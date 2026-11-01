@@ -1,6 +1,9 @@
 #include "Image.h"
 #include <wincodec.h>
 #include <wrl/client.h>
+#include <propvarutil.h>
+#include "webp/decode.h"
+#include "webp/encode.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -147,13 +150,159 @@ ImageFormat FormatFromExt(const std::wstring& extIn) {
     if (e == L".bmp") return ImageFormat::BMP;
     if (e == L".gif") return ImageFormat::GIF;
     if (e == L".tif" || e == L".tiff") return ImageFormat::TIFF;
+    if (e == L".webp") return ImageFormat::WEBP;
+    if (e == L".avif") return ImageFormat::AVIF;
+    if (e == L".heic" || e == L".heif" || e == L".hif") return ImageFormat::HEIC;
     return ImageFormat::Unknown;
+}
+
+const wchar_t* FormatExt(ImageFormat fmt) {
+    switch (fmt) {
+    case ImageFormat::JPEG: return L".jpg";
+    case ImageFormat::BMP: return L".bmp";
+    case ImageFormat::GIF: return L".gif";
+    case ImageFormat::TIFF: return L".tif";
+    case ImageFormat::WEBP: return L".webp";
+    case ImageFormat::AVIF: return L".avif";
+    case ImageFormat::HEIC: return L".heic";
+    default: return L".png";
+    }
+}
+
+SaveOptions SaveOptions::FromSettings() {
+    SaveOptions o;
+    o.webpLossless = RegGetDword(L"WebPLossless", 1) != 0;
+    o.webpQuality = (int)std::clamp<DWORD>(RegGetDword(L"WebPQuality", 90), 1, 100);
+    o.avifQuality = (int)std::clamp<DWORD>(RegGetDword(L"AvifQuality", 80), 1, 100);
+    o.stripMetadata = RegGetDword(L"StripMetadata", 0) != 0;
+    return o;
+}
+
+static thread_local std::wstring g_ioError;
+const std::wstring& ImageIoError() { return g_ioError; }
+
+std::wstring CodecHint(ImageFormat fmt) {
+    if (fmt == ImageFormat::HEIC)
+        return Tr(L"Para abrir fotos HEIC, instale da Microsoft Store as extensões \"Extensões de Imagem HEIF\" e \"Extensões de Vídeo HEVC\".");
+    if (fmt == ImageFormat::AVIF)
+        return Tr(L"Para usar AVIF, instale da Microsoft Store a \"Extensão de Vídeo AV1\" e as \"Extensões de Imagem HEIF\". "
+                  L"Salvar em AVIF também precisa de um codificador AV1 (placas de vídeo recentes).");
+    return L"";
+}
+
+static bool IsWebP(const BYTE* d, size_t n) { return n >= 12 && !memcmp(d, "RIFF", 4) && !memcmp(d + 8, "WEBP", 4); }
+
+static bool DecodeWebP(const BYTE* d, size_t n, Image& out) {
+    int w = 0, h = 0;
+    if (!WebPGetInfo(d, n, &w, &h) || w <= 0 || h <= 0) { g_ioError = Tr(L"Arquivo WebP inválido."); return false; }
+    out = Image(w, h);
+    if (!WebPDecodeBGRAInto(d, n, (uint8_t*)out.px.data(), out.px.size() * 4, w * 4)) {
+        out = Image(); g_ioError = Tr(L"Arquivo WebP inválido."); return false;
+    }
+    return true;
+}
+
+static bool EncodeWebP(const Image& img, const SaveOptions& opt, std::vector<BYTE>& out) {
+    uint8_t* data = nullptr;
+    size_t n = opt.webpLossless ? WebPEncodeLosslessBGRA((const uint8_t*)img.px.data(), img.w, img.h, img.w * 4, &data)
+                                : WebPEncodeBGRA((const uint8_t*)img.px.data(), img.w, img.h, img.w * 4, (float)opt.webpQuality, &data);
+    if (!n || !data) { g_ioError = Tr(L"Falha ao codificar WebP."); return false; }
+    out.assign(data, data + n);
+    WebPFree(data);
+    return true;
 }
 
 static ComPtr<IWICImagingFactory> Factory() {
     ComPtr<IWICImagingFactory> f;
     CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&f));
     return f;
+}
+
+// ---------------------------------------------------------------- metadata (C29)
+static std::wstring PropString(const PROPVARIANT& v) {
+    if (v.vt == VT_LPWSTR && v.pwszVal) return v.pwszVal;
+    if (v.vt == VT_LPSTR && v.pszVal) return Utf8ToW(v.pszVal);
+    if (v.vt == VT_BSTR && v.bstrVal) return v.bstrVal;
+    return L"";
+}
+
+// degrees from the EXIF rational triple (degrees, minutes, seconds)
+static bool PropDegrees(const PROPVARIANT& v, double& out) {
+    double part[3];
+    if (v.vt == (VT_VECTOR | VT_UI8) && v.cauh.cElems >= 3) {           // EXIF rationals
+        for (int i = 0; i < 3; i++) {
+            ULARGE_INTEGER r = v.cauh.pElems[i];
+            part[i] = r.HighPart ? (double)r.LowPart / r.HighPart : 0;
+        }
+    } else if (v.vt == (VT_VECTOR | VT_R8) && v.cadbl.cElems >= 3) {     // the photo policy gives doubles
+        for (int i = 0; i < 3; i++) part[i] = v.cadbl.pElems[i];
+    } else return false;
+    out = part[0] + part[1] / 60 + part[2] / 3600;
+    return true;
+}
+
+static void ReadMeta(IWICBitmapFrameDecode* frame, Image& out) {
+    ComPtr<IWICMetadataQueryReader> q;
+    if (FAILED(frame->GetMetadataQueryReader(&q)) || !q) return;
+    auto get = [&](const wchar_t* name, PROPVARIANT& v) { PropVariantInit(&v); return SUCCEEDED(q->GetMetadataByName(name, &v)); };
+    auto meta = std::make_shared<ImageMeta>();
+    PROPVARIANT v;
+    if (get(L"System.Photo.DateTaken", v)) {
+        if (v.vt == VT_FILETIME) {
+            FILETIME local; FileTimeToLocalFileTime(&v.filetime, &local);   // EXIF dates are local time
+            SYSTEMTIME st; FileTimeToSystemTime(&local, &st);
+            meta->dateTaken = Format(L"%04d:%02d:%02d %02d:%02d:%02d", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+        } else meta->dateTaken = PropString(v);
+        PropVariantClear(&v);
+    }
+    if (get(L"System.Photo.CameraManufacturer", v)) { meta->make = PropString(v); PropVariantClear(&v); }
+    if (get(L"System.Photo.CameraModel", v)) { meta->model = PropString(v); PropVariantClear(&v); }
+    if (get(L"System.ApplicationName", v)) { meta->software = PropString(v); PropVariantClear(&v); }
+    // GPS: the photo policy, or the EXIF GPS directory of JPEG / TIFF
+    for (const wchar_t* base : { L"System.GPS.", L"/app1/ifd/gps/", L"/ifd/gps/" }) {
+        bool policy = base[0] == L'S';
+        auto name = [&](const wchar_t* pol, int tag) { return policy ? std::wstring(base) + pol : std::wstring(base) + Format(L"{ushort=%d}", tag); };
+        double lat = 0, lon = 0;
+        PROPVARIANT a, b;
+        bool okLat = get(name(L"Latitude", 2).c_str(), a) && PropDegrees(a, lat);
+        bool okLon = get(name(L"Longitude", 4).c_str(), b) && PropDegrees(b, lon);
+        PropVariantClear(&a); PropVariantClear(&b);
+        if (!okLat || !okLon) continue;
+        if (get(name(L"LatitudeRef", 1).c_str(), v)) { if (PropString(v).rfind(L"S", 0) == 0) lat = -lat; PropVariantClear(&v); }
+        if (get(name(L"LongitudeRef", 3).c_str(), v)) { if (PropString(v).rfind(L"W", 0) == 0) lon = -lon; PropVariantClear(&v); }
+        meta->gps = true; meta->lat = lat; meta->lon = lon;
+        break;
+    }
+    if (!meta->empty()) out.meta = meta;
+}
+
+// photos from phones and cameras are stored sideways with an EXIF orientation: the image is turned upright on load
+static void ApplyOrientation(IWICBitmapFrameDecode* frame, Image& img) {
+    ComPtr<IWICMetadataQueryReader> q;
+    if (FAILED(frame->GetMetadataQueryReader(&q)) || !q) return;
+    PROPVARIANT v; PropVariantInit(&v);
+    if (FAILED(q->GetMetadataByName(L"System.Photo.Orientation", &v))) return;
+    int o = v.vt == VT_UI2 ? v.uiVal : v.vt == VT_UI4 ? (int)v.ulVal : 1;
+    PropVariantClear(&v);
+    if (o < 2 || o > 8) return;
+    bool swap = o >= 5;
+    Image r(swap ? img.h : img.w, swap ? img.w : img.h);
+    for (int y = 0; y < img.h; y++)
+        for (int x = 0; x < img.w; x++) {
+            int nx = x, ny = y;
+            switch (o) {
+            case 2: nx = img.w - 1 - x; break;                         // mirrored
+            case 3: nx = img.w - 1 - x; ny = img.h - 1 - y; break;     // 180°
+            case 4: ny = img.h - 1 - y; break;
+            case 5: nx = y; ny = x; break;
+            case 6: nx = img.h - 1 - y; ny = x; break;                 // 90° clockwise
+            case 7: nx = img.h - 1 - y; ny = img.w - 1 - x; break;
+            case 8: nx = y; ny = img.w - 1 - x; break;                 // 90° counterclockwise
+            }
+            r.at(nx, ny) = img.at(x, y);
+        }
+    r.dpi = img.dpi; r.meta = img.meta;
+    img = std::move(r);
 }
 
 static bool DecodeWith(IWICImagingFactory* f, IWICBitmapDecoder* dec, Image& out) {
@@ -165,20 +314,69 @@ static bool DecodeWith(IWICImagingFactory* f, IWICBitmapDecoder* dec, Image& out
                                 WICBitmapPaletteTypeCustom))) return false;
     UINT w, h; conv->GetSize(&w, &h);
     out = Image(w, h);
-    return SUCCEEDED(conv->CopyPixels(nullptr, w * 4, (UINT)out.px.size() * 4, (BYTE*)out.px.data()));
+    if (FAILED(conv->CopyPixels(nullptr, w * 4, (UINT)out.px.size() * 4, (BYTE*)out.px.data()))) return false;
+    ReadMeta(frame.Get(), out);
+    ApplyOrientation(frame.Get(), out);
+    return true;
+}
+
+static std::vector<BYTE> ReadFileBytes(const std::wstring& path) {
+    std::vector<BYTE> d;
+    HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+    if (h == INVALID_HANDLE_VALUE) return d;
+    LARGE_INTEGER sz{};
+    if (GetFileSizeEx(h, &sz) && sz.QuadPart > 0 && sz.QuadPart < 512LL * 1024 * 1024) {
+        d.resize((size_t)sz.QuadPart);
+        DWORD rd = 0;
+        if (!ReadFile(h, d.data(), (DWORD)d.size(), &rd, nullptr) || rd != d.size()) d.clear();
+    }
+    CloseHandle(h);
+    return d;
 }
 
 bool LoadImageFile(const std::wstring& path, Image& out) {
+    g_ioError.clear();
+    {
+        BYTE head[12] = {};
+        HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+        if (h != INVALID_HANDLE_VALUE) {
+            DWORD rd = 0; ReadFile(h, head, sizeof head, &rd, nullptr); CloseHandle(h);
+            if (rd == sizeof head && IsWebP(head, sizeof head)) {        // WebP: libwebp (the Windows codec is optional)
+                auto d = ReadFileBytes(path);
+                return !d.empty() && DecodeWebP(d.data(), d.size(), out);
+            }
+        }
+    }
     ComScope cs;
     auto f = Factory();
     if (!f) return false;
     ComPtr<IWICBitmapDecoder> dec;
-    if (FAILED(f->CreateDecoderFromFilename(path.c_str(), nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &dec)))
-        return false;
-    return DecodeWith(f.Get(), dec.Get(), out);
+    HRESULT hr = f->CreateDecoderFromFilename(path.c_str(), nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &dec);
+    bool ok = SUCCEEDED(hr) && DecodeWith(f.Get(), dec.Get(), out);
+    if (!ok) {
+        ImageFormat fmt = FormatFromExt(FileExt(path));
+        g_ioError = CodecHint(fmt);
+        if (g_ioError.empty() && hr == WINCODEC_ERR_COMPONENTNOTFOUND) g_ioError = Tr(L"Formato de imagem não suportado.");
+    }
+    return ok;
 }
 
 bool DecodeImage(IStream* stream, Image& out) {
+    g_ioError.clear();
+    {
+        BYTE head[12] = {}; ULONG rd = 0;
+        LARGE_INTEGER z{};
+        stream->Seek(z, STREAM_SEEK_SET, nullptr);
+        stream->Read(head, sizeof head, &rd);
+        stream->Seek(z, STREAM_SEEK_SET, nullptr);
+        if (rd == sizeof head && IsWebP(head, sizeof head)) {
+            STATSTG ss{}; stream->Stat(&ss, STATFLAG_NONAME);
+            std::vector<BYTE> d((size_t)ss.cbSize.QuadPart);
+            ULONG got = 0;
+            if (d.empty() || FAILED(stream->Read(d.data(), (ULONG)d.size(), &got)) || got != d.size()) return false;
+            return DecodeWebP(d.data(), d.size(), out);
+        }
+    }
     ComScope cs;
     auto f = Factory();
     if (!f) return false;
@@ -187,10 +385,80 @@ bool DecodeImage(IStream* stream, Image& out) {
     return DecodeWith(f.Get(), dec.Get(), out);
 }
 
+// metadata written by Snapnab (unless stripped): the program, the date and what the source photo had
+static void WriteMeta(IWICBitmapFrameEncode* frame, ImageFormat fmt, const Image& img) {
+    ComPtr<IWICMetadataQueryWriter> q;
+    if (FAILED(frame->GetMetadataQueryWriter(&q)) || !q) return;
+    auto putStr = [&](const wchar_t* name, const std::wstring& s) {
+        if (s.empty()) return;
+        std::string u = WToUtf8(s);
+        PROPVARIANT v; PropVariantInit(&v);
+        v.vt = VT_LPSTR; v.pszVal = u.data();
+        q->SetMetadataByName(name, &v);          // not cleared: the string belongs to u
+    };
+    SYSTEMTIME st; GetLocalTime(&st);
+    std::wstring now = Format(L"%04d:%02d:%02d %02d:%02d:%02d", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+    std::wstring software = L"Snapnab " + std::wstring(kAppVersion);
+    const ImageMeta* m = img.meta.get();
+    std::wstring date = m && !m->dateTaken.empty() ? m->dateTaken : now;
+    if (fmt == ImageFormat::PNG) {
+        putStr(L"/tEXt/{str=Software}", software);
+        putStr(L"/tEXt/{str=Creation Time}", date);
+        return;
+    }
+    if (fmt != ImageFormat::JPEG && fmt != ImageFormat::TIFF) return;
+    std::wstring ifd = fmt == ImageFormat::JPEG ? L"/app1/ifd" : L"/ifd";
+    putStr((ifd + L"/{ushort=305}").c_str(), software);
+    putStr((ifd + L"/{ushort=306}").c_str(), now);
+    putStr((ifd + L"/exif/{ushort=36867}").c_str(), date);
+    if (!m) return;
+    putStr((ifd + L"/{ushort=271}").c_str(), m->make);
+    putStr((ifd + L"/{ushort=272}").c_str(), m->model);
+    if (m->gps) {
+        auto putDeg = [&](const wchar_t* tag, double deg) {
+            deg = std::fabs(deg);
+            ULARGE_INTEGER r[3];
+            double mins = (deg - std::floor(deg)) * 60;
+            r[0].LowPart = (DWORD)std::floor(deg); r[0].HighPart = 1;
+            r[1].LowPart = (DWORD)std::floor(mins); r[1].HighPart = 1;
+            r[2].LowPart = (DWORD)std::lround((mins - std::floor(mins)) * 60 * 1000); r[2].HighPart = 1000;
+            PROPVARIANT v; PropVariantInit(&v);
+            v.vt = VT_VECTOR | VT_UI8; v.cauh.cElems = 3; v.cauh.pElems = r;
+            q->SetMetadataByName((ifd + L"/gps/" + tag).c_str(), &v);
+        };
+        putStr((ifd + L"/gps/{ushort=1}").c_str(), m->lat < 0 ? L"S" : L"N");
+        putDeg(L"{ushort=2}", m->lat);
+        putStr((ifd + L"/gps/{ushort=3}").c_str(), m->lon < 0 ? L"W" : L"E");
+        putDeg(L"{ushort=4}", m->lon);
+    }
+}
+
+// AVIF through the Windows HEIF encoder with AV1 compression
+static ComPtr<IWICBitmapEncoder> CreateAvifEncoder(IWICImagingFactory* f) {
+    ComPtr<IWICBitmapEncoder> enc;
+    if (FAILED(f->CreateEncoder(GUID_ContainerFormatHeif, nullptr, &enc))) enc.Reset();
+    return enc;
+}
+
 bool EncodeImage(IStream* stream, const Image& imgIn, ImageFormat fmt, int quality) {
+    SaveOptions o = SaveOptions::FromSettings();
+    o.jpegQuality = quality;
+    return EncodeImageEx(stream, imgIn, fmt, o);
+}
+
+bool EncodeImageEx(IStream* stream, const Image& imgIn, ImageFormat fmt, const SaveOptions& opt) {
+    g_ioError.clear();
+    if (imgIn.empty()) return false;
+    if (fmt == ImageFormat::WEBP) {
+        std::vector<BYTE> d;
+        if (!EncodeWebP(imgIn, opt, d)) return false;
+        ULONG wr = 0;
+        return SUCCEEDED(stream->Write(d.data(), (ULONG)d.size(), &wr)) && wr == d.size();
+    }
     ComScope cs;
     auto f = Factory();
-    if (!f || imgIn.empty()) return false;
+    if (!f) return false;
+    const int quality = opt.jpegQuality;
     GUID container;
     switch (fmt) {
     case ImageFormat::PNG: container = GUID_ContainerFormatPng; break;
@@ -198,6 +466,7 @@ bool EncodeImage(IStream* stream, const Image& imgIn, ImageFormat fmt, int quali
     case ImageFormat::BMP: container = GUID_ContainerFormatBmp; break;
     case ImageFormat::GIF: container = GUID_ContainerFormatGif; break;
     case ImageFormat::TIFF: container = GUID_ContainerFormatTiff; break;
+    case ImageFormat::AVIF: container = GUID_ContainerFormatHeif; break;
     default: return false;
     }
     // JPEG/BMP have no alpha: composite over white
@@ -209,19 +478,29 @@ bool EncodeImage(IStream* stream, const Image& imgIn, ImageFormat fmt, int quali
         img = &flat;
     }
     ComPtr<IWICBitmapEncoder> enc;
-    if (FAILED(f->CreateEncoder(container, nullptr, &enc))) return false;
+    if (FAILED(f->CreateEncoder(container, nullptr, &enc))) {
+        if (fmt == ImageFormat::AVIF) g_ioError = CodecHint(fmt);
+        return false;
+    }
     if (FAILED(enc->Initialize(stream, WICBitmapEncoderNoCache))) return false;
     ComPtr<IWICBitmapFrameEncode> frame;
     ComPtr<IPropertyBag2> props;
     if (FAILED(enc->CreateNewFrame(&frame, &props))) return false;
-    if (fmt == ImageFormat::JPEG && props) {
-        PROPBAG2 opt{}; opt.pstrName = (LPOLESTR)L"ImageQuality";
-        VARIANT v; VariantInit(&v); v.vt = VT_R4; v.fltVal = std::clamp(quality, 1, 100) / 100.0f;
-        props->Write(1, &opt, &v);
+    if ((fmt == ImageFormat::JPEG || fmt == ImageFormat::AVIF) && props) {
+        PROPBAG2 pq{}; pq.pstrName = (LPOLESTR)L"ImageQuality";
+        VARIANT v; VariantInit(&v); v.vt = VT_R4;
+        v.fltVal = std::clamp(fmt == ImageFormat::AVIF ? opt.avifQuality : quality, 1, 100) / 100.0f;
+        props->Write(1, &pq, &v);
     }
-    if (FAILED(frame->Initialize(props.Get()))) return false;
+    if (fmt == ImageFormat::AVIF && props) {
+        PROPBAG2 pc{}; pc.pstrName = (LPOLESTR)L"HeifCompressionMethod";
+        VARIANT v; VariantInit(&v); v.vt = VT_UI1; v.bVal = WICHeifCompressionAV1;
+        if (FAILED(props->Write(1, &pc, &v))) { g_ioError = CodecHint(fmt); return false; }
+    }
+    if (FAILED(frame->Initialize(props.Get()))) { if (fmt == ImageFormat::AVIF) g_ioError = CodecHint(fmt); return false; }
     frame->SetSize(img->w, img->h);
     if (imgIn.dpi > 0) frame->SetResolution(imgIn.dpi, imgIn.dpi);
+    if (!opt.stripMetadata) WriteMeta(frame.Get(), fmt, imgIn);
     WICPixelFormatGUID pf = GUID_WICPixelFormat32bppBGRA;
     frame->SetPixelFormat(&pf);
     HRESULT hr;
@@ -246,28 +525,52 @@ bool EncodeImage(IStream* stream, const Image& imgIn, ImageFormat fmt, int quali
             hr = frame->WriteSource(conv.Get(), nullptr);
         }
     }
-    if (FAILED(hr)) return false;
-    if (FAILED(frame->Commit())) return false;
-    return SUCCEEDED(enc->Commit());
+    if (FAILED(hr)) { if (fmt == ImageFormat::AVIF) g_ioError = CodecHint(fmt); return false; }
+    if (FAILED(frame->Commit()) || FAILED(enc->Commit())) { if (fmt == ImageFormat::AVIF) g_ioError = CodecHint(fmt); return false; }
+    return true;
 }
 
 bool SaveImageFile(const std::wstring& path, const Image& img, int quality) {
+    SaveOptions o = SaveOptions::FromSettings();
+    o.jpegQuality = quality;
+    return SaveImageFileEx(path, img, o);
+}
+
+bool SaveImageFileEx(const std::wstring& path, const Image& img, const SaveOptions& opt) {
     ImageFormat fmt = FormatFromExt(FileExt(path));
-    if (fmt == ImageFormat::Unknown) fmt = ImageFormat::PNG;
+    if (fmt == ImageFormat::Unknown || fmt == ImageFormat::HEIC) fmt = ImageFormat::PNG;     // HEIC is only opened
     ComPtr<IStream> st;
     std::wstring tmp = path + L".tmp";
     if (FAILED(SHCreateStreamOnFileEx(tmp.c_str(), STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
                                       FILE_ATTRIBUTE_NORMAL, TRUE, nullptr, &st))) return false;
-    bool ok = EncodeImage(st.Get(), img, fmt, quality);
+    bool ok = EncodeImageEx(st.Get(), img, fmt, opt);
     st.Reset();
     if (!ok) { DeleteFileW(tmp.c_str()); return false; }
     return MoveFileExW(tmp.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING) != 0;
 }
 
+bool CanEncode(ImageFormat fmt) {
+    if (fmt != ImageFormat::AVIF) return fmt != ImageFormat::HEIC && fmt != ImageFormat::Unknown;
+    static int cached = -1;                  // a tiny test image: the AV1 encoder exists or not
+    if (cached < 0) {
+        std::vector<BYTE> d;
+        SaveOptions o; o.stripMetadata = true;
+        cached = EncodeToMemoryEx(Image(16, 16, 0xFF808080), ImageFormat::AVIF, d, o) && !d.empty();
+    }
+    return cached == 1;
+}
+
 bool EncodeToMemory(const Image& img, ImageFormat fmt, std::vector<BYTE>& out, int quality) {
+    SaveOptions o = SaveOptions::FromSettings();
+    o.jpegQuality = quality;
+    o.stripMetadata = true;                  // internal copies (.snap streams, PDF, clipboard) carry no metadata
+    return EncodeToMemoryEx(img, fmt, out, o);
+}
+
+bool EncodeToMemoryEx(const Image& img, ImageFormat fmt, std::vector<BYTE>& out, const SaveOptions& opt) {
     ComPtr<IStream> st;
     if (FAILED(CreateStreamOnHGlobal(nullptr, TRUE, &st))) return false;
-    if (!EncodeImage(st.Get(), img, fmt, quality)) return false;
+    if (!EncodeImageEx(st.Get(), img, fmt, opt)) return false;
     STATSTG ss{}; st->Stat(&ss, STATFLAG_NONAME);
     out.resize((size_t)ss.cbSize.QuadPart);
     LARGE_INTEGER z{}; st->Seek(z, STREAM_SEEK_SET, nullptr);
@@ -282,15 +585,16 @@ bool DecodeFromMemory(const BYTE* data, size_t len, Image& out) {
 }
 
 std::wstring ImageOpenFilter() {
-    std::wstring f = Tr(L"Imagens e documentos (*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.mp4)|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.mp4|"
-                     L"Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|");
+    std::wstring f = Tr(L"Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|"
+                        L"Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|");
     std::replace(f.begin(), f.end(), L'|', L'\0');
     return f;
 }
 
+// the order matters: the Editor's Save as maps the chosen filter to an extension (kSaveExts)
 std::wstring ImageSaveFilter() {
     std::wstring f = Tr(L"PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|"
-                     L"PDF (*.pdf)|*.pdf|Documento Snapnab (*.snap)|*.snap|");
+                        L"WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Documento Snapnab (*.snap)|*.snap|");
     std::replace(f.begin(), f.end(), L'|', L'\0');
     return f;
 }

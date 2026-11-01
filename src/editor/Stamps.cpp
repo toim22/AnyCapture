@@ -1,4 +1,5 @@
 #include "Stamps.h"
+#include "EditorTools.h"
 #include "Xml.h"
 #include <shobjidl.h>
 
@@ -196,6 +197,11 @@ std::vector<StampCategory> StampCategories() {
         FindClose(h);
     }
     cats.push_back({ Tr(L"Rótulos"), LabelStamps(), false, L"labels" });
+    {   // mouse cursors and click indicators (C25)
+        StampCategory c{ Tr(L"Cursores"), {}, false, L"cursors" };
+        for (auto& [id, name] : CursorStamps()) c.items.push_back({ id, name });
+        cats.push_back(c);
+    }
     for (auto& s : kStock) cats.push_back({ Tr(s.cat), ParseList(s.list), false, s.cat });
     // pinned stamps: first in their categories and gathered in "Pinned" (in the pin order)
     std::vector<StampItem> pins;

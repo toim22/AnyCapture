@@ -531,6 +531,7 @@ Image ApplyCaptureEffects(const Image& s, const CaptureEffects& e) {
     if (e.border) img = Border(img, e.borderWidth, FromColorref(e.borderColor));
     if (e.edge) img = EdgeEffect(img, (Edge)e.edgeStyle, e.edgeSize, e.edgeSides ? e.edgeSides : (Bottom | Right), false);
     if (e.shadow) img = Shadow(img, e.shadowOffset, e.shadowBlur, e.shadowOpacity);
+    if (e.beautify) img = Beautify(img, e.beautifyOpt);
     if (e.resolution) img.dpi = (float)e.dpi;
     return img;
 }

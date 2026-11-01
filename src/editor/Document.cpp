@@ -95,7 +95,10 @@ RectF DrawObj::Bounds() const {
     case ObjType::Arrow: case ObjType::Line:
         if (style.bezier) Grow(r, ctrl);
         pad = style.width / 2 + CapLength(style.width, std::max(style.startSize, style.endSize));
-        if (HasLabel() && !text.empty()) {          // the label beyond the tail (with its outline)
+        if (HasLabel() && !text.empty() && style.textOnPath) {     // text along the line (C37): beside it
+            float m = style.fontSize * 1.6f + style.width;
+            r.Inflate(m, m);
+        } else if (HasLabel() && !text.empty()) {   // the label beyond the tail (with its outline)
             RectF lb = ArrowLabelRect(*this);
             lb.Inflate(style.width + 2 - pad, style.width + 2 - pad);
             RectF::Union(r, r, lb);
@@ -197,6 +200,7 @@ void DrawObj::Move(float dx, float dy) {
     tail.X += dx; tail.Y += dy;
     ctrl.X += dx; ctrl.Y += dy;
     for (auto& p : pts) { p.X += dx; p.Y += dy; }
+    for (auto& r : textBoxes) { r.X += dx; r.Y += dy; }
     for (auto& c : children) c.Move(dx, dy);
 }
 
@@ -208,12 +212,21 @@ void DrawObj::Scale(RectF from, RectF to) {
     };
     map(p1); map(p2); map(tail); map(ctrl);
     for (auto& p : pts) map(p);
+    for (auto& r : textBoxes) {
+        PointF a(r.X, r.Y), b(r.GetRight(), r.GetBottom());
+        map(a); map(b);
+        r = RectF(std::min(a.X, b.X), std::min(a.Y, b.Y), std::fabs(b.X - a.X), std::fabs(b.Y - a.Y));
+    }
     for (auto& c : children) c.Scale(from, to);
 }
 
 void DrawObj::MapPoints(const std::function<PointF(PointF)>& f) {
     p1 = f(p1); p2 = f(p2); tail = f(tail); ctrl = f(ctrl);
     for (auto& p : pts) p = f(p);
+    for (auto& r : textBoxes) {
+        PointF a = f(PointF(r.X, r.Y)), b = f(PointF(r.GetRight(), r.GetBottom()));
+        r = RectF(std::min(a.X, b.X), std::min(a.Y, b.Y), std::fabs(b.X - a.X), std::fabs(b.Y - a.Y));
+    }
     for (auto& c : children) c.MapPoints(f);
 }
 
@@ -267,7 +280,10 @@ Image& Document::MutableBase() {
     return *copy;
 }
 
-void Document::SetBase(Image img) { st.base = std::make_shared<Image>(std::move(img)); }
+void Document::SetBase(Image img) {
+    if (!img.meta && st.base) img.meta = st.base->meta;       // crop, resize, effects: the photo keeps its metadata
+    st.base = std::make_shared<Image>(std::move(img));
+}
 
 Image Document::Render(const DrawObj* hideText) const {
     if (!st.base) return {};
@@ -313,6 +329,7 @@ bool Document::SaveAs(const std::wstring& file, int q) {
         return false;
     }
     Image img = Render();
+    img.meta = st.base->meta;                               // what the imported photo had (removed if StripMetadata)
     if (ext == L".pdf") {                                   // the captured links stay clickable in the PDF
         std::vector<PdfLink> links;
         for (auto& o : st.objs) if (o->type == ObjType::Link && !o->hidden) links.push_back({ o->Rect(), o->text });

@@ -11,7 +11,9 @@ add_executable(SnapnabTests
     ${SRC}/editor/Serialize.cpp
     ${SRC}/editor/QuickStyles.cpp
     ${SRC}/editor/Pdf.cpp
-    ${SRC}/editor/Clip.cpp)
+    ${SRC}/editor/Clip.cpp
+    ${SRC}/editor/Cursors.cpp
+    ${SRC}/editor/EditorTools.cpp)
 target_link_libraries(SnapnabTests PRIVATE SnapnabCommon mfplat mfreadwrite mfuuid mf winspool windowsapp)
 
 add_test(NAME integration COMMAND SnapnabTests)

@@ -10,6 +10,7 @@
 #include "Panoramic.h"
 #include "Webcam.h"
 #include "Links.h"
+#include "CleanDesktop.h"
 
 namespace snap {
 
@@ -26,6 +27,8 @@ public:
     void VideoStartPauseResume();
     void VideoStop();
     void VideoCancel();
+    void VideoToggleZoom();                 // C15 (hotkey during the recording)
+    void VideoOverlayMenu(POINT screen);    // C07: cursor highlight, clicks, keys
     void OnRecorderNote(WPARAM note);
 
     // common output (also used by the clipboard capture and the clipboard monitor)
@@ -37,6 +40,12 @@ public:
     std::function<void(const std::wstring& title, const std::wstring& text)> notify;   // tray balloon
     std::function<void(bool busy)> onBusyChanged;
     std::function<void(const Preset&)> onPresetVolumes;   // volume panel of the HUD changed (the preset remembers it)
+    // outputs handled by the capture window (pins, QR results, overlay, Office, upload)
+    std::function<void(const Image&, const std::wstring& title, const POINT* at)> onPin;
+    std::function<void(const Image&)> onReadQr;
+    std::function<void(const Image&, const std::wstring& libPath, bool video, const std::wstring& title)> onOverlay;
+    std::function<void(const Image&, int target)> onOffice;
+    std::function<void(const Image&, const std::wstring& libPath, const std::wstring& title)> onUpload;
     Recorder recorder;
 
 private:
@@ -60,6 +69,8 @@ private:
     HWND frame_ = nullptr;
     ipc::Notify* ipc_ = nullptr;
     State state_ = Idle;
+    ULONGLONG stateSince_ = 0;    // when the state last changed
+    bool UiAlive();
     Preset preset_;
     Image frozen_;
     RECT vs_{};
@@ -68,6 +79,16 @@ private:
     WebcamOverlay webcam_;
     RECT videoArea_{};
     HWND delayWnd_ = nullptr;
+    CleanDesktop clean_;          // icons hidden / notifications off during the capture (C16)
+    POINT origin_{};              // screen position of the last captured area (pins open where it was)
+    bool haveOrigin_ = false;
+    // captured cursor kept apart, to become an editable object in the Editor (C25, option CursorAsObject)
+    Image cursorImg_;
+    POINT cursorPos_{};           // screen position of the cursor image's top left corner
 };
+
+// Windows 11 rounded corners of a captured window made transparent (C06); off for maximized windows and for windows
+// that ask for square corners (DWMWA_WINDOW_CORNER_PREFERENCE)
+void RoundWindowCorners(Image& img, HWND h);
 
 } // namespace snap

@@ -6,7 +6,7 @@ namespace snap::settings {
 namespace {
 // settings files of the data folder (the library, logs and the tray list are not settings)
 const wchar_t* const kFiles[] = { L"Presets1.xml", L"ToolThemes.xml", L"Favorites.xml", L"ToolStyles.xml", L"QuickEffects.xml",
-                                  L"StampOrder.xml" };
+                                  L"StampOrder.xml", L"BeautifyPresets.xml", L"Uploaders.xml", L"AiSettings.xml" };
 
 std::string ReadAll(const std::wstring& path) {
     std::string out;

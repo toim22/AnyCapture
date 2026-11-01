@@ -109,6 +109,12 @@ bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames
                 if (!ok) break;
                 XmlNode doc = frames[i].doc;
                 doc.set("BaseImage", "Image_0.png");
+                // metadata of an imported photo (C29), written only when there is some
+                if (const ImageMeta* m = frames[i].base.meta.get(); m && !doc.child("Metadata")) {
+                    XmlNode& md = doc.add("Metadata");
+                    md.setW("DateTaken", m->dateTaken).setW("Make", m->make).setW("Model", m->model).setW("Software", m->software);
+                    if (m->gps) md.seti("Gps", 1).setd("Latitude", m->lat).setd("Longitude", m->lon);
+                }
                 doc.seti("Width", frames[i].base.w).seti("Height", frames[i].base.h);
                 std::string xml = XmlSerialize(doc);
                 ok = WriteStream(fs.Get(), L"Document", xml.data(), xml.size()) && WritePng(is.Get(), "Image_0.png", frames[i].base);
@@ -122,7 +128,7 @@ bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames
         }
         lb->Release();          // closes the file when the IStorage releases it too
     }
-    if (!ok) { DeleteFileW(tmp.c_str()); Log(L"SaveSnapFile falhou: %s", path.c_str()); return false; }
+    if (!ok) { DeleteFileW(tmp.c_str()); Log(L"SaveSnapFile failed: %s", path.c_str()); return false; }
     return MoveFileExW(tmp.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING) != 0;
 }
 
@@ -133,6 +139,24 @@ bool IsSnapFile(const std::wstring& path) {
     ReadFile(f, h, 24, &rd, nullptr);
     CloseHandle(f);
     return rd == 24 && memcmp(h, kHeader, 24) == 0;
+}
+
+bool LoadSnapDocument(const std::wstring& path, XmlNode& doc) {
+    if (!IsSnapFile(path)) return false;
+    HANDLE f = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+    if (f == INVALID_HANDLE_VALUE) return false;
+    auto* lb = new HeaderedLockBytes(f, sizeof kHeader);
+    bool ok = false;
+    {
+        ComPtr<IStorage> root, fs;
+        std::string xml;
+        if (SUCCEEDED(StgOpenStorageOnILockBytes(lb, nullptr, STGM_READ | STGM_SHARE_EXCLUSIVE, nullptr, 0, &root)) &&
+            SUCCEEDED(root->OpenStorage(L"Frame0", nullptr, STGM_READ | STGM_SHARE_EXCLUSIVE, nullptr, 0, &fs)) &&
+            ReadStream(fs.Get(), L"Document", xml))
+            ok = XmlParse(xml, doc);
+    }
+    lb->Release();
+    return ok;
 }
 
 bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames) {
@@ -160,6 +184,13 @@ bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames) {
                         if (ReadStream(fs.Get(), L"Document", xml)) XmlParse(xml, frame.doc);
                         if (is) {
                             ReadPng(is.Get(), frame.doc.get("BaseImage", "Image_0.png"), frame.base);
+                            if (const XmlNode* md = frame.doc.child("Metadata")) {
+                                auto m = std::make_shared<ImageMeta>();
+                                m->dateTaken = md->getW("DateTaken"); m->make = md->getW("Make"); m->model = md->getW("Model");
+                                m->software = md->getW("Software");
+                                m->gps = md->getb("Gps"); m->lat = md->getd("Latitude"); m->lon = md->getd("Longitude");
+                                if (!m->empty()) frame.base.meta = m;
+                            }
                             // embedded images referenced by StreamName at any level
                             std::function<void(const XmlNode&)> walk = [&](const XmlNode& n) {
                                 std::string sn = n.get("StreamName");
@@ -178,7 +209,7 @@ bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames) {
         }
     }
     lb->Release();
-    if (!ok) Log(L"LoadSnapFile falhou: %s", path.c_str());
+    if (!ok) Log(L"LoadSnapFile failed: %s", path.c_str());
     return ok;
 }
 

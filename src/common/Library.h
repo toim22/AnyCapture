@@ -26,6 +26,9 @@ std::wstring AddImageToLibrary(const Image& img, const CaptureInfo& info);   // 
 std::wstring AddLayeredToLibrary(const Image& base, const Image& flat, const CaptureInfo& info, const XmlNode& objects,
                                  const std::map<std::string, Image>& embedded);
 std::wstring NewVideoPath();
+// audio-only recordings (C32): Music\Snapnab (AudioFolder in the registry), .m4a or .mp3
+std::wstring AudioDir();
+std::wstring NewAudioPath(bool mp3);
 std::wstring ThumbPathFor(const std::wstring& itemPath);
 bool  WriteThumbnail(const std::wstring& itemPath, const Image& img);
 Image LoadThumbnail(const std::wstring& itemPath);
@@ -35,6 +38,12 @@ bool  IsInLibrary(const std::wstring& path);
 // names given to captures (shown in the tray and library, searchable): <Library>\Names.xml, by file name
 std::wstring CaptureName(const std::wstring& itemPath);
 bool SetCaptureName(const std::wstring& itemPath, const std::wstring& name);   // empty removes the name
+
+// automatic cleanup (C41, off by default): captures older than 'days' are removed — to the Recycle Bin or deleted —
+// except, optionally, the ones with a name or with tags. Returns how many were removed. Settings: CleanupEnabled,
+// CleanupDays, CleanupKeepNamed, CleanupKeepTagged, CleanupRecycle (CleanupLibraryNow uses them)
+int CleanupLibrary(int days, bool keepNamed, bool keepTagged, bool recycle);
+int CleanupLibraryNow();                // with the settings, if enabled (at most once a day: CleanupLast)
 
 // Automatic name (<Prefix><AutoNum>, ed_comp_2 §7)
 std::wstring NextAutoName(const std::wstring& folder, const std::wstring& prefix, const std::wstring& ext, int digits = 3);

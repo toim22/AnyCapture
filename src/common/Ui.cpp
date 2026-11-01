@@ -75,7 +75,11 @@ struct FormState {
     std::function<std::wstring(std::vector<Field>&)> validate;
     bool done = false, ok = false;
     int dpi = 96;
+    std::function<Image(std::vector<Field>&)> preview;     // optional live preview (RunFormPreview)
+    RECT previewRect{};
+    Image previewImg;
 };
+constexpr UINT_PTR kPreviewTimer = 0x51;
 
 constexpr int ID_OK = 1, ID_CANCEL = 2, ID_FIELD = 1000;
 
@@ -119,7 +123,55 @@ LRESULT CALLBACK FormProc(HWND h, UINT m, WPARAM w, LPARAM l) {
             if (f.type == Field::Color && HIWORD(w) == BN_CLICKED) {
                 if (PickColor(h, f.color)) InvalidateRect(f.hwnd, nullptr, TRUE);
             }
+            WORD code = HIWORD(w);
+            if (st->preview && (code == EN_CHANGE || code == CBN_SELCHANGE || code == BN_CLICKED)) SetTimer(h, kPreviewTimer, 180, nullptr);
         }
+        return 0;
+    }
+    case WM_TIMER:
+        if (w == kPreviewTimer && st->preview) {
+            KillTimer(h, kPreviewTimer);
+            std::vector<Field> copy = *st->fields;
+            Collect(copy);
+            HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+            st->previewImg = st->preview(copy);
+            SetCursor(old);
+            InvalidateRect(h, &st->previewRect, FALSE);
+        }
+        return 0;
+    case WM_PAINT: {
+        PAINTSTRUCT ps; HDC dc = BeginPaint(h, &ps);
+        if (st && st->preview) {
+            RECT r = st->previewRect;
+            // checkerboard (transparency) and the image fitted inside
+            HDC mem = CreateCompatibleDC(dc);
+            HBITMAP bb = CreateCompatibleBitmap(dc, r.right - r.left, r.bottom - r.top);
+            HGDIOBJ ob = SelectObject(mem, bb);
+            int cw = r.right - r.left, chh = r.bottom - r.top, cs = 8;
+            for (int y = 0; y < chh; y += cs)
+                for (int x = 0; x < cw; x += cs) {
+                    RECT c{ x, y, x + cs, y + cs };
+                    HBRUSH b = CreateSolidBrush(((x / cs + y / cs) % 2) ? RGB(236, 236, 240) : RGB(250, 250, 252));
+                    FillRect(mem, &c, b); DeleteObject(b);
+                }
+            const Image& im = st->previewImg;
+            if (!im.empty()) {
+                double k = std::min({ 1.0, (double)cw / im.w, (double)chh / im.h });
+                int w2 = std::max(1, (int)(im.w * k)), h2 = std::max(1, (int)(im.h * k));
+                Image s = k < 1 ? ScaleImage(im, w2, h2, true) : im;
+                Image flat(s.w, s.h, 0);
+                for (int y = 0; y < s.h; y++)       // over the checkerboard
+                    for (int x = 0; x < s.w; x++) {
+                        uint32_t bg = (((x + (cw - w2) / 2) / cs + (y + (chh - h2) / 2) / cs) % 2) ? 0xFFECECF0 : 0xFFFAFAFC;
+                        flat.at(x, y) = BlendOver(bg, s.at(x, y));
+                    }
+                flat.DrawTo(mem, (cw - w2) / 2, (chh - h2) / 2, w2, h2, false);
+            }
+            HBRUSH fr = CreateSolidBrush(RGB(200, 200, 206)); RECT all{ 0, 0, cw, chh }; FrameRect(mem, &all, fr); DeleteObject(fr);
+            BitBlt(dc, r.left, r.top, cw, chh, mem, 0, 0, SRCCOPY);
+            SelectObject(mem, ob); DeleteObject(bb); DeleteDC(mem);
+        }
+        EndPaint(h, &ps);
         return 0;
     }
     case WM_DRAWITEM: {
@@ -147,8 +199,23 @@ LRESULT CALLBACK FormProc(HWND h, UINT m, WPARAM w, LPARAM l) {
 }
 }
 
+static bool RunFormImpl(HWND owner, const std::wstring& title, std::vector<Field>& fields,
+                        std::function<std::wstring(std::vector<Field>&)> validate, int width,
+                        std::function<Image(std::vector<Field>&)> preview, SIZE previewSize);
+
 bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
              std::function<std::wstring(std::vector<Field>&)> validate, int width) {
+    return RunFormImpl(owner, title, fields, validate, width, nullptr, {});
+}
+
+bool RunFormPreview(HWND owner, const std::wstring& title, std::vector<Field>& fields, std::function<Image(std::vector<Field>&)> preview,
+                    SIZE previewSize, std::function<std::wstring(std::vector<Field>&)> validate, int width) {
+    return RunFormImpl(owner, title, fields, validate, width, preview, previewSize);
+}
+
+static bool RunFormImpl(HWND owner, const std::wstring& title, std::vector<Field>& fields,
+                        std::function<std::wstring(std::vector<Field>&)> validate, int width,
+                        std::function<Image(std::vector<Field>&)> preview, SIZE previewSize) {
     static bool reg = false;
     if (!reg) {
         WNDCLASSW wc{}; wc.lpfnWndProc = FormProc; wc.hInstance = GetModuleHandleW(nullptr);
@@ -158,6 +225,7 @@ bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
     }
     FormState st{ &fields, validate };
     st.dpi = DpiForWindow(owner);
+    st.preview = preview;
     int dpi = st.dpi;
     int W = Scale(width, dpi), pad = Scale(14, dpi), rowH = Scale(30, dpi), ctlH = Scale(24, dpi);
     int labelW = Scale(150, dpi);
@@ -174,9 +242,48 @@ bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
         int need = std::min(widest + Scale(14, dpi), Scale(320, dpi));
         if (need > labelW) { W += need - labelW; labelW = need; }
     }
-    int rows = 0;
-    for (auto& f : fields) rows += f.type == Field::Label ? 1 : 1;
+    // long explanatory labels wrap over several rows (up to 4)
+    std::vector<int> span(fields.size(), 1);
+    {
+        HDC dc = GetDC(nullptr);
+        HGDIOBJ of = SelectObject(dc, UiFont(dpi));
+        const int avail = std::max(1, W - 2 * pad - Scale(4, dpi));
+        for (size_t i = 0; i < fields.size(); i++) {
+            if (fields[i].type != Field::Label) continue;
+            SIZE sz{}; GetTextExtentPoint32W(dc, fields[i].label.c_str(), (int)fields[i].label.size(), &sz);
+            span[i] = std::clamp((int)((sz.cx * 11 / 10) / avail) + 1, 1, 4);     // a little slack for word wrapping
+        }
+        SelectObject(dc, of); ReleaseDC(nullptr, dc);
+    }
+    auto spanRows = [&](size_t a, size_t b) { int n = 0; for (size_t i = a; i < b; i++) n += span[i]; return n; };
+    // a form taller than the screen is split into two columns, at the section (separator) nearest the middle
+    int rows = spanRows(0, fields.size());
+    size_t colBreak = fields.size();
+    {
+        RECT wa = MonitorRectFromPoint({ 0, 0 }, true);
+        if (owner) { RECT orc0; GetWindowRect(owner, &orc0); wa = MonitorRectFromPoint({ (orc0.left + orc0.right) / 2, (orc0.top + orc0.bottom) / 2 }, true); }
+        int maxRows = std::max(8, (int)((wa.bottom - wa.top) * 85 / 100 - pad * 2 - Scale(90, dpi)) / rowH);
+        if (rows > maxRows) {
+            size_t best = fields.size(); int bestDist = INT_MAX;
+            for (size_t i = 1; i < fields.size(); i++)
+                if (fields[i].type == Field::Separator && std::abs((int)i - rows / 2) < bestDist) { best = i; bestDist = std::abs((int)i - rows / 2); }
+            if (best == fields.size()) best = (fields.size() + 1) / 2;
+            colBreak = best;
+            rows = std::max(spanRows(0, colBreak), spanRows(colBreak, fields.size()));
+        }
+    }
+    const int colW = W;
+    if (colBreak < fields.size()) W = colW * 2;
     int clientH = pad * 2 + rows * rowH + Scale(46, dpi);
+    // preview on the left: the fields move right
+    int px0 = 0;
+    if (preview) {
+        int pw = Scale(previewSize.cx, dpi), ph = Scale(previewSize.cy, dpi);
+        st.previewRect = { pad, pad, pad + pw, pad + ph };
+        px0 = pw + pad;
+        W += px0;
+        clientH = std::max(clientH, ph + 2 * pad + Scale(46, dpi));
+    }
     RECT wr{ 0, 0, W, clientH };
     DWORD style = WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_CLIPCHILDREN;
     AdjustWindowRectExForDpi(&wr, style, FALSE, WS_EX_DLGMODALFRAME, dpi);
@@ -192,21 +299,23 @@ bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
     for (size_t i = 0; i < fields.size(); i++) {
         Field& f = fields[i];
         HMENU id = (HMENU)(INT_PTR)(ID_FIELD + i);
-        int cx = pad + labelW, cw = W - pad - cx;
+        if (i == colBreak) yy = pad;
+        const int x0 = px0 + (i >= colBreak ? colW : 0);  // left edge of the field's column
+        int cx = x0 + pad + labelW, cw = x0 + colW - pad - cx;
         auto label = [&]() {
             HWND s = CreateWindowExW(0, L"STATIC", f.label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT | SS_CENTERIMAGE,
-                                     pad, yy, labelW - Scale(8, dpi), ctlH, h, nullptr, hi, nullptr);
+                                     x0 + pad, yy, labelW - Scale(8, dpi), ctlH, h, nullptr, hi, nullptr);
             SendMessageW(s, WM_SETFONT, (WPARAM)font, TRUE);
         };
         switch (f.type) {
         case Field::Label:
-            f.hwnd = CreateWindowExW(0, L"STATIC", f.label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT | SS_CENTERIMAGE,
-                                     pad, yy, W - 2 * pad, ctlH, h, id, hi, nullptr);
+            f.hwnd = CreateWindowExW(0, L"STATIC", f.label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT | (span[i] > 1 ? 0 : SS_CENTERIMAGE),
+                                     x0 + pad, yy + (span[i] > 1 ? Scale(3, dpi) : 0), colW - 2 * pad, ctlH + (span[i] - 1) * rowH, h, id, hi, nullptr);
             SendMessageW(f.hwnd, WM_SETFONT, (WPARAM)font, TRUE);
             break;
         case Field::Separator:
             f.hwnd = CreateWindowExW(0, L"STATIC", f.label.c_str(), WS_CHILD | WS_VISIBLE | SS_LEFT | SS_CENTERIMAGE,
-                                     pad, yy, W - 2 * pad, ctlH, h, id, hi, nullptr);
+                                     x0 + pad, yy, colW - 2 * pad, ctlH, h, id, hi, nullptr);
             SendMessageW(f.hwnd, WM_SETFONT, (WPARAM)bold, TRUE);
             break;
         case Field::Text:
@@ -229,7 +338,7 @@ bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
             break;
         case Field::Check:
             f.hwnd = CreateWindowExW(0, L"BUTTON", f.label.c_str(), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_AUTOCHECKBOX,
-                                     pad, yy, W - 2 * pad, ctlH, h, id, hi, nullptr);
+                                     x0 + pad, yy, colW - 2 * pad, ctlH, h, id, hi, nullptr);
             Button_SetCheck(f.hwnd, f.value ? BST_CHECKED : BST_UNCHECKED);
             break;
         case Field::Combo:
@@ -253,10 +362,10 @@ bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
         }
         if (f.hwnd) SendMessageW(f.hwnd, WM_SETFONT, (WPARAM)(f.type == Field::Separator ? bold : font), TRUE);
         if (!first && f.hwnd && f.type != Field::Label && f.type != Field::Separator) first = f.hwnd;
-        yy += rowH;
+        yy += rowH * span[i];
     }
     int bw = Scale(96, dpi), bh = Scale(28, dpi);
-    yy += Scale(6, dpi);
+    yy = std::max(pad + rows * rowH, preview ? (int)st.previewRect.bottom : 0) + Scale(6, dpi);
     HWND ok = CreateWindowExW(0, L"BUTTON", Tr(L"OK"), WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON,
                               W - pad - bw * 2 - Scale(8, dpi), yy, bw, bh, h, (HMENU)(INT_PTR)ID_OK, hi, nullptr);
     HWND cancel = CreateWindowExW(0, L"BUTTON", Tr(L"Cancelar"), WS_CHILD | WS_VISIBLE | WS_TABSTOP,
@@ -265,6 +374,7 @@ bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
     SendMessageW(cancel, WM_SETFONT, (WPARAM)font, TRUE);
 
     if (owner) EnableWindow(owner, FALSE);
+    if (preview) SetTimer(h, kPreviewTimer, 10, nullptr);     // first preview right away
     ShowWindow(h, SW_SHOW);
     SetForegroundWindow(h);
     SetFocus(first ? first : ok);

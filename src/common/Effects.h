@@ -1,6 +1,7 @@
 // Effects and filters (IImageFilters / CEffectSettings* / CPaintOpRaster, comp_4 + ds_arch §17.B)
 #pragma once
 #include "Image.h"
+#include "Beautify.h"
 
 namespace snap::fx {
 
@@ -63,8 +64,9 @@ struct CaptureEffects {
     bool rotate = false;  int rotateKind = 0;                 // 0 90° clockwise, 1 90° counterclockwise, 2 180°, 3 flip ↔, 4 flip ↕
     bool watermark = false; std::wstring watermarkText = L"Snapnab"; int watermarkOpacity = 35; bool watermarkTiled = true;
     bool resolution = false; int dpi = 300;                   // written to the file metadata
+    bool beautify = false; BeautifyOptions beautifyOpt;       // background, padding, corners and shadow (C05), applied last
     bool Any() const {
-        return border || filter || shadow || caption || replaceColor || scale || edge || trim || adjust || rotate || watermark || resolution;
+        return border || filter || shadow || caption || replaceColor || scale || edge || trim || adjust || rotate || watermark || resolution || beautify;
     }
 };
 Image ApplyCaptureEffects(const Image& s, const CaptureEffects& e);

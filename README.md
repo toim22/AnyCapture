@@ -20,6 +20,9 @@ Snapnab lives in the notification area: press **Print Screen**, choose what to c
   edge effects, trim edges, color adjustment, rotate, watermark and resolution
 - Full-screen captures with **each window as a separate object**, and the **links** of web pages and documents kept as
   clickable areas (also in PDF exports)
+- Every capture copied to the clipboard, a quick thumbnail after capturing, **pin captures on the screen**, screen color
+  picker, region history and keyboard-precise selection, HDR-correct captures, Windows 11 rounded corners, interval
+  capture, screen focus, QR code reading and command-line automation (`/region`, `/window`, `/output`…)
 
 **Video recording**
 - MP4 (H.264 + AAC), microphone and system audio with separate mute and volume (automatic or manual microphone gain),
@@ -27,6 +30,8 @@ Snapnab lives in the notification area: press **Print Screen**, choose what to c
 - Webcam inside the video (circle, rounded square, square or rectangle, with optional background removal), which can
   be dragged during the recording
 - Control panel and frame that do not show up in the recording, downscaling to 1080p, hardware encoding
+- Cursor highlight, click rings and keys on screen, zoom that follows the pointer, crash-safe recording, audio-only
+  recording (M4A/MP3)
 
 **Editor**
 - Arrow (with a text label at the tail), line, shapes, pen, highlighter, text, callouts (with frosted-glass
@@ -37,7 +42,13 @@ Snapnab lives in the notification area: press **Print Screen**, choose what to c
 - **Layers panel** (hide, lock, rename and reorder objects), rulers and guides, exact X/Y/width/height, align and
   distribute, paste in place, selection and crop that snap to edges
 - Selection with Smart Move, magic wand and smart fill; lift a piece, edit the rest and drop it back; undo/redo
-- Image effects, text recognition (OCR), save as PNG, JPG, BMP, GIF, TIFF, PDF and `.snap`, print and email
+- Image effects, text recognition (OCR), save as PNG, JPG, BMP, GIF, TIFF, WebP, AVIF, PDF and `.snap` (opens HEIC),
+  print and email
+- Beautify, combine and compare images, redact sensitive data automatically, smart highlighter and text-only blur,
+  draw-and-hold shapes, hand-drawn style, vertical text and text along a line, cursor and date stamps, background
+  removal, split image, contrast checker, batch processing, *Copy as…*, send to Word/PowerPoint/Excel/OneNote
+- Optional (off by default): upload to S3, Dropbox, Google Drive, OneDrive, FTP/SFTP or a custom uploader, and an AI
+  assistant with your own key
 - Video: cut out parts, save a frame, create an animated GIF and export MP4
 - Library with all your captures: names, search, a larger preview on hover
 - Export and import all settings in one file, with an automatic weekly backup
@@ -142,8 +153,11 @@ The SHA-256 hashes of the release packages are published with each release.
 
 This program will not transfer any information to other networked systems unless specifically requested by the user or
 the person installing or operating it. Snapnab has no telemetry, update check or online account; the only network
-activity happens when you open a link yourself (it opens in your default browser) or choose to send a capture by email
-(it is handed to your email program). See [Your data](#your-data) for what is stored on your computer.
+activity happens when you open a link yourself (it opens in your default browser), choose to send a capture by email
+(it is handed to your email program), or turn on one of the two optional online features: **upload** (to the storage
+you configure) and the **AI assistant** (the image and your question go to the provider you choose, with your own
+key). Both are off until you set them up; their secrets stay in the Windows Credential Manager. See
+[Your data](#your-data) for what is stored on your computer.
 
 ## License
 

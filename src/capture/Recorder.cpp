@@ -1,4 +1,5 @@
 #include "Recorder.h"
+#include "Library.h"
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
@@ -9,6 +10,7 @@
 #include <deque>
 #include <future>
 #include <cmath>
+#include <gdiplus.h>
 
 using Microsoft::WRL::ComPtr;
 
@@ -182,15 +184,39 @@ LONGLONG Recorder::Now100ns() const {
 
 double Recorder::Elapsed() const { return state_ == Idle ? 0 : Now100ns() / (double)kHns; }
 
-static HRESULT CreateWriter(const RecordSettings& s, int w, int h, bool hw, bool audio, ComPtr<IMFSinkWriter>& out,
-                            DWORD& vStream, DWORD& aStream) {
+static HRESULT CreateWriter(const RecordSettings& s, const std::wstring& path, bool fragmented, int w, int h, bool hw, bool audio,
+                            ComPtr<IMFSinkWriter>& out, DWORD& vStream, DWORD& aStream) {
     ComPtr<IMFAttributes> attr;
     MFCreateAttributes(&attr, 3);
     attr->SetUINT32(MF_READWRITE_ENABLE_HARDWARE_TRANSFORMS, hw ? TRUE : FALSE);
-    attr->SetGUID(MF_TRANSCODE_CONTAINERTYPE, MFTranscodeContainerType_MPEG4);
+    const bool mp3 = s.audioOnly && FileExt(path) == L".mp3";
+    attr->SetGUID(MF_TRANSCODE_CONTAINERTYPE, mp3 ? MFTranscodeContainerType_MP3 : fragmented ? MFTranscodeContainerType_FMPEG4 : MFTranscodeContainerType_MPEG4);
     ComPtr<IMFSinkWriter> wr;
-    HRESULT hr = MFCreateSinkWriterFromURL(s.path.c_str(), nullptr, attr.Get(), &wr);
+    HRESULT hr = MFCreateSinkWriterFromURL(path.c_str(), nullptr, attr.Get(), &wr);
     if (FAILED(hr)) return hr;
+    if (s.audioOnly) {                          // audio only (C32): AAC in .m4a or MP3
+        ComPtr<IMFMediaType> aout, ain;
+        MFCreateMediaType(&aout);
+        aout->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+        aout->SetGUID(MF_MT_SUBTYPE, mp3 ? MFAudioFormat_MP3 : MFAudioFormat_AAC);
+        aout->SetUINT32(MF_MT_AUDIO_SAMPLES_PER_SECOND, kRate);
+        aout->SetUINT32(MF_MT_AUDIO_NUM_CHANNELS, 2);
+        aout->SetUINT32(MF_MT_AUDIO_AVG_BYTES_PER_SECOND, mp3 ? 24000 : 24000);
+        if (!mp3) { aout->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16); aout->SetUINT32(MF_MT_AAC_PAYLOAD_TYPE, 0); }
+        if (FAILED(hr = wr->AddStream(aout.Get(), &aStream))) return hr;
+        MFCreateMediaType(&ain);
+        ain->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+        ain->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+        ain->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16);
+        ain->SetUINT32(MF_MT_AUDIO_SAMPLES_PER_SECOND, kRate);
+        ain->SetUINT32(MF_MT_AUDIO_NUM_CHANNELS, 2);
+        ain->SetUINT32(MF_MT_AUDIO_BLOCK_ALIGNMENT, 4);
+        ain->SetUINT32(MF_MT_AUDIO_AVG_BYTES_PER_SECOND, kRate * 4);
+        if (FAILED(hr = wr->SetInputMediaType(aStream, ain.Get(), nullptr))) return hr;
+        if (FAILED(hr = wr->BeginWriting())) return hr;
+        out = wr;
+        return S_OK;
+    }
 
     static const double bppTable[4] = { 0.04, 0.07, 0.10, 0.16 };
     UINT32 bitrate = (UINT32)std::clamp(bppTable[std::clamp(s.quality, 0, 3)] * w * h * s.fps, 400000.0, 40000000.0);
@@ -270,6 +296,40 @@ void Recorder::StopMonitor() {
     micLevel_ = 0; sysLevel_ = 0; micGainNow_ = 1;
 }
 
+// ---------------------------------------------------------------- input hooks (C07): every click and key press, even quick ones
+static Recorder* g_hookRec = nullptr;
+
+LRESULT CALLBACK RecorderKeyHook(int code, WPARAM w, LPARAM l) {
+    if (code == HC_ACTION && g_hookRec && (w == WM_KEYDOWN || w == WM_SYSKEYDOWN)) {
+        auto* k = (KBDLLHOOKSTRUCT*)l;
+        Recorder::InputEvent e{ true, k->vkCode, {}, GetAsyncKeyState(VK_CONTROL) < 0, GetAsyncKeyState(VK_MENU) < 0 || (k->flags & LLKHF_ALTDOWN),
+                                GetAsyncKeyState(VK_SHIFT) < 0, GetAsyncKeyState(VK_LWIN) < 0 || GetAsyncKeyState(VK_RWIN) < 0, GetTickCount64() };
+        std::lock_guard<std::mutex> lk(g_hookRec->inputMutex_);
+        if (g_hookRec->input_.size() < 256) g_hookRec->input_.push_back(e);
+    }
+    return CallNextHookEx(nullptr, code, w, l);
+}
+
+LRESULT CALLBACK RecorderMouseHook(int code, WPARAM w, LPARAM l) {
+    if (code == HC_ACTION && g_hookRec && (w == WM_LBUTTONDOWN || w == WM_RBUTTONDOWN)) {
+        auto* m = (MSLLHOOKSTRUCT*)l;
+        Recorder::InputEvent e{ false, (UINT)(w == WM_RBUTTONDOWN ? VK_RBUTTON : VK_LBUTTON), m->pt, false, false, false, false, GetTickCount64() };
+        std::lock_guard<std::mutex> lk(g_hookRec->inputMutex_);
+        if (g_hookRec->input_.size() < 256) g_hookRec->input_.push_back(e);
+    }
+    return CallNextHookEx(nullptr, code, w, l);
+}
+
+void Recorder::InputThread() {
+    inputThreadId_ = GetCurrentThreadId();
+    HHOOK kh = SetWindowsHookExW(WH_KEYBOARD_LL, RecorderKeyHook, GetModuleHandleW(nullptr), 0);
+    HHOOK mh = SetWindowsHookExW(WH_MOUSE_LL, RecorderMouseHook, GetModuleHandleW(nullptr), 0);
+    MSG msg;
+    while (GetMessageW(&msg, nullptr, 0, 0) > 0) {}
+    if (kh) UnhookWindowsHookEx(kh);
+    if (mh) UnhookWindowsHookEx(mh);
+}
+
 bool Recorder::Start(const RecordSettings& s, HWND notify, UINT notifyMsg) {
     if (state_ != Idle) return false;
     StopMonitor();
@@ -283,7 +343,9 @@ bool Recorder::Start(const RecordSettings& s, HWND notify, UINT notifyMsg) {
 
     // output size: even, ≤ 1080 lines (optional) and within the H.264 encoder limit (4096×2304)
     int w = s.rect.right - s.rect.left, h = s.rect.bottom - s.rect.top;
+    if (s.audioOnly) { w = h = 32; }
     if (w < 16 || h < 16) { lastError = Tr(L"Área de gravação muito pequena."); return false; }
+    highlight_ = s.highlightCursor; clicks_ = s.clickEffects; keyMode_ = std::clamp(s.keyMode, 0, 2); zoomOn_ = false;
     double sc = 1.0;
     if (s.downscale1080 && h > 1080) sc = 1080.0 / h;
     sc = std::min({ sc, 4096.0 / w, 2304.0 / h });
@@ -296,13 +358,43 @@ bool Recorder::Start(const RecordSettings& s, HWND notify, UINT notifyMsg) {
     if (s.microphone) { mic_ = std::make_shared<AudioSource>(); hasMic_ = mic_->Start(false, &micLevel_); if (!hasMic_) mic_.reset(); }
     if (s.systemAudio) { sys_ = std::make_shared<AudioSource>(); hasSys_ = sys_->Start(true, &sysLevel_); if (!hasSys_) sys_.reset(); }
     audioEnabled_ = hasMic_ || hasSys_;
+    if (s.audioOnly && !audioEnabled_) {
+        lastError = Tr(L"Nenhuma fonte de áudio disponível (ligue o microfone ou o áudio do sistema).");
+        MFShutdown();
+        return false;
+    }
 
+    // crash-safe (C14): a fragmented MP4 in the recovery folder, remuxed into 'path' when the recording ends
+    tempPath_.clear();
+    if (s.crashSafe && !s.audioOnly) {
+        std::wstring dir = RecoveryDir();
+        tempPath_ = dir + L"\\" + NewGuidString() + L".mp4";
+        HANDLE t = CreateFileW((tempPath_ + L".target").c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+        if (t != INVALID_HANDLE_VALUE) {
+            std::string u = WToUtf8(s.path);
+            DWORD wr = 0; WriteFile(t, u.data(), (DWORD)u.size(), &wr, nullptr);
+            CloseHandle(t);
+        } else tempPath_.clear();
+    }
     ComPtr<IMFSinkWriter> wr;
-    HRESULT hr = CreateWriter(settings_, outW_, outH_, s.hardware, audioEnabled_, wr, videoStream_, audioStream_);
-    if (FAILED(hr) && s.hardware) {
+    auto create = [&](bool hw) {
+        HRESULT r = E_FAIL;
+        if (!tempPath_.empty()) {
+            r = CreateWriter(settings_, tempPath_, true, outW_, outH_, hw, audioEnabled_, wr, videoStream_, audioStream_);
+            if (SUCCEEDED(r)) return r;
+            Log(L"Recorder: fragmented MP4 rejected (0x%08X), recording straight to MP4", r);
+            wr.Reset();
+            DeleteFileW(tempPath_.c_str()); DeleteFileW((tempPath_ + L".target").c_str());
+            tempPath_.clear();
+        }
+        return CreateWriter(settings_, s.path, false, outW_, outH_, hw, audioEnabled_, wr, videoStream_, audioStream_);
+    };
+    HRESULT hr = create(s.hardware);
+    if (FAILED(hr) && s.hardware && !s.audioOnly) {
         Log(L"Recorder: hardware encoder rejected (0x%08X), trying software", hr);
+        wr.Reset();
         DeleteFileW(s.path.c_str());
-        hr = CreateWriter(settings_, outW_, outH_, false, audioEnabled_, wr, videoStream_, audioStream_);
+        hr = create(false);
     }
     if (FAILED(hr)) {
         lastError = Format(Tr(L"Não foi possível iniciar o codificador MP4 (0x%08X)."), hr);
@@ -319,7 +411,12 @@ bool Recorder::Start(const RecordSettings& s, HWND notify, UINT notifyMsg) {
     state_ = Recording;
     running_ = true;
     SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);   // keeps the system from sleeping
-    videoThread_ = std::thread([this] { VideoThread(); });
+    if (!s.audioOnly) {
+        { std::lock_guard<std::mutex> lk(inputMutex_); input_.clear(); }
+        g_hookRec = this;
+        inputThread_ = std::thread([this] { InputThread(); });
+        videoThread_ = std::thread([this] { VideoThread(); });
+    }
     if (audioEnabled_) audioThread_ = std::thread([this] { AudioMixThread(); });
     Log(L"Recorder: started %dx%d → %dx%d @%d fps, audio mic=%d sys=%d, %s", w, h, outW_, outH_, s.fps, hasMic_, hasSys_, s.path.c_str());
     return true;
@@ -387,26 +484,149 @@ void Recorder::VideoThread() {
     LONGLONG lastTs = -1;
     ULONGLONG lastDiskCheck = 0;
     bool warnedDisk = false;
+    // overlays (C07) and zoom (C15)
+    struct Ripple { POINT p; ULONGLONG t0; bool right; };
+    std::vector<Ripple> ripples;
+    bool wasL = false, wasR = false;
+    bool keyDown[256] = {};
+    std::wstring keyText;
+    ULONGLONG keyTime = 0;
+    double zoomNow = 1.0, zcx = (r.left + r.right) / 2.0, zcy = (r.top + r.bottom) / 2.0;
+    ULONGLONG autoZoomUntil = 0;
+    auto keyName = [](UINT vk) -> std::wstring {
+        switch (vk) {
+        case VK_RETURN: return L"Enter"; case VK_ESCAPE: return L"Esc"; case VK_SPACE: return Tr(L"Espaço"); case VK_TAB: return L"Tab";
+        case VK_BACK: return L"⌫"; case VK_DELETE: return L"Del"; case VK_LEFT: return L"←"; case VK_RIGHT: return L"→";
+        case VK_UP: return L"↑"; case VK_DOWN: return L"↓"; case VK_HOME: return L"Home"; case VK_END: return L"End";
+        case VK_PRIOR: return L"PgUp"; case VK_NEXT: return L"PgDn"; case VK_INSERT: return L"Ins"; case VK_SNAPSHOT: return L"PrtSc";
+        }
+        if (vk >= VK_F1 && vk <= VK_F24) return Format(L"F%u", vk - VK_F1 + 1);
+        if ((vk >= '0' && vk <= '9') || (vk >= 'A' && vk <= 'Z')) return std::wstring(1, (wchar_t)vk);
+        UINT sc = MapVirtualKeyW(vk, MAPVK_VK_TO_VSC);
+        wchar_t b[64] = L"";
+        if (sc && GetKeyNameTextW((LONG)(sc << 16), b, 64) > 0) return b;
+        return Format(L"#%u", vk);
+    };
 
     while (running_) {
         if (state_ == Paused) { Sleep(10); continue; }
         LONGLONG t = Now100ns();
-        if (scaled) StretchBlt(mem, 0, 0, outW_, outH_, screen, r.left, r.top, sw, sh, SRCCOPY | CAPTUREBLT);
+        ULONGLONG tick = GetTickCount64();
+        CURSORINFO ci{ sizeof(ci) };
+        bool haveCursor = GetCursorInfo(&ci) != 0;
+        // clicks and keys seen by the hooks since the last frame (C07, and C15 auto zoom)
+        std::vector<InputEvent> events;
+        { std::lock_guard<std::mutex> lk(inputMutex_); events.swap(input_); }
+        for (auto& e : events) {
+            if (e.key) continue;
+            // (the hook's time may be a little after this frame's clock: the age must not go below zero)
+            if (clicks_) ripples.push_back({ e.pt, std::min(e.tick, tick), e.code == VK_RBUTTON });
+            if (settings_.autoZoom) autoZoomUntil = e.tick + 2500;
+        }
+        (void)wasL; (void)wasR;
+        // zoom (C15): eases toward the target and follows the pointer
+        double target = (zoomOn_ || tick < autoZoomUntil) ? std::clamp(settings_.zoomPercent, 120, 400) / 100.0 : 1.0;
+        zoomNow += (target - zoomNow) * 0.18;
+        if (std::fabs(target - zoomNow) < 0.004) zoomNow = target;
+        if (haveCursor) { zcx += (ci.ptScreenPos.x - zcx) * 0.2; zcy += (ci.ptScreenPos.y - zcy) * 0.2; }
+        double srcW = sw / zoomNow, srcH = sh / zoomNow;
+        double srcL = std::clamp(zcx - srcW / 2, (double)r.left, r.right - srcW), srcT = std::clamp(zcy - srcH / 2, (double)r.top, r.bottom - srcH);
+        if (zoomNow == 1.0) { srcL = r.left; srcT = r.top; }
+        const double kx = outW_ / srcW, ky = outH_ / srcH;          // screen → output
+        auto toOut = [&](POINT p) { return Gdiplus::PointF((float)((p.x - srcL) * kx), (float)((p.y - srcT) * ky)); };
+        if (zoomNow != 1.0) StretchBlt(mem, 0, 0, outW_, outH_, screen, (int)std::lround(srcL), (int)std::lround(srcT), (int)std::lround(srcW), (int)std::lround(srcH), SRCCOPY | CAPTUREBLT);
+        else if (scaled) StretchBlt(mem, 0, 0, outW_, outH_, screen, r.left, r.top, sw, sh, SRCCOPY | CAPTUREBLT);
         else BitBlt(mem, 0, 0, outW_, outH_, screen, r.left, r.top, SRCCOPY | CAPTUREBLT);
-        if (settings_.cursor) {
-            CURSORINFO ci{ sizeof(ci) };
-            if (GetCursorInfo(&ci) && (ci.flags & CURSOR_SHOWING)) {
-                ICONINFO ii{};
-                if (GetIconInfo(ci.hCursor, &ii)) {
-                    int cx = (int)((ci.ptScreenPos.x - r.left - (int)ii.xHotspot) * fx);
-                    int cy = (int)((ci.ptScreenPos.y - r.top - (int)ii.yHotspot) * fy);
-                    int cs = (int)(GetSystemMetrics(SM_CXCURSOR) * std::min(fx, 1.0));
-                    DrawIconEx(mem, cx, cy, ci.hCursor, scaled ? cs : 0, scaled ? cs : 0, 0, nullptr, DI_NORMAL);
-                    if (ii.hbmMask) DeleteObject(ii.hbmMask);
-                    if (ii.hbmColor) DeleteObject(ii.hbmColor);
-                }
+        const bool overlays = highlight_ || !ripples.empty() || keyMode_ > 0;
+        std::unique_ptr<Gdiplus::Graphics> gg;
+        if (overlays) { gg = std::make_unique<Gdiplus::Graphics>(mem); gg->SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias); }
+        const float px = (float)std::min(kx, ky);                  // screen pixel → output pixels
+        if (highlight_ && haveCursor && (ci.flags & CURSOR_SHOWING)) {          // halo under the cursor (C07)
+            Gdiplus::PointF c = toOut(ci.ptScreenPos);
+            float rad = settings_.highlightSize / 2.0f * px;
+            COLORREF hc = settings_.highlightColor;
+            Gdiplus::SolidBrush b(Gdiplus::Color((BYTE)(std::clamp(settings_.highlightOpacity, 5, 100) * 255 / 100), GetRValue(hc), GetGValue(hc), GetBValue(hc)));
+            gg->FillEllipse(&b, c.X - rad, c.Y - rad, 2 * rad, 2 * rad);
+        }
+        if (settings_.cursor && haveCursor && (ci.flags & CURSOR_SHOWING)) {
+            ICONINFO ii{};
+            if (GetIconInfo(ci.hCursor, &ii)) {
+                if (gg) gg->Flush(Gdiplus::FlushIntentionSync);
+                // the cursor follows the scale of the picture (smaller when downscaled, bigger when zoomed in)
+                Gdiplus::PointF c = toOut(ci.ptScreenPos);
+                bool custom = std::fabs(px - 1.0f) > 0.01f;
+                int cs = (int)std::lround(GetSystemMetrics(SM_CXCURSOR) * px);
+                int cx = (int)std::lround(c.X - ii.xHotspot * px), cy = (int)std::lround(c.Y - ii.yHotspot * px);
+                DrawIconEx(mem, cx, cy, ci.hCursor, custom ? cs : 0, custom ? cs : 0, 0, nullptr, DI_NORMAL);
+                if (ii.hbmMask) DeleteObject(ii.hbmMask);
+                if (ii.hbmColor) DeleteObject(ii.hbmColor);
             }
         }
+        // click ripples (C07): an expanding ring over a fading disc for 700 ms, red for the left button and blue for the
+        // right one (the first version, thin and short, went unnoticed)
+        if (!ripples.empty()) {
+            const float life = 700.0f;
+            ripples.erase(std::remove_if(ripples.begin(), ripples.end(), [&](const Ripple& rp) { return tick - rp.t0 > life; }), ripples.end());
+            for (auto& rp : ripples) {
+                float prog = (tick - rp.t0) / life, ease = 1 - (1 - prog) * (1 - prog);
+                COLORREF cc = rp.right ? settings_.rightClickColor : settings_.leftClickColor;
+                Gdiplus::PointF c = toOut(rp.p);
+                float rad = (10 + 38 * ease) * px;
+                Gdiplus::SolidBrush disc(Gdiplus::Color((BYTE)(90 * (1 - prog)), GetRValue(cc), GetGValue(cc), GetBValue(cc)));
+                gg->FillEllipse(&disc, c.X - rad, c.Y - rad, 2 * rad, 2 * rad);
+                Gdiplus::Pen pen(Gdiplus::Color((BYTE)(240 * (1 - prog)), GetRValue(cc), GetGValue(cc), GetBValue(cc)), std::max(3.0f, 5.0f * px));
+                gg->DrawEllipse(&pen, c.X - rad, c.Y - rad, 2 * rad, 2 * rad);
+                Gdiplus::SolidBrush dot(Gdiplus::Color((BYTE)(200 * (1 - prog)), GetRValue(cc), GetGValue(cc), GetBValue(cc)));
+                gg->FillEllipse(&dot, c.X - 6 * px, c.Y - 6 * px, 12 * px, 12 * px);
+            }
+        }
+        // keys on screen (C07): shortcuts only by default — typed text (passwords) stays out unless "every key"
+        if (keyMode_ > 0) {
+            for (auto& e : events) {
+                if (!e.key) continue;
+                UINT vk = e.code;
+                bool ctrl = e.ctrl, alt = e.alt, shift = e.shift, win = e.win;
+                if (vk == VK_SHIFT || vk == VK_CONTROL || vk == VK_MENU || vk == VK_LWIN || vk == VK_RWIN || (vk >= VK_LSHIFT && vk <= VK_RMENU) ||
+                    vk == VK_CAPITAL || vk == VK_NUMLOCK || vk >= 256) continue;
+                bool down = true;
+                if (down && !keyDown[vk]) {
+                    bool fkey = vk >= VK_F1 && vk <= VK_F24;
+                    bool shortcut = ctrl || alt || win || fkey;
+                    if (keyMode_ == 2 || shortcut) {
+                        std::wstring combo = (ctrl ? L"Ctrl + " : L"") + std::wstring(alt ? L"Alt + " : L"") + (win ? L"Win + " : L"") +
+                                             ((shift && shortcut) ? L"Shift + " : L"") + keyName(vk);
+                        bool typing = keyMode_ == 2 && !shortcut && combo.size() == 1;
+                        if (typing && tick - keyTime < 1500 && keyText.size() < 28 && !keyText.empty() && keyText.find(L'+') == std::wstring::npos)
+                            keyText += shift ? combo : std::wstring(1, (wchar_t)towlower(combo[0]));
+                        else keyText = typing && !shift ? std::wstring(1, (wchar_t)towlower(combo[0])) : combo;
+                        keyTime = tick;
+                    }
+                }
+                (void)down;
+            }
+            if (!keyText.empty() && tick - keyTime < 1800) {
+                float fade = tick - keyTime > 1400 ? 1 - (tick - keyTime - 1400) / 400.0f : 1;
+                float em = std::max(14.0f, outH_ / 20.0f);
+                Gdiplus::FontFamily ff(L"Segoe UI");
+                Gdiplus::Font font(&ff, em, Gdiplus::FontStyleBold, Gdiplus::UnitPixel);
+                Gdiplus::RectF box;
+                gg->MeasureString(keyText.c_str(), -1, &font, Gdiplus::PointF(0, 0), &box);
+                float bw = box.Width + em * 1.2f, bh = box.Height + em * 0.5f;
+                Gdiplus::RectF bg((outW_ - bw) / 2, outH_ - bh - outH_ * 0.06f, bw, bh);
+                Gdiplus::GraphicsPath path;
+                float rr = bh * 0.3f;
+                path.AddArc(bg.X, bg.Y, 2 * rr, 2 * rr, 180, 90); path.AddArc(bg.GetRight() - 2 * rr, bg.Y, 2 * rr, 2 * rr, 270, 90);
+                path.AddArc(bg.GetRight() - 2 * rr, bg.GetBottom() - 2 * rr, 2 * rr, 2 * rr, 0, 90); path.AddArc(bg.X, bg.GetBottom() - 2 * rr, 2 * rr, 2 * rr, 90, 90);
+                path.CloseFigure();
+                Gdiplus::SolidBrush back(Gdiplus::Color((BYTE)(190 * fade), 20, 22, 26));
+                gg->FillPath(&back, &path);
+                Gdiplus::SolidBrush fore(Gdiplus::Color((BYTE)(255 * fade), 255, 255, 255));
+                Gdiplus::StringFormat sf; sf.SetAlignment(Gdiplus::StringAlignmentCenter); sf.SetLineAlignment(Gdiplus::StringAlignmentCenter);
+                gg->SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
+                gg->DrawString(keyText.c_str(), -1, &font, bg, &sf, &fore);
+            }
+        }
+        gg.reset();
         GdiFlush();
         // the BitBlt alpha channel is undefined: the encoder ignores it, but the thumbnail needs it opaque
         if (firstFrame.empty()) {
@@ -507,6 +727,12 @@ bool Recorder::Stop() {
     running_ = false;
     if (videoThread_.joinable()) videoThread_.join();
     if (audioThread_.joinable()) audioThread_.join();
+    if (inputThread_.joinable()) {
+        while (!inputThreadId_ || !PostThreadMessageW(inputThreadId_, WM_QUIT, 0, 0)) Sleep(5);
+        inputThread_.join();
+        inputThreadId_ = 0;
+    }
+    g_hookRec = nullptr;
     if (mic_) mic_->Stop();
     if (sys_) sys_->Stop();
     mic_.reset(); sys_.reset();
@@ -518,6 +744,20 @@ bool Recorder::Stop() {
         ((IMFSinkWriter*)writer_)->Release();
         writer_ = nullptr;
     }
+    // crash-safe recording (C14): the fragmented file becomes a regular MP4 (no re-encoding)
+    if (!tempPath_.empty()) {
+        if (ok) {
+            std::wstring err;
+            if (!RemuxToMp4(tempPath_, settings_.path, err)) {
+                Log(L"Recorder: remux failed (%s), keeping the fragmented MP4", err.c_str());
+                DeleteFileW(settings_.path.c_str());
+                ok = MoveFileExW(tempPath_.c_str(), settings_.path.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED) != 0;
+            }
+        }
+        DeleteFileW(tempPath_.c_str());
+        DeleteFileW((tempPath_ + L".target").c_str());
+        tempPath_.clear();
+    }
     MFShutdown();
     SetThreadExecutionState(ES_CONTINUOUS);
     state_ = Idle;
@@ -527,9 +767,110 @@ bool Recorder::Stop() {
 }
 
 void Recorder::Cancel() {
+    std::wstring temp = tempPath_;
+    tempPath_.clear();                   // nothing to remux: the recording is thrown away
     Stop();
+    if (!temp.empty()) { DeleteFileW(temp.c_str()); DeleteFileW((temp + L".target").c_str()); }
     DeleteFileW(settings_.path.c_str());
     Log(L"Recorder: canceled");
+}
+
+// ---------------------------------------------------------------- crash recovery (C14)
+std::wstring Recorder::RecoveryDir() {
+    std::wstring d = AppDataDir() + L"\\Recovery";
+    EnsureDir(d);
+    return d;
+}
+
+// copies the streams of 'in' into a regular MP4 without re-encoding (Source Reader → Sink Writer in passthrough); a
+// file cut short by a crash is copied up to where it can be read
+bool Recorder::RemuxToMp4(const std::wstring& in, const std::wstring& out, std::wstring& err) {
+    if (FAILED(MFStartup(MF_VERSION, MFSTARTUP_FULL))) { err = L"MFStartup"; return false; }
+    bool ok = false;
+    {
+        ComPtr<IMFSourceReader> rd;
+        ComPtr<IMFSinkWriter> wr;
+        HRESULT hr = MFCreateSourceReaderFromURL(in.c_str(), nullptr, &rd);
+        if (SUCCEEDED(hr)) {
+            ComPtr<IMFAttributes> attr;
+            MFCreateAttributes(&attr, 1);
+            attr->SetGUID(MF_TRANSCODE_CONTAINERTYPE, MFTranscodeContainerType_MPEG4);
+            hr = MFCreateSinkWriterFromURL(out.c_str(), nullptr, attr.Get(), &wr);
+        }
+        std::map<DWORD, DWORD> map;                     // reader stream → writer stream
+        for (DWORD i = 0; SUCCEEDED(hr); i++) {
+            ComPtr<IMFMediaType> mt;
+            HRESULT h2 = rd->GetNativeMediaType(i, 0, &mt);
+            if (h2 == MF_E_INVALIDSTREAMNUMBER) break;
+            if (FAILED(h2)) { hr = h2; break; }
+            GUID major{};
+            mt->GetGUID(MF_MT_MAJOR_TYPE, &major);
+            if (major != MFMediaType_Video && major != MFMediaType_Audio) { rd->SetStreamSelection(i, FALSE); continue; }
+            rd->SetStreamSelection(i, TRUE);
+            rd->SetCurrentMediaType(i, nullptr, mt.Get());
+            DWORD ws = 0;
+            if (FAILED(hr = wr->AddStream(mt.Get(), &ws))) break;
+            map[i] = ws;
+        }
+        if (SUCCEEDED(hr) && !map.empty()) hr = wr->BeginWriting();
+        LONGLONG count = 0;
+        while (SUCCEEDED(hr) && !map.empty()) {
+            DWORD idx = 0, flags = 0;
+            LONGLONG ts = 0;
+            ComPtr<IMFSample> smp;
+            HRESULT h2 = rd->ReadSample((DWORD)MF_SOURCE_READER_ANY_STREAM, 0, &idx, &flags, &ts, &smp);
+            if (FAILED(h2) || (flags & MF_SOURCE_READERF_ERROR)) break;     // cut short: what was read is kept
+            if (flags & MF_SOURCE_READERF_ENDOFSTREAM) {
+                map.erase(idx);
+                continue;
+            }
+            if (!smp || !map.count(idx)) continue;
+            if (FAILED(wr->WriteSample(map[idx], smp.Get()))) break;
+            count++;
+        }
+        if (SUCCEEDED(hr) && count > 0) { hr = wr->Finalize(); ok = SUCCEEDED(hr); }
+        if (!ok) err = Format(L"0x%08X", hr);
+    }
+    MFShutdown();
+    if (!ok) DeleteFileW(out.c_str());
+    return ok;
+}
+
+std::vector<std::wstring> Recorder::RecoverInterrupted() {
+    std::vector<std::wstring> done;
+    std::wstring dir = RecoveryDir();
+    WIN32_FIND_DATAW fd;
+    HANDLE h = FindFirstFileW((dir + L"\\*.mp4").c_str(), &fd);
+    if (h == INVALID_HANDLE_VALUE) return done;
+    std::vector<std::wstring> files;
+    do { files.push_back(dir + L"\\" + fd.cFileName); } while (FindNextFileW(h, &fd));
+    FindClose(h);
+    for (auto& f : files) {
+        std::wstring target;
+        HANDLE t = CreateFileW((f + L".target").c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        if (t != INVALID_HANDLE_VALUE) {
+            char buf[2048]; DWORD rd = 0;
+            if (ReadFile(t, buf, sizeof buf - 1, &rd, nullptr)) target = Utf8ToW(std::string(buf, rd));
+            CloseHandle(t);
+        }
+        if (target.empty()) target = LibraryDir() + L"\\" + FileNameOf(f);
+        // never over an existing video
+        for (int n = 2; FileExists(target); n++) {
+            std::wstring base = target.substr(0, target.size() - 4);
+            size_t us = base.rfind(L"_r");
+            target = (us != std::wstring::npos && us + 2 < base.size() && iswdigit(base[us + 2]) ? base.substr(0, us) : base) + Format(L"_r%d.mp4", n);
+        }
+        EnsureDir(DirOf(target));
+        std::wstring err;
+        LARGE_INTEGER size{};
+        WIN32_FILE_ATTRIBUTE_DATA fa{};
+        if (GetFileAttributesExW(f.c_str(), GetFileExInfoStandard, &fa)) { size.HighPart = (LONG)fa.nFileSizeHigh; size.LowPart = fa.nFileSizeLow; }
+        bool ok = size.QuadPart > 4096 && RemuxToMp4(f, target, err);
+        if (ok) done.push_back(target);
+        Log(L"Recorder: recovery of %s → %s: %s", f.c_str(), target.c_str(), ok ? L"ok" : (L"failed " + err).c_str());
+        if (ok || size.QuadPart <= 4096) { DeleteFileW(f.c_str()); DeleteFileW((f + L".target").c_str()); }
+    }
+    return done;
 }
 
 } // namespace snap

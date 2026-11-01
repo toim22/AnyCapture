@@ -3,6 +3,83 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] — 2026-11-01
+
+### Added
+- **Every capture is copied to the clipboard** right away (videos as a file); *Options › After capturing* turns it off.
+- **Quick thumbnail after capturing** (instead of or besides the Editor): copy, save, annotate, pin, delete, drag into
+  another program, *Copy as…*, read QR code, upload; it closes by itself and several captures stack.
+- **Pin captures on the screen**: zoom, opacity, move, lock, click-through, always on top, shadow, quick annotation,
+  open in the Editor, drag out, history and *Show/Hide/Close all*; from the capture, the Editor (Ctrl+Shift+P), the
+  tray/library and the clipboard (image, text or color).
+- **HDR monitors**: captures are tone-mapped to SDR so colors look right (option).
+- **WebP and AVIF** save and open, **HEIC** open (Windows codecs for AVIF/HEIC, with a hint when one is missing); quality
+  options; **remove metadata** (camera, GPS, dates) when saving, on by default for uploads.
+- **QR code and barcode reading** (ZXing-C++): capture output, Editor (Ctrl+Shift+Q) and pinned images.
+- **Beautify**: background (gradient, wallpaper, image, color, transparent), padding, rounded corners, shadow, alignment,
+  aspect ratio, balanced margins and presets; in the Editor (*Image › Effects*) with a live preview and as a capture
+  effect.
+- Window captures keep the **Windows 11 rounded corners** transparent, with an optional shadow.
+- **Screen color picker** (HEX, RGB, HSL and code formats, recent colors) from the tray, the capture window, a
+  shortcut, `/colorpicker` and the crosshair (C).
+- Crosshair: **region history** (Tab), recent captures (H), **keyboard-precise selection** (arrows move, Ctrl/Ctrl+Shift
+  grow and shrink, type the size).
+- **Combine images** (side by side, stacked, grid) from the tray/library or files; *Image › Apply template…* is
+  enabled; *Tools › Add capture* adds a new capture below the image.
+- **Redact sensitive data** (Ctrl+Shift+E): e-mails, phones, card numbers, IBAN, CPF/CNPJ, SSN, IP addresses, links with
+  tokens, API keys and faces, found locally (Windows OCR and face detection), hidden with blur, pixelate or a black bar
+  as editable objects.
+- **Smart highlighter** that snaps to the text lines, and **text only** for the Highlighter, Blur and Spotlight.
+- **Compare images**: overlay, swipe, difference and side by side; export a before/after GIF or image.
+- **Draw and hold**: a rough Pen stroke held still becomes a line, arrow, rectangle, ellipse or triangle (option).
+- **Cursor stamps** (arrow, hand, I-beam, busy, crosshair, move, resize, click indicators) and the **captured cursor as
+  an object** (option); **date and time stamp** (Ctrl+Shift+D, format configurable).
+- **Remove the background** of a photo, locally.
+- **Batch processing**: resize, quick effect or Beautify preset, watermark, format and quality, metadata removal and
+  renaming for many images, with a preview and progress.
+- **Copy as…**: image, file, file path, Base64, data URL (PNG/WebP), upload link and Markdown.
+- **Send to Word, PowerPoint, Excel or OneNote**.
+- **Optional upload** (off by default): S3-compatible storage, Dropbox, Google Drive, OneDrive, FTP, SFTP and custom
+  `.sxcu` uploaders; secrets in the Windows Credential Manager.
+- **AI assistant** (off by default, your own key): OpenAI, Gemini, Anthropic, OpenAI-compatible or a local Ollama model
+  explain, describe, extract the steps or the text of a capture; the answer can be added as text.
+- **Split image** by size or number of parts, and long images split across pages without cutting text lines when
+  printing and exporting PDF (option).
+- **Hand-drawn style** for lines, arrows, shapes and text, with variations and quick styles.
+- **Contrast checker** (WCAG AA/AAA).
+- **Vertical text** and **text along a line or curve**.
+- **Touch, pen and touchpad**: pinch zoom, two-finger pan, pen pressure, pen eraser, bigger handles.
+- Recording: **cursor highlight, click rings and keys on screen** (shortcuts only or every key), **zoom following the
+  pointer** (Shift+F11, or automatic on clicks), **crash-safe recording** recovered at the next start, **audio-only
+  recording** (M4A/MP3, starts after a countdown), restart with a confirmation, Do not disturb and no screen sleep while
+  recording, hidden desktop icons while capturing; the buttons of the recording panel show their names and shortcuts.
+- **Interval capture**, **screen focus** for presentations and **automatic library cleanup** (off by default).
+- **Command line automation**: `/region`, `/window`, `/monitor`, `/fullscreen`, `/delay`, `/ocr`, `/qr`, `/upload`, `/pin`,
+  `/pinclipboard`, `/colorpicker`, `/focus`, `/interval` and `/output clipboard|editor|none|file`.
+- Capture sound (shutter, click, tap, your WAV or none).
+- Manual: new part “More tools” with screenshots (`help/images`, regenerated with `scripts/manual-screenshots.ps1`),
+  new shortcuts and command line switches. All new text translated into the 11 other languages.
+
+### Changed
+- The Options dialog uses two columns when it would be taller than the screen; long explanations in forms wrap.
+- Building downloads two pinned open-source libraries on the first configure (libwebp 1.5.0 and ZXing-C++ 2.2.1,
+  readers only; see `THIRD-PARTY-NOTICES.txt`); CMake 3.28 or later.
+- The text recognition reads lines that Windows OCR leaves out (such as card numbers full of “1111”).
+- Editor: the Eyedropper pointer is a dropper whose tip is the pixel picked; the Pen hint explains draw and hold.
+
+### Fixed
+- The names of the capture effects (Border, Filters…) were always in Portuguese, whatever the language.
+- Running Snapnab or a command line switch while it was already open could crash the second process on PCs with
+  audio overlays that inject themselves into every program (Nahimic on Alienware/Dell).
+- *Print* did nothing without a printer or with the print service stopped; it now says why.
+- Editor shortcuts such as Ctrl+S and Ctrl+Shift+S were ignored while a field of the side panel had the focus.
+- A capture that did not end cleanly could leave Snapnab busy until it restarted (the record button stopped
+  working); a new capture now resets it.
+- Editor: starting a pen stroke on or next to the previous one dragged that stroke instead of drawing; the pen now
+  always draws (the Move tool moves strokes).
+- Editor: Shift did nothing with the Pen; it now draws a straight segment (in 45° steps) while held.
+- Default file names (“Captura…” when saving or exporting, “Antes-depois” in Compare images) now follow the language.
+
 ## [0.3.0] — 2026-10-26
 
 ### Added

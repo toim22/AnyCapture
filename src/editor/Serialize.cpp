@@ -122,6 +122,22 @@ XmlNode ObjToXml(const DrawObj& o, SnapFrame& frame, int& counter) {
         for (auto& p : o.pts) pts += FormatA("%.1f,%.1f ", p.X, p.Y);
         n.set("Points", pts);
     }
+    // competitor feature request: written only when set, so older versions read the file as before
+    if (s.textOnly) {
+        n.seti("TextOnly", 1);
+        std::string boxes;
+        for (auto& r : o.textBoxes) boxes += FormatA("%.1f,%.1f,%.1f,%.1f ", r.X, r.Y, r.Width, r.Height);
+        n.set("TextBoxes", boxes);
+    }
+    if (s.snapText) n.seti("SnapText", 1);
+    if (s.sketch) n.seti("Sketch", 1).seti("SketchSeed", s.sketchSeed);
+    if (s.vertical) n.seti("VerticalText", 1);
+    if (s.textOnPath) n.seti("TextOnPath", 1);
+    if (o.type == ObjType::Pen && !o.pressure.empty() && o.pressure.size() == o.pts.size()) {
+        std::string pr;
+        for (float v : o.pressure) pr += FormatA("%.2f ", v);
+        n.set("Pressure", pr);
+    }
     if (o.type == ObjType::Picture && o.picture) {
         std::string name = FormatA("Image_%d.png", counter++);
         frame.embedded[name] = *o.picture;
@@ -196,6 +212,28 @@ ObjPtr ObjFromXml(const XmlNode& n, const SnapFrame& frame) {
     s.bgBlur = n.getb("BackgroundBlur");
     s.bgBlurAmount = std::clamp(n.geti("BackgroundBlurAmount", 8), 1, 40);
     s.grad = GradFromXml(n);
+    s.textOnly = n.getb("TextOnly");
+    s.snapText = n.getb("SnapText");
+    s.sketch = n.getb("Sketch");
+    s.sketchSeed = n.geti("SketchSeed", 1);
+    s.vertical = n.getb("VerticalText");
+    s.textOnPath = n.getb("TextOnPath");
+    {
+        std::string b = n.get("TextBoxes");
+        for (size_t i = 0; i < b.size();) {
+            float x, y, w, h; int used = 0;
+            if (sscanf_s(b.c_str() + i, "%f,%f,%f,%f %n", &x, &y, &w, &h, &used) < 4 || used <= 0) break;
+            o->textBoxes.push_back({ x, y, w, h });
+            i += used;
+        }
+        std::string pr = n.get("Pressure");
+        for (size_t i = 0; i < pr.size();) {
+            float v; int used = 0;
+            if (sscanf_s(pr.c_str() + i, "%f %n", &v, &used) < 1 || used <= 0) break;
+            o->pressure.push_back(std::clamp(v, 0.0f, 1.0f));
+            i += used;
+        }
+    }
     o->text = n.getW("Text");
     o->tail = { (float)n.getd("TailX"), (float)n.getd("TailY") };
     o->stepValue = n.geti("StepValue", 1);

@@ -25,6 +25,7 @@ enum Code : uint32_t {
     LibraryDocReleased    = 0x03,   // blob: GUID
     EditorStartCapture    = 0x12,   // start a capture from the Editor (int: 0 image, 1 video)
     EditorClosed          = 0x13,
+    PinFile               = 0x40,   // string: image or .snap to pin on the screen (C01, from the Editor / library)
     EditorOptionChanged   = 0x17,
 };
 

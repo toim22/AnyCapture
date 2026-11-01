@@ -1,6 +1,7 @@
 #include "RecorderHud.h"
 #include "Icons.h"
 #include "Ui.h"
+#include "Hotkeys.h"
 
 #ifndef WDA_EXCLUDEFROMCAPTURE
 #define WDA_EXCLUDEFROMCAPTURE 0x00000011
@@ -8,9 +9,31 @@
 
 namespace snap {
 
-enum { BtnRecord = 1, BtnStop, BtnRestart, BtnCancel, BtnMic, BtnSys, BtnCam, BtnSnap, BtnVolume };
+enum { BtnRecord = 1, BtnStop, BtnRestart, BtnCancel, BtnMic, BtnSys, BtnCam, BtnSnap, BtnVolume, BtnZoom, BtnOverlay };
 
 static RecorderHud* g_hud = nullptr;
+
+// the name of a button, with its shortcut when it has one (Options › shortcuts, Video options)
+static std::wstring ButtonTip(int id) {
+    auto key = [](const wchar_t* name, DWORD def) {
+        UINT m, v; UnpackHotkey(RegGetDword(name, def), m, v);
+        return v ? L" (" + HotkeyToText(m, v) + L")" : std::wstring();
+    };
+    switch (id) {
+    case BtnRecord: return Tr(L"Gravar / pausar") + key(L"VideoStartPauseResumeKey", PackHotkey(MOD_SHIFT, VK_F9));
+    case BtnStop: return Tr(L"Parar e salvar") + key(L"VideoStopKey", PackHotkey(MOD_SHIFT, VK_F10));
+    case BtnRestart: return Tr(L"Recomeçar a gravação");
+    case BtnCancel: return Tr(L"Cancelar (descarta a gravação)");
+    case BtnMic: return Tr(L"Microfone: liga / desliga");
+    case BtnSys: return Tr(L"Áudio do sistema: liga / desliga");
+    case BtnVolume: return Tr(L"Volume do microfone e do sistema");
+    case BtnCam: return Tr(L"Webcam: mostra / oculta");
+    case BtnSnap: return Tr(L"Capturar uma imagem sem parar a gravação");
+    case BtnZoom: return Tr(L"Zoom em volta do ponteiro") + key(L"VideoZoomKey", PackHotkey(MOD_SHIFT, VK_F11));
+    case BtnOverlay: return Tr(L"No vídeo: destaque do cursor, cliques e teclas");
+    }
+    return L"";
+}
 
 void RecorderHud::Layout() {
     int dpi = DpiForWindow(hwnd_);
@@ -20,8 +43,9 @@ void RecorderHud::Layout() {
     auto add = [&](int id) { buttons_.push_back({ id, { x, y, x + b, y + b } }); x += b + gap; };
     add(BtnRecord); add(BtnStop); add(BtnRestart); add(BtnCancel);
     x += sep; add(BtnMic); add(BtnSys); add(BtnVolume);
+    if (audioOnly) return;
     if (camAvailable) add(BtnCam);
-    x += sep; add(BtnSnap);
+    x += sep; add(BtnSnap); add(BtnZoom); add(BtnOverlay);
 }
 
 void RecorderHud::Show(RECT area, Recorder* rec, HudCallbacks cb, bool micOpt, bool sysOpt) {
@@ -43,8 +67,8 @@ void RecorderHud::Show(RECT area, Recorder* rec, HudCallbacks cb, bool micOpt, b
         RegisterClassW(&vc);
         reg = true;
     }
-    // red frame around the area (outside it, not shown in the recording)
-    int t = 3;
+    // red frame around the area (outside it, not shown in the recording); none for an audio-only recording
+    int t = audioOnly ? 0 : 3;
     RECT o{ area.left - t, area.top - t, area.right + t, area.bottom + t };
     border_ = CreateWindowExW(WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE,
                               L"SnapnabRecorderBorder", L"", WS_POPUP, o.left, o.top, o.right - o.left, o.bottom - o.top,
@@ -56,7 +80,7 @@ void RecorderHud::Show(RECT area, Recorder* rec, HudCallbacks cb, bool micOpt, b
     DeleteObject(inner);
     SetWindowRgn(border_, outer, FALSE);
     SetWindowDisplayAffinity(border_, WDA_EXCLUDEFROMCAPTURE);
-    ShowWindow(border_, SW_SHOWNOACTIVATE);
+    if (!audioOnly) ShowWindow(border_, SW_SHOWNOACTIVATE);
 
     // HUD below the area; if it does not fit, above; otherwise inside, in the bottom corner
     hwnd_ = CreateWindowExW(WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE, L"SnapnabRecorderHud", Tr(L"Snapnab — gravação"),
@@ -68,17 +92,32 @@ void RecorderHud::Show(RECT area, Recorder* rec, HudCallbacks cb, bool micOpt, b
     RECT mon = MonitorRectFromPoint(c, true);
     int x = std::clamp((int)(area.left + area.right) / 2 - W / 2, (int)mon.left, (int)mon.right - W);
     int y = area.bottom + ui::Scale(10, dpi);
+    if (audioOnly) { c = { (area.left + area.right) / 2, (area.top + area.bottom) / 2 }; mon = MonitorRectFromPoint(c, true); y = mon.bottom - H - ui::Scale(90, dpi); }
     if (y + H > mon.bottom) y = area.top - H - ui::Scale(10, dpi);
     if (y < mon.top) y = area.bottom - H - ui::Scale(16, dpi);
     SetWindowPos(hwnd_, HWND_TOPMOST, x, y, W, H, SWP_NOACTIVATE);
     HRGN rr = CreateRoundRectRgn(0, 0, W + 1, H + 1, ui::Scale(14, dpi), ui::Scale(14, dpi));
     SetWindowRgn(hwnd_, rr, FALSE);
     SetWindowDisplayAffinity(hwnd_, WDA_EXCLUDEFROMCAPTURE);     // the HUD does not appear in the video
+    // the name of each button on hover (the icons alone were not enough to find zoom and the overlays); not in the video
+    tip_ = CreateWindowExW(WS_EX_TOPMOST | WS_EX_TOOLWINDOW, TOOLTIPS_CLASSW, nullptr, WS_POPUP | TTS_ALWAYSTIP | TTS_NOPREFIX,
+                           0, 0, 0, 0, hwnd_, nullptr, hi, nullptr);
+    SetWindowDisplayAffinity(tip_, WDA_EXCLUDEFROMCAPTURE);
+    tipText_.clear();
+    for (auto& bt : buttons_) tipText_.push_back(ButtonTip(bt.id));
+    for (size_t i = 0; i < buttons_.size(); i++) {
+        TTTOOLINFOW ti{ sizeof ti };
+        ti.uFlags = TTF_SUBCLASS;
+        ti.hwnd = hwnd_; ti.uId = (UINT_PTR)buttons_[i].id; ti.rect = buttons_[i].r;
+        ti.lpszText = tipText_[i].data();
+        SendMessageW(tip_, TTM_ADDTOOLW, 0, (LPARAM)&ti);
+    }
     ShowWindow(hwnd_, SW_SHOWNOACTIVATE);
     SetTimer(hwnd_, 1, 150, nullptr);
 }
 
 void RecorderHud::Hide() {
+    if (tip_) { DestroyWindow(tip_); tip_ = nullptr; }
     if (vol_) { DestroyWindow(vol_); vol_ = nullptr; }
     if (hwnd_) { KillTimer(hwnd_, 1); DestroyWindow(hwnd_); hwnd_ = nullptr; }
     if (border_) { DestroyWindow(border_); border_ = nullptr; }
@@ -127,6 +166,11 @@ void RecorderHud::Paint(HDC hdc) {
             case BtnCam: id = camOn ? icons::Webcam : icons::WebcamOff; break;
             case BtnSnap: id = icons::Camera; enabled = st != Recorder::Idle; break;
             case BtnVolume: id = icons::Sliders; if (vol_) col = Gdiplus::Color(255, 120, 190, 255); break;
+            case BtnZoom: id = icons::Focus; enabled = st != Recorder::Idle; if (rec_ && rec_->zoomed()) col = Gdiplus::Color(255, 120, 190, 255); break;
+            case BtnOverlay:
+                id = icons::Cursor;
+                if (rec_ && (rec_->highlightOn() || rec_->clicksOn() || rec_->keyMode() > 0)) col = Gdiplus::Color(255, 120, 190, 255);
+                break;
             }
             if (hover_ == b.id && enabled) {
                 Gdiplus::SolidBrush hb(Gdiplus::Color(255, 60, 60, 66));
@@ -218,6 +262,16 @@ LRESULT CALLBACK RecorderHud::Proc(HWND h, UINT m, WPARAM w, LPARAM l) {
             break;
         case BtnSnap: if (st != Recorder::Idle && self->cb_.onSnapshot) self->cb_.onSnapshot(); break;
         case BtnVolume: self->ToggleVolume(); break;
+        case BtnZoom: if (st != Recorder::Idle && self->cb_.onZoom) self->cb_.onZoom(); break;
+        case BtnOverlay:
+            if (self->cb_.onOverlay) {
+                RECT br{};
+                for (auto& b : self->buttons_) if (b.id == BtnOverlay) br = b.r;
+                POINT sp{ br.left, br.bottom };
+                ClientToScreen(h, &sp);
+                self->cb_.onOverlay(sp);
+            }
+            break;
         }
         InvalidateRect(h, nullptr, FALSE);
         return 0;

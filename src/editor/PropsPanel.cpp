@@ -23,6 +23,8 @@ enum : int {
     C_BOLD, C_ITALIC, C_UNDERLINE, C_AL_L, C_AL_C, C_AL_R, C_AL_T, C_AL_M, C_AL_B, C_SHADED, C_MAGSCALE, C_MAGLINK,
     C_ANTIALIAS, C_TOLERANCE, C_AMOUNT, C_SMARTMOVE, C_GLOBAL, C_STEPRESET, C_ROWLABEL, C_HINT,
     C_LINESPACING, C_BGBLUR, C_BGBLURAMT, C_FILLALPHA, C_STEPOUTLINE, C_STEPOUTLINEW, C_AREA, C_LOUPE, C_LOUPEHANDLE, C_ASPECT,
+    // competitor feature request: text only / snap to text (C12), hand-drawn (C35), vertical text and text on a line (C37)
+    C_TEXTONLY, C_SNAPTEXT, C_SKETCH, C_SKETCHSEED, C_VERTICAL, C_TEXTONPATH,
 };
 enum : int {
     H_THEME = 400, H_SEARCH, H_STAMPCAT, H_FONT, H_STEPTYPE, H_SELMODE, H_SELFILL, H_CUTDIR, H_HIDEKIND, H_ORGANIZE, H_IMPORT,
@@ -118,7 +120,7 @@ std::wstring HelpFor(Tool t) {
     case Tool::Arrow: return Tr(L"Arraste para desenhar uma seta. Shift trava em 45°. Com “Curva de Bézier”, arraste a alça do meio para curvar.");
     case Tool::Line: return Tr(L"Arraste para desenhar uma linha. Shift trava em 45°.");
     case Tool::Shape: return Tr(L"Arraste para desenhar a forma. Shift deixa a forma perfeita (quadrado, círculo, triângulo equilátero, hexágono regular).");
-    case Tool::Pen: return Tr(L"Arraste para desenhar à mão livre.");
+    case Tool::Pen: return Tr(L"Arraste para desenhar à mão livre; segure Shift para um trecho reto. Para virar linha, seta, retângulo, elipse ou triângulo, pare o mouse por um instante antes de soltar.");
     case Tool::Highlighter: return Tr(L"Arraste sobre o que quer destacar. Em Forma, escolha retângulo, elipse, polígono (clique nos cantos) ou mão livre; Shift deixa a forma perfeita.");
     case Tool::Text: return Tr(L"Clique ou arraste para criar uma caixa de texto. Duplo clique edita o texto.");
     case Tool::Callout: return Tr(L"Arraste para criar o balão e digite. A alça amarela move a ponta (ou a direção das setas).");
@@ -194,6 +196,11 @@ int PropsPanel::Value(int id) const {
     case C_STEPOUTLINEW: return (int)std::lround(s.stepOutlineWidth);
     case C_LOUPE: return s.loupe;
     case C_LOUPEHANDLE: return s.loupeHandle;
+    case C_TEXTONLY: return s.textOnly;
+    case C_SNAPTEXT: return s.snapText;
+    case C_SKETCH: return s.sketch;
+    case C_VERTICAL: return s.vertical;
+    case C_TEXTONPATH: return s.textOnPath;
     case C_ASPECT: return aspectLock_;
     case C_TOLERANCE: return (int)canvas->tolerance;
     case C_BEZIER: return s.bezier;
@@ -237,6 +244,11 @@ void PropsPanel::SetValue(int id, int v, bool newStep) {
     case C_STEPOUTLINEW: s.stepOutlineWidth = (float)std::clamp(v, 0, 40); break;
     case C_LOUPE: s.loupe = v != 0; break;
     case C_LOUPEHANDLE: s.loupeHandle = v != 0; break;
+    case C_TEXTONLY: s.textOnly = v != 0; break;
+    case C_SNAPTEXT: s.snapText = v != 0; break;
+    case C_SKETCH: s.sketch = v != 0; if (s.sketch && s.sketchSeed < 1) s.sketchSeed = 1; break;
+    case C_VERTICAL: s.vertical = v != 0; break;
+    case C_TEXTONPATH: s.textOnPath = v != 0; break;
     case C_BEZIER: s.bezier = v != 0; break;
     case C_SHADED: s.shaded = v != 0; break;
     case C_MAGLINK: s.magnifyLink = v != 0; break;
@@ -249,7 +261,7 @@ void PropsPanel::SetValue(int id, int v, bool newStep) {
     default: return;
     }
     SetStyle(s, newStep);
-    if (id == C_BEZIER || id == C_MAGLINK || id == C_BGBLUR || id == C_LOUPE || id == C_FILLALPHA) Layout();
+    if (id == C_BEZIER || id == C_MAGLINK || id == C_BGBLUR || id == C_LOUPE || id == C_FILLALPHA || id == C_SKETCH || id == C_TEXTONPATH) Layout();
 }
 
 // ================================================================= creation
@@ -381,8 +393,8 @@ const Image& PropsPanel::StampThumb(const std::wstring& id, int px) {
             img = Image(px, px, 0);
             img.Blit(sc, (px - sc.w) / 2, (px - sc.h) / 2, false);
         }
-    } else if (id.rfind(L"label:", 0) == 0) {          // label stamp: the badge fitted to the tile
-        Image src = StampImage(id, px * 3);
+    } else if (id.rfind(L"label:", 0) == 0 || id.rfind(L"cursor:", 0) == 0) {   // label / cursor stamp fitted to the tile
+        Image src = StampImage(id, id[0] == L'c' ? px : px * 3);
         if (!src.empty()) {
             double k = std::min((double)px / src.w, (double)px / src.h);
             Image sc = ScaleImage(src, std::max(1, (int)(src.w * k)), std::max(1, (int)(src.h * k)));
@@ -531,6 +543,12 @@ void PropsPanel::Layout() {
         if (callout) check(C_SHADED, Tr(L"Sombreado (degradê)"));
     };
     auto hint = [&](const std::wstring& t) { ctls_.push_back({ C_HINT, K_LABEL, { x0, y, x1, y + S(46) }, t }); y += S(50); };
+    // hand-drawn look with a "randomize" button beside it (C35)
+    auto sketch = [&](const wchar_t* label) {
+        ctls_.push_back({ C_SKETCH, K_CHECK, { x0, y, x1 - S(34), y + S(26) }, label, 0, 1, true });
+        ctls_.push_back({ C_SKETCHSEED, K_ICONBTN, { x1 - S(28), y - S(1), x1, y + S(27) }, Tr(L"Variar o traço"), 0, 0, st.sketch });
+        y += S(30);
+    };
     bool startSz = st.arrowStart != CapFlat && st.arrowStart != CapRound, endSz = st.arrowEnd != CapFlat && st.arrowEnd != CapRound;
     int nsel = canvas->SelectionCount();
     bool isGroup = ObjSelected() && canvas->doc->st.objs[canvas->selected]->type == ObjType::Group;
@@ -546,10 +564,13 @@ void PropsPanel::Layout() {
         slider(C_STARTSIZE, Tr(L"Tamanho inicial"), 1, 10, startSz);
         slider(C_ENDSIZE, Tr(L"Tamanho final"), 1, 10, endSz);
         check(C_BEZIER, Tr(L"Curva de Bézier"));
-        if (pt == Tool::Arrow) {                  // label at the tail (type right after drawing the arrow)
+        sketch(Tr(L"Desenhado à mão"));
+        check(C_TEXTONPATH, Tr(L"Texto ao longo da linha"));
+        if (pt == Tool::Arrow || st.textOnPath) {  // label at the tail (type right after drawing the arrow)
             combo(H_FONT, Tr(L"Fonte do texto"));
             slider(C_FONTSIZE, Tr(L"Tamanho do texto"), 6, 200);
-            hint(Tr(L"Depois de desenhar a seta, digite para escrever um texto na ponta inicial; duplo clique edita."));
+            hint(st.textOnPath ? Tr(L"Depois de desenhar, digite o texto: ele acompanha a linha ou a curva; duplo clique edita.")
+                               : Tr(L"Depois de desenhar a seta, digite para escrever um texto na ponta inicial; duplo clique edita."));
         }
         break;
     case Tool::Pen:
@@ -561,12 +582,16 @@ void PropsPanel::Layout() {
     case Tool::Highlighter:
         swatches({ { C_COLOR, Tr(L"Cor") }, { C_AREA, Tr(L"Forma") } });
         slider(C_OPACITY, Tr(L"Opacidade"), 5, 100);
+        check(C_SNAPTEXT, Tr(L"Encaixar nas linhas de texto"));
+        check(C_TEXTONLY, Tr(L"Somente o texto (palavras na área)"));
         break;
     case Tool::Text:
         swatches({ { C_TEXTCOLOR, Tr(L"Preenchimento") }, { C_OUTLINE, Tr(L"Contorno") }, { C_SHADOW, Tr(L"Sombra") } });
         combo(H_FONT, Tr(L"Fonte"));
         slider(C_FONTSIZE, Tr(L"Tamanho da fonte"), 6, 200);
         slider(C_OUTLINEW, Tr(L"Espessura"), 0, 20);
+        check(C_VERTICAL, Tr(L"Texto vertical"));
+        check(C_SKETCH, Tr(L"Letra à mão"));
         advancedText(false);
         break;
     case Tool::Callout: {
@@ -589,6 +614,7 @@ void PropsPanel::Layout() {
         check(C_BGBLUR, Tr(L"Desfocar o fundo (vidro fosco)"));
         slider(C_BGBLURAMT, Tr(L"Desfoque"), 1, 40, st.bgBlur);
         slider(C_FILLALPHA, Tr(L"Opacidade do preenchimento"), 0, 100);
+        check(C_VERTICAL, Tr(L"Texto vertical"));
         advancedText(true);
         break;
     }
@@ -596,6 +622,7 @@ void PropsPanel::Layout() {
         swatches({ { C_FILL, Tr(L"Preenchimento") }, { C_OUTLINE, Tr(L"Contorno") }, { C_SHAPE, Tr(L"Forma") }, { C_SHADOW, Tr(L"Sombra") } });
         slider(C_WIDTH, Tr(L"Espessura"), 0, 50);
         slider(C_OPACITY, Tr(L"Opacidade"), 0, 100);
+        sketch(Tr(L"Desenhado à mão"));
         break;
     case Tool::Stamp:
         swatches({ { C_SHADOW, Tr(L"Sombra") } });
@@ -635,10 +662,12 @@ void PropsPanel::Layout() {
         swatches({ { C_AREA, Tr(L"Forma") } });
         combo(H_HIDEKIND, Tr(L"Tipo"));
         slider(C_AMOUNT, Tr(L"Intensidade"), 1, 30);
+        check(C_TEXTONLY, Tr(L"Somente o texto (palavras na área)"));
         break;
     case Tool::Spotlight:
         swatches({ { C_AREA, Tr(L"Forma") } });
         slider(C_AMOUNT, Tr(L"Intensidade"), 1, 14);
+        check(C_TEXTONLY, Tr(L"Somente o texto (palavras na área)"));
         break;
     case Tool::Select:
         if (nsel > 1) break;
@@ -983,6 +1012,11 @@ void PropsPanel::PaintCtl(Gdiplus::Graphics& g, HDC dc, const Ctl& c) {
     }
     case K_ICONBTN: {
         if (hot) FillRound(g, r, (float)S(5), RGB(236, 237, 241));
+        if (c.id == C_SKETCHSEED) {               // randomize: dice-like sparkle
+            icons::Draw(g, icons::Sparkle, Gdiplus::RectF((float)r.left + S(4), (float)r.top + S(5), (float)(r.right - r.left) - S(8), (float)(r.bottom - r.top) - S(10)),
+                        GC(c.enabled ? RGB(60, 60, 66) : RGB(170, 170, 176)));
+            break;
+        }
         icons::Draw(g, icons::Restart, Gdiplus::RectF((float)r.left + S(4), (float)r.top + S(5), (float)(r.right - r.left) - S(8), (float)(r.bottom - r.top) - S(10)), GC(RGB(60, 60, 66)));
         break;
     }
@@ -1081,7 +1115,7 @@ void PropsPanel::Paint(HDC hdc) {
                     g.DrawLine(&pp, cx - k, cy, cx + k, cy); g.DrawLine(&pp, cx, cy - k, cx, cy + k);
                 } else if (!stamps && t.index < (int)tileStyles_.size()) {
                     bool isFav = fav || QS().IsFavorite(tileTool, tileStyles_[t.index]);
-                    if (isFav || hot) {         // estrela de favorito no canto
+                    if (isFav || hot) {         // favorite star in the corner
                         float sz = (float)S(13), sx = (float)r.right - sz - S(2), sy = (float)r.top + S(2);
                         Gdiplus::PointF p[10];
                         for (int k = 0; k < 10; k++) {
@@ -1389,6 +1423,11 @@ void PropsPanel::ClickCtl(const Ctl& c, POINT p) {
         return;
     case K_ICONBTN:
         if (c.id == C_STEPRESET && canvas->doc) { canvas->doc->st.nextStep = 1; if (onHint) onHint(Tr(L"A sequência de passos recomeça em 1.")); }
+        if (c.id == C_SKETCHSEED && c.enabled) {   // another variation of the hand-drawn strokes (C35)
+            Style s = Cur();
+            s.sketchSeed = (int)(GetTickCount() % 9973) + 1;
+            SetStyle(s, true);
+        }
         return;
     }
 }

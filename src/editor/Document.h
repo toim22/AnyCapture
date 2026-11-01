@@ -77,6 +77,13 @@ struct Style {
     int bgBlurAmount = 8;
     bool loupe = false;                  // magnifier: real lens look (thick rim, reflection)
     bool loupeHandle = true;             // loupe: handle
+    // competitor feature request
+    bool textOnly = false;               // hide, highlighter and spotlight: only the text inside the area (C12)
+    bool snapText = false;               // highlighter: snaps to the text lines under the stroke (C12)
+    bool sketch = false;                 // hand-drawn look for lines, arrows, shapes, pen and text (C35)
+    int sketchSeed = 1;                  // "randomize": another variation of the hand-drawn strokes
+    bool vertical = false;               // text and callout: vertical text, top to bottom (C37)
+    bool textOnPath = false;             // line and arrow: the label follows the line or curve (C37)
 };
 
 struct DrawObj {
@@ -94,6 +101,8 @@ struct DrawObj {
     bool hidden = false;                 // hidden in the layers panel: not rendered nor exported
     bool locked = false;                 // cannot be moved, resized or deleted
     bool floating = false;               // lifted piece of the image (Lift out), merged back with "Drop piece"
+    std::vector<Gdiplus::RectF> textBoxes;   // text-only areas: OCR word boxes inside the area (C12; kept in the .snap)
+    std::vector<float> pressure;         // pen: pressure of each point, 0..1 (C43; empty = constant width)
 
     Gdiplus::RectF Rect() const;         // normalized rectangle (p1..p2)
     Gdiplus::RectF Bounds() const;       // includes stroke, ends, callout tip, shadow
@@ -103,7 +112,8 @@ struct DrawObj {
     bool IsPointShape() const { return IsAreaTool() && IsPointArea(style.areaShape) && pts.size() >= 2; }
     bool IsAreaTool() const { return type == ObjType::Highlighter || type == ObjType::Spotlight || type == ObjType::Blur || type == ObjType::Pixelate; }
     bool HasText() const { return type == ObjType::Text || type == ObjType::Callout; }
-    bool HasLabel() const { return type == ObjType::Arrow; }   // arrow with a text label at its tail (Skitch style)
+    // arrow with a text label at its tail (Skitch style); a line gets one when its text follows the line (C37)
+    bool HasLabel() const { return type == ObjType::Arrow || (type == ObjType::Line && style.textOnPath); }
     bool IsShape() const { return type == ObjType::Shape || type == ObjType::Rect || type == ObjType::Ellipse || type == ObjType::RoundRect; }
     int Kind() const;                    // effective shape (ShapeKind), also for old Rect/Ellipse/RoundRect
     bool CalloutHasTail() const;         // callout shape with a draggable tip

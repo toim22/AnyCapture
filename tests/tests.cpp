@@ -16,6 +16,11 @@
 #include "../src/editor/Video.h"
 #include "../src/editor/Document.h"
 #include "../src/editor/QuickStyles.h"
+#include "../src/editor/EditorTools.h"
+#include "Beautify.h"
+#include "Color.h"
+#include "Net.h"
+#include "Upload.h"
 #include <cstdio>
 #include <mfapi.h>
 #include <mfidl.h>
@@ -25,6 +30,7 @@
 using namespace snap;
 
 static int g_fail = 0;
+static std::wstring TestTempDir() { wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t); std::wstring d = t; if (!d.empty() && d.back() == L'\\') d.pop_back(); return d; }
 #define CHECK(c, ...) do { if (c) { printf("  ok   "); printf(__VA_ARGS__); printf("\n"); } else { printf("  FAIL "); printf(__VA_ARGS__); printf("\n"); g_fail++; } } while (0)
 
 static Image Pattern(int w, int h, int seed) {
@@ -39,6 +45,12 @@ static Image Pattern(int w, int h, int seed) {
             img.at(x, y) = ARGB(255, (blk + v / 4) & 255, (blk * 3 + v / 8) & 255, (255 - blk + v / 6) & 255);
         }
     return img;
+}
+
+static std::wstring DigitsOfTest(const std::wstring& s) {
+    std::wstring d;
+    for (wchar_t c : s) if (c >= L'0' && c <= L'9') d += c;
+    return d;
 }
 
 static std::wstring Tmp(const wchar_t* name) {
@@ -310,14 +322,45 @@ int wmain(int argc, wchar_t** argv) {
         Recorder rec;
         RecordSettings rs; rs.rect = { 100, 100, 954, 460 }; rs.fps = 15; rs.path = mp4; rs.hardware = false;
         rs.microphone = false; rs.systemAudio = true;
+        rs.highlightCursor = true; rs.clickEffects = true; rs.keyMode = 1;      // overlays drawn in the video (C07)
+        rs.leftClickColor = RGB(0, 255, 0);                                     // a color the test pattern does not have
+        rs.crashSafe = true;                                                    // fragmented MP4 remuxed at the end (C14)
         bool started = rec.Start(rs, nullptr, 0);
         CHECK(started, "recorder started %s", started ? "" : WToUtf8(rec.lastError).c_str());
-        for (int i = 0; i < 60; i++) { while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) DispatchMessageW(&msg); Sleep(25); }
+        for (int i = 0; i < 30; i++) { while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) DispatchMessageW(&msg); Sleep(25); }
+        {   // a click on the test window (C07): it must leave a ripple in the video
+            POINT old; GetCursorPos(&old);
+            SetCursorPos(300, 200);
+            INPUT in[2] = {};
+            in[0].type = in[1].type = INPUT_MOUSE;
+            in[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN; in[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+            SendInput(2, in, sizeof(INPUT));
+            Sleep(30);
+            SetCursorPos(old.x, old.y);
+        }
+        for (int i = 0; i < 30; i++) { while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) DispatchMessageW(&msg); Sleep(25); }
         rec.Pause(); Sleep(500); rec.Resume();
         for (int i = 0; i < 30; i++) { while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) DispatchMessageW(&msg); Sleep(25); }
         double el = rec.Elapsed();
         bool stopped = rec.Stop();
         DestroyWindow(w);
+        {
+            // nothing of this recording is left in the recovery folder (C14)
+            bool left = false;
+            WIN32_FIND_DATAW fd;
+            HANDLE fh = FindFirstFileW((Recorder::RecoveryDir() + L"\\*.target").c_str(), &fd);
+            if (fh != INVALID_HANDLE_VALUE) {
+                do {
+                    std::wstring tp = Recorder::RecoveryDir() + L"\\" + fd.cFileName;
+                    HANDLE t = CreateFileW(tp.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+                    char b[2048]; DWORD n = 0;
+                    if (t != INVALID_HANDLE_VALUE) { ReadFile(t, b, sizeof b, &n, nullptr); CloseHandle(t); }
+                    if (Utf8ToW(std::string(b, n)) == mp4) left = true;
+                } while (FindNextFileW(fh, &fd));
+                FindClose(fh);
+            }
+            CHECK(!left, "crash-safe recording: the fragmented file was remuxed and removed from the recovery folder");
+        }
         CHECK(stopped && FileSize(mp4) > 2000, "MP4 finalized (%llu bytes, %.2f s recorded, pause excluded)", (unsigned long long)FileSize(mp4), el);
         ed::VideoReader rd;
         Image f; LONGLONG ts;
@@ -332,6 +375,15 @@ int wmain(int argc, wchar_t** argv) {
             for (int y : { 20, 180, 340 }) aligned &= CG(f.at(400, y)) < 120 && CG(f.at(460, y)) > 200;
             CHECK(aligned, "frame rows aligned with a width that is not a multiple of 16 (y=340: left G=%d, right G=%d)", CG(f.at(400, 340)), CG(f.at(460, 340)));
             CHECK(rd.duration > 1.0e7 && rd.duration < 3.5e7, "duration consistent with the recorded time without the pause (%.2f s)", rd.duration / 1e7);
+            // the click ripple (green here) shows up in some frame around the click point (200, 100 in the video)
+            int ripple = 0;
+            Image fr2; LONGLONG ts2;
+            ed::VideoReader rd2;
+            if (rd2.Open(mp4))
+                while (rd2.ReadFrame(fr2, ts2) && !ripple)
+                    for (int y = 40; y < 160 && y < fr2.h; y++)
+                        for (int x = 140; x < 260 && x < fr2.w; x++) { uint32_t p = fr2.at(x, y); if (CG(p) > 150 && CR(p) < 90 && CB(p) < 90) ripple++; }
+            CHECK(ripple > 0, "click ripple drawn in the video (%d green pixels)", ripple);
         }
     }
 
@@ -368,6 +420,24 @@ int wmain(int argc, wchar_t** argv) {
         bool match = text.find(L"Snapnab") != std::wstring::npos || text.find(L"OCR") != std::wstring::npos;
         if (!ok) printf("  info OCR unavailable: %s\n", WToUtf8(err).c_str());
         else CHECK(match, "recognized text: \"%s\"", WToUtf8(Trim(text)).c_str());
+        // the engine drops a line holding "1111"; the second pass reads it word by word (the test card for C11)
+        // (200 px tall: the image is enlarged for the engine; 520 px: it is not, and the pieces are enlarged on their own)
+        for (int cardH : { 200, 520 }) if (ok) {
+            Image card(900, cardH, 0xFFFFFFFF);
+            auto cb = card.WrapGdip();
+            { Gdiplus::Graphics gr(cb.get()); gr.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAliasGridFit);
+              Gdiplus::FontFamily ff(L"Segoe UI"); Gdiplus::Font fnt(&ff, 27, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
+              Gdiplus::SolidBrush br(Gdiplus::Color(255, 0, 0, 0));
+              gr.DrawString(L"Telefone: +55 (11) 98765-4321", -1, &fnt, Gdiplus::PointF(30, 30), &br);
+              gr.DrawString(L"Cartao: 4111 1111 1111 1111", -1, &fnt, Gdiplus::PointF(30, 90), &br); }
+            std::vector<OcrLine> lines;
+            RunOcrLines(card, lines, err);
+            std::wstring found, all;
+            for (auto& it : ed::FindSensitive(lines)) if (it.kind == Tr(L"Cartão")) found = it.text;
+            for (auto& l : lines) all += L"[" + l.text + L"]";
+            CHECK(DigitsOfTest(found) == L"4111111111111111", "card number with \"1111\" found by the second OCR pass (%d px tall image): \"%s\" in %s",
+                  cardH, WToUtf8(found).c_str(), WToUtf8(all).c_str());
+        }
     }
 
     printf("[11] Panoramic scrolling (frame stitching)\n");
@@ -595,6 +665,254 @@ int wmain(int argc, wchar_t** argv) {
             SaveImageFile(std::wstring(dump) + L"\\lote_rotulo.png", ls);
             SaveImageFile(std::wstring(dump) + L"\\lote_seta.png", al);
             SaveImageFile(std::wstring(dump) + L"\\lote_passo.png", so);
+        }
+    }
+
+    printf("[15] Competitor batch: formats, metadata, capture and editor tools\n");
+    {
+        // C03: lossless WebP keeps every visible pixel; lossy WebP decodes to the same size
+        Image src(64, 48, 0);
+        for (int y = 0; y < src.h; y++)
+            for (int x = 0; x < src.w; x++) src.at(x, y) = ARGB(x < 8 ? 0 : 255 - y, x * 4, y * 5, (x + y) * 2);
+        SaveOptions lo; lo.webpLossless = true; lo.stripMetadata = true;
+        std::vector<BYTE> wl, wq;
+        Image back;
+        bool encL = EncodeToMemoryEx(src, ImageFormat::WEBP, wl, lo) && DecodeFromMemory(wl.data(), wl.size(), back);
+        bool same = encL && back.w == src.w && back.h == src.h;
+        for (size_t i = 0; same && i < src.px.size(); i++)
+            if (CA(src.px[i]) && src.px[i] != back.px[i]) same = false;
+        CHECK(same, "WebP lossless round trip (%zu bytes), alpha and colors kept", wl.size());
+        SaveOptions qo = lo; qo.webpLossless = false; qo.webpQuality = 60;
+        Image backQ;
+        bool encQ = EncodeToMemoryEx(src, ImageFormat::WEBP, wq, qo) && DecodeFromMemory(wq.data(), wq.size(), backQ);
+        CHECK(encQ && backQ.w == 64 && backQ.h == 48 && wq.size() > 0, "WebP lossy (quality 60): %zu bytes", wq.size());
+        std::wstring wpath = TestTempDir() + L"\\snapnab_test.webp";
+        bool wfile = SaveImageFile(wpath, src) && LoadImageFile(wpath, back) && back.w == 64;
+        CHECK(wfile && FormatFromExt(L".WEBP") == ImageFormat::WEBP && FormatFromExt(L".heic") == ImageFormat::HEIC,
+              "WebP file saved and opened by extension");
+        DeleteFileW(wpath.c_str());
+        if (CanEncode(ImageFormat::AVIF)) {
+            std::vector<BYTE> av; Image ab;
+            bool ok = EncodeToMemoryEx(src, ImageFormat::AVIF, av, qo) && DecodeFromMemory(av.data(), av.size(), ab);
+            CHECK(ok && ab.w == 64 && ab.h == 48, "AVIF round trip through the Windows codec (%zu bytes)", av.size());
+        } else printf("  skip AVIF: no AV1 encoder on this computer\n");
+        // C29: metadata written when kept (camera, date, GPS) and absent when stripped
+        Image photo = Pattern(80, 60, 3);
+        photo.meta = std::make_shared<ImageMeta>();
+        photo.meta->make = L"TestCam"; photo.meta->model = L"Model X"; photo.meta->dateTaken = L"2024:05:06 07:08:09";
+        photo.meta->gps = true; photo.meta->lat = -23.5; photo.meta->lon = -46.625;
+        std::wstring jp = TestTempDir() + L"\\snapnab_meta.jpg";
+        SaveOptions keep; keep.stripMetadata = false;
+        Image rj;
+        bool mk = SaveImageFileEx(jp, photo, keep) && LoadImageFile(jp, rj) && rj.meta;
+        CHECK(mk && rj.meta->make == L"TestCam" && rj.meta->model == L"Model X" && rj.meta->dateTaken.substr(0, 10) == L"2024:05:06" &&
+              rj.meta->gps && std::fabs(rj.meta->lat + 23.5) < 0.01 && std::fabs(rj.meta->lon + 46.625) < 0.01,
+              "metadata kept in JPEG: camera, date and GPS (%ls | %ls | %ls | %ls | %d %.3f %.3f)", mk ? rj.meta->software.c_str() : L"-", mk ? rj.meta->make.c_str() : L"-", mk ? rj.meta->model.c_str() : L"-", mk ? rj.meta->dateTaken.c_str() : L"-", mk ? (int)rj.meta->gps : -1, mk ? rj.meta->lat : 0.0, mk ? rj.meta->lon : 0.0);
+        SaveOptions strip; strip.stripMetadata = true;
+        Image rs;
+        bool st = SaveImageFileEx(jp, photo, strip) && LoadImageFile(jp, rs);
+        CHECK(st && (!rs.meta || (rs.meta->make.empty() && !rs.meta->gps && rs.meta->software.empty())), "metadata removed when stripping");
+        DeleteFileW(jp.c_str());
+        // [15] next
+    }
+
+    printf("[16] Competitor batch: editor tools, canvas, outputs\n");
+    {
+        using namespace snap::ed;
+        // C11: sensitive data patterns
+        CHECK(SensitiveKind(L"maria.silva@example.com.br") == Tr(L"E-mail"), "e-mail recognized");
+        CHECK(SensitiveKind(L"4111 1111 1111 1111") == Tr(L"Cartão") && SensitiveKind(L"4111 1111 1111 1112").empty(), "card number with Luhn check");
+        CHECK(SensitiveKind(L"529.982.247-25") == L"CPF" && SensitiveKind(L"111.111.111-11").empty(), "CPF with check digits");
+        CHECK(SensitiveKind(L"GB82 WEST 1234 5698 7654 32") == L"IBAN", "IBAN with mod 97");
+        CHECK(SensitiveKind(L"192.168.10.254") == Tr(L"Endereço IP") && SensitiveKind(L"+55 (11) 98765-4321") == Tr(L"Telefone"), "IP address and phone");
+        CHECK(SensitiveKind(L"https://example.com/reset?token=abc123XYZ") == Tr(L"Link com token") &&
+              SensitiveKind(L"sk-abcdefghijklmnop1234567890") == Tr(L"Chave de API"), "URL with a token and an API key");
+        CHECK(SensitiveKind(L"Relatório anual").empty() && SensitiveKind(L"2026-10-31").empty(), "plain text and dates are not sensitive");
+        {
+            OcrLine ln;
+            auto word = [&](const wchar_t* t, LONG x0, LONG x1) { OcrWord w; w.text = t; w.box = { x0, 10, x1, 30 }; ln.words.push_back(w); };
+            word(L"Fone:", 0, 40); word(L"(11)", 50, 80); word(L"98765-4321", 85, 170); word(L"ok", 180, 200);
+            auto items = FindSensitive({ ln });
+            CHECK(items.size() == 1 && items[0].box.left <= 50 && items[0].box.right >= 170 && items[0].box.left > 40,
+                  "phone spread over OCR words becomes one box over those words (%zu item(s))", items.size());
+        }
+        // C09: combine side by side / stacked / grid
+        Image a(100, 50, 0xFFFF0000), b(60, 80, 0xFF00FF00), c(40, 40, 0xFF0000FF);
+        CombineOptions co; co.gap = 10; co.margin = 5;
+        co.layout = 0; Image h = CombineImages({ a, b, c }, co);
+        co.layout = 1; Image v = CombineImages({ a, b, c }, co);
+        co.layout = 2; co.columns = 2; Image gr = CombineImages({ a, b, c }, co);
+        CHECK(h.w == 5 + 100 + 10 + 60 + 10 + 40 + 5 && h.h == 5 + 80 + 5 && v.w == 5 + 100 + 5 && v.h == 5 + 50 + 10 + 80 + 10 + 40 + 5,
+              "combine side by side %dx%d and stacked %dx%d", h.w, h.h, v.w, v.h);
+        CHECK(gr.w == 5 + 100 + 10 + 60 + 5 && gr.h == 5 + 80 + 10 + 40 + 5 && gr.at(5 + 50, 5 + 15 + 25) == 0xFFFF0000, "combine as a grid %dx%d, centered", gr.w, gr.h);
+        // C17: difference
+        Image d1(50, 40, 0xFFFFFFFF), d2 = d1;
+        d2.FillRect({ 10, 10, 20, 15 }, 0xFF000000);
+        int changed = 0; RECT box{};
+        Image diff = DiffImage(d1, d2, 10, &changed, &box);
+        CHECK(changed == 50 && box.left == 10 && box.right == 20 && box.top == 10 && box.bottom == 15 && diff.at(12, 12) == 0xFFE5322D,
+              "difference image: %d changed pixels in the right box", changed);
+        // C23: draw & hold recognition
+        {
+            std::vector<Gdiplus::PointF> line, rect, ell, tri, arrow;
+            for (int i = 0; i <= 40; i++) line.push_back(Gdiplus::PointF(10.0f + i * 5, 20.0f + i * 2 + (i % 2 ? 1.0f : -1.0f)));
+            for (int i = 0; i <= 40; i++) rect.push_back(Gdiplus::PointF(10.0f + i * 5, 10));
+            for (int i = 0; i <= 20; i++) rect.push_back(Gdiplus::PointF(210, 10.0f + i * 5));
+            for (int i = 0; i <= 40; i++) rect.push_back(Gdiplus::PointF(210.0f - i * 5, 110));
+            for (int i = 0; i <= 19; i++) rect.push_back(Gdiplus::PointF(10, 110.0f - i * 5));
+            for (int i = 0; i <= 60; i++) { double t = i * 2 * 3.14159265 / 60; ell.push_back(Gdiplus::PointF((float)(150 + 100 * cos(t)), (float)(100 + 50 * sin(t)))); }
+            Gdiplus::PointF tp[3] = { { 100, 10 }, { 190, 150 }, { 10, 150 } };
+            for (int s = 0; s < 3; s++) for (int i = 0; i < 20; i++) {
+                Gdiplus::PointF p = tp[s], q = tp[(s + 1) % 3];
+                tri.push_back(Gdiplus::PointF(p.X + (q.X - p.X) * i / 20, p.Y + (q.Y - p.Y) * i / 20));
+            }
+            tri.push_back(tp[0]);
+            for (int i = 0; i <= 40; i++) arrow.push_back(Gdiplus::PointF(10.0f + i * 5, 50));
+            for (int i = 1; i <= 6; i++) arrow.push_back(Gdiplus::PointF(210.0f - i * 4, 50.0f - i * 4));
+            Gdiplus::PointF pa, pb;
+            int kl = RecognizeStroke(line, pa, pb), kr = RecognizeStroke(rect, pa, pb), ke = RecognizeStroke(ell, pa, pb);
+            int kt = RecognizeStroke(tri, pa, pb), ka = RecognizeStroke(arrow, pa, pb);
+            CHECK(kl == RecLine && kr == RecRect && ke == RecEllipse && kt == RecTriangle, "rough strokes: line %d, rectangle %d, ellipse %d, triangle %d", kl, kr, ke, kt);
+            CHECK(ka == RecArrow && std::fabs(pb.X - 210) < 1, "a line ending in a hook is an arrow (%d, tip x %.0f)", ka, pb.X);
+            // a square drawn by hand: rounded corners, wobbly sides, the end short of the start (was taken for an ellipse)
+            std::vector<Gdiplus::PointF> sq;
+            const double side = 150, rad = 30, pi = 3.14159265;
+            for (int c = 0; c < 4; c++) {                           // corners: top right, bottom right, bottom left, top left
+                double cx = c < 2 ? side - rad : rad, cy = c == 1 || c == 2 ? side - rad : rad, a0 = -pi / 2 + c * pi / 2;
+                double ex = c == 0 ? rad : c == 1 ? side : c == 2 ? side - rad : 0, ey = c == 0 ? 0 : c == 1 ? rad : c == 2 ? side : side - rad;
+                double fx = cx + rad * cos(a0), fy = cy + rad * sin(a0);
+                for (int i = 0; i <= 12; i++)                       // the wobbly side leading to the corner, then its arc
+                    sq.push_back(Gdiplus::PointF((float)(ex + (fx - ex) * i / 12 + (i % 3) - 1), (float)(ey + (fy - ey) * i / 12 + (i % 2) * 2 - 1)));
+                for (int i = 1; i <= 8; i++) { double t = a0 + i * (pi / 2) / 8; sq.push_back(Gdiplus::PointF((float)(cx + rad * cos(t)), (float)(cy + rad * sin(t)))); }
+            }
+            sq.resize(sq.size() - 3);
+            // the same square tilted by 9 degrees (its box no longer fits it: low fill, corners away from the box's)
+            std::vector<Gdiplus::PointF> tilt;
+            for (auto& p : sq) {
+                double x = p.X - side / 2, y = p.Y - side / 2, c = cos(9 * pi / 180), s = sin(9 * pi / 180);
+                tilt.push_back(Gdiplus::PointF((float)(200 + x * c - y * s), (float)(200 + x * s + y * c)));
+            }
+            // an uneven ellipse: egg-shaped, wobbly, not closed
+            std::vector<Gdiplus::PointF> egg;
+            for (int i = 0; i <= 56; i++) {
+                double t = i * 2 * pi / 60, rx = (cos(t) > 0 ? 110 : 90) + 4 * sin(5 * t);
+                egg.push_back(Gdiplus::PointF((float)(150 + rx * cos(t)), (float)(100 + (55 + 3 * cos(7 * t)) * sin(t))));
+            }
+            int ks = RecognizeStroke(sq, pa, pb), kt2 = RecognizeStroke(tilt, pa, pb), kg = RecognizeStroke(egg, pa, pb);
+            CHECK(ks == RecRect && kt2 == RecRect && kg == RecEllipse,
+                  "hand-drawn: rounded square %d, tilted square %d, uneven ellipse %d (squares were taken for ellipses)", ks, kt2, kg);
+        }
+        // C34: smart page breaks fall between "text lines"
+        {
+            Image page(200, 1000, 0xFFFFFFFF);
+            for (int y = 0; y < 1000; y += 40) page.FillRect({ 10, y + 8, 190, y + 30 }, 0xFF202020);   // a line of text every 40 px
+            auto cuts = SmartBreaks(page, 300);
+            bool quiet = !cuts.empty();
+            for (int ct : cuts) quiet &= (ct % 40) < 8 || (ct % 40) >= 30;
+            auto parts = SplitImage(page, cuts, false);
+            int total = 0; for (auto& p : parts) total += p.h;
+            CHECK(quiet && cuts.size() >= 3 && total == 1000, "smart breaks between text lines (%zu cuts), parts add up to the height", cuts.size());
+        }
+        // C26: date and time stamp
+        {
+            SYSTEMTIME t{}; t.wYear = 2026; t.wMonth = 10; t.wDay = 31; t.wHour = 14; t.wMinute = 5; t.wSecond = 9;
+            CHECK(DateStampText(L"yyyy-MM-dd HH:mm:ss", t) == L"2026-10-31 14:05:09" && DateStampText(L"'Hora' h:mm tt", t) == L"Hora 2:05 PM",
+                  "date stamp formats (%ls)", DateStampText(L"'Hora' h:mm tt", t).c_str());
+            CHECK(!DateStampText(L"", t).empty() && !DateStampText(L"dddd MMMM", t).empty(), "date stamp with the Windows short format and names");
+        }
+        // C36: contrast
+        CHECK(std::fabs(color::ContrastRatio(RGB(0, 0, 0), RGB(255, 255, 255)) - 21.0) < 0.01 &&
+              ContrastReport(RGB(119, 119, 119), RGB(255, 255, 255)).find(L"4.48:1") != std::wstring::npos,
+              "WCAG contrast ratio (black/white 21:1, #777 on white 4.48:1)");
+        {
+            Image sel(40, 20, 0xFFFFFFFF);
+            sel.FillRect({ 5, 5, 35, 15 }, 0xFF102040);
+            COLORREF fg = 0, bg = 0;
+            DominantColors(sel, fg, bg);
+            CHECK(bg == RGB(255, 255, 255) && color::ContrastRatio(fg, bg) > 10, "dominant colors of a selection: background and text");
+        }
+        // C27: background removal keeps the subject and clears the background
+        {
+            Image photo(120, 90, 0xFFF4F4F4);
+            for (int y = 0; y < photo.h; y++) for (int x = 0; x < photo.w; x++) photo.at(x, y) = ARGB(255, 240 - y / 6, 242 - y / 6, 245);
+            for (int y = 25; y < 65; y++) for (int x = 35; x < 85; x++) photo.at(x, y) = 0xFFC03020;
+            Image cut = RemoveBackground(photo, 30, 0);
+            CHECK(CA(cut.at(2, 2)) == 0 && CA(cut.at(118, 88)) == 0 && CA(cut.at(60, 45)) == 255, "background removed, subject kept (corner a=%d, center a=%d)", CA(cut.at(2, 2)), CA(cut.at(60, 45)));
+        }
+        // C25: cursor stamps are drawn with transparency
+        {
+            Image cur = RenderCursorStamp(L"cursor:arrow", 64), hand = RenderCursorStamp(L"cursor:hand", 64);
+            CHECK(!cur.empty() && CA(cur.at(0, cur.h - 1)) == 0 && CA(cur.at(cur.w / 4, cur.h / 3)) > 200 && !hand.empty(), "cursor stamps (%dx%d)", cur.w, cur.h);
+        }
+        // C12: words in an area, highlighter snapped to the lines
+        {
+            OcrLine l1, l2;
+            OcrWord w1; w1.text = L"Hello"; w1.box = { 10, 10, 60, 30 }; l1.words.push_back(w1);
+            OcrWord w2; w2.text = L"world"; w2.box = { 70, 10, 130, 30 }; l1.words.push_back(w2);
+            OcrWord w3; w3.text = L"next"; w3.box = { 10, 50, 50, 70 }; l2.words.push_back(w3);
+            auto inArea = WordsInArea({ l1, l2 }, Gdiplus::RectF(0, 0, 90, 40));
+            auto snapped = SnapToTextLines({ l1, l2 }, Gdiplus::RectF(30, 15, 120, 45));
+            CHECK(inArea.size() == 1 && snapped.size() == 2 && snapped[0].X < 12 && snapped[0].GetRight() > 128, "text-only words in an area (%zu), highlighter snapped to %zu line(s)", inArea.size(), snapped.size());
+        }
+        // C05: beautify adds the padding around the capture
+        {
+            fx::BeautifyOptions bo; bo.padding = 30; bo.autoBalance = false; bo.aspect = 0; bo.background = 0;
+            POINT org{};
+            Image bt = fx::Beautify(Image(100, 60, 0xFF3366CC), bo, &org);
+            CHECK(bt.w == 160 && bt.h == 120 && org.x == 30 && org.y == 30, "beautify: %dx%d with the capture at %ld,%ld", bt.w, bt.h, org.x, org.y);
+        }
+        // C21: AWS Signature V4 (the S3 "GET Object" example of the AWS documentation) and the custom uploader syntax
+        {
+            std::map<std::string, std::string> hd = { { "host", "examplebucket.s3.amazonaws.com" }, { "range", "bytes=0-9" },
+                { "x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" }, { "x-amz-date", "20130524T000000Z" } };
+            std::string auth = upload::SigV4Authorization("GET", "/test.txt", "", hd, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                                          "20130524T000000Z", "us-east-1", "s3", "AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+            CHECK(auth.find("Signature=f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41") != std::string::npos, "SigV4 signature matches the AWS example");
+            std::string resp = R"({"data":{"link":"https://i.example/abc.png","id":7},"ok":true})";
+            CHECK(upload::ExpandSyntax("{json:data.link}", "a.png", resp, {}) == "https://i.example/abc.png" &&
+                  upload::ExpandSyntax("name={filename}", "a.png", resp, {}) == "name=a.png", "custom uploader syntax ({json:…}, {filename})");
+            net::Json j;
+            bool parsed = net::Json::Parse(R"({"a":[1,2,{"b":"cé"}],"t":true})", j);
+            const net::Json* pb = parsed ? j.Path("a[2].b") : nullptr;
+            CHECK(pb && Utf8ToW(pb->Text()) == L"cé" && j.Path("t") && j.Path("t")->b, "JSON reader (paths, unicode escapes)");
+        }
+        // C34: a long image becomes a PDF of several pages
+        {
+            Image tall(600, 4000, 0xFFFFFFFF);
+            for (int y = 0; y < 4000; y += 40) tall.FillRect({ 20, y + 10, 580, y + 30 }, 0xFF303030);
+            std::wstring pdf = TestTempDir() + L"\\snapnab_long.pdf", err;
+            bool ok = SavePdf(pdf, tall, err);
+            std::string data;
+            if (ok) {
+                HANDLE f = CreateFileW(pdf.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+                DWORD sz = GetFileSize(f, nullptr), n = 0;
+                data.resize(sz); ReadFile(f, data.data(), sz, &n, nullptr); CloseHandle(f);
+            }
+            size_t cp = data.find("/Count ");
+            int pages = cp != std::string::npos ? atoi(data.c_str() + cp + 7) : 0;
+            CHECK(ok && (pages >= 3 || !SplitLongPages()), "long image split across PDF pages (%d pages)", pages);
+            DeleteFileW(pdf.c_str());
+        }
+        // C35 / C37 / C43: sketch, vertical text, text along a line and pen pressure are saved and read back
+        {
+            DrawObj o; o.type = ObjType::Line; o.p1 = { 10, 10 }; o.p2 = { 200, 60 }; o.text = L"along";
+            o.style.sketch = true; o.style.sketchSeed = 42; o.style.textOnPath = true;
+            DrawObj p; p.type = ObjType::Pen; p.pts = { { 1, 1 }, { 5, 5 }, { 9, 4 } }; p.pressure = { 0.2f, 0.6f, 1.0f };
+            DrawObj t; t.type = ObjType::Text; t.p1 = { 0, 0 }; t.p2 = { 80, 200 }; t.text = L"縦書き"; t.style.vertical = true;
+            DrawObj hl; hl.type = ObjType::Blur; hl.p1 = { 0, 0 }; hl.p2 = { 100, 40 }; hl.style.textOnly = true; hl.textBoxes = { Gdiplus::RectF(5, 5, 30, 12) };
+            SnapFrame fr; int counter = 1;
+            auto r1 = ObjFromXml(ObjToXml(o, fr, counter), fr), r2 = ObjFromXml(ObjToXml(p, fr, counter), fr);
+            auto r3 = ObjFromXml(ObjToXml(t, fr, counter), fr), r4 = ObjFromXml(ObjToXml(hl, fr, counter), fr);
+            CHECK(r1 && r1->style.sketch && r1->style.sketchSeed == 42 && r1->style.textOnPath && r1->HasLabel() && r1->text == L"along" &&
+                  r2 && r2->pressure.size() == 3 && std::fabs(r2->pressure[1] - 0.6f) < 0.01f && r3 && r3->style.vertical &&
+                  r4 && r4->style.textOnly && r4->textBoxes.size() == 1, "new object properties survive the .snap round trip");
+            Image canvas(240, 220, 0xFFFFFFFF);
+            auto bmp = canvas.WrapGdip();
+            Gdiplus::Graphics gg(bmp.get());
+            RenderObject(gg, canvas, o); RenderObject(gg, canvas, p); RenderObject(gg, canvas, t); RenderObject(gg, canvas, hl);
+            gg.Flush(Gdiplus::FlushIntentionSync);
+            int dark = 0; for (uint32_t px : canvas.px) if (CR(px) < 200) dark++;
+            CHECK(dark > 200, "sketch line, text along it, pressure pen and vertical text are drawn (%d px)", dark);
         }
     }
 

@@ -15,7 +15,7 @@ enum class Selection {
 const wchar_t* SelectionName(Selection s);
 std::vector<Selection> SelectionsFor(CaptureKind k);
 
-enum class FileFormat { PNG = 0, JPEG, BMP, GIF, TIFF };
+enum class FileFormat { PNG = 0, JPEG, BMP, GIF, TIFF, WEBP, AVIF };     // new formats at the end (OutputFileType)
 const wchar_t* FileFormatExt(FileFormat f);
 
 struct Preset {
@@ -41,6 +41,12 @@ struct Preset {
     bool openInProgram = false;
     std::wstring programPath = L"mspaint.exe";
     bool grabText = false;                // Grab Text: OCR of the capture → text window + clipboard
+    bool pinToScreen = false;             // pins the capture on the screen (C01)
+    bool readQr = false;                  // reads QR codes / barcodes of the capture (C04)
+    int office = -1;                      // sends to Word, PowerPoint, Excel or OneNote (office::Target, C20); -1 = no
+    bool upload = false;                  // uploads and copies the link (C21)
+    std::wstring outputPath;              // command line /output file: exact file (not saved in the preset)
+    bool outputClipboardOnly = false;     // command line /output clipboard: no Editor, no overlay (not saved)
     fx::CaptureEffects effects;
     // video
     bool microphone = true;
@@ -51,6 +57,8 @@ struct Preset {
     int quality = 2;                      // 0 very low … 3 high
     bool downscale1080 = true;
     bool hardwareEncode = true;
+    bool audioOnly = false;               // record only the sound (C32): microphone and/or system audio
+    int audioFormat = 0;                  // 0 M4A (AAC), 1 MP3
     bool webcam = false;                  // webcam picture-in-picture (EnableWebcam / SelectedWebcam, comp_7 §2)
     std::wstring webcamDevice, webcamName;    // device symbolic link and friendly name
     int webcamShape = 0;                  // CamShape: circle, rounded square, square, 16:9, 4:3

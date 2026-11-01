@@ -1,4 +1,5 @@
 #include "Library.h"
+#include <shlobj.h>
 
 namespace snap {
 
@@ -78,6 +79,22 @@ std::wstring NewVideoPath() {
     return LibraryDir() + L"\\Video_" + TimeStamp() + L".mp4";
 }
 
+std::wstring AudioDir() {
+    std::wstring d = RegGetString(L"AudioFolder", L"");
+    if (d.empty()) {
+        PWSTR music = nullptr;
+        if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Music, 0, nullptr, &music))) d = std::wstring(music) + L"\\Snapnab";
+        CoTaskMemFree(music);
+        if (d.empty()) d = AppDataDir() + L"\\Audio";
+    }
+    EnsureDir(d);
+    return d;
+}
+
+std::wstring NewAudioPath(bool mp3) {
+    return AudioDir() + L"\\" + Tr(L"Audio") + L"_" + TimeStamp() + (mp3 ? L".mp3" : L".m4a");
+}
+
 bool DeleteLibraryItem(const std::wstring& itemPath, HWND owner) {
     std::wstring from = itemPath; from.push_back(L'\0');
     SHFILEOPSTRUCTW op{};
@@ -87,6 +104,46 @@ bool DeleteLibraryItem(const std::wstring& itemPath, HWND owner) {
     DeleteFileW(ThumbPathFor(itemPath).c_str());
     if (ok && !CaptureName(itemPath).empty()) SetCaptureName(itemPath, L"");      // the name goes with it
     return ok;
+}
+
+int CleanupLibrary(int days, bool keepNamed, bool keepTagged, bool recycle) {
+    if (days <= 0) return 0;
+    FILETIME nowFt; GetSystemTimeAsFileTime(&nowFt);
+    ULARGE_INTEGER now{ nowFt.dwLowDateTime, nowFt.dwHighDateTime };
+    const ULONGLONG limit = (ULONGLONG)days * 24 * 3600 * 10000000ULL;
+    int removed = 0;
+    for (auto& it : ListLibrary(1000000)) {
+        ULARGE_INTEGER t{ it.modified.dwLowDateTime, it.modified.dwHighDateTime };
+        if (now.QuadPart < t.QuadPart || now.QuadPart - t.QuadPart < limit) continue;
+        if (keepNamed && !CaptureName(it.path).empty()) continue;
+        if (keepTagged && !it.video) {
+            XmlNode doc;
+            if (LoadSnapDocument(it.path, doc) && !Trim(doc.getW("Tags")).empty()) continue;
+        }
+        bool ok;
+        if (recycle) ok = DeleteLibraryItem(it.path, nullptr);
+        else {
+            ok = DeleteFileW(it.path.c_str()) != 0;
+            DeleteFileW(ThumbPathFor(it.path).c_str());
+            if (ok && !CaptureName(it.path).empty()) SetCaptureName(it.path, L"");
+        }
+        if (ok) { removed++; Log(L"Cleanup: removed %s", it.path.c_str()); }
+    }
+    return removed;
+}
+
+int CleanupLibraryNow() {
+    if (!RegGetDword(L"CleanupEnabled", 0)) return 0;
+    FILETIME ft; GetSystemTimeAsFileTime(&ft);
+    ULONGLONG now = ((ULONGLONG)ft.dwHighDateTime << 32 | ft.dwLowDateTime) / 10000000ULL / 3600;     // hours
+    ULONGLONG last = ((ULONGLONG)RegGetDword(L"CleanupLastHigh", 0) << 32) | RegGetDword(L"CleanupLast", 0);
+    if (last && now - last < 24) return 0;
+    RegSetDword(L"CleanupLast", (DWORD)(now & 0xFFFFFFFF));
+    RegSetDword(L"CleanupLastHigh", (DWORD)(now >> 32));
+    int n = CleanupLibrary((int)RegGetDword(L"CleanupDays", 30), RegGetDword(L"CleanupKeepNamed", 1) != 0,
+                           RegGetDword(L"CleanupKeepTagged", 1) != 0, RegGetDword(L"CleanupRecycle", 1) != 0);
+    Log(L"Cleanup: %d capture(s) older than %u day(s) removed", n, RegGetDword(L"CleanupDays", 30));
+    return n;
 }
 
 bool IsInLibrary(const std::wstring& path) {

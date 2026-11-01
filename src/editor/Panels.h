@@ -266,12 +266,16 @@ public:
     std::function<std::vector<std::wstring>(const std::vector<std::wstring>&)> filesForDrag;   // items → files to drag
     std::function<void()> onShowLibrary;          // tray "Library" button / library "Back" button
     std::function<void(const std::wstring& path, const std::wstring& name)> onRenamed;   // capture renamed (F2 / context menu)
+    // more commands of the context menu (C01 pin, C30 copy as, C21 upload, C09 combine, C17 compare, C28 batch)
+    enum ItemCmd { CmdPin = 1, CmdCopyAs, CmdUpload, CmdCombine, CmdCompare, CmdBatch };
+    std::function<void(int cmd, const std::vector<std::wstring>& paths)> onItemCommand;
     std::wstring current;
     void Create(HWND parent, Mode m);
     void Reload();
     void SetCurrent(const std::wstring& p);       // active document (in the tray, it also goes into the recents)
     void InvalidateThumb(const std::wstring& p);
     void SelectAll();
+    std::vector<std::wstring> SelectedPaths() const { return Selection(); }
     void RemoveFromTray(const std::vector<std::wstring>& paths);
     void Rename(const std::wstring& path);        // asks for the capture's name
     static std::wstring ItemLabel(const LibraryItem& it);   // name, or the date and time

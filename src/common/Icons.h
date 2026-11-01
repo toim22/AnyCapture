@@ -13,7 +13,8 @@ enum Id {
     Star, Clipboard, Program, Duplicate, SaveAs, NewClipboard, AutoTrim, DeleteObject,
     FxBorder, FxEdges, FxCaption, FxPerspective, FxPageCurl, FxShadow, FxFilters, FxColorAdjust, FxColorReplace, FxSpotlight, FxWatermark,
     Lock, Unlock, Eye, EyeOff, Pin, AlignLeft, AlignCenter, AlignRight, AlignTop, AlignMiddle, AlignBottom, DistributeH, DistributeV,
-    Ruler, Link, Group, Sliders
+    Ruler, Link, Group, Sliders,
+    Check, Qr, Upload, Sparkle, Compare, Combine, Clock, Cursor, Contrast, Split, Focus, Beautify
 };
 
 void Draw(Gdiplus::Graphics& g, Id id, Gdiplus::RectF r, Gdiplus::Color c);

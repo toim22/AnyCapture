@@ -36,6 +36,8 @@ const wchar_t* FileFormatExt(FileFormat f) {
     case FileFormat::BMP: return L".bmp";
     case FileFormat::GIF: return L".gif";
     case FileFormat::TIFF: return L".tif";
+    case FileFormat::WEBP: return L".webp";
+    case FileFormat::AVIF: return L".avif";
     default: return L".png";
     }
 }
@@ -56,6 +58,10 @@ XmlNode Preset::ToXml() const {
     XmlNode& pr = n.add("ShareSettingsProgram");
     pr.seti("Enabled", openInProgram).setW("Program", programPath);
     n.add("ShareSettingsGrabText").seti("Enabled", grabText);
+    n.add("ShareSettingsPin").seti("Enabled", pinToScreen);
+    n.add("ShareSettingsQRCode").seti("Enabled", readQr);
+    n.add("ShareSettingsOffice").seti("Target", office);
+    n.add("ShareSettingsUpload").seti("Enabled", upload);
     if (!builtin.empty()) n.setW("Builtin", builtin);
     XmlNode& e = n.add("CaptureEffects");
     const auto& f = effects;
@@ -73,13 +79,15 @@ XmlNode Preset::ToXml() const {
     e.seti("Watermark", f.watermark).setW("WatermarkText", f.watermarkText).seti("WatermarkOpacity", f.watermarkOpacity)
      .seti("WatermarkTiled", f.watermarkTiled);
     e.seti("Resolution", f.resolution).seti("Dpi", f.dpi);
+    e.seti("Beautify", f.beautify);
+    e.children.push_back(f.beautifyOpt.ToXml());
     XmlNode& v = n.add("Video");
     v.seti("EnableMicrophone", microphone).seti("EnableSystemAudio", systemAudio).seti("FrameRate", fps)
      .seti("MicrophoneVolume", micVolume).seti("SystemAudioVolume", sysVolume).seti("AutomaticGain", autoGain)
      .seti("Quality", quality).seti("Downscale1080", downscale1080).seti("HardwareEncoding", hardwareEncode)
      .seti("EnableWebcam", webcam).setW("SelectedWebcam", webcamDevice).setW("SelectedWebcamName", webcamName)
      .seti("WebcamShape", webcamShape).seti("ChromaKey", chromaKey).setW("ChromaColor", ColorToHex(chromaColor))
-     .seti("ChromaTolerance", chromaTolerance);
+     .seti("ChromaTolerance", chromaTolerance).seti("AudioOnly", audioOnly).seti("AudioFormat", audioFormat);
     n.seti("HotKey", hotkeyVk).seti("HotKeyModifiers", hotkeyMods);
     return n;
 }
@@ -99,11 +107,15 @@ Preset Preset::FromXml(const XmlNode& n) {
     p.windowObjects = n.getb("WindowsAsObjects"); p.captureLinks = n.getb("CaptureLinks", true);
     p.previewInEditor = n.getb("PreviewInEditor", true); p.copyToClipboard = n.getb("CopyToClipboard");
     if (auto* sh = n.child("ShareSettingsFile")) {
-        p.saveToFile = sh->getb("Enabled"); p.fileFormat = (FileFormat)std::clamp(sh->geti("OutputFileType"), 0, 4);
+        p.saveToFile = sh->getb("Enabled"); p.fileFormat = (FileFormat)std::clamp(sh->geti("OutputFileType"), 0, (int)FileFormat::AVIF);
         p.filePrefix = sh->getW("Prefix", p.filePrefix); p.folder = sh->getW("FolderName");
     }
     if (auto* pr = n.child("ShareSettingsProgram")) { p.openInProgram = pr->getb("Enabled"); p.programPath = pr->getW("Program", p.programPath); }
     if (auto* gt = n.child("ShareSettingsGrabText")) p.grabText = gt->getb("Enabled");
+    if (auto* x = n.child("ShareSettingsPin")) p.pinToScreen = x->getb("Enabled");
+    if (auto* x = n.child("ShareSettingsQRCode")) p.readQr = x->getb("Enabled");
+    if (auto* x = n.child("ShareSettingsOffice")) p.office = std::clamp(x->geti("Target", -1), -1, 3);
+    if (auto* x = n.child("ShareSettingsUpload")) p.upload = x->getb("Enabled");
     p.builtin = n.getW("Builtin");
     if (auto* e = n.child("CaptureEffects")) {
         auto& f = p.effects;
@@ -132,6 +144,8 @@ Preset Preset::FromXml(const XmlNode& n) {
         f.watermark = e->getb("Watermark"); f.watermarkText = e->getW("WatermarkText", f.watermarkText);
         f.watermarkOpacity = std::clamp(e->geti("WatermarkOpacity", 35), 5, 100); f.watermarkTiled = e->getb("WatermarkTiled", true);
         f.resolution = e->getb("Resolution"); f.dpi = std::clamp(e->geti("Dpi", 300), 36, 2400);
+        f.beautify = e->getb("Beautify");
+        if (const XmlNode* b = e->child("Beautify")) f.beautifyOpt = fx::BeautifyOptions::FromXml(*b);
     }
     if (auto* v = n.child("Video")) {
         p.microphone = v->getb("EnableMicrophone", true); p.systemAudio = v->getb("EnableSystemAudio", true);
@@ -139,6 +153,7 @@ Preset Preset::FromXml(const XmlNode& n) {
         p.autoGain = v->getb("AutomaticGain", true);
         p.fps = std::clamp(v->geti("FrameRate", 30), 5, 60); p.quality = std::clamp(v->geti("Quality", 2), 0, 3);
         p.downscale1080 = v->getb("Downscale1080", true); p.hardwareEncode = v->getb("HardwareEncoding", true);
+        p.audioOnly = v->getb("AudioOnly"); p.audioFormat = std::clamp(v->geti("AudioFormat"), 0, 1);
         p.webcam = v->getb("EnableWebcam"); p.webcamDevice = v->getW("SelectedWebcam"); p.webcamName = v->getW("SelectedWebcamName");
         p.webcamShape = std::clamp(v->geti("WebcamShape"), 0, 4);
         p.chromaKey = v->getb("ChromaKey"); p.chromaColor = HexToColor(v->getW("ChromaColor"), p.chromaColor);

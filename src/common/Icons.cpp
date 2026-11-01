@@ -490,6 +490,53 @@ void Draw(Graphics& g, Id id, RectF r, Color c) {
         g.FillRectangle(&b, 6.f, 6.f, 7.f, 7.f);
         g.DrawEllipse(&p, 11.f, 11.f, 7.f, 7.f);
         break;
+    case Check: { PointF s[3] = { { 4.5f, 12.5f }, { 9.5f, 17.5f }, { 19.5f, 6.5f } }; g.DrawLines(&p, s, 3); break; }
+    case Qr:                              // three finder squares and a few modules
+        for (auto [x, y] : { std::pair<float, float>{ 3.f, 3.f }, { 14.f, 3.f }, { 3.f, 14.f } }) { g.DrawRectangle(&p, x, y, 7.f, 7.f); g.FillRectangle(&b, x + 2.5f, y + 2.5f, 2.f, 2.f); }
+        g.FillRectangle(&b, 14.f, 14.f, 2.5f, 2.5f); g.FillRectangle(&b, 18.f, 18.f, 2.5f, 2.5f); g.FillRectangle(&b, 18.f, 14.f, 2.5f, 2.5f);
+        break;
+    case Upload:                          // cloud with an up arrow
+        g.DrawArc(&p, 3.f, 9.f, 8.f, 8.f, 90.f, 180.f); g.DrawArc(&p, 7.f, 5.f, 10.f, 10.f, 180.f, 180.f); g.DrawArc(&p, 13.f, 9.f, 8.f, 8.f, -90.f, 180.f);
+        g.DrawLine(&p, 7.f, 17.f, 17.f, 17.f);
+        g.DrawLine(&p, 12.f, 21.f, 12.f, 11.f); g.DrawLine(&p, 9.f, 14.f, 12.f, 11.f); g.DrawLine(&p, 15.f, 14.f, 12.f, 11.f);
+        break;
+    case Sparkle: {                       // AI: a four-point star and a small one
+        PointF s[8] = { { 10, 2 }, { 12, 8 }, { 18, 10 }, { 12, 12 }, { 10, 18 }, { 8, 12 }, { 2, 10 }, { 8, 8 } };
+        g.FillPolygon(&b, s, 8);
+        PointF t[8] = { { 18, 14 }, { 19, 17 }, { 22, 18 }, { 19, 19 }, { 18, 22 }, { 17, 19 }, { 14, 18 }, { 17, 17 } };
+        g.FillPolygon(&b, t, 8);
+        break;
+    }
+    case Compare:                         // two frames side by side with a divider
+        g.DrawRectangle(&p, 3.f, 5.f, 18.f, 14.f); g.DrawLine(&p, 12.f, 2.f, 12.f, 22.f);
+        g.FillRectangle(&faint, 3.f, 5.f, 9.f, 14.f);
+        break;
+    case Combine:                         // two rectangles joined
+        g.DrawRectangle(&p, 3.f, 4.f, 8.f, 16.f); g.DrawRectangle(&p, 13.f, 4.f, 8.f, 16.f); g.FillRectangle(&faint, 13.f, 4.f, 8.f, 16.f);
+        break;
+    case Clock:
+        g.DrawEllipse(&p, 3.f, 3.f, 18.f, 18.f); g.DrawLine(&p, 12.f, 12.f, 12.f, 6.5f); g.DrawLine(&p, 12.f, 12.f, 16.f, 14.f);
+        break;
+    case Cursor: {                        // arrow pointer
+        PointF s[7] = { { 5, 2 }, { 5, 19 }, { 9.5f, 14.5f }, { 12.5f, 21 }, { 15, 20 }, { 12, 13.5f }, { 18, 13.5f } };
+        g.FillPolygon(&faint, s, 7); g.DrawPolygon(&p, s, 7);
+        break;
+    }
+    case Contrast:                        // half-filled circle
+        g.DrawEllipse(&p, 3.f, 3.f, 18.f, 18.f); g.FillPie(&b, 3.f, 3.f, 18.f, 18.f, 90.f, 180.f);
+        break;
+    case Split:                           // a page cut by a dashed line
+        g.DrawRectangle(&p, 5.f, 3.f, 14.f, 18.f);
+        { Gdiplus::Pen d(c, 1.6f); d.SetDashStyle(DashStyleDash); g.DrawLine(&d, 2.f, 12.f, 22.f, 12.f); }
+        break;
+    case Focus:                           // spotlight: dark frame with a bright circle
+        g.FillRectangle(&faint, 2.f, 4.f, 20.f, 16.f); g.DrawRectangle(&p, 2.f, 4.f, 20.f, 16.f);
+        g.DrawEllipse(&p, 8.f, 7.f, 10.f, 10.f);
+        break;
+    case Beautify:                        // a picture on a background card
+        g.FillRectangle(&faint, 2.f, 3.f, 20.f, 18.f);
+        g.DrawRectangle(&p, 6.f, 7.f, 12.f, 10.f);
+        break;
     }
     g.Restore(st);
 }

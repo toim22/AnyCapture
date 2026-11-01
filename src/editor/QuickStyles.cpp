@@ -38,6 +38,8 @@ XmlNode StyleToXml(const Style& s, const char* name) {
     n.setd("LineSpacing", s.lineSpacing).set("StepOutlineColor", Hex(s.stepOutline)).setd("StepOutlineWidth", s.stepOutlineWidth);
     n.seti("AreaShape", s.areaShape).seti("BackgroundBlur", s.bgBlur).seti("BackgroundBlurAmount", s.bgBlurAmount);
     n.seti("Loupe", s.loupe).seti("LoupeHandle", s.loupeHandle);
+    n.seti("TextOnly", s.textOnly).seti("SnapText", s.snapText).seti("Sketch", s.sketch).seti("SketchSeed", s.sketchSeed)
+     .seti("VerticalText", s.vertical).seti("TextOnPath", s.textOnPath);
     GradToXml(n, s.grad);
     return n;
 }
@@ -86,6 +88,12 @@ Style StyleFromXml(const XmlNode& n) {
     s.bgBlurAmount = std::clamp(n.geti("BackgroundBlurAmount", 8), 1, 40);
     s.loupe = n.getb("Loupe");
     s.loupeHandle = n.getb("LoupeHandle", true);
+    s.textOnly = n.getb("TextOnly");
+    s.snapText = n.attr("SnapText") ? n.getb("SnapText") : true;      // styles saved before the option: on (its default)
+    s.sketch = n.getb("Sketch");
+    s.sketchSeed = n.geti("SketchSeed", 1);
+    s.vertical = n.getb("VerticalText");
+    s.textOnPath = n.getb("TextOnPath");
     s.grad = GradFromXml(n);
     return s;
 }
@@ -110,6 +118,10 @@ std::vector<Style> GenerateStyles(Tool t, const std::array<uint32_t, 4>& c) {
                 if (row == 2) { s.arrowStart = CapArrow; s.arrowEnd = CapArrow; s.dash = DashDot; s.width = 6; s.startSize = s.endSize = 2.5f; }
                 v.push_back(s);
             }
+        for (int i = 0; i < 4; i++) {           // hand-drawn (C35)
+            Style s = b; s.stroke = c[i]; s.width = 5; s.arrowStart = CapFlat; s.arrowEnd = CapArrowOpen; s.sketch = true; s.sketchSeed = i + 1; s.shadow = false;
+            v.push_back(s);
+        }
         break;
     case Tool::Line:
         for (int row = 0; row < 3; row++)
@@ -119,6 +131,10 @@ std::vector<Style> GenerateStyles(Tool t, const std::array<uint32_t, 4>& c) {
                 if (row == 2) { s.width = 8; s.arrowStart = s.arrowEnd = CapRound; }
                 v.push_back(s);
             }
+        for (int i = 0; i < 4; i++) {           // hand-drawn (C35)
+            Style s = b; s.stroke = c[i]; s.arrowStart = s.arrowEnd = CapFlat; s.width = 4; s.sketch = true; s.sketchSeed = i + 1; s.shadow = false;
+            v.push_back(s);
+        }
         break;
     case Tool::Pen:
         for (int row = 0; row < 2; row++)
@@ -126,7 +142,7 @@ std::vector<Style> GenerateStyles(Tool t, const std::array<uint32_t, 4>& c) {
         break;
     case Tool::Highlighter: {
         const uint32_t hl[4] = { 0xFFFFEB3B, 0xFF76FF03, 0xFFFF4081, 0xFF40C4FF };
-        for (int i = 0; i < 8; i++) { Style s = b; s.stroke = i < 4 ? hl[i] : c[i - 4]; s.opacity = i < 4 ? 50 : 40; s.shadow = false; v.push_back(s); }
+        for (int i = 0; i < 8; i++) { Style s = b; s.stroke = i < 4 ? hl[i] : c[i - 4]; s.opacity = i < 4 ? 50 : 40; s.shadow = false; s.snapText = true; v.push_back(s); }
         for (int i = 0; i < 4; i++) { Style s = b; s.stroke = hl[i]; s.opacity = 45; s.shadow = false; s.areaShape = i < 2 ? ShapeEllipse : ShapeRoundRect; v.push_back(s); }
         break;
     }
@@ -142,6 +158,11 @@ std::vector<Style> GenerateStyles(Tool t, const std::array<uint32_t, 4>& c) {
                 s.shadow = row >= 2;
                 v.push_back(s);
             }
+        for (int i = 0; i < 4; i++) {           // hand-drawn (C35): handwriting font
+            Style s = b; s.fontSize = 36; s.bold = false; s.alignH = s.alignV = 1; s.font = L"Ink Free"; s.sketch = true;
+            s.textColor = c[i]; s.stroke = kWhite; s.width = 4; s.shadow = false;
+            v.push_back(s);
+        }
         break;
     }
     case Tool::Callout:
@@ -158,6 +179,10 @@ std::vector<Style> GenerateStyles(Tool t, const std::array<uint32_t, 4>& c) {
     case Tool::Shape:
         for (int i = 0; i < 4; i++) { Style s = b; s.stroke = c[i]; s.width = 4; s.shapeKind = ShapeRect; v.push_back(s); }
         for (int i = 0; i < 4; i++) { Style s = b; s.stroke = c[i]; s.width = 4; s.shapeKind = i < 2 ? ShapeEllipse : ShapeRoundRect; v.push_back(s); }
+        for (int i = 0; i < 4; i++) {           // hand-drawn (C35)
+            Style s = b; s.stroke = c[i]; s.width = 4; s.shapeKind = i % 2 ? ShapeEllipse : ShapeRect; s.sketch = true; s.sketchSeed = i + 1; s.shadow = false;
+            v.push_back(s);
+        }
         {
             Style s = b; s.shapeKind = ShapeRect; s.width = 0;
             s.fill = kBlack; s.stroke = kBlack; v.push_back(s);

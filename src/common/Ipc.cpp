@@ -63,7 +63,7 @@ void Notify::ListenerThread() {
         }
         ReleaseMutex(mutex_);
         SetEvent(ack_);                         // releases the sender
-        Log(L"IPC: recebido code=0x%02X kind=%u", m.code, m.kind);
+        Log(L"IPC: received code=0x%02X kind=%u", m.code, m.kind);
         if (listener_) listener_(m);
     }
     if (aliveMutex_) { ReleaseMutex(aliveMutex_); CloseHandle(aliveMutex_); aliveMutex_ = nullptr; }
@@ -104,7 +104,7 @@ bool Notify::Send(Channel dest, uint32_t code, uint32_t kind, const void* payloa
         ResetEvent(ack);
     }
     CloseHandle(ev); CloseHandle(map); CloseHandle(m); CloseHandle(ack);
-    Log(L"IPC: enviado code=0x%02X kind=%u → %u", code, kind, dest);
+    Log(L"IPC: sent code=0x%02X kind=%u → %u", code, kind, dest);
     return true;
 }
 

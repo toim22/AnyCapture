@@ -4,10 +4,10 @@
 #
 # Products: Snapnab.exe (capture), SnapnabEditor.exe (editor) and SnapEx64.dll (extended window),
 # always side by side in the same folder — the two processes find each other through the executable's folder.
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.28)
 
 project(Snapnab
-    VERSION 0.3.0
+    VERSION 0.4.0
     DESCRIPTION "Screen capture, video recording and image editor"
     LANGUAGES CXX RC)
 
@@ -27,6 +27,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # PDB in Release too (the symbols go to dist/symbols, outside the package)
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "ProgramDatabase")
+
+# third-party libraries (libwebp, ZXing-C++), built before Snapnab's own compile options are set
+include(cmake/Dependencies.cmake)
 
 add_compile_definitions(UNICODE _UNICODE NOMINMAX _CRT_SECURE_NO_WARNINGS)
 add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:/utf-8;/permissive-;/W3;/EHsc>")
@@ -50,10 +53,10 @@ add_custom_target(SnapnabLang ALL
     VERBATIM)
 
 # user manual (help\Snapnab-Manual.html, opened by Help › Manual and F1) next to the executables
-file(GLOB SNAPNAB_HELP CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/help/*)
+# (with its screenshots in help\images)
+file(GLOB_RECURSE SNAPNAB_HELP CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/help/*)
 add_custom_target(SnapnabHelp ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/help
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SNAPNAB_HELP} ${CMAKE_BINARY_DIR}/bin/help
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/help ${CMAKE_BINARY_DIR}/bin/help
     DEPENDS ${SNAPNAB_HELP}
     VERBATIM)
 
@@ -67,10 +70,10 @@ endif()
 # Runtime component = what the user gets; Symbols = PDBs to debug crashes.
 install(TARGETS Snapnab SnapnabEditor SnapEx64
     RUNTIME DESTINATION . COMPONENT Runtime)
-install(FILES packaging/README.txt CHANGELOG.md LICENSE
+install(FILES packaging/README.txt CHANGELOG.md LICENSE THIRD-PARTY-NOTICES.txt
     DESTINATION . COMPONENT Runtime)
 install(FILES ${SNAPNAB_PO} DESTINATION lang COMPONENT Runtime)
-install(FILES ${SNAPNAB_HELP} DESTINATION help COMPONENT Runtime)
+install(DIRECTORY help/ DESTINATION help COMPONENT Runtime)
 install(FILES $<TARGET_PDB_FILE:Snapnab> $<TARGET_PDB_FILE:SnapnabEditor> $<TARGET_PDB_FILE:SnapEx64>
     DESTINATION . COMPONENT Symbols)
 

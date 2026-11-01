@@ -1,6 +1,8 @@
 // Screen recording — equivalent of TSCRec3 + AVFileWriter + AVStreamEncoder (ds_arch §12, comp_3)
 //   video: BitBlt of the area → RGB32 samples → IMFSinkWriter (H.264, MP4), optional hardware encoding
 //   audio: WASAPI (microphone + system loopback) → mixer with separate mute → AAC
+//   competitor feature request: cursor highlight, click ripples and keystrokes drawn in the video (C07), crash-safe
+//   recording into a fragmented MP4 remuxed at the end (C14), zoom following the pointer (C15), audio only (C32)
 #pragma once
 #include "Image.h"
 
@@ -19,6 +21,17 @@ struct RecordSettings {
     bool downscale1080 = true;
     bool hardware = true;
     std::wstring path;
+    // drawn in the video (C07)
+    bool highlightCursor = false;
+    COLORREF highlightColor = RGB(255, 214, 0);
+    int highlightSize = 44, highlightOpacity = 35;    // px (at the screen size), %
+    bool clickEffects = false;
+    COLORREF leftClickColor = RGB(229, 50, 45), rightClickColor = RGB(0, 120, 215);
+    int keyMode = 0;             // keys on screen: 0 off, 1 shortcuts only (Ctrl/Alt/Win + key, F-keys), 2 every key
+    bool autoZoom = false;       // zooms in on each click for a moment (C15)
+    int zoomPercent = 200;
+    bool crashSafe = true;       // fragmented MP4 while recording: a crash leaves a recoverable file (C14)
+    bool audioOnly = false;      // C32: no video; .m4a (AAC) or .mp3 by the path's extension
 };
 
 class Recorder {
@@ -56,12 +69,25 @@ public:
     Image firstFrame;
     std::wstring lastError;
     ~Recorder();
+    // live from the HUD (C07, C15)
+    void SetOverlay(bool highlight, bool clicks, int keyMode) { highlight_ = highlight; clicks_ = clicks; keyMode_ = keyMode; }
+    bool highlightOn() const { return highlight_; }
+    bool clicksOn() const { return clicks_; }
+    int keyMode() const { return keyMode_; }
+    void ToggleZoom() { zoomOn_ = !zoomOn_; }
+    bool zoomed() const { return zoomOn_; }
+    // crash recovery (C14): recordings interrupted by a crash are left in RecoveryDir() with a ".target" file naming the
+    // video they were meant to become; RecoverInterrupted() finishes them (at startup) and returns the recovered videos
+    static std::wstring RecoveryDir();
+    static std::vector<std::wstring> RecoverInterrupted();
+    static bool RemuxToMp4(const std::wstring& in, const std::wstring& out, std::wstring& err);
 
     // notifications sent to notifyMsg (wParam)
     enum Note { NoteDiskLow = 1, NoteDiskFull = 2, NoteError = 3 };
 private:
     struct AudioSource;
     void VideoThread();
+    void InputThread();          // low-level mouse/keyboard hooks: clicks and keys for the overlays (C07, C15)
     void AudioMixThread();
     LONGLONG Now100ns() const;   // recording clock (excludes pauses)
     bool WriteSample(DWORD stream, const void* data, DWORD len, LONGLONG time, LONGLONG dur);
@@ -88,6 +114,19 @@ private:
     LARGE_INTEGER qpcFreq_{}, qpcStart_{};
     mutable std::mutex clockMutex_;
     LONGLONG pausedTotal_ = 0, pauseStart_ = 0;
+    std::atomic<bool> highlight_{ false }, clicks_{ false }, zoomOn_{ false };
+    std::atomic<int> keyMode_{ 0 };
+    std::wstring tempPath_;      // fragmented recording being written (crash-safe mode), "" = straight to 'path'
+    // input events seen by the hooks, consumed by the video thread (quick taps are not lost between two frames)
+public:
+    struct InputEvent { bool key; UINT code; POINT pt; bool ctrl, alt, shift, win; ULONGLONG tick; };
+private:
+    std::mutex inputMutex_;
+    std::vector<InputEvent> input_;
+    std::thread inputThread_;
+    DWORD inputThreadId_ = 0;
+    friend LRESULT CALLBACK RecorderKeyHook(int, WPARAM, LPARAM);
+    friend LRESULT CALLBACK RecorderMouseHook(int, WPARAM, LPARAM);
 };
 
 } // namespace snap

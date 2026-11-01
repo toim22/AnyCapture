@@ -1,6 +1,7 @@
 // Shared Win32 UI utilities (modal forms built in code, fonts, drawing)
 #pragma once
 #include "Common.h"
+#include "Image.h"
 
 namespace snap::ui {
 
@@ -32,6 +33,12 @@ struct Field {
 // Modal form; returns true on OK. 'validate' can reject (by returning an error message).
 bool RunForm(HWND owner, const std::wstring& title, std::vector<Field>& fields,
              std::function<std::wstring(std::vector<Field>&)> validate = nullptr, int width = 420);
+
+// the same form with a live preview on the left: 'preview' gets the current values (after each change, with a short
+// pause) and returns the image to show, scaled to fit 'previewSize' (pixels at 96 DPI)
+bool RunFormPreview(HWND owner, const std::wstring& title, std::vector<Field>& fields,
+                    std::function<Image(std::vector<Field>&)> preview, SIZE previewSize = { 420, 320 },
+                    std::function<std::wstring(std::vector<Field>&)> validate = nullptr, int width = 420);
 
 // Shows long copyable text (OCR result, help)
 void ShowTextWindow(HWND owner, const std::wstring& title, const std::wstring& text);

@@ -99,6 +99,9 @@ ol.steps > li::before { content: counter(step); position: absolute; left: 0; top
 .toolgrid a:hover { background: var(--accent-soft); text-decoration: none; }
 .toolgrid kbd { margin-left: 8px; }
 section.hidden { display: none; }
+figure { margin: 14px 0 18px; }
+figure img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
 mark { background: #ffe86b; color: #1f2328; border-radius: 2px; }
 .nores { display: none; padding: 20px; color: var(--muted); }
 .top { position: fixed; right: 18px; bottom: 18px; padding: 8px 12px; border-radius: 20px; background: var(--accent); color: #fff; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
@@ -186,6 +189,19 @@ mark { background: #ffe86b; color: #1f2328; border-radius: 2px; }
     <li><a href="#options">Options and language</a></li>
     <li><a href="#backup">Backing up your settings</a></li>
     <li><a href="#data">Where your data lives</a></li>
+    <li class="part">Part 6 — More tools</li>
+    <li><a href="#capture-extras">After the capture, crosshair, color picker</a></li>
+    <li><a href="#pins">Pinning captures on the screen</a></li>
+    <li><a href="#qr">QR codes and barcodes</a></li>
+    <li><a href="#beautify">Beautify</a></li>
+    <li><a href="#combine-compare">Combining and comparing images</a></li>
+    <li><a href="#redact">Hiding sensitive data</a></li>
+    <li><a href="#smart-drawing">Smart drawing</a></li>
+    <li><a href="#image-tools">Image tools</a></li>
+    <li><a href="#outputs">Formats, Copy as, Office, upload, batch</a></li>
+    <li><a href="#ai">AI assistant</a></li>
+    <li><a href="#recording-extras">Recording extras</a></li>
+    <li><a href="#system-extras">Interval capture, focus, cleanup</a></li>
     <li class="part">Reference</li>
     <li><a href="#shortcuts">Keyboard shortcuts</a></li>
     <li><a href="#cmdline">Command line</a></li>
@@ -1009,7 +1025,7 @@ a <a href="#colors">gradient</a> or no color for an empty frame), <span class="u
 thickness and opacity. <kbd>Shift</kbd> makes it perfect (square, circle, equilateral triangle, regular hexagon).</p>
 
 <h4 id="tool-pen">Pen (P)</h4>
-<p>Draws freehand lines: circle something, underline, sign. Properties: color, shadow, dashes, width and opacity.</p>
+<p>Draws freehand lines: circle something, underline, sign. Properties: color, shadow, dashes, width and opacity. Hold <kbd>Shift</kbd> while drawing for a straight segment in 45° steps from where you pressed it; release it to go on freehand. The pen always draws, even when a stroke starts on top of an earlier one; move or change finished strokes with the Move tool <kbd>V</kbd>. To turn a rough line, arrow, rectangle, ellipse or triangle into a clean shape, hold the mouse still for a moment before releasing (see <a href="#drawhold">Draw and hold</a>).</p>
 
 <h4 id="tool-text">Text (T)</h4>
 <p>Click to start typing, or drag to create a box of a fixed width; the text wraps and the box grows downward. Double-click edits.
@@ -1099,7 +1115,7 @@ contrast edges and can be typed exactly in <span class="ui">Crop area (px)</span
 <span class="ui">Smooth edges</span>.</p>
 
 <h4 id="tool-eyedropper">Eyedropper (I)</h4>
-<p>Click the image to pick a color. It is applied to the drawing tools, so your next arrow or text matches the color you picked.</p>
+<p>Click the image to pick a color: the pointer is a dropper, and the pixel under its tip is the one picked. It is applied to the drawing tools, so your next arrow or text matches the color you picked.</p>
 
 <h4 id="tool-favorites">Favorites</h4>
 <p>Shows your favorite <a href="#styles">quick styles</a> from every tool. Choose one to draw with it.</p>
@@ -1459,6 +1475,130 @@ Uninstalling Snapnab keeps all of this.</p>
 </section>
 
 <!-- ============================================================ REFERENCE -->
+<p class="part-title">Part 6 — More tools</p>
+<section id="capture-extras">
+<h2>After the capture, crosshair extras and the color picker</h2>
+<p>Every capture is <strong>copied to the clipboard</strong> as soon as it is taken (videos are copied as a file), so you can paste it right away. Turn this off in <em>Options › After capturing</em>.</p>
+<h3>Quick thumbnail</h3>
+<p>In <em>Options › After capturing › When done</em> you can show a small floating thumbnail in a corner of the screen instead of (or as well as) opening the Editor. It has <em>Copy</em>, <em>Save</em>, <em>Annotate</em>, <em>Pin</em>, <em>Delete</em> and <em>Close</em>; drag it into any program to drop the file there, right-click for <em>Copy as…</em>, <em>Read QR code</em> and <em>Upload</em>. It closes by itself after the chosen number of seconds (it waits while the mouse is over it); several captures stack.</p>
+<h3>Capture sound</h3>
+<p>A short sound plays when an image is taken: camera shutter, click, soft tap, your own WAV file or none (<em>Options › Capture sound</em>).</p>
+<h3>New crosshair keys</h3>
+<table>
+<tr><th>Keys</th><th class="wrap">Action</th></tr>
+<tr><td><kbd>Tab</kbd></td><td class="wrap">Cycle through the regions you captured before (region history)</td></tr>
+<tr><td><kbd>H</kbd></td><td class="wrap">Menu of the recent captures (open one in the Editor)</td></tr>
+<tr><td><kbd>C</kbd></td><td class="wrap">Copy the color under the pointer</td></tr>
+<tr><td>Arrow keys after drawing</td><td class="wrap">Move the selection (<kbd>Shift</kbd> = 10 px); <kbd>Ctrl</kbd>+arrows grow it, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+arrows shrink it; click the size label to type an exact size; <kbd>Enter</kbd> or double-click captures</td></tr>
+</table>
+<h3>Screen color picker</h3>
+<p>From the notification area, the capture window (<em>Capture › Screen color picker</em>), a global shortcut or <code>/colorpicker</code>: a magnifier follows the pointer and shows HEX, RGB and HSL. Click to copy the color in the default format; a menu offers the other formats (HEX, RGB, HSL, CSS, 0x, C#, Delphi) and the recent colors.</p>
+<h3>Windows: rounded corners, shadow, HDR, clean desktop</h3>
+<p>Window captures keep the Windows 11 rounded corners transparent and can get a shadow like the window's own. On HDR monitors captures are tone-mapped so they look like what you see. While capturing, the desktop icons can be hidden, notifications silenced (Do not disturb while recording) and the screen kept awake — all restored afterwards, even after a crash. Each of these is a check box in <em>Options</em>.</p>
+</section>
+
+<section id="pins">
+<h2>Pinning captures on the screen</h2>
+<figure><img src="images/pin.webp" alt="A pinned capture floating over the Editor" loading="lazy"><figcaption>A pinned image floating over other windows (right-click it for its menu).</figcaption></figure>
+<p>A pinned image floats above every window like a sticky note. Pin from the capture (<em>Capture and pin</em> preset, <code>/pin</code>), from the Editor (<em>File › Pin to screen</em>, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>), from the tray or the Library (right-click › <em>Pin to screen</em>) or from the clipboard (an image, text or a color).</p>
+<ul>
+<li>Mouse wheel zooms, <kbd>Ctrl</kbd>+wheel changes the opacity, arrow keys move it, middle click resets size and opacity.</li>
+<li>Right-click: copy, save, open in the Editor, quick annotation (pen, highlighter, arrow, rectangle, text), lock position, click-through, always on top, shadow, read QR code, copy the color under the pointer (<kbd>Alt</kbd>+click), close.</li>
+<li><kbd>Ctrl</kbd>+drag drags the image into another program.</li>
+<li>The notification area menu has <em>Pinned images › Show all / Hide all / Close all</em>, <em>Reopen the last closed</em> and a short history.</li>
+</ul>
+</section>
+
+<section id="qr">
+<h2>Reading QR codes and barcodes</h2>
+<p>QR codes and common barcodes (EAN, UPC, Code 128, Code 39, Data Matrix, PDF417, Aztec…) are read on the computer: as a capture output (<em>Share › Read QR code</em>, tray <em>Read QR code</em>, <code>/qr</code>), in the Editor (<em>Tools › Read QR code</em>, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>, also on a selection) and on a pinned image. The results window copies each content and opens links.</p>
+</section>
+
+<section id="beautify">
+<h2>Beautify</h2>
+<figure><img src="images/beautify.webp" alt="The Beautify dialog with a live preview" loading="lazy"><figcaption>Beautify: background, padding, corners and shadow with a live preview.</figcaption></figure>
+<p><em>Image › Effects › Beautify</em> makes a capture presentation-ready: a background (gradient, desktop wallpaper, an image, a solid color or transparent), padding, rounded corners, a shadow, alignment and an aspect ratio (free, 16:9, 4:3, 1:1, 9:16). <em>Balance the margins</em> makes the plain border around the content even before the padding is added. Pick one of the presets or type a name in <em>Save as preset</em> to keep your settings. As a <em>capture effect</em> (capture window › Effects › Beautify) it applies to every capture of that preset.</p>
+</section>
+
+<section id="combine-compare">
+<h2>Combining and comparing images</h2>
+<h3>Combine</h3>
+<p>Select two or more captures in the tray or the Library and right-click › <em>Combine…</em>, or use <em>File › Combine images…</em> (it asks for files). Arrange them side by side, stacked or in a grid, with spacing, padding, alignment, the same size and a background color or transparency; the result is a new image. <em>Image › Apply template…</em> combines the current image with other files the same way. <em>Tools › Add capture</em> takes a new capture and adds it below the current image as a movable object.</p>
+<h3>Compare</h3>
+<figure><img src="images/compare.webp" alt="The Compare images window in Difference mode" loading="lazy"><figcaption>Compare images: the Difference view shows the changed pixels in red.</figcaption></figure>
+<p>Select two captures and right-click › <em>Compare the two…</em> (or <em>File › Compare images…</em>). Views: <em>Overlay</em> with a transparency slider, <em>Swipe</em> (drag the divider), <em>Difference</em> (changed pixels in red, with a tolerance and a count) and <em>Side by side</em>. <em>Export GIF…</em> makes a two-frame before/after animation; <em>Export image…</em> saves both side by side with “Before” and “After” captions.</p>
+</section>
+
+<section id="redact">
+<h2>Hiding sensitive data automatically</h2>
+<figure><img src="images/redact.webp" alt="The Redact sensitive data dialog" loading="lazy"><figcaption>Redact sensitive data: each item found can be unchecked.</figcaption></figure>
+<p><em>Tools › Redact sensitive data…</em> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd>) reads the image with the Windows OCR and finds e-mail addresses, phone numbers, card numbers (checked with the Luhn rule), IBANs, CPF/CNPJ and SSN numbers, IP addresses, links with tokens and API keys, plus faces (Windows face detection). Everything runs on the computer. Uncheck what should stay visible, choose blur, pixelate or a black bar, and press OK: each area becomes an object you can move, resize or delete.</p>
+<p class="note">The OCR may miss text in unusual fonts or very small sizes — always look over the result before sharing.</p>
+</section>
+
+<section id="smart-drawing">
+<h2>Smart drawing</h2>
+<h3>Smart highlighter and text-only areas</h3>
+<p>With <em>Snap to the text lines</em> on (the default), a highlighter dragged across text snaps to the lines and words it touched. <em>Text only</em> on the Highlighter, Blur and Spotlight tools affects only the words inside the area, so the background stays untouched; move or resize the area and the words are found again.</p>
+<h3 id="drawhold">Draw and hold</h3>
+<p>With the Pen, draw a rough line, arrow, rectangle, ellipse or triangle and hold still for a moment: it turns into the clean shape (an editable object). Turn it off in <em>Edit › Draw and hold makes a shape</em>.</p>
+<h3>Hand-drawn style</h3>
+<p><em>Hand-drawn</em> on lines, arrows and shapes draws slightly irregular marker strokes; the sparkle button beside it gives another variation. On texts, <em>Handwriting</em> uses a handwriting font. The quick styles have a hand-drawn row.</p>
+<h3>Vertical text and text along a line</h3>
+<p><em>Vertical text</em> (Text and Callout) writes top to bottom in columns, as in Chinese and Japanese. <em>Text along the line</em> (Line and Arrow) makes the text you type after drawing follow the line or the Bézier curve.</p>
+<h3>Cursors and date stamp</h3>
+<p><em>Tools › Insert cursor</em> (and the <em>Cursors</em> stamp category) adds an arrow, hand, text cursor, busy circle, crosshair, move or resize cursor, or a click indicator as a resizable object. With <em>Options › Captured cursor as an object</em>, the cursor of a capture becomes an object in the Editor instead of being drawn into the image. <em>Tools › Insert date and time</em> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd>) adds a Text object; <em>Tools › Date and time format…</em> sets the format (for example <code>dddd, dd/MM/yyyy HH:mm</code>).</p>
+<h3>Touch, pen and touchpad</h3>
+<p>Pinch to zoom and two-finger pan on touch screens and precision touchpads; one finger draws. A pen's pressure changes the Pen width, the pen's eraser end works as the Eraser, and the handles get bigger after touch or pen input.</p>
+</section>
+
+<section id="image-tools">
+<h2>Image tools</h2>
+<h3>Remove the background</h3>
+<p><em>Tools › Remove the background…</em> keeps the main subject and makes the background transparent (what touches the image edges and has their colors). With a selection, the image is cropped to it first. Adjust the tolerance and the soft edge in the preview; save as PNG or WebP to keep the transparency.</p>
+<h3>Split long images</h3>
+<p><em>Tools › Split image…</em> cuts an image into parts by size or number, horizontally or vertically. With <em>Don't cut text lines</em> on, each cut moves to the nearest quiet row. The parts become new images in the tray. Printing and PDF export split long images (scrolling captures) across pages the same way (<em>Options › Split long images across pages</em>).</p>
+<h3>Contrast checker</h3>
+<p><em>Tools › Contrast checker…</em> shows the WCAG contrast ratio of two colors with pass/fail for normal text, large text and components. With a selection, it starts with its two main colors; click a swatch to pick a color from the screen or the color dialog, or swap them.</p>
+</section>
+
+<section id="outputs">
+<h2>Formats, Copy as, Office, upload and batch</h2>
+<h3>WebP, AVIF and HEIC</h3>
+<p>Save and open WebP (lossless or with a quality) and AVIF, and open HEIC photos. AVIF and HEIC use the Windows codecs; when one is missing, Snapnab says which Microsoft Store extension to install. <em>Options › Remove metadata</em> takes camera, GPS and date information out of saved images.</p>
+<h3>Copy as…</h3>
+<p><em>Edit › Copy as…</em>, the Share button, the tray/Library and the quick thumbnail copy the capture as an image, a file (paste it in Explorer, e-mail or chat), the file path, Base64 or a data URL (PNG or WebP), and — after an upload — the link or a Markdown image.</p>
+<h3>Send to Office</h3>
+<p><em>File › Send to</em> puts the image into Word (at the cursor), PowerPoint (current or new slide), Excel (active cell) or OneNote (current page). Programs that are not installed are grayed out.</p>
+<h3>Upload (optional)</h3>
+<p>Off by default — nothing is sent until you choose a destination in <em>Tools › Set up upload…</em>: S3-compatible storage, Dropbox, Google Drive, OneDrive (with your own app key), FTP, SFTP or a custom HTTP uploader compatible with ShareX <code>.sxcu</code>. Passwords, keys and tokens stay in the Windows Credential Manager. After <em>File › Upload</em> the link is copied; images are uploaded without metadata unless you turn that off.</p>
+<h3>Batch processing</h3>
+<p>Select captures and right-click › <em>Batch process…</em>, or <em>File › Batch processing…</em> to pick files. Resize, apply a quick effect or a Beautify preset, add a text watermark, convert the format (PNG, JPEG, WebP, AVIF, BMP, GIF, TIFF) with a quality, remove metadata and rename with <code>{name}</code>, <code>{n}</code> and <code>{date}</code>. The preview shows the first image; the originals are never changed.</p>
+</section>
+
+<section id="ai">
+<h2>AI assistant (optional)</h2>
+<p><em>Tools › AI assistant…</em> asks an AI provider about the image: <em>Explain</em>, <em>Describe</em>, <em>Extract the steps</em>, <em>Extract the text</em> or your own question. It is off until you turn it on in <em>Tools › Set up the AI assistant…</em> with your own key: OpenAI, Google Gemini, Anthropic, any OpenAI-compatible endpoint or a local model through Ollama (<code>http://localhost:11434/v1</code>, no key). The window says where the image will be sent; nothing is sent until you ask. The answer can be copied or added to the image as text. The key stays in the Windows Credential Manager.</p>
+</section>
+
+<section id="recording-extras">
+<h2>Recording extras</h2>
+<h3>Clicks, cursor and keys in the video</h3>
+<p>In <em>Video options</em> (gear on the capture window) or the cursor button of the recording panel: highlight the cursor, show clicks as rings (red for the left button, blue for the right one) and show the keys pressed — <em>shortcuts only</em> (with <kbd>Ctrl</kbd>, <kbd>Alt</kbd>, <kbd>Win</kbd> or F-keys) or every key. Typed text is only shown when you choose <em>every key</em>. These are drawn in the video file, not on your screen while you record: open the video to see them.</p>
+<p>The recording panel itself does not appear in the video (nor in screenshots). Rest the pointer on any of its buttons to see its name and shortcut: record/pause, stop, restart, cancel, microphone, system audio, volume, webcam, image during the recording, zoom and the cursor button for these overlays.</p>
+<h3>Zoom while recording</h3>
+<p>While recording, <kbd>Shift</kbd>+<kbd>F11</kbd> (or the zoom button of the panel, the one with the target) zooms in around the pointer in the video and follows it; press again to zoom out. <em>Zoom in on clicks</em> does it automatically for a moment after each click. The level and the shortcut are in <em>Video options</em>.</p>
+<h3>Crash protection</h3>
+<p>Recordings are written in a crash-safe way: if Snapnab or Windows stops in the middle, the next start finishes the video and puts it in the Library.</p>
+<h3>Restart, audio only</h3>
+<p>The restart button asks before throwing the recording away (with <em>Don't ask again</em>). <em>Record audio only</em> (tray, Capture menu or <em>Video options</em>) records the microphone and/or the system sound to M4A or MP3 in <em>Music\Snapnab</em>. There is no area to choose, so it starts by itself after a three-second countdown (<em>Skip</em> starts at once, the cancel button gives up); stop it with the stop button or <kbd>Shift</kbd>+<kbd>F10</kbd>.</p>
+</section>
+
+<section id="system-extras">
+<h2>Interval capture, screen focus and library cleanup</h2>
+<p><strong>Interval capture</strong> (<em>Capture › Interval capture…</em> on the capture window, or the tray menu) takes a capture of an area, the full screen or a window every few seconds, for a set time or until you stop it; a red dot on the tray icon shows it is running. <strong>Screen focus</strong> (<em>Capture › Screen focus (presentations)</em>, the tray menu, its shortcut in Options or <code>/focus</code>) darkens the screen except a circle or rectangle around the pointer, for presentations. <strong>Clean desktop</strong>: <em>Options › Capture › Hide desktop icons while capturing</em> hides them during every capture and brings them back afterwards. <strong>Library cleanup</strong> (off by default) deletes captures older than a chosen number of days, keeping named or tagged ones if you want and sending them to the Recycle Bin; the cleanup is set in <em>Options › Privacy and library</em>, and <em>File › Clean up the library now</em> runs it at once.</p>
+</section>
+
 <p class="part-title">Reference</p>
 <section id="shortcuts">
 <h2>Keyboard shortcuts</h2>
@@ -1469,6 +1609,8 @@ Uninstalling Snapnab keeps all of this.</p>
 <tr><td><kbd>Shift</kbd>+<kbd>Print Screen</kbd></td><td class="wrap">Record video / stop</td></tr>
 <tr><td><kbd>Shift</kbd>+<kbd>F9</kbd></td><td class="wrap">Start (skip countdown), pause and resume the recording</td></tr>
 <tr><td><kbd>Shift</kbd>+<kbd>F10</kbd></td><td class="wrap">Stop the recording</td></tr>
+<tr><td><kbd>Shift</kbd>+<kbd>F11</kbd></td><td class="wrap">Zoom in / out around the pointer while recording</td></tr>
+<tr><td>Options › Shortcuts</td><td class="wrap">Screen color picker, capture and pin, pin the clipboard, screen focus (no keys by default)</td></tr>
 <tr><td>Your preset shortcuts</td><td class="wrap">Run that preset</td></tr>
 </table>
 <h3>Crosshair</h3>
@@ -1477,6 +1619,8 @@ Uninstalling Snapnab keeps all of this.</p>
 <tr><td><kbd>Enter</kbd></td><td class="wrap">Capture the monitor / finish multiple areas</td></tr>
 <tr><td>Arrow keys (<kbd>Shift</kbd> = 10 px)</td><td class="wrap">Move the pointer 1 pixel</td></tr>
 <tr><td><kbd>Backspace</kbd></td><td class="wrap">Remove the last area (Multiple areas)</td></tr>
+<tr><td><kbd>Tab</kbd> / <kbd>H</kbd> / <kbd>C</kbd></td><td class="wrap">Previous regions / recent captures / copy the color</td></tr>
+<tr><td><kbd>Ctrl</kbd>+arrows, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+arrows</td><td class="wrap">Grow / shrink the selection</td></tr>
 <tr><td><kbd>Esc</kbd></td><td class="wrap">Cancel</td></tr>
 </table>
 <h3>Editor — tools</h3>
@@ -1512,6 +1656,10 @@ Uninstalling Snapnab keeps all of this.</p>
 <tr><td><kbd>Enter</kbd> / <kbd>Esc</kbd></td><td class="wrap">Apply crop, close polygon, drop piece / cancel</td></tr>
 <tr><td><kbd>F2</kbd></td><td class="wrap">Rename (layer, or capture in the tray/library)</td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></td><td class="wrap">Grab Text (OCR)</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd></td><td class="wrap">Read QR code / barcode</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></td><td class="wrap">Redact sensitive data</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd></td><td class="wrap">Insert date and time</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td class="wrap">Pin to screen</td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td><td class="wrap">Lift out the selection</td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> / <kbd>B</kbd></td><td class="wrap">Bring forward / send backward</td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> / <kbd>U</kbd></td><td class="wrap">Group / ungroup</td></tr>
@@ -1545,8 +1693,28 @@ Uninstalling Snapnab keeps all of this.</p>
   /video           record video with the current video preset
   /preset "name"   run a preset by name
   /clipboard       capture the image on the clipboard
+  /region x,y,w,h  capture this area of the screen
+  /window "title"  capture the window whose title contains the text
+  /monitor n       capture monitor n (1, 2…, from left to right)
+  /fullscreen      capture the whole screen
+  /delay s         wait s seconds before capturing
+  /ocr             recognize the text of the capture
+  /qr              read the QR code / barcode of the capture
+  /upload          upload the capture (when a destination is set up)
+  /pin [file]      pin the file (no file: capture and pin)
+  /pinclipboard    pin what is on the clipboard
+  /colorpicker     open the screen color picker
+  /focus           turn screen focus on or off
+  /interval [stop] start (or stop) the interval capture
+  /output clipboard|editor|none|"file"
+                   where the capture goes (combine with an area and a tool)
   /exit            close the running Snapnab
   /help            show this list
+
+Examples:
+  Snapnab.exe /region 0,0,1280,720 /output "C:\Shots\top-left.png"
+  Snapnab.exe /window "Notepad" /delay 2 /output clipboard
+  Snapnab.exe /monitor 2 /ocr
 
 SnapnabEditor.exe [options] [file…]
   /Open "file"       open a file (.snap, image, .mp4)

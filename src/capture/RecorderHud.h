@@ -14,6 +14,8 @@ struct HudCallbacks {
     std::function<void(bool)> onSysMute;
     std::function<void(bool)> onWebcam;    // show/hide the webcam (ToggleWebcamCommand)
     std::function<void(int mic, int sys, bool autoGain)> onVolume;   // volume sliders changed (saved in the preset)
+    std::function<void()> onZoom;          // zoom in / out following the pointer (C15)
+    std::function<void(POINT screen)> onOverlay;   // menu: cursor highlight, click effects, keys on screen (C07)
 };
 
 class RecorderHud {
@@ -29,6 +31,7 @@ public:
     bool camAvailable = false, camOn = false;   // webcam button: only shown if the webcam was turned on in the preset
     int micVolume = 100, sysVolume = 100;  // volume panel (before and during the recording)
     bool autoGain = true;
+    bool audioOnly = false;                // audio-only recording (C32): no frame, no video buttons
 private:
     static LRESULT CALLBACK Proc(HWND, UINT, WPARAM, LPARAM);
     static LRESULT CALLBACK CountProc(HWND, UINT, WPARAM, LPARAM);
@@ -46,7 +49,8 @@ private:
     void Layout();
     struct Button { int id; RECT r; };
     std::vector<Button> buttons_;
-    HWND hwnd_ = nullptr, border_ = nullptr, count_ = nullptr;
+    HWND hwnd_ = nullptr, border_ = nullptr, count_ = nullptr, tip_ = nullptr;   // tip_: names of the buttons on hover
+    std::vector<std::wstring> tipText_;
     RECT area_{};
     Recorder* rec_ = nullptr;
     HudCallbacks cb_;

@@ -1,4 +1,5 @@
 #include "Panels.h"
+#include "DragOut.h"
 #include "Ui.h"
 #include "Video.h"
 #include "Widgets.h"
@@ -1410,115 +1411,6 @@ void LibraryTray::EnsureVisible() {
 
 bool LibraryTray::s_draggingOut = false;
 
-namespace {
-// IDataObject with the files in two formats: CF_HDROP (Explorer, browsers, messengers, Office) and the Shell item
-// list (CFSTR_SHELLIDLIST, used by packaged apps such as Paint and Photos). It also stores the formats that
-// IDragSourceHelper writes (the image that follows the cursor).
-class FileDropData : public IDataObject {
-    LONG ref_ = 1;
-    HGLOBAL hdrop_ = nullptr, idlist_ = nullptr;
-    CLIPFORMAT cfIdList_ = (CLIPFORMAT)RegisterClipboardFormatW(CFSTR_SHELLIDLIST);
-    std::vector<std::pair<FORMATETC, STGMEDIUM>> extra_;
-    static HGLOBAL Dup(HGLOBAL h) {
-        SIZE_T n = GlobalSize(h);
-        HGLOBAL c = GlobalAlloc(GMEM_MOVEABLE, n);
-        if (!c) return nullptr;
-        void* d = GlobalLock(c); void* s = GlobalLock(h);
-        memcpy(d, s, n);
-        GlobalUnlock(h); GlobalUnlock(c);
-        return c;
-    }
-public:
-    explicit FileDropData(const std::vector<std::wstring>& files) {
-        size_t chars = 1;
-        for (auto& f : files) chars += f.size() + 1;
-        hdrop_ = GlobalAlloc(GHND, sizeof(DROPFILES) + chars * sizeof(wchar_t));
-        auto* df = (DROPFILES*)GlobalLock(hdrop_);
-        df->pFiles = sizeof(DROPFILES);
-        df->fWide = TRUE;
-        wchar_t* p = (wchar_t*)((BYTE*)df + sizeof(DROPFILES));
-        for (auto& f : files) { memcpy(p, f.c_str(), f.size() * sizeof(wchar_t)); p += f.size(); *p++ = 0; }
-        *p = 0;
-        GlobalUnlock(hdrop_);
-        // CIDA: parent folder = desktop (empty PIDL) and each item with its full PIDL
-        std::vector<PIDLIST_ABSOLUTE> pidls;
-        for (auto& f : files) { PIDLIST_ABSOLUTE id = nullptr; if (SUCCEEDED(SHParseDisplayName(f.c_str(), nullptr, &id, 0, nullptr)) && id) pidls.push_back(id); }
-        if (!pidls.empty()) {
-            UINT n = (UINT)pidls.size();
-            size_t header = sizeof(UINT) * (n + 2), total = header + 2;
-            for (auto id : pidls) total += ILGetSize(id);
-            idlist_ = GlobalAlloc(GHND, total);
-            BYTE* b = (BYTE*)GlobalLock(idlist_);
-            UINT* u = (UINT*)b;
-            u[0] = n;
-            size_t off = header;
-            u[1] = (UINT)off; off += 2;                       // empty PIDL = desktop
-            for (UINT i = 0; i < n; i++) {
-                UINT sz = ILGetSize(pidls[i]);
-                u[2 + i] = (UINT)off;
-                memcpy(b + off, pidls[i], sz);
-                off += sz;
-            }
-            GlobalUnlock(idlist_);
-        }
-        for (auto id : pidls) CoTaskMemFree(id);
-    }
-    ~FileDropData() {
-        if (hdrop_) GlobalFree(hdrop_);
-        if (idlist_) GlobalFree(idlist_);
-        for (auto& e : extra_) ReleaseStgMedium(&e.second);
-    }
-    STDMETHODIMP QueryInterface(REFIID riid, void** pv) override {
-        if (riid == IID_IUnknown || riid == IID_IDataObject) { *pv = static_cast<IDataObject*>(this); AddRef(); return S_OK; }
-        *pv = nullptr; return E_NOINTERFACE;
-    }
-    STDMETHODIMP_(ULONG) AddRef() override { return InterlockedIncrement(&ref_); }
-    STDMETHODIMP_(ULONG) Release() override { LONG r = InterlockedDecrement(&ref_); if (!r) delete this; return r; }
-    STDMETHODIMP GetData(FORMATETC* fe, STGMEDIUM* m) override {
-        if (!fe || !m) return E_INVALIDARG;
-        if ((fe->cfFormat == CF_HDROP || (fe->cfFormat == cfIdList_ && idlist_)) && (fe->tymed & TYMED_HGLOBAL)) {
-            m->tymed = TYMED_HGLOBAL; m->hGlobal = Dup(fe->cfFormat == CF_HDROP ? hdrop_ : idlist_); m->pUnkForRelease = nullptr;
-            return m->hGlobal ? S_OK : E_OUTOFMEMORY;
-        }
-        for (auto& e : extra_)
-            if (e.first.cfFormat == fe->cfFormat && (e.first.tymed & fe->tymed) && e.second.tymed == TYMED_HGLOBAL) {
-                m->tymed = TYMED_HGLOBAL; m->hGlobal = Dup(e.second.hGlobal); m->pUnkForRelease = nullptr;
-                return m->hGlobal ? S_OK : E_OUTOFMEMORY;
-            }
-        return DV_E_FORMATETC;
-    }
-    STDMETHODIMP GetDataHere(FORMATETC*, STGMEDIUM*) override { return E_NOTIMPL; }
-    STDMETHODIMP QueryGetData(FORMATETC* fe) override {
-        if (!fe) return E_INVALIDARG;
-        if ((fe->cfFormat == CF_HDROP || (fe->cfFormat == cfIdList_ && idlist_)) && (fe->tymed & TYMED_HGLOBAL)) return S_OK;
-        for (auto& e : extra_) if (e.first.cfFormat == fe->cfFormat && (e.first.tymed & fe->tymed)) return S_OK;
-        return DV_E_FORMATETC;
-    }
-    STDMETHODIMP GetCanonicalFormatEtc(FORMATETC*, FORMATETC* out) override { if (out) out->ptd = nullptr; return DATA_S_SAMEFORMATETC; }
-    STDMETHODIMP SetData(FORMATETC* fe, STGMEDIUM* m, BOOL release) override {
-        if (!fe || !m || m->tymed != TYMED_HGLOBAL) return E_NOTIMPL;
-        STGMEDIUM copy{};
-        copy.tymed = TYMED_HGLOBAL;
-        copy.hGlobal = release ? m->hGlobal : Dup(m->hGlobal);
-        for (auto it = extra_.begin(); it != extra_.end(); ++it)
-            if (it->first.cfFormat == fe->cfFormat) { ReleaseStgMedium(&it->second); extra_.erase(it); break; }
-        FORMATETC f = *fe; f.ptd = nullptr;
-        extra_.push_back({ f, copy });
-        return S_OK;
-    }
-    STDMETHODIMP EnumFormatEtc(DWORD dir, IEnumFORMATETC** e) override {
-        if (dir != DATADIR_GET) return E_NOTIMPL;
-        std::vector<FORMATETC> list = { { CF_HDROP, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL } };
-        if (idlist_) list.push_back({ cfIdList_, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL });
-        for (auto& x : extra_) list.push_back(x.first);
-        return SHCreateStdEnumFmtEtc((UINT)list.size(), list.data(), e);
-    }
-    STDMETHODIMP DAdvise(FORMATETC*, DWORD, IAdviseSink*, DWORD*) override { return OLE_E_ADVISENOTSUPPORTED; }
-    STDMETHODIMP DUnadvise(DWORD) override { return OLE_E_ADVISENOTSUPPORTED; }
-    STDMETHODIMP EnumDAdvise(IEnumSTATDATA**) override { return OLE_E_ADVISENOTSUPPORTED; }
-};
-} // namespace
-
 // dragging items to other programs (TrayDragDrop): images go as PNG (with the annotations) and videos as MP4
 void LibraryTray::StartDrag(int item) {
     std::vector<std::wstring> paths;
@@ -1528,47 +1420,15 @@ void LibraryTray::StartDrag(int item) {
     std::vector<std::wstring> files = filesForDrag ? filesForDrag(paths) : paths;
     SetCursor(old);
     if (files.empty()) { Log(L"Tray: nothing to drag (%zu items)", paths.size()); return; }
-    auto* obj = new FileDropData(files);
-    // image that follows the cursor: the item's thumbnail (with the number of items, if there are several)
-    IDragSourceHelper* helper = nullptr;
-    if (SUCCEEDED(CoCreateInstance(CLSID_DragDropHelper, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&helper)))) {
-        const Image& t = Thumb(items_[item].path, items_[item].video);
-        if (!t.empty()) {
-            int maxS = Sc(96, hwnd);
-            double k = std::min({ 1.0, (double)maxS / t.w, (double)maxS / t.h });
-            Image img = ScaleImage(t, std::max(1, (int)(t.w * k)), std::max(1, (int)(t.h * k)));
-            for (auto& px : img.px) { int a = CA(px) * 220 / 255; px = ARGB(a, CR(px) * a / 255, CG(px) * a / 255, CB(px) * a / 255); }
-            SHDRAGIMAGE di{};
-            di.sizeDragImage = { img.w, img.h };
-            di.ptOffset = { img.w / 2, img.h / 2 };
-            di.hbmpDragImage = img.ToHBITMAP();
-            di.crColorKey = CLR_NONE;
-            if (FAILED(helper->InitializeFromBitmap(&di, obj))) DeleteObject(di.hbmpDragImage);
-        }
-        helper->Release();
-    }
-    // Explorer follows the preferred effect (copy); some apps, like Paint, only accept it when "move" is also allowed.
-    // Move only applies to the temporary copies: a video goes with its library path and cannot leave it
-    FORMATETC pref{ (CLIPFORMAT)RegisterClipboardFormatW(CFSTR_PREFERREDDROPEFFECT), nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
-    STGMEDIUM prefData{};
-    prefData.tymed = TYMED_HGLOBAL;
-    if ((prefData.hGlobal = GlobalAlloc(GHND, sizeof(DWORD))) != nullptr) {
-        *(DWORD*)GlobalLock(prefData.hGlobal) = DROPEFFECT_COPY;
-        GlobalUnlock(prefData.hGlobal);
-        obj->SetData(&pref, &prefData, TRUE);
-    }
     bool original = std::any_of(files.begin(), files.end(), [&](const std::wstring& f) { return std::find(paths.begin(), paths.end(), f) != paths.end(); });
-    DWORD allowed = DROPEFFECT_COPY | DROPEFFECT_LINK | (original ? 0 : DROPEFFECT_MOVE);
-    DWORD effect = 0;
     s_draggingOut = true;
-    HRESULT hr = SHDoDragDrop(hwnd, obj, nullptr, allowed, &effect);
+    DWORD effect = DragFilesOut(hwnd, files, &Thumb(items_[item].path, items_[item].video), !original);
     // dropping back onto one of the Editor's own windows (tray, library, canvas) arrives as a WM_DROPFILES posted only after
     // the drag ends: discard it here so a copy of the item is not imported
     MSG pending;
     while (PeekMessageW(&pending, nullptr, WM_DROPFILES, WM_DROPFILES, PM_REMOVE)) DragFinish((HDROP)pending.wParam);
     s_draggingOut = false;
-    Log(L"Tray: dragged %zu file(s), result 0x%08X, effect %u", files.size(), (unsigned)hr, (unsigned)effect);
-    obj->Release();
+    Log(L"Tray: dragged %zu file(s), effect %u", files.size(), (unsigned)effect);
 }
 
 RECT LibraryTray::BandRect() const {
@@ -1620,7 +1480,7 @@ void LibraryTray::Paint(HDC hdc) {
         bool hot = (int)i == hover_;
         bool sel = i < sel_.size() && sel_[i];
         float rad = (float)ui::Scale(8, dpi);
-        if (hot) {                         // "levanta" a miniatura: sombra mais forte
+        if (hot) {                         // "lifts" the thumbnail: a stronger shadow
             RECT s1 = cell; OffsetRect(&s1, 0, ui::Scale(2, dpi)); InflateRect(&s1, 1, 1);
             FillRound(g, s1, rad + 1, RGB(0, 0, 0), 26);
         } else {
@@ -1900,6 +1760,18 @@ LRESULT LibraryTray::Handle(UINT m, WPARAM w, LPARAM l) {
             AppendMenuW(mm, MF_SEPARATOR, 0, nullptr);
         }
         AppendMenuW(mm, MF_STRING, 4, s.size() > 1 ? Format(Tr(L"Exportar %zu itens…"), s.size()).c_str() : Tr(L"Exportar…"));
+        if (onItemCommand) {
+            bool video = s.size() == 1 && FileExt(s[0]) == L".mp4";
+            if (s.size() == 1) {
+                AppendMenuW(mm, MF_STRING, 100 + CmdCopyAs, Tr(L"Copiar como…"));
+                if (!video) AppendMenuW(mm, MF_STRING, 100 + CmdPin, Tr(L"Fixar na tela"));
+                AppendMenuW(mm, MF_STRING, 100 + CmdUpload, Tr(L"Enviar (upload)"));
+            }
+            if (s.size() >= 2) AppendMenuW(mm, MF_STRING, 100 + CmdCombine, Format(Tr(L"Combinar %zu imagens…"), s.size()).c_str());
+            if (s.size() == 2) AppendMenuW(mm, MF_STRING, 100 + CmdCompare, Tr(L"Comparar as duas…"));
+            AppendMenuW(mm, MF_STRING, 100 + CmdBatch, s.size() > 1 ? Format(Tr(L"Processar %zu em lote…"), s.size()).c_str() : Tr(L"Processamento em lote…"));
+            AppendMenuW(mm, MF_SEPARATOR, 0, nullptr);
+        }
         AppendMenuW(mm, MF_STRING, 5, Tr(L"Selecionar tudo\tCtrl+A"));
         if (s.size() == 1) AppendMenuW(mm, MF_STRING, 7, Tr(L"Renomear…\tF2"));
         if (mode == Tray) AppendMenuW(mm, MF_STRING, 6, s.size() > 1 ? Tr(L"Remover da bandeja") : Tr(L"Remover da bandeja (continua na biblioteca)"));
@@ -1915,6 +1787,7 @@ LRESULT LibraryTray::Handle(UINT m, WPARAM w, LPARAM l) {
         else if (cmd == 4 && onExport) onExport(s);
         else if (cmd == 5) SelectAll();
         else if (cmd == 6) RemoveFromTray(s);
+        else if (cmd > 100 && onItemCommand) onItemCommand(cmd - 100, s);
         return 0;
     }
     }

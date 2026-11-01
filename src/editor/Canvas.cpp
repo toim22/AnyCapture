@@ -1,4 +1,5 @@
 #include "Canvas.h"
+#include "EditorTools.h"
 #include "Effects.h"
 #include "Ui.h"
 #include "Icons.h"
@@ -38,7 +39,49 @@ const wchar_t* ToolName(Tool t) {
 
 static const int kMargin = 40;
 static Gdiplus::Rect GR(RECT r) { return Gdiplus::Rect(r.left, r.top, r.right - r.left, r.bottom - r.top); }
-static const int kHandle = 5;
+constexpr UINT_PTR kHoldTimer = 0x23;      // draw & hold (C23): the pen stood still
+
+// eyedropper cursor: a pipette whose tip (the hotspot) is the pixel that is picked; white outline for dark images
+static HCURSOR DropperCursor(UINT dpi) {
+    static HCURSOR cur = nullptr;
+    static int curSize = 0;
+    int s = GetSystemMetricsForDpi(SM_CXCURSOR, dpi);
+    if (cur && curSize == s) return cur;
+    BITMAPINFO bi{};
+    bi.bmiHeader = { sizeof(BITMAPINFOHEADER), s, -s, 1, 32, BI_RGB };
+    void* bits = nullptr;
+    HBITMAP color = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (!color) return LoadCursor(nullptr, IDC_CROSS);
+    {
+        Gdiplus::Bitmap bmp(s, s, s * 4, PixelFormat32bppARGB, (BYTE*)bits);
+        Gdiplus::Graphics g(&bmp);
+        g.Clear(Gdiplus::Color(0, 0, 0, 0));
+        g.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+        g.ScaleTransform(s / 32.0f, s / 32.0f);
+        for (int pass = 0; pass < 2; pass++) {              // outline, then the body
+            float o = pass ? 0 : 2.2f;
+            Gdiplus::Color c = pass ? Gdiplus::Color(255, 20, 20, 24) : Gdiplus::Color(255, 255, 255, 255);
+            Gdiplus::SolidBrush b(c);
+            Gdiplus::Pen tip(c, 1.6f + o), tube(c, 4.5f + o), collar(c, 8.5f + o);
+            tip.SetStartCap(Gdiplus::LineCapRound); tube.SetStartCap(Gdiplus::LineCapRound);
+            g.DrawLine(&tip, 1.5f, 30.5f, 6.f, 26.f);
+            g.DrawLine(&tube, 5.f, 27.f, 18.f, 14.f);
+            g.DrawLine(&collar, 16.5f, 15.5f, 20.5f, 11.5f);
+            g.FillEllipse(&b, 19.f - o / 2, 4.f - o / 2, 9.f + o, 9.f + o);
+        }
+        Gdiplus::Pen glass(Gdiplus::Color(255, 255, 255, 255), 1.4f);     // a glint on the glass
+        g.DrawLine(&glass, 8.f, 23.f, 14.f, 17.f);
+    }
+    HBITMAP mask = CreateBitmap(s, s, 1, 1, nullptr);
+    int hot = std::max(0, (int)std::lround(1.5f * s / 32) - 1);
+    ICONINFO ii{ FALSE, (DWORD)hot, (DWORD)(s - 1 - hot), mask, color };
+    HCURSOR c = (HCURSOR)CreateIconIndirect(&ii);
+    DeleteObject(color); DeleteObject(mask);
+    if (!c) return LoadCursor(nullptr, IDC_CROSS);
+    if (cur) DestroyCursor(cur);
+    cur = c; curSize = s;
+    return cur;
+}
 
 void Canvas::Create(HWND parent) {
     static bool reg = false;
@@ -55,7 +98,7 @@ void Canvas::Create(HWND parent) {
     Style& ar = styles[Tool::Arrow]; ar.width = 8;
     Style& ln = styles[Tool::Line]; ln.arrowEnd = CapFlat; ln.width = 4;
     Style& sh = styles[Tool::Shape]; sh.width = 4; sh.shapeKind = ShapeRect;
-    Style& hl = styles[Tool::Highlighter]; hl.stroke = 0xFFFFEB3B; hl.opacity = 50; hl.shadow = false;
+    Style& hl = styles[Tool::Highlighter]; hl.stroke = 0xFFFFEB3B; hl.opacity = 50; hl.shadow = false; hl.snapText = true;
     Style& tx = styles[Tool::Text]; tx.textColor = red; tx.stroke = 0xFFFFFFFF; tx.width = 4; tx.fontSize = 36;
     Style& co = styles[Tool::Callout]; co.calloutShape = 4; co.fill = red; co.stroke = red; co.width = 0; co.textColor = 0xFFFFFFFF;
     co.tailColor = red; co.tailWidth = 6; co.fontSize = 20; co.padding = 8;
@@ -67,6 +110,10 @@ void Canvas::Create(HWND parent) {
 
     hwnd = CreateWindowExW(0, L"SnapnabCanvas", nullptr, WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL | WS_CLIPCHILDREN,
                            0, 0, 10, 10, parent, nullptr, GetModuleHandleW(nullptr), this);
+    // touch screens (C43): pinch to zoom and two-finger pan; one finger keeps drawing (no single-finger panning)
+    GESTURECONFIG gc[] = { { GID_ZOOM, GC_ZOOM, 0 },
+                           { GID_PAN, GC_PAN, GC_PAN_WITH_SINGLE_FINGER_VERTICALLY | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY | GC_PAN_WITH_INERTIA } };
+    SetGestureConfig(hwnd, 0, 2, gc, sizeof(GESTURECONFIG));
 }
 
 Style& Canvas::CurrentStyle() { return styles[tool]; }
@@ -384,7 +431,7 @@ int Canvas::HitHandle(POINT p) const {
     if (doc->st.objs[selected]->locked) return -1;              // locked: cannot be resized
     auto hs = HandlePoints(*doc->st.objs[selected]);
     for (int i = (int)hs.size() - 1; i >= 0; i--)
-        if (std::abs(p.x - hs[i].x) <= kHandle + 2 && std::abs(p.y - hs[i].y) <= kHandle + 2) return i;
+        if (std::abs(p.x - hs[i].x) <= HandleSize() + 2 && std::abs(p.y - hs[i].y) <= HandleSize() + 2) return i;
     return -1;
 }
 
@@ -887,8 +934,9 @@ void Canvas::Paint(HDC hdc) {
             for (size_t i = 0; i < hs.size(); i++) {
                 bool tail = (i == 8 && !obj.IsLine()) || (obj.IsLine() && i == 2);
                 Gdiplus::SolidBrush yb(Gdiplus::Color(255, 255, 200, 0));
-                g.FillEllipse(tail ? &yb : &wb, hs[i].x - kHandle, hs[i].y - kHandle, kHandle * 2, kHandle * 2);
-                g.DrawEllipse(&bp, hs[i].x - kHandle, hs[i].y - kHandle, kHandle * 2, kHandle * 2);
+                const int hz = HandleSize();
+                g.FillEllipse(tail ? &yb : &wb, hs[i].x - hz, hs[i].y - hz, hz * 2, hz * 2);
+                g.DrawEllipse(&bp, hs[i].x - hz, hs[i].y - hz, hz * 2, hz * 2);
             }
         }
     }
@@ -1309,7 +1357,15 @@ void Canvas::ApplyStyleToSelected(const Style& s, bool newStep) {
     if (doc->st.objs[selected]->type == ObjType::Group) { Refresh(); if (onDocChanged) onDocChanged(); return; }
     DrawObj* o = doc->Mutable(selected);
     int oldArea = o->style.areaShape;
+    bool becameVertical = !o->style.vertical && s.vertical && o->HasText();
     o->style = s;
+    if (becameVertical) {                         // vertical text (C37): the box turns into a tall column
+        RectF r = o->Rect();
+        float colW = std::max(s.fontSize * 1.6f + 2 * s.padding, 24.0f);
+        float colH = std::max({ r.Height, r.Width, s.fontSize * 1.25f * (float)std::max<size_t>(2, o->text.size()) + 2 * s.padding });
+        o->p1 = PointF(r.X, r.Y);
+        o->p2 = PointF(r.X + colW * (1 + (float)std::count(o->text.begin(), o->text.end(), L'\n')), r.Y + colH);
+    }
     AdaptAreaPoints(*o, oldArea);
     if (o->IsShape()) o->type = ObjType::Shape;                  // old shapes become Shape with the style's kind
     if (o->type == ObjType::Blur || o->type == ObjType::Pixelate) o->type = s.hideKind == 1 ? ObjType::Pixelate : ObjType::Blur;
@@ -1319,6 +1375,7 @@ void Canvas::ApplyStyleToSelected(const Style& s, bool newStep) {
     if (o->type == ObjType::Callout && o->CalloutHasTail() && o->Rect().Contains(o->tail)) {
         RectF r = o->Rect(); o->tail = PointF(r.X + r.Width * 0.25f, r.GetBottom() + std::max(20.0f, r.Height * 0.45f));
     }
+    RefreshTextBoxes(SelectedList());
     Refresh(); if (onDocChanged) onDocChanged();
 }
 
@@ -1337,7 +1394,97 @@ void Canvas::Nudge(int dx, int dy) {
     if (!doc || v.empty()) return;
     doc->Checkpoint();
     for (int i : v) doc->Mutable(i)->Move((float)dx, (float)dy);
+    RefreshTextBoxes(v);
     Refresh(); if (onDocChanged) onDocChanged();
+}
+
+// ---------------------------------------------------------------- text under the areas (C12)
+const std::vector<OcrLine>& Canvas::OcrText() {
+    if (!doc || !doc->st.base) { ocrLines_.clear(); return ocrLines_; }
+    if (ocrBase_.lock() != doc->st.base || !ocrTried_) {
+        ocrLines_.clear();
+        ocrBase_ = doc->st.base;
+        ocrTried_ = true;
+        HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+        std::wstring err;
+        RunOcrLines(*doc->st.base, ocrLines_, err);
+        SetCursor(old);
+        if (!err.empty() && onHint) onHint(Tr(L"OCR indisponível: ") + err);
+    }
+    return ocrLines_;
+}
+
+void Canvas::UpdateTextBoxes(DrawObj& o) {
+    o.textBoxes.clear();
+    if (!o.style.textOnly || !o.IsAreaTool()) return;
+    RectF area = o.IsPointShape() ? o.Bounds() : o.Rect();
+    o.textBoxes = WordsInArea(OcrText(), area);
+    if (o.textBoxes.empty() && onHint) onHint(Tr(L"Nenhum texto reconhecido nesta área (\"Somente o texto\" ligado)."));
+}
+
+void Canvas::RefreshTextBoxes(const std::vector<int>& idx) {
+    if (!doc) return;
+    for (int i : idx) {
+        if (i < 0 || i >= (int)doc->st.objs.size()) continue;
+        const DrawObj& o = *doc->st.objs[i];
+        if (!o.IsAreaTool() || (!o.style.textOnly && o.textBoxes.empty())) continue;
+        UpdateTextBoxes(*doc->Mutable(i));
+    }
+}
+
+bool Canvas::SnapHighlighter(DrawObj& o) {
+    // every shape snaps (an ellipse or a stroke too, not only boxes); a polygon is drawn point by point on purpose
+    if (o.style.areaShape == AreaPolygon) return false;
+    RectF area = o.IsPointShape() || o.IsPath() ? o.Bounds() : o.Rect();
+    auto rects = SnapToTextLines(OcrText(), area);
+    if (rects.empty()) {
+        if (onHint) onHint(Tr(L"Nenhuma linha de texto reconhecida aqui: o marca-texto ficou como foi desenhado."));
+        return false;
+    }
+    auto piece = [&](RectF r) {
+        DrawObj h = o;
+        h.pts.clear();
+        h.style.areaShape = o.style.areaShape == ShapeRoundRect ? ShapeRoundRect : ShapeRect;
+        h.p1 = PointF(r.X, r.Y); h.p2 = PointF(r.GetRight(), r.GetBottom());
+        return h;
+    };
+    if (rects.size() == 1) { o = piece(rects[0]); return true; }
+    DrawObj g;
+    g.type = ObjType::Group;
+    g.style = o.style;
+    for (auto& r : rects) g.children.push_back(piece(r));
+    g.UpdateGroupRect();
+    o = g;
+    return true;
+}
+
+// ---------------------------------------------------------------- draw & hold (C23)
+void Canvas::RecognizeHold() {
+    if (drag_ != Drag::Create || !preview_ || preview_->type != ObjType::Pen || holdShape_ || !drawHold) return;
+    PointF a, b;
+    int k = RecognizeStroke(preview_->pts, a, b);
+    if (k == RecNone) return;
+    DrawObj o;
+    o.style = preview_->style;
+    o.style.sketch = preview_->style.sketch;
+    if (k == RecLine || k == RecArrow) {
+        o.type = k == RecArrow ? ObjType::Arrow : ObjType::Line;
+        const Style& base = styles[k == RecArrow ? Tool::Arrow : Tool::Line];
+        o.style.arrowStart = CapFlat; o.style.arrowEnd = k == RecArrow ? (base.arrowEnd != CapFlat ? base.arrowEnd : CapArrow) : CapFlat;
+        o.style.startSize = base.startSize; o.style.endSize = base.endSize; o.style.bezier = false; o.style.dash = DashSolid;
+        o.p1 = a; o.p2 = b;
+        o.ctrl = PointF((a.X + b.X) / 2, (a.Y + b.Y) / 2);
+    } else {
+        o.type = ObjType::Shape;
+        o.style.shapeKind = k == RecEllipse ? ShapeEllipse : k == RecTriangle ? ShapeTriangle : ShapeRect;
+        o.style.fill = 0; o.style.grad = Gradient();
+        o.p1 = a; o.p2 = b;
+    }
+    *preview_ = o;
+    holdShape_ = true;
+    static const wchar_t* names[] = { L"", TR_NOOP(L"linha"), TR_NOOP(L"seta"), TR_NOOP(L"retângulo"), TR_NOOP(L"elipse"), TR_NOOP(L"triângulo") };
+    if (onHint) onHint(Tr(L"Forma reconhecida: ") + std::wstring(Tr(names[k])) + Tr(L" (Ctrl+Z desfaz; Editar › Desenhar e segurar desliga)."));
+    InvalidateRect(hwnd, nullptr, FALSE);
 }
 
 // ---------------------------------------------------------------- in-place text (IInPlaceRichEditOwner)
@@ -1386,6 +1533,7 @@ void Canvas::LayoutTextEdit() {
     ObjType type = doc->st.objs[editIdx_]->type;
     int alignV = doc->st.objs[editIdx_]->style.alignV;
     float pad = doc->st.objs[editIdx_]->style.padding;
+    bool vert = type == ObjType::Text && doc->st.objs[editIdx_]->style.vertical;
     int n = GetWindowTextLengthW(edit_);
     std::wstring t(n + 1, L'\0');
     GetWindowTextW(edit_, t.data(), n + 1);
@@ -1407,6 +1555,7 @@ void Canvas::LayoutTextEdit() {
             r.left -= extra / 2; r.right += extra - extra / 2;
         }
         if (r.right - r.left < 60) { int c = (r.left + r.right) / 2; r.left = c - 30; r.right = c + 30; }
+        if (vert && r.right - r.left < 240) r.right = r.left + 240;     // typed in a line; the column is laid out on commit
         return r;
     };
     RECT r = area();
@@ -1419,7 +1568,7 @@ void Canvas::LayoutTextEdit() {
     SelectObject(dc, of);
     ReleaseDC(edit_, dc);
     int textH = m.bottom + 4, areaH = r.bottom - r.top;
-    if (type == ObjType::Text && textH > areaH) {          // grows downward
+    if (type == ObjType::Text && !vert && textH > areaH) {          // grows downward
         float grow = (textH - areaH) / (float)zoom;
         DrawObj* w = doc->Mutable(editIdx_);
         if (w->p2.Y >= w->p1.Y) w->p2.Y += grow; else w->p1.Y += grow;
@@ -1651,9 +1800,11 @@ float Canvas::SnapEdge(bool vertical, float pos, float a0, float a1) {
 }
 
 void Canvas::OnDown(POINT p, bool dbl) {
-    if (!doc || doc->isVideo || fxPreview_) return;         // during an effect preview the image cannot be edited
-    if (edit_) { CommitText(); return; }      // clicking outside only commits the text (does not create another object)
+    // clicking outside only commits the text (does not create another object); the focus comes here in every case
+    // (also for a video), so the shortcuts work
+    if (edit_) { CommitText(); SetFocus(hwnd); return; }
     SetFocus(hwnd);
+    if (!doc || doc->isVideo || fxPreview_) return;         // during an effect preview the image cannot be edited
     if (drag_ == Drag::Polygon && preview_) { PolygonClick(p, dbl); return; }
     labelReady_ = false;
     PointF d = ToDoc(p);
@@ -1686,6 +1837,7 @@ void Canvas::OnDown(POINT p, bool dbl) {
     // the selected object's handle takes priority in any drawing tool (and the lifted piece's in the Selection tool)
     int hh = HitHandle(p);
     bool floatingSel = selected >= 0 && selected < (int)doc->st.objs.size() && doc->st.objs[selected]->floating;
+    if (hh >= 0 && tool == Tool::Pen && doc->st.objs[selected]->type == ObjType::Pen) hh = -1;    // the pen draws next to its strokes
     if (hh >= 0 && tool != Tool::Crop && (tool != Tool::Selection || floatingSel) && tool != Tool::Fill && tool != Tool::Eyedropper) {
         doc->Checkpoint();
         dragOrig_ = *doc->st.objs[selected];
@@ -1709,6 +1861,8 @@ void Canvas::OnDown(POINT p, bool dbl) {
                     tool != Tool::Eraser && tool != Tool::Eyedropper && tool != Tool::Cutout;
     if (tool == Tool::Select || drawTool) {
         int hit = HitObject(d);
+        // the pen always draws: strokes are made close to each other (the Move tool moves them)
+        if (tool == Tool::Pen) hit = -1;
         // with a drawing tool, clicking an existing object selects/moves it (like the original)
         if (hit >= 0 && (tool == Tool::Select || hit == selected || !dbl)) {
             // a drawing tool only picks objects of its own kind (arrow picks arrow); over the others it draws —
@@ -1833,11 +1987,16 @@ void Canvas::OnDown(POINT p, bool dbl) {
     o.style = s;
     o.p1 = o.p2 = d;
     o.ctrl = d;
+    penAnchor_ = -1;
     switch (tool) {
     case Tool::Arrow: o.type = ObjType::Arrow; break;
     case Tool::Line: o.type = ObjType::Line; break;
     case Tool::Shape: o.type = ObjType::Shape; break;
-    case Tool::Pen: o.type = ObjType::Pen; o.pts = { d }; break;
+    case Tool::Pen:
+        o.type = ObjType::Pen; o.pts = { d };
+        if (penPressure_ >= 0) o.pressure = { penPressure_ };      // pen pressure (C43)
+        holdShape_ = false;
+        break;
     // highlighter (CPaintOpHighlight, <Highlight> object, comp_5 §3.2): always a dragged rectangle, in the chosen
     // color and opacity
     case Tool::Highlighter: o.type = ObjType::Highlighter; break;
@@ -1907,9 +2066,27 @@ void Canvas::OnMove(POINT p, WPARAM keys) {
     case Drag::Create: {
         DrawObj& o = *preview_;
         bool freehand = o.IsAreaTool() && o.style.areaShape == AreaFreehand;
+        if (holdShape_) {                                   // recognized shape (C23): a line keeps following the pen
+            if (o.IsLine()) o.p2 = d;
+            break;
+        }
         if ((o.IsPath() || freehand) && !o.pts.empty()) {
+            if (shift) {                                    // Shift: a straight segment (45° steps) from where it was pressed
+                if (penAnchor_ < 0 || penAnchor_ >= (int)o.pts.size()) penAnchor_ = (int)o.pts.size() - 1;
+                o.pts.resize(penAnchor_ + 1);
+                o.pts.push_back(Constrain45(o.pts[penAnchor_], d));
+                if (!o.pressure.empty()) { o.pressure.resize(penAnchor_ + 1); o.pressure.push_back(o.pressure.back()); }
+                KillTimer(hwnd, kHoldTimer);
+                if (freehand) FitToPoints(o);
+                break;
+            }
+            penAnchor_ = -1;                                // released: freehand again from the end of the segment
             PointF last = o.pts.back();
-            if (std::hypot(d.X - last.X, d.Y - last.Y) * zoom > 1.5) o.pts.push_back(d);
+            if (std::hypot(d.X - last.X, d.Y - last.Y) * zoom > 1.5) {
+                o.pts.push_back(d);
+                if (!o.pressure.empty()) o.pressure.push_back(penPressure_ >= 0 ? penPressure_ : o.pressure.back());
+                if (o.type == ObjType::Pen && drawHold) SetTimer(hwnd, kHoldTimer, 700, nullptr);
+            }
             if (freehand) FitToPoints(o);
         } else {
             PointF e = d;
@@ -2074,7 +2251,9 @@ void Canvas::FinishCreate() {
         if (r.Height < minH) { o.p1 = PointF(r.X, r.Y); o.p2 = PointF(r.GetRight(), r.Y + minH); }
     }
     if (tiny) {
-        if (o.type == ObjType::Text) { o.p2 = PointF(o.p1.X + 260, o.p1.Y + o.style.fontSize * 1.6f); }
+        if (o.type == ObjType::Text && o.style.vertical)       // vertical text (C37): a column, about eight characters tall
+            o.p2 = PointF(o.p1.X + std::max(o.style.fontSize * 1.6f + 2 * o.style.padding, 24.0f), o.p1.Y + o.style.fontSize * 1.25f * 8 + 2 * o.style.padding);
+        else if (o.type == ObjType::Text) { o.p2 = PointF(o.p1.X + 260, o.p1.Y + o.style.fontSize * 1.6f); }
         else if (o.type == ObjType::Callout) {
             o.p2 = PointF(o.p1.X + 220, o.p1.Y + 90);
             o.tail = PointF(o.p1.X + 50, o.p1.Y + 150);
@@ -2085,9 +2264,12 @@ void Canvas::FinishCreate() {
         }
         else return;
     }
+    if (o.type == ObjType::Highlighter && o.style.snapText && !o.style.textOnly) SnapHighlighter(o);    // C12
+    if (o.style.textOnly && o.IsAreaTool()) UpdateTextBoxes(o);
     doc->Checkpoint();
     doc->st.objs.push_back(std::make_shared<DrawObj>(o));
     selected = (int)doc->st.objs.size() - 1; extra_.clear();
+    if (o.type == ObjType::Pen && tool == Tool::Pen) selected = -1;     // freehand strokes follow one another unselected
     dirty_ = true;
     if (onSelectionChanged) onSelectionChanged();
     if (o.HasText()) BeginTextEdit(selected, true);
@@ -2099,6 +2281,8 @@ void Canvas::FinishCreate() {
 
 void Canvas::OnUp(POINT p) {
     ReleaseCapture();
+    KillTimer(hwnd, kHoldTimer);
+    if (toolBeforeEraser_ != Tool::Count && drag_ != Drag::Erase) { tool = toolBeforeEraser_; toolBeforeEraser_ = Tool::Count; }
     if (!doc) return;
     if (drag_ == Drag::Polygon) return;                     // the polygon continues until it is closed
     Drag d = drag_;
@@ -2187,6 +2371,8 @@ void Canvas::OnUp(POINT p) {
     }
     default: break;
     }
+    if ((d == Drag::Move || d == Drag::Resize) && changed_) RefreshTextBoxes(SelectedList());
+    if (d == Drag::Erase && toolBeforeEraser_ != Tool::Count) { tool = toolBeforeEraser_; toolBeforeEraser_ = Tool::Count; }
     Refresh();
     if (d == Drag::Create || d == Drag::Move || d == Drag::Resize || d == Drag::Cut || d == Drag::Erase)
         if (onDocChanged) onDocChanged();
@@ -2211,9 +2397,10 @@ void Canvas::SetCursorForPoint(POINT p) {
         int hit = HitObject(d);
         if (hit >= 0 && doc->st.objs[hit]->floating) inside = true;
         c = inside ? IDC_SIZEALL : IDC_CROSS;
-    } else if (tool == Tool::Fill || tool == Tool::Eyedropper) c = IDC_HAND;
+    } else if (tool == Tool::Eyedropper) { SetCursor(DropperCursor(DpiForWindow(hwnd))); return; }
+    else if (tool == Tool::Fill) c = IDC_HAND;
     else {
-        int hit = HitObject(ToDoc(p));
+        int hit = tool == Tool::Pen ? -1 : HitObject(ToDoc(p));
         c = (hit >= 0 && hit == selected) ? IDC_SIZEALL : IDC_CROSS;
     }
     SetCursor(LoadCursor(nullptr, c));
@@ -2233,6 +2420,50 @@ LRESULT CALLBACK Canvas::Proc(HWND h, UINT m, WPARAM w, LPARAM l) {
 
 LRESULT Canvas::Handle(UINT m, WPARAM w, LPARAM l) {
     switch (m) {
+    case WM_TIMER:
+        if (w == kHoldTimer) { KillTimer(hwnd, kHoldTimer); RecognizeHold(); return 0; }
+        break;
+    // pen and touch (C43): pressure and the eraser end of the pen; the mouse messages still come (DefWindowProc)
+    case WM_POINTERDOWN: case WM_POINTERUPDATE: case WM_POINTERUP: {
+        UINT32 id = GET_POINTERID_WPARAM(w);
+        POINTER_INPUT_TYPE type = PT_POINTER;
+        if (GetPointerType(id, &type)) {
+            touchInput_ = type == PT_PEN || type == PT_TOUCH;
+            if (type == PT_PEN) {
+                POINTER_PEN_INFO pi{};
+                if (GetPointerPenInfo(id, &pi)) {
+                    penPressure_ = (pi.penMask & PEN_MASK_PRESSURE) && m != WM_POINTERUP ? std::clamp(pi.pressure / 1024.0f, 0.0f, 1.0f) : -1;
+                    bool eraser = (pi.penFlags & (PEN_FLAG_ERASER | PEN_FLAG_INVERTED)) != 0;
+                    if (m == WM_POINTERDOWN && eraser && tool != Tool::Eraser && doc && !doc->isVideo) { toolBeforeEraser_ = tool; tool = Tool::Eraser; }
+                }
+            } else penPressure_ = -1;
+        }
+        break;
+    }
+    // touch screens: pinch to zoom and two-finger pan (one finger draws, through the mouse messages)
+    case WM_GESTURE: {
+        GESTUREINFO gi{ sizeof gi };
+        if (!GetGestureInfo((HGESTUREINFO)l, &gi)) break;
+        POINT pt{ gi.ptsLocation.x, gi.ptsLocation.y };
+        ScreenToClient(hwnd, &pt);
+        if (gi.dwID == GID_ZOOM) {
+            if (!(gi.dwFlags & GF_BEGIN) && gestureArg_ && gi.ullArguments) ZoomTo(zoom * (double)gi.ullArguments / (double)gestureArg_, &pt);
+            gestureArg_ = gi.ullArguments;
+            CloseGestureInfoHandle((HGESTUREINFO)l);
+            return 0;
+        }
+        if (gi.dwID == GID_PAN) {
+            if (!(gi.dwFlags & GF_BEGIN)) {
+                scroll_.x -= pt.x - gestureLast_.x; scroll_.y -= pt.y - gestureLast_.y;
+                UpdateScrollBars();
+                InvalidateRect(hwnd, nullptr, FALSE);
+            }
+            gestureLast_ = pt;
+            CloseGestureInfoHandle((HGESTUREINFO)l);
+            return 0;
+        }
+        break;
+    }
     case WM_ERASEBKGND: return 1;
     case WM_PAINT: { PAINTSTRUCT ps; HDC dc = BeginPaint(hwnd, &ps); Paint(dc); EndPaint(hwnd, &ps); return 0; }
     case WM_SIZE: if (fit_) FitToWindow(); else UpdateScrollBars(); return 0;

@@ -8,7 +8,11 @@
 - To build the installer: [Inno Setup 6.5+](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
   Without it, `build.bat` produces only the folder and the zip.
 
-There are no external dependencies: everything uses Windows APIs (Win32, GDI+, WIC, Media Foundation, WASAPI, Windows.Media.Ocr).
+Almost everything uses Windows APIs (Win32, GDI+, WIC, Media Foundation, WASAPI, Windows.Media.Ocr, WinHTTP). Two small
+open-source libraries are downloaded by CMake (`FetchContent`, pinned versions with SHA-256 checks, see
+`cmake/Dependencies.cmake`) on the first configure, so that step needs internet access: **libwebp 1.5.0** (WebP, BSD)
+and **ZXing-C++ 2.2.1** (QR/barcode reading only, Apache-2.0). CMake 3.28 or later is required (the one included with
+Visual Studio is fine). Their licenses are in `THIRD-PARTY-NOTICES.txt`, installed next to the programs.
 
 ## Command line
 
@@ -52,7 +56,7 @@ finds `ISCC.exe` (in `%LOCALAPPDATA%\Programs`, `Program Files` or on the `PATH`
 To compile it by hand after `build.bat`:
 
 ```bat
-ISCC.exe /DAppVersion=0.3.0 packaging\installer\Snapnab.iss
+ISCC.exe /DAppVersion=0.4.0 packaging\installer\Snapnab.iss
 ```
 
 What the installer does:

@@ -1,8 +1,20 @@
 // Snapnab.exe — capture process (≙ Snagit32.exe): tray, capture window, global hotkeys,
 // capture engine, video recording, native outputs, One Click and the IPC channel with the Editor (ds_pseudocode §1–§4)
 #include "Common.h"
+#include "Barcode.h"
 #include "CaptureEngine.h"
+#include "Clipboard.h"
+#include "Color.h"
+#include "ColorPicker.h"
+#include "DragOut.h"
 #include "Hotkeys.h"
+#include "IntervalCapture.h"
+#include "Office.h"
+#include "Pins.h"
+#include "QuickOverlay.h"
+#include "ScreenFocus.h"
+#include "Sounds.h"
+#include "Upload.h"
 #include "Icons.h"
 #include "Ipc.h"
 #include "Library.h"
@@ -30,13 +42,19 @@ enum : int {
     IDM_SHOW, IDM_ONECLICK, IDM_SHOW_PRESETS, IDM_PRESET_FROM_CURRENT, IDM_PRESET_NEW, IDM_PRESET_HELP,
     IDM_PRESET_RUN, IDM_PRESET_RENAME, IDM_PRESET_DUP, IDM_PRESET_HOTKEY, IDM_PRESET_DEL,
     IDM_SETTINGS_EXPORT, IDM_SETTINGS_IMPORT, IDM_SETTINGS_BACKUPS, IDM_MANUAL,
+    IDM_COLOR_PICKER, IDM_PIN_CLIPBOARD, IDM_PIN_FILE, IDM_PINS_SHOW, IDM_PINS_HIDE, IDM_PINS_CLOSE, IDM_PINS_REOPEN,
+    IDM_PINS_CLICKTHROUGH, IDM_INTERVAL, IDM_FOCUS, IDM_QR_REGION, IDM_UPLOAD_SETTINGS, IDM_CAPTURE_PIN, IDM_CLEANUP_NOW,
+    IDM_RECORD_AUDIO, IDM_AUDIO_FOLDER,
+    IDM_PIN_HISTORY_BASE = 1500,
     IDM_PRESET_BASE = 2000, IDM_DELAY_BASE = 3000, IDM_WEBCAM_OFF = 3100, IDM_WEBCAM_BASE = 3101,
     IDM_WEBCAM_SHAPE = 3200, IDM_WEBCAM_CHROMA = 3300,
 };
 constexpr UINT WM_FX_ADD = WM_APP + 0x60;       // reopen the effects list on "add another"
 constexpr UINT WM_PRESET_ZONE = WM_APP + 0x62;  // click on the hotkey/gear of a preset row
-enum : int { HK_IMAGE = 1, HK_VIDEO = 2, HK_VIDEO_PAUSE = 4, HK_VIDEO_STOP = 5, HK_PRESET_BASE = 100 };
-enum Share { ShareNone, ShareFile, ShareProgram, ShareText };
+enum : int { HK_IMAGE = 1, HK_VIDEO = 2, HK_VIDEO_PAUSE = 4, HK_VIDEO_STOP = 5, HK_COLOR = 6, HK_CAPTURE_PIN = 7, HK_PIN_CLIP = 8,
+             HK_FOCUS = 9, HK_VIDEO_ZOOM = 10, HK_PRESET_BASE = 100 };
+// outputs of the "Share" box (one per preset): new ones at the end
+enum Share { ShareNone, ShareFile, ShareProgram, ShareText, SharePin, ShareQr, ShareWord, SharePowerPoint, ShareExcel, ShareOneNote, ShareUpload, ShareCount };
 
 struct App {
     HINSTANCE hi = nullptr;
@@ -65,6 +83,11 @@ struct App {
     int presetHot = -1, presetZone = 0;
     std::vector<CameraInfo> cams;  // webcams listed in the last menu
     bool trayIgnoreUp = false;     // second click of a double click on the tray icon
+    PinManager pins;               // pinned captures (C01)
+    QuickOverlay overlay;          // quick access overlay after capturing (C08)
+    IntervalCapture interval;      // automatic interval capture (C24)
+    ScreenFocus focus;             // screen focus for presentations (C39)
+    HICON iconBusy = nullptr;      // tray icon with a red dot while the interval capture runs
 } g;
 constexpr UINT_PTR kTrayClickTimer = 8;
 
@@ -142,6 +165,12 @@ void RegisterHotkeys() {
     g.hk.Set(HK_IMAGE, m, v);
     UnpackHotkey(RegGetDword(L"VideoHotkey", PackHotkey(MOD_SHIFT, VK_SNAPSHOT)), m, v);
     g.hk.Set(HK_VIDEO, m, v);
+    // tools without a default key (a global key steals the combination from every program): set in Options
+    for (auto [id, name] : { std::pair<int, const wchar_t*>{ HK_COLOR, L"ColorPickerHotkey" }, { HK_CAPTURE_PIN, L"CapturePinHotkey" },
+                             { HK_PIN_CLIP, L"PinClipboardHotkey" }, { HK_FOCUS, L"FocusHotkey" } }) {
+        UnpackHotkey(RegGetDword(name, 0), m, v);
+        if (v) g.hk.Set(id, m, v);
+    }
     for (size_t i = 0; i < g.store.presets.size(); i++) {
         auto& p = g.store.presets[i];
         if (!p.hotkeyVk) continue;
@@ -158,9 +187,12 @@ void SetVideoHotkeys(bool on) {
         g.hk.Set(HK_VIDEO_PAUSE, m, v);
         UnpackHotkey(RegGetDword(L"VideoStopKey", PackHotkey(MOD_SHIFT, VK_F10)), m, v);
         g.hk.Set(HK_VIDEO_STOP, m, v);
+        UnpackHotkey(RegGetDword(L"VideoZoomKey", PackHotkey(MOD_SHIFT, VK_F11)), m, v);     // zoom following the pointer (C15)
+        if (v) g.hk.Set(HK_VIDEO_ZOOM, m, v);
     } else {
         g.hk.Remove(HK_VIDEO_PAUSE);
         g.hk.Remove(HK_VIDEO_STOP);
+        g.hk.Remove(HK_VIDEO_ZOOM);
     }
 }
 
@@ -185,16 +217,18 @@ Preset FirstOfKind(CaptureKind k) {
 }
 
 // ---------------------------------------------------------------- effects ("Effects" list of the capture window)
-enum Fx { FxBorder, FxFilter, FxShadow, FxCaption, FxReplace, FxScale, FxEdge, FxTrim, FxAdjust, FxRotate, FxWatermark, FxResolution, FxCount };
+enum Fx { FxBorder, FxFilter, FxShadow, FxCaption, FxReplace, FxScale, FxEdge, FxTrim, FxAdjust, FxRotate, FxWatermark, FxResolution, FxBeautify, FxCount };
 enum : LPARAM { FxNone = -1, FxSep = -2, FxAdd = -3, FxRemove = -4 };   // action items of the list
+// translated where they are shown: this table is built before the language catalog is loaded
 const wchar_t* const kFxNames[FxCount] = {
-    Tr(L"Borda"), Tr(L"Filtros"), Tr(L"Sombra"), Tr(L"Informações da captura"), Tr(L"Substituição de cor"), Tr(L"Redimensionar imagem"),
-    Tr(L"Bordas especiais"), Tr(L"Cortar bordas"), Tr(L"Ajuste de cor"), Tr(L"Girar imagem"), Tr(L"Marca d'água"), Tr(L"Resolução da imagem"),
+    TR_NOOP(L"Borda"), TR_NOOP(L"Filtros"), TR_NOOP(L"Sombra"), TR_NOOP(L"Informações da captura"), TR_NOOP(L"Substituição de cor"),
+    TR_NOOP(L"Redimensionar imagem"), TR_NOOP(L"Bordas especiais"), TR_NOOP(L"Cortar bordas"), TR_NOOP(L"Ajuste de cor"),
+    TR_NOOP(L"Girar imagem"), TR_NOOP(L"Marca d'água"), TR_NOOP(L"Resolução da imagem"), TR_NOOP(L"Embelezar (fundo, margem e sombra)"),
 };
 
 bool& FxOn(fx::CaptureEffects& e, int k) {
     bool* on[FxCount] = { &e.border, &e.filter, &e.shadow, &e.caption, &e.replaceColor, &e.scale,
-                          &e.edge, &e.trim, &e.adjust, &e.rotate, &e.watermark, &e.resolution };
+                          &e.edge, &e.trim, &e.adjust, &e.rotate, &e.watermark, &e.resolution, &e.beautify };
     return *on[k];
 }
 
@@ -247,9 +281,17 @@ bool EditFx(int k) {
     case FxResolution:
         f = { F::MakeInt(Tr(L"Resolução (DPI)"), e.dpi, 36, 2400), F::MakeLabel(Tr(L"Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP).")) };
         break;
+    case FxBeautify: {
+        // a saved preset fills the fields; the fields can then be changed for this capture preset
+        if (!fx::BeautifyDialog(g.frame, e.beautifyOpt)) return false;
+        FxOn(e, k) = true;
+        g.fxCurrent = k;
+        g.store.Save();
+        return true;
+    }
     default: return false;
     }
-    if (!ui::RunForm(g.frame, kFxNames[k], f)) return false;
+    if (!ui::RunForm(g.frame, Tr(kFxNames[k]), f)) return false;
     switch (k) {
     case FxBorder: e.borderWidth = f[0].value; e.borderColor = f[1].color; break;
     case FxFilter: e.filterKind = f[0].value; break;
@@ -280,7 +322,7 @@ void UpdateEffectsText() {
     if (g.fxCurrent < 0 || !FxOn(e, g.fxCurrent)) g.fxCurrent = FxFirstOn(e);
     std::wstring t = Tr(L"Nenhum");
     if (g.fxCurrent >= 0) {
-        t = kFxNames[g.fxCurrent];
+        t = Tr(kFxNames[g.fxCurrent]);
         int others = FxCountOn(e) - 1;
         if (others > 0) t += Format(L"  +%d", others);
     }
@@ -297,11 +339,11 @@ void FillEffectsList() {
         SendMessageW(cb, mui::MUI_SETITEMFLAGS, i, flags);
     };
     if (g.fxAddMode) {          // "Add another effect": only the ones not on yet
-        for (int k = 0; k < FxCount; k++) if (!FxOn(e, k)) add(kFxNames[k], k);
+        for (int k = 0; k < FxCount; k++) if (!FxOn(e, k)) add(Tr(kFxNames[k]), k);
         return;
     }
     add(Tr(L"Nenhum"), FxNone);
-    for (int k = 0; k < FxCount; k++) add(kFxNames[k], k, FxOn(e, k) ? mui::ItemChecked : 0);
+    for (int k = 0; k < FxCount; k++) add(Tr(kFxNames[k]), k, FxOn(e, k) ? mui::ItemChecked : 0);
     add(L"", FxSep, mui::ItemSeparator);
     add(Tr(L"Adicionar outro efeito"), FxAdd);
     add(Tr(L"Remover este efeito"), FxRemove);
@@ -328,6 +370,10 @@ void OnEffectPicked(LPARAM item) {
 // ---------------------------------------------------------------- share (capture output)
 Share ShareOf(const Preset& p) {
     if (p.grabText) return ShareText;
+    if (p.readQr) return ShareQr;
+    if (p.pinToScreen) return SharePin;
+    if (p.upload) return ShareUpload;
+    if (p.office >= 0 && p.office < office::TargetCount) return (Share)(ShareWord + p.office);
     if (p.saveToFile) return ShareFile;
     if (p.openInProgram) return ShareProgram;
     return ShareNone;
@@ -337,6 +383,10 @@ void SetShare(Preset& p, Share s) {
     p.saveToFile = s == ShareFile;
     p.openInProgram = s == ShareProgram;
     p.grabText = s == ShareText;
+    p.pinToScreen = s == SharePin;
+    p.readQr = s == ShareQr;
+    p.upload = s == ShareUpload;
+    p.office = s >= ShareWord && s <= ShareOneNote ? s - ShareWord : -1;
 }
 
 std::wstring DelayText(int s) { return s <= 0 ? Tr(L"Desligado") : Format(Tr(L"%d s"), s); }
@@ -345,7 +395,7 @@ void FillPresetList() {
     HWND lb = C(IDC_PRESETS);
     SendMessageW(lb, WM_SETREDRAW, FALSE, 0);
     ListBox_ResetContent(lb);
-    for (auto& p : g.store.presets) ListBox_AddString(lb, p.name.c_str());     // drawn in DrawPresetItem
+    for (auto& p : g.store.presets) ListBox_AddString(lb, Tr(p.name).c_str());     // drawn in DrawPresetItem (the text is for screen readers)
     ListBox_SetCurSel(lb, g.store.selected);
     SendMessageW(lb, WM_SETREDRAW, TRUE, 0);
     InvalidateRect(lb, nullptr, TRUE);
@@ -390,7 +440,7 @@ void LoadControls() {
     UpdateEffectsText();
     Share sh = ShareOf(p);
     ComboBox_SetCurSel(C(IDC_SHARE), sh);
-    SendMessageW(C(IDC_SHARE), mui::MUI_SETGEAR, sh == ShareFile || sh == ShareProgram, 0);
+    SendMessageW(C(IDC_SHARE), mui::MUI_SETGEAR, sh == ShareFile || sh == ShareProgram || sh == ShareUpload || sh == SharePowerPoint, 0);
     Button_SetCheck(C(IDC_PREVIEW), p.previewInEditor);
     Button_SetCheck(C(IDC_CLIPBOARD), p.copyToClipboard);
     Button_SetCheck(C(IDC_CURSOR), p.captureCursor);
@@ -431,7 +481,7 @@ void SaveControls() {
 void EditFileOutput() {
     auto& p = Cur();
     std::vector<ui::Field> f = {
-        ui::Field::MakeCombo(Tr(L"Formato"), { L"PNG", L"JPEG", L"BMP", L"GIF", L"TIFF" }, (int)p.fileFormat),
+        ui::Field::MakeCombo(Tr(L"Formato"), { L"PNG", L"JPEG", L"BMP", L"GIF", L"TIFF", L"WebP", L"AVIF" }, (int)p.fileFormat),
         ui::Field::MakeText(Tr(L"Prefixo do nome"), p.filePrefix),
         ui::Field::MakeText(Tr(L"Pasta"), p.folder.empty() ? DefaultSaveDir() : p.folder),
         ui::Field::MakeLabel(Tr(L"Nome automático: <Prefixo><Número>, ex.: Captura001.png")),
@@ -442,6 +492,10 @@ void EditFileOutput() {
         return L"";
     };
     if (!ui::RunForm(g.frame, Tr(L"Salvar em arquivo"), f, validate)) return;
+    if ((FileFormat)f[0].value == FileFormat::AVIF && !CanEncode(ImageFormat::AVIF)) {
+        MessageBoxW(g.frame, (Tr(L"Este computador não consegue salvar em AVIF.\n\n") + CodecHint(ImageFormat::AVIF)).c_str(), L"Snapnab", MB_ICONWARNING);
+        return;
+    }
     p.fileFormat = (FileFormat)f[0].value; p.filePrefix = f[1].text; p.folder = f[2].text;
     g.store.Save();
 }
@@ -519,12 +573,40 @@ void EditVideoOptions() {
         ui::Field::MakeInt(Tr(L"Volume do áudio do sistema (%)"), p.sysVolume, 0, 200),
         ui::Field::MakeCheck(Tr(L"Ganho automático do microfone"), p.autoGain),
         ui::Field::MakeLabel(Tr(L"Também ajustáveis no painel da gravação.")),
+        ui::Field::MakeCheck(Tr(L"Gravar somente o áudio (sem vídeo)"), p.audioOnly),
+        ui::Field::MakeCombo(Tr(L"Formato do áudio"), { L"M4A (AAC)", L"MP3" }, p.audioFormat),
+        // the rest applies to every video preset (Options › exported with the settings)
+        ui::Field::MakeSeparator(Tr(L"Na gravação (todos os presets)")),
+        ui::Field::MakeCheck(Tr(L"Destacar o cursor"), RegGetDword(L"RecHighlightCursor", 0) != 0),
+        ui::Field::MakeColor(Tr(L"Cor do destaque"), RegGetDword(L"RecHighlightColor", RGB(255, 214, 0))),
+        ui::Field::MakeInt(Tr(L"Tamanho do destaque (px)"), (int)RegGetDword(L"RecHighlightSize", 44), 16, 200),
+        ui::Field::MakeCheck(Tr(L"Mostrar os cliques"), RegGetDword(L"RecClickEffects", 0) != 0),
+        ui::Field::MakeColor(Tr(L"Cor do clique esquerdo"), RegGetDword(L"RecLeftClickColor", RGB(229, 50, 45))),
+        ui::Field::MakeColor(Tr(L"Cor do clique direito"), RegGetDword(L"RecRightClickColor", RGB(0, 120, 215))),
+        ui::Field::MakeCombo(Tr(L"Teclas na tela"), { Tr(L"Não mostrar"), Tr(L"Só atalhos (Ctrl, Alt, Win, F1…)"), Tr(L"Todas (inclusive o que for digitado)") },
+                             std::clamp((int)RegGetDword(L"RecKeyMode", 0), 0, 2)),
+        ui::Field::MakeCheck(Tr(L"Ampliar ao clicar (zoom automático)"), RegGetDword(L"RecAutoZoom", 0) != 0),
+        ui::Field::MakeInt(Tr(L"Ampliação do zoom (%)"), (int)RegGetDword(L"RecZoomPercent", 200), 120, 400),
+        ui::Field::MakeHotkey(Tr(L"Atalho do zoom durante a gravação"), 0, 0),
+        ui::Field::MakeCheck(Tr(L"Proteger contra travamentos (recupera a gravação)"), RegGetDword(L"RecCrashSafe", 1) != 0),
+        ui::Field::MakeCheck(Tr(L"Confirmar antes de recomeçar a gravação"), RegGetDword(L"ConfirmRestart", 1) != 0),
     };
+    {
+        UINT zm, zv;
+        UnpackHotkey(RegGetDword(L"VideoZoomKey", PackHotkey(MOD_SHIFT, VK_F11)), zm, zv);
+        f[20].hkMods = zm; f[20].hkVk = zv;
+    }
     if (!ui::RunForm(g.frame, Tr(L"Opções de vídeo"), f)) return;
     p.fps = fpsList[std::clamp(f[0].value, 0, 4)];
     p.downscale1080 = f[1].value != 0;
     p.hardwareEncode = f[2].value != 0;
     p.micVolume = f[4].value; p.sysVolume = f[5].value; p.autoGain = f[6].value != 0;
+    p.audioOnly = f[8].value != 0; p.audioFormat = f[9].value;
+    RegSetDword(L"RecHighlightCursor", f[11].value); RegSetDword(L"RecHighlightColor", f[12].color); RegSetDword(L"RecHighlightSize", f[13].value);
+    RegSetDword(L"RecClickEffects", f[14].value); RegSetDword(L"RecLeftClickColor", f[15].color); RegSetDword(L"RecRightClickColor", f[16].color);
+    RegSetDword(L"RecKeyMode", f[17].value); RegSetDword(L"RecAutoZoom", f[18].value); RegSetDword(L"RecZoomPercent", f[19].value);
+    RegSetDword(L"VideoZoomKey", PackHotkey(f[20].hkMods, f[20].hkVk));
+    RegSetDword(L"RecCrashSafe", f[21].value); RegSetDword(L"ConfirmRestart", f[22].value);
     g.store.Save();
 }
 
@@ -542,11 +624,11 @@ void EditPresetHotkey() {
         p.hotkeyMods = oldM; p.hotkeyVk = oldV;
         return;
     }
+    g.store.Save();                               // saved before the notice below (it waits for the user)
+    FillPresetList();
     if (r == HotkeyManager::HookedFallback)
         MessageBoxW(g.frame, Tr(L"Outro programa já usa esse atalho. O Snapnab vai interceptá-lo por um gancho de teclado."),
                     Tr(L"Atalho"), MB_ICONINFORMATION);
-    g.store.Save();
-    FillPresetList();
 }
 
 bool AskPresetName(std::wstring& name, const wchar_t* title) {
@@ -662,34 +744,71 @@ void RestartApps() {
 }
 
 void ShowOptions() {
-    UINT im, iv, vm, vv, pm, pv, sm, sv;
+    UINT im, iv, vm, vv, pm, pv, sm, sv, cm, cv, km, kv, lm, lv, fm, fv;
     UnpackHotkey(RegGetDword(L"ImageHotkey", PackHotkey(0, VK_SNAPSHOT)), im, iv);
     UnpackHotkey(RegGetDword(L"VideoHotkey", PackHotkey(MOD_SHIFT, VK_SNAPSHOT)), vm, vv);
     UnpackHotkey(RegGetDword(L"VideoStartPauseResumeKey", PackHotkey(MOD_SHIFT, VK_F9)), pm, pv);
     UnpackHotkey(RegGetDword(L"VideoStopKey", PackHotkey(MOD_SHIFT, VK_F10)), sm, sv);
+    UnpackHotkey(RegGetDword(L"ColorPickerHotkey", 0), cm, cv);
+    UnpackHotkey(RegGetDword(L"CapturePinHotkey", 0), km, kv);
+    UnpackHotkey(RegGetDword(L"PinClipboardHotkey", 0), lm, lv);
+    UnpackHotkey(RegGetDword(L"FocusHotkey", 0), fm, fv);
+    std::vector<std::wstring> soundNames;
+    for (int k = 0; k < sounds::Count; k++) soundNames.push_back(sounds::KindName((sounds::Kind)k));
     // language: "Automatic" follows Windows (English if its language has no translation); the others by their own name
     std::vector<std::wstring> langCodes = { L"" }, langNames = { Tr(L"Automático (idioma do Windows)") };
     for (auto& l : i18n::Languages())
         if (i18n::Available(l.code)) { langCodes.push_back(l.code); langNames.push_back(l.name); }
     int langIndex = (int)(std::find(langCodes.begin(), langCodes.end(), i18n::Configured()) - langCodes.begin());
-    std::vector<ui::Field> f = {
-        ui::Field::MakeSeparator(Tr(L"Atalhos globais")),
-        ui::Field::MakeHotkey(Tr(L"Capturar imagem"), im, iv),
-        ui::Field::MakeHotkey(Tr(L"Gravar vídeo"), vm, vv),
-        ui::Field::MakeHotkey(Tr(L"Pausar/retomar vídeo"), pm, pv),
-        ui::Field::MakeHotkey(Tr(L"Parar vídeo"), sm, sv),
-        ui::Field::MakeSeparator(Tr(L"Geral")),
-        ui::Field::MakeText(Tr(L"Pasta de saída"), DefaultSaveDir()),
-        ui::Field::MakeCombo(Tr(L"Monitorar área de transferência"), { Tr(L"Desligado"), Tr(L"Só a Ferramenta de Captura do Windows"), Tr(L"Qualquer aplicativo") },
-                             (int)RegGetDword(L"ClipboardMonitor", 1)),
-        ui::Field::MakeCheck(Tr(L"Iniciar com o Windows"), StartupEnabled()),
-        ui::Field::MakeCheck(Tr(L"Mostrar a janela de captura ao iniciar"), RegGetDword(L"ShowCaptureWindow", 1) != 0),
-        ui::Field::MakeCombo(Tr(L"Idioma"), langNames, langIndex < (int)langCodes.size() ? langIndex : 0),
-        ui::Field::MakeLabel(Tr(L"Biblioteca: ") + LibraryDir()),
+    using F = ui::Field;
+    std::vector<F> f = {
+        F::MakeSeparator(Tr(L"Atalhos globais")),
+        F::MakeHotkey(Tr(L"Capturar imagem"), im, iv),
+        F::MakeHotkey(Tr(L"Gravar vídeo"), vm, vv),
+        F::MakeHotkey(Tr(L"Pausar/retomar vídeo"), pm, pv),
+        F::MakeHotkey(Tr(L"Parar vídeo"), sm, sv),
+        F::MakeHotkey(Tr(L"Conta-gotas de tela"), cm, cv),                        // 5
+        F::MakeHotkey(Tr(L"Capturar e fixar na tela"), km, kv),
+        F::MakeHotkey(Tr(L"Fixar da área de transferência"), lm, lv),
+        F::MakeHotkey(Tr(L"Foco de tela (apresentações)"), fm, fv),
+        F::MakeSeparator(Tr(L"Geral")),                                          // 9
+        F::MakeText(Tr(L"Pasta de saída"), DefaultSaveDir()),
+        F::MakeCombo(Tr(L"Monitorar área de transferência"), { Tr(L"Desligado"), Tr(L"Só a Ferramenta de Captura do Windows"), Tr(L"Qualquer aplicativo") },
+                     (int)RegGetDword(L"ClipboardMonitor", 1)),
+        F::MakeCheck(Tr(L"Iniciar com o Windows"), StartupEnabled()),
+        F::MakeCheck(Tr(L"Mostrar a janela de captura ao iniciar"), RegGetDword(L"ShowCaptureWindow", 1) != 0),
+        F::MakeCombo(Tr(L"Idioma"), langNames, langIndex < (int)langCodes.size() ? langIndex : 0),
+        F::MakeSeparator(Tr(L"Depois da captura")),                              // 15
+        F::MakeCheck(Tr(L"Copiar toda captura para a área de transferência"), RegGetDword(L"CopyEveryCapture", 1) != 0),
+        F::MakeCombo(Tr(L"Ao terminar"), { Tr(L"Abrir no Editor (como o preset diz)"), Tr(L"Mostrar a miniatura rápida em vez do Editor"),
+                                          Tr(L"Mostrar a miniatura e abrir o Editor") }, (int)std::min<DWORD>(RegGetDword(L"AfterCaptureMode", 0), 2)),
+        F::MakeInt(Tr(L"A miniatura fecha após (s, 0 = não fecha)"), (int)RegGetDword(L"OverlaySeconds", 8), 0, 600),
+        F::MakeCombo(Tr(L"Canto da miniatura"), { Tr(L"Inferior direito"), Tr(L"Inferior esquerdo"), Tr(L"Superior direito"), Tr(L"Superior esquerdo") },
+                     (int)std::min<DWORD>(RegGetDword(L"OverlayCorner", 0), 3)),
+        F::MakeCombo(Tr(L"Som da captura"), soundNames, (int)std::min<DWORD>(RegGetDword(L"CaptureSound", 0), sounds::Count - 1)),
+        F::MakeText(Tr(L"Arquivo WAV do som"), RegGetString(L"CaptureSoundFile", L"")),
+        F::MakeSeparator(Tr(L"Captura")),                                        // 22
+        F::MakeCheck(Tr(L"Capturar a região assim que soltar o mouse"), RegGetDword(L"QuickCrop", 1) != 0),
+        F::MakeCheck(Tr(L"Corrigir as cores em monitores HDR"), RegGetDword(L"HdrCorrection", 1) != 0),
+        F::MakeCheck(Tr(L"Cantos arredondados transparentes nas janelas"), RegGetDword(L"WindowRoundCorners", 1) != 0),
+        F::MakeCheck(Tr(L"Sombra nas capturas de janela"), RegGetDword(L"WindowShadow", 0) != 0),
+        F::MakeCheck(Tr(L"Ocultar os ícones da área de trabalho ao capturar"), RegGetDword(L"HideDesktopIcons", 0) != 0),
+        F::MakeCheck(Tr(L"Não perturbe (sem notificações) ao gravar"), RegGetDword(L"DndWhileRecording", 0) != 0),
+        F::MakeCheck(Tr(L"Manter a tela acesa durante a captura"), RegGetDword(L"KeepAwake", 1) != 0),
+        F::MakeSeparator(Tr(L"Privacidade e biblioteca")),                       // 30
+        F::MakeCheck(Tr(L"Remover metadados (câmera, GPS, datas) ao salvar"), RegGetDword(L"StripMetadata", 0) != 0),
+        F::MakeCheck(Tr(L"Limpar a biblioteca automaticamente"), RegGetDword(L"CleanupEnabled", 0) != 0),
+        F::MakeInt(Tr(L"Apagar capturas com mais de (dias)"), (int)RegGetDword(L"CleanupDays", 30), 1, 3650),
+        F::MakeCheck(Tr(L"Manter as capturas que têm nome"), RegGetDword(L"CleanupKeepNamed", 1) != 0),
+        F::MakeCheck(Tr(L"Manter as capturas com etiquetas"), RegGetDword(L"CleanupKeepTagged", 1) != 0),
+        F::MakeCheck(Tr(L"Enviar para a Lixeira em vez de apagar"), RegGetDword(L"CleanupRecycle", 1) != 0),
+        F::MakeCheck(Tr(L"Cursor capturado como objeto no Editor"), RegGetDword(L"CursorAsObject", 0) != 0),      // 37 (C25)
+        F::MakeCheck(Tr(L"Dividir imagens longas em páginas (impressão e PDF)"), RegGetDword(L"SplitLongPages", 1) != 0),   // 38 (C34)
+        F::MakeLabel(Tr(L"Biblioteca: ") + LibraryDir()),
     };
     auto validate = [](std::vector<ui::Field>& f) -> std::wstring {
         std::vector<std::pair<UINT, UINT>> keys;
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 8; i++) {
             if (!f[i].hkVk) continue;
             for (auto& k : keys) if (k == std::make_pair(f[i].hkMods, f[i].hkVk)) return Tr(L"Dois atalhos iguais: ") + HotkeyToText(f[i].hkMods, f[i].hkVk);
             keys.push_back({ f[i].hkMods, f[i].hkVk });
@@ -701,13 +820,41 @@ void ShowOptions() {
     RegSetDword(L"VideoHotkey", PackHotkey(f[2].hkMods, f[2].hkVk));
     RegSetDword(L"VideoStartPauseResumeKey", PackHotkey(f[3].hkMods, f[3].hkVk));
     RegSetDword(L"VideoStopKey", PackHotkey(f[4].hkMods, f[4].hkVk));
-    if (!Trim(f[6].text).empty()) RegSetString(L"OutputFolder", Trim(f[6].text));
-    RegSetDword(L"ClipboardMonitor", f[7].value);
-    SetStartup(f[8].value != 0);
-    RegSetDword(L"ShowCaptureWindow", f[9].value);
+    RegSetDword(L"ColorPickerHotkey", PackHotkey(f[5].hkMods, f[5].hkVk));
+    RegSetDword(L"CapturePinHotkey", PackHotkey(f[6].hkMods, f[6].hkVk));
+    RegSetDword(L"PinClipboardHotkey", PackHotkey(f[7].hkMods, f[7].hkVk));
+    RegSetDword(L"FocusHotkey", PackHotkey(f[8].hkMods, f[8].hkVk));
+    if (!Trim(f[10].text).empty()) RegSetString(L"OutputFolder", Trim(f[10].text));
+    RegSetDword(L"ClipboardMonitor", f[11].value);
+    SetStartup(f[12].value != 0);
+    RegSetDword(L"ShowCaptureWindow", f[13].value);
+    RegSetDword(L"CopyEveryCapture", f[16].value);
+    RegSetDword(L"AfterCaptureMode", f[17].value);
+    RegSetDword(L"OverlaySeconds", f[18].value);
+    RegSetDword(L"OverlayCorner", f[19].value);
+    RegSetDword(L"CaptureSound", f[20].value);
+    RegSetString(L"CaptureSoundFile", Trim(f[21].text));
+    RegSetDword(L"QuickCrop", f[23].value);
+    RegSetDword(L"HdrCorrection", f[24].value);
+    RegSetDword(L"WindowRoundCorners", f[25].value);
+    RegSetDword(L"WindowShadow", f[26].value);
+    RegSetDword(L"HideDesktopIcons", f[27].value);
+    RegSetDword(L"DndWhileRecording", f[28].value);
+    RegSetDword(L"KeepAwake", f[29].value);
+    RegSetDword(L"StripMetadata", f[31].value);
+    RegSetDword(L"CleanupEnabled", f[32].value);
+    RegSetDword(L"CleanupDays", f[33].value);
+    RegSetDword(L"CleanupKeepNamed", f[34].value);
+    RegSetDword(L"CleanupKeepTagged", f[35].value);
+    RegSetDword(L"CleanupRecycle", f[36].value);
+    RegSetDword(L"CursorAsObject", f[37].value);
+    RegSetDword(L"SplitLongPages", f[38].value);
+    if (f[20].value == sounds::Custom && Trim(f[21].text).empty())
+        MessageBoxW(g.frame, Tr(L"Escolha o arquivo WAV do som da captura (caminho completo)."), L"Snapnab", MB_ICONINFORMATION);
+    else if (f[20].value != sounds::Off) sounds::Play((sounds::Kind)f[20].value, Trim(f[21].text));      // a sample of the sound
     RegisterHotkeys();
     g.ipc.SendInt(ipc::kEditor, ipc::ReloadConfig, 0);
-    std::wstring lang = langCodes[std::clamp(f[10].value, 0, (int)langCodes.size() - 1)];
+    std::wstring lang = langCodes[std::clamp(f[14].value, 0, (int)langCodes.size() - 1)];
     if (lang != i18n::Configured()) {
         i18n::SetConfigured(lang);
         // the strings are loaded when each program starts (like the reference's resource DLL)
@@ -742,6 +889,124 @@ void About() {
     MessageBoxW(g.frame, text.c_str(), Tr(L"Sobre o Snapnab"), MB_ICONINFORMATION);
 }
 
+// ---------------------------------------------------------------- tools (C01, C04, C10, C20, C21, C24, C39)
+void RunColorPicker() {
+    RunScreenColorPicker([](bool ok, COLORREF c) {
+        if (!ok) return;
+        color::AddRecent(c);
+        clip::CopyText(g.frame, color::ToText(c, color::DefaultFmt()));      // copied right away; the menu offers the other formats
+        POINT pt; GetCursorPos(&pt);
+        ColorFormatsMenu(g.frame, c, pt);
+    });
+}
+
+Preset ToolPreset(Share share) {                  // region selection whose only output is the tool
+    Preset p = FirstOfKind(CaptureKind::Image);
+    p.kind = CaptureKind::Image;
+    p.selection = Selection::Region; p.regionFixed = false;
+    p.delaySeconds = 0; p.effects = {}; p.previewInEditor = false; p.copyToClipboard = false; p.windowObjects = false;
+    SetShare(p, share);
+    return p;
+}
+
+void ShowQrResults(const Image& img) {
+    HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+    auto r = barcode::Read(img);
+    SetCursor(old);
+    barcode::ShowResults(nullptr, r);
+}
+
+void SendToOffice(const Image& img, int target) {
+    std::wstring file = TempImageFile(img, L"Snapnab_" + TimeStamp());
+    std::wstring err;
+    HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+    bool ok = !file.empty() && office::Send((office::Target)target, file, img.w, img.h, err);
+    SetCursor(old);
+    if (ok) TrayNotify(L"Snapnab", Format(Tr(L"Captura enviada para o %s."), office::TargetName((office::Target)target)));
+    else MessageBoxW(nullptr, err.c_str(), L"Snapnab", MB_ICONWARNING);
+}
+
+void UploadCapture(const Image& img, const std::wstring& lib, const std::wstring& title) {
+    if (!upload::Settings::Load().Configured()) {
+        if (MessageBoxW(nullptr, Tr(L"O upload ainda não está configurado. Configurar agora?"), L"Snapnab", MB_YESNO | MB_ICONQUESTION) != IDYES) return;
+        if (!upload::ConfigureDialog(nullptr) || !upload::Settings::Load().Configured()) return;
+    }
+    TrayNotify(L"Snapnab", Tr(L"Enviando a captura…"));
+    std::wstring name = (title.empty() ? std::wstring(L"Snapnab") : title).substr(0, 60) + L"_" + TimeStamp();
+    upload::UploadImageAsync(img, name, [lib](const upload::Result& r) {
+        if (!r.ok) { MessageBoxW(nullptr, (Tr(L"O upload falhou.\n\n") + r.error).c_str(), L"Snapnab", MB_ICONWARNING); return; }
+        if (!lib.empty()) upload::SetUploadedUrl(lib, r.url);
+        if (upload::Settings::Load().copyLink) clip::CopyText(g.frame, r.url);
+        TrayNotify(Tr(L"Upload concluído — link copiado"), r.url);
+    });
+}
+
+void PinFromFile() {
+    std::wstring path;
+    if (!ui::OpenFileDialog(g.frame, ImageOpenFilter(), path, Tr(L"Fixar imagem na tela"))) return;
+    if (!g.pins.PinFile(path)) MessageBoxW(g.frame, (Tr(L"Não foi possível abrir a imagem.\n\n") + ImageIoError()).c_str(), L"Snapnab", MB_ICONWARNING);
+}
+
+void PinsSubmenu(HMENU m) {
+    AppendMenuW(m, MF_STRING, IDM_PIN_CLIPBOARD, Tr(L"Fixar da área de transferência"));
+    AppendMenuW(m, MF_STRING, IDM_PIN_FILE, Tr(L"Fixar um arquivo…"));
+    AppendMenuW(m, MF_STRING, IDM_CAPTURE_PIN, Tr(L"Capturar e fixar"));
+    AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
+    UINT has = g.pins.count() ? 0 : MF_GRAYED;
+    AppendMenuW(m, MF_STRING | has, IDM_PINS_SHOW, Tr(L"Mostrar todas"));
+    AppendMenuW(m, MF_STRING | has, IDM_PINS_HIDE, Tr(L"Ocultar todas"));
+    AppendMenuW(m, MF_STRING | has, IDM_PINS_CLOSE, Tr(L"Fechar todas"));
+    AppendMenuW(m, MF_STRING | has, IDM_PINS_CLICKTHROUGH, Tr(L"Desligar \"atravessar cliques\""));
+    auto hist = g.pins.History();
+    AppendMenuW(m, MF_STRING | (hist.empty() ? MF_GRAYED : 0), IDM_PINS_REOPEN, Tr(L"Reabrir a última fechada"));
+    if (!hist.empty()) {
+        HMENU h = CreatePopupMenu();
+        for (size_t i = 0; i < hist.size() && i < 10; i++) {
+            WIN32_FILE_ATTRIBUTE_DATA fa{};
+            GetFileAttributesExW(hist[i].c_str(), GetFileExInfoStandard, &fa);
+            SYSTEMTIME st, lt; FileTimeToSystemTime(&fa.ftLastWriteTime, &st); SystemTimeToTzSpecificLocalTime(nullptr, &st, &lt);
+            AppendMenuW(h, MF_STRING, IDM_PIN_HISTORY_BASE + i, Format(L"%02d/%02d %02d:%02d", lt.wDay, lt.wMonth, lt.wHour, lt.wMinute).c_str());
+        }
+        AppendMenuW(m, MF_POPUP, (UINT_PTR)h, Tr(L"Histórico"));
+    }
+}
+
+HICON MakeBusyIcon() {                            // the app icon with a red dot (interval capture running)
+    int s = GetSystemMetrics(SM_CXSMICON);
+    Image img(s, s, 0);
+    {
+        HBITMAP hb = img.ToHBITMAP();
+        HDC dc = CreateCompatibleDC(nullptr);
+        HGDIOBJ o = SelectObject(dc, hb);
+        DrawIconEx(dc, 0, 0, g.iconSmall, s, s, 0, nullptr, DI_NORMAL);
+        SelectObject(dc, o); DeleteDC(dc);
+        img = Image::FromHBITMAP(hb);
+        DeleteObject(hb);
+    }
+    int r = s * 3 / 8;
+    for (int y = 0; y < s; y++)
+        for (int x = 0; x < s; x++) {
+            float dx = x + 0.5f - (s - r), dy = y + 0.5f - (s - r);
+            if (dx * dx + dy * dy <= r * r) img.at(x, y) = 0xFFE53935;
+        }
+    HBITMAP color = img.ToHBITMAP();
+    HBITMAP mask = CreateBitmap(s, s, 1, 1, nullptr);
+    ICONINFO ii{ TRUE, 0, 0, mask, color };
+    HICON ic = CreateIconIndirect(&ii);
+    DeleteObject(color); DeleteObject(mask);
+    return ic;
+}
+
+void UpdateTrayStatus(bool busy, int count) {
+    if (busy && !g.iconBusy) g.iconBusy = MakeBusyIcon();
+    g.nid.hIcon = busy && g.iconBusy ? g.iconBusy : g.iconSmall;
+    g.nid.uFlags = NIF_ICON | NIF_TIP;
+    std::wstring tip = busy ? Format(Tr(L"Snapnab — captura por intervalo: %d imagem(ns)"), count) : std::wstring(Tr(L"Snapnab — clique para capturar"));
+    wcsncpy_s(g.nid.szTip, tip.c_str(), _TRUNCATE);
+    Shell_NotifyIconW(NIM_MODIFY, &g.nid);
+    g.nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+}
+
 // ---------------------------------------------------------------- One Click
 void SetOneClick(bool on) {
     RegSetDword(L"OneClickEnabled", on);
@@ -757,6 +1022,7 @@ void OneClickMenu(POINT pt) {
     HMENU m = CreatePopupMenu();
     AppendMenuW(m, MF_STRING, IDM_CAPTURE_IMAGE, Tr(L"Capturar imagem"));
     AppendMenuW(m, MF_STRING, IDM_CAPTURE_VIDEO, Tr(L"Gravar vídeo"));
+    AppendMenuW(m, MF_STRING, IDM_RECORD_AUDIO, Tr(L"Gravar só o áudio"));
     HMENU pre = CreatePopupMenu();
     PresetsSubmenu(pre);
     AppendMenuW(m, MF_POPUP, (UINT_PTR)pre, Tr(L"Presets"));
@@ -796,17 +1062,89 @@ void OnIpc(const ipc::Message& m) {
     case ipc::EditorStartCapture: StartCapture(FirstOfKind(m.ivalue == 1 ? CaptureKind::Video : CaptureKind::Image)); break;
     case ipc::EditorClosed: Log(L"Editor closed"); break;
     case ipc::ReloadConfig: g.store.Load(); FillPresetList(); LoadControls(); break;
+    case ipc::PinFile: if (!m.text.empty() && !g.pins.PinFile(m.text)) Log(L"Pin: could not open %s", m.text.c_str()); break;
     default: break;
     }
 }
 
-// ---------------------------------------------------------------- command line (G3)
+// ---------------------------------------------------------------- command line (G3, C44)
+// monitors in reading order (left to right, top to bottom) for /monitor n
+std::vector<RECT> Monitors() {
+    std::vector<RECT> v;
+    EnumDisplayMonitors(nullptr, nullptr, [](HMONITOR, HDC, LPRECT r, LPARAM p) -> BOOL { ((std::vector<RECT>*)p)->push_back(*r); return TRUE; }, (LPARAM)&v);
+    std::sort(v.begin(), v.end(), [](const RECT& a, const RECT& b) { return a.left != b.left ? a.left < b.left : a.top < b.top; });
+    return v;
+}
+
+// the visible top-level window whose title contains the text (case-insensitive)
+HWND FindWindowByTitle(const std::wstring& text) {
+    struct Ctx { std::wstring t; HWND found; } ctx{ ToLower(text), nullptr };
+    EnumWindows([](HWND h, LPARAM p) -> BOOL {
+        auto* c = (Ctx*)p;
+        // owned windows count when they have a title bar (dialogs); tool windows and pop-ups do not
+        if (!IsWindowVisible(h) || IsIconic(h) || (GetWindow(h, GW_OWNER) && !(GetWindowLongW(h, GWL_STYLE) & WS_CAPTION))) return TRUE;
+        DWORD pid = 0; GetWindowThreadProcessId(h, &pid);
+        if (pid == GetCurrentProcessId()) return TRUE;
+        wchar_t b[512]; GetWindowTextW(h, b, 512);
+        if (b[0] && ToLower(b).find(c->t) != std::wstring::npos) { c->found = h; return FALSE; }
+        return TRUE;
+    }, (LPARAM)&ctx);
+    return ctx.found;
+}
+
 void ProcessCommandLine(const std::wstring& cmdLine, bool startup) {
     auto args = SplitCommandLine(cmdLine);
+    if (!args.empty()) Log(L"Command line: %zu argument(s), first %s", args.size(), args[0].c_str());
     bool hide = false, handled = false;
+    // automation (C44): an area, a tool and an output combine into one capture
+    Preset req = FirstOfKind(CaptureKind::Image);
+    req.kind = CaptureKind::Image;
+    bool doCapture = false, toolChosen = false;
+    std::wstring output;
+    auto area = [&](RECT r) {
+        req.selection = Selection::Region; req.regionFixed = true; req.regionUsePos = true;
+        req.regionX = r.left; req.regionY = r.top; req.fixedW = r.right - r.left; req.fixedH = r.bottom - r.top;
+        doCapture = true;
+    };
+    auto next = [&](size_t& i) -> std::wstring { return i + 1 < args.size() ? args[++i] : L""; };
     for (size_t i = 0; i < args.size(); i++) {
         std::wstring a = ToLower(args[i]);
-        if (a == L"/hide" || a == L"/tray") hide = true;
+        if (a == L"/region") {
+            int x, y, w, h;
+            std::wstring v = next(i);
+            if (swscanf_s(v.c_str(), L"%d,%d,%d,%d", &x, &y, &w, &h) == 4 && w > 1 && h > 1) area({ x, y, x + w, y + h });
+            else TrayNotify(L"Snapnab", Tr(L"/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."));
+            handled = true;
+        } else if (a == L"/window") {
+            std::wstring t = next(i);
+            HWND w = t.empty() ? nullptr : FindWindowByTitle(t);
+            if (w) area(WindowFrameRect(w));
+            else { Log(L"Command line: no window titled '%s'", t.c_str()); TrayNotify(L"Snapnab", Tr(L"Nenhuma janela com esse título: ") + t); }
+            handled = true;
+        } else if (a == L"/monitor") {
+            int n = _wtoi(next(i).c_str());
+            auto mons = Monitors();
+            if (n >= 1 && n <= (int)mons.size()) area(mons[n - 1]); else TrayNotify(L"Snapnab", Format(Tr(L"Monitor %d não existe (há %zu)."), n, mons.size()));
+            handled = true;
+        } else if (a == L"/fullscreen") { req.selection = Selection::FullScreen; doCapture = true; handled = true; }
+        else if (a == L"/delay") { req.delaySeconds = std::clamp(_wtoi(next(i).c_str()), 0, 600); }
+        else if (a == L"/ocr") { SetShare(req, ShareText); toolChosen = true; doCapture = true; handled = true; }
+        else if (a == L"/qr") { SetShare(req, ShareQr); toolChosen = true; doCapture = true; handled = true; }
+        else if (a == L"/upload") { SetShare(req, ShareUpload); toolChosen = true; doCapture = true; handled = true; }
+        else if (a == L"/pin") {
+            std::wstring f = i + 1 < args.size() && args[i + 1][0] != L'/' ? args[++i] : L"";
+            if (!f.empty()) { if (!g.pins.PinFile(f)) TrayNotify(L"Snapnab", Tr(L"Não foi possível fixar: ") + f); }
+            else { SetShare(req, SharePin); toolChosen = true; doCapture = true; }
+            handled = true;
+        } else if (a == L"/pinclipboard") { g.pins.PinClipboard(); handled = true; }
+        else if (a == L"/colorpicker") { RunColorPicker(); handled = true; }
+        else if (a == L"/focus") { g.focus.Toggle(); handled = true; }
+        else if (a == L"/interval") {
+            std::wstring v = ToLower(next(i));
+            if (v == L"stop") g.interval.Stop(); else g.interval.Start();
+            handled = true;
+        } else if (a == L"/output") { output = next(i); }
+        else if (a == L"/hide" || a == L"/tray") hide = true;
         else if (a == L"/capture") { StartCapture(FirstOfKind(CaptureKind::Image)); handled = true; }
         else if (a == L"/video") { StartCapture(FirstOfKind(CaptureKind::Video)); handled = true; }
         else if (a == L"/preset" && i + 1 < args.size()) {
@@ -816,14 +1154,36 @@ void ProcessCommandLine(const std::wstring& cmdLine, bool startup) {
         else if (a == L"/exit") { PostMessageW(g.frame, WM_COMMAND, IDM_EXIT, 0); handled = true; }
         else if (a == L"/help" || a == L"/?") {
             MessageBoxW(nullptr, Tr(L"Snapnab.exe [opções]\n\n"
-                L"/hide            inicia só na bandeja\n"
-                L"/capture         captura imagem com o preset de imagem atual\n"
-                L"/video           grava vídeo com o preset de vídeo atual\n"
-                L"/preset \"nome\"   executa um preset pelo nome\n"
-                L"/clipboard       captura a imagem da área de transferência\n"
-                L"/exit            encerra o Snapnab em execução"), Tr(L"Snapnab — linha de comando"), MB_ICONINFORMATION);
+                L"/hide                 inicia só na bandeja\n"
+                L"/capture              captura imagem com o preset de imagem atual\n"
+                L"/video                grava vídeo com o preset de vídeo atual\n"
+                L"/preset \"nome\"        executa um preset pelo nome\n"
+                L"/clipboard            captura a imagem da área de transferência\n"
+                L"/region x,y,l,a       captura essa área da tela\n"
+                L"/window \"título\"      captura a janela cujo título contém o texto\n"
+                L"/monitor n            captura o monitor n (1, 2…, da esquerda para a direita)\n"
+                L"/fullscreen           captura a tela inteira\n"
+                L"/delay s              espera s segundos antes de capturar\n"
+                L"/ocr  /qr  /upload    reconhece o texto, lê o código QR ou envia a captura\n"
+                L"/pin [arquivo]        fixa o arquivo na tela (sem arquivo: captura e fixa)\n"
+                L"/pinclipboard         fixa o conteúdo da área de transferência\n"
+                L"/colorpicker          abre o conta-gotas de tela\n"
+                L"/focus                liga ou desliga o foco de tela\n"
+                L"/interval [stop]      inicia (ou para) a captura por intervalo\n"
+                L"/output clipboard|editor|none|\"arquivo\"   para onde vai a captura\n"
+                L"/exit                 encerra o Snapnab em execução"), Tr(L"Snapnab — linha de comando"), MB_ICONINFORMATION);
             handled = true;
         }
+    }
+    if (doCapture) {
+        std::wstring o = ToLower(output);
+        if (o == L"clipboard") { req.outputClipboardOnly = true; req.previewInEditor = false; }
+        else if (o == L"editor") req.previewInEditor = true;
+        else if (o == L"none") req.previewInEditor = false;
+        else if (!output.empty()) { req.outputPath = output; req.previewInEditor = false; }
+        else if (toolChosen) req.previewInEditor = false;
+        if (toolChosen || !output.empty()) req.saveToFile = false;
+        StartCapture(req);
     }
     if (!handled && (!startup || (!hide && RegGetDword(L"ShowCaptureWindow", 1)))) ShowFrame();
 }
@@ -861,7 +1221,8 @@ void CreateControls() {
     MakeCtl(IDC_SHARE_LABEL, L"STATIC", Tr(L"Compartilhar:"), SS_LEFT | SS_CENTERIMAGE);
     HWND sh = MakeCtl(IDC_SHARE, kCombo, nullptr, WS_TABSTOP);
     style(IDC_SHARE, ComboGear);
-    for (auto s : { Tr(L"Nenhum"), Tr(L"Arquivo"), Tr(L"Programa externo"), Tr(L"Texto (OCR)") }) ComboBox_AddString(sh, s);
+    for (auto s : { Tr(L"Nenhum"), Tr(L"Arquivo"), Tr(L"Programa externo"), Tr(L"Texto (OCR)"), Tr(L"Fixar na tela"), Tr(L"Ler código QR"),
+                    L"Word", L"PowerPoint", L"Excel", L"OneNote", Tr(L"Upload (copiar o link)") }) ComboBox_AddString(sh, s);
     MakeCtl(IDC_QUALITY_LABEL, L"STATIC", Tr(L"Qualidade:"), SS_LEFT | SS_CENTERIMAGE);
     HWND q = MakeCtl(IDC_QUALITY, kCombo, nullptr, WS_TABSTOP);
     style(IDC_QUALITY, ComboGear);
@@ -1024,6 +1385,8 @@ HMENU BuildMenu() {
     AppendMenuW(file, MF_STRING, IDM_SETTINGS_IMPORT, Tr(L"Importar t&odas as configurações…"));
     AppendMenuW(file, MF_STRING, IDM_SETTINGS_BACKUPS, Tr(L"Abrir a pasta de &backups"));
     AppendMenuW(file, MF_SEPARATOR, 0, nullptr);
+    AppendMenuW(file, MF_STRING, IDM_UPLOAD_SETTINGS, Tr(L"Configurar o &upload…"));
+    AppendMenuW(file, MF_STRING, IDM_CLEANUP_NOW, Tr(L"&Limpar a biblioteca agora"));
     AppendMenuW(file, MF_STRING, IDM_OPTIONS, Tr(L"&Opções…"));
     AppendMenuW(file, MF_SEPARATOR, 0, nullptr);
     AppendMenuW(file, MF_STRING, IDM_EXIT, Tr(L"&Sair do Snapnab"));
@@ -1034,6 +1397,21 @@ HMENU BuildMenu() {
     AppendMenuW(cap, MF_SEPARATOR, 0, nullptr);
     AppendMenuW(cap, MF_STRING, IDM_CAPTURE_CLIPBOARD, Tr(L"Da área de &transferência"));
     AppendMenuW(cap, MF_STRING, IDM_CAPTURE_FILE, Tr(L"De um &arquivo gráfico…"));
+    AppendMenuW(cap, MF_SEPARATOR, 0, nullptr);
+    AppendMenuW(cap, MF_STRING, IDM_COLOR_PICKER, Tr(L"&Conta-gotas de tela"));
+    AppendMenuW(cap, MF_STRING, IDM_QR_REGION, Tr(L"Ler código &QR"));
+    {
+        HMENU pins = CreatePopupMenu();
+        AppendMenuW(pins, MF_STRING, IDM_CAPTURE_PIN, Tr(L"Capturar e fixar"));
+        AppendMenuW(pins, MF_STRING, IDM_PIN_CLIPBOARD, Tr(L"Fixar da área de transferência"));
+        AppendMenuW(pins, MF_STRING, IDM_PIN_FILE, Tr(L"Fixar um arquivo…"));
+        AppendMenuW(pins, MF_STRING, IDM_PINS_CLOSE, Tr(L"Fechar todas"));
+        AppendMenuW(cap, MF_POPUP, (UINT_PTR)pins, Tr(L"&Fixar na tela"));
+    }
+    AppendMenuW(cap, MF_STRING, IDM_INTERVAL, Tr(L"Captura por &intervalo…"));
+    AppendMenuW(cap, MF_STRING, IDM_FOCUS, Tr(L"F&oco de tela (apresentações)"));
+    AppendMenuW(cap, MF_STRING, IDM_RECORD_AUDIO, Tr(L"Gravar só o á&udio"));
+    AppendMenuW(cap, MF_STRING, IDM_AUDIO_FOLDER, Tr(L"Abrir a pasta dos áudios"));
     HMENU view = CreatePopupMenu();
     AppendMenuW(view, MF_STRING, IDM_ONECLICK, Tr(L"Mostrar o &One Click"));
     AppendMenuW(view, MF_STRING, IDM_SHOW_PRESETS, Tr(L"Lista de &presets"));
@@ -1053,9 +1431,19 @@ void TrayMenu() {
     HMENU m = CreatePopupMenu();
     AppendMenuW(m, MF_STRING, IDM_CAPTURE_IMAGE, Tr(L"Capturar imagem"));
     AppendMenuW(m, MF_STRING, IDM_CAPTURE_VIDEO, Tr(L"Gravar vídeo"));
+    AppendMenuW(m, MF_STRING, IDM_RECORD_AUDIO, Tr(L"Gravar só o áudio"));
     HMENU pre = CreatePopupMenu();
     PresetsSubmenu(pre);
     AppendMenuW(m, MF_POPUP, (UINT_PTR)pre, Tr(L"Presets"));
+    AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
+    AppendMenuW(m, MF_STRING, IDM_COLOR_PICKER, Tr(L"Conta-gotas de tela"));
+    AppendMenuW(m, MF_STRING, IDM_QR_REGION, Tr(L"Ler código QR"));
+    HMENU pins = CreatePopupMenu();
+    PinsSubmenu(pins);
+    AppendMenuW(m, MF_POPUP, (UINT_PTR)pins, g.pins.count() ? Format(Tr(L"Imagens fixadas (%zu)"), g.pins.count()).c_str() : Tr(L"Imagens fixadas"));
+    AppendMenuW(m, MF_STRING, IDM_INTERVAL, g.interval.running() ? Format(Tr(L"Parar a captura por intervalo (%d)"), g.interval.count()).c_str()
+                                                                  : Tr(L"Captura por intervalo…"));
+    AppendMenuW(m, MF_STRING | (g.focus.active() ? MF_CHECKED : 0), IDM_FOCUS, Tr(L"Foco de tela (apresentações)"));
     AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
     AppendMenuW(m, MF_STRING, IDM_SHOW, Tr(L"Abrir a janela de captura"));
     AppendMenuW(m, MF_STRING | (g.oneClick.enabled() ? MF_CHECKED : 0), IDM_ONECLICK, Tr(L"Mostrar o One Click"));
@@ -1339,13 +1727,36 @@ void OnCommand(int id, int code) {
     if (id >= IDM_PRESET_BASE && id < IDM_PRESET_BASE + (int)g.store.presets.size()) {
         StartCapture(g.store.presets[id - IDM_PRESET_BASE]); return;
     }
+    if (id >= IDM_PIN_HISTORY_BASE && id < IDM_PIN_HISTORY_BASE + 10) { g.pins.ReopenHistory(id - IDM_PIN_HISTORY_BASE); return; }
     switch (id) {
+    case IDM_COLOR_PICKER: RunColorPicker(); return;
+    case IDM_QR_REGION: StartCapture(ToolPreset(ShareQr)); return;
+    case IDM_CAPTURE_PIN: StartCapture(ToolPreset(SharePin)); return;
+    case IDM_PIN_CLIPBOARD: g.pins.PinClipboard(); return;
+    case IDM_PIN_FILE: PinFromFile(); return;
+    case IDM_PINS_SHOW: g.pins.ShowAll(true); return;
+    case IDM_PINS_HIDE: g.pins.ShowAll(false); return;
+    case IDM_PINS_CLOSE: g.pins.CloseAll(); return;
+    case IDM_PINS_REOPEN: g.pins.ReopenLast(); return;
+    case IDM_PINS_CLICKTHROUGH: g.pins.ClickThroughOffAll(); return;
+    case IDM_INTERVAL: if (g.interval.running()) g.interval.Stop(); else g.interval.Setup(g.frame); return;
+    case IDM_FOCUS: g.focus.Toggle(); return;
+    case IDM_UPLOAD_SETTINGS: upload::ConfigureDialog(g.frame); return;
+    case IDM_CLEANUP_NOW: {
+        if (MessageBoxW(g.frame, Format(Tr(L"Remover agora as capturas com mais de %u dias (com as regras das Opções)?"), RegGetDword(L"CleanupDays", 30)).c_str(),
+                        L"Snapnab", MB_YESNO | MB_ICONQUESTION) != IDYES) return;
+        int n = CleanupLibrary((int)RegGetDword(L"CleanupDays", 30), RegGetDword(L"CleanupKeepNamed", 1) != 0, RegGetDword(L"CleanupKeepTagged", 1) != 0,
+                               RegGetDword(L"CleanupRecycle", 1) != 0);
+        g.ipc.SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
+        TrayNotify(L"Snapnab", Format(Tr(L"%d captura(s) removida(s) da biblioteca."), n));
+        return;
+    }
     case IDC_PRESETS:
         if (code == LBN_SELCHANGE) SelectPreset(ListBox_GetCurSel(C(IDC_PRESETS)));
         else if (code == LBN_DBLCLK) StartCapture(Cur());
         break;
     case IDC_PRESET_ADD: AddPresetMenu(); break;
-    case IDM_PRESET_FROM_CURRENT: { Preset p = Cur(); p.name = Cur().name + Tr(L" (cópia)"); AddPreset(p, Tr(L"Novo preset com as configurações atuais")); break; }
+    case IDM_PRESET_FROM_CURRENT: { Preset p = Cur(); p.name = Tr(Cur().name) + Tr(L" (cópia)"); AddPreset(p, Tr(L"Novo preset com as configurações atuais")); break; }
     case IDM_PRESET_NEW: {
         Preset p; p.name = Format(Tr(L"Preset %zu"), g.store.presets.size() + 1);
         p.kind = Cur().kind; if (p.kind == CaptureKind::Video) p.captureCursor = true;
@@ -1355,7 +1766,7 @@ void OnCommand(int id, int code) {
     case IDM_PRESET_HELP: PresetHelp(); break;
     case IDM_PRESET_RUN: StartCapture(Cur()); break;
     case IDM_PRESET_DUP: {
-        Preset p = Cur(); p.name += Tr(L" (cópia)"); p.hotkeyMods = p.hotkeyVk = 0; p.builtin.clear();
+        Preset p = Cur(); p.name = Tr(p.name) + Tr(L" (cópia)"); p.hotkeyMods = p.hotkeyVk = 0; p.builtin.clear();
         g.store.presets.push_back(p);
         g.store.selected = (int)g.store.presets.size() - 1;
         g.store.Save(); FillPresetList(); LoadControls(); Layout(); ResizeToContent();
@@ -1394,13 +1805,23 @@ void OnCommand(int id, int code) {
         break;
     case IDC_SHARE:
         if (code == CBN_SELCHANGE) {
-            SetShare(Cur(), (Share)std::max(0, ComboBox_GetCurSel(C(IDC_SHARE))));
+            Share chosen = (Share)std::max(0, ComboBox_GetCurSel(C(IDC_SHARE)));
+            if (chosen >= ShareWord && chosen <= ShareOneNote && !office::Available((office::Target)(chosen - ShareWord)))
+                MessageBoxW(g.frame, Format(Tr(L"O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."),
+                                            office::TargetName((office::Target)(chosen - ShareWord))).c_str(), L"Snapnab", MB_ICONINFORMATION);
+            SetShare(Cur(), chosen);
             g.store.Save();
             LoadControls();
+            if (chosen == ShareUpload && !upload::Settings::Load().Configured()) upload::ConfigureDialog(g.frame);
         } else if (code == mui::MUI_GEARCLICK) {
             Share s = ShareOf(Cur());
             if (s == ShareFile) EditFileOutput();
             else if (s == ShareProgram) EditProgramOutput();
+            else if (s == ShareUpload) upload::ConfigureDialog(g.frame);
+            else if (s == SharePowerPoint) {
+                std::vector<ui::Field> f = { ui::Field::MakeCheck(Tr(L"Cada captura num slide novo (desligado: no slide atual)"), RegGetDword(L"OfficeNewSlide", 1) != 0) };
+                if (ui::RunForm(g.frame, L"PowerPoint", f)) RegSetDword(L"OfficeNewSlide", f[0].value);
+            }
         }
         break;
     case IDC_QUALITY:
@@ -1418,6 +1839,13 @@ void OnCommand(int id, int code) {
     case IDM_ONECLICK: SetOneClick(!g.oneClick.enabled()); break;
     case IDM_CAPTURE_IMAGE: StartCapture(FirstOfKind(CaptureKind::Image)); break;
     case IDM_CAPTURE_VIDEO: StartCapture(FirstOfKind(CaptureKind::Video)); break;
+    case IDM_RECORD_AUDIO: {                     // audio only (C32): the first video preset's audio settings, no video
+        Preset p = FirstOfKind(CaptureKind::Video);
+        p.audioOnly = true; p.delaySeconds = 0; p.webcam = false;
+        StartCapture(p);
+        break;
+    }
+    case IDM_AUDIO_FOLDER: ShellExecuteW(nullptr, L"open", AudioDir().c_str(), nullptr, nullptr, SW_SHOWNORMAL); break;
     case IDM_REPEAT: if (g.haveLast) StartCapture(g.lastPreset); else StartCapture(Cur()); break;
     case IDM_CAPTURE_CLIPBOARD: { Preset p = FirstOfKind(CaptureKind::Image); p.selection = Selection::Clipboard; p.delaySeconds = 0; StartCapture(p); break; }
     case IDM_CAPTURE_FILE: { Preset p = FirstOfKind(CaptureKind::Image); p.selection = Selection::File; p.delaySeconds = 0; StartCapture(p); break; }
@@ -1582,6 +2010,11 @@ LRESULT CALLBACK FrameProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         break;
     case WM_TIMER:
         if (w == kTrayClickTimer) { KillTimer(h, kTrayClickTimer); StartCapture(Cur()); return 0; }
+        if (w == 9) {                                 // automatic library cleanup (C41): soon after the start, then every 6 h
+            SetTimer(h, 9, 6 * 3600 * 1000, nullptr);
+            if (CleanupLibraryNow() > 0) g.ipc.SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
+            return 0;
+        }
         if (w == 7) {
             POINT p; GetCursorPos(&p);
             if (WindowFromPoint(p) != C(IDC_CAPTURE)) { g.hoverCapture = false; KillTimer(h, 7); InvalidateRect(C(IDC_CAPTURE), nullptr, FALSE); }
@@ -1596,6 +2029,11 @@ LRESULT CALLBACK FrameProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         }
         else if (id == HK_VIDEO_PAUSE) g.engine.VideoStartPauseResume();
         else if (id == HK_VIDEO_STOP) g.engine.VideoStop();
+        else if (id == HK_VIDEO_ZOOM) g.engine.VideoToggleZoom();
+        else if (id == HK_COLOR) RunColorPicker();
+        else if (id == HK_CAPTURE_PIN) StartCapture(ToolPreset(SharePin));
+        else if (id == HK_PIN_CLIP) g.pins.PinClipboard();
+        else if (id == HK_FOCUS) g.focus.Toggle();
         else if (id >= HK_PRESET_BASE && id - HK_PRESET_BASE < (int)g.store.presets.size()) StartCapture(g.store.presets[id - HK_PRESET_BASE]);
         return 0;
     }
@@ -1642,6 +2080,9 @@ LRESULT CALLBACK FrameProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         Shell_NotifyIconW(NIM_DELETE, &g.nid);
         g.hk.Clear();
         g.oneClick.Show(false);
+        g.focus.Stop();
+        g.interval.Stop();
+        g.overlay.CloseAll();
         g.ipc.SendInt(ipc::kEditor, ipc::CloseEditorIfHidden, 0);
         PostQuitMessage(0);
         return 0;
@@ -1655,7 +2096,9 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE, LPWSTR, int) {
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
     // single instance: mutex + "SnapnabUI" window; the second instance forwards the command line (WM_COPYDATA)
     WaitForPreviousInstance(kCaptureWndClass);
-    if (ForwardToExistingInstance(kCaptureMutex, kCaptureWndClass, &g.mutex)) return 0;
+    // forwarded: this process ends right away, without the DLL unload notifications (third-party overlays injected
+    // into every process, such as NahimicOSD.dll, crashed in them when the process ended this early)
+    if (ForwardToExistingInstance(kCaptureMutex, kCaptureWndClass, &g.mutex)) TerminateProcess(GetCurrentProcess(), 0);
     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
     INITCOMMONCONTROLSEX icc{ sizeof(icc), ICC_STANDARD_CLASSES | ICC_UPDOWN_CLASS | ICC_HOTKEY_CLASS | ICC_LISTVIEW_CLASSES };
     InitCommonControlsEx(&icc);
@@ -1697,6 +2140,7 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE, LPWSTR, int) {
     AddClipboardFormatListener(frame);
     g.lastClipSeq = GetClipboardSequenceNumber();
 
+    CleanDesktop::RestoreAfterCrash();          // desktop icons / notifications left hidden by a crash (C16)
     // automatic backup of the settings, once a week (the last 5 are kept)
     std::wstring backup = settings::AutoBackup();
     if (!backup.empty()) Log(L"Settings backup: %s", backup.c_str());
@@ -1711,6 +2155,32 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE, LPWSTR, int) {
         SetVideoHotkeys(busy && g.lastPreset.kind == CaptureKind::Video);
         g.oneClick.SetBusy(busy);
     };
+    g.engine.onPin = [](const Image& img, const std::wstring& title, const POINT* at) { g.pins.Pin(img, title, at); };
+    g.engine.onReadQr = ShowQrResults;
+    g.engine.onOffice = SendToOffice;
+    g.engine.onUpload = UploadCapture;
+    g.engine.onOverlay = [](const Image& img, const std::wstring& lib, bool video, const std::wstring& title) { g.overlay.Show(img, lib, video, title); };
+    g.overlay.annotate = [](const std::wstring& lib) { g.engine.DeliverToEditor(lib); };
+    g.overlay.pin = [](const Image& img, const std::wstring& title) { g.pins.Pin(img, title); };
+    g.overlay.readQr = ShowQrResults;
+    g.overlay.upload = [](const std::wstring& lib, const Image& img) { UploadCapture(img, lib, FileNameOf(lib)); };
+    g.overlay.notify = TrayNotify;
+    g.overlay.libraryChanged = [] { g.ipc.SendInt(ipc::kEditor, ipc::LibraryChanged, 0); };
+    g.pins.notify = TrayNotify;
+    g.pins.readQr = ShowQrResults;
+    g.pins.openInEditor = [](const std::wstring& path) { g.ipc.SendInt(ipc::kEditor, ipc::LibraryChanged, 0); g.engine.DeliverToEditor(path); };
+    g.interval.notify = TrayNotify;
+    g.interval.onStatus = UpdateTrayStatus;
+    SetTimer(frame, 9, 30000, nullptr);          // first library cleanup half a minute after the start
+    // recordings cut short by a crash or a power loss (C14): finished now and put in the library
+    {
+        auto recovered = Recorder::RecoverInterrupted();
+        if (!recovered.empty()) {
+            g.ipc.SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
+            TrayNotify(Tr(L"Snapnab — gravação recuperada"),
+                       Format(Tr(L"%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."), recovered.size()) + L"\n" + FileNameOf(recovered[0]));
+        }
+    }
     g.oneClick.onCapture = [] { StartCapture(Cur()); };
     g.oneClick.onMenu = OneClickMenu;
     if (RegGetDword(L"OneClickEnabled", 0)) g.oneClick.Show(true);

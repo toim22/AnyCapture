@@ -10,5 +10,6 @@
 *.ico  binary
 *.png  binary
 *.jpg  binary
+*.webp binary
 *.docx binary
 *.zip  binary

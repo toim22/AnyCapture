@@ -2,6 +2,7 @@
 #pragma once
 #include "Document.h"
 #include "Cv.h"
+#include "Ocr.h"
 
 namespace snap::ed {
 
@@ -41,6 +42,7 @@ public:
     std::function<void(bool inside, Gdiplus::PointF p)> onCursorMoved;   // cursor position in image pixels (rulers on)
     std::function<void(const std::wstring&)> onHint;                     // short message for the status bar
     std::function<void(POINT screen)> onContextMenu;                     // right click (after selecting the object below)
+    bool drawHold = true;       // Pen: drawing a rough shape and holding still turns it into the clean shape (C23)
 
     void Create(HWND parent);
     void SetDocument(Document* d);
@@ -113,8 +115,28 @@ public:
     void SetEffectPreview(std::shared_ptr<Image> img) { fxPreview_ = std::move(img); InvalidateRect(hwnd, nullptr, FALSE); }
     bool HasEffectPreview() const { return fxPreview_ != nullptr; }
     void Nudge(int dx, int dy);
+    // text-only areas (C12): recomputes the word boxes of the objects that have "text only" on
+    void RefreshTextBoxes(const std::vector<int>& idx);
 
 private:
+    // C12: OCR words of the current base image (computed on demand, once per image)
+    std::vector<OcrLine> ocrLines_;
+    std::weak_ptr<const Image> ocrBase_;
+    bool ocrTried_ = false;
+    const std::vector<OcrLine>& OcrText();
+    void UpdateTextBoxes(DrawObj& o);
+    bool SnapHighlighter(DrawObj& o);         // smart highlighter: snaps to the text lines (one rectangle or a group)
+    // C23: draw & hold
+    bool holdShape_ = false;
+    void RecognizeHold();
+    // C43: pen and touch
+    float penPressure_ = -1;                  // pressure of the pen in contact (-1 = mouse)
+    Tool toolBeforeEraser_ = Tool::Count;     // the pen's eraser end switches to the Eraser for that stroke
+    bool touchInput_ = false;                 // last input came from touch or pen: bigger handles
+    ULONGLONG gestureArg_ = 0;
+    POINT gestureLast_{};
+    int HandleSize() const { return touchInput_ ? 10 : 5; }
+
     static LRESULT CALLBACK Proc(HWND, UINT, WPARAM, LPARAM);
     LRESULT Handle(UINT m, WPARAM w, LPARAM l);
     void Paint(HDC dc);
@@ -141,6 +163,7 @@ private:
     Gdiplus::PointF eraseLast_{};
     bool eraseShift_ = false;           // Shift held during the stroke: straight line from eraseAnchor_ (axis in axisLock_)
     Gdiplus::PointF eraseAnchor_{};
+    int penAnchor_ = -1;                // Shift held during a pen stroke: index of the point the straight segment starts at
 
     Image composed_, display_;
     std::shared_ptr<Image> fxPreview_;

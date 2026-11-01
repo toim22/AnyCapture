@@ -1,6 +1,9 @@
 #include "CaptureEngine.h"
+#include "Clipboard.h"
 #include "Cv.h"
+#include "Hdr.h"
 #include "Ocr.h"
+#include "Sounds.h"
 #include "Ui.h"
 #include <dwmapi.h>
 
@@ -22,6 +25,8 @@ void CaptureEngine::SetState(State s) {
     Log(L"CaptureEngine: %s → %s", StateName(state_), StateName(s));
     bool wasBusy = state_ != Idle;
     state_ = s;
+    stateSince_ = GetTickCount64();
+    if (s == Idle) clean_.End();                  // desktop icons / notifications back as they were
     if (onBusyChanged && wasBusy != (s != Idle)) onBusyChanged(s != Idle);
 }
 
@@ -76,14 +81,35 @@ void CaptureEngine::ShowDelay(int seconds, std::function<void()> then) {
 }
 
 // ---------------------------------------------------------------- input
+// Something of the capture still on the screen (selection, delay, recording HUD, panoramic bar) or running.
+bool CaptureEngine::UiAlive() {
+    if (recorder.state() != Recorder::Idle || (hud_.hwnd() && IsWindow(hud_.hwnd()))) return true;
+    for (const wchar_t* cls : { L"SnapnabSelectWindowClass", L"SnapnabDelay", L"SnapnabPanoBar", L"SnapnabCountdown" })
+        if (FindWindowW(cls, nullptr)) return true;
+    return GetTickCount64() - stateSince_ < 15000;     // a capture being processed (scrolling, effects, outputs)
+}
+
 bool CaptureEngine::Activate(const Preset& preset) {
     if (state_ != Idle) {
-        Log(L"CaptureEngine: busy (%s), activation ignored", StateName(state_));
-        return false;
+        if (UiAlive()) {
+            Log(L"CaptureEngine: busy (%s), activation ignored", StateName(state_));
+            return false;
+        }
+        // nothing of a capture left on the screen: a capture that ended without coming back to Idle would block every
+        // new one until Snapnab restarted (the record button "stopped working")
+        Log(L"CaptureEngine: stale state %s with nothing on the screen, reset", StateName(state_));
+        recorder.StopMonitor();
+        hud_.Hide();
+        StopWebcam();
+        frozen_ = Image(); cursorImg_ = Image();
+        SetState(Idle);
     }
     preset_ = preset;
+    Log(L"CaptureEngine: preset \"%s\"%s", preset_.name.c_str(), preset_.effects.Any() ? L" with effects" : L"");
     SetState(Activated);
     if (frame_ && IsWindowVisible(frame_)) ShowWindow(frame_, SW_HIDE);
+    // the screen-based selections: desktop icons hidden before the screen is frozen (C16)
+    if (preset_.selection != Selection::Clipboard && preset_.selection != Selection::File) clean_.Begin(preset_.kind == CaptureKind::Video);
     int delay = preset_.kind == CaptureKind::Image ? preset_.delaySeconds : 0;
     if (preset_.selection == Selection::Menu && delay == 0) delay = 3;        // time to open the menu
     auto go = [this] {
@@ -99,10 +125,57 @@ bool CaptureEngine::Activate(const Preset& preset) {
     return true;
 }
 
+// the cursor as an image with transparency: drawn over black and over white, the difference gives the alpha (also
+// for the old monochrome cursors, which have no alpha of their own)
+static Image CursorBitmap(HCURSOR hc, POINT& hotspot) {
+    ICONINFO ii{};
+    if (!GetIconInfo(hc, &ii)) return {};
+    BITMAP bm{};
+    GetObjectW(ii.hbmColor ? ii.hbmColor : ii.hbmMask, sizeof bm, &bm);
+    int w = bm.bmWidth, h = ii.hbmColor ? bm.bmHeight : bm.bmHeight / 2;
+    hotspot = { (LONG)ii.xHotspot, (LONG)ii.yHotspot };
+    if (ii.hbmMask) DeleteObject(ii.hbmMask);
+    if (ii.hbmColor) DeleteObject(ii.hbmColor);
+    if (w <= 0 || h <= 0 || w > 512 || h > 512) return {};
+    auto render = [&](uint32_t bg) {
+        Image im(w, h, bg);
+        HBITMAP hb = im.ToHBITMAP();
+        HDC dc = CreateCompatibleDC(nullptr);
+        HGDIOBJ o = SelectObject(dc, hb);
+        DrawIconEx(dc, 0, 0, hc, w, h, 0, nullptr, DI_NORMAL);
+        SelectObject(dc, o); DeleteDC(dc);
+        Image r = Image::FromHBITMAP(hb);
+        DeleteObject(hb);
+        return r;
+    };
+    Image b = render(0xFF000000), wt = render(0xFFFFFFFF), out(w, h, 0);
+    if (b.w != w || wt.w != w) return {};
+    for (size_t i = 0; i < out.px.size(); i++) {
+        uint32_t pb = b.px[i], pw = wt.px[i];
+        int a = 255 - ((CR(pw) - CR(pb)) + (CG(pw) - CG(pb)) + (CB(pw) - CB(pb))) / 3;
+        a = std::clamp(a, 0, 255);
+        if (a == 0) continue;
+        out.px[i] = ARGB(a, std::min(255, CR(pb) * 255 / a), std::min(255, CG(pb) * 255 / a), std::min(255, CB(pb) * 255 / a));
+    }
+    return out;
+}
+
 Image CaptureEngine::FreezeScreen(RECT vs, bool withCursor) {
     HDC screen = GetDC(nullptr);
     Image img = Image::FromDC(screen, vs);
     ReleaseDC(nullptr, screen);
+    if (hdr::Enabled() && hdr::IsHdrArea(vs)) hdr::FixCapture(vs, img);     // HDR monitors: tone-mapped copy (C02)
+    if (withCursor && RegGetDword(L"CursorAsObject", 0)) {
+        // kept apart: InputCaptured makes it an object (or draws it in when effects change the geometry)
+        CURSORINFO ci{ sizeof(ci) };
+        cursorImg_ = Image();
+        if (GetCursorInfo(&ci) && (ci.flags & CURSOR_SHOWING)) {
+            POINT hot{};
+            cursorImg_ = CursorBitmap(ci.hCursor, hot);
+            cursorPos_ = { ci.ptScreenPos.x - hot.x, ci.ptScreenPos.y - hot.y };
+        }
+        return img;
+    }
     if (withCursor) {
         CURSORINFO ci{ sizeof(ci) };
         if (GetCursorInfo(&ci) && (ci.flags & CURSOR_SHOWING)) {
@@ -125,6 +198,12 @@ Image CaptureEngine::FreezeScreen(RECT vs, bool withCursor) {
 
 void CaptureEngine::BeginInput() {
     SetState(InputSelecting);
+    cursorImg_ = Image();
+    if (preset_.kind == CaptureKind::Video && preset_.audioOnly) {      // audio only (C32): no area to select
+        POINT c; GetCursorPos(&c);
+        StartVideoHud(MonitorRectFromPoint(c));
+        return;
+    }
     vs_ = VirtualScreenRect();
     const bool video = preset_.kind == CaptureKind::Video;
     CaptureInfo info; info.mode = SelectionName(preset_.selection);
@@ -141,7 +220,7 @@ void CaptureEngine::BeginInput() {
         info.mode = Tr(L"Região fixa");
         if (video) { StartVideoHud(r); return; }
         SetState(Capturing);
-        InputCaptured(FreezeScreen(r, preset_.captureCursor), info);
+        InputCaptured(FreezeScreen(r, preset_.captureCursor), info, {}, { r.left, r.top });
         return;
     }
     switch (preset_.selection) {
@@ -157,6 +236,8 @@ void CaptureEngine::BeginInput() {
             // each window as a separate object on top of the desktop background (the outputs get the screen as it was)
             Layers ly;
             if (CaptureWindowsAsObjects(r, FreezeScreen(r, false), ly)) {
+                sounds::PlayCaptureSound();
+                haveOrigin_ = false;
                 for (auto& l : links)
                     ly.objects.add("Link").seti("X1", l.r.left - r.left).seti("Y1", l.r.top - r.top).seti("X2", l.r.right - r.left)
                       .seti("Y2", l.r.bottom - r.top).setW("Url", l.url);
@@ -201,7 +282,12 @@ void CaptureEngine::BeginInput() {
 
     frozen_ = FreezeScreen(vs_, false);
     Image shown = preset_.captureCursor && !video ? FreezeScreen(vs_, true) : frozen_;
-    if (preset_.captureCursor && !video) frozen_ = shown;
+    if (preset_.captureCursor && !video) {
+        frozen_ = shown;
+        // cursor as an object: the crosshair shows it, the frozen copy stays without it
+        if (!cursorImg_.empty()) shown.Blit(cursorImg_, cursorPos_.x - vs_.left, cursorPos_.y - vs_.top, true);
+    }
+    if (!video) clean_.End();                     // the frozen copy is taken: the icons can come back
     SelectMode mode = fixedRegion ? SelectMode::Fixed : SelectMode::Region;
     switch (preset_.selection) {
     case Selection::Window: mode = SelectMode::Window; break;
@@ -212,12 +298,18 @@ void CaptureEngine::BeginInput() {
     case Selection::Scrolling: case Selection::ExtendedWindow: mode = SelectMode::PickWindow; break;
     default: break;          // Panoramic: a normal region; scrolling starts after the selection
     }
+    SelectOptions so;
+    so.quickCrop = RegGetDword(L"QuickCrop", 1) != 0;
+    so.openCapture = [this](const std::wstring& path) { DeliverToEditor(path); };     // H in the crosshair
     RunSelectOverlay(shown, vs_, mode, { preset_.fixedW, preset_.fixedH }, video,
-                     [this](const SelectResult& r) { if (r.ok) OnInputSelected(r); else InputCanceled(); });
+                     [this](const SelectResult& r) { if (r.ok) OnInputSelected(r); else InputCanceled(); }, so);
 }
 
 void CaptureEngine::OnInputSelected(const SelectResult& r) {
     SetState(InputSelected);
+    // regions recalled with Tab in the crosshair (C18)
+    if (preset_.selection == Selection::Region || preset_.selection == Selection::Window || preset_.selection == Selection::Object)
+        RememberRegion(r.rect);
     CaptureInfo info;
     info.mode = SelectionName(preset_.selection);
     if (r.window) { info.windowTitle = WindowTitle(r.window); info.application = WindowProcessName(r.window); }
@@ -248,9 +340,11 @@ void CaptureEngine::OnInputSelected(const SelectResult& r) {
     Image img;
     switch (preset_.selection) {
     case Selection::Scrolling:
+        cursorImg_ = Image();
         img = ScrollCapture(r.window, r.child, { (r.rect.left + r.rect.right) / 2, (r.rect.top + r.rect.bottom) / 2 });
         break;
     case Selection::ExtendedWindow:
+        cursorImg_ = Image();
         img = ExtendedWindowCapture(r.window);
         break;
     case Selection::Freehand: {
@@ -269,6 +363,15 @@ void CaptureEngine::OnInputSelected(const SelectResult& r) {
         }
         break;
     }
+    case Selection::Window:
+        img = frozen_.Crop(local);
+        // transparent rounded corners and, optionally, a shadow like the window's own (C06)
+        if (r.window && RegGetDword(L"WindowRoundCorners", 1)) RoundWindowCorners(img, r.window);
+        if (r.window && RegGetDword(L"WindowShadow", 0)) {
+            if (!cursorImg_.empty()) { img.Blit(cursorImg_, cursorPos_.x - r.rect.left, cursorPos_.y - r.rect.top, true); cursorImg_ = Image(); }
+            img = fx::Shadow(img, 0, 14, 45);
+        }
+        break;
     default:
         img = frozen_.Crop(local);
     }
@@ -279,19 +382,32 @@ void CaptureEngine::OnInputSelected(const SelectResult& r) {
 
 void CaptureEngine::InputCanceled() {
     frozen_ = Image();
+    cursorImg_ = Image();
     SetState(Idle);
 }
 
 void CaptureEngine::InputCaptured(Image img, const CaptureInfo& info, std::vector<CapturedLink> links, POINT origin) {
     SetState(HaveInput);
+    origin_ = origin;
+    haveOrigin_ = preset_.selection != Selection::Clipboard && preset_.selection != Selection::File && !preset_.effects.Any();
+    if (preset_.selection != Selection::Clipboard && preset_.selection != Selection::File) sounds::PlayCaptureSound();   // C31
+    // captured cursor (C25): an object over the image, or drawn in when an effect changes the geometry
+    Image cursor = std::move(cursorImg_);
+    cursorImg_ = Image();
+    POINT cpos{ cursorPos_.x - origin.x, cursorPos_.y - origin.y };
+    if (!cursor.empty()) {
+        RECT cr{ cpos.x, cpos.y, cpos.x + cursor.w, cpos.y + cursor.h }, ir{ 0, 0, img.w, img.h }, x;
+        if (!IntersectRect(&x, &cr, &ir)) cursor = Image();
+        else if (preset_.effects.Any()) { img.Blit(cursor, cpos.x, cpos.y, true); cursor = Image(); }
+    }
     Image out = fx::ApplyCaptureEffects(img, preset_.effects);          // preset effects (CEffectSettings*)
     SetState(Outputting);
     // the links follow the image: scale and border move them; other effects that change the geometry drop them
     const auto& e = preset_.effects;
     bool keep = !links.empty() && !e.trim && !e.rotate && !e.caption && !e.edge && !e.shadow;
+    Layers ly;
+    ly.base = out;
     if (keep) {
-        Layers ly;
-        ly.base = out;
         double k = e.scale ? e.scalePercent / 100.0 : 1.0;
         int off = e.border ? e.borderWidth : 0;
         for (auto& l : links) {
@@ -301,7 +417,18 @@ void CaptureEngine::InputCaptured(Image img, const CaptureInfo& info, std::vecto
             if (!IntersectRect(&vis, &a, &bounds)) continue;
             ly.objects.add("Link").seti("X1", vis.left).seti("Y1", vis.top).seti("X2", vis.right).seti("Y2", vis.bottom).setW("Url", l.url);
         }
-        if (!ly.objects.children.empty()) { Output(out, info, &ly); SetState(Idle); return; }
+    }
+    if (!cursor.empty()) {
+        ly.embedded["Cursor.png"] = cursor;
+        ly.objects.add("Image").seti("X1", cpos.x).seti("Y1", cpos.y).seti("X2", cpos.x + cursor.w).seti("Y2", cpos.y + cursor.h)
+            .set("StreamName", "Cursor.png").seti("PenWidth", 0).seti("Shadow", 0).setW("Name", Tr(L"Cursor do mouse"));
+    }
+    if (!ly.objects.children.empty()) {
+        Image flat = out;                       // the outputs (file, clipboard) get the image as seen, with the cursor
+        if (!cursor.empty()) flat.Blit(cursor, cpos.x, cpos.y, true);
+        Output(flat, info, &ly);
+        SetState(Idle);
+        return;
     }
     Output(out, info);
     SetState(Idle);
@@ -344,25 +471,31 @@ Image WindowImage(HWND h, RECT frame, const Image& screen, RECT area) {
         OffsetRect(&vis, -area.left, -area.top);
         img = screen.Crop(vis);
     }
-    // Windows 11 rounded corners (windows that are not maximized)
+    if (!img.empty()) RoundWindowCorners(img, h);
+    return img;
+}
+}
+
+void RoundWindowCorners(Image& img, HWND h) {
+    if (img.empty() || !h) return;
     WINDOWPLACEMENT wp{ sizeof wp };
     OSVERSIONINFOEXW ov{ sizeof ov }; ov.dwBuildNumber = 22000;
     bool win11 = VerifyVersionInfoW(&ov, VER_BUILDNUMBER, VerSetConditionMask(0, VER_BUILDNUMBER, VER_GREATER_EQUAL)) != 0;
-    if (win11 && GetWindowPlacement(h, &wp) && wp.showCmd != SW_SHOWMAXIMIZED && !img.empty()) {
-        int rad = std::max(4, MulDiv(8, (int)GetDpiForWindow(h), 96));
-        for (int y = 0; y < std::min(rad, img.h); y++)
-            for (int x = 0; x < std::min(rad, img.w); x++) {
-                float dx = rad - x - 0.5f, dy = rad - y - 0.5f, d = std::sqrt(dx * dx + dy * dy);
-                int a = (int)std::clamp((rad - d + 0.5f) * 255.0f, 0.0f, 255.0f);
-                if (a >= 255) continue;
-                for (auto [px, py] : std::initializer_list<std::pair<int, int>>{ { x, y }, { img.w - 1 - x, y }, { x, img.h - 1 - y }, { img.w - 1 - x, img.h - 1 - y } }) {
-                    uint32_t& p = img.at(px, py);
-                    p = (p & 0x00FFFFFF) | ((uint32_t)(CA(p) * a / 255) << 24);
-                }
+    if (!win11 || !GetWindowPlacement(GetAncestor(h, GA_ROOT), &wp) || wp.showCmd == SW_SHOWMAXIMIZED) return;
+    DWORD pref = 0;                                   // DWMWCP_DEFAULT / ROUND = 8 px, ROUNDSMALL = 4 px, DONOTROUND
+    DwmGetWindowAttribute(GetAncestor(h, GA_ROOT), 33 /*DWMWA_WINDOW_CORNER_PREFERENCE*/, &pref, sizeof pref);
+    if (pref == 1 /*DWMWCP_DONOTROUND*/) return;
+    int rad = std::max(2, MulDiv(pref == 3 /*DWMWCP_ROUNDSMALL*/ ? 4 : 8, (int)GetDpiForWindow(h), 96));
+    for (int y = 0; y < std::min(rad, img.h); y++)
+        for (int x = 0; x < std::min(rad, img.w); x++) {
+            float dx = rad - x - 0.5f, dy = rad - y - 0.5f, d = std::sqrt(dx * dx + dy * dy);
+            int a = (int)std::clamp((rad - d + 0.5f) * 255.0f, 0.0f, 255.0f);
+            if (a >= 255) continue;
+            for (auto [px, py] : std::initializer_list<std::pair<int, int>>{ { x, y }, { img.w - 1 - x, y }, { x, img.h - 1 - y }, { img.w - 1 - x, img.h - 1 - y } }) {
+                uint32_t& p = img.at(px, py);
+                p = (p & 0x00FFFFFF) | ((uint32_t)(CA(p) * a / 255) << 24);
             }
-    }
-    return img;
-}
+        }
 }
 
 bool CaptureEngine::CaptureWindowsAsObjects(RECT area, const Image& screen, Layers& out) {
@@ -460,12 +593,28 @@ void CaptureEngine::Output(const Image& img, const CaptureInfo& info, const Laye
     std::wstring lib = layers ? AddLayeredToLibrary(layers->base.empty() ? img : layers->base, img, info, layers->objects, layers->embedded)
                               : AddImageToLibrary(img, info);
     std::vector<std::wstring> done;
-    if (preset_.copyToClipboard && CopyImageToClipboard(frame_, img)) done.push_back(Tr(L"copiada para a área de transferência"));
+    // every capture goes to the clipboard (owner's request, Options › CopyEveryCapture, on by default) besides the
+    // preset's own "Copy to the clipboard"; Grab Text and Read QR code keep their text there instead
+    const bool autoCopy = RegGetDword(L"CopyEveryCapture", 1) != 0;
+    if ((preset_.copyToClipboard || autoCopy || preset_.outputClipboardOnly) && !preset_.grabText && !preset_.readQr && CopyImageToClipboard(frame_, img))
+        done.push_back(Tr(L"copiada para a área de transferência"));
+    const std::wstring title = info.windowTitle.empty() ? info.mode : info.windowTitle;
+    if (!preset_.outputPath.empty()) {                // command line /output "file"
+        EnsureDir(DirOf(preset_.outputPath));
+        if (SaveImageFile(preset_.outputPath, img)) done.push_back(Tr(L"salva em ") + preset_.outputPath);
+        else Log(L"Output: failed to save %s", preset_.outputPath.c_str());
+    }
+    if (preset_.readQr && onReadQr) onReadQr(img);
+    if (preset_.pinToScreen && onPin) onPin(img, title, haveOrigin_ ? &origin_ : nullptr);
+    if (preset_.office >= 0 && onOffice) onOffice(img, preset_.office);
+    if (preset_.upload && onUpload) onUpload(img, lib, title);
     std::wstring saved;
     if (preset_.saveToFile) {
         std::wstring folder = preset_.folder.empty() ? DefaultSaveDir() : preset_.folder;
         EnsureDir(folder);
-        saved = NextAutoName(folder, preset_.filePrefix, FileFormatExt(preset_.fileFormat));
+        // the default prefix follows the language; one the user typed is kept as is
+        std::wstring prefix = preset_.filePrefix == L"Captura" ? std::wstring(Tr(L"Captura")) : preset_.filePrefix;
+        saved = NextAutoName(folder, prefix, FileFormatExt(preset_.fileFormat));
         if (SaveImageFile(saved, img)) done.push_back(Tr(L"salva em ") + saved);
         else { Log(L"Output: failed to save %s", saved.c_str()); saved.clear(); }
     }
@@ -479,8 +628,12 @@ void CaptureEngine::Output(const Image& img, const CaptureInfo& info, const Laye
         ShellExecuteW(nullptr, L"open", preset_.programPath.c_str(), (L"\"" + file + L"\"").c_str(), nullptr, SW_SHOWNORMAL);
     }
     if (ipc_) ipc_->SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
-    if (preset_.previewInEditor && !lib.empty()) DeliverToEditor(lib);
-    else if (preset_.grabText) {}               // the text window is already the feedback
+    // after the capture: the Editor (as the preset says), the quick access overlay (C08) instead of it, or both
+    const int mode = preset_.outputClipboardOnly ? 0 : (int)RegGetDword(L"AfterCaptureMode", 0);
+    const bool other = preset_.grabText || preset_.readQr || preset_.pinToScreen;      // outputs that are already the feedback
+    if (mode >= 1 && !other && onOverlay && !lib.empty()) onOverlay(img, lib, false, title);
+    if (preset_.previewInEditor && !lib.empty() && mode != 1 && !preset_.outputClipboardOnly) DeliverToEditor(lib);
+    else if (other || mode >= 1) {}             // the text window, the QR results, the pin or the overlay are the feedback
     else if (notify) {
         std::wstring t = Tr(L"Captura adicionada à biblioteca");
         for (auto& d : done) t += L"; " + d;
@@ -676,10 +829,33 @@ void CaptureEngine::StartVideoHud(RECT area) {
     cb.onRecord = [this] { VideoStartPauseResume(); };
     cb.onStop = [this] { VideoStop(); };
     cb.onRestart = [this] {
+        // C33: asks first (the recording pauses meanwhile); "do not ask again" turns the question off
+        if (RegGetDword(L"ConfirmRestart", 1)) {
+            bool wasRecording = recorder.state() == Recorder::Recording;
+            if (wasRecording) recorder.Pause();
+            TASKDIALOGCONFIG tc{ sizeof tc };
+            tc.hwndParent = hud_.hwnd();
+            tc.dwFlags = TDF_POSITION_RELATIVE_TO_WINDOW;
+            tc.pszWindowTitle = L"Snapnab";
+            tc.pszMainIcon = TD_WARNING_ICON;
+            std::wstring main = Tr(L"Recomeçar a gravação?"), content = Tr(L"O que foi gravado até agora será descartado.");
+            std::wstring verify = Tr(L"Não perguntar de novo");
+            tc.pszMainInstruction = main.c_str();
+            tc.pszContent = content.c_str();
+            tc.pszVerificationText = verify.c_str();
+            tc.dwCommonButtons = TDCBF_YES_BUTTON | TDCBF_NO_BUTTON;
+            tc.nDefaultButton = IDNO;
+            int btn = 0; BOOL dontAsk = FALSE;
+            TaskDialogIndirect(&tc, &btn, nullptr, &dontAsk);
+            if (btn != IDYES) { if (wasRecording) recorder.Resume(); hud_.Refresh(); return; }
+            if (dontAsk) RegSetDword(L"ConfirmRestart", 0);
+        }
         recorder.Cancel();
         hud_.Refresh();
         hud_.Countdown(3, [this] { StartRecording(); });
     };
+    cb.onZoom = [this] { VideoToggleZoom(); };
+    cb.onOverlay = [this](POINT p) { VideoOverlayMenu(p); };
     cb.onCancel = [this] { VideoCancel(); };
     cb.onSnapshot = [this] {
         Image snap = recorder.TakeSnapshot();
@@ -706,7 +882,11 @@ void CaptureEngine::StartVideoHud(RECT area) {
     hud_.micVolume = preset_.micVolume; hud_.sysVolume = preset_.sysVolume; hud_.autoGain = preset_.autoGain;
     recorder.SetMicVolume(preset_.micVolume); recorder.SetSysVolume(preset_.sysVolume); recorder.SetAutoGain(preset_.autoGain);
     recorder.StartMonitor(preset_.microphone, preset_.systemAudio);
+    hud_.audioOnly = preset_.audioOnly;
+    if (preset_.audioOnly) hud_.camAvailable = hud_.camOn = false;
     hud_.Show(area, &recorder, cb, preset_.microphone, preset_.systemAudio);
+    // audio only (C32): there is no area to frame, so it starts by itself after the countdown (Skip or Cancel still work)
+    if (preset_.audioOnly) hud_.Countdown(3, [this] { StartRecording(); });
 }
 
 void CaptureEngine::StopWebcam() { webcam_.Stop(); }
@@ -720,7 +900,20 @@ void CaptureEngine::StartRecording() {
     rs.micVolume = hud_.micVolume; rs.sysVolume = hud_.sysVolume; rs.autoGain = hud_.autoGain;
     rs.fps = preset_.fps; rs.quality = preset_.quality;
     rs.downscale1080 = preset_.downscale1080; rs.hardware = preset_.hardwareEncode;
-    rs.path = NewVideoPath();
+    rs.audioOnly = preset_.audioOnly;
+    rs.path = preset_.audioOnly ? NewAudioPath(preset_.audioFormat == 1) : NewVideoPath();
+    // drawn in the video (C07), zoom (C15) and crash safety (C14): Options › Video options
+    rs.highlightCursor = RegGetDword(L"RecHighlightCursor", 0) != 0;
+    rs.highlightColor = RegGetDword(L"RecHighlightColor", RGB(255, 214, 0));
+    rs.highlightSize = std::clamp((int)RegGetDword(L"RecHighlightSize", 44), 16, 200);
+    rs.highlightOpacity = std::clamp((int)RegGetDword(L"RecHighlightOpacity", 35), 5, 100);
+    rs.clickEffects = RegGetDword(L"RecClickEffects", 0) != 0;
+    rs.leftClickColor = RegGetDword(L"RecLeftClickColor", RGB(229, 50, 45));
+    rs.rightClickColor = RegGetDword(L"RecRightClickColor", RGB(0, 120, 215));
+    rs.keyMode = std::clamp((int)RegGetDword(L"RecKeyMode", 0), 0, 2);
+    rs.autoZoom = RegGetDword(L"RecAutoZoom", 0) != 0;
+    rs.zoomPercent = std::clamp((int)RegGetDword(L"RecZoomPercent", 200), 120, 400);
+    rs.crashSafe = RegGetDword(L"RecCrashSafe", 1) != 0;
     if (!recorder.Start(rs, frame_, WM_SNAP_DONE)) {
         MessageBoxW(nullptr, (Tr(L"Não foi possível iniciar a gravação.\n\n") + recorder.lastError).c_str(), L"Snapnab", MB_ICONERROR);
         recorder.StopMonitor();
@@ -744,6 +937,35 @@ void CaptureEngine::VideoStartPauseResume() {
     hud_.Refresh();
 }
 
+void CaptureEngine::VideoToggleZoom() {
+    if (recorder.state() == Recorder::Idle || preset_.audioOnly) return;
+    recorder.ToggleZoom();
+    hud_.Refresh();
+}
+
+void CaptureEngine::VideoOverlayMenu(POINT p) {
+    bool hl = recorder.state() != Recorder::Idle ? recorder.highlightOn() : RegGetDword(L"RecHighlightCursor", 0) != 0;
+    bool cl = recorder.state() != Recorder::Idle ? recorder.clicksOn() : RegGetDword(L"RecClickEffects", 0) != 0;
+    int km = recorder.state() != Recorder::Idle ? recorder.keyMode() : (int)RegGetDword(L"RecKeyMode", 0);
+    HMENU m = CreatePopupMenu();
+    AppendMenuW(m, MF_STRING | (hl ? MF_CHECKED : 0), 1, Tr(L"Destacar o cursor"));
+    AppendMenuW(m, MF_STRING | (cl ? MF_CHECKED : 0), 2, Tr(L"Mostrar os cliques"));
+    AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
+    AppendMenuW(m, MF_STRING | (km == 0 ? MF_CHECKED : 0), 10, Tr(L"Teclas: não mostrar"));
+    AppendMenuW(m, MF_STRING | (km == 1 ? MF_CHECKED : 0), 11, Tr(L"Teclas: só atalhos (Ctrl, Alt, Win, F1…)"));
+    AppendMenuW(m, MF_STRING | (km == 2 ? MF_CHECKED : 0), 12, Tr(L"Teclas: todas (inclusive o que for digitado)"));
+    SetForegroundWindow(hud_.hwnd());
+    int cmd = TrackPopupMenu(m, TPM_RETURNCMD | TPM_RIGHTBUTTON, p.x, p.y, 0, hud_.hwnd(), nullptr);
+    DestroyMenu(m);
+    if (!cmd) return;
+    if (cmd == 1) hl = !hl;
+    else if (cmd == 2) cl = !cl;
+    else km = cmd - 10;
+    RegSetDword(L"RecHighlightCursor", hl); RegSetDword(L"RecClickEffects", cl); RegSetDword(L"RecKeyMode", km);
+    recorder.SetOverlay(hl, cl, km);
+    hud_.Refresh();
+}
+
 void CaptureEngine::VideoStop() {
     if (recorder.state() == Recorder::Idle) { if (state_ == InputSelected) VideoCancel(); return; }
     SetState(Outputting);
@@ -764,10 +986,20 @@ void CaptureEngine::FinishVideo(bool ok) {
     hud_.Hide();
     StopWebcam();
     std::wstring path = recorder.path();
+    if (ok && FileExists(path) && preset_.audioOnly) {          // audio only (C32): outside the library
+        if (RegGetDword(L"CopyEveryCapture", 1)) clip::CopyFiles(frame_, { path });
+        if (notify) notify(Tr(L"Snapnab — áudio salvo"), path);
+        SetState(Idle);
+        return;
+    }
     if (ok && FileExists(path)) {
         if (!recorder.firstFrame.empty()) WriteThumbnail(path, recorder.firstFrame);
+        if (RegGetDword(L"CopyEveryCapture", 1)) clip::CopyFiles(frame_, { path });     // videos: the file
         if (ipc_) ipc_->SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
-        if (preset_.previewInEditor) DeliverToEditor(path);
+        const int mode = (int)RegGetDword(L"AfterCaptureMode", 0);
+        if (mode >= 1 && onOverlay && !recorder.firstFrame.empty()) onOverlay(recorder.firstFrame, path, true, FileNameOf(path));
+        if (preset_.previewInEditor && mode != 1) DeliverToEditor(path);
+        else if (mode >= 1) {}
         else if (notify) notify(L"Snapnab", Tr(L"Vídeo salvo na biblioteca: ") + FileNameOf(path));
     } else {
         MessageBoxW(nullptr, (Tr(L"A gravação falhou.\n\n") + recorder.lastError).c_str(), L"Snapnab", MB_ICONERROR);

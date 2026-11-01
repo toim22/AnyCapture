@@ -16,6 +16,7 @@ struct SnapFrame {
 
 bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames);
 bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames);
+bool LoadSnapDocument(const std::wstring& path, XmlNode& doc);      // only the first frame's XML (no images): tags, mode…
 bool IsSnapFile(const std::wstring& path);
 
 } // namespace snap

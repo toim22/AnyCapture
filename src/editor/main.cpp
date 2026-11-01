@@ -5,6 +5,12 @@
 #include "QuickStyles.h"
 #include "Popups.h"
 #include "Video.h"
+#include "EditorTools.h"
+#include "Barcode.h"
+#include "Beautify.h"
+#include "Clipboard.h"
+#include "Office.h"
+#include "Upload.h"
 #include "Effects.h"
 #include "Ipc.h"
 #include "Library.h"
@@ -42,7 +48,14 @@ enum : int {
     // distribute, paste in place, lock, lifted piece, rulers, edge snapping, plain-text paste, layers
     M_DIST_H, M_DIST_V, M_PASTE_INPLACE, M_LOCK, M_UNLOCK, M_LIFT, M_DROP, M_RULERS, M_EDGESNAP, M_PLAINPASTE, M_RENAME_OBJ,
     M_SHOW_LAYERS, M_CLEAR_GUIDES, M_OPEN_LINK, M_MANUAL,
+    // competitor feature request (EditorTools.h): QR (C04), Beautify (C05), combine / add capture (C09), redaction (C11),
+    // comparison (C17), AI assistant (C22), date stamp (C26), background removal (C27), batch (C28), split (C34),
+    // contrast (C36), pin (C01), upload (C21), copy as (C30)
+    M_READ_QR, M_BEAUTIFY, M_COMBINE, M_ADD_CAPTURE, M_REDACT, M_COMPARE, M_ASSISTANT, M_AI_SETTINGS, M_DATESTAMP, M_DATESTAMP_FMT,
+    M_REMOVE_BG, M_BATCH, M_SPLIT, M_CONTRAST, M_PIN, M_UPLOAD, M_UPLOAD_SETTINGS, M_COPYAS, M_DRAWHOLD,
     M_TB_CUSTOMIZE = 1500, M_TB_RESET, M_MORE_TOOL_BASE = 1600,
+    M_OFFICE_BASE = 1700,          // Send to Word / PowerPoint / Excel / OneNote (C20)
+    M_CURSOR_BASE = 1720,          // Insert cursor › (C25)
 };
 
 // quick effect (CInteropQuickEffect, ed_comp_5 §4.4): border + edge effect + shadow + page curl in a single step
@@ -91,6 +104,8 @@ struct App {
     HANDLE watchStop = nullptr;
     std::thread watcher;
     int dpi = 96;
+    std::wstring addCaptureTo;     // Add capture (C09): the next capture is appended to this document
+    DWORD addCaptureTick = 0;
 } g;
 
 int S(int v) { return ui::Scale(v, g.dpi); }
@@ -264,7 +279,11 @@ bool OpenPath(const std::wstring& pathIn) {
     if (!FileExists(path)) { MessageBoxW(g.frame, (Tr(L"Arquivo não encontrado:\n") + path).c_str(), L"Snapnab Editor", MB_ICONWARNING); return false; }
     std::wstring ext = FileExt(path);
     auto d = Document::Load(path);
-    if (!d) { MessageBoxW(g.frame, (Tr(L"Não foi possível abrir:\n") + path).c_str(), L"Snapnab Editor", MB_ICONWARNING); return false; }
+    if (!d) {
+        std::wstring why = ImageIoError();            // e.g. the HEIC/AVIF codec is not installed
+        MessageBoxW(g.frame, (Tr(L"Não foi possível abrir:\n") + path + (why.empty() ? L"" : L"\n\n" + why)).c_str(), L"Snapnab Editor", MB_ICONWARNING);
+        return false;
+    }
     if (ext != L".snap" && ext != L".mp4") {
         // regular image: imported into the library
         Image img = *d->st.base;
@@ -450,16 +469,31 @@ bool SaveAs() {
     std::wstring path = DefaultSaveDir() + L"\\" + (base.empty() ? Tr(L"Captura") : base);
     static int fi = 1;
     if (!ui::SaveFileDialog(g.frame, ImageSaveFilter(), path, fi, L"png", Tr(L"Salvar como"))) return false;
-    static const wchar_t* exts[] = { L".png", L".jpg", L".bmp", L".gif", L".tif", L".pdf", L".snap" };
+    // same order as ImageSaveFilter()
+    static const wchar_t* exts[] = { L".png", L".jpg", L".bmp", L".gif", L".tif", L".webp", L".avif", L".pdf", L".snap" };
     std::wstring ext = FileExt(path);
     bool known = false;
     for (auto e : exts) if (ext == e || (ext == L".jpeg" && !wcscmp(e, L".jpg")) || (ext == L".tiff" && !wcscmp(e, L".tif"))) known = true;
-    if (!known && fi >= 1 && fi <= 7) path += exts[fi - 1];
+    if (!known && fi >= 1 && fi <= (int)std::size(exts)) path += exts[fi - 1];
     int q = 90;
     if (FileExt(path) == L".jpg" || FileExt(path) == L".jpeg") {
         std::vector<ui::Field> f = { ui::Field::MakeInt(Tr(L"Qualidade JPEG (1–100)"), 90, 1, 100) };
         if (!ui::RunForm(g.frame, L"JPEG", f)) return false;
         q = f[0].value;
+    } else if (FileExt(path) == L".webp") {           // lossless (screenshots) or lossy with a quality (photos); remembered
+        std::vector<ui::Field> f = { ui::Field::MakeCheck(Tr(L"Sem perdas (ideal para capturas de tela)"), RegGetDword(L"WebPLossless", 1) != 0),
+                                     ui::Field::MakeInt(Tr(L"Qualidade com perdas (1–100)"), (int)RegGetDword(L"WebPQuality", 90), 1, 100) };
+        if (!ui::RunForm(g.frame, L"WebP", f)) return false;
+        RegSetDword(L"WebPLossless", f[0].value != 0);
+        RegSetDword(L"WebPQuality", f[1].value);
+    } else if (FileExt(path) == L".avif") {
+        if (!CanEncode(ImageFormat::AVIF)) {
+            MessageBoxW(g.frame, (Tr(L"Este computador não consegue salvar em AVIF.\n\n") + CodecHint(ImageFormat::AVIF)).c_str(), L"Snapnab Editor", MB_ICONWARNING);
+            return false;
+        }
+        std::vector<ui::Field> f = { ui::Field::MakeInt(Tr(L"Qualidade AVIF (1–100)"), (int)RegGetDword(L"AvifQuality", 80), 1, 100) };
+        if (!ui::RunForm(g.frame, L"AVIF", f)) return false;
+        RegSetDword(L"AvifQuality", f[0].value);
     }
     bool ok;
     if (FileExt(path) == L".snap") {
@@ -468,7 +502,11 @@ bool SaveAs() {
         g.cur->path = path; ok = g.cur->Save();
         g.cur->path = old; g.cur->modified = mod;
     } else ok = g.cur->SaveAs(path, q);
-    if (!ok) { MessageBoxW(g.frame, (Tr(L"Não foi possível salvar:\n") + path).c_str(), L"Snapnab Editor", MB_ICONWARNING); return false; }
+    if (!ok) {
+        std::wstring why = ImageIoError();
+        MessageBoxW(g.frame, (Tr(L"Não foi possível salvar:\n") + path + (why.empty() ? L"" : L"\n\n" + why)).c_str(), L"Snapnab Editor", MB_ICONWARNING);
+        return false;
+    }
     SetStatus(Tr(L"Salvo em ") + path);
     // a library capture without a name takes the name used in "Save as" (shown in the tray and library)
     if (IsInLibrary(g.cur->path) && CaptureName(g.cur->path).empty()) {
@@ -585,7 +623,7 @@ void ExportItems(const std::vector<std::wstring>& paths) {
         WIN32_FILE_ATTRIBUTE_DATA fa{};
         GetFileAttributesExW(p.c_str(), GetFileExInfoStandard, &fa);
         SYSTEMTIME st, lt; FileTimeToSystemTime(&fa.ftLastWriteTime, &st); SystemTimeToTzSpecificLocalTime(nullptr, &st, &lt);
-        std::wstring base = Format(L"Captura_%04d-%02d-%02d_%02d-%02d-%02d", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
+        std::wstring base = Tr(L"Captura") + Format(L"_%04d-%02d-%02d_%02d-%02d-%02d", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
         bool video = FileExt(p) == L".mp4";
         std::wstring dst = dir + L"\\" + base + (video ? L".mp4" : exts[fmt]);
         for (int n = 2; FileExists(dst); n++) dst = dir + L"\\" + base + Format(L"_%d", n) + (video ? L".mp4" : exts[fmt]);
@@ -605,20 +643,38 @@ void PrintCurrent() {
     PRINTDLGW pd{ sizeof(pd) };
     pd.hwndOwner = g.frame;
     pd.Flags = PD_RETURNDC | PD_NOSELECTION | PD_NOPAGENUMS;
-    if (!PrintDlgW(&pd)) return;
+    if (!PrintDlgW(&pd)) {
+        // canceled = no error; otherwise there is no printer or the print service (Spooler) is stopped: say so
+        if (DWORD e = CommDlgExtendedError())
+            MessageBoxW(g.frame, Format(Tr(L"Não foi possível abrir a impressão: não há impressora instalada ou o serviço de impressão do Windows (Spooler) está parado. (código 0x%04X)"), e).c_str(),
+                        Tr(L"Imprimir"), MB_ICONWARNING);
+        return;
+    }
     Image img(g.cur->w(), g.cur->h(), 0xFFFFFFFF);
     img.Blit(g.cur->Render(), 0, 0, true);
     DOCINFOW di{ sizeof(di) }; di.lpszDocName = g.cur->title.c_str();
-    if (StartDocW(pd.hDC, &di) > 0 && StartPage(pd.hDC) > 0) {
+    if (StartDocW(pd.hDC, &di) > 0) {
         int pw = GetDeviceCaps(pd.hDC, HORZRES), ph = GetDeviceCaps(pd.hDC, VERTRES);
-        double s = std::min((double)pw / img.w, (double)ph / img.h);
         int dpiX = GetDeviceCaps(pd.hDC, LOGPIXELSX);
-        s = std::min(s, dpiX / 96.0);                    // does not enlarge beyond the actual size
-        int w = (int)(img.w * s), h = (int)(img.h * s);
-        img.DrawTo(pd.hDC, (pw - w) / 2, (ph - h) / 2, w, h, true);
-        EndPage(pd.hDC);
+        double fitW = std::min((double)pw / img.w, dpiX / 96.0);       // does not enlarge beyond the actual size
+        // a long image (scrolling capture) goes across pages at the page width, broken between text lines (C34)
+        if (SplitLongPages() && img.h * fitW > ph * 1.25) {
+            auto parts = SplitImage(img, SmartBreaks(img, std::max(64, (int)(ph / fitW))), false);
+            for (auto& part : parts) {
+                if (StartPage(pd.hDC) <= 0) break;
+                int w = (int)(part.w * fitW), h = (int)(part.h * fitW);
+                part.DrawTo(pd.hDC, (pw - w) / 2, 0, w, h, true);
+                EndPage(pd.hDC);
+            }
+        } else if (StartPage(pd.hDC) > 0) {
+            double s = std::min(fitW, (double)ph / img.h);
+            int w = (int)(img.w * s), h = (int)(img.h * s);
+            img.DrawTo(pd.hDC, (pw - w) / 2, (ph - h) / 2, w, h, true);
+            EndPage(pd.hDC);
+        }
         EndDoc(pd.hDC);
-    }
+    } else MessageBoxW(g.frame, Tr(L"A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."),
+                       Tr(L"Imprimir"), MB_ICONWARNING);
     DeleteDC(pd.hDC);
     if (pd.hDevMode) GlobalFree(pd.hDevMode);
     if (pd.hDevNames) GlobalFree(pd.hDevNames);
@@ -812,6 +868,14 @@ void SetItemIcon(HMENU m, UINT id, icons::Id icon) {
 
 HMENU ToolsMenu();               // Image › Tools (list of the tools, defined along with the toolbar)
 
+// File › Send to: the Office programs (C20), the ones not installed grayed out
+HMENU OfficeMenu() {
+    HMENU m = CreatePopupMenu();
+    for (int t = 0; t < office::TargetCount; t++)
+        AppendMenuW(m, MF_STRING | (office::Available((office::Target)t) ? 0 : MF_GRAYED), M_OFFICE_BASE + t, office::TargetName((office::Target)t));
+    return m;
+}
+
 HMENU BuildMenu() {
     HMENU bar = CreateMenu();
     auto pop = [](std::initializer_list<std::pair<int, const wchar_t*>> items) {
@@ -823,21 +887,33 @@ HMENU BuildMenu() {
                        { M_NEW_CLIPBOARD, Tr(L"Novo da área de &transferência") }, { M_NEW_IMAGE, Tr(L"Nova &imagem…") }, { 0, nullptr },
                        { M_OPEN, Tr(L"&Abrir…\tCtrl+O") }, { M_SAVE, Tr(L"&Salvar\tCtrl+S") }, { M_SAVEAS, Tr(L"Salvar &como…\tCtrl+Shift+S") },
                        { M_DUPLICATE, Tr(L"&Duplicar") }, { M_DELETE, Tr(L"&Excluir (Lixeira)") }, { 0, nullptr },
-                       { M_PRINT, Tr(L"&Imprimir…\tCtrl+P") }, { M_EMAIL, Tr(L"Enviar por &e-mail…") }, { M_OPEN_PROGRAM, Tr(L"Abrir em &programa externo…") }, { 0, nullptr },
+                       { M_PRINT, Tr(L"&Imprimir…\tCtrl+P") }, { M_EMAIL, Tr(L"Enviar por &e-mail…") }, { M_OPEN_PROGRAM, Tr(L"Abrir em &programa externo…") },
+                       { M_PIN, Tr(L"Fi&xar na tela\tCtrl+Shift+P") }, { M_UPLOAD, Tr(L"Enviar (&upload)") }, { 0, nullptr },
+                       { M_COMBINE, Tr(L"Com&binar imagens…") }, { M_COMPARE, Tr(L"Comparar ima&gens…") }, { M_BATCH, Tr(L"Processamento em &lote…") }, { 0, nullptr },
                        { M_LIBRARY, Tr(L"Abrir a pasta da &biblioteca") }, { M_CLOSE, Tr(L"&Fechar documento\tCtrl+W") }, { M_EXIT, Tr(L"Sai&r") } });
+    InsertMenuW(file, M_COMBINE, MF_BYCOMMAND | MF_POPUP, (UINT_PTR)OfficeMenu(), Tr(L"Enviar &para"));
+    InsertMenuW(file, M_COMBINE, MF_BYCOMMAND | MF_SEPARATOR, 0, nullptr);
+    SetItemIcon(file, M_PIN, icons::Pin);
+    SetItemIcon(file, M_UPLOAD, icons::Upload);
+    SetItemIcon(file, M_COMBINE, icons::Combine);
+    SetItemIcon(file, M_COMPARE, icons::Compare);
     HMENU edit = pop({ { M_UNDO, Tr(L"&Desfazer\tCtrl+Z") }, { M_REDO, Tr(L"&Refazer\tCtrl+Y") }, { M_UNDOALL, Tr(L"Desfazer &tudo") }, { 0, nullptr },
                        { M_CUT, Tr(L"Recor&tar\tCtrl+X") }, { M_COPY, Tr(L"&Copiar\tCtrl+C") }, { M_COPYALL, Tr(L"Copiar t&udo\tCtrl+Shift+C") },
+                       { M_COPYAS, Tr(L"Copiar co&mo…") },
                        { M_PASTE, Tr(L"C&olar\tCtrl+V") }, { M_PASTE_INPLACE, Tr(L"Colar no &mesmo lugar\tCtrl+Shift+V") },
                        { M_DELETE_SEL, Tr(L"E&xcluir\tDel") }, { M_SELECTALL, Tr(L"Selecionar tu&do\tCtrl+A") },
                        { M_CROP_SEL, Tr(L"Cortar para a &seleção") }, { M_LIFT, Tr(L"&Levantar a seleção (peça solta)\tCtrl+Shift+L") },
                        { M_DROP, Tr(L"Soltar a &peça na imagem\tEnter") }, { 0, nullptr },
-                       { M_PLAINPASTE, Tr(L"Colar texto sem &formatação") }, { M_EDGESNAP, Tr(L"Seleção encaixa nas &bordas da imagem") }, { 0, nullptr },
+                       { M_PLAINPASTE, Tr(L"Colar texto sem &formatação") }, { M_EDGESNAP, Tr(L"Seleção encaixa nas &bordas da imagem") },
+                       { M_DRAWHOLD, Tr(L"Desen&har e segurar vira forma (Caneta)") }, { 0, nullptr },
                        { M_OCR, Tr(L"&Grab Text (OCR)\tCtrl+Shift+O") } });
     // Image › Effects, with a sample of each effect (as in the reference)
     HMENU fxm = pop({ { M_FX_BORDER, Tr(L"&Borda") }, { M_FX_EDGE, Tr(L"Bor&das") }, { M_FX_CAPTION, Tr(L"&Informações da captura") },
                       { M_FX_PERSPECTIVE, Tr(L"&Perspectiva") }, { M_FX_PAGECURL, Tr(L"D&obra de página") }, { M_FX_SHADOW, Tr(L"&Sombra") },
                       { M_FX_FILTER, Tr(L"&Filtros") }, { M_FX_ADJUST, Tr(L"&Ajuste de cores") }, { M_FX_REPLACE, Tr(L"Substituição de co&r") },
-                      { M_FX_SPOTLIGHT, Tr(L"Spotlight e &lupa") }, { M_FX_WATERMARK, Tr(L"&Marca d'água") } });
+                      { M_FX_SPOTLIGHT, Tr(L"Spotlight e &lupa") }, { M_FX_WATERMARK, Tr(L"&Marca d'água") }, { 0, nullptr },
+                      { M_BEAUTIFY, Tr(L"&Embelezar…") } });
+    SetItemIcon(fxm, M_BEAUTIFY, icons::Beautify);
     const std::pair<int, icons::Id> fxIcons[] = { { M_FX_BORDER, icons::FxBorder }, { M_FX_EDGE, icons::FxEdges }, { M_FX_CAPTION, icons::FxCaption },
         { M_FX_PERSPECTIVE, icons::FxPerspective }, { M_FX_PAGECURL, icons::FxPageCurl }, { M_FX_SHADOW, icons::FxShadow },
         { M_FX_FILTER, icons::FxFilters }, { M_FX_ADJUST, icons::FxColorAdjust }, { M_FX_REPLACE, icons::FxColorReplace },
@@ -892,9 +968,26 @@ HMENU BuildMenu() {
                        { M_TB_CUSTOMIZE, Tr(L"&Personalizar a barra de ferramentas…") } });
     HMENU help = pop({ { M_MANUAL, Tr(L"&Manual do Snapnab\tF1") }, { M_SHORTCUTS, Tr(L"&Atalhos de teclado") },
                        { M_ABOUT, Tr(L"&Sobre o Snapnab Editor") } });
+    HMENU cursors = CreatePopupMenu();
+    {
+        auto cs = CursorStamps();
+        for (size_t i = 0; i < cs.size(); i++) AppendMenuW(cursors, MF_STRING, M_CURSOR_BASE + (UINT)i, cs[i].second.c_str());
+    }
+    HMENU tools = pop({ { M_READ_QR, Tr(L"Ler código &QR\tCtrl+Shift+Q") }, { M_REDACT, Tr(L"&Ocultar dados sensíveis…\tCtrl+Shift+E") },
+                        { M_REMOVE_BG, Tr(L"Remover o &fundo…") }, { M_SPLIT, Tr(L"&Dividir imagem…") }, { M_ADD_CAPTURE, Tr(L"Adicionar ca&ptura") }, { 0, nullptr },
+                        { M_DATESTAMP, Tr(L"Inserir data e &hora\tCtrl+Shift+D") }, { M_DATESTAMP_FMT, Tr(L"Formato da data e hora…") }, { 0, nullptr },
+                        { M_CONTRAST, Tr(L"Verificador de &contraste…") }, { M_ASSISTANT, Tr(L"&Assistente de IA…") }, { 0, nullptr },
+                        { M_AI_SETTINGS, Tr(L"Configurar o assistente de IA…") }, { M_UPLOAD_SETTINGS, Tr(L"Configurar o &upload…") } });
+    InsertMenuW(tools, M_DATESTAMP_FMT, MF_BYCOMMAND | MF_POPUP, (UINT_PTR)cursors, Tr(L"Inserir c&ursor"));
+    SetItemIcon(tools, M_READ_QR, icons::Qr);
+    SetItemIcon(tools, M_DATESTAMP, icons::Clock);
+    SetItemIcon(tools, M_CONTRAST, icons::Contrast);
+    SetItemIcon(tools, M_ASSISTANT, icons::Sparkle);
+    SetItemIcon(tools, M_SPLIT, icons::Split);
     AppendMenuW(bar, MF_POPUP, (UINT_PTR)file, Tr(L"&Arquivo"));
     AppendMenuW(bar, MF_POPUP, (UINT_PTR)edit, Tr(L"&Editar"));
     AppendMenuW(bar, MF_POPUP, (UINT_PTR)img, Tr(L"&Imagem"));
+    AppendMenuW(bar, MF_POPUP, (UINT_PTR)tools, Tr(L"&Ferramentas"));
     AppendMenuW(bar, MF_POPUP, (UINT_PTR)view, Tr(L"E&xibir"));
     AppendMenuW(bar, MF_POPUP, (UINT_PTR)help, Tr(L"A&juda"));
     return bar;
@@ -917,6 +1010,8 @@ HACCEL BuildAccel() {
         { FCONTROL | FVIRTKEY, 'R', M_ROT_CW }, { FCONTROL | FVIRTKEY, VK_OEM_PLUS, M_ZOOM_IN }, { FCONTROL | FVIRTKEY, VK_ADD, M_ZOOM_IN },
         { FCONTROL | FVIRTKEY, VK_OEM_MINUS, M_ZOOM_OUT }, { FCONTROL | FVIRTKEY, VK_SUBTRACT, M_ZOOM_OUT },
         { FCONTROL | FVIRTKEY, '1', M_ZOOM_100 }, { FCONTROL | FVIRTKEY, '0', M_ZOOM_FIT }, { FVIRTKEY, VK_F1, M_MANUAL },
+        { FCONTROL | FSHIFT | FVIRTKEY, 'P', M_PIN }, { FCONTROL | FSHIFT | FVIRTKEY, 'Q', M_READ_QR },
+        { FCONTROL | FSHIFT | FVIRTKEY, 'E', M_REDACT }, { FCONTROL | FSHIFT | FVIRTKEY, 'D', M_DATESTAMP },
     };
     return CreateAcceleratorTableW(a, (int)(sizeof a / sizeof *a));
 }
@@ -1308,13 +1403,348 @@ void ShowShortcuts() {
         L"         Duplo clique edita texto • Esc cancela • Enter aplica o recorte\n"
         L"Exibir:  Ctrl+roda = zoom • Ctrl+0 ajustar • Ctrl+1 tamanho real • botão do meio arrasta\n"
         L"Arquivo: Ctrl+S salvar na biblioteca • Ctrl+Shift+S salvar como (PNG/JPG/BMP/GIF/TIFF/PDF/SNAP)\n"
-        L"Texto:   Ctrl+Shift+O Grab Text (OCR)\n"
+        L"Texto:   Ctrl+Shift+O Grab Text (OCR) • Ctrl+Shift+D data e hora\n"
+        L"Ferramentas: Ctrl+Shift+Q ler código QR • Ctrl+Shift+E ocultar dados sensíveis • Ctrl+Shift+P fixar na tela\n"
         L"Imagem:  Ctrl+Shift+F/B um passo à frente/atrás • Ctrl+T mesclar o objeto • Ctrl+Shift+T mesclar tudo • Ctrl+; encaixe\n"
         L"Vídeo:   Espaço reproduz/pausa • ←/→ quadro • I/O marcam início/fim\n"));
 }
 
+// ---------------------------------------------------------------- competitor feature request (EditorTools.h)
+Image ApplyQuick(const QuickEffect& q, const Image& src, double k, POINT* off);
+void CommitEffect(const std::wstring& name, bool keepObjects, std::function<Image(const Image&, POINT*)> run);
+
+Image CurrentImageOrSelection() { return g.canvas.HasRasterSelection() ? g.canvas.SelectionImage() : g.cur->Render(); }
+
+// an item of the library (open document or file) as an image with its objects, and its name
+bool LoadItemImage(const std::wstring& p, Image& out, std::wstring* name = nullptr) {
+    if (FileExt(p) == L".mp4") return false;
+    if (Document* d = FindDoc(p)) { out = d->Render(); if (name) *name = d->title; return !out.empty(); }
+    auto d = Document::Load(p);
+    if (!d || d->isVideo) return false;
+    out = d->Render();
+    if (FileExt(p) != L".snap" && d->st.base) out.meta = d->st.base->meta;
+    if (name) *name = d->title.empty() ? FileNameOf(p) : d->title;
+    return !out.empty();
+}
+
+// the tray and the library list the newest first; combine and compare take the oldest first (before → after)
+std::vector<std::wstring> LibrarySelection() {
+    auto v = g.libraryOpen ? g.library.SelectedPaths() : g.tray.SelectedPaths();
+    std::reverse(v.begin(), v.end());
+    return v;
+}
+
+void ReadQrCode() {
+    if (!RequireImageDoc()) return;
+    HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+    auto res = barcode::Read(CurrentImageOrSelection());
+    SetCursor(old);
+    barcode::ShowResults(g.frame, res);
+}
+
+// Beautify (C05): the last settings are remembered (registry Editor\Beautify, as XML)
+void BeautifyCurrent() {
+    if (!RequireImageDoc()) return;
+    fx::BeautifyOptions o;
+    XmlNode n;
+    if (XmlParse(WToUtf8(RegGetString(L"BeautifyLast", L"", L"Editor")), n)) o = fx::BeautifyOptions::FromXml(n);
+    Image src = g.cur->Render();
+    if (!fx::BeautifyDialog(g.frame, o, &src)) return;
+    RegSetString(L"BeautifyLast", Utf8ToW(XmlSerialize(o.ToXml(), false)), L"Editor");
+    CommitEffect(Tr(L"Embelezar"), false, [&](const Image& base, POINT*) { return fx::Beautify(base, o); });
+}
+
+// Combine (C09): the library selection, or the current image plus files; the result is a new image
+void CombineImagesNow(std::vector<std::wstring> paths, bool withCurrent) {
+    std::vector<Image> imgs;
+    if (withCurrent && g.cur && !g.cur->isVideo) { g.canvas.CommitText(); imgs.push_back(g.cur->Render()); }
+    if (paths.empty() && !PickImageFiles(g.frame, paths) && imgs.empty()) return;
+    for (auto& p : paths) { Image im; if (LoadItemImage(p, im)) imgs.push_back(std::move(im)); }
+    if (imgs.size() < 2) { SetStatus(Tr(L"Escolha duas ou mais imagens para combinar.")); return; }
+    CombineOptions o = CombineOptions::Load();
+    if (!CombineDialog(g.frame, imgs, o)) return;
+    Image out = CombineImages(imgs, o);
+    if (out.empty()) { MessageBoxW(g.frame, Tr(L"A imagem combinada ficaria grande demais."), L"Snapnab Editor", MB_ICONWARNING); return; }
+    NewDocFromImage(std::move(out), Tr(L"Imagens combinadas"), Tr(L"Combinar imagens"));
+    SetStatus(Format(Tr(L"%zu imagens combinadas numa imagem nova."), imgs.size()));
+}
+
+// Add capture (C09): the next capture arrives through IPC and goes below the target image as a Picture object
+bool AppendCapture(const std::wstring& target, const std::wstring& capture) {
+    Document* d = FindDoc(target);
+    if (!d || d->isVideo) return false;
+    auto nd = Document::Load(capture);
+    if (!nd || nd->isVideo) return false;
+    Image add = nd->Render();
+    if (add.empty()) return false;
+    Activate(d);
+    g.canvas.CommitText();
+    const int gap = 16, W = std::max(d->w(), add.w), H = d->h() + gap + add.h;
+    d->Checkpoint();
+    d->SetBase(fx::CanvasResize(*d->st.base, W, H, 0, d->st.base->HasTransparency() ? 0 : 0xFFFFFFFF));
+    g.canvas.Refresh();
+    g.canvas.PasteImageAt(add, Gdiplus::PointF(0, (float)(H - add.h)));
+    g.canvas.FitToWindow();
+    DocChanged();
+    SetStatus(Tr(L"Captura adicionada abaixo da imagem (é um objeto: pode ser movida)."));
+    return true;
+}
+
+// Redact sensitive data (C11): OCR words + patterns and faces, each one a Blur/Pixelate/black object
+void RedactSensitive() {
+    if (!RequireImageDoc()) return;
+    Image img = g.cur->Render();
+    HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+    SetStatus(Tr(L"Procurando dados sensíveis…"));
+    std::vector<OcrLine> lines;
+    std::wstring err;
+    RunOcrLines(img, lines, err);
+    auto items = FindSensitive(lines);
+    if (RegGetDword(L"RedactFaces", 1, L"Editor")) {
+        std::vector<RECT> faces;
+        std::wstring ferr;
+        if (DetectFaces(img, faces, ferr)) for (auto& f : faces) items.push_back({ Tr(L"Rosto"), L"", f, true });
+    }
+    SetCursor(old);
+    SetStatus(L"");
+    if (items.empty()) {
+        MessageBoxW(g.frame, err.empty() ? Tr(L"Nenhum dado sensível encontrado (e-mail, telefone, cartão, documentos, links com token, chaves, rostos).")
+                                         : (Tr(L"OCR indisponível: ") + err).c_str(), Tr(L"Ocultar dados sensíveis"), MB_ICONINFORMATION);
+        return;
+    }
+    int style = std::clamp((int)RegGetDword(L"RedactStyle", 0, L"Editor"), 0, 2);
+    if (!RedactDialog(g.frame, img, items, style)) return;
+    RegSetDword(L"RedactStyle", style, L"Editor");
+    std::vector<DrawObj> objs;
+    for (auto& it : items) {
+        if (!it.on) continue;
+        DrawObj o;
+        o.p1 = Gdiplus::PointF((float)it.box.left, (float)it.box.top);
+        o.p2 = Gdiplus::PointF((float)it.box.right, (float)it.box.bottom);
+        if (style == 2) {
+            o.type = ObjType::Shape;
+            o.style = g.canvas.styles[Tool::Shape];
+            o.style.shapeKind = ShapeRect; o.style.fill = 0xFF000000; o.style.stroke = 0xFF000000; o.style.width = 1;
+            o.style.shadow = false; o.style.opacity = 100; o.style.grad = Gradient();
+        } else {
+            o.type = ObjType::Blur;
+            o.style = g.canvas.styles[Tool::Blur];
+            o.style.hideKind = style; o.style.areaShape = ShapeRect; o.style.opacity = 100;
+            o.style.amount = std::max(o.style.amount, 12);
+        }
+        o.name = it.kind;
+        objs.push_back(o);
+    }
+    if (objs.empty()) return;
+    g.canvas.PasteObjects(objs, true, true);
+    DocChanged();
+    SetStatus(Format(Tr(L"%zu áreas ocultadas — cada uma é um objeto (pode ser movida, redimensionada ou excluída)."), objs.size()));
+}
+
+// Remove background (C27): the selection (cropped) or the whole image, with a preview
+void RemoveBackgroundNow() {
+    if (!RequireImageDoc()) return;
+    bool sel = g.canvas.HasRasterSelection();
+    Image full = g.cur->Render();
+    Image src = sel ? full.Crop(g.canvas.RasterSelectionBounds()) : full;
+    if (src.empty()) return;
+    std::vector<ui::Field> f = {
+        ui::Field::MakeInt(Tr(L"Tolerância (1–100)"), (int)RegGetDword(L"RemoveBgTolerance", 30, L"Editor"), 1, 100),
+        ui::Field::MakeInt(Tr(L"Borda suave (px)"), (int)RegGetDword(L"RemoveBgFeather", 1, L"Editor"), 0, 20),
+        ui::Field::MakeLabel(sel ? Tr(L"A imagem será cortada para a seleção.") : Tr(L"O fundo é o que toca as bordas da imagem e tem as cores delas.")),
+    };
+    Image mini = MakeThumbnail(src, 640, 480);
+    double k = (double)mini.w / src.w;
+    if (!ui::RunFormPreview(g.frame, Tr(L"Remover o fundo"), f, [&](std::vector<ui::Field>& v) {
+            return RemoveBackground(mini, v[0].value, (int)std::lround(v[1].value * k)); }, { 420, 320 })) return;
+    RegSetDword(L"RemoveBgTolerance", f[0].value, L"Editor");
+    RegSetDword(L"RemoveBgFeather", f[1].value, L"Editor");
+    HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+    Image out = RemoveBackground(src, f[0].value, f[1].value);
+    SetCursor(old);
+    g.canvas.ClearRasterSelection();
+    g.cur->Checkpoint();
+    g.cur->st.objs.clear();                 // the objects are part of the processed image
+    g.canvas.selected = -1;
+    g.cur->SetBase(std::move(out));
+    g.canvas.FitToWindow();
+    g.canvas.Refresh();
+    DocChanged();
+    SetStatus(Tr(L"Fundo removido (Ctrl+Z desfaz). Salve como PNG ou WebP para manter a transparência."));
+}
+
+void SplitCurrent() {
+    if (!RequireImageDoc()) return;
+    Image img = g.cur->Render();
+    std::vector<int> cuts;
+    bool vertical = false;
+    if (!SplitDialog(g.frame, img, cuts, vertical)) return;
+    auto parts = SplitImage(img, cuts, vertical);
+    std::wstring base = g.cur->title;
+    for (size_t i = 0; i < parts.size(); i++)
+        NewDocFromImage(std::move(parts[i]), Format(Tr(L"%s — parte %zu"), base.c_str(), i + 1), Tr(L"Imagem dividida"));
+    SetStatus(Format(Tr(L"Imagem dividida em %zu partes (imagens novas na bandeja)."), parts.size()));
+}
+
+void InsertDateStamp() {
+    if (!RequireImageDoc()) return;
+    SYSTEMTIME t; GetLocalTime(&t);
+    g.canvas.PasteText(DateStampText(DateStampFormat(), t), nullptr);
+    DocChanged();
+}
+
+void DateStampFormatDialog() {
+    SYSTEMTIME t; GetLocalTime(&t);
+    std::vector<ui::Field> f = {
+        ui::Field::MakeText(Tr(L"Formato"), DateStampFormat()),
+        ui::Field::MakeLabel(Tr(L"Vazio = data e hora curtas. Códigos: yyyy ano · MM mês · MMM/MMMM nome do mês · dd dia · ddd/dddd dia da semana · "
+                                L"HH hora (24 h) · hh hora (12 h) · mm minutos · ss segundos · tt AM/PM · '…' texto")),
+        ui::Field::MakeLabel(Tr(L"Exemplo: ") + DateStampText(L"dddd, dd/MM/yyyy HH:mm", t)),
+    };
+    if (!ui::RunForm(g.frame, Tr(L"Formato da data e hora"), f, nullptr, 520)) return;
+    SetDateStampFormat(Trim(f[0].text));
+    SetStatus(Tr(L"Data e hora: ") + DateStampText(DateStampFormat(), t));
+}
+
+void InsertCursor(int i) {
+    auto cs = CursorStamps();
+    if (i < 0 || i >= (int)cs.size() || !RequireImageDoc()) return;
+    DrawObj o;
+    o.type = ObjType::Stamp;
+    o.text = cs[i].first;
+    o.style = g.canvas.styles[Tool::Stamp];
+    o.name = cs[i].second;
+    float h = std::clamp(std::min(g.cur->w(), g.cur->h()) / 8.0f, 24.0f, 64.0f), w = h * StampAspect(o.text);
+    float cx = g.cur->w() / 2.0f, cy = g.cur->h() / 2.0f;
+    o.p1 = Gdiplus::PointF(cx - w / 2, cy - h / 2);
+    o.p2 = Gdiplus::PointF(cx + w / 2, cy + h / 2);
+    g.canvas.PasteObjects({ o }, true, true);
+    DocChanged();
+}
+
+void ContrastNow() {
+    COLORREF fg = RGB(0, 0, 0), bg = RGB(255, 255, 255);
+    if (g.cur && !g.cur->isVideo && g.canvas.HasRasterSelection()) DominantColors(g.canvas.SelectionImage(), fg, bg);
+    ShowContrastChecker(g.frame, fg, bg);
+}
+
+// Pin (C01): the capture process pins the .snap (with its objects) or a PNG copy
+void PinPath(const std::wstring& p) {
+    if (IsProcessRunning(kCaptureMutex)) g.ipc.SendString(ipc::kCapture, ipc::PinFile, p);
+    else LaunchSibling(kCaptureExe, L"/hide /pin \"" + p + L"\"");
+    SetStatus(Tr(L"Imagem fixada na tela."));
+}
+
+void PinCurrent() {
+    if (!RequireImageDoc()) return;
+    Autosave(g.cur);
+    PinPath(FileExt(g.cur->path) == L".snap" && FileExists(g.cur->path) ? g.cur->path : TempExport());
+}
+
+// Upload (C21): off until a destination is configured; the link replaces the image on the clipboard (option)
+void UploadItem(const std::wstring& itemPath, const Image* img, const std::wstring& name) {
+    auto s = upload::Settings::Load();
+    if (!s.Configured()) {
+        if (!upload::ConfigureDialog(g.frame)) return;
+        s = upload::Settings::Load();
+        if (!s.Configured()) return;
+    }
+    SetStatus(Tr(L"Enviando…"));
+    auto done = [itemPath](const upload::Result& r) {
+        if (!r.ok) {
+            SetStatus(Tr(L"Falha no envio."));
+            MessageBoxW(g.frame, (Tr(L"Falha no envio: ") + r.error).c_str(), L"Snapnab Editor", MB_ICONWARNING);
+            return;
+        }
+        if (!itemPath.empty()) upload::SetUploadedUrl(itemPath, r.url);
+        bool copy = upload::Settings::Load().copyLink;
+        if (copy) clip::CopyText(g.frame, r.url);
+        SetStatus(Tr(L"Enviado: ") + r.url + (copy ? Tr(L" (link copiado)") : L""));
+    };
+    if (img) upload::UploadImageAsync(*img, name, done);
+    else upload::UploadFileAsync(itemPath, done);
+}
+
+void UploadCurrent() {
+    if (!g.cur) return;
+    if (g.cur->isVideo) { UploadItem(g.cur->path, nullptr, g.cur->title); return; }
+    g.canvas.CommitText();
+    Image img = g.cur->Render();
+    UploadItem(g.cur->path, &img, g.cur->title);
+}
+
+void SendToOffice(int t) {
+    if (!RequireImageDoc()) return;
+    std::wstring err;
+    std::wstring file = TempExport();
+    HCURSOR old = SetCursor(LoadCursor(nullptr, IDC_WAIT));
+    bool ok = office::Send((office::Target)t, file, g.cur->w(), g.cur->h(), err);
+    SetCursor(old);
+    if (ok) SetStatus(std::wstring(Tr(L"Enviado para ")) + office::TargetName((office::Target)t) + L".");
+    else MessageBoxW(g.frame, err.c_str(), office::TargetName((office::Target)t), MB_ICONWARNING);
+}
+
+void CopyAsItem(const std::wstring& path, const Image& img, const std::wstring& title) {
+    POINT p; GetCursorPos(&p);
+    if (CopyAsMenu(g.frame, p, img, path, title, upload::UploadedUrl(path))) SetStatus(Tr(L"Copiado."));
+}
+
+// Batch processing (C28): quick effects and Beautify presets as the effects
+void RunBatch(std::vector<std::wstring> files) {
+    files.erase(std::remove_if(files.begin(), files.end(), [](const std::wstring& f) { return FileExt(f) == L".mp4"; }), files.end());
+    std::vector<BatchEffect> effects;
+    for (auto& q : g.quick) { QuickEffect qq = q; effects.push_back({ Tr(q.name), [qq](const Image& i) { return ApplyQuick(qq, i, 1.0, nullptr); } }); }
+    for (auto& p : fx::BeautifyPresets()) {
+        fx::BeautifyOptions o = p.opt;
+        effects.push_back({ Tr(L"Embelezar: ") + (p.builtin ? std::wstring(Tr(p.name)) : p.name), [o](const Image& i) { return fx::Beautify(i, o); } });
+    }
+    BatchDialog(g.frame, files, [](const std::wstring& p, Image& out) { return LoadItemImage(p, out); }, effects);
+}
+
+void CompareNow(std::vector<std::wstring> paths) {
+    paths.erase(std::remove_if(paths.begin(), paths.end(), [](const std::wstring& f) { return FileExt(f) == L".mp4"; }), paths.end());
+    Image a, b;
+    std::wstring na, nb;
+    if (paths.size() >= 2) { LoadItemImage(paths[0], a, &na); LoadItemImage(paths[1], b, &nb); }
+    else if (g.cur && !g.cur->isVideo) {
+        g.canvas.CommitText();
+        a = g.cur->Render(); na = g.cur->title;
+        std::wstring p = paths.size() == 1 && paths[0] != g.cur->path ? paths[0] : L"";
+        if (p.empty() && !ui::OpenFileDialog(g.frame, ImageOpenFilter(), p, Tr(L"Comparar com…"))) return;
+        LoadItemImage(p, b, &nb);
+    } else {
+        std::vector<std::wstring> files;
+        if (!PickImageFiles(g.frame, files) || files.size() < 2) { SetStatus(Tr(L"Escolha duas imagens para comparar.")); return; }
+        LoadItemImage(files[0], a, &na); LoadItemImage(files[1], b, &nb);
+    }
+    if (a.empty() || b.empty()) { SetStatus(Tr(L"Não foi possível abrir as imagens para comparar.")); return; }
+    ShowCompare(g.frame, a, b, na, nb);
+}
+
+void OnItemCommand(int cmd, const std::vector<std::wstring>& s) {
+    if (s.empty()) return;
+    Image img;
+    std::wstring name;
+    switch (cmd) {
+    case LibraryTray::CmdPin: PinPath(s[0]); break;
+    case LibraryTray::CmdCopyAs:
+        if (FileExt(s[0]) == L".mp4") CopyAsItem(s[0], Image(), FileNameOf(s[0]));
+        else if (LoadItemImage(s[0], img, &name)) CopyAsItem(s[0], img, name);
+        break;
+    case LibraryTray::CmdUpload:
+        if (FileExt(s[0]) == L".mp4") UploadItem(s[0], nullptr, FileNameOf(s[0]));
+        else if (LoadItemImage(s[0], img, &name)) UploadItem(s[0], &img, name);
+        break;
+    case LibraryTray::CmdCombine: CombineImagesNow({ s.rbegin(), s.rend() }, false); break;
+    case LibraryTray::CmdCompare: CompareNow({ s.rbegin(), s.rend() }); break;
+    case LibraryTray::CmdBatch: RunBatch(s); break;
+    }
+}
+
 void OnCommand(int id) {
     if (id >= T_TOOL_BASE && id < T_TOOL_BASE + (int)Tool::Count) { SetTool((Tool)(id - T_TOOL_BASE)); return; }
+    if (id >= M_OFFICE_BASE && id < M_OFFICE_BASE + office::TargetCount) { SendToOffice(id - M_OFFICE_BASE); return; }
+    if (id >= M_CURSOR_BASE && id < M_CURSOR_BASE + 16) { InsertCursor(id - M_CURSOR_BASE); return; }
     if (id >= M_MORE_TOOL_BASE && id < M_MORE_TOOL_BASE + (int)Tool::Count) { SetTool((Tool)(id - M_MORE_TOOL_BASE)); return; }
     switch (id) {
     case M_TB_CUSTOMIZE: CustomizeToolbar(); break;
@@ -1332,9 +1762,14 @@ void OnCommand(int id) {
         HMENU m = CreatePopupMenu();
         AppendMenuW(m, MF_STRING, M_SAVEAS, Tr(L"Arquivo…"));
         AppendMenuW(m, MF_STRING, M_COPYALL, Tr(L"Área de transferência"));
+        AppendMenuW(m, MF_STRING, M_COPYAS, Tr(L"Copiar como…"));
         AppendMenuW(m, MF_STRING, M_EMAIL, Tr(L"E-mail…"));
         AppendMenuW(m, MF_STRING, M_PRINT, Tr(L"Impressora…"));
         AppendMenuW(m, MF_STRING, M_OPEN_PROGRAM, Tr(L"Programa externo…"));
+        AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
+        AppendMenuW(m, MF_STRING, M_PIN, Tr(L"Fixar na tela"));
+        AppendMenuW(m, MF_STRING, M_UPLOAD, Tr(L"Enviar (upload)"));
+        AppendMenuW(m, MF_POPUP, (UINT_PTR)OfficeMenu(), Tr(L"Enviar para"));
         POINT p; GetCursorPos(&p);
         int cmd = TrackPopupMenu(m, TPM_RETURNCMD | TPM_RIGHTBUTTON, p.x, p.y, 0, g.frame, nullptr);
         DestroyMenu(m);
@@ -1397,6 +1832,12 @@ void OnCommand(int id) {
         RegSetDword(L"EdgeSnap", g.canvas.edgeSnap, L"Editor");
         SetStatus(g.canvas.edgeSnap ? Tr(L"A seleção e o corte encaixam nas bordas da imagem (Alt desliga na hora).") : Tr(L"Encaixe nas bordas desligado."));
         break;
+    case M_DRAWHOLD:                                 // C23
+        g.canvas.drawHold = !g.canvas.drawHold;
+        RegSetDword(L"DrawHold", g.canvas.drawHold, L"Editor");
+        SetStatus(g.canvas.drawHold ? Tr(L"Caneta: desenhe uma linha, seta, retângulo, elipse ou triângulo e segure parado para virar a forma.")
+                                    : Tr(L"Desenhar e segurar desligado."));
+        break;
     case M_PLAINPASTE:
         g.canvas.plainPaste = !g.canvas.plainPaste;
         RegSetDword(L"PlainTextPaste", g.canvas.plainPaste, L"Editor");
@@ -1417,7 +1858,7 @@ void OnCommand(int id) {
         break;
     case M_DELETE_SEL: if (RequireImageDoc()) g.canvas.DeleteSelected(); break;
     case M_SELECTALL:
-        if (GetFocus() == g.tray.hwnd) { g.tray.SelectAll(); break; }     // Ctrl+A na bandeja/biblioteca marca todas as capturas
+        if (GetFocus() == g.tray.hwnd) { g.tray.SelectAll(); break; }     // Ctrl+A in the tray/library selects every capture
         if (g.libraryOpen) { g.library.SelectAll(); break; }
         if (g.cur && !g.cur->isVideo && g.canvas.tool == Tool::Select && !g.canvas.smartMove && !g.cur->st.objs.empty()) {
             g.canvas.SelectAllObjects();               // with Move, Ctrl+A selects all objects
@@ -1447,8 +1888,34 @@ void OnCommand(int id) {
         g.canvas.UngroupSelected();
         SetStatus(Tr(L"Grupo desfeito."));
         break;
-    case M_APPLY_TEMPLATE:
-        SetStatus(Tr(L"Modelos (combinar imagens) ainda não estão disponíveis no Snapnab."));
+    case M_APPLY_TEMPLATE: CombineImagesNow({}, true); break;     // the current image in a layout with other images (C09)
+    case M_COMBINE: { auto s = LibrarySelection(); CombineImagesNow(s.size() >= 2 ? s : std::vector<std::wstring>{}, s.size() < 2); break; }
+    case M_ADD_CAPTURE:
+        if (!RequireImageDoc()) break;
+        g.addCaptureTo = g.cur->path;
+        g.addCaptureTick = GetTickCount();
+        SetStatus(Tr(L"Faça a captura: ela será adicionada abaixo desta imagem."));
+        RequestCapture(0);
+        break;
+    case M_READ_QR: ReadQrCode(); break;
+    case M_BEAUTIFY: BeautifyCurrent(); break;
+    case M_REDACT: RedactSensitive(); break;
+    case M_REMOVE_BG: RemoveBackgroundNow(); break;
+    case M_SPLIT: SplitCurrent(); break;
+    case M_DATESTAMP: InsertDateStamp(); break;
+    case M_DATESTAMP_FMT: DateStampFormatDialog(); break;
+    case M_CONTRAST: ContrastNow(); break;
+    case M_ASSISTANT:
+        if (RequireImageDoc()) ShowAssistant(g.frame, CurrentImageOrSelection(), [](const std::wstring& t) { g.canvas.PasteText(t, nullptr); DocChanged(); });
+        break;
+    case M_AI_SETTINGS: AssistantSettingsDialog(g.frame); break;
+    case M_UPLOAD_SETTINGS: upload::ConfigureDialog(g.frame); break;
+    case M_COMPARE: CompareNow(LibrarySelection()); break;
+    case M_BATCH: { auto s = LibrarySelection(); RunBatch(s.size() >= 2 ? s : std::vector<std::wstring>{}); break; }
+    case M_PIN: PinCurrent(); break;
+    case M_UPLOAD: UploadCurrent(); break;
+    case M_COPYAS:
+        if (g.cur) { g.canvas.CommitText(); CopyAsItem(g.cur->path, g.cur->isVideo ? Image() : g.cur->Render(), g.cur->title); }
         break;
     case M_SNAPPING:
         g.canvas.snapping = !g.canvas.snapping;
@@ -1503,9 +1970,17 @@ void OnIPCNotify(const ipc::Message& m) {
     case ipc::ReloadConfig: g.canvas.Refresh(false); break;
     case ipc::NewImageFromClipboard:
         Log(L"Snip detected. New Image From Clipboard commencing.");
-        SetTimer(g.frame, 0x1E, 500, nullptr);         // espera o clipboard assentar (Sleep(500) no original)
+        SetTimer(g.frame, 0x1E, 500, nullptr);         // waits for the clipboard to settle (Sleep(500) in the original)
         break;
-    case ipc::OpenFile: if (!m.text.empty()) { OpenPath(m.text); ShowEditor(); } break;
+    case ipc::OpenFile:
+        if (m.text.empty()) break;
+        if (!g.addCaptureTo.empty()) {                 // Add capture (C09): pending for two minutes
+            std::wstring target = g.addCaptureTo;
+            g.addCaptureTo.clear();
+            if (GetTickCount() - g.addCaptureTick < 120000 && FileExt(m.text) == L".snap" && AppendCapture(target, m.text)) { ShowEditor(); break; }
+        }
+        OpenPath(m.text); ShowEditor();
+        break;
     case ipc::LibraryChanged: g.tray.Reload(); if (g.libraryOpen) g.library.Reload(); break;
     case ipc::RestartEditor:            // language changed: opens the new instance (which waits for this one to close) and closes
         if (LaunchSibling(kEditorExe, RestartArgs())) PostMessageW(g.frame, WM_CLOSE, 0, 0);
@@ -1920,7 +2395,7 @@ std::vector<std::wstring> FilesForDrag(const std::vector<std::wstring>& paths) {
         WIN32_FILE_ATTRIBUTE_DATA fa{};
         GetFileAttributesExW(p.c_str(), GetFileExInfoStandard, &fa);
         SYSTEMTIME st, lt; FileTimeToSystemTime(&fa.ftLastWriteTime, &st); SystemTimeToTzSpecificLocalTime(nullptr, &st, &lt);
-        std::wstring base = dir + Format(L"\\Captura_%04d-%02d-%02d_%02d-%02d-%02d", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
+        std::wstring base = dir + L"\\" + Tr(L"Captura") + Format(L"_%04d-%02d-%02d_%02d-%02d-%02d", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
         std::wstring f = base + L".png";
         for (int n = 2; std::find(out.begin(), out.end(), f) != out.end(); n++) f = base + Format(L"_%d.png", n);
         if (SaveImageFile(f, img)) out.push_back(f);
@@ -2042,6 +2517,7 @@ void CreateChildren() {
     g.canvas.rulers = RegGetDword(L"Rulers", 0, L"Editor") != 0;               // off by default
     g.canvas.edgeSnap = RegGetDword(L"EdgeSnap", 1, L"Editor") != 0;
     g.canvas.plainPaste = RegGetDword(L"PlainTextPaste", 1, L"Editor") != 0;
+    g.canvas.drawHold = RegGetDword(L"DrawHold", 1, L"Editor") != 0;            // C23
     g.canvas.onCursorMoved = [](bool inside, Gdiplus::PointF p) {
         std::wstring c = inside ? Format(L"X: %d   Y: %d", (int)std::floor(p.X), (int)std::floor(p.Y)) : L"";
         if (c != g.coords) { g.coords = c; InvalidateStatus(); }
@@ -2100,6 +2576,7 @@ void CreateChildren() {
         };
         lt->onDelete = [](const std::vector<std::wstring>& p) { DeleteDocs(p); };
         lt->onExport = [](const std::vector<std::wstring>& p) { ExportItems(p); };
+        lt->onItemCommand = OnItemCommand;
         lt->onDropFiles = [](const std::vector<std::wstring>& files) { for (auto& f : files) OpenPath(f); };
         lt->filesForDrag = FilesForDrag;
     }
@@ -2131,8 +2608,9 @@ LRESULT CALLBACK FrameProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         g.caption.Init(h, { { Tr(L"Arquivo"), i18n::AltKey(Tr(L"Arquivo"), L'A'), GetSubMenu(g.menuBar, 0) },
                             { Tr(L"Editar"), i18n::AltKey(Tr(L"Editar"), L'E'), GetSubMenu(g.menuBar, 1) },
                             { Tr(L"Imagem"), i18n::AltKey(Tr(L"Imagem"), L'I'), GetSubMenu(g.menuBar, 2) },
-                            { Tr(L"Exibir"), L'X', GetSubMenu(g.menuBar, 3) },
-                            { Tr(L"Ajuda"), i18n::AltKey(Tr(L"Ajuda"), L'J'), GetSubMenu(g.menuBar, 4) } }, true, true);
+                            { Tr(L"Ferramentas"), i18n::AltKey(Tr(L"Ferramentas"), L'F'), GetSubMenu(g.menuBar, 3) },
+                            { Tr(L"Exibir"), L'X', GetSubMenu(g.menuBar, 4) },
+                            { Tr(L"Ajuda"), i18n::AltKey(Tr(L"Ajuda"), L'J'), GetSubMenu(g.menuBar, 5) } }, true, true);
         LoadTheme();
         CreateChildren();
         DragAcceptFiles(h, TRUE);
@@ -2201,8 +2679,14 @@ LRESULT CALLBACK FrameProc(HWND h, UINT m, WPARAM w, LPARAM l) {
         CheckMenuItem(mm, M_RULERS, g.canvas.rulers ? MF_CHECKED : MF_UNCHECKED);
         CheckMenuItem(mm, M_EDGESNAP, g.canvas.edgeSnap ? MF_CHECKED : MF_UNCHECKED);
         CheckMenuItem(mm, M_PLAINPASTE, g.canvas.plainPaste ? MF_CHECKED : MF_UNCHECKED);
+        CheckMenuItem(mm, M_DRAWHOLD, g.canvas.drawHold ? MF_CHECKED : MF_UNCHECKED);
         en(M_FLATTEN, img && !g.cur->st.objs.empty());
-        en(M_GROUP, img && g.canvas.SelectionCount() >= 2); en(M_UNGROUP, img && g.canvas.CanUngroup()); en(M_APPLY_TEMPLATE, false);
+        en(M_GROUP, img && g.canvas.SelectionCount() >= 2); en(M_UNGROUP, img && g.canvas.CanUngroup()); en(M_APPLY_TEMPLATE, img);
+        for (int id : { M_READ_QR, M_BEAUTIFY, M_REDACT, M_REMOVE_BG, M_SPLIT, M_ADD_CAPTURE, M_DATESTAMP, M_ASSISTANT, M_PIN })
+            en(id, img);
+        for (int t = 0; t < office::TargetCount; t++) en(M_OFFICE_BASE + t, img && office::Available((office::Target)t));
+        for (int i = 0; i < 16; i++) en(M_CURSOR_BASE + i, img);
+        en(M_UPLOAD, g.cur != nullptr); en(M_COPYAS, g.cur != nullptr);
         for (int id : { M_TRIM, M_RESIZE, M_CANVAS, M_CANVAS_COLOR, M_TAG, M_FLIP_H, M_FLIP_V, M_ROT_CW, M_ROT_CCW, M_ROT_180, M_ROT_FREE, M_CROP_SEL })
             en(id, img);
         CheckMenuItem(mm, M_SNAPPING, g.canvas.snapping ? MF_CHECKED : MF_UNCHECKED);
@@ -2274,7 +2758,9 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE, LPWSTR, int nShow) {
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
     // single instance: mutex + "SnapnabEditor" window; the second instance forwards the command line (WM_COPYDATA 0x8010)
     WaitForPreviousInstance(kEditorWndClass);
-    if (ForwardToExistingInstance(kEditorMutex, kEditorWndClass, &g.mutex)) return 0;
+    // forwarded: this process ends right away, without the DLL unload notifications (third-party overlays injected
+    // into every process, such as NahimicOSD.dll, crashed in them when the process ended this early)
+    if (ForwardToExistingInstance(kEditorMutex, kEditorWndClass, &g.mutex)) TerminateProcess(GetCurrentProcess(), 0);
     SetCurrentDirectoryW(ExeDir().c_str());
     OleInitialize(nullptr);          // COM in STA + OLE drag and drop (tray → other programs)
     INITCOMMONCONTROLSEX icc{ sizeof(icc), ICC_STANDARD_CLASSES | ICC_UPDOWN_CLASS | ICC_HOTKEY_CLASS | ICC_PROGRESS_CLASS | ICC_BAR_CLASSES };
@@ -2336,7 +2822,11 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE, LPWSTR, int nShow) {
         wchar_t cls[32] = L"";
         GetClassNameW(GetFocus(), cls, 32);
         bool inEdit = !_wcsicmp(cls, L"Edit") || !_wcsicmp(cls, L"ComboBox") || !_wcsicmp(cls, L"msctls_hotkey32");
-        if (!inEdit && TranslateAcceleratorW(g.frame, g.accel, &msg)) continue;
+        // in a text field the field keeps its own keys (Ctrl+Z/Y/X/C/V/A and the hotkey field); the other Ctrl
+        // shortcuts (save, save as, print…) still work, so a field left with the focus does not swallow them
+        bool fieldKey = !_wcsicmp(cls, L"msctls_hotkey32") || GetKeyState(VK_CONTROL) >= 0 ||
+                        ((msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN) && msg.wParam < 0x80 && wcschr(L"ZYXCVA", (wchar_t)msg.wParam));
+        if ((!inEdit || !fieldKey) && TranslateAcceleratorW(g.frame, g.accel, &msg)) continue;
         // tool letters (an arrow just drawn takes the typed letters as its label instead)
         if (msg.message == WM_KEYDOWN && GetFocus() == g.canvas.hwnd && GetKeyState(VK_CONTROL) >= 0 && GetKeyState(VK_MENU) >= 0 &&
             !g.canvas.WantsTyping() && HandleToolKey(msg.wParam)) continue;
