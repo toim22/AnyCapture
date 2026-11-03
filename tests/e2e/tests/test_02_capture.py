@@ -9,6 +9,7 @@ from PIL import Image
 
 from snapnab_e2e import apps, library, presets, regs, win
 from snapnab_e2e.apps import CaptureCmd
+from snapnab_e2e.config import EDITOR_EXE, LIBRARY_DIR
 from snapnab_e2e.logs import state
 
 OVERLAY = "SnapnabSelectWindowClass"
@@ -292,6 +293,53 @@ def test_output_clipboard(capture, lib):
     img = win.wait_until(win.clipboard_image, what="image on the clipboard")
     assert img.size == win.screen_size()
 
+
+def test_after_capture_only_copy(capture, logs, lib):
+    """Options › When done › Only copy to the clipboard (#3): neither the Editor nor the quick thumbnail, even with the
+    preset's Editor on, and the clipboard even with CopyEveryCapture off."""
+    regs.set_dword("AfterCaptureMode", 3)
+    regs.set_dword("CopyEveryCapture", 0)
+    try:
+        win.clear_clipboard()
+        start_with(capture, presets.preset("e2e only copy", "Monitor", editor=True))
+        win32api.SetCursorPos((10, 10))
+        run_preset(capture, "e2e only copy")
+        lib.wait_new()
+        img = win.wait_until(win.clipboard_image, what="image on the clipboard")
+        assert img.size == win.screen_size()
+        wait_idle(logs)
+        time.sleep(1.5)
+        assert not apps.Editor().running, "the Editor opened"
+        assert not win.find_window("SnapnabQuickOverlay", visible_only=True), "the quick thumbnail appeared"
+    finally:
+        regs.delete("AfterCaptureMode")
+        regs.delete("CopyEveryCapture")
+
+
+def tray_order():
+    """The Editor's Recent captures, front first (Tray.bin in the library: UTF-16 lines, hidden ones start with -)."""
+    f = LIBRARY_DIR / "Tray.bin"
+    text = f.read_bytes().decode("utf-16-le", "replace") if f.exists() else ""
+    return [l.strip().lstrip("﻿").lower() for l in text.splitlines() if l.strip() and not l.startswith("-")]
+
+
+def test_opening_a_tray_capture_keeps_its_place(capture, logs, lib):
+    """Clicking an older capture in Recent captures opens it without moving it to the front (#2)."""
+    start_with(capture, presets.preset("e2e tray", "Monitor", editor=False))
+    apps.Editor().start()
+    for n in range(1, 4):
+        logs.capture.mark()
+        run_preset(capture, "e2e tray")
+        lib.wait_new(count=n)
+        wait_idle(logs)
+    shots = [str(p).lower() for p in lib.new("*.snap")]     # oldest first
+    newest_first = shots[::-1]
+    win.wait_until(lambda: tray_order()[:3] == newest_first, 15, what="the three captures at the front of the tray")
+    logs.editor.mark()
+    apps.run(EDITOR_EXE, "/Open", shots[0])                   # same path as a click on the thumbnail
+    logs.editor.wait(r"IPC: sent code=0x02")
+    apps.wait_quiet(1.0)
+    assert tray_order()[:3] == newest_first
 
 @pytest.mark.parametrize("fmt,magic", [("png", b"\x89PNG"), ("jpg", b"\xff\xd8"), ("bmp", b"BM"), ("gif", b"GIF8"),
                                        ("tif", b"II*\x00")])

@@ -282,7 +282,9 @@ and start Snapnab with Windows. If Snapnab is running, the installer closes it b
 <tr><td>Double click</td><td class="wrap">Opens the capture window.</td></tr>
 <tr><td>Right click</td><td class="wrap">Menu with <span class="ui">Capture image</span>, <span class="ui">Record video</span>, the list
 of <span class="ui">Presets</span>, <span class="ui">Open the capture window</span>, <span class="ui">Show One Click</span>,
-<span class="ui">Open the Editor</span>, <span class="ui">Options…</span> and <span class="ui">Exit</span>.</td></tr>
+<span class="ui">Open the Editor</span>, <span class="ui">Open the Editor after capturing</span>, <span class="ui">Options…</span> and <span class="ui">Exit</span>.
+Uncheck <span class="ui">Open the Editor after capturing</span> to only copy each capture to the clipboard (see
+<a href="#capture-extras">After the capture</a>); check it again to go back to what you had chosen.</td></tr>
 </table>
 
 <div class="callout tip"><b>Print Screen already used by Windows?</b>On Windows 11 the Print Screen key may open the
@@ -1340,7 +1342,7 @@ objects editable; videos as MP4. You never lose a capture by forgetting to save 
 
 <h3>Recent captures tray</h3>
 <p>The strip at the bottom of the Editor shows your most recent captures (10 by default). New captures and opened files go to the
-front. Hide or show it with <span class="path">View › Recent captures (tray)</span>.</p>
+front; opening a capture that is already in the strip keeps it in its place. Hide or show it with <span class="path">View › Recent captures (tray)</span>.</p>
 <ul>
   <li>Click a thumbnail to open it. Rest the mouse on it for a larger preview with its annotations, size and date (videos show the
   first frame and the duration).</li>
@@ -1481,6 +1483,8 @@ Uninstalling Snapnab keeps all of this.</p>
 <p>Every capture is <strong>copied to the clipboard</strong> as soon as it is taken (videos are copied as a file), so you can paste it right away. Turn this off in <em>Options › After capturing</em>.</p>
 <h3>Quick thumbnail</h3>
 <p>In <em>Options › After capturing › When done</em> you can show a small floating thumbnail in a corner of the screen instead of (or as well as) opening the Editor. It has <em>Copy</em>, <em>Save</em>, <em>Annotate</em>, <em>Pin</em>, <em>Delete</em> and <em>Close</em>; drag it into any program to drop the file there, right-click for <em>Copy as…</em>, <em>Read QR code</em> and <em>Upload</em>. It closes by itself after the chosen number of seconds (it waits while the mouse is over it); several captures stack.</p>
+<h3>Only copy to the clipboard</h3>
+<p>Choose <em>Options › After capturing › When done › Only copy to the clipboard</em>, or uncheck <em>Open the Editor after capturing</em> in the notification area icon menu, to open neither the Editor nor the thumbnail: the capture goes to the clipboard (even with <em>Copy every capture to the clipboard</em> off) and to the library, and a short notification confirms it. Open it later from <em>Recent captures</em> in the Editor.</p>
 <h3>Capture sound</h3>
 <p>A short sound plays when an image is taken: camera shutter, click, soft tap, your own WAV file or none (<em>Options › Capture sound</em>).</p>
 <h3>New crosshair keys</h3>

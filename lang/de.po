@@ -71,63 +71,63 @@ msgstr "In der Aufnahme wurde kein Text gefunden."
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "Text erfassen — in die Zwischenablage kopiert"
 
-#: src/capture/CaptureEngine.cpp:600
+#: src/capture/CaptureEngine.cpp:601
 msgid "copiada para a área de transferência"
 msgstr "in die Zwischenablage kopiert"
 
-#: src/capture/CaptureEngine.cpp:604 src/capture/CaptureEngine.cpp:618
+#: src/capture/CaptureEngine.cpp:605 src/capture/CaptureEngine.cpp:619
 msgid "salva em "
 msgstr "gespeichert unter "
 
-#: src/capture/CaptureEngine.cpp:616 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1275
+#: src/capture/CaptureEngine.cpp:617 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1284
 msgid "Captura"
 msgstr "Aufnahme"
 
-#: src/capture/CaptureEngine.cpp:638
+#: src/capture/CaptureEngine.cpp:641
 msgid "Captura adicionada à biblioteca"
 msgstr "Aufnahme zur Bibliothek hinzugefügt"
 
-#: src/capture/CaptureEngine.cpp:763
+#: src/capture/CaptureEngine.cpp:766
 msgid "A janela será ampliada além da tela, capturada e restaurada."
 msgstr "Das Fenster wird über den Bildschirm hinaus vergrößert, aufgenommen und wiederhergestellt."
 
-#: src/capture/CaptureEngine.cpp:764
+#: src/capture/CaptureEngine.cpp:767
 msgid "Nova largura (px)"
 msgstr "Neue Breite (px)"
 
-#: src/capture/CaptureEngine.cpp:765
+#: src/capture/CaptureEngine.cpp:768
 msgid "Nova altura (px)"
 msgstr "Neue Höhe (px)"
 
-#: src/capture/CaptureEngine.cpp:767 src/capture/Presets.cpp:17
+#: src/capture/CaptureEngine.cpp:770 src/capture/Presets.cpp:17
 msgid "Janela estendida"
 msgstr "Erweitertes Fenster"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "Recomeçar a gravação?"
 msgstr "Aufnahme neu starten?"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "O que foi gravado até agora será descartado."
 msgstr "Das bisher Aufgenommene wird verworfen."
 
-#: src/capture/CaptureEngine.cpp:842
+#: src/capture/CaptureEngine.cpp:845
 msgid "Não perguntar de novo"
 msgstr "Nicht mehr fragen"
 
-#: src/capture/CaptureEngine.cpp:862
+#: src/capture/CaptureEngine.cpp:865
 msgid "Imagem durante gravação"
 msgstr "Bild während der Aufzeichnung"
 
-#: src/capture/CaptureEngine.cpp:865
+#: src/capture/CaptureEngine.cpp:868
 msgid "Imagem capturada sem parar a gravação."
 msgstr "Bild aufgenommen, ohne die Aufzeichnung zu stoppen."
 
-#: src/capture/CaptureEngine.cpp:879 src/capture/Webcam.cpp:91
+#: src/capture/CaptureEngine.cpp:882 src/capture/Webcam.cpp:91
 msgid "Snapnab — webcam"
 msgstr "Snapnab — Webcam"
 
-#: src/capture/CaptureEngine.cpp:918
+#: src/capture/CaptureEngine.cpp:921
 msgid ""
 "Não foi possível iniciar a gravação.\n"
 "\n"
@@ -135,35 +135,35 @@ msgstr ""
 "Die Aufzeichnung konnte nicht gestartet werden.\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:951 src/capture/main.cpp:580
+#: src/capture/CaptureEngine.cpp:954 src/capture/main.cpp:580
 msgid "Destacar o cursor"
 msgstr "Mauszeiger hervorheben"
 
-#: src/capture/CaptureEngine.cpp:952 src/capture/main.cpp:583
+#: src/capture/CaptureEngine.cpp:955 src/capture/main.cpp:583
 msgid "Mostrar os cliques"
 msgstr "Klicks anzeigen"
 
-#: src/capture/CaptureEngine.cpp:954
+#: src/capture/CaptureEngine.cpp:957
 msgid "Teclas: não mostrar"
 msgstr "Tasten: nicht anzeigen"
 
-#: src/capture/CaptureEngine.cpp:955
+#: src/capture/CaptureEngine.cpp:958
 msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "Tasten: nur Tastenkürzel (Strg, Alt, Win, F1…)"
 
-#: src/capture/CaptureEngine.cpp:956
+#: src/capture/CaptureEngine.cpp:959
 msgid "Teclas: todas (inclusive o que for digitado)"
 msgstr "Tasten: alle (auch das Getippte)"
 
-#: src/capture/CaptureEngine.cpp:991
+#: src/capture/CaptureEngine.cpp:994
 msgid "Snapnab — áudio salvo"
 msgstr "Snapnab — Audio gespeichert"
 
-#: src/capture/CaptureEngine.cpp:1003
+#: src/capture/CaptureEngine.cpp:1007
 msgid "Vídeo salvo na biblioteca: "
 msgstr "Video in der Bibliothek gespeichert: "
 
-#: src/capture/CaptureEngine.cpp:1005
+#: src/capture/CaptureEngine.cpp:1009
 msgid ""
 "A gravação falhou.\n"
 "\n"
@@ -171,15 +171,15 @@ msgstr ""
 "Die Aufzeichnung ist fehlgeschlagen.\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Snapnab — pouco espaço em disco"
 msgstr "Snapnab — wenig Speicherplatz"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Restam menos de 1 GB livres na unidade da biblioteca."
 msgstr "Auf dem Laufwerk der Bibliothek ist weniger als 1 GB frei."
 
-#: src/capture/CaptureEngine.cpp:1016
+#: src/capture/CaptureEngine.cpp:1020
 msgid "Gravação interrompida: espaço em disco insuficiente."
 msgstr "Aufzeichnung gestoppt: nicht genug Speicherplatz."
 
@@ -211,7 +211,7 @@ msgstr "Intervall (Sekunden)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "Dauer (Minuten, 0 = bis zum Stopp)"
 
-#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1522 src/editor/Batch.cpp:122
+#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1532 src/editor/Batch.cpp:122
 msgid "Formato"
 msgstr "Format"
 
@@ -227,7 +227,7 @@ msgstr "Intervall"
 msgid "Pasta"
 msgstr "Ordner"
 
-#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1235
+#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1244
 msgid "Capturar o cursor"
 msgstr "Mauszeiger aufnehmen"
 
@@ -373,7 +373,7 @@ msgstr "Immer im Vordergrund"
 msgid "Sombra"
 msgstr "Schatten"
 
-#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1224 src/capture/main.cpp:1440
+#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1233 src/capture/main.cpp:1449
 msgid "Ler código QR"
 msgstr "QR-Code lesen"
 
@@ -497,7 +497,7 @@ msgstr "Speichern unter…"
 msgid "Anotar no Editor"
 msgstr "Im Editor kommentieren"
 
-#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1224 src/editor/Panels.cpp:1767 src/editor/main.cpp:1770
+#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1233 src/editor/Panels.cpp:1772 src/editor/main.cpp:1770
 msgid "Fixar na tela"
 msgstr "Auf dem Bildschirm anheften"
 
@@ -525,7 +525,7 @@ msgstr "Video speichern"
 msgid "Salvar como"
 msgstr "Speichern unter"
 
-#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1766 src/editor/main.cpp:1765
+#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1771 src/editor/main.cpp:1765
 msgid "Copiar como…"
 msgstr "Kopieren als…"
 
@@ -533,7 +533,7 @@ msgstr "Kopieren als…"
 msgid "Enviar (upload) e copiar o link"
 msgstr "Hochladen und Link kopieren"
 
-#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1408
+#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1417
 msgid "Fechar todas"
 msgstr "Alle schließen"
 
@@ -968,7 +968,7 @@ msgstr "Auflösung (DPI)"
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "Wird in gespeicherte Dateien geschrieben (PNG, JPEG, TIFF, BMP)."
 
-#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1224
+#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1233
 msgid "Nenhum"
 msgstr "Keine"
 
@@ -980,7 +980,7 @@ msgstr "Weiteren Effekt hinzufügen"
 msgid "Remover este efeito"
 msgstr "Diesen Effekt entfernen"
 
-#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1290 src/capture/main.cpp:1475
+#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1299 src/capture/main.cpp:1485
 msgid "Desligado"
 msgstr "Aus"
 
@@ -989,11 +989,11 @@ msgstr "Aus"
 msgid "%d s"
 msgstr "%d s"
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343
 msgid "Ligada"
 msgstr "Ein"
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334 src/capture/main.cpp:1509
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343 src/capture/main.cpp:1519
 msgid "Desligada"
 msgstr "Aus"
 
@@ -1201,7 +1201,7 @@ msgstr ""
 "•  Das Zahnrad der Zeile benennt die Vorlage um, dupliziert oder löscht sie.\n"
 "•  \"Neue Vorlage aus aktuellen Einstellungen\" speichert, was jetzt im Fenster steht."
 
-#: src/capture/main.cpp:669 src/capture/main.cpp:1028 src/capture/main.cpp:1242 src/capture/main.cpp:1437
+#: src/capture/main.cpp:669 src/capture/main.cpp:1037 src/capture/main.cpp:1251 src/capture/main.cpp:1446
 msgid "Presets"
 msgstr "Vorlagen"
 
@@ -1253,11 +1253,11 @@ msgstr "Automatisch (Windows-Sprache)"
 msgid "Atalhos globais"
 msgstr "Globale Tastenkürzel"
 
-#: src/capture/main.cpp:766 src/capture/main.cpp:1023 src/capture/main.cpp:1432
+#: src/capture/main.cpp:766 src/capture/main.cpp:1032 src/capture/main.cpp:1441
 msgid "Capturar imagem"
 msgstr "Bild aufnehmen"
 
-#: src/capture/main.cpp:767 src/capture/main.cpp:1024 src/capture/main.cpp:1433
+#: src/capture/main.cpp:767 src/capture/main.cpp:1033 src/capture/main.cpp:1442
 msgid "Gravar vídeo"
 msgstr "Video aufzeichnen"
 
@@ -1269,7 +1269,7 @@ msgstr "Video anhalten/fortsetzen"
 msgid "Parar vídeo"
 msgstr "Video stoppen"
 
-#: src/capture/main.cpp:770 src/capture/main.cpp:1439
+#: src/capture/main.cpp:770 src/capture/main.cpp:1448
 msgid "Conta-gotas de tela"
 msgstr "Bildschirm-Farbpipette"
 
@@ -1277,11 +1277,11 @@ msgstr "Bildschirm-Farbpipette"
 msgid "Capturar e fixar na tela"
 msgstr "Aufnehmen und anheften"
 
-#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1406
+#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1415
 msgid "Fixar da área de transferência"
 msgstr "Aus der Zwischenablage anheften"
 
-#: src/capture/main.cpp:773 src/capture/main.cpp:1446
+#: src/capture/main.cpp:773 src/capture/main.cpp:1455
 msgid "Foco de tela (apresentações)"
 msgstr "Bildschirmfokus (Präsentationen)"
 
@@ -1340,6 +1340,10 @@ msgstr "Schnellvorschau statt des Editors anzeigen"
 #: src/capture/main.cpp:784
 msgid "Mostrar a miniatura e abrir o Editor"
 msgstr "Vorschau anzeigen und Editor öffnen"
+
+#: src/capture/main.cpp:784
+msgid "Só copiar para a área de transferência"
+msgstr "Nur in die Zwischenablage kopieren"
 
 #: src/capture/main.cpp:785
 msgid "A miniatura fecha após (s, 0 = não fecha)"
@@ -1514,11 +1518,11 @@ msgstr ""
 "Das Bild konnte nicht geöffnet werden.\n"
 "\n"
 
-#: src/capture/main.cpp:952 src/capture/main.cpp:1407
+#: src/capture/main.cpp:952 src/capture/main.cpp:1416
 msgid "Fixar um arquivo…"
 msgstr "Datei anheften…"
 
-#: src/capture/main.cpp:953 src/capture/main.cpp:1405
+#: src/capture/main.cpp:953 src/capture/main.cpp:1414
 msgid "Capturar e fixar"
 msgstr "Aufnehmen und anheften"
 
@@ -1547,36 +1551,36 @@ msgstr "Verlauf"
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — Intervallaufnahme: %d Bild(er)"
 
-#: src/capture/main.cpp:1025 src/capture/main.cpp:1434
+#: src/capture/main.cpp:1034 src/capture/main.cpp:1443
 msgid "Gravar só o áudio"
 msgstr "Nur Audio aufnehmen"
 
-#: src/capture/main.cpp:1030 src/capture/main.cpp:1448
+#: src/capture/main.cpp:1039 src/capture/main.cpp:1457
 msgid "Abrir a janela de captura"
 msgstr "Aufnahmefenster öffnen"
 
-#: src/capture/main.cpp:1031
+#: src/capture/main.cpp:1040
 msgid "Ocultar o One Click"
 msgstr "One Click ausblenden"
 
-#: src/capture/main.cpp:1116
+#: src/capture/main.cpp:1125
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region erwartet x,y,Breite,Höhe (z. B. /region 100,100,800,600)."
 
-#: src/capture/main.cpp:1122
+#: src/capture/main.cpp:1131
 msgid "Nenhuma janela com esse título: "
 msgstr "Kein Fenster mit diesem Titel: "
 
-#: src/capture/main.cpp:1127
+#: src/capture/main.cpp:1136
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "Monitor %d existiert nicht (es gibt %zu)."
 
-#: src/capture/main.cpp:1136
+#: src/capture/main.cpp:1145
 msgid "Não foi possível fixar: "
 msgstr "Anheften nicht möglich: "
 
-#: src/capture/main.cpp:1156
+#: src/capture/main.cpp:1165
 msgid ""
 "Snapnab.exe [opções]\n"
 "\n"
@@ -1620,411 +1624,415 @@ msgstr ""
 "/output clipboard|editor|none|\"Datei\"   wohin die Aufnahme geht\n"
 "/exit                 beendet das laufende Snapnab"
 
-#: src/capture/main.cpp:1174
+#: src/capture/main.cpp:1183
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — Befehlszeile"
 
-#: src/capture/main.cpp:1213 src/capture/main.cpp:1698 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
+#: src/capture/main.cpp:1222 src/capture/main.cpp:1708 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
 msgid "Imagem"
 msgstr "Bild"
 
-#: src/capture/main.cpp:1214 src/capture/main.cpp:1698
+#: src/capture/main.cpp:1223 src/capture/main.cpp:1708
 msgid "Vídeo"
 msgstr "Video"
 
-#: src/capture/main.cpp:1215
+#: src/capture/main.cpp:1224
 msgid "Seleção:"
 msgstr "Auswahl:"
 
-#: src/capture/main.cpp:1218
+#: src/capture/main.cpp:1227
 msgid "Efeitos:"
 msgstr "Effekte:"
 
-#: src/capture/main.cpp:1221
+#: src/capture/main.cpp:1230
 msgid "Compartilhar:"
 msgstr "Teilen:"
 
-#: src/capture/main.cpp:1224 src/capture/main.cpp:1275 src/editor/main.cpp:1041 src/editor/main.cpp:2608
+#: src/capture/main.cpp:1233 src/capture/main.cpp:1284 src/editor/main.cpp:1041 src/editor/main.cpp:2608
 msgid "Arquivo"
 msgstr "Datei"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Programa externo"
 msgstr "Externes Programm"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Texto (OCR)"
 msgstr "Text (OCR)"
 
-#: src/capture/main.cpp:1225
+#: src/capture/main.cpp:1234
 msgid "Upload (copiar o link)"
 msgstr "Hochladen (Link kopieren)"
 
-#: src/capture/main.cpp:1226
+#: src/capture/main.cpp:1235
 msgid "Qualidade:"
 msgstr "Qualität:"
 
-#: src/capture/main.cpp:1229
+#: src/capture/main.cpp:1238
 msgid "Muito baixa"
 msgstr "Sehr niedrig"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Baixa"
 msgstr "Niedrig"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2150 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2150 src/editor/main.cpp:2160
 msgid "Média"
 msgstr "Mittel"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Alta"
 msgstr "Hoch"
 
-#: src/capture/main.cpp:1230
+#: src/capture/main.cpp:1239
 msgid "Webcam:"
 msgstr "Webcam:"
 
-#: src/capture/main.cpp:1233
+#: src/capture/main.cpp:1242
 msgid "Visualizar no Editor"
 msgstr "Im Editor anzeigen"
 
-#: src/capture/main.cpp:1234
+#: src/capture/main.cpp:1243
 msgid "Copiar para a área de transferência"
 msgstr "In die Zwischenablage kopieren"
 
-#: src/capture/main.cpp:1236 src/capture/main.cpp:1290
+#: src/capture/main.cpp:1245 src/capture/main.cpp:1299
 msgid "Atraso"
 msgstr "Verzögerung"
 
-#: src/capture/main.cpp:1238
+#: src/capture/main.cpp:1247
 msgid "Gravar microfone"
 msgstr "Mikrofon aufzeichnen"
 
-#: src/capture/main.cpp:1239
+#: src/capture/main.cpp:1248
 msgid "Gravar áudio do sistema"
 msgstr "Systemton aufzeichnen"
 
-#: src/capture/main.cpp:1240 src/capture/main.cpp:1721 src/editor/main.cpp:2458
+#: src/capture/main.cpp:1249 src/capture/main.cpp:1731 src/editor/main.cpp:2458
 msgid "Capturar"
 msgstr "Aufnehmen"
 
-#: src/capture/main.cpp:1246
+#: src/capture/main.cpp:1255
 msgid "Abrir Editor"
 msgstr "Editor öffnen"
 
-#: src/capture/main.cpp:1275 src/editor/main.cpp:2612
+#: src/capture/main.cpp:1284 src/editor/main.cpp:2612
 msgid "Exibir"
 msgstr "Ansicht"
 
-#: src/capture/main.cpp:1275 src/capture/main.cpp:1547 src/editor/main.cpp:2613 src/editor/main.cpp:2613
+#: src/capture/main.cpp:1284 src/capture/main.cpp:1557 src/editor/main.cpp:2613 src/editor/main.cpp:2613
 msgid "Ajuda"
 msgstr "Hilfe"
 
-#: src/capture/main.cpp:1377
+#: src/capture/main.cpp:1386
 msgid "Abrir o &Editor"
 msgstr "&Editor öffnen"
 
-#: src/capture/main.cpp:1378 src/editor/main.cpp:893
+#: src/capture/main.cpp:1387 src/editor/main.cpp:893
 msgid "Abrir a pasta da &biblioteca"
 msgstr "&Bibliotheksordner öffnen"
 
-#: src/capture/main.cpp:1379
+#: src/capture/main.cpp:1388
 msgid "Abrir a pasta de &logs"
 msgstr "&Protokollordner öffnen"
 
-#: src/capture/main.cpp:1381
+#: src/capture/main.cpp:1390
 msgid "&Importar presets…"
 msgstr "Vorlagen &importieren…"
 
-#: src/capture/main.cpp:1382
+#: src/capture/main.cpp:1391
 msgid "E&xportar presets…"
 msgstr "Vorlagen e&xportieren…"
 
-#: src/capture/main.cpp:1384
+#: src/capture/main.cpp:1393
 msgid "Exportar &todas as configurações…"
 msgstr "&Alle Einstellungen exportieren…"
 
-#: src/capture/main.cpp:1385
+#: src/capture/main.cpp:1394
 msgid "Importar t&odas as configurações…"
 msgstr "A&lle Einstellungen importieren…"
 
-#: src/capture/main.cpp:1386
+#: src/capture/main.cpp:1395
 msgid "Abrir a pasta de &backups"
 msgstr "&Sicherungsordner öffnen"
 
-#: src/capture/main.cpp:1388 src/editor/main.cpp:980
+#: src/capture/main.cpp:1397 src/editor/main.cpp:980
 msgid "Configurar o &upload…"
 msgstr "&Hochladen einrichten…"
 
-#: src/capture/main.cpp:1389
+#: src/capture/main.cpp:1398
 msgid "&Limpar a biblioteca agora"
 msgstr "Bibliothek jetzt &aufräumen"
 
-#: src/capture/main.cpp:1390
+#: src/capture/main.cpp:1399
 msgid "&Opções…"
 msgstr "&Optionen…"
 
-#: src/capture/main.cpp:1392
+#: src/capture/main.cpp:1401
 msgid "&Sair do Snapnab"
 msgstr "Snapnab &beenden"
 
-#: src/capture/main.cpp:1394
+#: src/capture/main.cpp:1403
 msgid "Capturar &imagem"
 msgstr "&Bild aufnehmen"
 
-#: src/capture/main.cpp:1395
+#: src/capture/main.cpp:1404
 msgid "Gravar &vídeo"
 msgstr "&Video aufzeichnen"
 
-#: src/capture/main.cpp:1396
+#: src/capture/main.cpp:1405
 msgid "&Repetir a última captura"
 msgstr "Letzte Aufnahme &wiederholen"
 
-#: src/capture/main.cpp:1398
+#: src/capture/main.cpp:1407
 msgid "Da área de &transferência"
 msgstr "Aus der &Zwischenablage"
 
-#: src/capture/main.cpp:1399
+#: src/capture/main.cpp:1408
 msgid "De um &arquivo gráfico…"
 msgstr "Aus einer &Grafikdatei…"
 
-#: src/capture/main.cpp:1401
+#: src/capture/main.cpp:1410
 msgid "&Conta-gotas de tela"
 msgstr "Bildschirm-&Farbpipette"
 
-#: src/capture/main.cpp:1402
+#: src/capture/main.cpp:1411
 msgid "Ler código &QR"
 msgstr "&QR-Code lesen"
 
-#: src/capture/main.cpp:1409
+#: src/capture/main.cpp:1418
 msgid "&Fixar na tela"
 msgstr "Auf dem Bildschirm an&heften"
 
-#: src/capture/main.cpp:1411
+#: src/capture/main.cpp:1420
 msgid "Captura por &intervalo…"
 msgstr "&Intervallaufnahme…"
 
-#: src/capture/main.cpp:1412
+#: src/capture/main.cpp:1421
 msgid "F&oco de tela (apresentações)"
 msgstr "Bildschirmf&okus (Präsentationen)"
 
-#: src/capture/main.cpp:1413
+#: src/capture/main.cpp:1422
 msgid "Gravar só o á&udio"
 msgstr "Nur A&udio aufnehmen"
 
-#: src/capture/main.cpp:1414
+#: src/capture/main.cpp:1423
 msgid "Abrir a pasta dos áudios"
 msgstr "Audio-Ordner öffnen"
 
-#: src/capture/main.cpp:1416
+#: src/capture/main.cpp:1425
 msgid "Mostrar o &One Click"
 msgstr "&One Click anzeigen"
 
-#: src/capture/main.cpp:1417
+#: src/capture/main.cpp:1426
 msgid "Lista de &presets"
 msgstr "&Vorlagenliste"
 
-#: src/capture/main.cpp:1419 src/editor/main.cpp:969
+#: src/capture/main.cpp:1428 src/editor/main.cpp:969
 msgid "&Manual do Snapnab\tF1"
 msgstr "Snapnab-&Handbuch\tF1"
 
-#: src/capture/main.cpp:1420
+#: src/capture/main.cpp:1429
 msgid "Como usar os &presets"
 msgstr "So verwenden Sie &Vorlagen"
 
-#: src/capture/main.cpp:1422
+#: src/capture/main.cpp:1431
 msgid "&Sobre o Snapnab"
 msgstr "Ü&ber Snapnab"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "Angeheftete Bilder (%zu)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 msgid "Imagens fixadas"
 msgstr "Angeheftete Bilder"
 
-#: src/capture/main.cpp:1444
+#: src/capture/main.cpp:1453
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "Intervallaufnahme beenden (%d)"
 
-#: src/capture/main.cpp:1445
+#: src/capture/main.cpp:1454
 msgid "Captura por intervalo…"
 msgstr "Intervallaufnahme…"
 
-#: src/capture/main.cpp:1449
+#: src/capture/main.cpp:1458
 msgid "Mostrar o One Click"
 msgstr "One Click anzeigen"
 
-#: src/capture/main.cpp:1450
+#: src/capture/main.cpp:1459
 msgid "Abrir o Editor"
 msgstr "Editor öffnen"
 
-#: src/capture/main.cpp:1451
+#: src/capture/main.cpp:1460
+msgid "Abrir o Editor depois da captura"
+msgstr "Editor nach der Aufnahme öffnen"
+
+#: src/capture/main.cpp:1461
 msgid "Opções…"
 msgstr "Optionen…"
 
-#: src/capture/main.cpp:1453
+#: src/capture/main.cpp:1463
 msgid "Sair"
 msgstr "Beenden"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 msgid "1 segundo"
 msgstr "1 Sekunde"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 #, c-format
 msgid "%d segundos"
 msgstr "%d Sekunden"
 
-#: src/capture/main.cpp:1487
+#: src/capture/main.cpp:1497
 msgid "Remover o fundo da webcam"
 msgstr "Webcam-Hintergrund entfernen"
 
-#: src/capture/main.cpp:1488
+#: src/capture/main.cpp:1498
 msgid "Cor do fundo"
 msgstr "Hintergrundfarbe"
 
-#: src/capture/main.cpp:1489
+#: src/capture/main.cpp:1499
 msgid "Tolerância (0–100)"
 msgstr "Toleranz (0–100)"
 
-#: src/capture/main.cpp:1490
+#: src/capture/main.cpp:1500
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "Verwenden Sie einen einfarbigen, gut beleuchteten Hintergrund (ideal ist ein Greenscreen)."
 
-#: src/capture/main.cpp:1491
+#: src/capture/main.cpp:1501
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "Ohne Hintergrund erscheint die Webcam ohne Rahmen."
 
-#: src/capture/main.cpp:1493
+#: src/capture/main.cpp:1503
 msgid "Remover o fundo (chroma key)"
 msgstr "Hintergrund entfernen (Chroma Key)"
 
-#: src/capture/main.cpp:1511
+#: src/capture/main.cpp:1521
 msgid "Nenhuma webcam encontrada"
 msgstr "Keine Webcam gefunden"
 
-#: src/capture/main.cpp:1523
+#: src/capture/main.cpp:1533
 msgid "Remover o fundo (chroma key)…"
 msgstr "Hintergrund entfernen (Chroma Key)…"
 
-#: src/capture/main.cpp:1544 src/capture/main.cpp:1759
+#: src/capture/main.cpp:1554 src/capture/main.cpp:1769
 msgid "Novo preset com as configurações atuais"
 msgstr "Neue Vorlage aus aktuellen Einstellungen"
 
-#: src/capture/main.cpp:1545
+#: src/capture/main.cpp:1555
 msgid "Novo preset…"
 msgstr "Neue Vorlage…"
 
-#: src/capture/main.cpp:1556
+#: src/capture/main.cpp:1566
 msgid "Capturar com este preset"
 msgstr "Mit dieser Vorlage aufnehmen"
 
-#: src/capture/main.cpp:1558
+#: src/capture/main.cpp:1568
 msgid "Renomear…"
 msgstr "Umbenennen…"
 
-#: src/capture/main.cpp:1559
+#: src/capture/main.cpp:1569
 msgid "Atalho…"
 msgstr "Tastenkürzel…"
 
-#: src/capture/main.cpp:1560 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
+#: src/capture/main.cpp:1570 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
 msgid "Duplicar"
 msgstr "Duplizieren"
 
-#: src/capture/main.cpp:1562 src/editor/PropsPanel.cpp:1244
+#: src/capture/main.cpp:1572 src/editor/PropsPanel.cpp:1244
 msgid "Excluir"
 msgstr "Löschen"
 
-#: src/capture/main.cpp:1570
+#: src/capture/main.cpp:1580
 msgid "Adicionar atalho"
 msgstr "Tastenkürzel hinzufügen"
 
-#: src/capture/main.cpp:1721 src/editor/main.cpp:2459
+#: src/capture/main.cpp:1731 src/editor/main.cpp:2459
 msgid "Gravar"
 msgstr "Aufzeichnen"
 
-#: src/capture/main.cpp:1746
+#: src/capture/main.cpp:1756
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "Aufnahmen, die älter als %u Tage sind, jetzt entfernen (nach den Regeln der Optionen)?"
 
-#: src/capture/main.cpp:1751
+#: src/capture/main.cpp:1761
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "%d Aufnahme(n) aus der Bibliothek entfernt."
 
-#: src/capture/main.cpp:1759 src/capture/main.cpp:1769 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
+#: src/capture/main.cpp:1769 src/capture/main.cpp:1779 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
 msgid " (cópia)"
 msgstr " (Kopie)"
 
-#: src/capture/main.cpp:1761
+#: src/capture/main.cpp:1771
 #, c-format
 msgid "Preset %zu"
 msgstr "Vorlage %zu"
 
-#: src/capture/main.cpp:1763
+#: src/capture/main.cpp:1773
 msgid "Novo preset"
 msgstr "Neue Vorlage"
 
-#: src/capture/main.cpp:1776
+#: src/capture/main.cpp:1786
 msgid "É preciso manter pelo menos um preset."
 msgstr "Mindestens eine Vorlage muss erhalten bleiben."
 
-#: src/capture/main.cpp:1777
+#: src/capture/main.cpp:1787
 #, c-format
 msgid "Excluir o preset \"%s\"?"
 msgstr "Vorlage \"%s\" löschen?"
 
-#: src/capture/main.cpp:1810 src/common/Office.cpp:56
+#: src/capture/main.cpp:1820 src/common/Office.cpp:56
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s ist auf diesem Computer nicht installiert (oder es ist die Microsoft-Store-Version ohne Automatisierung)."
 
-#: src/capture/main.cpp:1822
+#: src/capture/main.cpp:1832
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "Jede Aufnahme auf einer neuen Folie (aus: auf der aktuellen Folie)"
 
-#: src/capture/main.cpp:1853
+#: src/capture/main.cpp:1864
 msgid "Presets do Snapnab (*.snappresets;*.xml)|*.snappresets;*.xml|"
 msgstr "Snapnab-Vorlagen (*.snappresets;*.xml)|*.snappresets;*.xml|"
 
-#: src/capture/main.cpp:1857
+#: src/capture/main.cpp:1868
 msgid "Presets importados."
 msgstr "Vorlagen importiert."
 
-#: src/capture/main.cpp:1858
+#: src/capture/main.cpp:1869
 msgid "Arquivo de presets inválido."
 msgstr "Ungültige Vorlagendatei."
 
-#: src/capture/main.cpp:1863
+#: src/capture/main.cpp:1874
 msgid "Presets do Snapnab (*.snappresets)|*.snappresets|"
 msgstr "Snapnab-Vorlagen (*.snappresets)|*.snappresets|"
 
-#: src/capture/main.cpp:1867
+#: src/capture/main.cpp:1878
 msgid "Não foi possível exportar."
 msgstr "Export nicht möglich."
 
-#: src/capture/main.cpp:1880
+#: src/capture/main.cpp:1891
 msgid "Há uma gravação em andamento. Parar e sair?"
 msgstr "Eine Aufzeichnung läuft. Stoppen und beenden?"
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Gravar vídeo  ("
 msgstr "Video aufzeichnen  ("
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Capturar imagem  ("
 msgstr "Bild aufnehmen  ("
 
-#: src/capture/main.cpp:2180
+#: src/capture/main.cpp:2191
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — Aufnahme wiederhergestellt"
 
-#: src/capture/main.cpp:2181
+#: src/capture/main.cpp:2192
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu unterbrochene Aufnahme(n) in der Bibliothek wiederhergestellt."
@@ -2256,23 +2264,23 @@ msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif
 msgid "Audio"
 msgstr "Audio"
 
-#: src/common/Ocr.cpp:141 src/common/Ocr.cpp:226 src/editor/Pdf.cpp:25
+#: src/common/Ocr.cpp:159 src/common/Ocr.cpp:244 src/editor/Pdf.cpp:25
 msgid "Imagem vazia."
 msgstr "Leeres Bild."
 
-#: src/common/Ocr.cpp:158 src/common/Ocr.cpp:248
+#: src/common/Ocr.cpp:176 src/common/Ocr.cpp:266
 msgid "Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma)."
 msgstr "In Windows ist keine OCR-Sprache installiert (Einstellungen › Zeit und Sprache › Sprache)."
 
-#: src/common/Ocr.cpp:182 src/common/Ocr.cpp:256
+#: src/common/Ocr.cpp:200 src/common/Ocr.cpp:274
 msgid "Falha desconhecida no OCR."
 msgstr "Unbekannter OCR-Fehler."
 
-#: src/common/Ocr.cpp:202
+#: src/common/Ocr.cpp:220
 msgid "A detecção de rostos não está disponível neste Windows."
 msgstr "Die Gesichtserkennung ist unter diesem Windows nicht verfügbar."
 
-#: src/common/Ocr.cpp:217
+#: src/common/Ocr.cpp:235
 msgid "Falha na detecção de rostos."
 msgstr "Gesichtserkennung fehlgeschlagen."
 
@@ -3461,119 +3469,119 @@ msgstr "Wird in der Leiste und der Bibliothek angezeigt. Leer zeigt das Datum."
 msgid "Renomear captura"
 msgstr "Aufnahme umbenennen"
 
-#: src/editor/Panels.cpp:1547 src/editor/main.cpp:2050
+#: src/editor/Panels.cpp:1552 src/editor/main.cpp:2050
 msgid "Capturas recentes"
 msgstr "Letzte Aufnahmen"
 
-#: src/editor/Panels.cpp:1547
+#: src/editor/Panels.cpp:1552
 #, c-format
 msgid "Biblioteca  •  %zu capturas"
 msgstr "Bibliothek  •  %zu Aufnahmen"
 
-#: src/editor/Panels.cpp:1548
+#: src/editor/Panels.cpp:1553
 #, c-format
 msgid "  •  %d selecionadas"
 msgstr "  •  %d ausgewählt"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Exportar (%d)…"
 msgstr "Exportieren (%d)…"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Excluir (%d)"
 msgstr "Löschen (%d)"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 msgid "Limpar seleção"
 msgstr "Auswahl aufheben"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Biblioteca"
 msgstr "Bibliothek"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Voltar ao editor"
 msgstr "Zurück zum Editor"
 
-#: src/editor/Panels.cpp:1563
+#: src/editor/Panels.cpp:1568
 msgid "Nenhuma captura recente. Capture com o Snapnab (Print Screen) ou solte arquivos aqui."
 msgstr "Keine letzten Aufnahmen. Nehmen Sie mit Snapnab auf (Druck) oder legen Sie Dateien hier ab."
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "Nenhuma captura com esse nome."
 msgstr "Keine Aufnahme mit diesem Namen."
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "A biblioteca está vazia."
 msgstr "Die Bibliothek ist leer."
 
-#: src/editor/Panels.cpp:1758 src/editor/main.cpp:1047
+#: src/editor/Panels.cpp:1763 src/editor/main.cpp:1047
 msgid "Abrir"
 msgstr "Öffnen"
 
-#: src/editor/Panels.cpp:1759
+#: src/editor/Panels.cpp:1764
 msgid "Mostrar na pasta"
 msgstr "Im Ordner anzeigen"
 
-#: src/editor/Panels.cpp:1762
+#: src/editor/Panels.cpp:1767
 #, c-format
 msgid "Exportar %zu itens…"
 msgstr "%zu Elemente exportieren…"
 
-#: src/editor/Panels.cpp:1762 src/editor/PropsPanel.cpp:1242
+#: src/editor/Panels.cpp:1767 src/editor/PropsPanel.cpp:1242
 msgid "Exportar…"
 msgstr "Exportieren…"
 
-#: src/editor/Panels.cpp:1768 src/editor/main.cpp:1771
+#: src/editor/Panels.cpp:1773 src/editor/main.cpp:1771
 msgid "Enviar (upload)"
 msgstr "Hochladen"
 
-#: src/editor/Panels.cpp:1770
+#: src/editor/Panels.cpp:1775
 #, c-format
 msgid "Combinar %zu imagens…"
 msgstr "%zu Bilder kombinieren…"
 
-#: src/editor/Panels.cpp:1771
+#: src/editor/Panels.cpp:1776
 msgid "Comparar as duas…"
 msgstr "Beide vergleichen…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 #, c-format
 msgid "Processar %zu em lote…"
 msgstr "%zu stapelweise verarbeiten…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 msgid "Processamento em lote…"
 msgstr "Stapelverarbeitung…"
 
-#: src/editor/Panels.cpp:1775
+#: src/editor/Panels.cpp:1780
 msgid "Selecionar tudo\tCtrl+A"
 msgstr "Alles auswählen\tStrg+A"
 
-#: src/editor/Panels.cpp:1776
+#: src/editor/Panels.cpp:1781
 msgid "Renomear…\tF2"
 msgstr "Umbenennen…\tF2"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja"
 msgstr "Aus der Leiste entfernen"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja (continua na biblioteca)"
 msgstr "Aus der Leiste entfernen (bleibt in der Bibliothek)"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 #, c-format
 msgid "Excluir %zu itens (Lixeira)\tDel"
 msgstr "%zu Elemente löschen (Papierkorb)\tEntf"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 msgid "Excluir (Lixeira)\tDel"
 msgstr "Löschen (Papierkorb)\tEntf"
 
-#: src/editor/Panels.cpp:1867
+#: src/editor/Panels.cpp:1872
 #, c-format
 msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
 msgstr "Video  •  %lld:%02lld  •  %d × %d"

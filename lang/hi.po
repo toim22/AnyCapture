@@ -71,63 +71,63 @@ msgstr "कैप्चर में कोई पाठ नहीं मिल�
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "पाठ निकालें — क्लिपबोर्ड पर कॉपी किया गया"
 
-#: src/capture/CaptureEngine.cpp:600
+#: src/capture/CaptureEngine.cpp:601
 msgid "copiada para a área de transferência"
 msgstr "क्लिपबोर्ड पर कॉपी की गई"
 
-#: src/capture/CaptureEngine.cpp:604 src/capture/CaptureEngine.cpp:618
+#: src/capture/CaptureEngine.cpp:605 src/capture/CaptureEngine.cpp:619
 msgid "salva em "
 msgstr "यहाँ सहेजी गई: "
 
-#: src/capture/CaptureEngine.cpp:616 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1275
+#: src/capture/CaptureEngine.cpp:617 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1284
 msgid "Captura"
 msgstr "कैप्चर"
 
-#: src/capture/CaptureEngine.cpp:638
+#: src/capture/CaptureEngine.cpp:641
 msgid "Captura adicionada à biblioteca"
 msgstr "कैप्चर लाइब्रेरी में जोड़ा गया"
 
-#: src/capture/CaptureEngine.cpp:763
+#: src/capture/CaptureEngine.cpp:766
 msgid "A janela será ampliada além da tela, capturada e restaurada."
 msgstr "विंडो को स्क्रीन से बड़ा किया जाएगा, कैप्चर किया जाएगा और फिर पहले जैसा कर दिया जाएगा।"
 
-#: src/capture/CaptureEngine.cpp:764
+#: src/capture/CaptureEngine.cpp:767
 msgid "Nova largura (px)"
 msgstr "नई चौड़ाई (px)"
 
-#: src/capture/CaptureEngine.cpp:765
+#: src/capture/CaptureEngine.cpp:768
 msgid "Nova altura (px)"
 msgstr "नई ऊँचाई (px)"
 
-#: src/capture/CaptureEngine.cpp:767 src/capture/Presets.cpp:17
+#: src/capture/CaptureEngine.cpp:770 src/capture/Presets.cpp:17
 msgid "Janela estendida"
 msgstr "विस्तारित विंडो"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "Recomeçar a gravação?"
 msgstr "रिकॉर्डिंग फिर से शुरू करें?"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "O que foi gravado até agora será descartado."
 msgstr "अब तक जो रिकॉर्ड हुआ है वह हटा दिया जाएगा।"
 
-#: src/capture/CaptureEngine.cpp:842
+#: src/capture/CaptureEngine.cpp:845
 msgid "Não perguntar de novo"
 msgstr "फिर से न पूछें"
 
-#: src/capture/CaptureEngine.cpp:862
+#: src/capture/CaptureEngine.cpp:865
 msgid "Imagem durante gravação"
 msgstr "रिकॉर्डिंग के दौरान छवि"
 
-#: src/capture/CaptureEngine.cpp:865
+#: src/capture/CaptureEngine.cpp:868
 msgid "Imagem capturada sem parar a gravação."
 msgstr "रिकॉर्डिंग रोके बिना छवि कैप्चर की गई।"
 
-#: src/capture/CaptureEngine.cpp:879 src/capture/Webcam.cpp:91
+#: src/capture/CaptureEngine.cpp:882 src/capture/Webcam.cpp:91
 msgid "Snapnab — webcam"
 msgstr "Snapnab — वेबकैम"
 
-#: src/capture/CaptureEngine.cpp:918
+#: src/capture/CaptureEngine.cpp:921
 msgid ""
 "Não foi possível iniciar a gravação.\n"
 "\n"
@@ -135,35 +135,35 @@ msgstr ""
 "रिकॉर्डिंग शुरू नहीं हो सकी।\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:951 src/capture/main.cpp:580
+#: src/capture/CaptureEngine.cpp:954 src/capture/main.cpp:580
 msgid "Destacar o cursor"
 msgstr "कर्सर हाइलाइट करें"
 
-#: src/capture/CaptureEngine.cpp:952 src/capture/main.cpp:583
+#: src/capture/CaptureEngine.cpp:955 src/capture/main.cpp:583
 msgid "Mostrar os cliques"
 msgstr "क्लिक दिखाएँ"
 
-#: src/capture/CaptureEngine.cpp:954
+#: src/capture/CaptureEngine.cpp:957
 msgid "Teclas: não mostrar"
 msgstr "कुंजियाँ: न दिखाएँ"
 
-#: src/capture/CaptureEngine.cpp:955
+#: src/capture/CaptureEngine.cpp:958
 msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "कुंजियाँ: केवल शॉर्टकट (Ctrl, Alt, Win, F1…)"
 
-#: src/capture/CaptureEngine.cpp:956
+#: src/capture/CaptureEngine.cpp:959
 msgid "Teclas: todas (inclusive o que for digitado)"
 msgstr "कुंजियाँ: सभी (जो टाइप किया जाए वह भी)"
 
-#: src/capture/CaptureEngine.cpp:991
+#: src/capture/CaptureEngine.cpp:994
 msgid "Snapnab — áudio salvo"
 msgstr "Snapnab — ऑडियो सहेजा गया"
 
-#: src/capture/CaptureEngine.cpp:1003
+#: src/capture/CaptureEngine.cpp:1007
 msgid "Vídeo salvo na biblioteca: "
 msgstr "वीडियो लाइब्रेरी में सहेजा गया: "
 
-#: src/capture/CaptureEngine.cpp:1005
+#: src/capture/CaptureEngine.cpp:1009
 msgid ""
 "A gravação falhou.\n"
 "\n"
@@ -171,15 +171,15 @@ msgstr ""
 "रिकॉर्डिंग विफल रही।\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Snapnab — pouco espaço em disco"
 msgstr "Snapnab — डिस्क में कम जगह"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Restam menos de 1 GB livres na unidade da biblioteca."
 msgstr "लाइब्रेरी ड्राइव पर 1 GB से कम जगह बची है।"
 
-#: src/capture/CaptureEngine.cpp:1016
+#: src/capture/CaptureEngine.cpp:1020
 msgid "Gravação interrompida: espaço em disco insuficiente."
 msgstr "रिकॉर्डिंग रुकी: डिस्क में पर्याप्त जगह नहीं है।"
 
@@ -211,7 +211,7 @@ msgstr "अंतराल (सेकंड)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "अवधि (मिनट, 0 = रोकने तक)"
 
-#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1522 src/editor/Batch.cpp:122
+#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1532 src/editor/Batch.cpp:122
 msgid "Formato"
 msgstr "फ़ॉर्मेट"
 
@@ -227,7 +227,7 @@ msgstr "अंतराल"
 msgid "Pasta"
 msgstr "फ़ोल्डर"
 
-#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1235
+#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1244
 msgid "Capturar o cursor"
 msgstr "कर्सर कैप्चर करें"
 
@@ -373,7 +373,7 @@ msgstr "हमेशा ऊपर"
 msgid "Sombra"
 msgstr "छाया"
 
-#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1224 src/capture/main.cpp:1440
+#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1233 src/capture/main.cpp:1449
 msgid "Ler código QR"
 msgstr "QR कोड पढ़ें"
 
@@ -497,7 +497,7 @@ msgstr "इस रूप में सहेजें…"
 msgid "Anotar no Editor"
 msgstr "एडिटर में एनोटेट करें"
 
-#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1224 src/editor/Panels.cpp:1767 src/editor/main.cpp:1770
+#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1233 src/editor/Panels.cpp:1772 src/editor/main.cpp:1770
 msgid "Fixar na tela"
 msgstr "स्क्रीन पर पिन करें"
 
@@ -525,7 +525,7 @@ msgstr "वीडियो सहेजें"
 msgid "Salvar como"
 msgstr "इस रूप में सहेजें"
 
-#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1766 src/editor/main.cpp:1765
+#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1771 src/editor/main.cpp:1765
 msgid "Copiar como…"
 msgstr "इस रूप में कॉपी करें…"
 
@@ -533,7 +533,7 @@ msgstr "इस रूप में कॉपी करें…"
 msgid "Enviar (upload) e copiar o link"
 msgstr "अपलोड करें और लिंक कॉपी करें"
 
-#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1408
+#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1417
 msgid "Fechar todas"
 msgstr "सभी बंद करें"
 
@@ -968,7 +968,7 @@ msgstr "रिज़ॉल्यूशन (DPI)"
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "सहेजी गई फ़ाइलों में लिखा जाता है (PNG, JPEG, TIFF, BMP)।"
 
-#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1224
+#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1233
 msgid "Nenhum"
 msgstr "कोई नहीं"
 
@@ -980,7 +980,7 @@ msgstr "दूसरा प्रभाव जोड़ें"
 msgid "Remover este efeito"
 msgstr "यह प्रभाव हटाएँ"
 
-#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1290 src/capture/main.cpp:1475
+#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1299 src/capture/main.cpp:1485
 msgid "Desligado"
 msgstr "बंद"
 
@@ -989,11 +989,11 @@ msgstr "बंद"
 msgid "%d s"
 msgstr "%d से."
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343
 msgid "Ligada"
 msgstr "चालू"
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334 src/capture/main.cpp:1509
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343 src/capture/main.cpp:1519
 msgid "Desligada"
 msgstr "बंद"
 
@@ -1201,7 +1201,7 @@ msgstr ""
 "•  पंक्ति का गियर प्रीसेट का नाम बदलता है, उसकी प्रति बनाता है या उसे हटाता है।\n"
 "•  \"वर्तमान सेटिंग्स से नया प्रीसेट\" अभी विंडो में जो है उसे सहेजता है।"
 
-#: src/capture/main.cpp:669 src/capture/main.cpp:1028 src/capture/main.cpp:1242 src/capture/main.cpp:1437
+#: src/capture/main.cpp:669 src/capture/main.cpp:1037 src/capture/main.cpp:1251 src/capture/main.cpp:1446
 msgid "Presets"
 msgstr "प्रीसेट"
 
@@ -1253,11 +1253,11 @@ msgstr "स्वचालित (Windows की भाषा)"
 msgid "Atalhos globais"
 msgstr "वैश्विक शॉर्टकट"
 
-#: src/capture/main.cpp:766 src/capture/main.cpp:1023 src/capture/main.cpp:1432
+#: src/capture/main.cpp:766 src/capture/main.cpp:1032 src/capture/main.cpp:1441
 msgid "Capturar imagem"
 msgstr "छवि कैप्चर करें"
 
-#: src/capture/main.cpp:767 src/capture/main.cpp:1024 src/capture/main.cpp:1433
+#: src/capture/main.cpp:767 src/capture/main.cpp:1033 src/capture/main.cpp:1442
 msgid "Gravar vídeo"
 msgstr "वीडियो रिकॉर्ड करें"
 
@@ -1269,7 +1269,7 @@ msgstr "वीडियो रोकें/जारी रखें"
 msgid "Parar vídeo"
 msgstr "वीडियो बंद करें"
 
-#: src/capture/main.cpp:770 src/capture/main.cpp:1439
+#: src/capture/main.cpp:770 src/capture/main.cpp:1448
 msgid "Conta-gotas de tela"
 msgstr "स्क्रीन रंग चयनकर्ता"
 
@@ -1277,11 +1277,11 @@ msgstr "स्क्रीन रंग चयनकर्ता"
 msgid "Capturar e fixar na tela"
 msgstr "कैप्चर करें और स्क्रीन पर पिन करें"
 
-#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1406
+#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1415
 msgid "Fixar da área de transferência"
 msgstr "क्लिपबोर्ड से पिन करें"
 
-#: src/capture/main.cpp:773 src/capture/main.cpp:1446
+#: src/capture/main.cpp:773 src/capture/main.cpp:1455
 msgid "Foco de tela (apresentações)"
 msgstr "स्क्रीन फ़ोकस (प्रस्तुतियाँ)"
 
@@ -1340,6 +1340,10 @@ msgstr "एडिटर के बजाय त्वरित थंबने�
 #: src/capture/main.cpp:784
 msgid "Mostrar a miniatura e abrir o Editor"
 msgstr "थंबनेल दिखाएँ और एडिटर खोलें"
+
+#: src/capture/main.cpp:784
+msgid "Só copiar para a área de transferência"
+msgstr "सिर्फ़ क्लिपबोर्ड पर कॉपी करें"
 
 #: src/capture/main.cpp:785
 msgid "A miniatura fecha após (s, 0 = não fecha)"
@@ -1514,11 +1518,11 @@ msgstr ""
 "छवि नहीं खोली जा सकी।\n"
 "\n"
 
-#: src/capture/main.cpp:952 src/capture/main.cpp:1407
+#: src/capture/main.cpp:952 src/capture/main.cpp:1416
 msgid "Fixar um arquivo…"
 msgstr "फ़ाइल पिन करें…"
 
-#: src/capture/main.cpp:953 src/capture/main.cpp:1405
+#: src/capture/main.cpp:953 src/capture/main.cpp:1414
 msgid "Capturar e fixar"
 msgstr "कैप्चर करें और पिन करें"
 
@@ -1547,36 +1551,36 @@ msgstr "इतिहास"
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — अंतराल कैप्चर: %d छवि(याँ)"
 
-#: src/capture/main.cpp:1025 src/capture/main.cpp:1434
+#: src/capture/main.cpp:1034 src/capture/main.cpp:1443
 msgid "Gravar só o áudio"
 msgstr "केवल ऑडियो रिकॉर्ड करें"
 
-#: src/capture/main.cpp:1030 src/capture/main.cpp:1448
+#: src/capture/main.cpp:1039 src/capture/main.cpp:1457
 msgid "Abrir a janela de captura"
 msgstr "कैप्चर विंडो खोलें"
 
-#: src/capture/main.cpp:1031
+#: src/capture/main.cpp:1040
 msgid "Ocultar o One Click"
 msgstr "One Click छिपाएँ"
 
-#: src/capture/main.cpp:1116
+#: src/capture/main.cpp:1125
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region को x,y,चौड़ाई,ऊँचाई चाहिए (उदा.: /region 100,100,800,600)।"
 
-#: src/capture/main.cpp:1122
+#: src/capture/main.cpp:1131
 msgid "Nenhuma janela com esse título: "
 msgstr "इस शीर्षक की कोई विंडो नहीं: "
 
-#: src/capture/main.cpp:1127
+#: src/capture/main.cpp:1136
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "मॉनिटर %d मौजूद नहीं है (कुल %zu हैं)।"
 
-#: src/capture/main.cpp:1136
+#: src/capture/main.cpp:1145
 msgid "Não foi possível fixar: "
 msgstr "पिन नहीं किया जा सका: "
 
-#: src/capture/main.cpp:1156
+#: src/capture/main.cpp:1165
 msgid ""
 "Snapnab.exe [opções]\n"
 "\n"
@@ -1620,411 +1624,415 @@ msgstr ""
 "/output clipboard|editor|none|\"फ़ाइल\"   कैप्चर कहाँ जाता है\n"
 "/exit                 चल रहे Snapnab को बंद करें"
 
-#: src/capture/main.cpp:1174
+#: src/capture/main.cpp:1183
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — कमांड लाइन"
 
-#: src/capture/main.cpp:1213 src/capture/main.cpp:1698 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
+#: src/capture/main.cpp:1222 src/capture/main.cpp:1708 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
 msgid "Imagem"
 msgstr "छवि"
 
-#: src/capture/main.cpp:1214 src/capture/main.cpp:1698
+#: src/capture/main.cpp:1223 src/capture/main.cpp:1708
 msgid "Vídeo"
 msgstr "वीडियो"
 
-#: src/capture/main.cpp:1215
+#: src/capture/main.cpp:1224
 msgid "Seleção:"
 msgstr "चयन:"
 
-#: src/capture/main.cpp:1218
+#: src/capture/main.cpp:1227
 msgid "Efeitos:"
 msgstr "प्रभाव:"
 
-#: src/capture/main.cpp:1221
+#: src/capture/main.cpp:1230
 msgid "Compartilhar:"
 msgstr "साझा करें:"
 
-#: src/capture/main.cpp:1224 src/capture/main.cpp:1275 src/editor/main.cpp:1041 src/editor/main.cpp:2608
+#: src/capture/main.cpp:1233 src/capture/main.cpp:1284 src/editor/main.cpp:1041 src/editor/main.cpp:2608
 msgid "Arquivo"
 msgstr "फ़ाइल"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Programa externo"
 msgstr "बाहरी प्रोग्राम"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Texto (OCR)"
 msgstr "पाठ (OCR)"
 
-#: src/capture/main.cpp:1225
+#: src/capture/main.cpp:1234
 msgid "Upload (copiar o link)"
 msgstr "अपलोड (लिंक कॉपी करें)"
 
-#: src/capture/main.cpp:1226
+#: src/capture/main.cpp:1235
 msgid "Qualidade:"
 msgstr "गुणवत्ता:"
 
-#: src/capture/main.cpp:1229
+#: src/capture/main.cpp:1238
 msgid "Muito baixa"
 msgstr "बहुत कम"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Baixa"
 msgstr "कम"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2150 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2150 src/editor/main.cpp:2160
 msgid "Média"
 msgstr "मध्यम"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Alta"
 msgstr "उच्च"
 
-#: src/capture/main.cpp:1230
+#: src/capture/main.cpp:1239
 msgid "Webcam:"
 msgstr "वेबकैम:"
 
-#: src/capture/main.cpp:1233
+#: src/capture/main.cpp:1242
 msgid "Visualizar no Editor"
 msgstr "एडिटर में पूर्वावलोकन"
 
-#: src/capture/main.cpp:1234
+#: src/capture/main.cpp:1243
 msgid "Copiar para a área de transferência"
 msgstr "क्लिपबोर्ड पर कॉपी करें"
 
-#: src/capture/main.cpp:1236 src/capture/main.cpp:1290
+#: src/capture/main.cpp:1245 src/capture/main.cpp:1299
 msgid "Atraso"
 msgstr "विलंब"
 
-#: src/capture/main.cpp:1238
+#: src/capture/main.cpp:1247
 msgid "Gravar microfone"
 msgstr "माइक्रोफ़ोन रिकॉर्ड करें"
 
-#: src/capture/main.cpp:1239
+#: src/capture/main.cpp:1248
 msgid "Gravar áudio do sistema"
 msgstr "सिस्टम ऑडियो रिकॉर्ड करें"
 
-#: src/capture/main.cpp:1240 src/capture/main.cpp:1721 src/editor/main.cpp:2458
+#: src/capture/main.cpp:1249 src/capture/main.cpp:1731 src/editor/main.cpp:2458
 msgid "Capturar"
 msgstr "कैप्चर"
 
-#: src/capture/main.cpp:1246
+#: src/capture/main.cpp:1255
 msgid "Abrir Editor"
 msgstr "एडिटर खोलें"
 
-#: src/capture/main.cpp:1275 src/editor/main.cpp:2612
+#: src/capture/main.cpp:1284 src/editor/main.cpp:2612
 msgid "Exibir"
 msgstr "दृश्य"
 
-#: src/capture/main.cpp:1275 src/capture/main.cpp:1547 src/editor/main.cpp:2613 src/editor/main.cpp:2613
+#: src/capture/main.cpp:1284 src/capture/main.cpp:1557 src/editor/main.cpp:2613 src/editor/main.cpp:2613
 msgid "Ajuda"
 msgstr "सहायता"
 
-#: src/capture/main.cpp:1377
+#: src/capture/main.cpp:1386
 msgid "Abrir o &Editor"
 msgstr "एडिटर खोलें(&E)"
 
-#: src/capture/main.cpp:1378 src/editor/main.cpp:893
+#: src/capture/main.cpp:1387 src/editor/main.cpp:893
 msgid "Abrir a pasta da &biblioteca"
 msgstr "लाइब्रेरी फ़ोल्डर खोलें(&L)"
 
-#: src/capture/main.cpp:1379
+#: src/capture/main.cpp:1388
 msgid "Abrir a pasta de &logs"
 msgstr "लॉग फ़ोल्डर खोलें(&G)"
 
-#: src/capture/main.cpp:1381
+#: src/capture/main.cpp:1390
 msgid "&Importar presets…"
 msgstr "प्रीसेट आयात करें(&I)…"
 
-#: src/capture/main.cpp:1382
+#: src/capture/main.cpp:1391
 msgid "E&xportar presets…"
 msgstr "प्रीसेट निर्यात करें(&X)…"
 
-#: src/capture/main.cpp:1384
+#: src/capture/main.cpp:1393
 msgid "Exportar &todas as configurações…"
 msgstr "सभी सेटिंग्स निर्यात करें(&A)…"
 
-#: src/capture/main.cpp:1385
+#: src/capture/main.cpp:1394
 msgid "Importar t&odas as configurações…"
 msgstr "सभी सेटिंग्स आयात करें(&L)…"
 
-#: src/capture/main.cpp:1386
+#: src/capture/main.cpp:1395
 msgid "Abrir a pasta de &backups"
 msgstr "बैकअप फ़ोल्डर खोलें(&B)"
 
-#: src/capture/main.cpp:1388 src/editor/main.cpp:980
+#: src/capture/main.cpp:1397 src/editor/main.cpp:980
 msgid "Configurar o &upload…"
 msgstr "अपलोड सेट करें(&U)…"
 
-#: src/capture/main.cpp:1389
+#: src/capture/main.cpp:1398
 msgid "&Limpar a biblioteca agora"
 msgstr "लाइब्रेरी अभी साफ़ करें(&L)"
 
-#: src/capture/main.cpp:1390
+#: src/capture/main.cpp:1399
 msgid "&Opções…"
 msgstr "विकल्प(&O)…"
 
-#: src/capture/main.cpp:1392
+#: src/capture/main.cpp:1401
 msgid "&Sair do Snapnab"
 msgstr "Snapnab से बाहर निकलें(&Q)"
 
-#: src/capture/main.cpp:1394
+#: src/capture/main.cpp:1403
 msgid "Capturar &imagem"
 msgstr "छवि कैप्चर करें(&I)"
 
-#: src/capture/main.cpp:1395
+#: src/capture/main.cpp:1404
 msgid "Gravar &vídeo"
 msgstr "वीडियो रिकॉर्ड करें(&V)"
 
-#: src/capture/main.cpp:1396
+#: src/capture/main.cpp:1405
 msgid "&Repetir a última captura"
 msgstr "पिछला कैप्चर दोहराएँ(&R)"
 
-#: src/capture/main.cpp:1398
+#: src/capture/main.cpp:1407
 msgid "Da área de &transferência"
 msgstr "क्लिपबोर्ड से(&C)"
 
-#: src/capture/main.cpp:1399
+#: src/capture/main.cpp:1408
 msgid "De um &arquivo gráfico…"
 msgstr "ग्राफ़िक फ़ाइल से(&F)…"
 
-#: src/capture/main.cpp:1401
+#: src/capture/main.cpp:1410
 msgid "&Conta-gotas de tela"
 msgstr "स्क्रीन रंग चयनकर्ता(&C)"
 
-#: src/capture/main.cpp:1402
+#: src/capture/main.cpp:1411
 msgid "Ler código &QR"
 msgstr "QR कोड पढ़ें(&Q)"
 
-#: src/capture/main.cpp:1409
+#: src/capture/main.cpp:1418
 msgid "&Fixar na tela"
 msgstr "स्क्रीन पर पिन करें(&F)"
 
-#: src/capture/main.cpp:1411
+#: src/capture/main.cpp:1420
 msgid "Captura por &intervalo…"
 msgstr "अंतराल कैप्चर(&I)…"
 
-#: src/capture/main.cpp:1412
+#: src/capture/main.cpp:1421
 msgid "F&oco de tela (apresentações)"
 msgstr "स्क्रीन फ़ोकस(&O) (प्रस्तुतियाँ)"
 
-#: src/capture/main.cpp:1413
+#: src/capture/main.cpp:1422
 msgid "Gravar só o á&udio"
 msgstr "केवल ऑडियो रिकॉर्ड करें(&U)"
 
-#: src/capture/main.cpp:1414
+#: src/capture/main.cpp:1423
 msgid "Abrir a pasta dos áudios"
 msgstr "ऑडियो फ़ोल्डर खोलें"
 
-#: src/capture/main.cpp:1416
+#: src/capture/main.cpp:1425
 msgid "Mostrar o &One Click"
 msgstr "One Click दिखाएँ(&O)"
 
-#: src/capture/main.cpp:1417
+#: src/capture/main.cpp:1426
 msgid "Lista de &presets"
 msgstr "प्रीसेट सूची(&P)"
 
-#: src/capture/main.cpp:1419 src/editor/main.cpp:969
+#: src/capture/main.cpp:1428 src/editor/main.cpp:969
 msgid "&Manual do Snapnab\tF1"
 msgstr "Snapnab &मैनुअल\tF1"
 
-#: src/capture/main.cpp:1420
+#: src/capture/main.cpp:1429
 msgid "Como usar os &presets"
 msgstr "प्रीसेट का उपयोग कैसे करें(&H)"
 
-#: src/capture/main.cpp:1422
+#: src/capture/main.cpp:1431
 msgid "&Sobre o Snapnab"
 msgstr "Snapnab के बारे में(&A)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "पिन की गई छवियाँ (%zu)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 msgid "Imagens fixadas"
 msgstr "पिन की गई छवियाँ"
 
-#: src/capture/main.cpp:1444
+#: src/capture/main.cpp:1453
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "अंतराल कैप्चर रोकें (%d)"
 
-#: src/capture/main.cpp:1445
+#: src/capture/main.cpp:1454
 msgid "Captura por intervalo…"
 msgstr "अंतराल कैप्चर…"
 
-#: src/capture/main.cpp:1449
+#: src/capture/main.cpp:1458
 msgid "Mostrar o One Click"
 msgstr "One Click दिखाएँ"
 
-#: src/capture/main.cpp:1450
+#: src/capture/main.cpp:1459
 msgid "Abrir o Editor"
 msgstr "एडिटर खोलें"
 
-#: src/capture/main.cpp:1451
+#: src/capture/main.cpp:1460
+msgid "Abrir o Editor depois da captura"
+msgstr "कैप्चर के बाद एडिटर खोलें"
+
+#: src/capture/main.cpp:1461
 msgid "Opções…"
 msgstr "विकल्प…"
 
-#: src/capture/main.cpp:1453
+#: src/capture/main.cpp:1463
 msgid "Sair"
 msgstr "बाहर निकलें"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 msgid "1 segundo"
 msgstr "1 सेकंड"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 #, c-format
 msgid "%d segundos"
 msgstr "%d सेकंड"
 
-#: src/capture/main.cpp:1487
+#: src/capture/main.cpp:1497
 msgid "Remover o fundo da webcam"
 msgstr "वेबकैम की पृष्ठभूमि हटाएँ"
 
-#: src/capture/main.cpp:1488
+#: src/capture/main.cpp:1498
 msgid "Cor do fundo"
 msgstr "पृष्ठभूमि का रंग"
 
-#: src/capture/main.cpp:1489
+#: src/capture/main.cpp:1499
 msgid "Tolerância (0–100)"
 msgstr "सहनशीलता (0–100)"
 
-#: src/capture/main.cpp:1490
+#: src/capture/main.cpp:1500
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "सादी और अच्छी रोशनी वाली पृष्ठभूमि का उपयोग करें (ग्रीन स्क्रीन सबसे अच्छी है)।"
 
-#: src/capture/main.cpp:1491
+#: src/capture/main.cpp:1501
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "पृष्ठभूमि हटने पर वेबकैम बिना फ़्रेम के दिखता है।"
 
-#: src/capture/main.cpp:1493
+#: src/capture/main.cpp:1503
 msgid "Remover o fundo (chroma key)"
 msgstr "पृष्ठभूमि हटाएँ (क्रोमा की)"
 
-#: src/capture/main.cpp:1511
+#: src/capture/main.cpp:1521
 msgid "Nenhuma webcam encontrada"
 msgstr "कोई वेबकैम नहीं मिला"
 
-#: src/capture/main.cpp:1523
+#: src/capture/main.cpp:1533
 msgid "Remover o fundo (chroma key)…"
 msgstr "पृष्ठभूमि हटाएँ (क्रोमा की)…"
 
-#: src/capture/main.cpp:1544 src/capture/main.cpp:1759
+#: src/capture/main.cpp:1554 src/capture/main.cpp:1769
 msgid "Novo preset com as configurações atuais"
 msgstr "वर्तमान सेटिंग्स से नया प्रीसेट"
 
-#: src/capture/main.cpp:1545
+#: src/capture/main.cpp:1555
 msgid "Novo preset…"
 msgstr "नया प्रीसेट…"
 
-#: src/capture/main.cpp:1556
+#: src/capture/main.cpp:1566
 msgid "Capturar com este preset"
 msgstr "इस प्रीसेट से कैप्चर करें"
 
-#: src/capture/main.cpp:1558
+#: src/capture/main.cpp:1568
 msgid "Renomear…"
 msgstr "नाम बदलें…"
 
-#: src/capture/main.cpp:1559
+#: src/capture/main.cpp:1569
 msgid "Atalho…"
 msgstr "शॉर्टकट…"
 
-#: src/capture/main.cpp:1560 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
+#: src/capture/main.cpp:1570 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
 msgid "Duplicar"
 msgstr "प्रति बनाएँ"
 
-#: src/capture/main.cpp:1562 src/editor/PropsPanel.cpp:1244
+#: src/capture/main.cpp:1572 src/editor/PropsPanel.cpp:1244
 msgid "Excluir"
 msgstr "हटाएँ"
 
-#: src/capture/main.cpp:1570
+#: src/capture/main.cpp:1580
 msgid "Adicionar atalho"
 msgstr "शॉर्टकट जोड़ें"
 
-#: src/capture/main.cpp:1721 src/editor/main.cpp:2459
+#: src/capture/main.cpp:1731 src/editor/main.cpp:2459
 msgid "Gravar"
 msgstr "रिकॉर्ड करें"
 
-#: src/capture/main.cpp:1746
+#: src/capture/main.cpp:1756
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "%u दिन से पुराने कैप्चर अभी हटाएँ (विकल्पों के नियमों के साथ)?"
 
-#: src/capture/main.cpp:1751
+#: src/capture/main.cpp:1761
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "लाइब्रेरी से %d कैप्चर हटाए गए।"
 
-#: src/capture/main.cpp:1759 src/capture/main.cpp:1769 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
+#: src/capture/main.cpp:1769 src/capture/main.cpp:1779 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
 msgid " (cópia)"
 msgstr " (प्रति)"
 
-#: src/capture/main.cpp:1761
+#: src/capture/main.cpp:1771
 #, c-format
 msgid "Preset %zu"
 msgstr "प्रीसेट %zu"
 
-#: src/capture/main.cpp:1763
+#: src/capture/main.cpp:1773
 msgid "Novo preset"
 msgstr "नया प्रीसेट"
 
-#: src/capture/main.cpp:1776
+#: src/capture/main.cpp:1786
 msgid "É preciso manter pelo menos um preset."
 msgstr "कम से कम एक प्रीसेट रखना ज़रूरी है।"
 
-#: src/capture/main.cpp:1777
+#: src/capture/main.cpp:1787
 #, c-format
 msgid "Excluir o preset \"%s\"?"
 msgstr "प्रीसेट \"%s\" हटाएँ?"
 
-#: src/capture/main.cpp:1810 src/common/Office.cpp:56
+#: src/capture/main.cpp:1820 src/common/Office.cpp:56
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s इस कंप्यूटर पर इंस्टॉल नहीं है (या यह Microsoft Store संस्करण है, बिना ऑटोमेशन के)।"
 
-#: src/capture/main.cpp:1822
+#: src/capture/main.cpp:1832
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "हर कैप्चर नई स्लाइड पर (बंद: वर्तमान स्लाइड पर)"
 
-#: src/capture/main.cpp:1853
+#: src/capture/main.cpp:1864
 msgid "Presets do Snapnab (*.snappresets;*.xml)|*.snappresets;*.xml|"
 msgstr "Snapnab प्रीसेट (*.snappresets;*.xml)|*.snappresets;*.xml|"
 
-#: src/capture/main.cpp:1857
+#: src/capture/main.cpp:1868
 msgid "Presets importados."
 msgstr "प्रीसेट आयात किए गए।"
 
-#: src/capture/main.cpp:1858
+#: src/capture/main.cpp:1869
 msgid "Arquivo de presets inválido."
 msgstr "अमान्य प्रीसेट फ़ाइल।"
 
-#: src/capture/main.cpp:1863
+#: src/capture/main.cpp:1874
 msgid "Presets do Snapnab (*.snappresets)|*.snappresets|"
 msgstr "Snapnab प्रीसेट (*.snappresets)|*.snappresets|"
 
-#: src/capture/main.cpp:1867
+#: src/capture/main.cpp:1878
 msgid "Não foi possível exportar."
 msgstr "निर्यात नहीं किया जा सका।"
 
-#: src/capture/main.cpp:1880
+#: src/capture/main.cpp:1891
 msgid "Há uma gravação em andamento. Parar e sair?"
 msgstr "रिकॉर्डिंग चल रही है। रोकें और बाहर निकलें?"
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Gravar vídeo  ("
 msgstr "वीडियो रिकॉर्ड करें  ("
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Capturar imagem  ("
 msgstr "छवि कैप्चर करें  ("
 
-#: src/capture/main.cpp:2180
+#: src/capture/main.cpp:2191
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — रिकॉर्डिंग वापस मिली"
 
-#: src/capture/main.cpp:2181
+#: src/capture/main.cpp:2192
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu बाधित रिकॉर्डिंग लाइब्रेरी में वापस मिलीं।"
@@ -2256,23 +2264,23 @@ msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif
 msgid "Audio"
 msgstr "Audio"
 
-#: src/common/Ocr.cpp:141 src/common/Ocr.cpp:226 src/editor/Pdf.cpp:25
+#: src/common/Ocr.cpp:159 src/common/Ocr.cpp:244 src/editor/Pdf.cpp:25
 msgid "Imagem vazia."
 msgstr "खाली छवि।"
 
-#: src/common/Ocr.cpp:158 src/common/Ocr.cpp:248
+#: src/common/Ocr.cpp:176 src/common/Ocr.cpp:266
 msgid "Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma)."
 msgstr "Windows में कोई OCR भाषा स्थापित नहीं है (सेटिंग्स › समय और भाषा › भाषा)।"
 
-#: src/common/Ocr.cpp:182 src/common/Ocr.cpp:256
+#: src/common/Ocr.cpp:200 src/common/Ocr.cpp:274
 msgid "Falha desconhecida no OCR."
 msgstr "अज्ञात OCR त्रुटि।"
 
-#: src/common/Ocr.cpp:202
+#: src/common/Ocr.cpp:220
 msgid "A detecção de rostos não está disponível neste Windows."
 msgstr "इस Windows पर चेहरा पहचान उपलब्ध नहीं है।"
 
-#: src/common/Ocr.cpp:217
+#: src/common/Ocr.cpp:235
 msgid "Falha na detecção de rostos."
 msgstr "चेहरा पहचान विफल रही।"
 
@@ -3461,119 +3469,119 @@ msgstr "ट्रे और लाइब्रेरी में दिखत�
 msgid "Renomear captura"
 msgstr "कैप्चर का नाम बदलें"
 
-#: src/editor/Panels.cpp:1547 src/editor/main.cpp:2050
+#: src/editor/Panels.cpp:1552 src/editor/main.cpp:2050
 msgid "Capturas recentes"
 msgstr "हाल के कैप्चर"
 
-#: src/editor/Panels.cpp:1547
+#: src/editor/Panels.cpp:1552
 #, c-format
 msgid "Biblioteca  •  %zu capturas"
 msgstr "लाइब्रेरी  •  %zu कैप्चर"
 
-#: src/editor/Panels.cpp:1548
+#: src/editor/Panels.cpp:1553
 #, c-format
 msgid "  •  %d selecionadas"
 msgstr "  •  %d चुने गए"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Exportar (%d)…"
 msgstr "निर्यात (%d)…"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Excluir (%d)"
 msgstr "हटाएँ (%d)"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 msgid "Limpar seleção"
 msgstr "चयन साफ़ करें"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Biblioteca"
 msgstr "लाइब्रेरी"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Voltar ao editor"
 msgstr "एडिटर पर लौटें"
 
-#: src/editor/Panels.cpp:1563
+#: src/editor/Panels.cpp:1568
 msgid "Nenhuma captura recente. Capture com o Snapnab (Print Screen) ou solte arquivos aqui."
 msgstr "कोई हाल का कैप्चर नहीं। Snapnab से कैप्चर करें (Print Screen) या फ़ाइलें यहाँ छोड़ें।"
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "Nenhuma captura com esse nome."
 msgstr "इस नाम का कोई कैप्चर नहीं।"
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "A biblioteca está vazia."
 msgstr "लाइब्रेरी खाली है।"
 
-#: src/editor/Panels.cpp:1758 src/editor/main.cpp:1047
+#: src/editor/Panels.cpp:1763 src/editor/main.cpp:1047
 msgid "Abrir"
 msgstr "खोलें"
 
-#: src/editor/Panels.cpp:1759
+#: src/editor/Panels.cpp:1764
 msgid "Mostrar na pasta"
 msgstr "फ़ोल्डर में दिखाएँ"
 
-#: src/editor/Panels.cpp:1762
+#: src/editor/Panels.cpp:1767
 #, c-format
 msgid "Exportar %zu itens…"
 msgstr "%zu आइटम निर्यात करें…"
 
-#: src/editor/Panels.cpp:1762 src/editor/PropsPanel.cpp:1242
+#: src/editor/Panels.cpp:1767 src/editor/PropsPanel.cpp:1242
 msgid "Exportar…"
 msgstr "निर्यात करें…"
 
-#: src/editor/Panels.cpp:1768 src/editor/main.cpp:1771
+#: src/editor/Panels.cpp:1773 src/editor/main.cpp:1771
 msgid "Enviar (upload)"
 msgstr "अपलोड करें"
 
-#: src/editor/Panels.cpp:1770
+#: src/editor/Panels.cpp:1775
 #, c-format
 msgid "Combinar %zu imagens…"
 msgstr "%zu छवियाँ मिलाएँ…"
 
-#: src/editor/Panels.cpp:1771
+#: src/editor/Panels.cpp:1776
 msgid "Comparar as duas…"
 msgstr "दोनों की तुलना करें…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 #, c-format
 msgid "Processar %zu em lote…"
 msgstr "%zu को बैच में प्रोसेस करें…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 msgid "Processamento em lote…"
 msgstr "बैच प्रोसेसिंग…"
 
-#: src/editor/Panels.cpp:1775
+#: src/editor/Panels.cpp:1780
 msgid "Selecionar tudo\tCtrl+A"
 msgstr "सब चुनें\tCtrl+A"
 
-#: src/editor/Panels.cpp:1776
+#: src/editor/Panels.cpp:1781
 msgid "Renomear…\tF2"
 msgstr "नाम बदलें…\tF2"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja"
 msgstr "ट्रे से हटाएँ"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja (continua na biblioteca)"
 msgstr "ट्रे से हटाएँ (लाइब्रेरी में बना रहेगा)"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 #, c-format
 msgid "Excluir %zu itens (Lixeira)\tDel"
 msgstr "%zu आइटम हटाएँ (रीसायकल बिन)\tDel"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 msgid "Excluir (Lixeira)\tDel"
 msgstr "हटाएँ (रीसायकल बिन)\tDel"
 
-#: src/editor/Panels.cpp:1867
+#: src/editor/Panels.cpp:1872
 #, c-format
 msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
 msgstr "वीडियो  •  %lld:%02lld  •  %d × %d"

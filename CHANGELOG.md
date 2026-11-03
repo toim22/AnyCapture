@@ -3,6 +3,17 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.4.1] — 2026-11-03
+
+### Added
+- **Only copy to the clipboard after capturing** (#3): *Options › After capturing › When done* has a new choice that
+  opens neither the Editor nor the quick thumbnail; the capture goes to the clipboard and the library with a short
+  notification. *Open the Editor after capturing* in the tray icon menu turns it on and off.
+
+### Fixed
+- Clicking an older capture in *Recent captures* (to open, copy or edit it) no longer moves it to the front as if it
+  were the latest (#2).
+
 ## [0.4.0] — 2026-11-01
 
 ### Added

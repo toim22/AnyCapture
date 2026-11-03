@@ -71,63 +71,63 @@ msgstr "ক্যাপচারে কোনো লেখা পাওয়া
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "লেখা বের করুন — ক্লিপবোর্ডে কপি হয়েছে"
 
-#: src/capture/CaptureEngine.cpp:600
+#: src/capture/CaptureEngine.cpp:601
 msgid "copiada para a área de transferência"
 msgstr "ক্লিপবোর্ডে কপি হয়েছে"
 
-#: src/capture/CaptureEngine.cpp:604 src/capture/CaptureEngine.cpp:618
+#: src/capture/CaptureEngine.cpp:605 src/capture/CaptureEngine.cpp:619
 msgid "salva em "
 msgstr "এখানে সংরক্ষিত: "
 
-#: src/capture/CaptureEngine.cpp:616 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1275
+#: src/capture/CaptureEngine.cpp:617 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1284
 msgid "Captura"
 msgstr "ক্যাপচার"
 
-#: src/capture/CaptureEngine.cpp:638
+#: src/capture/CaptureEngine.cpp:641
 msgid "Captura adicionada à biblioteca"
 msgstr "ক্যাপচার লাইব্রেরিতে যোগ হয়েছে"
 
-#: src/capture/CaptureEngine.cpp:763
+#: src/capture/CaptureEngine.cpp:766
 msgid "A janela será ampliada além da tela, capturada e restaurada."
 msgstr "উইন্ডোটি স্ক্রিনের চেয়ে বড় করা হবে, ক্যাপচার করা হবে এবং আগের অবস্থায় ফেরানো হবে।"
 
-#: src/capture/CaptureEngine.cpp:764
+#: src/capture/CaptureEngine.cpp:767
 msgid "Nova largura (px)"
 msgstr "নতুন প্রস্থ (px)"
 
-#: src/capture/CaptureEngine.cpp:765
+#: src/capture/CaptureEngine.cpp:768
 msgid "Nova altura (px)"
 msgstr "নতুন উচ্চতা (px)"
 
-#: src/capture/CaptureEngine.cpp:767 src/capture/Presets.cpp:17
+#: src/capture/CaptureEngine.cpp:770 src/capture/Presets.cpp:17
 msgid "Janela estendida"
 msgstr "বর্ধিত উইন্ডো"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "Recomeçar a gravação?"
 msgstr "রেকর্ডিং আবার শুরু করবেন?"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "O que foi gravado até agora será descartado."
 msgstr "এ পর্যন্ত যা রেকর্ড হয়েছে তা বাতিল হবে।"
 
-#: src/capture/CaptureEngine.cpp:842
+#: src/capture/CaptureEngine.cpp:845
 msgid "Não perguntar de novo"
 msgstr "আর জিজ্ঞেস করবেন না"
 
-#: src/capture/CaptureEngine.cpp:862
+#: src/capture/CaptureEngine.cpp:865
 msgid "Imagem durante gravação"
 msgstr "রেকর্ডিংয়ের সময় ছবি"
 
-#: src/capture/CaptureEngine.cpp:865
+#: src/capture/CaptureEngine.cpp:868
 msgid "Imagem capturada sem parar a gravação."
 msgstr "রেকর্ডিং না থামিয়েই ছবি ক্যাপচার হয়েছে।"
 
-#: src/capture/CaptureEngine.cpp:879 src/capture/Webcam.cpp:91
+#: src/capture/CaptureEngine.cpp:882 src/capture/Webcam.cpp:91
 msgid "Snapnab — webcam"
 msgstr "Snapnab — ওয়েবক্যাম"
 
-#: src/capture/CaptureEngine.cpp:918
+#: src/capture/CaptureEngine.cpp:921
 msgid ""
 "Não foi possível iniciar a gravação.\n"
 "\n"
@@ -135,35 +135,35 @@ msgstr ""
 "রেকর্ডিং শুরু করা যায়নি।\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:951 src/capture/main.cpp:580
+#: src/capture/CaptureEngine.cpp:954 src/capture/main.cpp:580
 msgid "Destacar o cursor"
 msgstr "কার্সর হাইলাইট করুন"
 
-#: src/capture/CaptureEngine.cpp:952 src/capture/main.cpp:583
+#: src/capture/CaptureEngine.cpp:955 src/capture/main.cpp:583
 msgid "Mostrar os cliques"
 msgstr "ক্লিক দেখান"
 
-#: src/capture/CaptureEngine.cpp:954
+#: src/capture/CaptureEngine.cpp:957
 msgid "Teclas: não mostrar"
 msgstr "কী: দেখাবেন না"
 
-#: src/capture/CaptureEngine.cpp:955
+#: src/capture/CaptureEngine.cpp:958
 msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "কী: শুধু শর্টকাট (Ctrl, Alt, Win, F1…)"
 
-#: src/capture/CaptureEngine.cpp:956
+#: src/capture/CaptureEngine.cpp:959
 msgid "Teclas: todas (inclusive o que for digitado)"
 msgstr "কী: সব (যা টাইপ করা হয় তাও)"
 
-#: src/capture/CaptureEngine.cpp:991
+#: src/capture/CaptureEngine.cpp:994
 msgid "Snapnab — áudio salvo"
 msgstr "Snapnab — অডিও সংরক্ষিত"
 
-#: src/capture/CaptureEngine.cpp:1003
+#: src/capture/CaptureEngine.cpp:1007
 msgid "Vídeo salvo na biblioteca: "
 msgstr "ভিডিও লাইব্রেরিতে সংরক্ষিত: "
 
-#: src/capture/CaptureEngine.cpp:1005
+#: src/capture/CaptureEngine.cpp:1009
 msgid ""
 "A gravação falhou.\n"
 "\n"
@@ -171,15 +171,15 @@ msgstr ""
 "রেকর্ডিং ব্যর্থ হয়েছে।\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Snapnab — pouco espaço em disco"
 msgstr "Snapnab — ডিস্কে জায়গা কম"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Restam menos de 1 GB livres na unidade da biblioteca."
 msgstr "লাইব্রেরির ড্রাইভে ১ GB-এর কম জায়গা খালি আছে।"
 
-#: src/capture/CaptureEngine.cpp:1016
+#: src/capture/CaptureEngine.cpp:1020
 msgid "Gravação interrompida: espaço em disco insuficiente."
 msgstr "রেকর্ডিং থেমেছে: ডিস্কে যথেষ্ট জায়গা নেই।"
 
@@ -211,7 +211,7 @@ msgstr "ব্যবধান (সেকেন্ড)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "সময়কাল (মিনিট, 0 = থামানো পর্যন্ত)"
 
-#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1522 src/editor/Batch.cpp:122
+#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1532 src/editor/Batch.cpp:122
 msgid "Formato"
 msgstr "ফরম্যাট"
 
@@ -227,7 +227,7 @@ msgstr "ব্যবধান"
 msgid "Pasta"
 msgstr "ফোল্ডার"
 
-#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1235
+#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1244
 msgid "Capturar o cursor"
 msgstr "কার্সর ক্যাপচার"
 
@@ -373,7 +373,7 @@ msgstr "সর্বদা উপরে"
 msgid "Sombra"
 msgstr "ছায়া"
 
-#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1224 src/capture/main.cpp:1440
+#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1233 src/capture/main.cpp:1449
 msgid "Ler código QR"
 msgstr "QR কোড পড়ুন"
 
@@ -497,7 +497,7 @@ msgstr "এভাবে সংরক্ষণ করুন…"
 msgid "Anotar no Editor"
 msgstr "এডিটরে টীকা দিন"
 
-#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1224 src/editor/Panels.cpp:1767 src/editor/main.cpp:1770
+#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1233 src/editor/Panels.cpp:1772 src/editor/main.cpp:1770
 msgid "Fixar na tela"
 msgstr "স্ক্রিনে পিন করুন"
 
@@ -525,7 +525,7 @@ msgstr "ভিডিও সংরক্ষণ করুন"
 msgid "Salvar como"
 msgstr "এভাবে সংরক্ষণ"
 
-#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1766 src/editor/main.cpp:1765
+#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1771 src/editor/main.cpp:1765
 msgid "Copiar como…"
 msgstr "এভাবে কপি করুন…"
 
@@ -533,7 +533,7 @@ msgstr "এভাবে কপি করুন…"
 msgid "Enviar (upload) e copiar o link"
 msgstr "আপলোড করে লিংক কপি করুন"
 
-#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1408
+#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1417
 msgid "Fechar todas"
 msgstr "সব বন্ধ করুন"
 
@@ -968,7 +968,7 @@ msgstr "রেজোলিউশন (DPI)"
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "সংরক্ষিত ফাইলে লেখা হয় (PNG, JPEG, TIFF, BMP)।"
 
-#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1224
+#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1233
 msgid "Nenhum"
 msgstr "কোনোটি নয়"
 
@@ -980,7 +980,7 @@ msgstr "আরেকটি প্রভাব যোগ করুন"
 msgid "Remover este efeito"
 msgstr "এই প্রভাব সরান"
 
-#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1290 src/capture/main.cpp:1475
+#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1299 src/capture/main.cpp:1485
 msgid "Desligado"
 msgstr "বন্ধ"
 
@@ -989,11 +989,11 @@ msgstr "বন্ধ"
 msgid "%d s"
 msgstr "%d সে."
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343
 msgid "Ligada"
 msgstr "চালু"
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334 src/capture/main.cpp:1509
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343 src/capture/main.cpp:1519
 msgid "Desligada"
 msgstr "বন্ধ"
 
@@ -1201,7 +1201,7 @@ msgstr ""
 "•  সারির গিয়ার প্রিসেটের নাম বদলায়, প্রতিলিপি করে বা মুছে ফেলে।\n"
 "•  \"বর্তমান সেটিংস থেকে নতুন প্রিসেট\" এখন উইন্ডোতে যা আছে তা সংরক্ষণ করে।"
 
-#: src/capture/main.cpp:669 src/capture/main.cpp:1028 src/capture/main.cpp:1242 src/capture/main.cpp:1437
+#: src/capture/main.cpp:669 src/capture/main.cpp:1037 src/capture/main.cpp:1251 src/capture/main.cpp:1446
 msgid "Presets"
 msgstr "প্রিসেট"
 
@@ -1253,11 +1253,11 @@ msgstr "স্বয়ংক্রিয় (Windows-এর ভাষা)"
 msgid "Atalhos globais"
 msgstr "গ্লোবাল শর্টকাট"
 
-#: src/capture/main.cpp:766 src/capture/main.cpp:1023 src/capture/main.cpp:1432
+#: src/capture/main.cpp:766 src/capture/main.cpp:1032 src/capture/main.cpp:1441
 msgid "Capturar imagem"
 msgstr "ছবি ক্যাপচার"
 
-#: src/capture/main.cpp:767 src/capture/main.cpp:1024 src/capture/main.cpp:1433
+#: src/capture/main.cpp:767 src/capture/main.cpp:1033 src/capture/main.cpp:1442
 msgid "Gravar vídeo"
 msgstr "ভিডিও রেকর্ড"
 
@@ -1269,7 +1269,7 @@ msgstr "ভিডিও বিরতি/চালু"
 msgid "Parar vídeo"
 msgstr "ভিডিও থামান"
 
-#: src/capture/main.cpp:770 src/capture/main.cpp:1439
+#: src/capture/main.cpp:770 src/capture/main.cpp:1448
 msgid "Conta-gotas de tela"
 msgstr "স্ক্রিন রং বাছাই"
 
@@ -1277,11 +1277,11 @@ msgstr "স্ক্রিন রং বাছাই"
 msgid "Capturar e fixar na tela"
 msgstr "ক্যাপচার করে স্ক্রিনে পিন করুন"
 
-#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1406
+#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1415
 msgid "Fixar da área de transferência"
 msgstr "ক্লিপবোর্ড থেকে পিন করুন"
 
-#: src/capture/main.cpp:773 src/capture/main.cpp:1446
+#: src/capture/main.cpp:773 src/capture/main.cpp:1455
 msgid "Foco de tela (apresentações)"
 msgstr "স্ক্রিন ফোকাস (উপস্থাপনা)"
 
@@ -1340,6 +1340,10 @@ msgstr "এডিটরের বদলে দ্রুত থাম্বনে
 #: src/capture/main.cpp:784
 msgid "Mostrar a miniatura e abrir o Editor"
 msgstr "থাম্বনেইল দেখান ও এডিটর খুলুন"
+
+#: src/capture/main.cpp:784
+msgid "Só copiar para a área de transferência"
+msgstr "শুধু ক্লিপবোর্ডে কপি করুন"
 
 #: src/capture/main.cpp:785
 msgid "A miniatura fecha após (s, 0 = não fecha)"
@@ -1514,11 +1518,11 @@ msgstr ""
 "ছবি খোলা যায়নি।\n"
 "\n"
 
-#: src/capture/main.cpp:952 src/capture/main.cpp:1407
+#: src/capture/main.cpp:952 src/capture/main.cpp:1416
 msgid "Fixar um arquivo…"
 msgstr "একটি ফাইল পিন করুন…"
 
-#: src/capture/main.cpp:953 src/capture/main.cpp:1405
+#: src/capture/main.cpp:953 src/capture/main.cpp:1414
 msgid "Capturar e fixar"
 msgstr "ক্যাপচার করে পিন করুন"
 
@@ -1547,36 +1551,36 @@ msgstr "ইতিহাস"
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — ব্যবধানে ক্যাপচার: %d ছবি"
 
-#: src/capture/main.cpp:1025 src/capture/main.cpp:1434
+#: src/capture/main.cpp:1034 src/capture/main.cpp:1443
 msgid "Gravar só o áudio"
 msgstr "শুধু অডিও রেকর্ড করুন"
 
-#: src/capture/main.cpp:1030 src/capture/main.cpp:1448
+#: src/capture/main.cpp:1039 src/capture/main.cpp:1457
 msgid "Abrir a janela de captura"
 msgstr "ক্যাপচার উইন্ডো খুলুন"
 
-#: src/capture/main.cpp:1031
+#: src/capture/main.cpp:1040
 msgid "Ocultar o One Click"
 msgstr "One Click লুকান"
 
-#: src/capture/main.cpp:1116
+#: src/capture/main.cpp:1125
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region-এর প্রয়োজন x,y,প্রস্থ,উচ্চতা (যেমন: /region 100,100,800,600)।"
 
-#: src/capture/main.cpp:1122
+#: src/capture/main.cpp:1131
 msgid "Nenhuma janela com esse título: "
 msgstr "এই শিরোনামের কোনো উইন্ডো নেই: "
 
-#: src/capture/main.cpp:1127
+#: src/capture/main.cpp:1136
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "মনিটর %d নেই (মোট %zuটি আছে)।"
 
-#: src/capture/main.cpp:1136
+#: src/capture/main.cpp:1145
 msgid "Não foi possível fixar: "
 msgstr "পিন করা যায়নি: "
 
-#: src/capture/main.cpp:1156
+#: src/capture/main.cpp:1165
 msgid ""
 "Snapnab.exe [opções]\n"
 "\n"
@@ -1620,411 +1624,415 @@ msgstr ""
 "/output clipboard|editor|none|\"ফাইল\"   ক্যাপচার কোথায় যাবে\n"
 "/exit                 চলমান Snapnab বন্ধ করে"
 
-#: src/capture/main.cpp:1174
+#: src/capture/main.cpp:1183
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — কমান্ড লাইন"
 
-#: src/capture/main.cpp:1213 src/capture/main.cpp:1698 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
+#: src/capture/main.cpp:1222 src/capture/main.cpp:1708 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
 msgid "Imagem"
 msgstr "ছবি"
 
-#: src/capture/main.cpp:1214 src/capture/main.cpp:1698
+#: src/capture/main.cpp:1223 src/capture/main.cpp:1708
 msgid "Vídeo"
 msgstr "ভিডিও"
 
-#: src/capture/main.cpp:1215
+#: src/capture/main.cpp:1224
 msgid "Seleção:"
 msgstr "নির্বাচন:"
 
-#: src/capture/main.cpp:1218
+#: src/capture/main.cpp:1227
 msgid "Efeitos:"
 msgstr "প্রভাব:"
 
-#: src/capture/main.cpp:1221
+#: src/capture/main.cpp:1230
 msgid "Compartilhar:"
 msgstr "শেয়ার:"
 
-#: src/capture/main.cpp:1224 src/capture/main.cpp:1275 src/editor/main.cpp:1041 src/editor/main.cpp:2608
+#: src/capture/main.cpp:1233 src/capture/main.cpp:1284 src/editor/main.cpp:1041 src/editor/main.cpp:2608
 msgid "Arquivo"
 msgstr "ফাইল"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Programa externo"
 msgstr "বাইরের প্রোগ্রাম"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Texto (OCR)"
 msgstr "লেখা (OCR)"
 
-#: src/capture/main.cpp:1225
+#: src/capture/main.cpp:1234
 msgid "Upload (copiar o link)"
 msgstr "আপলোড (লিংক কপি করুন)"
 
-#: src/capture/main.cpp:1226
+#: src/capture/main.cpp:1235
 msgid "Qualidade:"
 msgstr "মান:"
 
-#: src/capture/main.cpp:1229
+#: src/capture/main.cpp:1238
 msgid "Muito baixa"
 msgstr "খুব কম"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Baixa"
 msgstr "কম"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2150 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2150 src/editor/main.cpp:2160
 msgid "Média"
 msgstr "মাঝারি"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Alta"
 msgstr "উচ্চ"
 
-#: src/capture/main.cpp:1230
+#: src/capture/main.cpp:1239
 msgid "Webcam:"
 msgstr "ওয়েবক্যাম:"
 
-#: src/capture/main.cpp:1233
+#: src/capture/main.cpp:1242
 msgid "Visualizar no Editor"
 msgstr "এডিটরে প্রিভিউ"
 
-#: src/capture/main.cpp:1234
+#: src/capture/main.cpp:1243
 msgid "Copiar para a área de transferência"
 msgstr "ক্লিপবোর্ডে কপি করুন"
 
-#: src/capture/main.cpp:1236 src/capture/main.cpp:1290
+#: src/capture/main.cpp:1245 src/capture/main.cpp:1299
 msgid "Atraso"
 msgstr "বিলম্ব"
 
-#: src/capture/main.cpp:1238
+#: src/capture/main.cpp:1247
 msgid "Gravar microfone"
 msgstr "মাইক্রোফোন রেকর্ড"
 
-#: src/capture/main.cpp:1239
+#: src/capture/main.cpp:1248
 msgid "Gravar áudio do sistema"
 msgstr "সিস্টেমের অডিও রেকর্ড"
 
-#: src/capture/main.cpp:1240 src/capture/main.cpp:1721 src/editor/main.cpp:2458
+#: src/capture/main.cpp:1249 src/capture/main.cpp:1731 src/editor/main.cpp:2458
 msgid "Capturar"
 msgstr "ক্যাপচার"
 
-#: src/capture/main.cpp:1246
+#: src/capture/main.cpp:1255
 msgid "Abrir Editor"
 msgstr "এডিটর খুলুন"
 
-#: src/capture/main.cpp:1275 src/editor/main.cpp:2612
+#: src/capture/main.cpp:1284 src/editor/main.cpp:2612
 msgid "Exibir"
 msgstr "দেখুন"
 
-#: src/capture/main.cpp:1275 src/capture/main.cpp:1547 src/editor/main.cpp:2613 src/editor/main.cpp:2613
+#: src/capture/main.cpp:1284 src/capture/main.cpp:1557 src/editor/main.cpp:2613 src/editor/main.cpp:2613
 msgid "Ajuda"
 msgstr "সহায়তা"
 
-#: src/capture/main.cpp:1377
+#: src/capture/main.cpp:1386
 msgid "Abrir o &Editor"
 msgstr "এডিটর খুলুন(&E)"
 
-#: src/capture/main.cpp:1378 src/editor/main.cpp:893
+#: src/capture/main.cpp:1387 src/editor/main.cpp:893
 msgid "Abrir a pasta da &biblioteca"
 msgstr "লাইব্রেরি ফোল্ডার খুলুন(&L)"
 
-#: src/capture/main.cpp:1379
+#: src/capture/main.cpp:1388
 msgid "Abrir a pasta de &logs"
 msgstr "লগ ফোল্ডার খুলুন(&G)"
 
-#: src/capture/main.cpp:1381
+#: src/capture/main.cpp:1390
 msgid "&Importar presets…"
 msgstr "প্রিসেট আমদানি(&I)…"
 
-#: src/capture/main.cpp:1382
+#: src/capture/main.cpp:1391
 msgid "E&xportar presets…"
 msgstr "প্রিসেট রপ্তানি(&X)…"
 
-#: src/capture/main.cpp:1384
+#: src/capture/main.cpp:1393
 msgid "Exportar &todas as configurações…"
 msgstr "সব সেটিংস রপ্তানি করুন(&A)…"
 
-#: src/capture/main.cpp:1385
+#: src/capture/main.cpp:1394
 msgid "Importar t&odas as configurações…"
 msgstr "সব সেটিংস আমদানি করুন(&L)…"
 
-#: src/capture/main.cpp:1386
+#: src/capture/main.cpp:1395
 msgid "Abrir a pasta de &backups"
 msgstr "ব্যাকআপ ফোল্ডার খুলুন(&B)"
 
-#: src/capture/main.cpp:1388 src/editor/main.cpp:980
+#: src/capture/main.cpp:1397 src/editor/main.cpp:980
 msgid "Configurar o &upload…"
 msgstr "আপলোড সেট করুন(&U)…"
 
-#: src/capture/main.cpp:1389
+#: src/capture/main.cpp:1398
 msgid "&Limpar a biblioteca agora"
 msgstr "এখনই লাইব্রেরি পরিষ্কার করুন(&L)"
 
-#: src/capture/main.cpp:1390
+#: src/capture/main.cpp:1399
 msgid "&Opções…"
 msgstr "বিকল্প(&O)…"
 
-#: src/capture/main.cpp:1392
+#: src/capture/main.cpp:1401
 msgid "&Sair do Snapnab"
 msgstr "Snapnab থেকে প্রস্থান(&Q)"
 
-#: src/capture/main.cpp:1394
+#: src/capture/main.cpp:1403
 msgid "Capturar &imagem"
 msgstr "ছবি ক্যাপচার(&I)"
 
-#: src/capture/main.cpp:1395
+#: src/capture/main.cpp:1404
 msgid "Gravar &vídeo"
 msgstr "ভিডিও রেকর্ড(&V)"
 
-#: src/capture/main.cpp:1396
+#: src/capture/main.cpp:1405
 msgid "&Repetir a última captura"
 msgstr "শেষ ক্যাপচার পুনরাবৃত্তি(&R)"
 
-#: src/capture/main.cpp:1398
+#: src/capture/main.cpp:1407
 msgid "Da área de &transferência"
 msgstr "ক্লিপবোর্ড থেকে(&C)"
 
-#: src/capture/main.cpp:1399
+#: src/capture/main.cpp:1408
 msgid "De um &arquivo gráfico…"
 msgstr "গ্রাফিক ফাইল থেকে(&F)…"
 
-#: src/capture/main.cpp:1401
+#: src/capture/main.cpp:1410
 msgid "&Conta-gotas de tela"
 msgstr "স্ক্রিন রং বাছাই(&C)"
 
-#: src/capture/main.cpp:1402
+#: src/capture/main.cpp:1411
 msgid "Ler código &QR"
 msgstr "QR কোড পড়ুন(&Q)"
 
-#: src/capture/main.cpp:1409
+#: src/capture/main.cpp:1418
 msgid "&Fixar na tela"
 msgstr "স্ক্রিনে পিন করুন(&F)"
 
-#: src/capture/main.cpp:1411
+#: src/capture/main.cpp:1420
 msgid "Captura por &intervalo…"
 msgstr "ব্যবধানে ক্যাপচার(&I)…"
 
-#: src/capture/main.cpp:1412
+#: src/capture/main.cpp:1421
 msgid "F&oco de tela (apresentações)"
 msgstr "স্ক্রিন ফোকাস(&O) (উপস্থাপনা)"
 
-#: src/capture/main.cpp:1413
+#: src/capture/main.cpp:1422
 msgid "Gravar só o á&udio"
 msgstr "শুধু অডিও রেকর্ড করুন(&U)"
 
-#: src/capture/main.cpp:1414
+#: src/capture/main.cpp:1423
 msgid "Abrir a pasta dos áudios"
 msgstr "অডিও ফোল্ডার খুলুন"
 
-#: src/capture/main.cpp:1416
+#: src/capture/main.cpp:1425
 msgid "Mostrar o &One Click"
 msgstr "One Click দেখান(&O)"
 
-#: src/capture/main.cpp:1417
+#: src/capture/main.cpp:1426
 msgid "Lista de &presets"
 msgstr "প্রিসেটের তালিকা(&P)"
 
-#: src/capture/main.cpp:1419 src/editor/main.cpp:969
+#: src/capture/main.cpp:1428 src/editor/main.cpp:969
 msgid "&Manual do Snapnab\tF1"
 msgstr "Snapnab &ম্যানুয়াল\tF1"
 
-#: src/capture/main.cpp:1420
+#: src/capture/main.cpp:1429
 msgid "Como usar os &presets"
 msgstr "প্রিসেট কীভাবে ব্যবহার করবেন(&H)"
 
-#: src/capture/main.cpp:1422
+#: src/capture/main.cpp:1431
 msgid "&Sobre o Snapnab"
 msgstr "Snapnab সম্পর্কে(&A)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "পিন করা ছবি (%zu)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 msgid "Imagens fixadas"
 msgstr "পিন করা ছবি"
 
-#: src/capture/main.cpp:1444
+#: src/capture/main.cpp:1453
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "ব্যবধানে ক্যাপচার থামান (%d)"
 
-#: src/capture/main.cpp:1445
+#: src/capture/main.cpp:1454
 msgid "Captura por intervalo…"
 msgstr "ব্যবধানে ক্যাপচার…"
 
-#: src/capture/main.cpp:1449
+#: src/capture/main.cpp:1458
 msgid "Mostrar o One Click"
 msgstr "One Click দেখান"
 
-#: src/capture/main.cpp:1450
+#: src/capture/main.cpp:1459
 msgid "Abrir o Editor"
 msgstr "এডিটর খুলুন"
 
-#: src/capture/main.cpp:1451
+#: src/capture/main.cpp:1460
+msgid "Abrir o Editor depois da captura"
+msgstr "ক্যাপচারের পরে এডিটর খুলুন"
+
+#: src/capture/main.cpp:1461
 msgid "Opções…"
 msgstr "বিকল্প…"
 
-#: src/capture/main.cpp:1453
+#: src/capture/main.cpp:1463
 msgid "Sair"
 msgstr "প্রস্থান"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 msgid "1 segundo"
 msgstr "১ সেকেন্ড"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 #, c-format
 msgid "%d segundos"
 msgstr "%d সেকেন্ড"
 
-#: src/capture/main.cpp:1487
+#: src/capture/main.cpp:1497
 msgid "Remover o fundo da webcam"
 msgstr "ওয়েবক্যামের পটভূমি সরান"
 
-#: src/capture/main.cpp:1488
+#: src/capture/main.cpp:1498
 msgid "Cor do fundo"
 msgstr "পটভূমির রং"
 
-#: src/capture/main.cpp:1489
+#: src/capture/main.cpp:1499
 msgid "Tolerância (0–100)"
 msgstr "সহনশীলতা (0–100)"
 
-#: src/capture/main.cpp:1490
+#: src/capture/main.cpp:1500
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "সাধারণ, ভালো আলোযুক্ত পটভূমি ব্যবহার করুন (গ্রিন স্ক্রিন সবচেয়ে ভালো)।"
 
-#: src/capture/main.cpp:1491
+#: src/capture/main.cpp:1501
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "পটভূমি সরালে ওয়েবক্যাম ফ্রেম ছাড়া দেখা যায়।"
 
-#: src/capture/main.cpp:1493
+#: src/capture/main.cpp:1503
 msgid "Remover o fundo (chroma key)"
 msgstr "পটভূমি সরান (ক্রোমা কি)"
 
-#: src/capture/main.cpp:1511
+#: src/capture/main.cpp:1521
 msgid "Nenhuma webcam encontrada"
 msgstr "কোনো ওয়েবক্যাম পাওয়া যায়নি"
 
-#: src/capture/main.cpp:1523
+#: src/capture/main.cpp:1533
 msgid "Remover o fundo (chroma key)…"
 msgstr "পটভূমি সরান (ক্রোমা কি)…"
 
-#: src/capture/main.cpp:1544 src/capture/main.cpp:1759
+#: src/capture/main.cpp:1554 src/capture/main.cpp:1769
 msgid "Novo preset com as configurações atuais"
 msgstr "বর্তমান সেটিংস থেকে নতুন প্রিসেট"
 
-#: src/capture/main.cpp:1545
+#: src/capture/main.cpp:1555
 msgid "Novo preset…"
 msgstr "নতুন প্রিসেট…"
 
-#: src/capture/main.cpp:1556
+#: src/capture/main.cpp:1566
 msgid "Capturar com este preset"
 msgstr "এই প্রিসেট দিয়ে ক্যাপচার"
 
-#: src/capture/main.cpp:1558
+#: src/capture/main.cpp:1568
 msgid "Renomear…"
 msgstr "নাম বদলান…"
 
-#: src/capture/main.cpp:1559
+#: src/capture/main.cpp:1569
 msgid "Atalho…"
 msgstr "শর্টকাট…"
 
-#: src/capture/main.cpp:1560 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
+#: src/capture/main.cpp:1570 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
 msgid "Duplicar"
 msgstr "প্রতিলিপি"
 
-#: src/capture/main.cpp:1562 src/editor/PropsPanel.cpp:1244
+#: src/capture/main.cpp:1572 src/editor/PropsPanel.cpp:1244
 msgid "Excluir"
 msgstr "মুছুন"
 
-#: src/capture/main.cpp:1570
+#: src/capture/main.cpp:1580
 msgid "Adicionar atalho"
 msgstr "শর্টকাট যোগ করুন"
 
-#: src/capture/main.cpp:1721 src/editor/main.cpp:2459
+#: src/capture/main.cpp:1731 src/editor/main.cpp:2459
 msgid "Gravar"
 msgstr "রেকর্ড"
 
-#: src/capture/main.cpp:1746
+#: src/capture/main.cpp:1756
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "%u দিনের পুরোনো ক্যাপচার এখনই সরাবেন (অপশনের নিয়ম অনুযায়ী)?"
 
-#: src/capture/main.cpp:1751
+#: src/capture/main.cpp:1761
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "লাইব্রেরি থেকে %dটি ক্যাপচার সরানো হয়েছে।"
 
-#: src/capture/main.cpp:1759 src/capture/main.cpp:1769 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
+#: src/capture/main.cpp:1769 src/capture/main.cpp:1779 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
 msgid " (cópia)"
 msgstr " (প্রতিলিপি)"
 
-#: src/capture/main.cpp:1761
+#: src/capture/main.cpp:1771
 #, c-format
 msgid "Preset %zu"
 msgstr "প্রিসেট %zu"
 
-#: src/capture/main.cpp:1763
+#: src/capture/main.cpp:1773
 msgid "Novo preset"
 msgstr "নতুন প্রিসেট"
 
-#: src/capture/main.cpp:1776
+#: src/capture/main.cpp:1786
 msgid "É preciso manter pelo menos um preset."
 msgstr "অন্তত একটি প্রিসেট রাখতে হবে।"
 
-#: src/capture/main.cpp:1777
+#: src/capture/main.cpp:1787
 #, c-format
 msgid "Excluir o preset \"%s\"?"
 msgstr "প্রিসেট \"%s\" মুছবেন?"
 
-#: src/capture/main.cpp:1810 src/common/Office.cpp:56
+#: src/capture/main.cpp:1820 src/common/Office.cpp:56
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s এই কম্পিউটারে ইনস্টল নেই (বা এটি Microsoft Store সংস্করণ, অটোমেশন ছাড়া)।"
 
-#: src/capture/main.cpp:1822
+#: src/capture/main.cpp:1832
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "প্রতিটি ক্যাপচার নতুন স্লাইডে (বন্ধ: বর্তমান স্লাইডে)"
 
-#: src/capture/main.cpp:1853
+#: src/capture/main.cpp:1864
 msgid "Presets do Snapnab (*.snappresets;*.xml)|*.snappresets;*.xml|"
 msgstr "Snapnab প্রিসেট (*.snappresets;*.xml)|*.snappresets;*.xml|"
 
-#: src/capture/main.cpp:1857
+#: src/capture/main.cpp:1868
 msgid "Presets importados."
 msgstr "প্রিসেট আমদানি হয়েছে।"
 
-#: src/capture/main.cpp:1858
+#: src/capture/main.cpp:1869
 msgid "Arquivo de presets inválido."
 msgstr "অবৈধ প্রিসেট ফাইল।"
 
-#: src/capture/main.cpp:1863
+#: src/capture/main.cpp:1874
 msgid "Presets do Snapnab (*.snappresets)|*.snappresets|"
 msgstr "Snapnab প্রিসেট (*.snappresets)|*.snappresets|"
 
-#: src/capture/main.cpp:1867
+#: src/capture/main.cpp:1878
 msgid "Não foi possível exportar."
 msgstr "রপ্তানি করা যায়নি।"
 
-#: src/capture/main.cpp:1880
+#: src/capture/main.cpp:1891
 msgid "Há uma gravação em andamento. Parar e sair?"
 msgstr "রেকর্ডিং চলছে। থামিয়ে প্রস্থান করবেন?"
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Gravar vídeo  ("
 msgstr "ভিডিও রেকর্ড  ("
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Capturar imagem  ("
 msgstr "ছবি ক্যাপচার  ("
 
-#: src/capture/main.cpp:2180
+#: src/capture/main.cpp:2191
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — রেকর্ডিং পুনরুদ্ধার হয়েছে"
 
-#: src/capture/main.cpp:2181
+#: src/capture/main.cpp:2192
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zuটি বাধাপ্রাপ্ত রেকর্ডিং লাইব্রেরিতে পুনরুদ্ধার হয়েছে।"
@@ -2256,23 +2264,23 @@ msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif
 msgid "Audio"
 msgstr "Audio"
 
-#: src/common/Ocr.cpp:141 src/common/Ocr.cpp:226 src/editor/Pdf.cpp:25
+#: src/common/Ocr.cpp:159 src/common/Ocr.cpp:244 src/editor/Pdf.cpp:25
 msgid "Imagem vazia."
 msgstr "খালি ছবি।"
 
-#: src/common/Ocr.cpp:158 src/common/Ocr.cpp:248
+#: src/common/Ocr.cpp:176 src/common/Ocr.cpp:266
 msgid "Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma)."
 msgstr "Windows-এ কোনো OCR ভাষা ইনস্টল করা নেই (সেটিংস › সময় ও ভাষা › ভাষা)।"
 
-#: src/common/Ocr.cpp:182 src/common/Ocr.cpp:256
+#: src/common/Ocr.cpp:200 src/common/Ocr.cpp:274
 msgid "Falha desconhecida no OCR."
 msgstr "অজানা OCR ত্রুটি।"
 
-#: src/common/Ocr.cpp:202
+#: src/common/Ocr.cpp:220
 msgid "A detecção de rostos não está disponível neste Windows."
 msgstr "এই Windows-এ মুখ শনাক্তকরণ উপলব্ধ নয়।"
 
-#: src/common/Ocr.cpp:217
+#: src/common/Ocr.cpp:235
 msgid "Falha na detecção de rostos."
 msgstr "মুখ শনাক্তকরণ ব্যর্থ হয়েছে।"
 
@@ -3461,119 +3469,119 @@ msgstr "ট্রে ও লাইব্রেরিতে দেখা যা�
 msgid "Renomear captura"
 msgstr "ক্যাপচারের নাম বদলান"
 
-#: src/editor/Panels.cpp:1547 src/editor/main.cpp:2050
+#: src/editor/Panels.cpp:1552 src/editor/main.cpp:2050
 msgid "Capturas recentes"
 msgstr "সাম্প্রতিক ক্যাপচার"
 
-#: src/editor/Panels.cpp:1547
+#: src/editor/Panels.cpp:1552
 #, c-format
 msgid "Biblioteca  •  %zu capturas"
 msgstr "লাইব্রেরি  •  %zu টি ক্যাপচার"
 
-#: src/editor/Panels.cpp:1548
+#: src/editor/Panels.cpp:1553
 #, c-format
 msgid "  •  %d selecionadas"
 msgstr "  •  %d টি নির্বাচিত"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Exportar (%d)…"
 msgstr "রপ্তানি (%d)…"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Excluir (%d)"
 msgstr "মুছুন (%d)"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 msgid "Limpar seleção"
 msgstr "নির্বাচন মুছুন"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Biblioteca"
 msgstr "লাইব্রেরি"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Voltar ao editor"
 msgstr "এডিটরে ফিরুন"
 
-#: src/editor/Panels.cpp:1563
+#: src/editor/Panels.cpp:1568
 msgid "Nenhuma captura recente. Capture com o Snapnab (Print Screen) ou solte arquivos aqui."
 msgstr "সাম্প্রতিক কোনো ক্যাপচার নেই। Snapnab দিয়ে ক্যাপচার করুন (Print Screen) বা এখানে ফাইল ছাড়ুন।"
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "Nenhuma captura com esse nome."
 msgstr "এই নামের কোনো ক্যাপচার নেই।"
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "A biblioteca está vazia."
 msgstr "লাইব্রেরি খালি।"
 
-#: src/editor/Panels.cpp:1758 src/editor/main.cpp:1047
+#: src/editor/Panels.cpp:1763 src/editor/main.cpp:1047
 msgid "Abrir"
 msgstr "খুলুন"
 
-#: src/editor/Panels.cpp:1759
+#: src/editor/Panels.cpp:1764
 msgid "Mostrar na pasta"
 msgstr "ফোল্ডারে দেখান"
 
-#: src/editor/Panels.cpp:1762
+#: src/editor/Panels.cpp:1767
 #, c-format
 msgid "Exportar %zu itens…"
 msgstr "%zu টি আইটেম রপ্তানি…"
 
-#: src/editor/Panels.cpp:1762 src/editor/PropsPanel.cpp:1242
+#: src/editor/Panels.cpp:1767 src/editor/PropsPanel.cpp:1242
 msgid "Exportar…"
 msgstr "রপ্তানি…"
 
-#: src/editor/Panels.cpp:1768 src/editor/main.cpp:1771
+#: src/editor/Panels.cpp:1773 src/editor/main.cpp:1771
 msgid "Enviar (upload)"
 msgstr "আপলোড করুন"
 
-#: src/editor/Panels.cpp:1770
+#: src/editor/Panels.cpp:1775
 #, c-format
 msgid "Combinar %zu imagens…"
 msgstr "%zuটি ছবি একত্র করুন…"
 
-#: src/editor/Panels.cpp:1771
+#: src/editor/Panels.cpp:1776
 msgid "Comparar as duas…"
 msgstr "দুটি তুলনা করুন…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 #, c-format
 msgid "Processar %zu em lote…"
 msgstr "%zuটি ব্যাচে প্রসেস করুন…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 msgid "Processamento em lote…"
 msgstr "ব্যাচ প্রসেসিং…"
 
-#: src/editor/Panels.cpp:1775
+#: src/editor/Panels.cpp:1780
 msgid "Selecionar tudo\tCtrl+A"
 msgstr "সব নির্বাচন\tCtrl+A"
 
-#: src/editor/Panels.cpp:1776
+#: src/editor/Panels.cpp:1781
 msgid "Renomear…\tF2"
 msgstr "নাম বদলান…\tF2"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja"
 msgstr "ট্রে থেকে সরান"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja (continua na biblioteca)"
 msgstr "ট্রে থেকে সরান (লাইব্রেরিতে থাকবে)"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 #, c-format
 msgid "Excluir %zu itens (Lixeira)\tDel"
 msgstr "%zu টি আইটেম মুছুন (রিসাইকেল বিন)\tDel"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 msgid "Excluir (Lixeira)\tDel"
 msgstr "মুছুন (রিসাইকেল বিন)\tDel"
 
-#: src/editor/Panels.cpp:1867
+#: src/editor/Panels.cpp:1872
 #, c-format
 msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
 msgstr "ভিডিও  •  %lld:%02lld  •  %d × %d"

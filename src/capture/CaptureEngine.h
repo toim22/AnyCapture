@@ -14,6 +14,12 @@
 
 namespace snap {
 
+// Options › After capture › When done (AfterCaptureMode). CopyOnly (issue #3): neither the Editor nor the overlay,
+// the capture only goes to the library and the clipboard; the tray's "Open the Editor after capturing" switches
+// between it and the mode kept in AfterCaptureModeOn.
+enum AfterCapture : int { AfterEditor, AfterOverlay, AfterBoth, AfterCopyOnly };
+inline int AfterCaptureMode() { return (int)std::min<DWORD>(RegGetDword(L"AfterCaptureMode", AfterEditor), AfterCopyOnly); }
+
 class CaptureEngine {
 public:
     enum State { Idle, Activated, InputSelecting, InputSelected, Capturing, HaveInput, Outputting, Suspended };

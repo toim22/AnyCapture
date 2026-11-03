@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(Snapnab
-    VERSION 0.4.0
+    VERSION 0.4.1
     DESCRIPTION "Screen capture, video recording and image editor"
     LANGUAGES CXX RC)
 
