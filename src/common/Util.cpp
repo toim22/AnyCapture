@@ -111,10 +111,12 @@ bool EnsureDir(const std::wstring& dir) {
 }
 
 std::wstring AppDataDir() { auto d = KnownFolder(FOLDERID_LocalAppData) + L"\\Snapnab"; EnsureDir(d); return d; }
-std::wstring LibraryDir() {
-    std::wstring custom = RegGetString(L"LibraryFolder", L"");
-    auto d = custom.empty() ? AppDataDir() + L"\\Library" : custom;
-    EnsureDir(d); return d;
+std::wstring LibraryDir() {                 // rust/snapcore/src/library.rs (LibraryFolder or AppDataDir\Library)
+    SnapcoreWStr s{};
+    if (!snapcore_library_dir(&s)) return AppDataDir() + L"\\Library";
+    std::wstring d(s.data, s.len);
+    snapcore_wstr_free(s);
+    return d;
 }
 std::wstring ThumbDir() { auto d = LibraryDir() + L"\\Thumbnails"; EnsureDir(d); return d; }
 std::wstring LogsDir() { auto d = AppDataDir() + L"\\Logs"; EnsureDir(d); return d; }

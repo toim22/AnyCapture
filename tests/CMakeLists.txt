@@ -5,6 +5,7 @@ add_executable(SnapnabTests
     XmlReference.cpp
     ImageCodecReference.cpp
     SnapFileReference.cpp
+    LibraryReference.cpp
     ${SRC}/capture/Recorder.cpp
     ${SRC}/capture/Panoramic.cpp
     ${SRC}/capture/Webcam.cpp
@@ -18,7 +19,7 @@ add_executable(SnapnabTests
     ${SRC}/editor/Cursors.cpp
     ${SRC}/editor/EditorTools.cpp)
 target_link_libraries(SnapnabTests PRIVATE SnapnabCommon mfplat mfreadwrite mfuuid mf winspool windowsapp)
-# the snapcore C ABI (the XML, image and .snap tests read and write the streams of .snap files)
+# the snapcore C ABI (the tests of the parts moved to Rust call it directly)
 target_include_directories(SnapnabTests PRIVATE ${PROJECT_SOURCE_DIR}/rust/snapcore/include)
 
 add_test(NAME integration COMMAND SnapnabTests)

@@ -8,11 +8,13 @@
 //! - `xml`: the XML reader and writer (presets, .snap documents, Names.xml)
 //! - `image`, `codec`: images in memory and image files through the Windows codecs (WIC)
 //! - `snap`: the .snap document (index, frame documents, base and embedded images)
+//! - `library`: the capture library (its folder, thumbnails, capture names, cleanup)
 
 pub mod codec;
 pub mod container;
 pub mod i18n;
 pub mod image;
+pub mod library;
 pub mod log;
 pub mod paths;
 pub mod reg;

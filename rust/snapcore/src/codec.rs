@@ -42,6 +42,21 @@ pub enum Format {
 }
 
 impl Format {
+    /// FormatFromExt: by the file extension (".png", ".JPG"…).
+    pub fn from_ext(ext: &str) -> Format {
+        match ext.to_lowercase().as_str() {
+            ".png" => Format::Png,
+            ".jpg" | ".jpeg" | ".jpe" => Format::Jpeg,
+            ".bmp" => Format::Bmp,
+            ".gif" => Format::Gif,
+            ".tif" | ".tiff" => Format::Tiff,
+            ".webp" => Format::Webp,
+            ".avif" => Format::Avif,
+            ".heic" | ".heif" | ".hif" => Format::Heic,
+            _ => Format::Unknown,
+        }
+    }
+
     pub fn from_i32(v: i32) -> Format {
         [Format::Png, Format::Jpeg, Format::Bmp, Format::Gif, Format::Tiff, Format::Webp, Format::Avif, Format::Heic]
             .get(v as usize)
@@ -474,6 +489,20 @@ pub fn encode(img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> Res
         }
         Ok(out)
     }
+}
+
+/// Writes the image to a file (SaveImageFileEx, not WebP): unknown formats and HEIC (only opened) as PNG, written whole
+/// to `<path>.tmp` and then put in place.
+pub fn save_file(path: &Path, img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> bool {
+    let fmt = if matches!(fmt, Format::Unknown | Format::Heic) { Format::Png } else { fmt };
+    let Ok(data) = encode(img, fmt, opt, version) else { return false };
+    let mut tmp = path.as_os_str().to_owned();
+    tmp.push(".tmp");
+    if std::fs::write(&tmp, &data).is_err() {
+        let _ = std::fs::remove_file(&tmp);
+        return false;
+    }
+    std::fs::rename(&tmp, path).is_ok()
 }
 
 #[cfg(test)]

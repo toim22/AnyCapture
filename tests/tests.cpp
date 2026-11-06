@@ -21,12 +21,15 @@
 #include "Color.h"
 #include "Net.h"
 #include "Upload.h"
-#include "snapcore.h"
+#include "Library.h"
+#include "SnapcoreBridge.h"
 #include <cstdio>
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
 #include <cmath>
+#include <filesystem>
+#include <shlobj.h>
 
 using namespace snap;
 
@@ -45,6 +48,22 @@ namespace snap::snapref {     // the former C++ .snap reading and writing (SnapF
 bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames);
 bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames);
 bool LoadSnapDocument(const std::wstring& path, XmlNode& doc);
+}
+namespace snap::libref {      // the former C++ library, with the folder as a parameter (LibraryReference.cpp)
+std::wstring LibraryDir();
+std::vector<LibraryItem> ListLibrary(const std::wstring& lib, size_t maxItems);
+std::wstring ThumbPathFor(const std::wstring& lib, const std::wstring& itemPath);
+std::wstring AddImageToLibrary(const std::wstring& lib, const Image& img, const CaptureInfo& info);
+std::wstring AddLayeredToLibrary(const std::wstring& lib, const Image& base, const Image& flat, const CaptureInfo& info,
+                                 const XmlNode& objects, const std::map<std::string, Image>& embedded);
+std::wstring NewVideoPath(const std::wstring& lib);
+std::wstring AudioDir();
+std::wstring NewAudioPath(bool mp3);
+int CleanupLibrary(const std::wstring& lib, int days, bool keepNamed, bool keepTagged, bool recycle);
+bool IsInLibrary(const std::wstring& lib, const std::wstring& path);
+std::wstring CaptureName(const std::wstring& lib, const std::wstring& itemPath);
+bool SetCaptureName(const std::wstring& lib, const std::wstring& itemPath, const std::wstring& name);
+std::wstring NextAutoName(const std::wstring& folder, const std::wstring& prefix, const std::wstring& ext, int digits);
 }
 
 static int g_fail = 0;
@@ -1595,6 +1614,287 @@ int wmain(int argc, wchar_t** argv) {
         }
         CHECK(!libBad, "%d .snap files of the library read alike (frames, images, metadata, documents), %d differ", files, libBad);
         SetSnapBackend(def);
+    }
+
+    printf("[20] Capture library: Rust and the former C++\n");
+    {
+        // library.rs must give what Library.cpp gave. The writing parts run in folders of their own (the Rust ones through
+        // the C ABI with that folder); the user's library is only read. Not compared: moving to the Recycle Bin
+        // (DeleteLibraryItem, the cleanup with recycle) and the daily cleanup, which writes the settings.
+        namespace fs = std::filesystem;
+        auto take = [](auto call) {
+            SnapcoreWStr w{};
+            std::wstring r;
+            if (call(&w)) { if (w.len) r.assign(w.data, w.len); snapcore_wstr_free(w); }
+            return r;
+        };
+        auto rList = [](const std::wstring& dir, size_t max) {
+            std::vector<LibraryItem> v;
+            snapcore_library_list(dir.data(), dir.size(), max, +[](void* ctx, const wchar_t* p, size_t n, uint64_t m, uint64_t sz, bool video) {
+                LibraryItem it; it.path.assign(p, n);
+                it.modified.dwLowDateTime = (DWORD)m; it.modified.dwHighDateTime = (DWORD)(m >> 32);
+                it.size = sz; it.video = video;
+                static_cast<std::vector<LibraryItem>*>(ctx)->push_back(it);
+            }, &v);
+            return v;
+        };
+        auto rName = [&](const std::wstring& dir, const std::wstring& item) {
+            return take([&](SnapcoreWStr* o) { return snapcore_library_name(dir.data(), dir.size(), item.data(), item.size(), o); });
+        };
+        auto rSetName = [](const std::wstring& dir, const std::wstring& item, const std::wstring& name) {
+            return snapcore_library_set_name(dir.data(), dir.size(), item.data(), item.size(), name.data(), name.size());
+        };
+        auto rThumb = [&](const std::wstring& dir, const std::wstring& item) {
+            return take([&](SnapcoreWStr* o) { return snapcore_library_thumb_path(dir.data(), dir.size(), item.data(), item.size(), o); });
+        };
+        auto key = [](const FILETIME& f) { return (uint64_t)f.dwHighDateTime << 32 | f.dwLowDateTime; };
+        auto sameItems = [&](const std::vector<LibraryItem>& a, const std::vector<LibraryItem>& b) {
+            if (a.size() != b.size()) return false;
+            for (size_t i = 0; i < a.size(); i++)
+                if (a[i].path != b[i].path || key(a[i].modified) != key(b[i].modified) || a[i].size != b[i].size || a[i].video != b[i].video) return false;
+            return true;
+        };
+        auto fileBytes = [](const std::wstring& path) {
+            std::string b;
+            HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+            if (h == INVALID_HANDLE_VALUE) return std::string("<missing>");
+            b.resize(GetFileSize(h, nullptr));
+            DWORD rd = 0; ReadFile(h, b.data(), (DWORD)b.size(), &rd, nullptr); CloseHandle(h);
+            return b;
+        };
+        auto putFile = [](const std::wstring& path, const std::string& bytes, uint64_t when) {
+            HANDLE h = CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
+            DWORD wr = 0; WriteFile(h, bytes.data(), (DWORD)bytes.size(), &wr, nullptr);
+            if (when) { FILETIME t{ (DWORD)when, (DWORD)(when >> 32) }; SetFileTime(h, nullptr, nullptr, &t); }
+            CloseHandle(h);
+        };
+        auto setTime = [](const std::wstring& path, uint64_t when) {
+            HANDLE h = CreateFileW(path.c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+            FILETIME t{ (DWORD)when, (DWORD)(when >> 32) }; SetFileTime(h, nullptr, nullptr, &t); CloseHandle(h);
+        };
+        auto freshDir = [](const wchar_t* name) {
+            std::wstring d = Tmp(name);
+            std::error_code ec; fs::remove_all(d, ec); fs::create_directories(d, ec);
+            return d;
+        };
+        // what a folder holds (files and the files of its subfolders), with the contents; for a .snap its size (the
+        // compound file records when it was written)
+        auto contents = [&](const std::wstring& dir) {
+            std::map<std::wstring, std::string> m;
+            std::error_code ec;
+            for (auto& e : fs::recursive_directory_iterator(dir, ec))
+                if (e.is_regular_file())
+                    m[fs::relative(e.path(), dir).wstring()] = IsSnapFile(e.path().wstring()) ? std::to_string(e.file_size()) : fileBytes(e.path().wstring());
+            return m;
+        };
+        FILETIME nowFt; GetSystemTimeAsFileTime(&nowFt);
+        const uint64_t now = key(nowFt), day = 24ULL * 3600 * 10000000;
+
+        // the program's library folder and the user's library (only read)
+        std::wstring lib = LibraryDir();
+        int realBad = 0;
+        if (lib != libref::LibraryDir()) { realBad++; printf("       LibraryDir differs\n"); }
+        {
+            auto a = libref::ListLibrary(lib, 1000000), b = ListLibrary(1000000);
+            auto order = [&](std::vector<LibraryItem> v) {     // items written in the same 100 ns may come in either order
+                std::stable_sort(v.begin(), v.end(), [&](auto& x, auto& y) { return key(x.modified) != key(y.modified) ? key(x.modified) > key(y.modified) : x.path < y.path; });
+                return v;
+            };
+            if (!sameItems(order(a), order(b))) { realBad++; printf("       the library is listed differently\n"); }
+            auto a300 = libref::ListLibrary(lib, 300), b300 = ListLibrary(300);
+            bool same300 = a300.size() == b300.size();
+            for (size_t i = 0; same300 && i < a300.size(); i++) same300 = key(a300[i].modified) == key(b300[i].modified);
+            if (!same300) { realBad++; printf("       the 300 most recent differ\n"); }
+            int names = 0;
+            for (auto& it : b) {
+                std::wstring na = libref::CaptureName(lib, it.path), nb = CaptureName(it.path);
+                if (!nb.empty()) names++;
+                if (na != nb || libref::ThumbPathFor(lib, it.path) != ThumbPathFor(it.path) ||
+                    libref::IsInLibrary(lib, it.path) != IsInLibrary(it.path) || !IsInLibrary(it.path)) {
+                    realBad++; printf("       %ls: name, thumbnail or place differ\n", it.path.c_str());
+                }
+            }
+            std::wstring va = libref::NewVideoPath(lib), vb = NewVideoPath();
+            if (va != vb) { va = libref::NewVideoPath(lib); vb = NewVideoPath(); }      // a second may have turned
+            if (va != vb) { realBad++; printf("       NewVideoPath: %ls / %ls\n", va.c_str(), vb.c_str()); }
+            // the audio folder only if it is there already (not created in the user's Music folder for the test)
+            bool audio = !RegGetString(L"AudioFolder", L"").empty();
+            PWSTR music = nullptr;
+            if (!audio && SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Music, 0, nullptr, &music)))
+                audio = GetFileAttributesW((std::wstring(music) + L"\\Snapnab").c_str()) != INVALID_FILE_ATTRIBUTES;
+            CoTaskMemFree(music);
+            if (audio) {
+                std::wstring aa = libref::NewAudioPath(true), ab = NewAudioPath(true);
+                if (aa != ab) { aa = libref::NewAudioPath(true); ab = NewAudioPath(true); }
+                if (libref::AudioDir() != AudioDir() || aa != ab) { realBad++; printf("       the audio folder or file name differ\n"); }
+            }
+            CHECK(!realBad, "the library folder and its %zu item(s) (%d with a name) read alike: list, names, thumbnails, place, new video%s",
+                  b.size(), names, audio ? " and audio" : "");
+        }
+
+        // a folder made for the test: what is listed, in which order, how many
+        std::wstring t1 = freshDir(L"lib_list");
+        const wchar_t* files[] = { L"a.snap", L"B.SNAP", L"c.mp4", L"d.MP4", L"e.txt", L"f g.snap", L"h.sn ap", L"noext",
+                                   L".snap", L"x.snap.bak", L"ção 中.snap", L"hidden.snap", L"v.Mp4" };
+        for (size_t i = 0; i < std::size(files); i++) putFile(t1 + L"\\" + files[i], std::string(i * 37 + 1, 'x'), now - (i * 7 % 13 + 1) * 3600 * 10000000ULL);
+        SetFileAttributesW((t1 + L"\\hidden.snap").c_str(), FILE_ATTRIBUTE_HIDDEN);
+        CreateDirectoryW((t1 + L"\\dir.snap").c_str(), nullptr);
+        int listBad = 0;
+        for (size_t max : { (size_t)1000, (size_t)4, (size_t)0 })
+            if (!sameItems(libref::ListLibrary(t1, max), rList(t1, max))) { listBad++; printf("       listed differently (at most %zu)\n", max); }
+        auto l = rList(t1, 1000);
+        CHECK(!listBad && l.size() == 9, "a folder of odd files listed alike (%zu of %zu: .snap and .mp4, the most recent first)", l.size(), std::size(files) + 1);
+
+        // file names, places, thumbnails and the next automatic name
+        int pathBad = 0;
+        std::wstring up = t1; for (auto& c : up) c = towupper(c);
+        for (const std::wstring& pth : { t1 + L"\\a.snap", up + L"\\a.snap", t1 + L"/a.snap", t1 + L"\\sub\\a.snap", t1,
+                                         std::wstring(L"a.snap"), std::wstring(), t1 + L"\\", DirOf(t1) + L"\\x.snap" }) {
+            if (libref::IsInLibrary(t1, pth) != snapcore_library_contains(t1.data(), t1.size(), pth.data(), pth.size()) ||
+                libref::ThumbPathFor(t1, pth) != rThumb(t1, pth)) { pathBad++; printf("       %ls: place or thumbnail differ\n", pth.c_str()); }
+        }
+        putFile(t1 + L"\\Snap001.png", "x", 0); putFile(t1 + L"\\Snap002.PNG", "x", 0); putFile(t1 + L"\\Snap1.png", "x", 0);
+        CreateDirectoryW((t1 + L"\\Snap003.png").c_str(), nullptr);
+        putFile(t1 + L"\\Captura ç_01.jpg", "x", 0);
+        for (int digits : { 3, 1, 0, 2, 5, -4 })
+            for (const wchar_t* pre : { L"Snap", L"Captura ç_", L"" })
+                for (const wchar_t* ext : { L".png", L".jpg", L"" }) {
+                    std::wstring a = libref::NextAutoName(t1, pre, ext, digits), b = NextAutoName(t1, pre, ext, digits);
+                    if (a != b) { pathBad++; printf("       NextAutoName(%ls, %ls, %d): %ls / %ls\n", pre, ext, digits, a.c_str(), b.c_str()); }
+                }
+        CHECK(!pathBad, "places, thumbnail paths and automatic names (6 widths, 3 prefixes, 3 extensions) alike");
+
+        // capture names: the same steps in two folders write the same Names.xml and give the same names
+        std::wstring na = freshDir(L"lib_names_a"), nb = freshDir(L"lib_names_b");
+        std::vector<std::pair<std::wstring, std::wstring>> steps = {
+            { L"a.snap", L"  Nome 1 " }, { L"A.SNAP", L"Nome 2" }, { L"ção 中.snap", L"Ç <&> \"x\"" }, { L"z.mp4", L"\"q\"" },
+            { L"b.snap", L" " }, { L"Video_1.mp4", L"vídeo\ttab" }, { L"a.snap", L"" }, { L"ÁRVORE.snap", L"árvore" },
+        };
+        int nameBad = 0;
+        auto compareNames = [&](const char* when) {
+            bool same = fileBytes(na + L"\\Names.xml") == fileBytes(nb + L"\\Names.xml");
+            for (const wchar_t* f : { L"a.snap", L"z.MP4", L"ção 中.snap", L"árvore.snap", L"b.snap", L"Video_1.mp4", L"x\\Video_1.mp4", L"nada" })
+                same = same && libref::CaptureName(na, na + L"\\" + f) == rName(nb, nb + L"\\" + f);
+            if (!same) { nameBad++; printf("       names differ %s\n", when); }
+        };
+        for (auto& [f, n] : steps) {
+            bool okA = libref::SetCaptureName(na, na + L"\\" + f, n), okB = rSetName(nb, nb + L"\\" + f, n);
+            if (okA != okB) nameBad++;
+            compareNames("after a change");
+        }
+        // Names.xml changed by the other program, malformed, missing
+        for (const char* xml : { "<Names><Item File=\"Q.snap\" Name=\"Outro\"/><Other File=\"r.snap\" Name=\"x\"/><Item Name=\"sem arquivo\"/><Item File=\"s.snap\"/></Names>",
+                                 "<Names><Item File=\"q.snap\" Name=\"meio\"", "" }) {
+            Sleep(20);
+            putFile(na + L"\\Names.xml", xml, 0); putFile(nb + L"\\Names.xml", xml, 0);
+            compareNames("after Names.xml changed");
+            bool same = libref::CaptureName(na, L"q.snap") == rName(nb, L"q.snap") && libref::CaptureName(na, L"s.snap") == rName(nb, L"s.snap");
+            if (!same) { nameBad++; printf("       %s: read differently\n", xml); }
+        }
+        DeleteFileW((na + L"\\Names.xml").c_str()); DeleteFileW((nb + L"\\Names.xml").c_str());
+        compareNames("after Names.xml was deleted");
+        CHECK(!nameBad, "capture names: %zu changes, a Names.xml changed outside, malformed and deleted, alike", steps.size());
+
+        // adding captures: the same document (but for the GUID and the time), the same thumbnail
+        std::wstring aa = freshDir(L"lib_add_a"), ab = freshDir(L"lib_add_b");
+        auto rAdd = [&](const Image& base, const Image& flat, const CaptureInfo& info, const XmlNode* objects,
+                        const std::map<std::string, Image>* embedded) {
+            Image thumb = MakeThumbnail(flat, 160, 120);
+            std::vector<SnapcoreNamedImage> emb;
+            if (embedded) for (auto& [n, im] : *embedded) emb.push_back({ n.data(), n.size(), ImageIn(im) });
+            SnapcoreLibraryAdd r{};
+            r.dir = ab.data(); r.dirLen = ab.size();
+            r.base = ImageIn(base); r.thumb = ImageIn(thumb);
+            r.mode = info.mode.c_str(); r.windowTitle = info.windowTitle.c_str(); r.application = info.application.c_str();
+            r.objects = objects ? XmlToSnapcore(*objects) : nullptr;
+            r.embedded = emb.data(); r.embeddedCount = emb.size();
+            r.version = kAppVersion;
+            return take([&](SnapcoreWStr* o) { return snapcore_library_add(&r, o); });
+        };
+        auto sameAdded = [&](const std::wstring& pa, const std::wstring& pb) {
+            if (pa.empty() || pb.empty()) return pa.empty() && pb.empty();
+            std::wstring fa = FileNameOf(pa), fb = FileNameOf(pb);
+            if (DirOf(pa) != aa || DirOf(pb) != ab || fa.size() != 41 || fb.size() != 41 || FileExt(fb) != L".snap" || fa == fb) return false;
+            std::vector<SnapFrame> x, y;
+            if (!LoadSnapFile(pa, x) || !LoadSnapFile(pb, y) || x.size() != 1 || y.size() != 1) return false;
+            std::string ca = x[0].doc.get("Created"), cb = y[0].doc.get("Created");
+            if (ca.size() != 19 || cb.size() != 19 || ca[10] != 'T' || cb[10] != 'T') return false;
+            x[0].doc.set("Created", ""); y[0].doc.set("Created", "");
+            if (XmlSerialize(x[0].doc) != XmlSerialize(y[0].doc) || x[0].base.px != y[0].base.px || x[0].embedded.size() != y[0].embedded.size()) return false;
+            for (auto& [k, v] : x[0].embedded) if (!y[0].embedded.count(k) || y[0].embedded.at(k).px != v.px) return false;
+            Image ta, tb;
+            bool hasA = LoadImageFile(libref::ThumbPathFor(aa, pa), ta), hasB = LoadImageFile(rThumb(ab, pb), tb);
+            return hasA == hasB && ta.w == tb.w && ta.h == tb.h && ta.px == tb.px;
+        };
+        int addBad = 0;
+        CaptureInfo info{ L"Região", L"Título — ç 中 <&>", L"app.exe" };
+        Image photo = Pattern(500, 300, 31);
+        auto meta = std::make_shared<ImageMeta>(); meta->make = L"Câmera"; meta->gps = true; meta->lat = 1.03125; meta->lon = -2.5;
+        photo.meta = meta;
+        Image tall = Pattern(90, 200, 32), dot(1, 1, 0x80FFFFFF);
+        for (const Image* img : { &photo, &tall, &dot }) {
+            if (!sameAdded(libref::AddImageToLibrary(aa, *img, info), rAdd(*img, *img, info, nullptr, nullptr))) { addBad++; printf("       an image %dx%d added differently\n", img->w, img->h); }
+        }
+        XmlNode objs("Objects");
+        objs.add("Image").set("StreamName", "Image_1.png").seti("X", 5);
+        objs.add("Group").add("Image").set("StreamName", "Image_2.png");
+        std::map<std::string, Image> emb = { { "Image_1.png", Pattern(30, 20, 33) }, { "Image_2.png", Pattern(8, 8, 34) } };
+        CaptureInfo info2{ L"Janela", L"", L"" };
+        if (!sameAdded(libref::AddLayeredToLibrary(aa, Pattern(300, 200, 35), Pattern(300, 200, 36), info2, objs, emb),
+                       rAdd(Pattern(300, 200, 35), Pattern(300, 200, 36), info2, &objs, &emb))) { addBad++; printf("       a layered capture added differently\n"); }
+        XmlNode noObjs("Objects");
+        if (!sameAdded(libref::AddLayeredToLibrary(aa, Pattern(30, 20, 37), Image(), info2, noObjs, {}),
+                       rAdd(Pattern(30, 20, 37), Image(), info2, &noObjs, nullptr))) { addBad++; printf("       a capture without a thumbnail added differently\n"); }
+        if (!sameAdded(libref::AddImageToLibrary(aa, Image(), info), rAdd(Image(), Image(), info, nullptr, nullptr))) { addBad++; printf("       an empty image is not refused alike\n"); }
+        auto added = rList(ab, 100);
+        CHECK(!addBad && added.size() == 5, "%zu captures added alike (photo metadata, objects and embedded images, no thumbnail, an empty one refused)", added.size());
+
+        // the cleanup (deleting, not to the Recycle Bin): old, new and future captures, named, tagged, videos, with and
+        // without thumbnails, for every choice of what is kept
+        auto fill = [&](const std::wstring& dir, bool rust) {
+            auto snapWith = [&](const wchar_t* name, const char* tags, uint64_t when) {
+                SnapFrame f; f.base = Pattern(12, 9, 40);
+                if (tags) f.doc.set("Tags", tags);
+                std::wstring pth = dir + L"\\" + name;
+                SaveSnapFile(pth, { f });
+                setTime(pth, when);
+                putFile(rust ? rThumb(dir, pth) : libref::ThumbPathFor(dir, pth), "thumb", 0);
+                return pth;
+            };
+            uint64_t old = now - 10 * day, recent = now - day / 2, future = now + 3 * day;
+            std::wstring named = snapWith(L"old_named.snap", nullptr, old);
+            snapWith(L"old_tagged.snap", "trabalho", old);
+            snapWith(L"old_blank_tags.snap", "  \"\" ", old);
+            snapWith(L"old_plain.snap", nullptr, old);
+            snapWith(L"recent.snap", nullptr, recent);
+            snapWith(L"future.snap", nullptr, future);
+            putFile(dir + L"\\Video_old.mp4", "mp4", old);
+            putFile(dir + L"\\Video_named.mp4", "mp4", old);
+            putFile(dir + L"\\old_damaged.snap", std::string("\xCB" "SNAPNAB") + std::string(100, 'x'), old);
+            putFile(dir + L"\\notes.txt", "keep", old);
+            if (rust) { rSetName(dir, named, L"Importante"); rSetName(dir, dir + L"\\Video_named.mp4", L"Vídeo"); rSetName(dir, dir + L"\\gone.snap", L"Sem arquivo"); }
+            else { libref::SetCaptureName(dir, named, L"Importante"); libref::SetCaptureName(dir, dir + L"\\Video_named.mp4", L"Vídeo"); libref::SetCaptureName(dir, dir + L"\\gone.snap", L"Sem arquivo"); }
+        };
+        int cleanBad = 0, cases = 0;
+        for (int days : { 30, 5, 0, -1 })
+            for (bool keepNamed : { true, false })
+                for (bool keepTagged : { true, false }) {
+                    std::wstring ca = freshDir(L"lib_clean_a"), cb = freshDir(L"lib_clean_b");
+                    fill(ca, false); fill(cb, true);
+                    int ra = libref::CleanupLibrary(ca, days, keepNamed, keepTagged, false);
+                    int rb = snapcore_library_cleanup(cb.data(), cb.size(), days, keepNamed, keepTagged, false);
+                    cases++;
+                    if (ra != rb || contents(ca) != contents(cb)) {
+                        cleanBad++;
+                        printf("       %d days, keep named %d, tagged %d: %d / %d removed%s\n", days, keepNamed, keepTagged, ra, rb,
+                               ra == rb ? ", different files left" : "");
+                    }
+                }
+        CHECK(!cleanBad, "the cleanup alike in %d cases (days, keeping the named and the tagged ones): what is removed, what stays, Names.xml", cases);
+
+        std::error_code ec;
+        for (const wchar_t* d : { L"lib_list", L"lib_names_a", L"lib_names_b", L"lib_add_a", L"lib_add_b", L"lib_clean_a", L"lib_clean_b" })
+            fs::remove_all(Tmp(d), ec);
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

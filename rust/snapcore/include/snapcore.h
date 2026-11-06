@@ -120,4 +120,35 @@ void                 snapcore_snap_free(SnapcoreSnap* h);
 int32_t snapcore_snap_load_document(const wchar_t* path, size_t len, const SnapcoreXmlSink* sink, void* ctx);
                                                        // the first frame's document: -1 not read, 0 malformed, 1 read
 
+// ---- the capture library (Library.cpp); dir: the library folder (dirLen units), null for the program's (LibraryDir)
+bool snapcore_library_dir(SnapcoreWStr* out);
+typedef void (*SnapcoreLibraryItemFn)(void* ctx, const wchar_t* path, size_t len, uint64_t modified, uint64_t size, bool video);
+void snapcore_library_list(const wchar_t* dir, size_t dirLen, size_t max, SnapcoreLibraryItemFn item, void* ctx);
+                                                       // the .snap and .mp4 files, the most recent first
+bool snapcore_library_thumb_path(const wchar_t* dir, size_t dirLen, const wchar_t* item, size_t itemLen, SnapcoreWStr* out);
+bool snapcore_library_write_thumbnail(const wchar_t* dir, size_t dirLen, const wchar_t* item, size_t itemLen,
+                                      const SnapcoreImageIn* thumb, const wchar_t* version);   // thumb already scaled
+struct SnapcoreNamedImage { const char* name; size_t len; SnapcoreImageIn image; };   // name: StreamName, UTF-8
+struct SnapcoreLibraryAdd {
+    const wchar_t* dir; size_t dirLen;
+    SnapcoreImageIn base, thumb;                       // an empty thumb is not written
+    const wchar_t *mode, *windowTitle, *application;
+    SnapcoreXmlBuilder* objects;                       // the <Objects> element (consumed), null for a plain image
+    const SnapcoreNamedImage* embedded; size_t embeddedCount;
+    const wchar_t* version;
+};
+bool snapcore_library_add(const SnapcoreLibraryAdd* req, SnapcoreWStr* out);   // the new .snap's path
+bool snapcore_library_new_video_path(const wchar_t* dir, size_t dirLen, SnapcoreWStr* out);
+bool snapcore_library_audio_dir(SnapcoreWStr* out);
+bool snapcore_library_new_audio_path(bool mp3, SnapcoreWStr* out);
+bool snapcore_library_delete(const wchar_t* dir, size_t dirLen, const wchar_t* item, size_t itemLen, void* owner);
+int32_t snapcore_library_cleanup(const wchar_t* dir, size_t dirLen, int32_t days, bool keepNamed, bool keepTagged, bool recycle);
+int32_t snapcore_library_cleanup_now();
+bool snapcore_library_contains(const wchar_t* dir, size_t dirLen, const wchar_t* path, size_t len);
+bool snapcore_library_name(const wchar_t* dir, size_t dirLen, const wchar_t* item, size_t itemLen, SnapcoreWStr* out);
+bool snapcore_library_set_name(const wchar_t* dir, size_t dirLen, const wchar_t* item, size_t itemLen,
+                               const wchar_t* name, size_t nameLen);
+bool snapcore_next_auto_name(const wchar_t* folder, size_t folderLen, const wchar_t* prefix, size_t prefixLen,
+                             const wchar_t* ext, size_t extLen, int32_t digits, SnapcoreWStr* out);
+
 }

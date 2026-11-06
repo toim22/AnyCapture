@@ -10,7 +10,8 @@ use crate::container::{Reader, Writer, is_snap};
 use crate::wide::{from_ptr, to_os, to_string_lossy};
 use crate::codec::{self, DecodeError, EncodeError, Format, SaveOptions};
 use crate::image::{Image, Meta};
-use crate::{i18n, log, reg, snap, xml};
+use crate::{i18n, library, log, reg, snap, xml};
+use windows::Win32::Foundation::HWND;
 
 fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
     catch_unwind(AssertUnwindSafe(f)).unwrap_or(fallback)
@@ -797,5 +798,170 @@ pub unsafe extern "C" fn snapcore_snap_load_document(path: *const u16, len: usiz
             }
             None => -1,
         }
+    })
+}
+
+// ---------------------------------------------------------------- the capture library (Library.cpp)
+
+/// A UTF-16 string of `len` units (no nul needed); empty for null.
+unsafe fn wide_arg(p: *const u16, len: usize) -> Vec<u16> {
+    if p.is_null() { Vec::new() } else { unsafe { std::slice::from_raw_parts(p, len) }.to_vec() }
+}
+
+/// The library folder: `dir` if given, otherwise the program's (LibraryDir).
+unsafe fn dir_arg(dir: *const u16, len: usize) -> Vec<u16> {
+    if dir.is_null() { library::library_dir() } else { unsafe { wide_arg(dir, len) } }
+}
+
+fn wide_out(out: *mut SnapWStr, s: &[u16]) -> bool {
+    if out.is_null() {
+        return false;
+    }
+    unsafe { *out = wstr(&to_os(s)) };
+    true
+}
+
+/// LibraryDir (created if missing).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_dir(out: *mut SnapWStr) -> bool {
+    guard(false, || wide_out(out, &library::library_dir()))
+}
+
+/// Called once per item, the most recent first.
+pub type LibraryItemFn = extern "C" fn(ctx: *mut c_void, path: *const u16, len: usize, modified: u64, size: u64, video: bool);
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_list(dir: *const u16, dir_len: usize, max: usize, item: Option<LibraryItemFn>, ctx: *mut c_void) {
+    guard((), || {
+        let Some(item) = item else { return };
+        for it in library::list(&unsafe { dir_arg(dir, dir_len) }, max) {
+            item(ctx, it.path.as_ptr(), it.path.len(), it.modified, it.size, it.video);
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_thumb_path(dir: *const u16, dir_len: usize, item: *const u16, item_len: usize, out: *mut SnapWStr) -> bool {
+    guard(false, || wide_out(out, &library::thumb_path_for(&unsafe { dir_arg(dir, dir_len) }, &unsafe { wide_arg(item, item_len) })))
+}
+
+/// Writes the thumbnail of an item, already scaled; false if it is empty or cannot be written.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_write_thumbnail(dir: *const u16, dir_len: usize, item: *const u16, item_len: usize,
+                                                          thumb: *const ImageIn, version: *const u16) -> bool {
+    guard(false, || {
+        let Some(thumb) = unsafe { thumb.as_ref() }.and_then(|t| unsafe { image_in(t) }) else { return false };
+        let version = unsafe { from_ptr(version) }.map(to_string_lossy).unwrap_or_default();
+        library::write_thumbnail(&unsafe { dir_arg(dir, dir_len) }, &unsafe { wide_arg(item, item_len) }, &thumb, &version)
+    })
+}
+
+/// An image with its StreamName (UTF-8).
+#[repr(C)]
+pub struct NamedImage {
+    pub name: *const u8,
+    pub len: usize,
+    pub image: ImageIn,
+}
+
+/// A capture to add (AddImageToLibrary / AddLayeredToLibrary); the strings are nul-terminated or null.
+#[repr(C)]
+pub struct LibraryAdd {
+    pub dir: *const u16,
+    pub dir_len: usize,
+    pub base: ImageIn,
+    pub thumb: ImageIn,
+    pub mode: *const u16,
+    pub window_title: *const u16,
+    pub application: *const u16,
+    pub objects: *mut XmlBuilder,
+    pub embedded: *const NamedImage,
+    pub embedded_count: usize,
+    pub version: *const u16,
+}
+
+/// Adds the capture as a new .snap and writes its thumbnail; the path in *out. `objects` is consumed (null for a
+/// plain image).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_add(req: *const LibraryAdd, out: *mut SnapWStr) -> bool {
+    guard(false, || {
+        let Some(r) = (unsafe { req.as_ref() }) else { return false };
+        let objects = (!r.objects.is_null()).then(|| unsafe { Box::from_raw(r.objects) }.finish());
+        let (Some(base), Some(thumb)) = (unsafe { image_in(&r.base) }, unsafe { image_in(&r.thumb) }) else { return false };
+        let mut embedded = std::collections::BTreeMap::new();
+        if r.embedded_count > 0 && !r.embedded.is_null() {
+            for e in unsafe { std::slice::from_raw_parts(r.embedded, r.embedded_count) } {
+                let Some(img) = (unsafe { image_in(&e.image) }) else { return false };
+                embedded.insert(unsafe { text_arg(e.name, e.len) }, img);
+            }
+        }
+        let text = |p: *const u16| unsafe { from_ptr(p) }.map(|s| s.to_vec()).unwrap_or_default();
+        let info = library::CaptureInfo { mode: text(r.mode), window_title: text(r.window_title), application: text(r.application) };
+        let version = unsafe { from_ptr(r.version) }.map(to_string_lossy).unwrap_or_default();
+        match library::add(&unsafe { dir_arg(r.dir, r.dir_len) }, base, &thumb, &info, objects, embedded, &version) {
+            Some(p) => wide_out(out, &p),
+            None => false,
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_new_video_path(dir: *const u16, dir_len: usize, out: *mut SnapWStr) -> bool {
+    guard(false, || wide_out(out, &library::new_video_path(&unsafe { dir_arg(dir, dir_len) })))
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_audio_dir(out: *mut SnapWStr) -> bool {
+    guard(false, || wide_out(out, &library::audio_dir()))
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_new_audio_path(mp3: bool, out: *mut SnapWStr) -> bool {
+    guard(false, || wide_out(out, &library::new_audio_path(mp3)))
+}
+
+/// Moves the item to the Recycle Bin (owner: the window of the progress, may be null).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_delete(dir: *const u16, dir_len: usize, item: *const u16, item_len: usize, owner: *mut c_void) -> bool {
+    guard(false, || {
+        library::delete_item(&unsafe { dir_arg(dir, dir_len) }, &unsafe { wide_arg(item, item_len) }, HWND(owner))
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_cleanup(dir: *const u16, dir_len: usize, days: i32, keep_named: bool, keep_tagged: bool, recycle: bool) -> i32 {
+    guard(0, || library::cleanup(&unsafe { dir_arg(dir, dir_len) }, days, keep_named, keep_tagged, recycle))
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_library_cleanup_now() -> i32 {
+    guard(0, library::cleanup_now)
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_contains(dir: *const u16, dir_len: usize, path: *const u16, len: usize) -> bool {
+    guard(false, || library::contains(&unsafe { dir_arg(dir, dir_len) }, &unsafe { wide_arg(path, len) }))
+}
+
+/// The capture's name in *out ("" if none).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_name(dir: *const u16, dir_len: usize, item: *const u16, item_len: usize, out: *mut SnapWStr) -> bool {
+    guard(false, || wide_out(out, &library::name(&unsafe { dir_arg(dir, dir_len) }, &unsafe { wide_arg(item, item_len) })))
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_library_set_name(dir: *const u16, dir_len: usize, item: *const u16, item_len: usize,
+                                                   name: *const u16, name_len: usize) -> bool {
+    guard(false, || {
+        library::set_name(&unsafe { dir_arg(dir, dir_len) }, &unsafe { wide_arg(item, item_len) }, &unsafe { wide_arg(name, name_len) })
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_next_auto_name(folder: *const u16, folder_len: usize, prefix: *const u16, prefix_len: usize,
+                                                 ext: *const u16, ext_len: usize, digits: i32, out: *mut SnapWStr) -> bool {
+    guard(false, || {
+        let (f, p, e) = unsafe { (wide_arg(folder, folder_len), wide_arg(prefix, prefix_len), wide_arg(ext, ext_len)) };
+        wide_out(out, &library::next_auto_name(&f, &p, &e, digits))
     })
 }
