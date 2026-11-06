@@ -121,7 +121,7 @@ src/                    source code (C++20, Win32)
   editor/               SnapnabEditor.exe — editor
   snapex/               SnapEx64.dll — extended window capture
   resources/            icons and manifest
-rust/snapcore/          .snap container in Rust (linked into both programs)
+rust/                   Rust workspace: the parts already moved from C++ (linked into both programs)
 tests/                  integration tests
 help/                   user manual (Snapnab-Manual.html, opened by Help › Snapnab Manual and F1)
 lang/                   interface translations (gettext: <language>.po and the snapnab.pot template)

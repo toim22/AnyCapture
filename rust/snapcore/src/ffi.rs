@@ -1,0 +1,322 @@
+//! The C ABI the C++ side calls (declared in include/snapcore.h). Strings cross as nul-terminated UTF-16 unless a length
+//! is given; strings snapcore returns as `*const u16` live as long as the process. No panic crosses the boundary:
+//! every entry point catches it and reports a failure.
+
+use std::ffi::{OsStr, OsString};
+use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::path::PathBuf;
+
+use crate::container::{Reader, Writer, is_snap};
+use crate::wide::{from_ptr, to_os, to_string_lossy};
+use crate::{i18n, log, reg};
+
+fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
+    catch_unwind(AssertUnwindSafe(f)).unwrap_or(fallback)
+}
+
+/// A buffer allocated by snapcore; give it back with snapcore_buf_free.
+#[repr(C)]
+pub struct SnapBuf {
+    pub data: *mut u8,
+    pub len: usize,
+}
+
+/// A UTF-16 string allocated by snapcore (no nul); give it back with snapcore_wstr_free.
+#[repr(C)]
+pub struct SnapWStr {
+    pub data: *mut u16,
+    pub len: usize,
+}
+
+unsafe fn path_arg(path: *const u16, len: usize) -> Option<PathBuf> {
+    if path.is_null() {
+        return None;
+    }
+    let w = unsafe { std::slice::from_raw_parts(path, len) };
+    Some(PathBuf::from(to_os(w)))
+}
+
+unsafe fn str_arg<'a>(s: *const u8, len: usize) -> Option<&'a str> {
+    if s.is_null() {
+        return None;
+    }
+    std::str::from_utf8(unsafe { std::slice::from_raw_parts(s, len) }).ok()
+}
+
+/// A nul-terminated UTF-16 argument; None for null.
+unsafe fn os_arg(p: *const u16) -> Option<OsString> {
+    unsafe { from_ptr(p) }.map(to_os)
+}
+
+// ---------------------------------------------------------------- .snap container
+
+/// True if the file starts with the .snap header.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_is_snap(path: *const u16, len: usize) -> bool {
+    guard(false, || unsafe { path_arg(path, len) }.is_some_and(|p| is_snap(&p)))
+}
+
+/// Opens a .snap file for reading; null if it cannot be opened or is not a .snap file.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_open(path: *const u16, len: usize) -> *mut Reader {
+    guard(std::ptr::null_mut(), || match unsafe { path_arg(path, len) }.map(|p| Reader::open(&p)) {
+        Some(Ok(r)) => Box::into_raw(Box::new(r)),
+        _ => std::ptr::null_mut(),
+    })
+}
+
+/// Reads a whole stream into *out (free it with snapcore_buf_free); false if it does not exist or cannot be read.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_read(r: *mut Reader, stream: *const u8, stream_len: usize, out: *mut SnapBuf) -> bool {
+    guard(false, || {
+        let (Some(r), Some(name), false) = (unsafe { r.as_mut() }, unsafe { str_arg(stream, stream_len) }, out.is_null())
+        else {
+            return false;
+        };
+        match r.read(name) {
+            Ok(v) => {
+                let b = v.into_boxed_slice();
+                let len = b.len();
+                unsafe { *out = SnapBuf { data: Box::into_raw(b) as *mut u8, len } };
+                true
+            }
+            Err(_) => false,
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_close(r: *mut Reader) {
+    if !r.is_null() {
+        guard((), || drop(unsafe { Box::from_raw(r) }));
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_buf_free(b: SnapBuf) {
+    if !b.data.is_null() {
+        guard((), || drop(unsafe { Box::from_raw(std::ptr::slice_from_raw_parts_mut(b.data, b.len)) }));
+    }
+}
+
+/// Creates (or truncates) a .snap file for writing; null on failure.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_create(path: *const u16, len: usize) -> *mut Writer {
+    guard(std::ptr::null_mut(), || match unsafe { path_arg(path, len) }.map(|p| Writer::create(&p)) {
+        Some(Ok(w)) => Box::into_raw(Box::new(w)),
+        _ => std::ptr::null_mut(),
+    })
+}
+
+/// Writes a stream (its storages are created as needed).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_write(w: *mut Writer, stream: *const u8, stream_len: usize, data: *const u8, len: usize) -> bool {
+    guard(false, || {
+        let (Some(w), Some(name)) = (unsafe { w.as_mut() }, unsafe { str_arg(stream, stream_len) }) else {
+            return false;
+        };
+        let bytes = if len == 0 { &[][..] } else if data.is_null() { return false } else { unsafe { std::slice::from_raw_parts(data, len) } };
+        w.write(name, bytes).is_ok()
+    })
+}
+
+/// Writes everything out, closes the file and frees the writer; false if the file is incomplete.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_finish(w: *mut Writer) -> bool {
+    if w.is_null() {
+        return false;
+    }
+    guard(false, || unsafe { Box::from_raw(w) }.finish().is_ok())
+}
+
+/// Closes the file without finishing it and frees the writer (the caller deletes the partial file).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_abort(w: *mut Writer) {
+    if !w.is_null() {
+        guard((), || drop(unsafe { Box::from_raw(w) }));
+    }
+}
+
+// ---------------------------------------------------------------- strings handed to the C++ side
+
+fn wstr(s: &OsStr) -> SnapWStr {
+    use std::os::windows::ffi::OsStrExt;
+    let b: Box<[u16]> = s.encode_wide().collect();
+    let len = b.len();
+    SnapWStr { data: Box::into_raw(b) as *mut u16, len }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_wstr_free(s: SnapWStr) {
+    if !s.data.is_null() {
+        guard((), || drop(unsafe { Box::from_raw(std::ptr::slice_from_raw_parts_mut(s.data, s.len)) }));
+    }
+}
+
+// ---------------------------------------------------------------- log
+
+/// Opens %LOCALAPPDATA%\Snapnab\Logs\<component>.log and writes the start line with `version`.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_log_init(component: *const u16, version: *const u16) {
+    guard((), || {
+        let c = unsafe { from_ptr(component) }.map(to_string_lossy).unwrap_or_default();
+        let v = unsafe { from_ptr(version) }.map(to_string_lossy).unwrap_or_default();
+        log::init(&c, &v);
+    })
+}
+
+/// One already formatted message (the time and thread id are added here).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_log(msg: *const u16) {
+    guard((), || log::write(&unsafe { from_ptr(msg) }.map(to_string_lossy).unwrap_or_default()))
+}
+
+// ---------------------------------------------------------------- registry (sub may be null)
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_reg_get_dword(sub: *const u16, name: *const u16, def: u32) -> u32 {
+    guard(def, || {
+        let (s, n) = unsafe { (os_arg(sub), os_arg(name)) };
+        n.map_or(def, |n| reg::get_dword(&n, def, s.as_deref()))
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_reg_set_dword(sub: *const u16, name: *const u16, v: u32) {
+    guard((), || {
+        let (s, n) = unsafe { (os_arg(sub), os_arg(name)) };
+        if let Some(n) = n {
+            reg::set_dword(&n, v, s.as_deref());
+        }
+    })
+}
+
+/// The string in *out (free it with snapcore_wstr_free); false if the value is missing or not a string.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_reg_get_string(sub: *const u16, name: *const u16, out: *mut SnapWStr) -> bool {
+    guard(false, || {
+        let (s, n) = unsafe { (os_arg(sub), os_arg(name)) };
+        match (n.and_then(|n| reg::get_string(&n, s.as_deref())), out.is_null()) {
+            (Some(v), false) => {
+                unsafe { *out = wstr(&v) };
+                true
+            }
+            _ => false,
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_reg_set_string(sub: *const u16, name: *const u16, value: *const u16) {
+    guard((), || {
+        let (s, n, v) = unsafe { (os_arg(sub), os_arg(name), os_arg(value)) };
+        if let (Some(n), Some(v)) = (n, v) {
+            reg::set_string(&n, &v, s.as_deref());
+        }
+    })
+}
+
+// ---------------------------------------------------------------- interface language
+
+fn code_ptr(code: &str) -> *const u16 {
+    static EMPTY: [u16; 1] = [0];
+    match i18n::LANGUAGES.iter().position(|(c, _)| *c == code) {
+        Some(i) => i18n::LANGUAGES_WIDE[i].0.as_ptr(),
+        None => EMPTY.as_ptr(),
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_i18n_init() {
+    guard((), i18n::init)
+}
+
+/// The translation of `pt`, or `pt` itself when there is none.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_tr(pt: *const u16) -> *const u16 {
+    guard(pt, || match unsafe { from_ptr(pt) }.and_then(i18n::tr) {
+        Some(t) => t.as_ptr(),
+        None => pt,
+    })
+}
+
+/// Language `index` of the 12 (code and own name); false past the end.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_i18n_language(index: usize, code: *mut *const u16, name: *mut *const u16) -> bool {
+    guard(false, || match (i18n::LANGUAGES_WIDE.get(index), code.is_null() || name.is_null()) {
+        (Some((c, n)), false) => {
+            unsafe {
+                *code = c.as_ptr();
+                *name = n.as_ptr();
+            }
+            true
+        }
+        _ => false,
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_i18n_available(code: *const u16) -> bool {
+    guard(false, || unsafe { from_ptr(code) }.is_some_and(|c| i18n::available(&to_string_lossy(c))))
+}
+
+/// The language chosen in Options, "" for the Windows language.
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_i18n_configured() -> *const u16 {
+    guard(code_ptr(""), || code_ptr(i18n::configured()))
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_i18n_set_configured(code: *const u16) {
+    guard((), || i18n::set_configured(&unsafe { from_ptr(code) }.map(to_string_lossy).unwrap_or_default()))
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_i18n_resolve() -> *const u16 {
+    guard(code_ptr("pt"), || code_ptr(i18n::resolve()))
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_i18n_current() -> *const u16 {
+    guard(code_ptr("pt"), || i18n::current_wide().as_ptr())
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_i18n_rtl() -> bool {
+    guard(false, i18n::rtl)
+}
+
+/// Interface font with the language's characters; null for the default font.
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_i18n_ui_font_face() -> *const u16 {
+    use windows::core::w;
+    guard(std::ptr::null(), || match i18n::ui_font_face() {
+        Some("Microsoft YaHei UI") => w!("Microsoft YaHei UI").0,
+        Some(_) => w!("Nirmala UI").0,
+        None => std::ptr::null(),
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_i18n_alt_key(name: *const u16, fallback: u16) -> u16 {
+    guard(fallback, || unsafe { from_ptr(name) }.map_or(fallback, |n| i18n::alt_key(n, fallback)))
+}
+
+/// Reads a .po catalog and calls `entry(ctx, msgid, msgstr)` for each translated entry (nul-terminated UTF-16, valid
+/// during the call); false if the file does not open.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_po_load(path: *const u16, entry: extern "C" fn(*mut std::ffi::c_void, *const u16, *const u16),
+                                          ctx: *mut std::ffi::c_void) -> bool {
+    guard(false, || {
+        let Some(p) = (unsafe { os_arg(path) }) else { return false };
+        let mut v = Vec::new();
+        if !i18n::load_po_file(std::path::Path::new(&p), &mut v) {
+            return false;
+        }
+        for (id, msg) in v {
+            let (id, msg) = (crate::wide::to_wide(&id), crate::wide::to_wide(&msg));
+            entry(ctx, id.as_ptr(), msg.as_ptr());
+        }
+        true
+    })
+}

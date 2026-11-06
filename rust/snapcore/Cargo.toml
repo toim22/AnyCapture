@@ -1,10 +1,10 @@
 [package]
 name = "snapcore"
 version = "0.1.0"
-edition = "2024"
-description = "The .snap container of Snapnab (pilot of the Rust migration)"
-license = "GPL-3.0-only"
-publish = false
+description = "Snapnab's shared Rust layer: the .snap container, the log, the registry settings and the translations"
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
 
 [lib]
 crate-type = ["staticlib", "rlib"]
@@ -12,7 +12,16 @@ crate-type = ["staticlib", "rlib"]
 [dependencies]
 cfb = "0.16.0"
 
-[profile.release]
-lto = true
-codegen-units = 1
-opt-level = "s"
+[dependencies.windows]
+version = "0.62.2"
+features = [
+    "Win32_Foundation",
+    "Win32_Globalization",
+    "Win32_System_Com",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Registry",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+    "Win32_UI_Shell",
+]

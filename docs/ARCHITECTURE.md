@@ -18,7 +18,7 @@ not part of this repository (the `§N`, `comp_N` and `ed_comp_N` citations in th
 | `src/capture/` | `Snapnab.exe`: capture window (`main.cpp`), presets, hotkeys, crosshair (`SelectOverlay.*`), capture engine (with each window as an object), links of the captured area (`Links.*`, UI Automation), panoramic scrolling (`Panoramic.*`), video recorder and HUD, webcam (`Webcam.*`) and One Click (`OneClick.*`) |
 | `src/editor/` | `SnapnabEditor.exe`: document and undo, object rendering, canvas and tools, panels (properties, effects, layers, tray), clipboard formats (`Clip.cpp`), video, PDF, OCR |
 | `src/snapex/` | `SnapEx64.dll` |
-| `rust/snapcore/` | Rust static library (pilot of the Rust migration): the `.snap` compound file container, with a C ABI in `include/snapcore.h`, built and linked by Corrosion |
+| `rust/` | Cargo workspace of the C++ to Rust migration (one phase at a time, each behind the unchanged e2e suite). `snapcore/`: static library linked into both programs by Corrosion, with a C ABI in `src/ffi.rs` / `include/snapcore.h`: the `.snap` compound file container, the log, the registry settings and the interface language (catalog and `.po` reader); `Util.cpp` and `I18n.cpp` keep their C++ API as thin wrappers |
 | `src/resources/` | icons and manifest (DPI PerMonitorV2, Common Controls 6) |
 | `tests/` | integration tests (`SnapnabTests.exe`, run by CTest) and the end-to-end UI suite (`tests/e2e`, pytest + pywinauto) |
 | `cmake/` | `Dependencies.cmake`: libwebp, ZXing-C++ and Corrosion through `FetchContent` (pinned, hashed) |
@@ -42,7 +42,7 @@ code and by the executables' `VERSIONINFO` resources.
 | Webcam (comp_3 §8) | `src/capture/Webcam.*`: `MFEnumDeviceSources` + `IMFSourceReader` (RGB32 through the video processor) in a mirrored layered window inside the recorded area (circle, rounded square, square, 16:9 or 4:3); since the recording copies the screen, the webcam ends up in the video; chroma key by chrominance distance (Cb/Cr) with a soft edge and halo reduction; the HUD has the show/hide button (`ToggleWebcamCommand`) |
 | Grab Text | "Capture text" preset: the capture goes through OCR (`src/common/Ocr.*`), the text goes to the clipboard and opens in a window |
 | Computer vision (§9) | `src/common/Cv.*`: cost-ordered wand, global selection, `DoWand` (clamp 0.01–100, shortcut 100), Dingo7 (dominant color of the dilated neighborhood), diffusion (role of Navier-Stokes), Smart Move automatic tolerance (formula from §9.6) |
-| `.snap` format (ed_comp_2 §3) | `src/common/SnapFile.*`: 24-byte header + OLE compound file; streams `Index` (XML), `Frame%d/Document`, `Frame%d/ImageStorage/Image_N.png`. The compound file is read and written by `rust/snapcore` (the `cfb` crate, version 3 files like the Windows API writes) or, built with `SNAPNAB_RUST=OFF`, by the structured storage API over an offset `ILockBytes`; the XML and the PNG streams stay in C++ |
+| `.snap` format (ed_comp_2 §3) | `src/common/SnapFile.*`: 24-byte header + OLE compound file; streams `Index` (XML), `Frame%d/Document`, `Frame%d/ImageStorage/Image_N.png`. The compound file is read and written by `rust/snapcore` (the `cfb` crate, version 3 files like the Windows API writes); the structured storage API over an offset `ILockBytes` stays in the code so the tests can check one against the other; the XML and the PNG streams stay in C++ |
 | Library (DataStore) | `%LOCALAPPDATA%\Snapnab\Library` (`<GUID>.snap`, `Video_*.mp4`, `Thumbnails\`); the folder is watched by the Editor. Capture names (the reference's DataStore keeps them in its database) are in `Names.xml` in the library, by file name |
 | Interactive or fixed region (comp_1 §6, comp_7 §2) | Region gear: `RegionSelectionType` Interactive/Fixed, `Region{Left,Top,Width,Height}` and `SetPosition`; with a position, the input is ready without a selector (`INPUT_REGION_FIXED`); without one, the crosshair shows a fixed-size rectangle to place |
 | Presets (comp_7) | `Presets1.xml` with capture, effects, outputs, audio/video and hotkey in the same object; `.snappresets` import/export |
@@ -53,7 +53,7 @@ code and by the executables' `VERSIONINFO` resources.
 | PDF (§10.1) | A4 or Letter page according to the measurement system, orientation from the image, margin 0; captured links become `/Link` annotations with a `/URI` action |
 | Polygon objects (comp_5 §5.1 `CPaintOpPolygon`) | the Highlighter, Spotlight and Hide areas take an `AreaShape` (the `ShapeKind` outlines, a clicked polygon or a freehand outline) and keep the corners in `Points`, as the reference's `<Polygon>` |
 | Layers and z-order (comp_5 §4 `CPaintOpReorderComponentSelection`) | `src/editor/LayersPanel.cpp`: hide, lock, rename and reorder are document operations with an undo step; `Hidden`, `Locked` and `Name` attributes of each object in the `.snap` |
-| Interface language (ed_comp_1 §3, step 5) | `src/common/I18n.*`: like the `SnagItEditorRes.dll` in the language folder, each program loads `lang\<code>.po` from the executable's folder at startup; the code stays in Portuguese and `Tr(L"…")` returns the translation (static tables mark strings with `TR_NOOP` and translate them when shown). Language = the one chosen in *Options* (`Language` in `HKCU\Software\Snapnab\1`) or the first Windows display language with a catalog, otherwise English; anything missing from a catalog falls back to English. Changing the language restarts both programs (`/restartwait` waits for the previous instance to close). Built-in names stored as data (presets, themes, quick effects) stay in Portuguese in the file and are translated when shown. `Format` uses `_vswprintf_p`, so translations can reorder the values (`%1$s`) |
+| Interface language (ed_comp_1 §3, step 5) | `rust/snapcore/src/i18n.rs` (C++ API in `src/common/I18n.*`): like the `SnagItEditorRes.dll` in the language folder, each program loads `lang\<code>.po` from the executable's folder at startup; the code stays in Portuguese and `Tr(L"…")` returns the translation (static tables mark strings with `TR_NOOP` and translate them when shown). Language = the one chosen in *Options* (`Language` in `HKCU\Software\Snapnab\1`) or the first Windows display language with a catalog, otherwise English; anything missing from a catalog falls back to English. Changing the language restarts both programs (`/restartwait` waits for the previous instance to close). Built-in names stored as data (presets, themes, quick effects) stay in Portuguese in the file and are translated when shown. `Format` uses `_vswprintf_p`, so translations can reorder the values (`%1$s`) |
 
 ## Capture window
 
@@ -233,7 +233,8 @@ files, quick styles, the clipboard object format, RTF/HTML formatting and PDF li
 complete and with the same `%d`/`%s` markers as the original).
 
 The `.snap` tests also write with each container and read with the other, and feed both damaged files (garbage after
-the header, a file cut in half); `cargo test` in `rust/snapcore` runs the crate's own tests.
+the header, a file cut in half); `cargo test --workspace` in `rust/` runs the Rust tests (container, `.po` reader and
+shipped catalogs, registry round trip).
 
 Helper modes: `SnapnabTests.exe dump file.snap` prints the document XML; `SnapnabTests.exe audio file.mp4`
 reads the audio track; `SnapnabTests.exe comparesnap <folder>` opens every `.snap` of a folder with both containers,

@@ -1,8 +1,6 @@
 #include "SnapFile.h"
 #include <wrl/client.h>
-#ifdef SNAPNAB_RUST
 #include "snapcore.h"
-#endif
 
 using Microsoft::WRL::ComPtr;
 
@@ -14,7 +12,7 @@ static const BYTE kHeader[24] = { 0xCB, 'S', 'N', 'A', 'P', 'N', 'A', 'B',
                                   0xA7, 0x44, 0xC2, 0x9B, 0x10, 0x7E, 0xD3, 0x55 };
 
 // The container: named streams in nested storages, addressed by paths such as "Frame0/ImageStorage/Image_0.png".
-// Two implementations: snapcore (Rust, rust/snapcore — the default when built with it) and the Windows structured
+// Two implementations: snapcore (Rust, rust/snapcore — the one the programs use) and the Windows structured
 // storage API (the original one, kept so the tests can check that each reads what the other writes).
 namespace {
 
@@ -170,7 +168,6 @@ private:
 };
 
 // ---------------------------------------------------------------- snapcore (Rust)
-#ifdef SNAPNAB_RUST
 class RustReader : public ContainerReader {
 public:
     ~RustReader() override { snapcore_close(r_); }
@@ -197,32 +194,23 @@ public:
 private:
     SnapcoreWriter* w_ = nullptr;
 };
-#endif
 
-#ifdef SNAPNAB_RUST
 SnapBackend g_backend = SnapBackend::Rust;
-#else
-SnapBackend g_backend = SnapBackend::Windows;
-#endif
 
 std::unique_ptr<ContainerReader> OpenContainer(const std::wstring& path) {
-#ifdef SNAPNAB_RUST
     if (g_backend == SnapBackend::Rust) {
         auto r = std::make_unique<RustReader>();
         return r->Open(path) ? std::move(r) : nullptr;
     }
-#endif
     auto r = std::make_unique<ComReader>();
     return r->Open(path) ? std::move(r) : nullptr;
 }
 
 std::unique_ptr<ContainerWriter> CreateContainer(const std::wstring& path) {
-#ifdef SNAPNAB_RUST
     if (g_backend == SnapBackend::Rust) {
         auto w = std::make_unique<RustWriter>();
         return w->Create(path) ? std::move(w) : nullptr;
     }
-#endif
     auto w = std::make_unique<ComWriter>();
     return w->Create(path) ? std::move(w) : nullptr;
 }
@@ -241,13 +229,7 @@ bool ReadPng(ContainerReader& r, const std::string& stream, Image& img) {
 
 } // namespace
 
-void SetSnapBackend(SnapBackend b) {
-#ifdef SNAPNAB_RUST
-    g_backend = b;
-#else
-    (void)b;
-#endif
-}
+void SetSnapBackend(SnapBackend b) { g_backend = b; }
 
 SnapBackend GetSnapBackend() { return g_backend; }
 

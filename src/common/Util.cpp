@@ -6,6 +6,7 @@
 #include <commdlg.h>
 #include <lmcons.h>
 #include <shellscalingapi.h>
+#include "snapcore.h"
 
 namespace snap {
 
@@ -133,39 +134,15 @@ uint64_t FileSize(const std::wstring& path) {
     return ((uint64_t)d.nFileSizeHigh << 32) | d.nFileSizeLow;
 }
 
-// ---------------------------------------------------------------- log
-static std::mutex g_logMutex;
-static std::wstring g_logFile;
-static std::wstring g_logComponent;
-
-void LogInit(const wchar_t* component) {
-    g_logComponent = component;
-    g_logFile = LogsDir() + L"\\" + component + L".log";
-    if (FileSize(g_logFile) > 2 * 1024 * 1024) {
-        MoveFileExW(g_logFile.c_str(), (g_logFile + L".old").c_str(), MOVEFILE_REPLACE_EXISTING);
-    }
-    Log(L"==== %s %s started (pid %u) ====", component, kAppVersion, GetCurrentProcessId());
-}
+// ---------------------------------------------------------------- log (rust/snapcore/src/log.rs writes the file)
+void LogInit(const wchar_t* component) { snapcore_log_init(component, kAppVersion); }
 
 void Log(const wchar_t* fmt, ...) {
     va_list ap; va_start(ap, fmt);
     wchar_t msg[2048];
     _vsnwprintf_s(msg, _TRUNCATE, fmt, ap);
     va_end(ap);
-    SYSTEMTIME st; GetLocalTime(&st);
-    std::wstring line = Format(L"%04d-%02d-%02d %02d:%02d:%02d.%03d [%u] %s\r\n", st.wYear, st.wMonth, st.wDay,
-                               st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, GetCurrentThreadId(), msg);
-    OutputDebugStringW(line.c_str());
-    if (g_logFile.empty()) return;
-    std::lock_guard<std::mutex> lk(g_logMutex);
-    HANDLE h = CreateFileW(g_logFile.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
-                           OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-    if (h == INVALID_HANDLE_VALUE) return;
-    DWORD wr0;
-    if (GetLastError() != ERROR_ALREADY_EXISTS) WriteFile(h, "\xEF\xBB\xBF", 3, &wr0, nullptr);   // UTF-8 BOM (Notepad)
-    std::string u = WToUtf8(line);
-    DWORD wr; WriteFile(h, u.data(), (DWORD)u.size(), &wr, nullptr);
-    CloseHandle(h);
+    snapcore_log(msg);
 }
 
 // ---------------------------------------------------------------- base64 (embedded images on the clipboard, settings backup)
@@ -195,39 +172,20 @@ std::vector<BYTE> Base64Decode(const std::string& s) {
     return out;
 }
 
-// ---------------------------------------------------------------- registry
-static std::wstring RegPath(const wchar_t* sub) {
-    std::wstring p = kRegRoot;
-    if (sub && *sub) { p += L"\\"; p += sub; }
-    return p;
-}
+// ---------------------------------------------------------------- registry (rust/snapcore/src/reg.rs)
+DWORD RegGetDword(const wchar_t* name, DWORD def, const wchar_t* sub) { return snapcore_reg_get_dword(sub, name, def); }
 
-DWORD RegGetDword(const wchar_t* name, DWORD def, const wchar_t* sub) {
-    DWORD v = 0, cb = sizeof(v);
-    if (RegGetValueW(HKEY_CURRENT_USER, RegPath(sub).c_str(), name, RRF_RT_REG_DWORD, nullptr, &v, &cb) == ERROR_SUCCESS)
-        return v;
-    return def;
-}
-
-void RegSetDword(const wchar_t* name, DWORD v, const wchar_t* sub) {
-    RegSetKeyValueW(HKEY_CURRENT_USER, RegPath(sub).c_str(), name, REG_DWORD, &v, sizeof(v));
-}
+void RegSetDword(const wchar_t* name, DWORD v, const wchar_t* sub) { snapcore_reg_set_dword(sub, name, v); }
 
 std::wstring RegGetString(const wchar_t* name, const std::wstring& def, const wchar_t* sub) {
-    DWORD cb = 0;
-    if (RegGetValueW(HKEY_CURRENT_USER, RegPath(sub).c_str(), name, RRF_RT_REG_SZ, nullptr, nullptr, &cb) != ERROR_SUCCESS)
-        return def;
-    std::wstring s(cb / sizeof(wchar_t) + 1, L'\0');
-    if (RegGetValueW(HKEY_CURRENT_USER, RegPath(sub).c_str(), name, RRF_RT_REG_SZ, nullptr, s.data(), &cb) != ERROR_SUCCESS)
-        return def;
-    s.resize(wcslen(s.c_str()));
+    SnapcoreWStr v{};
+    if (!snapcore_reg_get_string(sub, name, &v)) return def;
+    std::wstring s(v.data, v.len);
+    snapcore_wstr_free(v);
     return s;
 }
 
-void RegSetString(const wchar_t* name, const std::wstring& v, const wchar_t* sub) {
-    RegSetKeyValueW(HKEY_CURRENT_USER, RegPath(sub).c_str(), name, REG_SZ, v.c_str(),
-                    (DWORD)((v.size() + 1) * sizeof(wchar_t)));
-}
+void RegSetString(const wchar_t* name, const std::wstring& v, const wchar_t* sub) { snapcore_reg_set_string(sub, name, v.c_str()); }
 
 // ---------------------------------------------------------------- single instance
 struct CopyDataHeader { GUID guid; DWORD cb; };
