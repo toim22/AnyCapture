@@ -34,6 +34,13 @@ namespace snap::xmlref {      // the former C++ reader and writer (XmlReference.
 std::string Serialize(const XmlNode& root, bool decl);
 bool Parse(const std::string& text, XmlNode& root);
 }
+namespace snap::imgref {      // the former WIC codecs (ImageCodecReference.cpp)
+const std::wstring& Error();
+bool LoadImageFile(const std::wstring& path, Image& out);
+bool DecodeFromMemory(const BYTE* data, size_t len, Image& out);
+bool EncodeToMemoryEx(const Image& img, ImageFormat fmt, std::vector<BYTE>& out, const SaveOptions& opt);
+bool EncodeJpegWithOrientation(const Image& img, int orientation, std::vector<BYTE>& out);
+}
 
 static int g_fail = 0;
 static std::wstring TestTempDir() { wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t); std::wstring d = t; if (!d.empty() && d.back() == L'\\') d.pop_back(); return d; }
@@ -1202,6 +1209,163 @@ int wmain(int argc, wchar_t** argv) {
         CHECK(saved && loaded && bytes == xmlref::Serialize(doc, true) && xmlref::Parse(bytes, refBack) && same(same, refBack, back) &&
               back.child("Preset") && back.child("Preset")->getW("Name") == L"Região ç → 中文 😀" && missing,
               "XML file written and read back; a missing file leaves the tree as it was");
+    }
+
+    printf("[18] Image files: Rust and the former C++\n");
+    {
+        // the Rust codecs (snapcore, through WIC) must write the bytes and read the images the C++ ones did
+        auto sameImage = [](const Image& a, const Image& b) {
+            if (a.w != b.w || a.h != b.h || a.px != b.px || !a.meta != !b.meta) return false;
+            if (!a.meta) return true;
+            const ImageMeta &x = *a.meta, &y = *b.meta;
+            return x.dateTaken == y.dateTaken && x.make == y.make && x.model == y.model && x.software == y.software &&
+                   x.gps == y.gps && x.lat == y.lat && x.lon == y.lon;
+        };
+        std::vector<std::pair<const char*, Image>> imgs;
+        imgs.push_back({ "opaque 37x21", Pattern(37, 21, 1) });
+        Image alpha = Pattern(64, 48, 2);
+        for (size_t i = 0; i < alpha.px.size(); i++) alpha.px[i] = (alpha.px[i] & 0xFFFFFF) | ((uint32_t)(i * 7 % 256) << 24);
+        imgs.push_back({ "alpha 64x48", alpha });
+        imgs.push_back({ "1x1", Image(1, 1, 0xFF123456) });
+        Image dpi = Pattern(50, 40, 3); dpi.dpi = 300;
+        imgs.push_back({ "300 dpi", dpi });
+        imgs.push_back({ "640x480", Pattern(640, 480, 4) });
+        Image photo = Pattern(32, 24, 5);
+        auto meta = std::make_shared<ImageMeta>();
+        meta->dateTaken = L"2024:05:06 07:08:09"; meta->make = L"Maker ç"; meta->model = L"Model 中";
+        meta->gps = true; meta->lat = -23.5505; meta->lon = -46.6333;
+        photo.meta = meta;
+        imgs.push_back({ "photo with EXIF", photo });
+
+        std::vector<std::pair<const char*, ImageFormat>> fmts = { { "PNG", ImageFormat::PNG }, { "JPEG", ImageFormat::JPEG },
+            { "BMP", ImageFormat::BMP }, { "GIF", ImageFormat::GIF }, { "TIFF", ImageFormat::TIFF } };
+        bool avif = CanEncode(ImageFormat::AVIF);
+        if (avif) fmts.push_back({ "AVIF", ImageFormat::AVIF });
+        int encodings = 0, encBad = 0, decBad = 0;
+        for (bool strip : { true, false })
+            for (int q : { 90, 40 })
+                for (auto& [iname, img] : imgs)
+                    for (auto& [fname, fmt] : fmts) {
+                        if (q == 40 && fmt != ImageFormat::JPEG && fmt != ImageFormat::AVIF) continue;
+                        SaveOptions o; o.stripMetadata = strip; o.jpegQuality = q; o.avifQuality = q;
+                        std::vector<BYTE> a, b;
+                        bool okA = imgref::EncodeToMemoryEx(img, fmt, a, o), okB = EncodeToMemoryEx(img, fmt, b, o);
+                        // JPEG and TIFF carry the time of writing: a second turning between the two calls changes it
+                        if (okA && okB && a != b && !strip) {
+                            okA = imgref::EncodeToMemoryEx(img, fmt, a, o);
+                            okB = EncodeToMemoryEx(img, fmt, b, o);
+                        }
+                        encodings++;
+                        // the AV1 encoder of the graphics card need not give the same bytes twice: AVIF is compared decoded
+                        bool sameBytes = fmt == ImageFormat::AVIF || a == b;
+                        if (okA != okB || !okA || !sameBytes) {
+                            encBad++;
+                            printf("       %s, %s, quality %d%s: %s\n", fname, iname, q, strip ? "" : ", metadata",
+                                   okA != okB || !okA ? "written by one only" : "different bytes");
+                        }
+                        Image da, db;
+                        bool dA = imgref::DecodeFromMemory(b.data(), b.size(), da), dB = DecodeFromMemory(b.data(), b.size(), db);
+                        if (dA != dB || !dA || !sameImage(da, db)) {
+                            decBad++;
+                            printf("       %s, %s: read differently\n", fname, iname);
+                        }
+                    }
+        CHECK(!encBad, "%d encodings (PNG, JPEG, BMP, GIF, TIFF%s; with and without metadata) byte for byte the same, %d differ",
+              encodings, avif ? ", AVIF" : "", encBad);
+        CHECK(!decBad, "the same files read alike (pixels and metadata), %d differ", decBad);
+
+        // photos turned by their EXIF orientation, read alike and upright
+        Image src = Pattern(30, 20, 6);
+        int orientBad = 0;
+        for (int o = 1; o <= 8; o++) {
+            std::vector<BYTE> jpg;
+            Image a, b;
+            if (!imgref::EncodeJpegWithOrientation(src, o, jpg) || !imgref::DecodeFromMemory(jpg.data(), jpg.size(), a) ||
+                !DecodeFromMemory(jpg.data(), jpg.size(), b) || !sameImage(a, b) || (o >= 5 ? a.w != 20 : a.w != 30)) orientBad++;
+        }
+        CHECK(!orientBad, "JPEG with the 8 EXIF orientations turned upright alike (%d differ)", orientBad);
+
+        // real images: the repository's, the library thumbnails and the base images of the .snap files (only read)
+        int realFiles = 0, realBad = 0;
+        auto compareFile = [&](const std::wstring& path) {
+            Image a, b;
+            bool okA = imgref::LoadImageFile(path, a), okB = LoadImageFile(path, b);
+            realFiles++;
+            if (okA != okB || !sameImage(a, b)) { realBad++; printf("       %ls: read differently\n", path.c_str()); }
+        };
+        std::wstring repo = ExeDir() + L"\\..\\..\\..\\..";
+        for (const wchar_t* f : { L"\\src\\resources", L"\\packaging\\installer", L"\\docs\\images" }) {
+            WIN32_FIND_DATAW fd;
+            HANDLE h = FindFirstFileW((repo + f + L"\\*").c_str(), &fd);
+            if (h == INVALID_HANDLE_VALUE) continue;
+            do {
+                std::wstring ext = FileExt(fd.cFileName);
+                for (auto& c : ext) c = towlower(c);
+                if (ext == L".png" || ext == L".ico" || ext == L".jpg" || ext == L".bmp" || ext == L".gif") compareFile(repo + f + L"\\" + fd.cFileName);
+            } while (FindNextFileW(h, &fd));
+            FindClose(h);
+        }
+        int snaps = 0;
+        {
+            WIN32_FIND_DATAW fd;
+            std::wstring thumbs = LibraryDir() + L"\\Thumbnails";
+            HANDLE h = FindFirstFileW((thumbs + L"\\*.png").c_str(), &fd);
+            if (h != INVALID_HANDLE_VALUE) {
+                int n = 0;
+                do { compareFile(thumbs + L"\\" + fd.cFileName); } while (++n < 150 && FindNextFileW(h, &fd));
+                FindClose(h);
+            }
+            h = FindFirstFileW((LibraryDir() + L"\\*.snap").c_str(), &fd);
+            if (h != INVALID_HANDLE_VALUE) {
+                do {
+                    std::wstring p = LibraryDir() + L"\\" + fd.cFileName;
+                    SnapcoreReader* r = snapcore_open(p.c_str(), p.size());
+                    if (!r) continue;
+                    SnapcoreBuf buf{};
+                    const char kStream[] = "Frame0/ImageStorage/Image_0.png";
+                    if (snapcore_read(r, kStream, sizeof kStream - 1, &buf)) {
+                        Image a, b;
+                        bool okA = imgref::DecodeFromMemory(buf.data, buf.len, a), okB = DecodeFromMemory(buf.data, buf.len, b);
+                        snaps++;
+                        if (okA != okB || !sameImage(a, b)) { realBad++; printf("       %ls: base image read differently\n", fd.cFileName); }
+                        snapcore_buf_free(buf);
+                    }
+                    snapcore_close(r);
+                } while (snaps < 150 && FindNextFileW(h, &fd));
+                FindClose(h);
+            }
+        }
+        CHECK(realFiles + snaps > 0 && !realBad, "%d image files and %d .snap base images read alike, %d differ", realFiles, snaps, realBad);
+
+        // what the user is told when a file does not open
+        std::wstring junk = Tmp(L"junk.xyz");
+        { HANDLE h = CreateFileW(junk.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
+          DWORD wr; WriteFile(h, "plain text, not an image", 24, &wr, nullptr); CloseHandle(h); }
+        Image ja, jb;
+        bool la = imgref::LoadImageFile(junk, ja), lb = LoadImageFile(junk, jb);
+        std::wstring ea = imgref::Error(), eb = ImageIoError();
+        std::wstring heic = Tmp(L"junk.heic");
+        MoveFileExW(junk.c_str(), heic.c_str(), MOVEFILE_REPLACE_EXISTING);
+        bool ha = imgref::LoadImageFile(heic, ja), hb = LoadImageFile(heic, jb);
+        std::wstring hea = imgref::Error(), heb = ImageIoError();
+        DeleteFileW(heic.c_str());
+        CHECK(!la && !lb && !ea.empty() && ea == eb && !ha && !hb && hea == heb && hea == CodecHint(ImageFormat::HEIC),
+              "a file that is not an image gives the same message (\"%ls\"), a bad .heic the codec hint", eb.c_str());
+
+        // saving to a file: the same bytes as the encoder gives
+        std::wstring sp = Tmp(L"save.png");
+        SaveOptions so; so.stripMetadata = true;
+        std::vector<BYTE> expect;
+        bool saved = SaveImageFileEx(sp, alpha, so) && imgref::EncodeToMemoryEx(alpha, ImageFormat::PNG, expect, so);
+        std::string onDisk;
+        HANDLE hf = CreateFileW(sp.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        if (hf != INVALID_HANDLE_VALUE) {
+            onDisk.resize(GetFileSize(hf, nullptr));
+            DWORD rd = 0; ReadFile(hf, onDisk.data(), (DWORD)onDisk.size(), &rd, nullptr); CloseHandle(hf);
+        }
+        DeleteFileW(sp.c_str());
+        CHECK(saved && onDisk == std::string(expect.begin(), expect.end()) && GetFileAttributesW((sp + L".tmp").c_str()) == INVALID_FILE_ATTRIBUTES,
+              "SaveImageFileEx writes the encoder's bytes and leaves no .tmp behind");
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

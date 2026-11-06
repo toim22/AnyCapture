@@ -18,7 +18,7 @@ not part of this repository (the `§N`, `comp_N` and `ed_comp_N` citations in th
 | `src/capture/` | `Snapnab.exe`: capture window (`main.cpp`), presets, hotkeys, crosshair (`SelectOverlay.*`), capture engine (with each window as an object), links of the captured area (`Links.*`, UI Automation), panoramic scrolling (`Panoramic.*`), video recorder and HUD, webcam (`Webcam.*`) and One Click (`OneClick.*`) |
 | `src/editor/` | `SnapnabEditor.exe`: document and undo, object rendering, canvas and tools, panels (properties, effects, layers, tray), clipboard formats (`Clip.cpp`), video, PDF, OCR |
 | `src/snapex/` | `SnapEx64.dll` |
-| `rust/` | Cargo workspace of the C++ to Rust migration (one phase at a time, each behind the unchanged e2e suite). `snapcore/`: static library linked into both programs by Corrosion, with a C ABI in `src/ffi.rs` / `include/snapcore.h`: the `.snap` compound file container, the log, the registry settings, the interface language (catalog and `.po` reader) and the XML reader and writer; `Util.cpp`, `I18n.cpp` and `Xml.cpp` keep their C++ API as thin wrappers |
+| `rust/` | Cargo workspace of the C++ to Rust migration (one phase at a time, each behind the unchanged e2e suite). `snapcore/`: static library linked into both programs by Corrosion, with a C ABI in `src/ffi.rs` / `include/snapcore.h`: the `.snap` compound file container, the log, the registry settings, the interface language (catalog and `.po` reader), the XML reader and writer and the image files through WIC (`codec.rs`: PNG, JPEG, BMP, GIF, TIFF, AVIF, HEIC, with metadata and EXIF orientation); `Util.cpp`, `I18n.cpp`, `Xml.cpp` and `Image.cpp` keep their C++ API as thin wrappers (WebP stays with libwebp in `Image.cpp` for now) |
 | `src/resources/` | icons and manifest (DPI PerMonitorV2, Common Controls 6) |
 | `tests/` | integration tests (`SnapnabTests.exe`, run by CTest) and the end-to-end UI suite (`tests/e2e`, pytest + pywinauto) |
 | `cmake/` | `Dependencies.cmake`: libwebp, ZXing-C++ and Corrosion through `FetchContent` (pinned, hashed) |
@@ -184,7 +184,7 @@ exported with the settings) and, where it has the feature, the ShareX reverse-en
 | Pins (C01) | `capture/Pins.*` (renders `.snap` objects with the Editor's `Render.cpp`) |
 | Region history, keyboard selection, color in the crosshair (C18, C19, C10) | `capture/SelectOverlay.*`, `common/ColorPicker.*`, `common/Color.*` |
 | Interval capture (C24), screen focus (C39), library cleanup (C41), command line (C44) | `capture/IntervalCapture.*`, `capture/ScreenFocus.*`, `common/Library.*`, `capture/main.cpp` |
-| WebP/AVIF/HEIC and metadata (C03, C29) | `common/Image.*` (libwebp; WIC HEIF encoder with AV1) |
+| WebP/AVIF/HEIC and metadata (C03, C29) | `common/Image.*` (libwebp) and `rust/snapcore/src/codec.rs` (WIC, HEIF encoder with AV1) |
 | QR (C04) | `common/Barcode.*` (ZXing-C++ readers) |
 | Beautify (C05) | `common/Beautify.*` (capture effect and Editor dialog) |
 | Copy as (C30), drag out | `common/Clipboard.*`, `common/DragOut.*` |

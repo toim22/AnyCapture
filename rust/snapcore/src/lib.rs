@@ -6,9 +6,12 @@
 //! - `reg`: the settings in HKCU\Software\Snapnab\1
 //! - `i18n`: the interface language and the lang\<code>.po catalogs
 //! - `xml`: the XML reader and writer (presets, .snap documents, Names.xml)
+//! - `image`, `codec`: images in memory and image files through the Windows codecs (WIC)
 
+pub mod codec;
 pub mod container;
 pub mod i18n;
+pub mod image;
 pub mod log;
 pub mod paths;
 pub mod reg;

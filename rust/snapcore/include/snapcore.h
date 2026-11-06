@@ -74,4 +74,29 @@ void snapcore_xml_close(SnapcoreXmlBuilder* b);
 bool snapcore_xml_serialize(SnapcoreXmlBuilder* b, bool declaration, SnapcoreBuf* out);
 bool snapcore_xml_save(SnapcoreXmlBuilder* b, const wchar_t* path, size_t len);
 
+// ---- image files through the Windows codecs (Image.cpp; WebP stays with libwebp). Formats as ImageFormat in Image.h.
+// Errors: decoding 1 = failed, 2 = Windows has no decoder for the file; encoding 1 = failed, 2 = the AVIF codec hint.
+struct SnapcoreImage;                                  // a decoded image: copy it out, then snapcore_image_free
+struct SnapcoreImageInfo { uint32_t w, h; bool hasMeta, gps; double lat, lon; };
+SnapcoreImage*  snapcore_image_decode(const uint8_t* data, size_t len, int32_t* err);
+SnapcoreImage*  snapcore_image_load(const wchar_t* path, size_t len, int32_t* err);
+void            snapcore_image_info(const SnapcoreImage* img, SnapcoreImageInfo* out);
+const uint32_t* snapcore_image_pixels(const SnapcoreImage* img);                  // w × h, 0xAARRGGBB
+const wchar_t*  snapcore_image_meta_text(const SnapcoreImage* img, uint32_t field);
+                                                       // 0 date taken, 1 make, 2 model, 3 software ("" if none)
+void            snapcore_image_free(SnapcoreImage* img);
+struct SnapcoreEncodeRequest {
+    uint32_t w, h;
+    const uint32_t* px;
+    float dpi;
+    int32_t format, jpegQuality, avifQuality;
+    bool stripMetadata;
+    bool hasMeta;                                      // the metadata of the source photo (strings may be null)
+    const wchar_t *dateTaken, *make, *model, *software;
+    bool gps;
+    double lat, lon;
+    const wchar_t* version;                            // "Snapnab <version>" goes into the metadata
+};
+bool snapcore_image_encode(const SnapcoreEncodeRequest* req, SnapcoreBuf* out, int32_t* err);
+
 }

@@ -8,6 +8,8 @@ use std::path::PathBuf;
 
 use crate::container::{Reader, Writer, is_snap};
 use crate::wide::{from_ptr, to_os, to_string_lossy};
+use crate::codec::{self, DecodeError, EncodeError, Format, SaveOptions};
+use crate::image::{Image, Meta};
 use crate::{i18n, log, reg, xml};
 
 fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
@@ -475,4 +477,170 @@ pub unsafe extern "C" fn snapcore_xml_save(b: *mut XmlBuilder, path: *const u16,
         let root = unsafe { Box::from_raw(b) }.finish();
         unsafe { path_arg(path, len) }.is_some_and(|p| xml::save_file(&p, &root))
     })
+}
+
+// ---------------------------------------------------------------- image files (Image.cpp; WebP stays with libwebp)
+// Errors: decoding 1 = failed, 2 = Windows has no decoder for the file; encoding 1 = failed, 2 = the AVIF codec hint
+// applies.
+
+/// A decoded image held by snapcore until the C++ side has copied it.
+pub struct Decoded {
+    img: Image,
+    texts: [Vec<u16>; 4], // date taken, make, model, software (nul-terminated)
+}
+
+#[repr(C)]
+pub struct ImageInfo {
+    pub w: u32,
+    pub h: u32,
+    pub has_meta: bool,
+    pub gps: bool,
+    pub lat: f64,
+    pub lon: f64,
+}
+
+fn decoded(r: Result<Image, DecodeError>, err: *mut i32) -> *mut Decoded {
+    let code = match &r {
+        Ok(_) => 0,
+        Err(DecodeError::Failed) => 1,
+        Err(DecodeError::NoDecoder) => 2,
+    };
+    if !err.is_null() {
+        unsafe { *err = code };
+    }
+    let Ok(img) = r else { return std::ptr::null_mut() };
+    let text = |s: &str| crate::wide::to_wide(s);
+    let texts = match &img.meta {
+        Some(m) => [text(&m.date_taken), text(&m.make), text(&m.model), text(&m.software)],
+        None => [vec![0], vec![0], vec![0], vec![0]],
+    };
+    Box::into_raw(Box::new(Decoded { img, texts }))
+}
+
+/// Decodes an image in memory (not WebP); null on failure, with the reason in *err.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_decode(data: *const u8, len: usize, err: *mut i32) -> *mut Decoded {
+    guard(std::ptr::null_mut(), || decoded(codec::decode(unsafe { bytes_arg(data, len) }), err))
+}
+
+/// Decodes an image file (not WebP); null on failure, with the reason in *err.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_load(path: *const u16, len: usize, err: *mut i32) -> *mut Decoded {
+    guard(std::ptr::null_mut(), || match unsafe { path_arg(path, len) } {
+        Some(p) => decoded(codec::load(&p), err),
+        None => decoded(Err(DecodeError::Failed), err),
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_info(d: *const Decoded, out: *mut ImageInfo) {
+    guard((), || {
+        let (Some(d), false) = (unsafe { d.as_ref() }, out.is_null()) else { return };
+        let m = d.img.meta.as_ref();
+        unsafe {
+            *out = ImageInfo {
+                w: d.img.w,
+                h: d.img.h,
+                has_meta: m.is_some(),
+                gps: m.is_some_and(|m| m.gps),
+                lat: m.map_or(0.0, |m| m.lat),
+                lon: m.map_or(0.0, |m| m.lon),
+            }
+        };
+    })
+}
+
+/// The w × h pixels (0xAARRGGBB), valid until snapcore_image_free.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_pixels(d: *const Decoded) -> *const u32 {
+    guard(std::ptr::null(), || unsafe { d.as_ref() }.map_or(std::ptr::null(), |d| d.img.px.as_ptr()))
+}
+
+/// A metadata text: 0 date taken, 1 make, 2 model, 3 software ("" when there is none); valid until snapcore_image_free.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_meta_text(d: *const Decoded, field: u32) -> *const u16 {
+    guard(std::ptr::null(), || {
+        unsafe { d.as_ref() }.and_then(|d| d.texts.get(field as usize)).map_or(std::ptr::null(), |t| t.as_ptr())
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_free(d: *mut Decoded) {
+    if !d.is_null() {
+        guard((), || drop(unsafe { Box::from_raw(d) }));
+    }
+}
+
+/// An image to encode and how (SaveOptions and ImageMeta of Image.h); the strings are nul-terminated UTF-16 or null.
+#[repr(C)]
+pub struct EncodeRequest {
+    pub w: u32,
+    pub h: u32,
+    pub px: *const u32,
+    pub dpi: f32,
+    pub format: i32,
+    pub jpeg_quality: i32,
+    pub avif_quality: i32,
+    pub strip_metadata: bool,
+    pub has_meta: bool,
+    pub date_taken: *const u16,
+    pub make: *const u16,
+    pub model: *const u16,
+    pub software: *const u16,
+    pub gps: bool,
+    pub lat: f64,
+    pub lon: f64,
+    pub version: *const u16,
+}
+
+/// Encodes the image (not WebP) into *out (free it with snapcore_buf_free); false on failure, with the reason in *err.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_image_encode(req: *const EncodeRequest, out: *mut SnapBuf, err: *mut i32) -> bool {
+    let set_err = |code: i32| {
+        if !err.is_null() {
+            unsafe { *err = code };
+        }
+    };
+    let r = guard(Err(EncodeError::Failed), || {
+        let Some(r) = (unsafe { req.as_ref() }) else { return Err(EncodeError::Failed) };
+        let n = r.w as usize * r.h as usize;
+        if out.is_null() || (n > 0 && r.px.is_null()) {
+            return Err(EncodeError::Failed);
+        }
+        let text = |p: *const u16| unsafe { from_ptr(p) }.map(to_string_lossy).unwrap_or_default();
+        let img = Image {
+            w: r.w,
+            h: r.h,
+            px: if n > 0 { unsafe { std::slice::from_raw_parts(r.px, n) }.to_vec() } else { Vec::new() },
+            dpi: r.dpi,
+            meta: r.has_meta.then(|| Meta {
+                date_taken: text(r.date_taken),
+                make: text(r.make),
+                model: text(r.model),
+                software: text(r.software),
+                gps: r.gps,
+                lat: r.lat,
+                lon: r.lon,
+            }),
+        };
+        let opt = SaveOptions { jpeg_quality: r.jpeg_quality, avif_quality: r.avif_quality, strip_metadata: r.strip_metadata };
+        codec::encode(&img, Format::from_i32(r.format), &opt, &text(r.version))
+    });
+    match r {
+        Ok(v) => {
+            let b = v.into_boxed_slice();
+            let len = b.len();
+            unsafe { *out = SnapBuf { data: Box::into_raw(b) as *mut u8, len } };
+            set_err(0);
+            true
+        }
+        Err(EncodeError::Failed) => {
+            set_err(1);
+            false
+        }
+        Err(EncodeError::Codec) => {
+            set_err(2);
+            false
+        }
+    }
 }
