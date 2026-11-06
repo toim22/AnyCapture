@@ -67,47 +67,6 @@ int wmain(int argc, wchar_t** argv) {
         return 0;
     }
     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    if (argc > 2 && std::wstring(argv[1]) == L"comparesnap") {   // reads every .snap of a folder with both containers
-        int files = 0, same = 0, bothFail = 0;
-        double tRead[2] = {}, tWrite[2] = {};
-        auto now = [] { LARGE_INTEGER c, f; QueryPerformanceCounter(&c); QueryPerformanceFrequency(&f); return (double)c.QuadPart / f.QuadPart; };
-        std::wstring out = Tmp(L"compare.snap");
-        WIN32_FIND_DATAW fd;
-        HANDLE h = FindFirstFileW((std::wstring(argv[2]) + L"\\*.snap").c_str(), &fd);
-        for (BOOL more = h != INVALID_HANDLE_VALUE; more; more = FindNextFileW(h, &fd)) {
-            std::wstring p = std::wstring(argv[2]) + L"\\" + fd.cFileName;
-            std::vector<SnapFrame> a, b;
-            double t0 = now();
-            SetSnapBackend(SnapBackend::Rust);
-            bool okA = LoadSnapFile(p, a);
-            double t1 = now();
-            SetSnapBackend(SnapBackend::Windows);
-            bool okB = LoadSnapFile(p, b);
-            tRead[0] += t1 - t0; tRead[1] += now() - t1;
-            if (okA) {                          // and writes it back with each one (to a temporary file)
-                for (int k = 0; k < 2; k++) {
-                    SetSnapBackend(k ? SnapBackend::Windows : SnapBackend::Rust);
-                    double w0 = now(); SaveSnapFile(out, a); tWrite[k] += now() - w0;
-                }
-                DeleteFileW(out.c_str());
-            }
-            bool eq = okA == okB && a.size() == b.size();
-            for (size_t i = 0; eq && i < a.size(); i++) {
-                eq = a[i].base.w == b[i].base.w && a[i].base.px == b[i].base.px &&
-                     XmlSerialize(a[i].doc) == XmlSerialize(b[i].doc) && a[i].embedded.size() == b[i].embedded.size();
-                for (auto& e : a[i].embedded) eq = eq && b[i].embedded.count(e.first) && b[i].embedded.at(e.first).px == e.second.px;
-            }
-            files++;
-            if (eq) same++;
-            if (!okA && !okB) bothFail++;
-            if (!eq) printf("  DIFFERENT %ls (Rust %s, Windows %s)\n", fd.cFileName, okA ? "ok" : "failed", okB ? "ok" : "failed");
-        }
-        if (h != INVALID_HANDLE_VALUE) FindClose(h);
-        printf("%d .snap files: %d read the same by both containers (%d refused by both)\n", files, same, bothFail);
-        printf("read:  Rust %.0f ms, Windows %.0f ms (PNG decoding included)\n", tRead[0] * 1000, tRead[1] * 1000);
-        printf("write: Rust %.0f ms, Windows %.0f ms (PNG encoding included)\n", tWrite[0] * 1000, tWrite[1] * 1000);
-        return same == files ? 0 : 1;
-    }
     if (argc > 2 && std::wstring(argv[1]) == L"audio") {    // debugging: reads only the audio track
         MFStartup(MF_VERSION);
         IMFSourceReader* rd = nullptr;
@@ -194,56 +153,6 @@ int wmain(int argc, wchar_t** argv) {
         CHECK(loaded && in[0].embedded.count("Image_1.png") && in[0].embedded["Image_1.png"].w == 10, "embedded image by StreamName");
         auto d = ed::Document::Load(p);
         CHECK(d && d->st.objs.size() == 2 && d->st.objs[0]->type == ed::ObjType::Arrow, "Document loads objects (%zu)", d ? d->st.objs.size() : 0);
-        DeleteFileW(p.c_str());
-
-        // the two containers (snapcore in Rust and the Windows structured storage API) read each other's files: two
-        // frames, metadata and an embedded image, written by one and read by the other
-        SnapBackend def = GetSnapBackend();
-        SnapFrame f2; f2.base = Pattern(64, 48, 3);
-        f2.doc.add("Objects").add("Text").setW("Text", L"segunda moldura ✓");
-        auto same = [&](const std::vector<SnapFrame>& v) {
-            return v.size() == 2 && v[0].base.px == f.base.px && v[1].base.px == f2.base.px &&
-                   v[0].doc.getW("CaptureMode") == L"Region ç → 中文" && v[0].embedded.count("Image_1.png") &&
-                   v[0].embedded.at("Image_1.png").px == f.embedded["Image_1.png"].px &&
-                   v[1].doc.child("Objects") && v[1].doc.child("Objects")->children[0].getW("Text") == L"segunda moldura ✓";
-        };
-        for (SnapBackend writer : { SnapBackend::Rust, SnapBackend::Windows }) {
-            SetSnapBackend(writer);
-            bool ok = SaveSnapFile(p, { f, f2 });
-            SetSnapBackend(writer == SnapBackend::Rust ? SnapBackend::Windows : SnapBackend::Rust);
-            std::vector<SnapFrame> v;
-            ok = ok && LoadSnapFile(p, v);
-            XmlNode doc0;
-            ok = ok && same(v) && LoadSnapDocument(p, doc0) && doc0.getW("CaptureMode") == L"Region ç → 中文";
-            CHECK(ok, "a .snap written by %s opens with %s (2 frames, metadata, embedded image)",
-                  writer == SnapBackend::Rust ? "snapcore (Rust)" : "the Windows API", writer == SnapBackend::Rust ? "the Windows API" : "snapcore (Rust)");
-        }
-        // damaged files: the right header over garbage, and a file cut in half, are refused without crashing
-        SetSnapBackend(SnapBackend::Rust);
-        SaveSnapFile(p, { f, f2 });
-        std::string bytes;
-        {
-            HANDLE h = CreateFileW(p.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-            DWORD sz = GetFileSize(h, nullptr), rd = 0;
-            bytes.resize(sz); ReadFile(h, bytes.data(), sz, &rd, nullptr); CloseHandle(h);
-        }
-        auto writeBytes = [&](const std::string& b) {
-            HANDLE h = CreateFileW(p.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
-            DWORD wr = 0; WriteFile(h, b.data(), (DWORD)b.size(), &wr, nullptr); CloseHandle(h);
-        };
-        std::string garbage = bytes.substr(0, 24);
-        for (int i = 0; i < 8192; i++) garbage += (char)((i * 2654435761u) >> 13);
-        bool refused = true;
-        for (const std::string& bad : { garbage, bytes.substr(0, bytes.size() / 2) }) {
-            writeBytes(bad);
-            for (SnapBackend b : { SnapBackend::Rust, SnapBackend::Windows }) {
-                SetSnapBackend(b);
-                std::vector<SnapFrame> v;
-                refused = refused && IsSnapFile(p) && !LoadSnapFile(p, v);
-            }
-        }
-        CHECK(refused, "damaged .snap files (garbage after the header, cut in half) are refused by both containers");
-        SetSnapBackend(def);
         DeleteFileW(p.c_str());
     }
 
