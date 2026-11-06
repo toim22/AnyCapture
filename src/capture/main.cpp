@@ -44,7 +44,7 @@ enum : int {
     IDM_SETTINGS_EXPORT, IDM_SETTINGS_IMPORT, IDM_SETTINGS_BACKUPS, IDM_MANUAL,
     IDM_COLOR_PICKER, IDM_PIN_CLIPBOARD, IDM_PIN_FILE, IDM_PINS_SHOW, IDM_PINS_HIDE, IDM_PINS_CLOSE, IDM_PINS_REOPEN,
     IDM_PINS_CLICKTHROUGH, IDM_INTERVAL, IDM_FOCUS, IDM_QR_REGION, IDM_UPLOAD_SETTINGS, IDM_CAPTURE_PIN, IDM_CLEANUP_NOW,
-    IDM_RECORD_AUDIO, IDM_AUDIO_FOLDER,
+    IDM_RECORD_AUDIO, IDM_AUDIO_FOLDER, IDM_AFTER_EDITOR,
     IDM_PIN_HISTORY_BASE = 1500,
     IDM_PRESET_BASE = 2000, IDM_DELAY_BASE = 3000, IDM_WEBCAM_OFF = 3100, IDM_WEBCAM_BASE = 3101,
     IDM_WEBCAM_SHAPE = 3200, IDM_WEBCAM_CHROMA = 3300,
@@ -781,7 +781,7 @@ void ShowOptions() {
         F::MakeSeparator(Tr(L"Depois da captura")),                              // 15
         F::MakeCheck(Tr(L"Copiar toda captura para a área de transferência"), RegGetDword(L"CopyEveryCapture", 1) != 0),
         F::MakeCombo(Tr(L"Ao terminar"), { Tr(L"Abrir no Editor (como o preset diz)"), Tr(L"Mostrar a miniatura rápida em vez do Editor"),
-                                          Tr(L"Mostrar a miniatura e abrir o Editor") }, (int)std::min<DWORD>(RegGetDword(L"AfterCaptureMode", 0), 2)),
+                                          Tr(L"Mostrar a miniatura e abrir o Editor"), Tr(L"Só copiar para a área de transferência") }, AfterCaptureMode()),
         F::MakeInt(Tr(L"A miniatura fecha após (s, 0 = não fecha)"), (int)RegGetDword(L"OverlaySeconds", 8), 0, 600),
         F::MakeCombo(Tr(L"Canto da miniatura"), { Tr(L"Inferior direito"), Tr(L"Inferior esquerdo"), Tr(L"Superior direito"), Tr(L"Superior esquerdo") },
                      (int)std::min<DWORD>(RegGetDword(L"OverlayCorner", 0), 3)),
@@ -1005,6 +1005,15 @@ void UpdateTrayStatus(bool busy, int count) {
     wcsncpy_s(g.nid.szTip, tip.c_str(), _TRUNCATE);
     Shell_NotifyIconW(NIM_MODIFY, &g.nid);
     g.nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+}
+
+// tray "Open the Editor after capturing" (issue #3): off = Options › When done › Only copy to the clipboard;
+// on again = the mode that was chosen before
+void ToggleAfterCaptureEditor() {
+    int mode = AfterCaptureMode();
+    if (mode == AfterCopyOnly) mode = (int)std::min<DWORD>(RegGetDword(L"AfterCaptureModeOn", AfterEditor), AfterBoth);
+    else { RegSetDword(L"AfterCaptureModeOn", mode); mode = AfterCopyOnly; }
+    RegSetDword(L"AfterCaptureMode", mode);
 }
 
 // ---------------------------------------------------------------- One Click
@@ -1448,6 +1457,7 @@ void TrayMenu() {
     AppendMenuW(m, MF_STRING, IDM_SHOW, Tr(L"Abrir a janela de captura"));
     AppendMenuW(m, MF_STRING | (g.oneClick.enabled() ? MF_CHECKED : 0), IDM_ONECLICK, Tr(L"Mostrar o One Click"));
     AppendMenuW(m, MF_STRING, IDM_OPEN_EDITOR, Tr(L"Abrir o Editor"));
+    AppendMenuW(m, MF_STRING | (AfterCaptureMode() != AfterCopyOnly ? MF_CHECKED : 0), IDM_AFTER_EDITOR, Tr(L"Abrir o Editor depois da captura"));
     AppendMenuW(m, MF_STRING, IDM_OPTIONS, Tr(L"Opções…"));
     AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
     AppendMenuW(m, MF_STRING, IDM_EXIT, Tr(L"Sair"));
@@ -1837,6 +1847,7 @@ void OnCommand(int id, int code) {
     case IDC_OPEN_EDITOR: case IDM_OPEN_EDITOR: OpenEditor(); break;
     case IDM_OPTIONS: ShowOptions(); break;
     case IDM_ONECLICK: SetOneClick(!g.oneClick.enabled()); break;
+    case IDM_AFTER_EDITOR: ToggleAfterCaptureEditor(); break;
     case IDM_CAPTURE_IMAGE: StartCapture(FirstOfKind(CaptureKind::Image)); break;
     case IDM_CAPTURE_VIDEO: StartCapture(FirstOfKind(CaptureKind::Video)); break;
     case IDM_RECORD_AUDIO: {                     // audio only (C32): the first video preset's audio settings, no video

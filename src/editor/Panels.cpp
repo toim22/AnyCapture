@@ -1288,7 +1288,12 @@ void LibraryTray::Reload() {
 
 void LibraryTray::SetCurrent(const std::wstring& p) {
     current = p;
-    if (mode == Tray) { AddRecent(p); Reload(); }
+    // a capture that is not in the tray yet comes in at the front; one already there keeps its place, so going
+    // back to an older capture to copy or edit it does not make it look like the latest (issue #2)
+    if (mode == Tray) {
+        if (std::none_of(recent_.begin(), recent_.end(), [&](auto& r) { return !_wcsicmp(r.c_str(), p.c_str()); })) AddRecent(p);
+        Reload();
+    }
     // opening an item leaves only it selected
     for (size_t i = 0; i < items_.size(); i++) sel_[i] = !_wcsicmp(items_[i].path.c_str(), p.c_str());
     EnsureVisible();

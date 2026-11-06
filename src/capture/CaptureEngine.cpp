@@ -595,7 +595,8 @@ void CaptureEngine::Output(const Image& img, const CaptureInfo& info, const Laye
     std::vector<std::wstring> done;
     // every capture goes to the clipboard (owner's request, Options › CopyEveryCapture, on by default) besides the
     // preset's own "Copy to the clipboard"; Grab Text and Read QR code keep their text there instead
-    const bool autoCopy = RegGetDword(L"CopyEveryCapture", 1) != 0;
+    const int mode = preset_.outputClipboardOnly ? AfterEditor : AfterCaptureMode();
+    const bool autoCopy = RegGetDword(L"CopyEveryCapture", 1) != 0 || mode == AfterCopyOnly;
     if ((preset_.copyToClipboard || autoCopy || preset_.outputClipboardOnly) && !preset_.grabText && !preset_.readQr && CopyImageToClipboard(frame_, img))
         done.push_back(Tr(L"copiada para a área de transferência"));
     const std::wstring title = info.windowTitle.empty() ? info.mode : info.windowTitle;
@@ -628,12 +629,14 @@ void CaptureEngine::Output(const Image& img, const CaptureInfo& info, const Laye
         ShellExecuteW(nullptr, L"open", preset_.programPath.c_str(), (L"\"" + file + L"\"").c_str(), nullptr, SW_SHOWNORMAL);
     }
     if (ipc_) ipc_->SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
-    // after the capture: the Editor (as the preset says), the quick access overlay (C08) instead of it, or both
-    const int mode = preset_.outputClipboardOnly ? 0 : (int)RegGetDword(L"AfterCaptureMode", 0);
+    // after the capture: the Editor (as the preset says), the quick access overlay (C08) instead of it, both, or
+    // neither (only the clipboard, with the balloon below)
     const bool other = preset_.grabText || preset_.readQr || preset_.pinToScreen;      // outputs that are already the feedback
-    if (mode >= 1 && !other && onOverlay && !lib.empty()) onOverlay(img, lib, false, title);
-    if (preset_.previewInEditor && !lib.empty() && mode != 1 && !preset_.outputClipboardOnly) DeliverToEditor(lib);
-    else if (other || mode >= 1) {}             // the text window, the QR results, the pin or the overlay are the feedback
+    const bool overlay = mode == AfterOverlay || mode == AfterBoth;
+    const bool editor = mode == AfterEditor || mode == AfterBoth;
+    if (overlay && !other && onOverlay && !lib.empty()) onOverlay(img, lib, false, title);
+    if (preset_.previewInEditor && !lib.empty() && editor && !preset_.outputClipboardOnly) DeliverToEditor(lib);
+    else if (other || overlay) {}               // the text window, the QR results, the pin or the overlay are the feedback
     else if (notify) {
         std::wstring t = Tr(L"Captura adicionada à biblioteca");
         for (auto& d : done) t += L"; " + d;
@@ -994,12 +997,13 @@ void CaptureEngine::FinishVideo(bool ok) {
     }
     if (ok && FileExists(path)) {
         if (!recorder.firstFrame.empty()) WriteThumbnail(path, recorder.firstFrame);
-        if (RegGetDword(L"CopyEveryCapture", 1)) clip::CopyFiles(frame_, { path });     // videos: the file
+        const int mode = AfterCaptureMode();
+        if (RegGetDword(L"CopyEveryCapture", 1) || mode == AfterCopyOnly) clip::CopyFiles(frame_, { path });     // videos: the file
         if (ipc_) ipc_->SendInt(ipc::kEditor, ipc::LibraryChanged, 0);
-        const int mode = (int)RegGetDword(L"AfterCaptureMode", 0);
-        if (mode >= 1 && onOverlay && !recorder.firstFrame.empty()) onOverlay(recorder.firstFrame, path, true, FileNameOf(path));
-        if (preset_.previewInEditor && mode != 1) DeliverToEditor(path);
-        else if (mode >= 1) {}
+        const bool overlay = mode == AfterOverlay || mode == AfterBoth;
+        if (overlay && onOverlay && !recorder.firstFrame.empty()) onOverlay(recorder.firstFrame, path, true, FileNameOf(path));
+        if (preset_.previewInEditor && (mode == AfterEditor || mode == AfterBoth)) DeliverToEditor(path);
+        else if (overlay) {}
         else if (notify) notify(L"Snapnab", Tr(L"Vídeo salvo na biblioteca: ") + FileNameOf(path));
     } else {
         MessageBoxW(nullptr, (Tr(L"A gravação falhou.\n\n") + recorder.lastError).c_str(), L"Snapnab", MB_ICONERROR);

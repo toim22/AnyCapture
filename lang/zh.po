@@ -71,63 +71,63 @@ msgstr "截图中未找到文本。"
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "提取文本 — 已复制到剪贴板"
 
-#: src/capture/CaptureEngine.cpp:600
+#: src/capture/CaptureEngine.cpp:601
 msgid "copiada para a área de transferência"
 msgstr "已复制到剪贴板"
 
-#: src/capture/CaptureEngine.cpp:604 src/capture/CaptureEngine.cpp:618
+#: src/capture/CaptureEngine.cpp:605 src/capture/CaptureEngine.cpp:619
 msgid "salva em "
 msgstr "已保存到 "
 
-#: src/capture/CaptureEngine.cpp:616 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1275
+#: src/capture/CaptureEngine.cpp:617 src/capture/QuickOverlay.cpp:145 src/capture/main.cpp:790 src/capture/main.cpp:1284
 msgid "Captura"
 msgstr "截图"
 
-#: src/capture/CaptureEngine.cpp:638
+#: src/capture/CaptureEngine.cpp:641
 msgid "Captura adicionada à biblioteca"
 msgstr "截图已添加到库"
 
-#: src/capture/CaptureEngine.cpp:763
+#: src/capture/CaptureEngine.cpp:766
 msgid "A janela será ampliada além da tela, capturada e restaurada."
 msgstr "窗口将被放大到超出屏幕，截取后再恢复。"
 
-#: src/capture/CaptureEngine.cpp:764
+#: src/capture/CaptureEngine.cpp:767
 msgid "Nova largura (px)"
 msgstr "新宽度 (像素)"
 
-#: src/capture/CaptureEngine.cpp:765
+#: src/capture/CaptureEngine.cpp:768
 msgid "Nova altura (px)"
 msgstr "新高度 (像素)"
 
-#: src/capture/CaptureEngine.cpp:767 src/capture/Presets.cpp:17
+#: src/capture/CaptureEngine.cpp:770 src/capture/Presets.cpp:17
 msgid "Janela estendida"
 msgstr "扩展窗口"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "Recomeçar a gravação?"
 msgstr "重新开始录制？"
 
-#: src/capture/CaptureEngine.cpp:841
+#: src/capture/CaptureEngine.cpp:844
 msgid "O que foi gravado até agora será descartado."
 msgstr "目前已录制的内容将被丢弃。"
 
-#: src/capture/CaptureEngine.cpp:842
+#: src/capture/CaptureEngine.cpp:845
 msgid "Não perguntar de novo"
 msgstr "不再询问"
 
-#: src/capture/CaptureEngine.cpp:862
+#: src/capture/CaptureEngine.cpp:865
 msgid "Imagem durante gravação"
 msgstr "录制期间的图像"
 
-#: src/capture/CaptureEngine.cpp:865
+#: src/capture/CaptureEngine.cpp:868
 msgid "Imagem capturada sem parar a gravação."
 msgstr "已截取图像，录制未停止。"
 
-#: src/capture/CaptureEngine.cpp:879 src/capture/Webcam.cpp:91
+#: src/capture/CaptureEngine.cpp:882 src/capture/Webcam.cpp:91
 msgid "Snapnab — webcam"
 msgstr "Snapnab — 摄像头"
 
-#: src/capture/CaptureEngine.cpp:918
+#: src/capture/CaptureEngine.cpp:921
 msgid ""
 "Não foi possível iniciar a gravação.\n"
 "\n"
@@ -135,35 +135,35 @@ msgstr ""
 "无法开始录制。\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:951 src/capture/main.cpp:580
+#: src/capture/CaptureEngine.cpp:954 src/capture/main.cpp:580
 msgid "Destacar o cursor"
 msgstr "突出显示指针"
 
-#: src/capture/CaptureEngine.cpp:952 src/capture/main.cpp:583
+#: src/capture/CaptureEngine.cpp:955 src/capture/main.cpp:583
 msgid "Mostrar os cliques"
 msgstr "显示点击"
 
-#: src/capture/CaptureEngine.cpp:954
+#: src/capture/CaptureEngine.cpp:957
 msgid "Teclas: não mostrar"
 msgstr "按键：不显示"
 
-#: src/capture/CaptureEngine.cpp:955
+#: src/capture/CaptureEngine.cpp:958
 msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "按键：仅快捷键 (Ctrl、Alt、Win、F1…)"
 
-#: src/capture/CaptureEngine.cpp:956
+#: src/capture/CaptureEngine.cpp:959
 msgid "Teclas: todas (inclusive o que for digitado)"
 msgstr "按键：全部 (包括键入的内容)"
 
-#: src/capture/CaptureEngine.cpp:991
+#: src/capture/CaptureEngine.cpp:994
 msgid "Snapnab — áudio salvo"
 msgstr "Snapnab — 音频已保存"
 
-#: src/capture/CaptureEngine.cpp:1003
+#: src/capture/CaptureEngine.cpp:1007
 msgid "Vídeo salvo na biblioteca: "
 msgstr "视频已保存到库： "
 
-#: src/capture/CaptureEngine.cpp:1005
+#: src/capture/CaptureEngine.cpp:1009
 msgid ""
 "A gravação falhou.\n"
 "\n"
@@ -171,15 +171,15 @@ msgstr ""
 "录制失败。\n"
 "\n"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Snapnab — pouco espaço em disco"
 msgstr "Snapnab — 磁盘空间不足"
 
-#: src/capture/CaptureEngine.cpp:1013
+#: src/capture/CaptureEngine.cpp:1017
 msgid "Restam menos de 1 GB livres na unidade da biblioteca."
 msgstr "库所在驱动器的可用空间不足 1 GB。"
 
-#: src/capture/CaptureEngine.cpp:1016
+#: src/capture/CaptureEngine.cpp:1020
 msgid "Gravação interrompida: espaço em disco insuficiente."
 msgstr "录制已停止：磁盘空间不足。"
 
@@ -211,7 +211,7 @@ msgstr "间隔 (秒)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "持续时间 (分钟，0 = 直到停止)"
 
-#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1522 src/editor/Batch.cpp:122
+#: src/capture/IntervalCapture.cpp:47 src/capture/main.cpp:484 src/capture/main.cpp:1532 src/editor/Batch.cpp:122
 msgid "Formato"
 msgstr "格式"
 
@@ -227,7 +227,7 @@ msgstr "间隔"
 msgid "Pasta"
 msgstr "文件夹"
 
-#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1235
+#: src/capture/IntervalCapture.cpp:50 src/capture/main.cpp:1244
 msgid "Capturar o cursor"
 msgstr "截取光标"
 
@@ -373,7 +373,7 @@ msgstr "总在最前"
 msgid "Sombra"
 msgstr "阴影"
 
-#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1224 src/capture/main.cpp:1440
+#: src/capture/Pins.cpp:275 src/capture/QuickOverlay.cpp:211 src/capture/main.cpp:1233 src/capture/main.cpp:1449
 msgid "Ler código QR"
 msgstr "读取二维码"
 
@@ -497,7 +497,7 @@ msgstr "另存为…"
 msgid "Anotar no Editor"
 msgstr "在编辑器中标注"
 
-#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1224 src/editor/Panels.cpp:1767 src/editor/main.cpp:1770
+#: src/capture/QuickOverlay.cpp:61 src/capture/main.cpp:1233 src/editor/Panels.cpp:1772 src/editor/main.cpp:1770
 msgid "Fixar na tela"
 msgstr "固定到屏幕"
 
@@ -525,7 +525,7 @@ msgstr "保存视频"
 msgid "Salvar como"
 msgstr "另存为"
 
-#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1766 src/editor/main.cpp:1765
+#: src/capture/QuickOverlay.cpp:210 src/editor/Panels.cpp:1771 src/editor/main.cpp:1765
 msgid "Copiar como…"
 msgstr "复制为…"
 
@@ -533,7 +533,7 @@ msgstr "复制为…"
 msgid "Enviar (upload) e copiar o link"
 msgstr "上传并复制链接"
 
-#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1408
+#: src/capture/QuickOverlay.cpp:215 src/capture/main.cpp:958 src/capture/main.cpp:1417
 msgid "Fechar todas"
 msgstr "全部关闭"
 
@@ -968,7 +968,7 @@ msgstr "分辨率 (DPI)"
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "写入保存的文件 (PNG、JPEG、TIFF、BMP)。"
 
-#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1224
+#: src/capture/main.cpp:323 src/capture/main.cpp:345 src/capture/main.cpp:1233
 msgid "Nenhum"
 msgstr "无"
 
@@ -980,7 +980,7 @@ msgstr "添加其他效果"
 msgid "Remover este efeito"
 msgstr "移除此效果"
 
-#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1290 src/capture/main.cpp:1475
+#: src/capture/main.cpp:392 src/capture/main.cpp:776 src/capture/main.cpp:1299 src/capture/main.cpp:1485
 msgid "Desligado"
 msgstr "关闭"
 
@@ -989,11 +989,11 @@ msgstr "关闭"
 msgid "%d s"
 msgstr "%d 秒"
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343
 msgid "Ligada"
 msgstr "开启"
 
-#: src/capture/main.cpp:448 src/capture/main.cpp:1334 src/capture/main.cpp:1509
+#: src/capture/main.cpp:448 src/capture/main.cpp:1343 src/capture/main.cpp:1519
 msgid "Desligada"
 msgstr "关闭"
 
@@ -1201,7 +1201,7 @@ msgstr ""
 "•  行上的齿轮可重命名、复制或删除预设。\n"
 "•  “用当前设置新建预设”会保存窗口中的当前内容。"
 
-#: src/capture/main.cpp:669 src/capture/main.cpp:1028 src/capture/main.cpp:1242 src/capture/main.cpp:1437
+#: src/capture/main.cpp:669 src/capture/main.cpp:1037 src/capture/main.cpp:1251 src/capture/main.cpp:1446
 msgid "Presets"
 msgstr "预设"
 
@@ -1253,11 +1253,11 @@ msgstr "自动 (Windows 语言)"
 msgid "Atalhos globais"
 msgstr "全局快捷键"
 
-#: src/capture/main.cpp:766 src/capture/main.cpp:1023 src/capture/main.cpp:1432
+#: src/capture/main.cpp:766 src/capture/main.cpp:1032 src/capture/main.cpp:1441
 msgid "Capturar imagem"
 msgstr "截取图像"
 
-#: src/capture/main.cpp:767 src/capture/main.cpp:1024 src/capture/main.cpp:1433
+#: src/capture/main.cpp:767 src/capture/main.cpp:1033 src/capture/main.cpp:1442
 msgid "Gravar vídeo"
 msgstr "录制视频"
 
@@ -1269,7 +1269,7 @@ msgstr "暂停/继续视频"
 msgid "Parar vídeo"
 msgstr "停止视频"
 
-#: src/capture/main.cpp:770 src/capture/main.cpp:1439
+#: src/capture/main.cpp:770 src/capture/main.cpp:1448
 msgid "Conta-gotas de tela"
 msgstr "屏幕取色器"
 
@@ -1277,11 +1277,11 @@ msgstr "屏幕取色器"
 msgid "Capturar e fixar na tela"
 msgstr "截图并固定到屏幕"
 
-#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1406
+#: src/capture/main.cpp:772 src/capture/main.cpp:951 src/capture/main.cpp:1415
 msgid "Fixar da área de transferência"
 msgstr "从剪贴板固定"
 
-#: src/capture/main.cpp:773 src/capture/main.cpp:1446
+#: src/capture/main.cpp:773 src/capture/main.cpp:1455
 msgid "Foco de tela (apresentações)"
 msgstr "屏幕聚焦 (演示)"
 
@@ -1340,6 +1340,10 @@ msgstr "显示快速缩略图而不是编辑器"
 #: src/capture/main.cpp:784
 msgid "Mostrar a miniatura e abrir o Editor"
 msgstr "显示缩略图并打开编辑器"
+
+#: src/capture/main.cpp:784
+msgid "Só copiar para a área de transferência"
+msgstr "仅复制到剪贴板"
 
 #: src/capture/main.cpp:785
 msgid "A miniatura fecha após (s, 0 = não fecha)"
@@ -1514,11 +1518,11 @@ msgstr ""
 "无法打开图像。\n"
 "\n"
 
-#: src/capture/main.cpp:952 src/capture/main.cpp:1407
+#: src/capture/main.cpp:952 src/capture/main.cpp:1416
 msgid "Fixar um arquivo…"
 msgstr "固定文件…"
 
-#: src/capture/main.cpp:953 src/capture/main.cpp:1405
+#: src/capture/main.cpp:953 src/capture/main.cpp:1414
 msgid "Capturar e fixar"
 msgstr "截图并固定"
 
@@ -1547,36 +1551,36 @@ msgstr "历史记录"
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — 定时截图：%d 张图像"
 
-#: src/capture/main.cpp:1025 src/capture/main.cpp:1434
+#: src/capture/main.cpp:1034 src/capture/main.cpp:1443
 msgid "Gravar só o áudio"
 msgstr "仅录制音频"
 
-#: src/capture/main.cpp:1030 src/capture/main.cpp:1448
+#: src/capture/main.cpp:1039 src/capture/main.cpp:1457
 msgid "Abrir a janela de captura"
 msgstr "打开截图窗口"
 
-#: src/capture/main.cpp:1031
+#: src/capture/main.cpp:1040
 msgid "Ocultar o One Click"
 msgstr "隐藏 One Click"
 
-#: src/capture/main.cpp:1116
+#: src/capture/main.cpp:1125
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region 需要 x,y,宽度,高度 (例如：/region 100,100,800,600)。"
 
-#: src/capture/main.cpp:1122
+#: src/capture/main.cpp:1131
 msgid "Nenhuma janela com esse título: "
 msgstr "没有此标题的窗口： "
 
-#: src/capture/main.cpp:1127
+#: src/capture/main.cpp:1136
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "显示器 %d 不存在 (共有 %zu 个)。"
 
-#: src/capture/main.cpp:1136
+#: src/capture/main.cpp:1145
 msgid "Não foi possível fixar: "
 msgstr "无法固定： "
 
-#: src/capture/main.cpp:1156
+#: src/capture/main.cpp:1165
 msgid ""
 "Snapnab.exe [opções]\n"
 "\n"
@@ -1620,411 +1624,415 @@ msgstr ""
 "/output clipboard|editor|none|\"文件\"   截图的去向\n"
 "/exit                 关闭正在运行的 Snapnab"
 
-#: src/capture/main.cpp:1174
+#: src/capture/main.cpp:1183
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — 命令行"
 
-#: src/capture/main.cpp:1213 src/capture/main.cpp:1698 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
+#: src/capture/main.cpp:1222 src/capture/main.cpp:1708 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76
 msgid "Imagem"
 msgstr "图像"
 
-#: src/capture/main.cpp:1214 src/capture/main.cpp:1698
+#: src/capture/main.cpp:1223 src/capture/main.cpp:1708
 msgid "Vídeo"
 msgstr "视频"
 
-#: src/capture/main.cpp:1215
+#: src/capture/main.cpp:1224
 msgid "Seleção:"
 msgstr "选择："
 
-#: src/capture/main.cpp:1218
+#: src/capture/main.cpp:1227
 msgid "Efeitos:"
 msgstr "效果："
 
-#: src/capture/main.cpp:1221
+#: src/capture/main.cpp:1230
 msgid "Compartilhar:"
 msgstr "分享："
 
-#: src/capture/main.cpp:1224 src/capture/main.cpp:1275 src/editor/main.cpp:1041 src/editor/main.cpp:2608
+#: src/capture/main.cpp:1233 src/capture/main.cpp:1284 src/editor/main.cpp:1041 src/editor/main.cpp:2608
 msgid "Arquivo"
 msgstr "文件"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Programa externo"
 msgstr "外部程序"
 
-#: src/capture/main.cpp:1224
+#: src/capture/main.cpp:1233
 msgid "Texto (OCR)"
 msgstr "文本 (OCR)"
 
-#: src/capture/main.cpp:1225
+#: src/capture/main.cpp:1234
 msgid "Upload (copiar o link)"
 msgstr "上传 (复制链接)"
 
-#: src/capture/main.cpp:1226
+#: src/capture/main.cpp:1235
 msgid "Qualidade:"
 msgstr "质量："
 
-#: src/capture/main.cpp:1229
+#: src/capture/main.cpp:1238
 msgid "Muito baixa"
 msgstr "很低"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Baixa"
 msgstr "低"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2150 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2150 src/editor/main.cpp:2160
 msgid "Média"
 msgstr "中"
 
-#: src/capture/main.cpp:1229 src/editor/main.cpp:2160
+#: src/capture/main.cpp:1238 src/editor/main.cpp:2160
 msgid "Alta"
 msgstr "高"
 
-#: src/capture/main.cpp:1230
+#: src/capture/main.cpp:1239
 msgid "Webcam:"
 msgstr "摄像头："
 
-#: src/capture/main.cpp:1233
+#: src/capture/main.cpp:1242
 msgid "Visualizar no Editor"
 msgstr "在编辑器中预览"
 
-#: src/capture/main.cpp:1234
+#: src/capture/main.cpp:1243
 msgid "Copiar para a área de transferência"
 msgstr "复制到剪贴板"
 
-#: src/capture/main.cpp:1236 src/capture/main.cpp:1290
+#: src/capture/main.cpp:1245 src/capture/main.cpp:1299
 msgid "Atraso"
 msgstr "延时"
 
-#: src/capture/main.cpp:1238
+#: src/capture/main.cpp:1247
 msgid "Gravar microfone"
 msgstr "录制麦克风"
 
-#: src/capture/main.cpp:1239
+#: src/capture/main.cpp:1248
 msgid "Gravar áudio do sistema"
 msgstr "录制系统声音"
 
-#: src/capture/main.cpp:1240 src/capture/main.cpp:1721 src/editor/main.cpp:2458
+#: src/capture/main.cpp:1249 src/capture/main.cpp:1731 src/editor/main.cpp:2458
 msgid "Capturar"
 msgstr "截图"
 
-#: src/capture/main.cpp:1246
+#: src/capture/main.cpp:1255
 msgid "Abrir Editor"
 msgstr "打开编辑器"
 
-#: src/capture/main.cpp:1275 src/editor/main.cpp:2612
+#: src/capture/main.cpp:1284 src/editor/main.cpp:2612
 msgid "Exibir"
 msgstr "查看"
 
-#: src/capture/main.cpp:1275 src/capture/main.cpp:1547 src/editor/main.cpp:2613 src/editor/main.cpp:2613
+#: src/capture/main.cpp:1284 src/capture/main.cpp:1557 src/editor/main.cpp:2613 src/editor/main.cpp:2613
 msgid "Ajuda"
 msgstr "帮助"
 
-#: src/capture/main.cpp:1377
+#: src/capture/main.cpp:1386
 msgid "Abrir o &Editor"
 msgstr "打开编辑器(&E)"
 
-#: src/capture/main.cpp:1378 src/editor/main.cpp:893
+#: src/capture/main.cpp:1387 src/editor/main.cpp:893
 msgid "Abrir a pasta da &biblioteca"
 msgstr "打开库文件夹(&L)"
 
-#: src/capture/main.cpp:1379
+#: src/capture/main.cpp:1388
 msgid "Abrir a pasta de &logs"
 msgstr "打开日志文件夹(&G)"
 
-#: src/capture/main.cpp:1381
+#: src/capture/main.cpp:1390
 msgid "&Importar presets…"
 msgstr "导入预设(&I)…"
 
-#: src/capture/main.cpp:1382
+#: src/capture/main.cpp:1391
 msgid "E&xportar presets…"
 msgstr "导出预设(&X)…"
 
-#: src/capture/main.cpp:1384
+#: src/capture/main.cpp:1393
 msgid "Exportar &todas as configurações…"
 msgstr "导出全部设置(&A)…"
 
-#: src/capture/main.cpp:1385
+#: src/capture/main.cpp:1394
 msgid "Importar t&odas as configurações…"
 msgstr "导入全部设置(&L)…"
 
-#: src/capture/main.cpp:1386
+#: src/capture/main.cpp:1395
 msgid "Abrir a pasta de &backups"
 msgstr "打开备份文件夹(&B)"
 
-#: src/capture/main.cpp:1388 src/editor/main.cpp:980
+#: src/capture/main.cpp:1397 src/editor/main.cpp:980
 msgid "Configurar o &upload…"
 msgstr "设置上传(&U)…"
 
-#: src/capture/main.cpp:1389
+#: src/capture/main.cpp:1398
 msgid "&Limpar a biblioteca agora"
 msgstr "立即清理库(&L)"
 
-#: src/capture/main.cpp:1390
+#: src/capture/main.cpp:1399
 msgid "&Opções…"
 msgstr "选项(&O)…"
 
-#: src/capture/main.cpp:1392
+#: src/capture/main.cpp:1401
 msgid "&Sair do Snapnab"
 msgstr "退出 Snapnab(&Q)"
 
-#: src/capture/main.cpp:1394
+#: src/capture/main.cpp:1403
 msgid "Capturar &imagem"
 msgstr "截取图像(&I)"
 
-#: src/capture/main.cpp:1395
+#: src/capture/main.cpp:1404
 msgid "Gravar &vídeo"
 msgstr "录制视频(&V)"
 
-#: src/capture/main.cpp:1396
+#: src/capture/main.cpp:1405
 msgid "&Repetir a última captura"
 msgstr "重复上次截图(&R)"
 
-#: src/capture/main.cpp:1398
+#: src/capture/main.cpp:1407
 msgid "Da área de &transferência"
 msgstr "从剪贴板(&C)"
 
-#: src/capture/main.cpp:1399
+#: src/capture/main.cpp:1408
 msgid "De um &arquivo gráfico…"
 msgstr "从图形文件(&F)…"
 
-#: src/capture/main.cpp:1401
+#: src/capture/main.cpp:1410
 msgid "&Conta-gotas de tela"
 msgstr "屏幕取色器(&C)"
 
-#: src/capture/main.cpp:1402
+#: src/capture/main.cpp:1411
 msgid "Ler código &QR"
 msgstr "读取二维码(&Q)"
 
-#: src/capture/main.cpp:1409
+#: src/capture/main.cpp:1418
 msgid "&Fixar na tela"
 msgstr "固定到屏幕(&F)"
 
-#: src/capture/main.cpp:1411
+#: src/capture/main.cpp:1420
 msgid "Captura por &intervalo…"
 msgstr "定时截图(&I)…"
 
-#: src/capture/main.cpp:1412
+#: src/capture/main.cpp:1421
 msgid "F&oco de tela (apresentações)"
 msgstr "屏幕聚焦(&O) (演示)"
 
-#: src/capture/main.cpp:1413
+#: src/capture/main.cpp:1422
 msgid "Gravar só o á&udio"
 msgstr "仅录制音频(&U)"
 
-#: src/capture/main.cpp:1414
+#: src/capture/main.cpp:1423
 msgid "Abrir a pasta dos áudios"
 msgstr "打开音频文件夹"
 
-#: src/capture/main.cpp:1416
+#: src/capture/main.cpp:1425
 msgid "Mostrar o &One Click"
 msgstr "显示 One Click(&O)"
 
-#: src/capture/main.cpp:1417
+#: src/capture/main.cpp:1426
 msgid "Lista de &presets"
 msgstr "预设列表(&P)"
 
-#: src/capture/main.cpp:1419 src/editor/main.cpp:969
+#: src/capture/main.cpp:1428 src/editor/main.cpp:969
 msgid "&Manual do Snapnab\tF1"
 msgstr "Snapnab 手册(&M)\tF1"
 
-#: src/capture/main.cpp:1420
+#: src/capture/main.cpp:1429
 msgid "Como usar os &presets"
 msgstr "如何使用预设(&H)"
 
-#: src/capture/main.cpp:1422
+#: src/capture/main.cpp:1431
 msgid "&Sobre o Snapnab"
 msgstr "关于 Snapnab(&A)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "固定的图像 (%zu)"
 
-#: src/capture/main.cpp:1443
+#: src/capture/main.cpp:1452
 msgid "Imagens fixadas"
 msgstr "固定的图像"
 
-#: src/capture/main.cpp:1444
+#: src/capture/main.cpp:1453
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "停止定时截图 (%d)"
 
-#: src/capture/main.cpp:1445
+#: src/capture/main.cpp:1454
 msgid "Captura por intervalo…"
 msgstr "定时截图…"
 
-#: src/capture/main.cpp:1449
+#: src/capture/main.cpp:1458
 msgid "Mostrar o One Click"
 msgstr "显示 One Click"
 
-#: src/capture/main.cpp:1450
+#: src/capture/main.cpp:1459
 msgid "Abrir o Editor"
 msgstr "打开编辑器"
 
-#: src/capture/main.cpp:1451
+#: src/capture/main.cpp:1460
+msgid "Abrir o Editor depois da captura"
+msgstr "截图后打开编辑器"
+
+#: src/capture/main.cpp:1461
 msgid "Opções…"
 msgstr "选项…"
 
-#: src/capture/main.cpp:1453
+#: src/capture/main.cpp:1463
 msgid "Sair"
 msgstr "退出"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 msgid "1 segundo"
 msgstr "1 秒"
 
-#: src/capture/main.cpp:1475
+#: src/capture/main.cpp:1485
 #, c-format
 msgid "%d segundos"
 msgstr "%d 秒"
 
-#: src/capture/main.cpp:1487
+#: src/capture/main.cpp:1497
 msgid "Remover o fundo da webcam"
 msgstr "移除摄像头背景"
 
-#: src/capture/main.cpp:1488
+#: src/capture/main.cpp:1498
 msgid "Cor do fundo"
 msgstr "背景颜色"
 
-#: src/capture/main.cpp:1489
+#: src/capture/main.cpp:1499
 msgid "Tolerância (0–100)"
 msgstr "容差 (0–100)"
 
-#: src/capture/main.cpp:1490
+#: src/capture/main.cpp:1500
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "请使用纯色、光线充足的背景 (绿幕最理想)。"
 
-#: src/capture/main.cpp:1491
+#: src/capture/main.cpp:1501
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "移除背景后，摄像头画面不带边框。"
 
-#: src/capture/main.cpp:1493
+#: src/capture/main.cpp:1503
 msgid "Remover o fundo (chroma key)"
 msgstr "移除背景 (色度键)"
 
-#: src/capture/main.cpp:1511
+#: src/capture/main.cpp:1521
 msgid "Nenhuma webcam encontrada"
 msgstr "未找到摄像头"
 
-#: src/capture/main.cpp:1523
+#: src/capture/main.cpp:1533
 msgid "Remover o fundo (chroma key)…"
 msgstr "移除背景 (色度键)…"
 
-#: src/capture/main.cpp:1544 src/capture/main.cpp:1759
+#: src/capture/main.cpp:1554 src/capture/main.cpp:1769
 msgid "Novo preset com as configurações atuais"
 msgstr "用当前设置新建预设"
 
-#: src/capture/main.cpp:1545
+#: src/capture/main.cpp:1555
 msgid "Novo preset…"
 msgstr "新建预设…"
 
-#: src/capture/main.cpp:1556
+#: src/capture/main.cpp:1566
 msgid "Capturar com este preset"
 msgstr "用此预设截图"
 
-#: src/capture/main.cpp:1558
+#: src/capture/main.cpp:1568
 msgid "Renomear…"
 msgstr "重命名…"
 
-#: src/capture/main.cpp:1559
+#: src/capture/main.cpp:1569
 msgid "Atalho…"
 msgstr "快捷键…"
 
-#: src/capture/main.cpp:1560 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
+#: src/capture/main.cpp:1570 src/editor/PropsPanel.cpp:1241 src/editor/main.cpp:1048
 msgid "Duplicar"
 msgstr "复制"
 
-#: src/capture/main.cpp:1562 src/editor/PropsPanel.cpp:1244
+#: src/capture/main.cpp:1572 src/editor/PropsPanel.cpp:1244
 msgid "Excluir"
 msgstr "删除"
 
-#: src/capture/main.cpp:1570
+#: src/capture/main.cpp:1580
 msgid "Adicionar atalho"
 msgstr "添加快捷键"
 
-#: src/capture/main.cpp:1721 src/editor/main.cpp:2459
+#: src/capture/main.cpp:1731 src/editor/main.cpp:2459
 msgid "Gravar"
 msgstr "录制"
 
-#: src/capture/main.cpp:1746
+#: src/capture/main.cpp:1756
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "现在删除早于 %u 天的截图 (按选项中的规则)？"
 
-#: src/capture/main.cpp:1751
+#: src/capture/main.cpp:1761
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "已从库中删除 %d 个截图。"
 
-#: src/capture/main.cpp:1759 src/capture/main.cpp:1769 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
+#: src/capture/main.cpp:1769 src/capture/main.cpp:1779 src/editor/PropsPanel.cpp:1249 src/editor/PropsPanel.cpp:1260
 msgid " (cópia)"
 msgstr " (副本)"
 
-#: src/capture/main.cpp:1761
+#: src/capture/main.cpp:1771
 #, c-format
 msgid "Preset %zu"
 msgstr "预设 %zu"
 
-#: src/capture/main.cpp:1763
+#: src/capture/main.cpp:1773
 msgid "Novo preset"
 msgstr "新建预设"
 
-#: src/capture/main.cpp:1776
+#: src/capture/main.cpp:1786
 msgid "É preciso manter pelo menos um preset."
 msgstr "至少需要保留一个预设。"
 
-#: src/capture/main.cpp:1777
+#: src/capture/main.cpp:1787
 #, c-format
 msgid "Excluir o preset \"%s\"?"
 msgstr "删除预设“%s”吗？"
 
-#: src/capture/main.cpp:1810 src/common/Office.cpp:56
+#: src/capture/main.cpp:1820 src/common/Office.cpp:56
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "此计算机未安装 %s (或者是 Microsoft Store 版本，不支持自动化)。"
 
-#: src/capture/main.cpp:1822
+#: src/capture/main.cpp:1832
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "每次截图放在新幻灯片上 (关闭：放在当前幻灯片)"
 
-#: src/capture/main.cpp:1853
+#: src/capture/main.cpp:1864
 msgid "Presets do Snapnab (*.snappresets;*.xml)|*.snappresets;*.xml|"
 msgstr "Snapnab 预设 (*.snappresets;*.xml)|*.snappresets;*.xml|"
 
-#: src/capture/main.cpp:1857
+#: src/capture/main.cpp:1868
 msgid "Presets importados."
 msgstr "已导入预设。"
 
-#: src/capture/main.cpp:1858
+#: src/capture/main.cpp:1869
 msgid "Arquivo de presets inválido."
 msgstr "预设文件无效。"
 
-#: src/capture/main.cpp:1863
+#: src/capture/main.cpp:1874
 msgid "Presets do Snapnab (*.snappresets)|*.snappresets|"
 msgstr "Snapnab 预设 (*.snappresets)|*.snappresets|"
 
-#: src/capture/main.cpp:1867
+#: src/capture/main.cpp:1878
 msgid "Não foi possível exportar."
 msgstr "无法导出。"
 
-#: src/capture/main.cpp:1880
+#: src/capture/main.cpp:1891
 msgid "Há uma gravação em andamento. Parar e sair?"
 msgstr "正在录制。要停止并退出吗？"
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Gravar vídeo  ("
 msgstr "录制视频  ("
 
-#: src/capture/main.cpp:1981
+#: src/capture/main.cpp:1992
 msgid "Capturar imagem  ("
 msgstr "截取图像  ("
 
-#: src/capture/main.cpp:2180
+#: src/capture/main.cpp:2191
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — 录制已恢复"
 
-#: src/capture/main.cpp:2181
+#: src/capture/main.cpp:2192
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "已在库中恢复 %zu 个中断的录制。"
@@ -2256,23 +2264,23 @@ msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif
 msgid "Audio"
 msgstr "Audio"
 
-#: src/common/Ocr.cpp:141 src/common/Ocr.cpp:226 src/editor/Pdf.cpp:25
+#: src/common/Ocr.cpp:159 src/common/Ocr.cpp:244 src/editor/Pdf.cpp:25
 msgid "Imagem vazia."
 msgstr "空图像。"
 
-#: src/common/Ocr.cpp:158 src/common/Ocr.cpp:248
+#: src/common/Ocr.cpp:176 src/common/Ocr.cpp:266
 msgid "Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma)."
 msgstr "Windows 中未安装 OCR 语言 (设置 › 时间和语言 › 语言)。"
 
-#: src/common/Ocr.cpp:182 src/common/Ocr.cpp:256
+#: src/common/Ocr.cpp:200 src/common/Ocr.cpp:274
 msgid "Falha desconhecida no OCR."
 msgstr "未知的 OCR 错误。"
 
-#: src/common/Ocr.cpp:202
+#: src/common/Ocr.cpp:220
 msgid "A detecção de rostos não está disponível neste Windows."
 msgstr "此 Windows 不支持人脸检测。"
 
-#: src/common/Ocr.cpp:217
+#: src/common/Ocr.cpp:235
 msgid "Falha na detecção de rostos."
 msgstr "人脸检测失败。"
 
@@ -3461,119 +3469,119 @@ msgstr "显示在托盘和库中。留空则显示日期。"
 msgid "Renomear captura"
 msgstr "重命名截图"
 
-#: src/editor/Panels.cpp:1547 src/editor/main.cpp:2050
+#: src/editor/Panels.cpp:1552 src/editor/main.cpp:2050
 msgid "Capturas recentes"
 msgstr "最近的截图"
 
-#: src/editor/Panels.cpp:1547
+#: src/editor/Panels.cpp:1552
 #, c-format
 msgid "Biblioteca  •  %zu capturas"
 msgstr "库  •  %zu 张截图"
 
-#: src/editor/Panels.cpp:1548
+#: src/editor/Panels.cpp:1553
 #, c-format
 msgid "  •  %d selecionadas"
 msgstr "  •  已选择 %d 个"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Exportar (%d)…"
 msgstr "导出 (%d)…"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 #, c-format
 msgid "Excluir (%d)"
 msgstr "删除 (%d)"
 
-#: src/editor/Panels.cpp:1557
+#: src/editor/Panels.cpp:1562
 msgid "Limpar seleção"
 msgstr "清除选择"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Biblioteca"
 msgstr "库"
 
-#: src/editor/Panels.cpp:1558
+#: src/editor/Panels.cpp:1563
 msgid "Voltar ao editor"
 msgstr "返回编辑器"
 
-#: src/editor/Panels.cpp:1563
+#: src/editor/Panels.cpp:1568
 msgid "Nenhuma captura recente. Capture com o Snapnab (Print Screen) ou solte arquivos aqui."
 msgstr "没有最近的截图。请用 Snapnab 截图 (Print Screen) 或将文件拖放到此处。"
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "Nenhuma captura com esse nome."
 msgstr "没有该名称的截图。"
 
-#: src/editor/Panels.cpp:1564
+#: src/editor/Panels.cpp:1569
 msgid "A biblioteca está vazia."
 msgstr "库为空。"
 
-#: src/editor/Panels.cpp:1758 src/editor/main.cpp:1047
+#: src/editor/Panels.cpp:1763 src/editor/main.cpp:1047
 msgid "Abrir"
 msgstr "打开"
 
-#: src/editor/Panels.cpp:1759
+#: src/editor/Panels.cpp:1764
 msgid "Mostrar na pasta"
 msgstr "在文件夹中显示"
 
-#: src/editor/Panels.cpp:1762
+#: src/editor/Panels.cpp:1767
 #, c-format
 msgid "Exportar %zu itens…"
 msgstr "导出 %zu 个项目…"
 
-#: src/editor/Panels.cpp:1762 src/editor/PropsPanel.cpp:1242
+#: src/editor/Panels.cpp:1767 src/editor/PropsPanel.cpp:1242
 msgid "Exportar…"
 msgstr "导出…"
 
-#: src/editor/Panels.cpp:1768 src/editor/main.cpp:1771
+#: src/editor/Panels.cpp:1773 src/editor/main.cpp:1771
 msgid "Enviar (upload)"
 msgstr "上传"
 
-#: src/editor/Panels.cpp:1770
+#: src/editor/Panels.cpp:1775
 #, c-format
 msgid "Combinar %zu imagens…"
 msgstr "合并 %zu 张图像…"
 
-#: src/editor/Panels.cpp:1771
+#: src/editor/Panels.cpp:1776
 msgid "Comparar as duas…"
 msgstr "比较这两个…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 #, c-format
 msgid "Processar %zu em lote…"
 msgstr "批量处理 %zu 个…"
 
-#: src/editor/Panels.cpp:1772
+#: src/editor/Panels.cpp:1777
 msgid "Processamento em lote…"
 msgstr "批量处理…"
 
-#: src/editor/Panels.cpp:1775
+#: src/editor/Panels.cpp:1780
 msgid "Selecionar tudo\tCtrl+A"
 msgstr "全选\tCtrl+A"
 
-#: src/editor/Panels.cpp:1776
+#: src/editor/Panels.cpp:1781
 msgid "Renomear…\tF2"
 msgstr "重命名…\tF2"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja"
 msgstr "从托盘移除"
 
-#: src/editor/Panels.cpp:1777
+#: src/editor/Panels.cpp:1782
 msgid "Remover da bandeja (continua na biblioteca)"
 msgstr "从托盘移除 (仍保留在库中)"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 #, c-format
 msgid "Excluir %zu itens (Lixeira)\tDel"
 msgstr "删除 %zu 个项目 (回收站)\tDel"
 
-#: src/editor/Panels.cpp:1779
+#: src/editor/Panels.cpp:1784
 msgid "Excluir (Lixeira)\tDel"
 msgstr "删除 (回收站)\tDel"
 
-#: src/editor/Panels.cpp:1867
+#: src/editor/Panels.cpp:1872
 #, c-format
 msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
 msgstr "视频  •  %lld:%02lld  •  %d × %d"

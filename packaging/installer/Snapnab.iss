@@ -1,6 +1,6 @@
 ﻿; Snapnab installer (Inno Setup 6.5 or later) — packages dist\Snapnab\ produced by build.bat.
 ; build.bat compiles it automatically when it finds Inno Setup, passing the version from CMakeLists.txt:
-;   ISCC.exe /DAppVersion=0.4.0 packaging\installer\Snapnab.iss   →   dist\Snapnab-0.4.0-setup.exe
+;   ISCC.exe /DAppVersion=0.4.1 packaging\installer\Snapnab.iss   →   dist\Snapnab-0.4.1-setup.exe
 ;
 ; Installs for the current user only (no administrator prompt, in %LOCALAPPDATA%\Programs\Snapnab) or, if the user
 ; chooses, for all users (in Program Files). Captures, presets and settings live in the user profile
@@ -8,7 +8,7 @@
 
 #define AppName      "Snapnab"
 #ifndef AppVersion
-  #define AppVersion "0.4.0"
+  #define AppVersion "0.4.1"
 #endif
 #define AppPublisher "Antonio Rezende"
 #define AppURL       "https://github.com/toim22/Snapnab"

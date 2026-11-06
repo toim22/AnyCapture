@@ -60,7 +60,7 @@ finds `ISCC.exe` (in `%LOCALAPPDATA%\Programs`, `Program Files` or on the `PATH`
 To compile it by hand after `build.bat`:
 
 ```bat
-ISCC.exe /DAppVersion=0.4.0 packaging\installer\Snapnab.iss
+ISCC.exe /DAppVersion=0.4.1 packaging\installer\Snapnab.iss
 ```
 
 What the installer does:
