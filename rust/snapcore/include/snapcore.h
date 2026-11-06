@@ -8,7 +8,7 @@
 
 extern "C" {
 
-// ---- the .snap container (SnapFile.cpp; the XML and PNG inside the streams stay in C++)
+// ---- the .snap container (SnapFile.cpp; the PNG inside the streams stays in C++)
 struct SnapcoreReader;
 struct SnapcoreWriter;
 struct SnapcoreBuf { uint8_t* data; size_t len; };       // allocated by snapcore: free with snapcore_buf_free
@@ -51,5 +51,27 @@ bool           snapcore_i18n_rtl();
 const wchar_t* snapcore_i18n_ui_font_face();            // null: the default font
 wchar_t        snapcore_i18n_alt_key(const wchar_t* name, wchar_t fallback);
 bool           snapcore_po_load(const wchar_t* path, void (*entry)(void* ctx, const wchar_t* id, const wchar_t* str), void* ctx);
+
+// ---- XML (Xml.cpp). Text is UTF-8 with a length. A document read by snapcore comes back through the sink in document
+// order: open(name), attr(k, v)…, text(t) if any, the children, close(). The root is sent also when the text is
+// malformed (what was read up to the error), as XmlParse always did.
+struct SnapcoreXmlSink {
+    void (*open)(void* ctx, const char* name, size_t len);
+    void (*attr)(void* ctx, const char* k, size_t klen, const char* v, size_t vlen);
+    void (*text)(void* ctx, const char* t, size_t len);
+    void (*close)(void* ctx);
+};
+bool    snapcore_xml_parse(const char* data, size_t len, const SnapcoreXmlSink* sink, void* ctx);   // false: malformed
+int32_t snapcore_xml_load(const wchar_t* path, size_t len, const SnapcoreXmlSink* sink, void* ctx);
+                                                       // -1: not read (nothing sent), 0: malformed, 1: read
+// a document written by snapcore is fed the same way, then serialized or saved (both free the builder)
+struct SnapcoreXmlBuilder;
+SnapcoreXmlBuilder* snapcore_xml_builder_new();
+void snapcore_xml_open(SnapcoreXmlBuilder* b, const char* name, size_t len);
+void snapcore_xml_attr(SnapcoreXmlBuilder* b, const char* k, size_t klen, const char* v, size_t vlen);
+void snapcore_xml_text(SnapcoreXmlBuilder* b, const char* t, size_t len);
+void snapcore_xml_close(SnapcoreXmlBuilder* b);
+bool snapcore_xml_serialize(SnapcoreXmlBuilder* b, bool declaration, SnapcoreBuf* out);
+bool snapcore_xml_save(SnapcoreXmlBuilder* b, const wchar_t* path, size_t len);
 
 }

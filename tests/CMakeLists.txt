@@ -2,6 +2,7 @@
 set(SRC ${PROJECT_SOURCE_DIR}/src)
 add_executable(SnapnabTests
     tests.cpp
+    XmlReference.cpp
     ${SRC}/capture/Recorder.cpp
     ${SRC}/capture/Panoramic.cpp
     ${SRC}/capture/Webcam.cpp
@@ -15,6 +16,8 @@ add_executable(SnapnabTests
     ${SRC}/editor/Cursors.cpp
     ${SRC}/editor/EditorTools.cpp)
 target_link_libraries(SnapnabTests PRIVATE SnapnabCommon mfplat mfreadwrite mfuuid mf winspool windowsapp)
+# the snapcore C ABI (the XML test reads the streams of real .snap files)
+target_include_directories(SnapnabTests PRIVATE ${PROJECT_SOURCE_DIR}/rust/snapcore/include)
 
 add_test(NAME integration COMMAND SnapnabTests)
 set_tests_properties(integration PROPERTIES TIMEOUT 600)

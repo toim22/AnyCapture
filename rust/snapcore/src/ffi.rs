@@ -2,13 +2,13 @@
 //! is given; strings snapcore returns as `*const u16` live as long as the process. No panic crosses the boundary:
 //! every entry point catches it and reports a failure.
 
-use std::ffi::{OsStr, OsString};
+use std::ffi::{OsStr, OsString, c_void};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::path::PathBuf;
 
 use crate::container::{Reader, Writer, is_snap};
 use crate::wide::{from_ptr, to_os, to_string_lossy};
-use crate::{i18n, log, reg};
+use crate::{i18n, log, reg, xml};
 
 fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
     catch_unwind(AssertUnwindSafe(f)).unwrap_or(fallback)
@@ -318,5 +318,161 @@ pub unsafe extern "C" fn snapcore_po_load(path: *const u16, entry: extern "C" fn
             entry(ctx, id.as_ptr(), msg.as_ptr());
         }
         true
+    })
+}
+
+// ---------------------------------------------------------------- XML (Xml.cpp)
+// Text crosses as UTF-8 with a length. A document read by snapcore comes back as calls to an XmlSink, in document
+// order; one written by snapcore is fed to an XmlBuilder the same way.
+
+/// Calls that rebuild a document on the C++ side: open(name), attr(k, v)…, text(t) if any, the children, close().
+/// The pointers are valid during the call only.
+#[repr(C)]
+pub struct XmlSink {
+    pub open: extern "C" fn(ctx: *mut c_void, name: *const u8, len: usize),
+    pub attr: extern "C" fn(ctx: *mut c_void, k: *const u8, klen: usize, v: *const u8, vlen: usize),
+    pub text: extern "C" fn(ctx: *mut c_void, t: *const u8, len: usize),
+    pub close: extern "C" fn(ctx: *mut c_void),
+}
+
+fn emit(n: &xml::Node, sink: &XmlSink, ctx: *mut c_void) {
+    (sink.open)(ctx, n.name.as_ptr(), n.name.len());
+    for (k, v) in &n.attrs {
+        (sink.attr)(ctx, k.as_ptr(), k.len(), v.as_ptr(), v.len());
+    }
+    if !n.text.is_empty() {
+        (sink.text)(ctx, n.text.as_ptr(), n.text.len());
+    }
+    for c in &n.children {
+        emit(c, sink, ctx);
+    }
+    (sink.close)(ctx);
+}
+
+unsafe fn bytes_arg<'a>(p: *const u8, len: usize) -> &'a [u8] {
+    if p.is_null() || len == 0 { &[] } else { unsafe { std::slice::from_raw_parts(p, len) } }
+}
+
+unsafe fn text_arg(p: *const u8, len: usize) -> String {
+    String::from_utf8_lossy(unsafe { bytes_arg(p, len) }).into_owned()
+}
+
+/// Reads `data` and sends the root element to the sink, also when the text is malformed (the part read up to the
+/// error; false is returned then).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_parse(data: *const u8, len: usize, sink: *const XmlSink, ctx: *mut c_void) -> bool {
+    guard(false, || {
+        let Some(sink) = (unsafe { sink.as_ref() }) else { return false };
+        let (root, ok) = xml::parse_partial(unsafe { bytes_arg(data, len) });
+        emit(&root, sink, ctx);
+        ok
+    })
+}
+
+/// As snapcore_xml_parse, from a file: -1 if the file cannot be read (nothing is sent), 0 if it is malformed, 1 if read.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_load(path: *const u16, len: usize, sink: *const XmlSink, ctx: *mut c_void) -> i32 {
+    guard(-1, || {
+        let (Some(p), Some(sink)) = (unsafe { path_arg(path, len) }, unsafe { sink.as_ref() }) else { return -1 };
+        let Ok(data) = std::fs::read(p) else { return -1 };
+        let (root, ok) = xml::parse_partial(&data);
+        emit(&root, sink, ctx);
+        ok as i32
+    })
+}
+
+/// A document being handed to snapcore element by element (open, attr, text, close), then written out.
+#[derive(Default)]
+pub struct XmlBuilder {
+    stack: Vec<xml::Node>,
+    root: Option<xml::Node>,
+}
+
+impl XmlBuilder {
+    fn finish(mut self) -> xml::Node {
+        while !self.stack.is_empty() {
+            self.close();
+        }
+        self.root.unwrap_or_default()
+    }
+
+    fn close(&mut self) {
+        if let Some(n) = self.stack.pop() {
+            match self.stack.last_mut() {
+                Some(parent) => parent.children.push(n),
+                None => self.root = Some(n),
+            }
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_xml_builder_new() -> *mut XmlBuilder {
+    guard(std::ptr::null_mut(), || Box::into_raw(Box::default()))
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_open(b: *mut XmlBuilder, name: *const u8, len: usize) {
+    guard((), || {
+        if let Some(b) = unsafe { b.as_mut() } {
+            b.stack.push(xml::Node::new(unsafe { text_arg(name, len) }));
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_attr(b: *mut XmlBuilder, k: *const u8, klen: usize, v: *const u8, vlen: usize) {
+    guard((), || {
+        if let Some(n) = unsafe { b.as_mut() }.and_then(|b| b.stack.last_mut()) {
+            n.attrs.push(unsafe { (text_arg(k, klen), text_arg(v, vlen)) });
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_text(b: *mut XmlBuilder, t: *const u8, len: usize) {
+    guard((), || {
+        if let Some(n) = unsafe { b.as_mut() }.and_then(|b| b.stack.last_mut()) {
+            n.text.push_str(&unsafe { text_arg(t, len) });
+        }
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_close(b: *mut XmlBuilder) {
+    guard((), || {
+        if let Some(b) = unsafe { b.as_mut() } {
+            b.close();
+        }
+    })
+}
+
+/// Writes the document as text into *out (free it with snapcore_buf_free) and frees the builder.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_serialize(b: *mut XmlBuilder, declaration: bool, out: *mut SnapBuf) -> bool {
+    guard(false, || {
+        if b.is_null() {
+            return false;
+        }
+        let root = unsafe { Box::from_raw(b) }.finish();
+        if out.is_null() {
+            return false;
+        }
+        let bytes = xml::serialize(&root, declaration).into_bytes().into_boxed_slice();
+        let len = bytes.len();
+        unsafe { *out = SnapBuf { data: Box::into_raw(bytes) as *mut u8, len } };
+        true
+    })
+}
+
+/// Writes the document to a file (with the XML declaration) and frees the builder; false if it cannot be written.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_xml_save(b: *mut XmlBuilder, path: *const u16, len: usize) -> bool {
+    guard(false, || {
+        if b.is_null() {
+            return false;
+        }
+        let root = unsafe { Box::from_raw(b) }.finish();
+        unsafe { path_arg(path, len) }.is_some_and(|p| xml::save_file(&p, &root))
     })
 }

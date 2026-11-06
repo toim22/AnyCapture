@@ -5,6 +5,7 @@
 //! - `log`: %LOCALAPPDATA%\Snapnab\Logs\<program>.log
 //! - `reg`: the settings in HKCU\Software\Snapnab\1
 //! - `i18n`: the interface language and the lang\<code>.po catalogs
+//! - `xml`: the XML reader and writer (presets, .snap documents, Names.xml)
 
 pub mod container;
 pub mod i18n;
@@ -12,5 +13,6 @@ pub mod log;
 pub mod paths;
 pub mod reg;
 pub mod wide;
+pub mod xml;
 
 mod ffi;

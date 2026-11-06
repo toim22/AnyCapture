@@ -21,6 +21,7 @@
 #include "Color.h"
 #include "Net.h"
 #include "Upload.h"
+#include "snapcore.h"
 #include <cstdio>
 #include <mfapi.h>
 #include <mfidl.h>
@@ -28,6 +29,11 @@
 #include <cmath>
 
 using namespace snap;
+
+namespace snap::xmlref {      // the former C++ reader and writer (XmlReference.cpp)
+std::string Serialize(const XmlNode& root, bool decl);
+bool Parse(const std::string& text, XmlNode& root);
+}
 
 static int g_fail = 0;
 static std::wstring TestTempDir() { wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t); std::wstring d = t; if (!d.empty() && d.back() == L'\\') d.pop_back(); return d; }
@@ -1053,6 +1059,149 @@ int wmain(int argc, wchar_t** argv) {
         }
         CHECK(!counts.empty(), "%zu catalogs in the lang folder", counts.size());
         for (auto& [name, n] : counts) CHECK(n == full, "%ls complete (%zu of %zu)", name.c_str(), n, full);
+    }
+
+    printf("[17] XML: Rust and the former C++\n");
+    {
+        // the Rust reader and writer must give the trees and the bytes the C++ ones gave. Strings that are not valid
+        // UTF-8 (only garbage input makes them) are compared by shape: Rust turns the bad bytes into U+FFFD.
+        auto validUtf8 = [](const std::string& t) {
+            return t.empty() || MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, t.data(), (int)t.size(), nullptr, 0) > 0;
+        };
+        auto sameStr = [&](const std::string& ref, const std::string& rust) {
+            return validUtf8(ref) ? ref == rust : validUtf8(rust);
+        };
+        auto same = [&](auto& self, const XmlNode& a, const XmlNode& b) -> bool {
+            if (!sameStr(a.name, b.name) || !sameStr(a.text, b.text) || a.attrs.size() != b.attrs.size() ||
+                a.children.size() != b.children.size()) return false;
+            for (size_t i = 0; i < a.attrs.size(); i++)
+                if (!sameStr(a.attrs[i].first, b.attrs[i].first) || !sameStr(a.attrs[i].second, b.attrs[i].second)) return false;
+            for (size_t i = 0; i < a.children.size(); i++) if (!self(self, a.children[i], b.children[i])) return false;
+            return true;
+        };
+        auto valid = [&](auto& self, const XmlNode& n) -> bool {
+            if (!validUtf8(n.name) || !validUtf8(n.text)) return false;
+            for (auto& [k, v] : n.attrs) if (!validUtf8(k) || !validUtf8(v)) return false;
+            for (auto& c : n.children) if (!self(self, c)) return false;
+            return true;
+        };
+        // one text through both readers; false (and the text shown) when they differ. 'thrown' counts the texts the
+        // former reader could not handle (it threw on "<a><b/" at the very end; the Rust one reports malformed)
+        int thrown = 0;
+        auto compare = [&](const std::string& t) {
+            XmlNode a, b;
+            bool okA;
+            try { okA = xmlref::Parse(t, a); } catch (...) { thrown++; return !XmlParse(t, b); }
+            bool okB = XmlParse(t, b);
+            bool eq = okA == okB && same(same, a, b);
+            if (eq && valid(valid, a))
+                eq = xmlref::Serialize(a, true) == XmlSerialize(b) && xmlref::Serialize(a, false) == XmlSerialize(a, false);
+            if (!eq) printf("       differs: \"%.200s\"\n", t.c_str());
+            return eq;
+        };
+
+        // real documents: the XML files of the user's Snapnab folder (presets, Names.xml…) and the index and frame
+        // documents inside the .snap files of the library, only read
+        std::vector<std::string> real;
+        auto walk = [&](auto& self, const std::wstring& dir) -> void {
+            WIN32_FIND_DATAW fd;
+            HANDLE h = FindFirstFileW((dir + L"\\*").c_str(), &fd);
+            if (h == INVALID_HANDLE_VALUE) return;
+            do {
+                std::wstring n = fd.cFileName, path = dir + L"\\" + n;
+                if (n == L"." || n == L"..") continue;
+                if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) { self(self, path); continue; }
+                std::wstring ext = n.size() > 4 ? n.substr(n.size() - 4) : L"";
+                for (auto& c : ext) c = towlower(c);
+                if (ext == L".xml") {
+                    HANDLE f = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+                    if (f == INVALID_HANDLE_VALUE) continue;
+                    std::string buf(GetFileSize(f, nullptr), '\0');
+                    DWORD rd = 0;
+                    ReadFile(f, buf.data(), (DWORD)buf.size(), &rd, nullptr);
+                    CloseHandle(f);
+                    buf.resize(rd);
+                    real.push_back(std::move(buf));
+                } else if (ext == L"snap") {
+                    SnapcoreReader* r = snapcore_open(path.c_str(), path.size());
+                    if (!r) continue;
+                    auto read = [&](const std::string& stream) {
+                        SnapcoreBuf b{};
+                        if (!snapcore_read(r, stream.data(), stream.size(), &b)) return false;
+                        real.emplace_back(reinterpret_cast<const char*>(b.data), b.len);
+                        snapcore_buf_free(b);
+                        return true;
+                    };
+                    if (read("Index"))
+                        for (int i = 0; i < 64 && read("Frame" + std::to_string(i) + "/Document"); i++) {}
+                    snapcore_close(r);
+                }
+            } while (FindNextFileW(h, &fd));
+            FindClose(h);
+        };
+        walk(walk, AppDataDir());
+        wchar_t extra[MAX_PATH];         // more documents to compare (a copy of another library, for example)
+        if (GetEnvironmentVariableW(L"SNAPNAB_XML_CORPUS", extra, MAX_PATH)) walk(walk, extra);
+        int realBad = 0;
+        for (auto& t : real) if (!compare(t)) realBad++;
+        CHECK(!realBad, "%zu real XML documents (Snapnab folder and .snap files) read and written alike, %d differ", real.size(), realBad);
+
+        // generated text: pieces of XML, malformed on purpose most of the time
+        static const char* pieces[] = { "<a", "<b", "<Frame", ">", "/>", "</a>", "</b>", "</x>", " ", "\n", "\t", "k=",
+            "\"v\"", "'w'", "=", "\"", "'", "&amp;", "&lt;", "&#65;", "&#x1F600;", "&#xD800;", "&#-1;", "&#x0x41;",
+            "&bogus;", "&", ";", "text", "\xC3\xA7", "\xE4\xB8\xAD", "<!-- c -->", "<?pi?>", "<!DOCTYPE d>",
+            "<![CDATA[x<y&z]]>", "\xEF\xBB\xBF", "\r\n" };
+        uint32_t seed = 12345;
+        auto rnd = [&](uint32_t n) { seed = seed * 1664525u + 1013904223u; return (seed >> 8) % n; };
+        int genBad = 0, genOk = 0;
+        const int kTexts = 30000;
+        for (int k = 0; k < kTexts; k++) {
+            std::string t = rnd(4) ? "<a" : "";
+            for (uint32_t n = 1 + rnd(40); n--;) t += pieces[rnd(_countof(pieces))];
+            if (!compare(t)) genBad++;
+            XmlNode tmp;
+            try { if (xmlref::Parse(t, tmp)) genOk++; } catch (...) {}
+        }
+        CHECK(!genBad, "%d generated texts (%d well formed, %d the former reader threw on): %d differ", kTexts, genOk, thrown, genBad);
+
+        // generated trees: written alike, and read back the same by both readers
+        static const char* words[] = { "a", "Frame", "x-y", "\xC3\xA7\xE4\xB8\xAD", "&<>\"'", "\r\n\t", " sp ", "", "1.5" };
+        int treeBad = 0;
+        for (int k = 0; k < 3000; k++) {
+            auto make = [&](auto& self, XmlNode& n, int depth) -> void {
+                n.name = std::string("N") + words[rnd(3)];
+                for (uint32_t i = rnd(4); i--;)
+                    n.attrs.emplace_back("k" + std::to_string(rnd(9)), std::string(words[rnd(_countof(words))]) + words[rnd(_countof(words))]);
+                if (rnd(3) == 0) n.text = std::string(words[rnd(_countof(words))]) + "x";
+                if (depth < 4) for (uint32_t i = rnd(4); i--;) self(self, n.children.emplace_back(), depth + 1);
+            };
+            XmlNode root;
+            make(make, root, 0);
+            std::string a = xmlref::Serialize(root, true), b = XmlSerialize(root);
+            XmlNode ra, rb;
+            if (!(a == b && xmlref::Parse(a, ra) && XmlParse(b, rb) && same(same, ra, rb))) treeBad++;
+        }
+        CHECK(!treeBad, "3000 generated trees written byte for byte alike and read back alike (%d differ)", treeBad);
+
+        // files: written by Rust, read back by Rust and by the former reader
+        std::wstring xp = Tmp(L"xml.xml");
+        XmlNode doc("Presets");
+        doc.add("Preset").setW("Name", L"Região ç → 中文 😀").set("Hotkey", "Ctrl+\"<&>\"");
+        XmlNode back, refBack, untouched("Keep");
+        bool saved = XmlSaveFile(xp, doc), loaded = XmlLoadFile(xp, back);
+        std::string bytes;
+        HANDLE f = CreateFileW(xp.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        if (f != INVALID_HANDLE_VALUE) {
+            bytes.resize(GetFileSize(f, nullptr));
+            DWORD rd = 0;
+            ReadFile(f, bytes.data(), (DWORD)bytes.size(), &rd, nullptr);
+            CloseHandle(f);
+        }
+        DeleteFileW(xp.c_str());
+        bool missing = !XmlLoadFile(xp, untouched) && untouched.name == "Keep";
+        CHECK(saved && loaded && bytes == xmlref::Serialize(doc, true) && xmlref::Parse(bytes, refBack) && same(same, refBack, back) &&
+              back.child("Preset") && back.child("Preset")->getW("Name") == L"Região ç → 中文 😀" && missing,
+              "XML file written and read back; a missing file leaves the tree as it was");
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);
