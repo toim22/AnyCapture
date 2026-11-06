@@ -6,7 +6,8 @@
     python scripts/i18n.py check      checks the catalogs: missing strings and %d/%s markers that differ from the original
 
 The strings in the code are Brazilian Portuguese. Mark them with Tr(L"...") where the string is shown or with
-TR_NOOP(L"...") in static tables (which call Tr() when showing it). The names of the built-in stamps
+TR_NOOP(L"...") in static tables (which call Tr() when showing it); in the Rust code (rust/), with tr!("...").
+The names of the built-in stamps
 (src/editor/Stamps.cpp) are extracted too, one by one. The msgid is the literal's text as it is in the code (the \\n,
 \\t, \\" and \\\\ escapes are the same as in the .po).
 """
@@ -19,6 +20,7 @@ LANG_DIR = os.path.join(ROOT, 'lang')
 POT = os.path.join(LANG_DIR, 'snapnab.pot')
 
 CALL = re.compile(r'\b(Tr|TR_NOOP)\(\s*((?:L"(?:[^"\\]|\\.)*"\s*)+)\)')
+RUST_CALL = re.compile(r'\btr!\(\s*"((?:[^"\\]|\\.)*)"\s*\)')
 LIT = re.compile(r'L"((?:[^"\\]|\\.)*)"')
 SPEC = re.compile(r'%(?:\d+\$)?[-+ #0]*(?:\d+|\*)?(?:\.\d+)?(?:hh|h|ll|l|z|j|t|I64|I32|L)?([diouxXeEfgGaAcspSn%])')
 
@@ -45,6 +47,37 @@ def strip_comments(src):
             while j < n and src[j] != "'":
                 j += 2 if src[j] == '\\' else 1
             out.append(src[i:j + 1]); i = j + 1
+        else:
+            out.append(src[i]); i += 1
+    return ''.join(out)
+
+
+def strip_rust_comments(src):
+    # as strip_comments, for Rust: raw strings r#"…"# and lifetimes ('a) are not character literals
+    out, i, n = [], 0, len(src)
+    while i < n:
+        if src.startswith('//', i):
+            j = src.find('\n', i)
+            j = n if j < 0 else j
+            out.append(' ' * (j - i)); i = j
+        elif src.startswith('/*', i):
+            j = src.find('*/', i + 2)
+            j = n if j < 0 else j + 2
+            out.append(re.sub(r'[^\n]', ' ', src[i:j])); i = j
+        elif re.match(r'b?r#*"', src[i:i + 8]) and (i == 0 or not (src[i - 1].isalnum() or src[i - 1] == '_')):
+            m = re.match(r'b?r(#*)"', src[i:])
+            end = '"' + m.group(1)
+            j = src.find(end, i + m.end())
+            j = n if j < 0 else j + len(end)
+            out.append(src[i:j]); i = j
+        elif src[i] == '"':
+            j = i + 1
+            while j < n and src[j] != '"':
+                j += 2 if src[j] == '\\' else 1
+            out.append(src[i:j + 1]); i = j + 1
+        elif src[i] == "'" and re.match(r"'(?:\\.[^']*|[^\\'\n])'", src[i:i + 12]):
+            m = re.match(r"'(?:\\.[^']*|[^\\'\n])'", src[i:])
+            out.append(m.group(0)); i += m.end()
         else:
             out.append(src[i]); i += 1
     return ''.join(out)
@@ -77,6 +110,16 @@ def extract():
                     for item in ''.join(LIT.findall(m.group(1))).split('|'):
                         if ' ' in item:
                             add(item.split(' ', 1)[1], f'{rel}:{line}')
+    for dp, dn, fn in os.walk(os.path.join(ROOT, 'rust')):
+        dn[:] = sorted(d for d in dn if d != 'target')
+        for f in sorted(fn):
+            if not f.endswith('.rs'):
+                continue
+            path = os.path.join(dp, f)
+            rel = os.path.relpath(path, ROOT).replace('\\', '/')
+            src = strip_rust_comments(open(path, encoding='utf-8').read())
+            for m in RUST_CALL.finditer(src):
+                add(m.group(1), f'{rel}:{src.count(chr(10), 0, m.start()) + 1}')
     return order, entries
 
 

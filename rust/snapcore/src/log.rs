@@ -17,6 +17,12 @@ use crate::wide::to_wide;
 const ROTATE_AT: u64 = 2 * 1024 * 1024;
 
 static FILE: Mutex<Option<PathBuf>> = Mutex::new(None);
+static VERSION: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+
+/// The program version `init` was given ("" before), for the HTTP user agent.
+pub fn app_version() -> &'static str {
+    VERSION.get().map_or("", |v| v.as_str())
+}
 
 /// Opens the log of `component` ("Snapnab", "SnapnabEditor") and writes the start line.
 pub fn init(component: &str, version: &str) {
@@ -27,6 +33,7 @@ pub fn init(component: &str, version: &str) {
         let _ = std::fs::rename(&path, old);
     }
     *FILE.lock().unwrap_or_else(|e| e.into_inner()) = Some(path);
+    let _ = VERSION.set(version.to_owned());
     write(&format!("==== {component} {version} started (pid {}) ====", std::process::id()));
 }
 

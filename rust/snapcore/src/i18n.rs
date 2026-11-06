@@ -147,6 +147,60 @@ pub fn tr(pt: &[u16]) -> Option<&'static [u16]> {
     catalog()?.map.get(pt).map(|v| &v[..])
 }
 
+/// The translation of `pt` as text, or `pt` itself when there is none. Called through `tr!("…")`, which
+/// scripts/i18n.py finds in the Rust sources as it finds `Tr(L"…")` in the C++ ones.
+pub fn tr_str(pt: &str) -> String {
+    let w: Vec<u16> = pt.encode_utf16().collect();
+    match tr(&w) {
+        Some(t) => String::from_utf16_lossy(t.strip_suffix(&[0]).unwrap_or(t)),
+        None => pt.to_owned(),
+    }
+}
+
+/// A translated text with its printf markers (%s, %ls, %d, %i, %u) filled in order and %% as %, as Format did.
+pub fn fill(t: &str, args: &[&dyn std::fmt::Display]) -> String {
+    let mut out = String::new();
+    let mut next = args.iter();
+    let mut it = t.chars().peekable();
+    while let Some(c) = it.next() {
+        if c != '%' {
+            out.push(c);
+            continue;
+        }
+        match it.peek().copied() {
+            Some('%') => {
+                it.next();
+                out.push('%');
+            }
+            Some('l') => {
+                it.next();
+                if it.peek() == Some(&'s') {
+                    it.next();
+                }
+                if let Some(a) = next.next() {
+                    out.push_str(&a.to_string());
+                }
+            }
+            Some('s' | 'd' | 'i' | 'u') => {
+                it.next();
+                if let Some(a) = next.next() {
+                    out.push_str(&a.to_string());
+                }
+            }
+            _ => out.push('%'),
+        }
+    }
+    out
+}
+
+/// `tr!("Texto")`: the translation of a Portuguese string of the program (see `tr_str`).
+#[macro_export]
+macro_rules! tr {
+    ($pt:literal) => {
+        $crate::i18n::tr_str($pt)
+    };
+}
+
 /// Language in use ("pt" before `init`).
 pub fn current() -> &'static str {
     catalog().map_or("pt", |c| c.code)

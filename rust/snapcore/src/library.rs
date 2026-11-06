@@ -33,7 +33,7 @@ use crate::codec::{self, Format, SaveOptions};
 use crate::image::Image;
 use crate::wide::{to_os, to_string_lossy};
 use crate::xml::{self, Node};
-use crate::{i18n, log, reg, snap};
+use crate::{log, reg, snap};
 
 /// A UTF-16 string without the terminating nul.
 pub type W = Vec<u16>;
@@ -216,8 +216,7 @@ pub fn audio_dir() -> W {
 }
 
 pub fn new_audio_path(mp3: bool) -> W {
-    let pt = w("Audio");
-    let name = i18n::tr(&pt).map_or(pt.clone(), |t| t.to_vec());
+    let name = w(&crate::tr!("Audio"));
     cat(&[&audio_dir(), &w("\\"), &name, &w("_"), &time_stamp(false), &w(if mp3 { ".mp3" } else { ".m4a" })])
 }
 

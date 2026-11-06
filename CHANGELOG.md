@@ -12,6 +12,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   (or `-DSNAPNAB_RUST=OFF`).
 - QR codes and barcodes are read by rxing, a Rust port of ZXing, instead of ZXing-C++; several codes in one picture
   are listed top to bottom.
+- The uploads, the sign-in to Dropbox, Google Drive and OneDrive and the AI assistant's requests run in Rust. The
+  `{regex:…}` of a custom uploader (.sxcu) uses Rust's regular expressions: no look-around or backreferences.
 
 ## [0.4.1] — 2026-11-03
 

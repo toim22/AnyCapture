@@ -6,6 +6,7 @@
 #include "EditorTools.h"
 #include "Clipboard.h"
 #include "Net.h"
+#include "SnapcoreBridge.h"
 #include "Ui.h"
 #include "Xml.h"
 #include <thread>
@@ -75,71 +76,23 @@ std::wstring HostOf(const std::wstring& url) {
     return url.substr(a, b == std::wstring::npos ? std::wstring::npos : b - a);
 }
 
-std::wstring Trimmed(std::wstring s) { while (!s.empty() && s.back() == L'/') s.pop_back(); return s; }
-
-// one request; returns the answer text or throws the error text through 'err'
+// one request (built and read by snapcore, rust/snapcore/src/ai.rs); returns the answer text or the error through 'err'
 std::wstring Ask(const AiSettings& s, const std::wstring& key, const Image& img, const std::wstring& question, std::wstring& err) {
     Image im = img;
     int longSide = std::max(im.w, im.h);
     if (longSide > 2000) im = ScaleImage(im, std::max(1, im.w * 2000 / longSide), std::max(1, im.h * 2000 / longSide));
     std::vector<BYTE> png;
     if (!EncodeToMemory(im, ImageFormat::PNG, png)) { err = Tr(L"Não foi possível preparar a imagem."); return L""; }
-    std::string b64 = Base64Encode(png);
     // answers in the interface language
     std::wstring langName;
     for (auto& l : i18n::Languages()) if (i18n::Current() == l.code) langName = l.name;
-    std::string q = WToUtf8(question + (langName.empty() ? L"" : L"\n\n(Answer in " + langName + L".)"));
-    using net::Json;
-    std::wstring url;
-    std::vector<std::wstring> headers = { L"Content-Type: application/json" };
-    Json body = Json::Obj();
-    if (s.provider == Gemini) {
-        url = Trimmed(s.endpoint) + L"/models/" + s.model + L":generateContent";
-        headers.push_back(L"x-goog-api-key: " + key);
-        Json parts = Json::Arr();
-        parts.Push(Json::Obj().Set("text", Json::Str(q)));
-        parts.Push(Json::Obj().Set("inline_data", Json::Obj().Set("mime_type", Json::Str("image/png")).Set("data", Json::Str(b64))));
-        body.Set("contents", Json::Arr().Push(Json::Obj().Set("parts", parts)));
-    } else if (s.provider == Anthropic) {
-        url = Trimmed(s.endpoint) + L"/messages";
-        headers.push_back(L"x-api-key: " + key);
-        headers.push_back(L"anthropic-version: 2023-06-01");
-        Json content = Json::Arr();
-        content.Push(Json::Obj().Set("type", Json::Str("image")).Set("source", Json::Obj().Set("type", Json::Str("base64"))
-                                   .Set("media_type", Json::Str("image/png")).Set("data", Json::Str(b64))));
-        content.Push(Json::Obj().Set("type", Json::Str("text")).Set("text", Json::Str(q)));
-        body.Set("model", Json::Str(WToUtf8(s.model))).Set("max_tokens", Json::Num(2048))
-            .Set("messages", Json::Arr().Push(Json::Obj().Set("role", Json::Str("user")).Set("content", content)));
-    } else {                                    // OpenAI and compatible (also Ollama's /v1)
-        url = Trimmed(s.endpoint) + L"/chat/completions";
-        if (!key.empty()) headers.push_back(L"Authorization: Bearer " + key);
-        Json content = Json::Arr();
-        content.Push(Json::Obj().Set("type", Json::Str("text")).Set("text", Json::Str(q)));
-        content.Push(Json::Obj().Set("type", Json::Str("image_url")).Set("image_url", Json::Obj().Set("url", Json::Str("data:image/png;base64," + b64))));
-        body.Set("model", Json::Str(WToUtf8(s.model)))
-            .Set("messages", Json::Arr().Push(Json::Obj().Set("role", Json::Str("user")).Set("content", content)));
-    }
-    net::Response r = net::Request(L"POST", url, headers, body.Dump(), 120000);
-    if (r.status == 0) { err = Tr(L"Sem resposta do provedor: ") + r.error; return L""; }
-    Json j;
-    bool parsed = Json::Parse(r.body, j);
-    if (!r.ok()) {
-        std::string msg;
-        if (parsed) {
-            for (const char* p : { "error.message", "error.error.message", "message", "error" })
-                if (const Json* e = j.Path(p)) { msg = e->Text(); if (!msg.empty()) break; }
-        }
-        err = Format(Tr(L"O provedor respondeu %d: "), r.status) + Utf8ToW(msg.empty() ? r.body.substr(0, 300) : msg);
-        return L"";
-    }
-    if (!parsed) { err = Tr(L"Resposta inválida do provedor."); return L""; }
-    const char* path = s.provider == Gemini ? "candidates[0].content.parts[0].text" : s.provider == Anthropic ? "content[0].text" : "choices[0].message.content";
-    const Json* t = j.Path(path);
-    std::string text = t ? t->Text() : "";
-    if (text.empty()) { err = Tr(L"O provedor não devolveu texto."); return L""; }
-    std::wstring w = Utf8ToW(text), out;
-    for (wchar_t c : w) { if (c == L'\n' && (out.empty() || out.back() != L'\r')) out += L'\r'; out += c; }
-    return out;
+    std::wstring q = question + (langName.empty() ? L"" : L"\n\n(Answer in " + langName + L".)");
+    SnapcoreWStr out{};
+    bool ok = snapcore_ai_ask(s.provider, s.endpoint.c_str(), s.model.c_str(), key.c_str(), png.data(), png.size(), q.c_str(), &out);
+    std::wstring t = TakeWStr(out);
+    if (ok) return t;
+    err = t;
+    return L"";
 }
 
 // ---------------------------------------------------------------- window

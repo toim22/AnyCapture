@@ -453,7 +453,7 @@ SOFTWARE
 
 
 -------------------------------------------------------------------------------
-The crates rxing uses (MIT, or MIT OR Apache-2.0 / Unlicense OR MIT used under MIT)
+The crates rxing uses, regex also by snapcore itself (MIT, or MIT OR Apache-2.0 / Unlicense OR MIT used under MIT)
 -------------------------------------------------------------------------------
 
   aho-corasick 1.1.5, memchr 2.8.3       Copyright (c) 2015 Andrew Gallant

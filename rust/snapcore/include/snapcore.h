@@ -260,6 +260,46 @@ int32_t snapcore_detect_faces(const SnapcoreImageIn* img, SnapcoreFaceSink sink,
 typedef void (*SnapcoreCodeSink)(void* ctx, const char* text, size_t len, const char* format, SnapcoreRect r, bool url);
 size_t snapcore_barcode_read(const SnapcoreImageIn* img, SnapcoreCodeSink sink, void* ctx);
 
+// ---- uploads (Upload.cpp): Uploaders.xml as the C++ Settings has it; strings nul-terminated (null = "")
+struct SnapcoreUploadSettings {
+    int32_t dest;
+    const wchar_t* s3Endpoint; const wchar_t* s3Region; const wchar_t* s3Bucket; const wchar_t* s3Prefix;
+    const wchar_t* s3AccessKey; const wchar_t* s3PublicUrl;
+    bool s3PathStyle; bool s3PublicRead;
+    const wchar_t* dropboxAppKey; const wchar_t* googleClientId; const wchar_t* msClientId; const wchar_t* folder;
+    bool publicLink;
+    const wchar_t* host; const wchar_t* user; const wchar_t* keyFile; const wchar_t* httpBase;
+    int32_t port;
+    const wchar_t* customJson;
+    bool copyLink;
+};
+SnapcoreUploadSettings* snapcore_upload_settings_load();           // free with snapcore_upload_settings_free
+void snapcore_upload_settings_free(SnapcoreUploadSettings* s);
+bool snapcore_upload_settings_save(const SnapcoreUploadSettings* s);
+bool snapcore_upload_configured(const SnapcoreUploadSettings* s);
+struct SnapcoreUploadResult { bool ok; SnapcoreWStr url, deleteUrl, thumbnailUrl, error; };   // each string: snapcore_wstr_free
+bool snapcore_upload_file(const SnapcoreUploadSettings* s, const wchar_t* path, size_t pathLen, const wchar_t* remote, size_t remoteLen,
+                          SnapcoreUploadResult* out);               // blocking: call from a worker thread
+bool snapcore_upload_custom_valid(const char* utf8, size_t len);    // a .sxcu: JSON with a RequestURL
+bool snapcore_upload_url_get(const wchar_t* item, size_t len, SnapcoreWStr* out);              // Library\Uploads.xml
+void snapcore_upload_url_set(const wchar_t* item, size_t len, const wchar_t* url, size_t urlLen);
+// sign-in (OAuth with PKCE): the page to open (or null and the error), the loopback poll, the code exchanged for the
+// refresh token (Dropbox: the code the user pasted; false with the error, "" when there is nothing to say)
+struct SnapcoreSignIn;
+SnapcoreSignIn* snapcore_signin_begin(const SnapcoreUploadSettings* s, SnapcoreWStr* urlOrError);
+bool snapcore_signin_poll(SnapcoreSignIn* si);
+bool snapcore_signin_finish(SnapcoreSignIn* si, const wchar_t* code, size_t len, SnapcoreWStr* error);
+void snapcore_signin_free(SnapcoreSignIn* si);
+
+// ---- secrets (Windows Credential Manager, generic credential "Snapnab/<name>"), nul-terminated names and values
+bool snapcore_secret_save(const wchar_t* name, const wchar_t* value);
+bool snapcore_secret_load(const wchar_t* name, SnapcoreWStr* out);   // "" if there is none
+void snapcore_secret_delete(const wchar_t* name);
+
+// ---- the AI assistant's request (Assistant.cpp), blocking: true with the answer (CR LF lines), false with the error
+bool snapcore_ai_ask(int32_t provider, const wchar_t* endpoint, const wchar_t* model, const wchar_t* key, const uint8_t* png,
+                     size_t pngLen, const wchar_t* question, SnapcoreWStr* out);
+
 // ---- animated GIF (Gif.cpp): frames at the GIF's size (the caller scales them)
 struct SnapcoreGif;
 SnapcoreGif* snapcore_gif_open(const wchar_t* path, size_t len, int32_t w, int32_t h, double fps, int32_t bitsPerPixel,

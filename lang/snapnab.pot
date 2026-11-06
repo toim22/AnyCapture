@@ -215,7 +215,7 @@ msgstr ""
 msgid "Intervalo"
 msgstr ""
 
-#: src/capture/IntervalCapture.cpp:49 src/capture/main.cpp:486 src/common/Upload.cpp:705 src/common/Upload.cpp:711 …
+#: src/capture/IntervalCapture.cpp:49 src/capture/main.cpp:486 src/common/Upload.cpp:237 src/common/Upload.cpp:243 …
 msgid "Pasta"
 msgstr ""
 
@@ -397,7 +397,7 @@ msgstr ""
 msgid "A área de transferência não tem imagem nem texto para fixar."
 msgstr ""
 
-#: src/capture/Presets.cpp:7 src/common/Upload.cpp:697
+#: src/capture/Presets.cpp:7 src/common/Upload.cpp:229
 msgid "Região"
 msgstr ""
 
@@ -477,7 +477,7 @@ msgstr ""
 msgid "Capturar texto"
 msgstr ""
 
-#: src/capture/QuickOverlay.cpp:58 src/editor/Assistant.cpp:215
+#: src/capture/QuickOverlay.cpp:58 src/editor/Assistant.cpp:168
 msgid "Copiar"
 msgstr ""
 
@@ -497,7 +497,7 @@ msgstr ""
 msgid "Excluir da biblioteca"
 msgstr ""
 
-#: src/capture/QuickOverlay.cpp:63 src/editor/Assistant.cpp:218 src/editor/Compare.cpp:146 src/editor/EditorTools.cpp:735
+#: src/capture/QuickOverlay.cpp:63 src/editor/Assistant.cpp:171 src/editor/Compare.cpp:146 src/editor/EditorTools.cpp:735
 msgid "Fechar"
 msgstr ""
 
@@ -900,11 +900,11 @@ msgstr ""
 msgid "Tamanho (px)"
 msgstr ""
 
-#: src/capture/main.cpp:263 src/common/Beautify.cpp:206 src/editor/main.cpp:409 src/editor/main.cpp:2155
+#: src/capture/main.cpp:263 src/common/Beautify.cpp:121 src/editor/main.cpp:409 src/editor/main.cpp:2155
 msgid "Direita"
 msgstr ""
 
-#: src/capture/main.cpp:264 src/common/Beautify.cpp:205 src/editor/main.cpp:408 src/editor/main.cpp:2155
+#: src/capture/main.cpp:264 src/common/Beautify.cpp:120 src/editor/main.cpp:408 src/editor/main.cpp:2155
 msgid "Esquerda"
 msgstr ""
 
@@ -1333,19 +1333,19 @@ msgstr ""
 msgid "Canto da miniatura"
 msgstr ""
 
-#: src/capture/main.cpp:786 src/common/Beautify.cpp:206 src/editor/main.cpp:2151
+#: src/capture/main.cpp:786 src/common/Beautify.cpp:121 src/editor/main.cpp:2151
 msgid "Inferior direito"
 msgstr ""
 
-#: src/capture/main.cpp:786 src/common/Beautify.cpp:206 src/editor/main.cpp:2151
+#: src/capture/main.cpp:786 src/common/Beautify.cpp:121 src/editor/main.cpp:2151
 msgid "Inferior esquerdo"
 msgstr ""
 
-#: src/capture/main.cpp:786 src/common/Beautify.cpp:205 src/editor/main.cpp:2151
+#: src/capture/main.cpp:786 src/common/Beautify.cpp:120 src/editor/main.cpp:2151
 msgid "Superior direito"
 msgstr ""
 
-#: src/capture/main.cpp:786 src/common/Beautify.cpp:205 src/editor/main.cpp:2151
+#: src/capture/main.cpp:786 src/common/Beautify.cpp:120 src/editor/main.cpp:2151
 msgid "Superior esquerdo"
 msgstr ""
 
@@ -1582,7 +1582,7 @@ msgstr ""
 msgid "Snapnab — linha de comando"
 msgstr ""
 
-#: src/capture/main.cpp:1222 src/capture/main.cpp:1708 src/common/Beautify.cpp:199 src/common/Clipboard.cpp:76 …
+#: src/capture/main.cpp:1222 src/capture/main.cpp:1708 src/common/Beautify.cpp:114 src/common/Clipboard.cpp:76 …
 msgid "Imagem"
 msgstr ""
 
@@ -1991,150 +1991,150 @@ msgstr ""
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr ""
 
-#: src/common/Barcode.cpp:42
+#: src/common/Barcode.cpp:20
 msgid "Nenhum código QR ou de barras encontrado na imagem."
 msgstr ""
 
-#: src/common/Barcode.cpp:54
+#: src/common/Barcode.cpp:32
 #, c-format
 msgid ""
 "Copiar %zu\n"
 "%s"
 msgstr ""
 
-#: src/common/Barcode.cpp:56
+#: src/common/Barcode.cpp:34
 #, c-format
 msgid ""
 "Abrir o link %zu\n"
 "%s"
 msgstr ""
 
-#: src/common/Barcode.cpp:58 src/common/Ui.cpp:435 src/editor/main.cpp:2460
+#: src/common/Barcode.cpp:36 src/common/Ui.cpp:435 src/editor/main.cpp:2460
 msgid "Copiar tudo"
 msgstr ""
 
-#: src/common/Barcode.cpp:60
+#: src/common/Barcode.cpp:38
 msgid "1 código encontrado"
 msgstr ""
 
-#: src/common/Barcode.cpp:60
+#: src/common/Barcode.cpp:38
 #, c-format
 msgid "%zu códigos encontrados"
 msgstr ""
 
-#: src/common/Beautify.cpp:39
+#: src/common/Beautify.cpp:40
 msgid "Livre"
 msgstr ""
 
-#: src/common/Beautify.cpp:166
+#: src/common/Beautify.cpp:81
 msgid "Oceano"
 msgstr ""
 
-#: src/common/Beautify.cpp:167
+#: src/common/Beautify.cpp:82
 msgid "Pôr do sol"
 msgstr ""
 
-#: src/common/Beautify.cpp:168
+#: src/common/Beautify.cpp:83
 msgid "Menta"
 msgstr ""
 
-#: src/common/Beautify.cpp:169
+#: src/common/Beautify.cpp:84
 msgid "Grafite"
 msgstr ""
 
-#: src/common/Beautify.cpp:170 src/common/Beautify.cpp:199
+#: src/common/Beautify.cpp:85 src/common/Beautify.cpp:114
 msgid "Papel de parede"
 msgstr ""
 
-#: src/common/Beautify.cpp:171
+#: src/common/Beautify.cpp:86
 msgid "Branco simples"
 msgstr ""
 
-#: src/common/Beautify.cpp:196
+#: src/common/Beautify.cpp:111
 msgid "(ajustes abaixo)"
 msgstr ""
 
-#: src/common/Beautify.cpp:198
+#: src/common/Beautify.cpp:113
 msgid "Predefinição"
 msgstr ""
 
-#: src/common/Beautify.cpp:199 src/editor/EditorTools.cpp:708
+#: src/common/Beautify.cpp:114 src/editor/EditorTools.cpp:708
 msgid "Fundo"
 msgstr ""
 
-#: src/common/Beautify.cpp:199
+#: src/common/Beautify.cpp:114
 msgid "Cor sólida"
 msgstr ""
 
-#: src/common/Beautify.cpp:199
+#: src/common/Beautify.cpp:114
 msgid "Degradê"
 msgstr ""
 
-#: src/common/Beautify.cpp:199 src/editor/main.cpp:410 src/editor/main.cpp:544
+#: src/common/Beautify.cpp:114 src/editor/main.cpp:410 src/editor/main.cpp:544
 msgid "Transparente"
 msgstr ""
 
-#: src/common/Beautify.cpp:200
+#: src/common/Beautify.cpp:115
 msgid "Cor 1"
 msgstr ""
 
-#: src/common/Beautify.cpp:200
+#: src/common/Beautify.cpp:115
 msgid "Cor 2 (degradê)"
 msgstr ""
 
-#: src/common/Beautify.cpp:201
+#: src/common/Beautify.cpp:116
 msgid "Ângulo do degradê"
 msgstr ""
 
-#: src/common/Beautify.cpp:201
+#: src/common/Beautify.cpp:116
 msgid "Imagem de fundo"
 msgstr ""
 
-#: src/common/Beautify.cpp:202 src/editor/EditorTools.cpp:91
+#: src/common/Beautify.cpp:117 src/editor/EditorTools.cpp:91
 msgid "Margem (px)"
 msgstr ""
 
-#: src/common/Beautify.cpp:202
+#: src/common/Beautify.cpp:117
 msgid "Cantos arredondados (px)"
 msgstr ""
 
-#: src/common/Beautify.cpp:203
+#: src/common/Beautify.cpp:118
 msgid "Sombra (%)"
 msgstr ""
 
-#: src/common/Beautify.cpp:203
+#: src/common/Beautify.cpp:118
 msgid "Tamanho da sombra (px)"
 msgstr ""
 
-#: src/common/Beautify.cpp:204
+#: src/common/Beautify.cpp:119
 msgid "Proporção"
 msgstr ""
 
-#: src/common/Beautify.cpp:205 src/editor/EditorTools.cpp:92 src/editor/PropsPanel.cpp:536
+#: src/common/Beautify.cpp:120 src/editor/EditorTools.cpp:92 src/editor/PropsPanel.cpp:536
 msgid "Alinhamento"
 msgstr ""
 
-#: src/common/Beautify.cpp:205 src/editor/main.cpp:408
+#: src/common/Beautify.cpp:120 src/editor/main.cpp:408
 msgid "Superior"
 msgstr ""
 
-#: src/common/Beautify.cpp:205 src/editor/EditorTools.cpp:92 src/editor/main.cpp:408
+#: src/common/Beautify.cpp:120 src/editor/EditorTools.cpp:92 src/editor/main.cpp:408
 msgid "Centro"
 msgstr ""
 
-#: src/common/Beautify.cpp:206 src/editor/main.cpp:409
+#: src/common/Beautify.cpp:121 src/editor/main.cpp:409
 msgid "Inferior"
 msgstr ""
 
-#: src/common/Beautify.cpp:207
+#: src/common/Beautify.cpp:122
 msgid "Equilibrar as margens (corta bordas lisas da captura)"
 msgstr ""
 
-#: src/common/Beautify.cpp:208
+#: src/common/Beautify.cpp:123
 msgid "Salvar como predefinição (nome)"
 msgstr ""
 
-#: src/common/Beautify.cpp:222 src/common/Beautify.cpp:227 src/editor/main.cpp:1454
+#: src/common/Beautify.cpp:137 src/common/Beautify.cpp:142 src/editor/main.cpp:1454
 msgid "Embelezar"
 msgstr ""
 
@@ -2182,55 +2182,51 @@ msgstr ""
 msgid "Snapnab — conta-gotas"
 msgstr ""
 
-#: src/common/Image.cpp:186
+#: src/common/Image.cpp:174
 msgid "Para abrir fotos HEIC, instale da Microsoft Store as extensões \"Extensões de Imagem HEIF\" e \"Extensões de Vídeo HEVC\"."
 msgstr ""
 
-#: src/common/Image.cpp:188
+#: src/common/Image.cpp:176
 msgid "Para usar AVIF, instale da Microsoft Store a \"Extensão de Vídeo AV1\" e as \"Extensões de Imagem HEIF\". Salvar em AVIF também precisa de um codificador AV1 (placas de vídeo recentes)."
 msgstr ""
 
-#: src/common/Image.cpp:197 src/common/Image.cpp:200
+#: src/common/Image.cpp:184
 msgid "Arquivo WebP inválido."
 msgstr ""
 
-#: src/common/Image.cpp:209
-msgid "Falha ao codificar WebP."
-msgstr ""
-
-#: src/common/Image.cpp:359
+#: src/common/Image.cpp:242
 msgid "Formato de imagem não suportado."
 msgstr ""
 
-#: src/common/Image.cpp:588
+#: src/common/Image.cpp:279
+msgid "Falha ao codificar WebP."
+msgstr ""
+
+#: src/common/Image.cpp:340
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr ""
 
-#: src/common/Image.cpp:596
+#: src/common/Image.cpp:348
 msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Documento Snapnab (*.snap)|*.snap|"
 msgstr ""
 
-#: src/common/Library.cpp:95
-msgid "Audio"
-msgstr ""
-
-#: src/common/Ocr.cpp:159 src/common/Ocr.cpp:244 src/editor/Pdf.cpp:25
+#: src/common/Ocr.cpp:17 src/editor/Pdf.cpp:21
 msgid "Imagem vazia."
 msgstr ""
 
-#: src/common/Ocr.cpp:176 src/common/Ocr.cpp:266
+#: src/common/Ocr.cpp:18
 msgid "Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma)."
 msgstr ""
 
-#: src/common/Ocr.cpp:200 src/common/Ocr.cpp:274
+#: src/common/Ocr.cpp:19
 msgid "Falha desconhecida no OCR."
 msgstr ""
 
-#: src/common/Ocr.cpp:220
+#: src/common/Ocr.cpp:20
 msgid "A detecção de rostos não está disponível neste Windows."
 msgstr ""
 
-#: src/common/Ocr.cpp:235
+#: src/common/Ocr.cpp:21
 msgid "Falha na detecção de rostos."
 msgstr ""
 
@@ -2276,413 +2272,301 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: src/common/Upload.cpp:19
+#: src/common/Upload.cpp:12 rust/snapcore/src/upload.rs:64
 msgid "Armazenamento S3 (AWS e compatíveis)"
 msgstr ""
 
-#: src/common/Upload.cpp:25
+#: src/common/Upload.cpp:18 rust/snapcore/src/upload.rs:70
 msgid "Enviador HTTP personalizado (.sxcu)"
 msgstr ""
 
-#: src/common/Upload.cpp:26
+#: src/common/Upload.cpp:19 rust/snapcore/src/upload.rs:71
 msgid "Nenhum (desligado)"
 msgstr ""
 
-#: src/common/Upload.cpp:181
-msgid "Snapnab: login concluído. Você já pode fechar esta janela."
-msgstr ""
-
-#: src/common/Upload.cpp:198
-msgid "Conclua o login no navegador"
-msgstr ""
-
-#: src/common/Upload.cpp:199
-msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
-msgstr ""
-
-#: src/common/Upload.cpp:218
-msgid "Falha ao renovar o acesso (faça login de novo nas opções de upload)"
-msgstr ""
-
-#: src/common/Upload.cpp:248
-msgid "Configure o bucket e as chaves do S3."
-msgstr ""
-
-#: src/common/Upload.cpp:265
-msgid "Falha no upload para o S3"
-msgstr ""
-
-#: src/common/Upload.cpp:275
-msgid "O Dropbox aceita até 150 MB por envio pela API."
-msgstr ""
-
-#: src/common/Upload.cpp:283
-msgid "Falha no upload para o Dropbox"
-msgstr ""
-
-#: src/common/Upload.cpp:294 src/common/Upload.cpp:349
-msgid "O arquivo foi enviado, mas o link não pôde ser criado"
-msgstr ""
-
-#: src/common/Upload.cpp:322
-msgid "Falha no upload para o Google Drive"
-msgstr ""
-
-#: src/common/Upload.cpp:341
-msgid "Falha no upload para o OneDrive"
-msgstr ""
-
-#: src/common/Upload.cpp:366
-#, c-format
-msgid "Não foi possível conectar ao FTP (%u)."
-msgstr ""
-
-#: src/common/Upload.cpp:374
-#, c-format
-msgid "O servidor FTP recusou o arquivo (%u)."
-msgstr ""
-
-#: src/common/Upload.cpp:383
-msgid "O cliente OpenSSH do Windows não está instalado (Configurações › Sistema › Recursos opcionais)."
-msgstr ""
-
-#: src/common/Upload.cpp:396
-msgid "Não foi possível iniciar o sftp."
-msgstr ""
-
-#: src/common/Upload.cpp:403
-#, c-format
-msgid "O SFTP falhou (código %u). Use autenticação por chave (sem senha) e confira host, usuário e pasta."
-msgstr ""
-
-#: src/common/Upload.cpp:411
-msgid "O enviador personalizado não é um JSON válido."
-msgstr ""
-
-#: src/common/Upload.cpp:417
-msgid "O enviador personalizado não tem RequestURL."
-msgstr ""
-
-#: src/common/Upload.cpp:446
+#: src/common/Upload.cpp:100 rust/snapcore/src/upload.rs:760
 msgid "Falha no envio"
 msgstr ""
 
-#: src/common/Upload.cpp:455
-msgid "O servidor respondeu, mas o link não foi encontrado na resposta."
-msgstr ""
-
-#: src/common/Upload.cpp:543
-msgid "Nenhum destino de upload configurado."
-msgstr ""
-
-#: src/common/Upload.cpp:552
-msgid "Não foi possível ler o arquivo."
-msgstr ""
-
-#: src/common/Upload.cpp:605 src/editor/Assistant.cpp:86
+#: src/common/Upload.cpp:149 src/editor/Assistant.cpp:85
 msgid "Não foi possível preparar a imagem."
 msgstr ""
 
-#: src/common/Upload.cpp:639
+#: src/common/Upload.cpp:169
+msgid "Conclua o login no navegador"
+msgstr ""
+
+#: src/common/Upload.cpp:170
+msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
+msgstr ""
+
+#: src/common/Upload.cpp:198
 msgid "Autorize no navegador e cole aqui o código que o Dropbox mostrar."
 msgstr ""
 
-#: src/common/Upload.cpp:640
+#: src/common/Upload.cpp:199
 msgid "Código"
 msgstr ""
 
-#: src/common/Upload.cpp:641
+#: src/common/Upload.cpp:200
 msgid "Login no Dropbox"
 msgstr ""
 
-#: src/common/Upload.cpp:646
-msgid "O Dropbox recusou o código"
-msgstr ""
-
-#: src/common/Upload.cpp:651
-msgid "Não foi possível abrir a porta local para o retorno do navegador."
-msgstr ""
-
-#: src/common/Upload.cpp:663
-msgid "Resposta de login inválida."
-msgstr ""
-
-#: src/common/Upload.cpp:672
-msgid "O login foi recusado"
-msgstr ""
-
-#: src/common/Upload.cpp:684
+#: src/common/Upload.cpp:216
 msgid "Desligado por padrão: nada é enviado até você escolher um destino."
 msgstr ""
 
-#: src/common/Upload.cpp:685
+#: src/common/Upload.cpp:217
 msgid "Destino"
 msgstr ""
 
-#: src/common/Upload.cpp:686
+#: src/common/Upload.cpp:218
 msgid "Copiar o link para a área de transferência depois do envio"
 msgstr ""
 
-#: src/common/Upload.cpp:687
+#: src/common/Upload.cpp:219
 msgid "Remover metadados das imagens enviadas"
 msgstr ""
 
-#: src/common/Upload.cpp:689
+#: src/common/Upload.cpp:221
 msgid "Upload — destino"
 msgstr ""
 
-#: src/common/Upload.cpp:697
+#: src/common/Upload.cpp:229
 msgid "Endpoint (host)"
 msgstr ""
 
-#: src/common/Upload.cpp:698
+#: src/common/Upload.cpp:230
 msgid "Prefixo (pasta)"
 msgstr ""
 
-#: src/common/Upload.cpp:700
+#: src/common/Upload.cpp:232
 msgid "Endereço público (opcional)"
 msgstr ""
 
-#: src/common/Upload.cpp:700
+#: src/common/Upload.cpp:232
 msgid "Endereço no estilo de caminho (MinIO e alguns serviços)"
 msgstr ""
 
-#: src/common/Upload.cpp:701
+#: src/common/Upload.cpp:233
 msgid "Leitura pública (x-amz-acl: public-read)"
 msgstr ""
 
-#: src/common/Upload.cpp:702
+#: src/common/Upload.cpp:234
 msgid "A chave secreta fica no Gerenciador de Credenciais do Windows."
 msgstr ""
 
-#: src/common/Upload.cpp:705
+#: src/common/Upload.cpp:237
 msgid "App key do seu app Dropbox"
 msgstr ""
 
-#: src/common/Upload.cpp:706
+#: src/common/Upload.cpp:238
 msgid "Crie um app em dropbox.com/developers (acesso \"App folder\" ou \"Full\", permissões files.content.write e sharing.write)."
 msgstr ""
 
-#: src/common/Upload.cpp:709
+#: src/common/Upload.cpp:241
 msgid "Client ID (app para computador)"
 msgstr ""
 
-#: src/common/Upload.cpp:711
+#: src/common/Upload.cpp:243
 msgid "Qualquer pessoa com o link pode ver"
 msgstr ""
 
-#: src/common/Upload.cpp:712
+#: src/common/Upload.cpp:244
 msgid "Crie credenciais OAuth do tipo \"App para computador\" no Google Cloud Console (API do Drive ativada)."
 msgstr ""
 
-#: src/common/Upload.cpp:715
+#: src/common/Upload.cpp:247
 msgid "Client ID (registro de app do Azure)"
 msgstr ""
 
-#: src/common/Upload.cpp:716
+#: src/common/Upload.cpp:248
 msgid "Link anônimo (qualquer pessoa com o link)"
 msgstr ""
 
-#: src/common/Upload.cpp:717
+#: src/common/Upload.cpp:249
 msgid "Registre um app (\"Aplicativos móveis e de desktop\", redirecionamento http://localhost) com a permissão Files.ReadWrite."
 msgstr ""
 
-#: src/common/Upload.cpp:720
+#: src/common/Upload.cpp:252
 msgid "Servidor"
 msgstr ""
 
-#: src/common/Upload.cpp:720
+#: src/common/Upload.cpp:252
 msgid "Porta (0 = padrão)"
 msgstr ""
 
-#: src/common/Upload.cpp:720
+#: src/common/Upload.cpp:252
 msgid "Usuário"
 msgstr ""
 
-#: src/common/Upload.cpp:721
+#: src/common/Upload.cpp:253
 msgid "Senha"
 msgstr ""
 
-#: src/common/Upload.cpp:722
+#: src/common/Upload.cpp:254
 msgid "Arquivo da chave privada"
 msgstr ""
 
-#: src/common/Upload.cpp:723
+#: src/common/Upload.cpp:255
 msgid "Pasta remota"
 msgstr ""
 
-#: src/common/Upload.cpp:723
+#: src/common/Upload.cpp:255
 msgid "Endereço web da pasta (para o link)"
 msgstr ""
 
-#: src/common/Upload.cpp:724
+#: src/common/Upload.cpp:256
 msgid "Usa o cliente OpenSSH do Windows com autenticação por chave."
 msgstr ""
 
-#: src/common/Upload.cpp:725
+#: src/common/Upload.cpp:257
 msgid "FTP sem criptografia: prefira SFTP para dados sensíveis."
 msgstr ""
 
-#: src/common/Upload.cpp:729
+#: src/common/Upload.cpp:261
 msgid "Enviador personalizado (*.sxcu;*.json)|*.sxcu;*.json|"
 msgstr ""
 
-#: src/common/Upload.cpp:731
+#: src/common/Upload.cpp:263
 msgid "Importar enviador (.sxcu)"
 msgstr ""
 
-#: src/common/Upload.cpp:737
+#: src/common/Upload.cpp:268
 msgid "Arquivo .sxcu inválido."
 msgstr ""
 
-#: src/common/Upload.cpp:745
+#: src/common/Upload.cpp:276
 msgid "Upload — "
 msgstr ""
 
-#: src/common/Upload.cpp:775
+#: src/common/Upload.cpp:306
 msgid "Fazer login de novo agora?"
 msgstr ""
 
-#: src/common/Upload.cpp:777
+#: src/common/Upload.cpp:308
 msgid "Login concluído. As capturas podem ser enviadas."
 msgstr ""
 
-#: src/common/Util.cpp:322
+#: src/common/Util.cpp:282
 msgid "O manual não foi encontrado:\n"
 msgstr ""
 
-#: src/common/Util.cpp:401 src/editor/Batch.cpp:111
+#: src/common/Util.cpp:361 src/editor/Batch.cpp:111
 msgid "(nenhum)"
 msgstr ""
 
-#: src/common/Util.cpp:410
+#: src/common/Util.cpp:370
 msgid "Print Screen"
 msgstr ""
 
-#: src/editor/Assistant.cpp:20
+#: src/editor/Assistant.cpp:21
 msgid "Compatível com OpenAI"
 msgstr ""
 
-#: src/editor/Assistant.cpp:20
+#: src/editor/Assistant.cpp:21
 msgid "Modelo local (Ollama)"
 msgstr ""
 
-#: src/editor/Assistant.cpp:123
-msgid "Sem resposta do provedor: "
-msgstr ""
-
-#: src/editor/Assistant.cpp:132
-#, c-format
-msgid "O provedor respondeu %d: "
-msgstr ""
-
-#: src/editor/Assistant.cpp:135
-msgid "Resposta inválida do provedor."
-msgstr ""
-
-#: src/editor/Assistant.cpp:139
-msgid "O provedor não devolveu texto."
-msgstr ""
-
-#: src/editor/Assistant.cpp:162
+#: src/editor/Assistant.cpp:115
 msgid "Explicar"
 msgstr ""
 
-#: src/editor/Assistant.cpp:162
+#: src/editor/Assistant.cpp:115
 msgid "Descrever"
 msgstr ""
 
-#: src/editor/Assistant.cpp:162
+#: src/editor/Assistant.cpp:115
 msgid "Extrair os passos"
 msgstr ""
 
-#: src/editor/Assistant.cpp:162
+#: src/editor/Assistant.cpp:115
 msgid "Extrair o texto"
 msgstr ""
 
-#: src/editor/Assistant.cpp:172
+#: src/editor/Assistant.cpp:125
 #, c-format
 msgid "A imagem e a pergunta serão enviadas para %s (%s). Nada é enviado até você perguntar."
 msgstr ""
 
-#: src/editor/Assistant.cpp:179
+#: src/editor/Assistant.cpp:132
 msgid "Configure a chave do provedor primeiro."
 msgstr ""
 
-#: src/editor/Assistant.cpp:181
+#: src/editor/Assistant.cpp:134
 msgid "Perguntando…"
 msgstr ""
 
-#: src/editor/Assistant.cpp:211
+#: src/editor/Assistant.cpp:164
 msgid "Faça uma pergunta sobre a imagem…"
 msgstr ""
 
-#: src/editor/Assistant.cpp:212
+#: src/editor/Assistant.cpp:165
 msgid "Perguntar"
 msgstr ""
 
-#: src/editor/Assistant.cpp:216
+#: src/editor/Assistant.cpp:169
 msgid "Adicionar como texto"
 msgstr ""
 
-#: src/editor/Assistant.cpp:217
+#: src/editor/Assistant.cpp:170
 msgid "Configurações…"
 msgstr ""
 
-#: src/editor/Assistant.cpp:254
+#: src/editor/Assistant.cpp:207
 #, c-format
 msgid "Resposta de %s (%s)."
 msgstr ""
 
-#: src/editor/Assistant.cpp:275
+#: src/editor/Assistant.cpp:228
 msgid "Resposta copiada."
 msgstr ""
 
-#: src/editor/Assistant.cpp:299
+#: src/editor/Assistant.cpp:252
 msgid "(guardada — deixe assim para manter)"
 msgstr ""
 
-#: src/editor/Assistant.cpp:301
+#: src/editor/Assistant.cpp:254
 msgid "Ativar o assistente de IA"
 msgstr ""
 
-#: src/editor/Assistant.cpp:302
+#: src/editor/Assistant.cpp:255
 msgid "Ao perguntar, a imagem é enviada ao provedor escolhido. Use a sua própria chave (cobrança na sua conta)."
 msgstr ""
 
-#: src/editor/Assistant.cpp:303
+#: src/editor/Assistant.cpp:256
 msgid "Provedor"
 msgstr ""
 
-#: src/editor/Assistant.cpp:304
+#: src/editor/Assistant.cpp:257
 msgid "Modelo"
 msgstr ""
 
-#: src/editor/Assistant.cpp:305
+#: src/editor/Assistant.cpp:258
 msgid "Endereço da API"
 msgstr ""
 
-#: src/editor/Assistant.cpp:306
+#: src/editor/Assistant.cpp:259
 msgid "Chave da API"
 msgstr ""
 
-#: src/editor/Assistant.cpp:307
+#: src/editor/Assistant.cpp:260
 msgid "A chave fica no Gerenciador de Credenciais do Windows, nunca em arquivos. Modelo local: Ollama em http://localhost:11434/v1 (sem chave)."
 msgstr ""
 
-#: src/editor/Assistant.cpp:316
+#: src/editor/Assistant.cpp:269
 msgid "Informe o endereço da API."
 msgstr ""
 
-#: src/editor/Assistant.cpp:317
+#: src/editor/Assistant.cpp:270
 msgid "Informe o modelo."
 msgstr ""
 
-#: src/editor/Assistant.cpp:320 src/editor/Assistant.cpp:344 src/editor/Assistant.cpp:365
+#: src/editor/Assistant.cpp:273 src/editor/Assistant.cpp:297 src/editor/Assistant.cpp:318
 msgid "Assistente de IA"
 msgstr ""
 
-#: src/editor/Assistant.cpp:343
+#: src/editor/Assistant.cpp:296
 msgid ""
 "O assistente de IA está desligado. Ele envia a imagem para um provedor de IA escolhido por você, com a sua chave.\n"
 "\n"
@@ -3516,16 +3400,16 @@ msgstr ""
 msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
 msgstr ""
 
-#: src/editor/Pdf.cpp:77
-msgid "Falha ao codificar a imagem."
-msgstr ""
-
-#: src/editor/Pdf.cpp:108
+#: src/editor/Pdf.cpp:22
 msgid "Não foi possível criar o arquivo."
 msgstr ""
 
-#: src/editor/Pdf.cpp:112
+#: src/editor/Pdf.cpp:23
 msgid "Falha ao gravar o arquivo."
+msgstr ""
+
+#: src/editor/Pdf.cpp:24
+msgid "Falha ao codificar a imagem."
 msgstr ""
 
 #: src/editor/Popups.cpp:231 src/editor/PropsPanel.cpp:640 src/editor/PropsPanel.cpp:663
@@ -7443,4 +7327,120 @@ msgstr ""
 
 #: src/editor/main.cpp:2635
 msgid "Ajustar à janela\tCtrl+0"
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:61
+msgid "Sem resposta do provedor: "
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:72
+#, c-format
+msgid "O provedor respondeu %d: "
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:74
+msgid "Resposta inválida do provedor."
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:82
+msgid "O provedor não devolveu texto."
+msgstr ""
+
+#: rust/snapcore/src/library.rs:219
+msgid "Audio"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:378
+msgid "Snapnab: login concluído. Você já pode fechar esta janela."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:393
+msgid "Falha ao renovar o acesso (faça login de novo nas opções de upload)"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:443
+msgid "Configure o bucket e as chaves do S3."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:468
+msgid "Falha no upload para o S3"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:480
+msgid "O Dropbox aceita até 150 MB por envio pela API."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:497
+msgid "Falha no upload para o Dropbox"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:513 rust/snapcore/src/upload.rs:587
+msgid "O arquivo foi enviado, mas o link não pôde ser criado"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:550
+msgid "Falha no upload para o Google Drive"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:576
+msgid "Falha no upload para o OneDrive"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:618
+#, c-format
+msgid "Não foi possível conectar ao FTP (%u)."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:637
+#, c-format
+msgid "O servidor FTP recusou o arquivo (%u)."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:650
+msgid "O cliente OpenSSH do Windows não está instalado (Configurações › Sistema › Recursos opcionais)."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:672
+msgid "Não foi possível iniciar o sftp."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:685
+#, c-format
+msgid "O SFTP falhou (código %u). Use autenticação por chave (sem senha) e confira host, usuário e pasta."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:693
+msgid "O enviador personalizado não é um JSON válido."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:705
+msgid "O enviador personalizado não tem RequestURL."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:768
+msgid "O servidor respondeu, mas o link não foi encontrado na resposta."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:906
+msgid "Nenhum destino de upload configurado."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:919
+msgid "Não foi possível ler o arquivo."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1002
+msgid "Não foi possível abrir a porta local para o retorno do navegador."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1034
+msgid "O Dropbox recusou o código"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1044
+msgid "Resposta de login inválida."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1060
+msgid "O login foi recusado"
 msgstr ""

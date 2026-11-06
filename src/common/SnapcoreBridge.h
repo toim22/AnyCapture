@@ -18,6 +18,13 @@ Image TakeImage(SnapcoreImage* d);                  // copied out and freed; emp
 SnapcoreXmlBuilder* XmlToSnapcore(const XmlNode& root);
 void XmlFromSnapcore(XmlNode& root, const std::function<void(const SnapcoreXmlSink* sink, void* ctx)>& send);
 
+// a string snapcore allocated, copied out and freed
+inline std::wstring TakeWStr(SnapcoreWStr s) {
+    std::wstring w = s.len ? std::wstring(s.data, s.len) : std::wstring();
+    if (s.data) snapcore_wstr_free(s);
+    return w;
+}
+
 namespace fx {
 struct BeautifyOptions;
 SnapcoreBeautify ToSnapcore(const BeautifyOptions& o);   // Beautify.cpp: pointers into o

@@ -20,7 +20,11 @@
 //! - `hdr`: HDR screenshots and recordings (DXGI duplication, tone mapping)
 //! - `ocr`: text recognition and face detection (Windows OCR and FaceAnalysis)
 //! - `barcode`: QR codes and barcodes (rxing)
+//! - `net`: HTTPS (WinHTTP), SHA-256/HMAC, JSON and the secrets in the Credential Manager
+//! - `upload`: the upload destinations, their settings, the sign-in and the custom uploader syntax
+//! - `ai`: the AI assistant's request
 
+pub mod ai;
 pub mod barcode;
 pub mod beautify;
 pub mod codec;
@@ -36,14 +40,17 @@ pub mod i18n;
 pub mod image;
 pub mod library;
 pub mod log;
+pub mod net;
 pub mod ocr;
 pub mod paths;
 pub mod pdf;
 pub mod reg;
 pub mod snap;
+pub mod upload;
 pub mod wide;
 pub mod xml;
 
 mod ffi;
 mod ffi_more;
+mod ffi_net;
 mod ffi_pixels;

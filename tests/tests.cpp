@@ -1334,20 +1334,22 @@ int wmain(int argc, wchar_t** argv) {
             Image bt = fx::Beautify(Image(100, 60, 0xFF3366CC), bo, &org);
             CHECK(bt.w == 160 && bt.h == 120 && org.x == 30 && org.y == 30, "beautify: %dx%d with the capture at %ld,%ld", bt.w, bt.h, org.x, org.y);
         }
-        // C21: AWS Signature V4 (the S3 "GET Object" example of the AWS documentation) and the custom uploader syntax
+        // C21: the upload settings and results through snapcore (Signature V4, JSON and the custom uploader syntax are
+        // checked by cargo test against tests/data/net-cpp.txt, what the C++ code gave); nothing here goes to the network
         {
-            std::map<std::string, std::string> hd = { { "host", "examplebucket.s3.amazonaws.com" }, { "range", "bytes=0-9" },
-                { "x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" }, { "x-amz-date", "20130524T000000Z" } };
-            std::string auth = upload::SigV4Authorization("GET", "/test.txt", "", hd, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-                                                          "20130524T000000Z", "us-east-1", "s3", "AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
-            CHECK(auth.find("Signature=f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41") != std::string::npos, "SigV4 signature matches the AWS example");
-            std::string resp = R"({"data":{"link":"https://i.example/abc.png","id":7},"ok":true})";
-            CHECK(upload::ExpandSyntax("{json:data.link}", "a.png", resp, {}) == "https://i.example/abc.png" &&
-                  upload::ExpandSyntax("name={filename}", "a.png", resp, {}) == "name=a.png", "custom uploader syntax ({json:…}, {filename})");
-            net::Json j;
-            bool parsed = net::Json::Parse(R"({"a":[1,2,{"b":"cé"}],"t":true})", j);
-            const net::Json* pb = parsed ? j.Path("a[2].b") : nullptr;
-            CHECK(pb && Utf8ToW(pb->Text()) == L"cé" && j.Path("t") && j.Path("t")->b, "JSON reader (paths, unicode escapes)");
+            upload::Settings none;
+            upload::Result r0 = upload::UploadFile(none, L"C:\\nothing.png", L"");
+            std::wstring f = TestTempDir() + L"\\snapnab_upload.png";
+            HANDLE h = CreateFileW(f.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
+            DWORD wr = 0;
+            if (h != INVALID_HANDLE_VALUE) { WriteFile(h, "PNG", 3, &wr, nullptr); CloseHandle(h); }
+            upload::Settings bad;
+            bad.dest = upload::Dest::Custom;
+            bad.customJson = L"{";
+            upload::Result r1 = upload::UploadFile(bad, f, L"");
+            DeleteFileW(f.c_str());
+            CHECK(!r0.ok && !r0.error.empty() && !r1.ok && r1.error != r0.error && !r1.error.empty() && net::LoadSecret(L"Tests/None").empty(),
+                  "upload refusals without a destination or with a broken custom uploader");
         }
         // C34: a long image becomes a PDF of several pages
         {

@@ -4,7 +4,7 @@
 // client id — "bring your own app"), FTP, SFTP (the OpenSSH client of Windows, key authentication) and a custom HTTP
 // uploader (request template compatible with ShareX .sxcu). Settings in Uploaders.xml; passwords, secrets and tokens
 // in the Windows Credential Manager ("Snapnab/…"), never in files. Images are uploaded without metadata unless the
-// user turns that off (StripMetadataOnUpload, C29).
+// user turns that off (StripMetadataOnUpload, C29). The work is done by snapcore (rust/snapcore/src/upload.rs).
 #pragma once
 #include "Image.h"
 
@@ -47,17 +47,6 @@ void UploadFileAsync(const std::wstring& path, std::function<void(const Result&)
 
 // settings dialogs: the destination, its fields and the sign-in (OAuth) when needed
 bool ConfigureDialog(HWND owner);
-
-// AWS Signature V4 (exposed for the tests): Authorization header value for a request whose headers (lowercase name →
-// value) are already final
-std::string SigV4Authorization(const std::string& method, const std::string& canonicalUri, const std::string& query,
-                               const std::map<std::string, std::string>& headers, const std::string& payloadHash,
-                               const std::string& amzDate, const std::string& region, const std::string& service,
-                               const std::string& accessKey, const std::string& secretKey);
-// the custom uploader's {…} syntax (exposed for the tests): {response}, {json:path}, {regex:pattern|group},
-// {header:name}, {filename}, {input}, {base64:text}, {random:a|b}
-std::string ExpandSyntax(const std::string& text, const std::string& fileName, const std::string& response,
-                         const std::map<std::wstring, std::wstring>& headers);
 
 // links of uploaded captures (Copy as › Markdown / link): Library\Uploads.xml, by file name
 std::wstring UploadedUrl(const std::wstring& itemPath);
