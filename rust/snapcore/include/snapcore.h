@@ -79,7 +79,7 @@ bool snapcore_xml_save(SnapcoreXmlBuilder* b, const wchar_t* path, size_t len);
 // while decoding, 5 = the WebP file could not be read whole; encoding 1 = failed, 2 = the AVIF codec hint, 3 = libwebp
 // could not encode.
 struct SnapcoreImage;                                  // a decoded image: copy it out, then snapcore_image_free
-struct SnapcoreImageInfo { uint32_t w, h; bool hasMeta, gps; double lat, lon; };
+struct SnapcoreImageInfo { uint32_t w, h; bool hasMeta, gps; double lat, lon; float dpi; };
 SnapcoreImage*  snapcore_image_decode(const uint8_t* data, size_t len, int32_t* err);
 SnapcoreImage*  snapcore_image_load(const wchar_t* path, size_t len, int32_t* err);
 void            snapcore_image_info(const SnapcoreImage* img, SnapcoreImageInfo* out);
@@ -152,6 +152,77 @@ bool snapcore_library_set_name(const wchar_t* dir, size_t dirLen, const wchar_t*
                                const wchar_t* name, size_t nameLen);
 bool snapcore_next_auto_name(const wchar_t* folder, size_t folderLen, const wchar_t* prefix, size_t prefixLen,
                              const wchar_t* ext, size_t extLen, int32_t digits, SnapcoreWStr* out);
+
+// ---- pixel work: effects (Effects.cpp), Beautify, scaling (Image.cpp), computer vision (Cv.cpp) and PDF (Pdf.cpp).
+// A new image comes back as a SnapcoreImage (copy it out, then snapcore_image_free; null: failed); the in-place calls
+// change the caller's w × h pixels. Colors are 0xAARRGGBB unless the field says COLORREF.
+struct SnapcoreRect { int32_t left, top, right, bottom; };
+struct SnapcoreFx {
+    int32_t op;
+    int32_t i[4];
+    double d;
+    uint32_t c[2];
+    SnapcoreRect rect;
+    const wchar_t* text;
+    size_t textLen;
+};
+// snapcore_fx ops: 0 Rotate90 (i0 clockwise), 1 Rotate180, 2 FlipH, 3 FlipV, 4 RotateAngle (d, c0), 5 CanvasResize
+// (i0 w, i1 h, i2 anchor, c0), 6 AutoTrim (i0), 7 Scale (i0 %), 8 Border (i0, c0), 9 Shadow (i0 offset, i1 blur,
+// i2 opacity), 10 EdgeEffect (i0 style, i1 size, i2 sides, i3 shadow), 11 Perspective (i0, i1, i2), 12 PageCurl (i0, i1),
+// 13 Spotlight (rect, i0 dim, i1 blur, i2 zoom, i3 shadow), 14 Caption (text, i0 top, i1 px, c0 fg, c1 bg),
+// 15 ScaleImage (i0 w, i1 h, i2 high quality), 16 MakeThumbnail (i0, i1)
+SnapcoreImage* snapcore_fx(const SnapcoreImageIn* img, const SnapcoreFx* a);
+// snapcore_fx_in_place ops: 0 Grayscale, 1 Invert, 2 Sepia, 3 Monochrome (i0), 4 BrightnessContrast (i0, i1),
+// 5 HueSaturation (i0, i1), 6 Gamma (d), 7 ReplaceColor (c0, c1, i0), 8 BoxBlur (rect, i0), 9 Pixelate (rect, i0),
+// 10 Emboss (i0), 11 Sharpen (i0), 12 Watermark (text, i0 opacity, i1 tiled, i2 emboss)
+void snapcore_fx_in_place(uint32_t* px, int32_t w, int32_t h, const SnapcoreFx* a);
+bool snapcore_fx_expand_tokens(const wchar_t* text, size_t len, SnapcoreWStr* out);
+struct SnapcoreBeautify {                              // BeautifyOptions; colors are COLORREFs
+    int32_t background;
+    uint32_t color1, color2;
+    int32_t angle;
+    const wchar_t* imagePath;
+    size_t imagePathLen;
+    int32_t padding, radius, shadow, shadowSize, align, aspect;
+    bool autoBalance;
+};
+SnapcoreImage* snapcore_beautify(const SnapcoreImageIn* img, const SnapcoreBeautify* o, int32_t* origin);   // origin: x, y
+bool snapcore_wallpaper_path(SnapcoreWStr* out);
+struct SnapcoreCaptureEffects {                        // fx::CaptureEffects, field by field; colors are COLORREFs
+    bool border; int32_t borderWidth; uint32_t borderColor;
+    bool filter; int32_t filterKind;
+    bool shadow; int32_t shadowOffset, shadowBlur, shadowOpacity;
+    bool caption; const wchar_t* captionText; size_t captionTextLen; bool captionTop;
+    bool replaceColor; uint32_t replaceFrom, replaceTo; int32_t replaceTolerance;
+    bool scale; int32_t scalePercent;
+    bool edge; int32_t edgeStyle, edgeSize, edgeSides;
+    bool trim; int32_t trimTolerance;
+    bool adjust; int32_t brightness, contrast, hue, saturation;
+    bool rotate; int32_t rotateKind;
+    bool watermark; const wchar_t* watermarkText; size_t watermarkTextLen; int32_t watermarkOpacity; bool watermarkTiled;
+    bool resolution; int32_t dpi;
+    bool beautify; SnapcoreBeautify beautifyOpt;
+};
+SnapcoreImage* snapcore_capture_effects(const SnapcoreImageIn* img, const SnapcoreCaptureEffects* e);
+// computer vision: masks are w × h bytes (0 or 255) the caller allocates
+bool snapcore_cv_wand(const SnapcoreImageIn* img, int32_t x, int32_t y, float tol, bool global, bool doWand, uint8_t* mask);
+void snapcore_cv_shape_mask(int32_t kind, int32_t w, int32_t h, SnapcoreRect r, const int32_t* pts, size_t n,
+                            uint8_t* mask);        // 0 rectangle, 1 ellipse (r), 2 polygon (n x, y pairs)
+SnapcoreRect snapcore_cv_mask_bounds(const uint8_t* mask, int32_t w, int32_t h);
+bool snapcore_cv_mask_empty(const uint8_t* mask, size_t n);
+void snapcore_cv_dilate(const uint8_t* mask, int32_t w, int32_t h, int32_t k, uint8_t* out);
+// 0 Dingo7 (arg kernel; false when there is no ring), 1 diffusion (arg iterations), 2 smart fill
+bool snapcore_cv_inpaint(int32_t kind, uint32_t* px, int32_t w, int32_t h, const uint8_t* mask, int32_t arg,
+                         uint32_t* dominant, double* share);
+float snapcore_cv_auto_tolerance(const SnapcoreImageIn* img);
+float snapcore_cv_tolerance_scaling(float t, float inMin, float inMax, float outMin, float outMax);
+void snapcore_cv_detect_translation(const SnapcoreImageIn* a, const SnapcoreImageIn* b, int32_t* offset, double* confidence);
+// PDF: 0 saved, 1 empty image, 2 the image could not be encoded, 3 the file could not be created, 4 nor written
+struct SnapcorePdfLink { float x, y, w, h; const wchar_t* url; size_t urlLen; };
+int32_t snapcore_pdf_save(const wchar_t* path, size_t len, const SnapcoreImageIn* img, const SnapcorePdfLink* links, size_t n);
+// SmartBreaks (parts < 0) or SmartCuts (parts >= 0) into out (capacity cap); returns how many there are
+size_t snapcore_page_breaks(const SnapcoreImageIn* img, int32_t pageH, int32_t search, int32_t parts, int32_t* out, size_t cap);
+bool snapcore_split_long_pages();
 
 // ---- animated GIF (Gif.cpp): frames at the GIF's size (the caller scales them)
 struct SnapcoreGif;

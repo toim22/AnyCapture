@@ -1,4 +1,5 @@
-//! In-memory image (BGRA 32 bpp, straight alpha), as `Image` in Image.h: 0xAARRGGBB per pixel, rows from top to bottom.
+//! In-memory image (BGRA 32 bpp, straight alpha), as `Image` in Image.h: 0xAARRGGBB per pixel, rows from top to bottom,
+//! with the helpers of Image.cpp (Crop, Blit, FillRect, BlendOver) and of Image.h (ARGB, CA…, FromColorref).
 
 /// Metadata carried with an image (C29): what an imported photo had (EXIF) and what Snapnab writes when saving.
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -52,6 +53,111 @@ impl Image {
 
     pub fn bytes_mut(&mut self) -> &mut [u8] {
         unsafe { std::slice::from_raw_parts_mut(self.px.as_mut_ptr() as *mut u8, self.px.len() * 4) }
+    }
+}
+
+/// RECT: left, top, right, bottom (right and bottom outside).
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[repr(C)]
+pub struct Rect {
+    pub left: i32,
+    pub top: i32,
+    pub right: i32,
+    pub bottom: i32,
+}
+
+impl Rect {
+    pub const fn new(left: i32, top: i32, right: i32, bottom: i32) -> Rect {
+        Rect { left, top, right, bottom }
+    }
+}
+
+pub fn argb(a: i32, r: i32, g: i32, b: i32) -> u32 {
+    (a as u32) << 24 | (r as u32) << 16 | (g as u32) << 8 | b as u32
+}
+pub fn ca(p: u32) -> i32 {
+    (p >> 24) as i32 & 255
+}
+pub fn cr(p: u32) -> i32 {
+    (p >> 16) as i32 & 255
+}
+pub fn cg(p: u32) -> i32 {
+    (p >> 8) as i32 & 255
+}
+pub fn cb(p: u32) -> i32 {
+    p as i32 & 255
+}
+/// FromColorref: a COLORREF (0x00BBGGRR) as an opaque pixel.
+pub fn from_colorref(c: u32) -> u32 {
+    argb(255, (c & 255) as i32, (c >> 8 & 255) as i32, (c >> 16 & 255) as i32)
+}
+
+impl Image {
+    /// Image(w, h, fill) of the C++ (sizes as int).
+    pub fn sized(w: i32, h: i32, fill: u32) -> Image {
+        Image::new(w.max(0) as u32, h.max(0) as u32, fill)
+    }
+    pub fn wi(&self) -> i32 {
+        self.w as i32
+    }
+    pub fn hi(&self) -> i32 {
+        self.h as i32
+    }
+    pub fn at(&self, x: i32, y: i32) -> u32 {
+        self.px[y as usize * self.w as usize + x as usize]
+    }
+    pub fn at_mut(&mut self, x: i32, y: i32) -> &mut u32 {
+        let w = self.w as usize;
+        &mut self.px[y as usize * w + x as usize]
+    }
+    pub fn row(&self, y: i32) -> &[u32] {
+        let w = self.w as usize;
+        &self.px[y as usize * w..(y as usize + 1) * w]
+    }
+
+    /// Crop: the part inside the image, or an empty image.
+    pub fn crop(&self, r: Rect) -> Image {
+        let (l, t) = (r.left.max(0), r.top.max(0));
+        let (rr, b) = (r.right.min(self.wi()), r.bottom.min(self.hi()));
+        if rr <= l || b <= t {
+            return Image::default();
+        }
+        let mut out = Image::sized(rr - l, b - t, 0);
+        let w = out.w as usize;
+        for y in 0..out.hi() {
+            let src = &self.row(t + y)[l as usize..l as usize + w];
+            out.px[y as usize * w..(y as usize + 1) * w].copy_from_slice(src);
+        }
+        out
+    }
+
+    /// Blit: `src` at (dx, dy), blended over (straight alpha) or copied.
+    pub fn blit(&mut self, src: &Image, dx: i32, dy: i32, blend: bool) {
+        for y in 0..src.hi() {
+            let ty = dy + y;
+            if ty < 0 || ty >= self.hi() {
+                continue;
+            }
+            for x in 0..src.wi() {
+                let tx = dx + x;
+                if tx < 0 || tx >= self.wi() {
+                    continue;
+                }
+                let s = src.at(x, y);
+                let d = self.at_mut(tx, ty);
+                *d = if blend { blend_over(*d, s) } else { s };
+            }
+        }
+    }
+
+    pub fn fill_rect(&mut self, r: Rect, color: u32) {
+        let (l, t) = (r.left.max(0), r.top.max(0));
+        let (rr, b) = (r.right.min(self.wi()), r.bottom.min(self.hi()));
+        for y in t..b {
+            for x in l..rr {
+                *self.at_mut(x, y) = color;
+            }
+        }
     }
 }
 

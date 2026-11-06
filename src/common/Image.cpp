@@ -206,6 +206,7 @@ void CopyDecoded(const SnapcoreImage* d, Image& out) {
     snapcore_image_info(d, &info);
     out = Image((int)info.w, (int)info.h);
     if (!out.px.empty()) memcpy(out.px.data(), snapcore_image_pixels(d), out.px.size() * 4);
+    out.dpi = info.dpi;
     if (info.hasMeta) {
         auto m = std::make_shared<ImageMeta>();
         m->dateTaken = snapcore_image_meta_text(d, 0);
@@ -215,6 +216,12 @@ void CopyDecoded(const SnapcoreImage* d, Image& out) {
         m->gps = info.gps; m->lat = info.lat; m->lon = info.lon;
         out.meta = m;
     }
+}
+
+Image TakeImage(SnapcoreImage* d) {
+    Image r;
+    if (d) { CopyDecoded(d, r); snapcore_image_free(d); }
+    return r;
 }
 
 // the copy snapcore decoded, moved into an Image
@@ -431,27 +438,17 @@ bool GetClipboardImage(Image& out) {
 
 // ---------------------------------------------------------------- scaling
 Image ScaleImage(const Image& src, int nw, int nh, bool hq) {
-    if (src.empty() || nw <= 0 || nh <= 0) return {};
-    Image dst(nw, nh, 0);
-    Image& s = const_cast<Image&>(src);
-    auto sb = s.WrapGdip();
-    auto db = dst.WrapGdip();
-    {
-        Gdiplus::Graphics g(db.get());
-        g.SetInterpolationMode(hq ? Gdiplus::InterpolationModeHighQualityBicubic : Gdiplus::InterpolationModeNearestNeighbor);
-        g.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
-        g.SetCompositingMode(Gdiplus::CompositingModeSourceCopy);
-        Gdiplus::ImageAttributes ia;
-        ia.SetWrapMode(Gdiplus::WrapModeTileFlipXY);
-        g.DrawImage(sb.get(), Gdiplus::Rect(0, 0, nw, nh), 0, 0, src.w, src.h, Gdiplus::UnitPixel, &ia);
-    }
-    return dst;
+    SnapcoreFx a{};
+    a.op = 15; a.i[0] = nw; a.i[1] = nh; a.i[2] = hq;
+    SnapcoreImageIn in = ImageIn(src);
+    return TakeImage(snapcore_fx(&in, &a));
 }
 
 Image MakeThumbnail(const Image& img, int maxW, int maxH) {
-    if (img.empty()) return {};
-    double s = std::min(1.0, std::min((double)maxW / img.w, (double)maxH / img.h));
-    return ScaleImage(img, std::max(1, (int)(img.w * s)), std::max(1, (int)(img.h * s)));
+    SnapcoreFx a{};
+    a.op = 16; a.i[0] = maxW; a.i[1] = maxH;
+    SnapcoreImageIn in = ImageIn(img);
+    return TakeImage(snapcore_fx(&in, &a));
 }
 
 } // namespace snap

@@ -10,18 +10,31 @@
 //! - `snap`: the .snap document (index, frame documents, base and embedded images)
 //! - `library`: the capture library (its folder, thumbnails, capture names, cleanup)
 //! - `gif`: the animated GIF writer
+//! - `crt`: printf-style number formatting through the C runtime (the same rounding the C++ had)
+//! - `gdip`: the GDI+ flat API (scaling, text, polygons) and image scaling
+//! - `fx`: the image effects and the capture preset effects
+//! - `beautify`: Beautify (background, padding, rounded corners, shadow)
+//! - `cv`: computer vision (magic wand, masks, inpainting, translation detection)
+//! - `pdf`: the PDF writer and the page breaks of long captures
 
+pub mod beautify;
 pub mod codec;
 pub mod container;
+pub mod crt;
+pub mod cv;
+pub mod fx;
+pub mod gdip;
 pub mod gif;
 pub mod i18n;
 pub mod image;
 pub mod library;
 pub mod log;
 pub mod paths;
+pub mod pdf;
 pub mod reg;
 pub mod snap;
 pub mod wide;
 pub mod xml;
 
 mod ffi;
+mod ffi_pixels;

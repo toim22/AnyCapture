@@ -13,7 +13,7 @@ use crate::image::{Image, Meta};
 use crate::{gif, i18n, library, log, reg, snap, xml};
 use windows::Win32::Foundation::HWND;
 
-fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
+pub(crate) fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
     catch_unwind(AssertUnwindSafe(f)).unwrap_or(fallback)
 }
 
@@ -498,6 +498,7 @@ pub struct ImageInfo {
     pub gps: bool,
     pub lat: f64,
     pub lon: f64,
+    pub dpi: f32,
 }
 
 fn decoded(r: Result<Image, DecodeError>, err: *mut i32) -> *mut Decoded {
@@ -517,7 +518,7 @@ fn decoded(r: Result<Image, DecodeError>, err: *mut i32) -> *mut Decoded {
 }
 
 impl Decoded {
-    fn new(img: Image) -> Self {
+    pub(crate) fn new(img: Image) -> Self {
         let text = |s: &str| crate::wide::to_wide(s);
         let texts = match &img.meta {
             Some(m) => [text(&m.date_taken), text(&m.make), text(&m.model), text(&m.software)],
@@ -555,6 +556,7 @@ pub unsafe extern "C" fn snapcore_image_info(d: *const Decoded, out: *mut ImageI
                 gps: m.is_some_and(|m| m.gps),
                 lat: m.map_or(0.0, |m| m.lat),
                 lon: m.map_or(0.0, |m| m.lon),
+                dpi: d.img.dpi,
             }
         };
     })
@@ -600,7 +602,7 @@ pub struct ImageIn {
 }
 
 /// A copy of the image; None if the pixels are missing.
-unsafe fn image_in(r: &ImageIn) -> Option<Image> {
+pub(crate) unsafe fn image_in(r: &ImageIn) -> Option<Image> {
     let n = r.w as usize * r.h as usize;
     if n > 0 && r.px.is_null() {
         return None;
@@ -819,7 +821,7 @@ pub unsafe extern "C" fn snapcore_snap_load_document(path: *const u16, len: usiz
 // ---------------------------------------------------------------- the capture library (Library.cpp)
 
 /// A UTF-16 string of `len` units (no nul needed); empty for null.
-unsafe fn wide_arg(p: *const u16, len: usize) -> Vec<u16> {
+pub(crate) unsafe fn wide_arg(p: *const u16, len: usize) -> Vec<u16> {
     if p.is_null() { Vec::new() } else { unsafe { std::slice::from_raw_parts(p, len) }.to_vec() }
 }
 
@@ -828,7 +830,7 @@ unsafe fn dir_arg(dir: *const u16, len: usize) -> Vec<u16> {
     if dir.is_null() { library::library_dir() } else { unsafe { wide_arg(dir, len) } }
 }
 
-fn wide_out(out: *mut SnapWStr, s: &[u16]) -> bool {
+pub(crate) fn wide_out(out: *mut SnapWStr, s: &[u16]) -> bool {
     if out.is_null() {
         return false;
     }

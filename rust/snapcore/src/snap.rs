@@ -90,7 +90,7 @@ pub fn atof(s: &str) -> f64 {
 
 /// setd of XmlNode: "%.4f".
 pub fn fixed4(v: f64) -> String {
-    format!("{v:.4}")
+    crate::crt::fixed(v, 4)
 }
 
 // ---------------------------------------------------------------- writing

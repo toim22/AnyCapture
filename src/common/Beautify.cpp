@@ -1,6 +1,7 @@
 #include "Beautify.h"
 #include "Effects.h"
 #include "Ui.h"
+#include "SnapcoreBridge.h"
 #include <cmath>
 
 namespace snap::fx {
@@ -40,117 +41,31 @@ const wchar_t* AspectName(int a) {
     }
 }
 
+SnapcoreBeautify ToSnapcore(const BeautifyOptions& o) {
+    SnapcoreBeautify b{};
+    b.background = o.background; b.color1 = o.color1; b.color2 = o.color2; b.angle = o.angle;
+    b.imagePath = o.imagePath.data(); b.imagePathLen = o.imagePath.size();
+    b.padding = o.padding; b.radius = o.radius; b.shadow = o.shadow; b.shadowSize = o.shadowSize;
+    b.align = o.align; b.aspect = o.aspect; b.autoBalance = o.autoBalance;
+    return b;
+}
+
 std::wstring WallpaperPath() {
-    wchar_t b[MAX_PATH * 2] = L"";
-    if (SystemParametersInfoW(SPI_GETDESKWALLPAPER, MAX_PATH * 2, b, 0) && b[0] && FileExists(b)) return b;
-    // the copy Windows keeps (also when the wallpaper came from a folder that is gone)
-    wchar_t ad[MAX_PATH]; ExpandEnvironmentStringsW(L"%APPDATA%\\Microsoft\\Windows\\Themes\\TranscodedWallpaper", ad, MAX_PATH);
-    return FileExists(ad) ? ad : L"";
+    SnapcoreWStr s{};
+    if (!snapcore_wallpaper_path(&s)) return L"";
+    std::wstring r = s.len ? std::wstring(s.data, s.len) : std::wstring();
+    snapcore_wstr_free(s);
+    return r;
 }
 
-// background image scaled to cover the canvas (dossier 02 · E.1 cover-fit), centered
-static void CoverFit(Image& canvas, const Image& bg) {
-    if (bg.empty()) return;
-    double k = std::max((double)canvas.w / bg.w, (double)canvas.h / bg.h);
-    int w = std::max(1, (int)std::ceil(bg.w * k)), h = std::max(1, (int)std::ceil(bg.h * k));
-    Image s = ScaleImage(bg, w, h, true);
-    canvas.Blit(s, (canvas.w - w) / 2, (canvas.h - h) / 2, false);
-}
-
-// distance-based alpha of a rounded rectangle (antialiased edge)
-static int RoundAlpha(int x, int y, int w, int h, int r) {
-    if (r <= 0) return 255;
-    float cx = x + 0.5f, cy = y + 0.5f, dx = 0, dy = 0;
-    if (cx < r) dx = r - cx; else if (cx > w - r) dx = cx - (w - r);
-    if (cy < r) dy = r - cy; else if (cy > h - r) dy = cy - (h - r);
-    if (dx <= 0 || dy <= 0) return 255;
-    float d = std::sqrt(dx * dx + dy * dy);
-    return (int)std::clamp((r - d + 0.5f) * 255.0f, 0.0f, 255.0f);
-}
-
-// auto balance: the plain border around the content is made even — the smallest of the four margins on every side, in
-// the border's own color — so the content sits centered without touching the edges
-static Image BalanceMargins(const Image& img) {
-    const uint32_t bg = img.at(0, 0);
-    auto differs = [&](uint32_t p) {
-        return std::abs(CR(p) - CR(bg)) > 6 || std::abs(CG(p) - CG(bg)) > 6 || std::abs(CB(p) - CB(bg)) > 6 || std::abs(CA(p) - CA(bg)) > 6;
-    };
-    int x0 = img.w, y0 = img.h, x1 = -1, y1 = -1;
-    for (int y = 0; y < img.h; y++)
-        for (int x = 0; x < img.w; x++)
-            if (differs(img.at(x, y))) { x0 = std::min(x0, x); y0 = std::min(y0, y); x1 = std::max(x1, x); y1 = std::max(y1, y); }
-    if (x1 < 0) return img;                                   // all one color
-    int m = std::min({ x0, y0, img.w - 1 - x1, img.h - 1 - y1 });
-    Image out(x1 - x0 + 1 + 2 * m, y1 - y0 + 1 + 2 * m, bg);
-    out.Blit(img.Crop({ x0, y0, x1 + 1, y1 + 1 }), m, m, false);
-    return out;
-}
-
-Image Beautify(const Image& srcIn, const BeautifyOptions& o, POINT* origin) {
-    if (srcIn.empty()) return srcIn;
-    Image src = o.autoBalance ? BalanceMargins(srcIn) : srcIn;
-    if (src.empty()) src = srcIn;
-    // rounded corners of the capture
-    int r = std::min({ o.radius, src.w / 2, src.h / 2 });
-    if (r > 0)
-        for (int y = 0; y < src.h; y++)
-            for (int x = 0; x < src.w; x++) {
-                int a = RoundAlpha(x, y, src.w, src.h, r);
-                if (a < 255) { uint32_t& p = src.at(x, y); p = (p & 0x00FFFFFF) | ((uint32_t)(CA(p) * a / 255) << 24); }
-            }
-    // canvas: capture + padding, grown to the aspect ratio
-    int pad = std::max(0, o.padding);
-    int W = src.w + 2 * pad, H = src.h + 2 * pad;
-    static const double ratios[5] = { 0, 16.0 / 9, 4.0 / 3, 1.0, 9.0 / 16 };
-    if (o.aspect > 0 && o.aspect < 5) {
-        double want = ratios[o.aspect];
-        if ((double)W / H < want) W = (int)std::ceil(H * want); else H = (int)std::ceil(W / want);
-    }
-    Image canvas(W, H, 0);
-    switch (o.background) {
-    case 0: canvas = Image(W, H, FromColorref(o.color1)); break;
-    case 1: {                                         // linear gradient along the angle
-        double th = o.angle * 3.14159265358979 / 180, cs = std::cos(th), sn = std::sin(th);
-        double half = (std::fabs(cs) * W + std::fabs(sn) * H) / 2;
-        for (int y = 0; y < H; y++)
-            for (int x = 0; x < W; x++) {
-                double t = std::clamp(((x - W / 2.0) * cs + (y - H / 2.0) * sn) / (2 * half) + 0.5, 0.0, 1.0);
-                auto mix = [&](int a, int b) { return (int)std::lround(a + (b - a) * t); };
-                canvas.at(x, y) = ARGB(255, mix(GetRValue(o.color1), GetRValue(o.color2)), mix(GetGValue(o.color1), GetGValue(o.color2)),
-                                       mix(GetBValue(o.color1), GetBValue(o.color2)));
-            }
-        break;
-    }
-    case 2: case 3: {
-        canvas = Image(W, H, FromColorref(o.color1));
-        Image bg;
-        std::wstring path = o.background == 2 ? WallpaperPath() : o.imagePath;
-        if (!path.empty() && LoadImageFile(path, bg)) CoverFit(canvas, bg);
-        break;
-    }
-    default: break;                                   // transparent
-    }
-    // where the capture goes (alignment inside the free space)
-    int freeW = W - src.w - 2 * pad, freeH = H - src.h - 2 * pad;
-    int col = o.align % 3, row = o.align / 3;
-    int x0 = pad + freeW * col / 2, y0 = pad + freeH * row / 2;
-    // shadow: the capture's alpha, blurred, a little below
-    if (o.shadow > 0 && o.shadowSize > 0) {
-        int blur = o.shadowSize, off = std::max(1, blur / 3);
-        Image sh(W, H, 0);
-        for (int y = 0; y < src.h; y++)
-            for (int x = 0; x < src.w; x++) {
-                int tx = x + x0, ty = y + y0 + off;
-                if (tx >= 0 && ty >= 0 && tx < W && ty < H) sh.at(tx, ty) = ARGB(CA(src.at(x, y)) * o.shadow / 100, 0, 0, 0);
-            }
-        BoxBlur(sh, { 0, 0, W, H }, std::max(1, blur / 2));
-        canvas.Blit(sh, 0, 0, true);
-    }
-    canvas.Blit(src, x0, y0, true);
-    canvas.dpi = srcIn.dpi;
-    canvas.meta = srcIn.meta;
-    if (origin) *origin = { x0, y0 };
-    return canvas;
+// the render is snapcore's (rust/snapcore/src/beautify.rs)
+Image Beautify(const Image& src, const BeautifyOptions& o, POINT* origin) {
+    SnapcoreImageIn in = ImageIn(src);
+    SnapcoreBeautify b = ToSnapcore(o);
+    int32_t at[2] = { 0, 0 };
+    Image r = TakeImage(snapcore_beautify(&in, &b, at));
+    if (origin) *origin = { at[0], at[1] };
+    return r;
 }
 
 // ---------------------------------------------------------------- presets

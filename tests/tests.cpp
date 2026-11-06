@@ -132,6 +132,211 @@ static std::vector<std::string> WebPFingerprints() {
     return lines;
 }
 
+// Pixel fingerprints: what the effects, Beautify, the computer vision, scaling and the PDF writer give for fixed
+// inputs. tests/data/pixels-cpp.txt holds the ones of the C++ code before it moved to Rust ("SnapnabTests fxgolden"
+// prints those of the current build).
+static std::string Fp(const char* name, const Image& img) {
+    return FormatA("%s %dx%d %016llx dpi=%g meta=%d", name, img.w, img.h, (unsigned long long)Fnv1a(img.px.data(), img.px.size() * 4),
+                   img.dpi, img.meta ? 1 : 0);
+}
+static std::string FpMask(const char* name, const cv::Mask& m) {
+    return FormatA("%s %zu %016llx", name, m.size(), (unsigned long long)Fnv1a(m.data(), m.size()));
+}
+
+static std::vector<std::string> PixelFingerprints(const std::wstring& tmpDir) {
+    std::vector<std::string> L;
+    auto add = [&](const std::string& s) { L.push_back(s); };
+    Image P = Pattern(97, 61, 3);
+    P.dpi = 144; P.meta = std::make_shared<ImageMeta>(); P.meta->make = L"Maker";
+    Image A = Pattern(80, 50, 4);
+    for (size_t i = 0; i < A.px.size(); i++) A.px[i] = (A.px[i] & 0xFFFFFF) | ((uint32_t)(i * 13 % 256) << 24);
+    Image framed(60, 40, 0xFFF0F0F0);
+    framed.Blit(Pattern(30, 20, 5), 12, 9, false);
+    Image tiny(1, 1, 0xFF336699);
+    std::vector<std::pair<const char*, const Image*>> srcs = { { "P", &P }, { "A", &A }, { "framed", &framed }, { "tiny", &tiny } };
+    for (auto& [n, im] : srcs) {
+        std::string k = n;
+        add(Fp((k + " rot90cw").c_str(), fx::Rotate90(*im, true)));
+        add(Fp((k + " rot90ccw").c_str(), fx::Rotate90(*im, false)));
+        add(Fp((k + " rot180").c_str(), fx::Rotate180(*im)));
+        add(Fp((k + " flipH").c_str(), fx::FlipH(*im)));
+        add(Fp((k + " flipV").c_str(), fx::FlipV(*im)));
+        add(Fp((k + " rotate15").c_str(), fx::RotateAngle(*im, 15, 0xFFFFFFFF)));
+        add(Fp((k + " rotate-37.5").c_str(), fx::RotateAngle(*im, -37.5, 0)));
+        for (int anchor = 0; anchor < 9; anchor++) {
+            add(Fp(FormatA("%s canvas+%d", n, anchor).c_str(), fx::CanvasResize(*im, im->w + 17, im->h + 8, anchor, 0xFF102030)));
+            add(Fp(FormatA("%s canvas-%d", n, anchor).c_str(), fx::CanvasResize(*im, im->w / 2, im->h - 3, anchor, 0)));
+        }
+        add(Fp((k + " trim8").c_str(), fx::AutoTrim(*im)));
+        add(Fp((k + " trim0").c_str(), fx::AutoTrim(*im, 0)));
+        for (int pc : { 100, 50, 150, 7 }) add(Fp(FormatA("%s scale%d", n, pc).c_str(), fx::Scale(*im, pc)));
+        auto inplace = [&](const char* what, auto f) { Image t = *im; f(t); add(Fp((k + " " + what).c_str(), t)); };
+        inplace("gray", [](Image& t) { fx::Grayscale(t); });
+        inplace("invert", [](Image& t) { fx::Invert(t); });
+        inplace("sepia", [](Image& t) { fx::Sepia(t); });
+        inplace("mono128", [](Image& t) { fx::Monochrome(t); });
+        inplace("mono60", [](Image& t) { fx::Monochrome(t, 60); });
+        inplace("bc30-20", [](Image& t) { fx::BrightnessContrast(t, 30, -20); });
+        inplace("bc-50+70", [](Image& t) { fx::BrightnessContrast(t, -50, 70); });
+        inplace("hs45+30", [](Image& t) { fx::HueSaturation(t, 45, 30); });
+        inplace("hs-120-60", [](Image& t) { fx::HueSaturation(t, -120, -60); });
+        inplace("gamma0.5", [](Image& t) { fx::Gamma(t, 0.5); });
+        inplace("gamma2.2", [](Image& t) { fx::Gamma(t, 2.2); });
+        inplace("replace", [&](Image& t) { fx::ReplaceColor(t, im->px[0], 0xFFFF00FF, 10); });
+        inplace("blur", [](Image& t) { fx::BoxBlur(t, { 3, 2, 40, 30 }, 4); });
+        inplace("blurAll", [](Image& t) { fx::BoxBlur(t, { -5, -5, 500, 500 }, 9); });
+        inplace("pixelate", [](Image& t) { fx::Pixelate(t, { 5, 4, 70, 45 }, 7); });
+        inplace("pixelate1", [](Image& t) { fx::Pixelate(t, { 0, 0, 500, 500 }, 1); });
+        inplace("emboss3", [](Image& t) { fx::Emboss(t, 3); });
+        inplace("emboss10", [](Image& t) { fx::Emboss(t, 12); });
+        inplace("sharpen40", [](Image& t) { fx::Sharpen(t, 40); });
+        inplace("sharpen100", [](Image& t) { fx::Sharpen(t, 100); });
+        inplace("watermark", [](Image& t) { fx::Watermark(t, L"Snapnab", 35, false, false); });
+        inplace("watermarkTiled", [](Image& t) { fx::Watermark(t, L"Confidencial ação", 60, true, true); });
+        add(Fp((k + " border").c_str(), fx::Border(*im, 5, 0xFF00FF00)));
+        add(Fp((k + " shadow").c_str(), fx::Shadow(*im, 6, 6, 50)));
+        add(Fp((k + " shadow0").c_str(), fx::Shadow(*im, 0, 1, 100)));
+        for (int st = 0; st < 6; st++)
+            for (int sides : { (int)fx::All, fx::Bottom | fx::Right, fx::Top | fx::Left })
+                for (bool sh : { false, true })
+                    add(Fp(FormatA("%s edge%d-%d-%d", n, st, sides, sh).c_str(), fx::EdgeEffect(*im, (fx::Edge)st, 9, sides, sh)));
+        add(Fp((k + " persp").c_str(), fx::Perspective(*im, 40, -25, 30)));
+        add(Fp((k + " persp2").c_str(), fx::Perspective(*im, -100, 100, -100)));
+        for (int c = 0; c < 4; c++) add(Fp(FormatA("%s curl%d", n, c).c_str(), fx::PageCurl(*im, 20, c)));
+        add(Fp((k + " spot").c_str(), fx::Spotlight(*im, { 10, 8, 40, 30 }, 50, 3, 100, false)));
+        add(Fp((k + " spotZoom").c_str(), fx::Spotlight(*im, { 10, 8, 40, 30 }, 70, 0, 150, true)));
+        add(Fp((k + " spotOut").c_str(), fx::Spotlight(*im, { 500, 500, 600, 600 }, 70, 0, 150, true)));
+        add(Fp((k + " caption").c_str(), fx::Caption(*im, L"Snapnab — teste", false, 12, 0xFFFFFFFF, 0xFF202020)));
+        add(Fp((k + " captionTop").c_str(), fx::Caption(*im, L"Um texto bem comprido que não cabe na largura", true, 14, 0xFF000000, 0x80FFFFFF)));
+        add(Fp((k + " scaleHQ").c_str(), ScaleImage(*im, 45, 31)));
+        add(Fp((k + " scaleNN").c_str(), ScaleImage(*im, 150, 20, false)));
+        add(Fp((k + " thumb").c_str(), MakeThumbnail(*im, 40, 40)));
+    }
+    // the capture preset effects, alone and together (no {date}/{time} tokens: they change)
+    {
+        fx::CaptureEffects e;
+        auto run = [&](const char* name) { add(Fp(name, fx::ApplyCaptureEffects(P, e))); add(Fp((std::string(name) + "-A").c_str(), fx::ApplyCaptureEffects(A, e))); };
+        run("ce none");
+        e.trim = true; run("ce trim");
+        e.rotate = true; for (int r = 0; r < 5; r++) { e.rotateKind = r; run(FormatA("ce rotate%d", r).c_str()); }
+        e.scale = true; e.scalePercent = 80; run("ce scale");
+        e.adjust = true; e.brightness = 10; e.contrast = 20; e.hue = 30; e.saturation = -10; run("ce adjust");
+        e.filter = true; for (int f = 0; f < 4; f++) { e.filterKind = f; run(FormatA("ce filter%d", f).c_str()); }
+        e.replaceColor = true; run("ce replace");
+        e.watermark = true; run("ce watermark");
+        e.caption = true; e.captionText = L"Snapnab"; e.captionTop = true; run("ce caption");
+        e.border = true; run("ce border");
+        e.edge = true; e.edgeSides = 0; run("ce edge");
+        e.shadow = true; run("ce shadow");
+        e.beautify = true; run("ce beautify");
+        e.resolution = true; e.dpi = 200; run("ce resolution");
+    }
+    // Beautify: backgrounds, aspect ratios, alignment, corners, shadow, auto balance
+    {
+        std::wstring bgFile = tmpDir + L"\\beautify_bg.png";
+        SaveImageFile(bgFile, Pattern(50, 90, 9));
+        int i = 0;
+        for (int bg : { 0, 1, 3, 4 })
+            for (int aspect = 0; aspect < 5; aspect++)
+                for (int align : { 0, 4, 8 }) {
+                    fx::BeautifyOptions o;
+                    o.background = bg; o.aspect = aspect; o.align = align; o.imagePath = bgFile;
+                    o.angle = (i * 47) % 360; o.padding = 10 + i % 30; o.radius = i % 25; o.shadow = (i * 7) % 101;
+                    o.shadowSize = i % 30; o.autoBalance = i % 2 == 0;
+                    POINT org{};
+                    for (auto& [n, im] : srcs) {
+                        Image r = fx::Beautify(*im, o, &org);
+                        add(Fp(FormatA("beautify%d %s", i, n).c_str(), r) + FormatA(" at %d,%d", org.x, org.y));
+                    }
+                    i++;
+                }
+        DeleteFileW(bgFile.c_str());
+    }
+    // computer vision
+    {
+        Image W = Pattern(64, 48, 7);
+        for (int y = 10; y < 30; y++) for (int x = 5; x < 40; x++) W.at(x, y) = 0xFF2040F0 + (uint32_t)((x * y) % 5);
+        for (auto [sx, sy] : { std::pair{ 6, 11 }, { 0, 0 }, { 63, 47 }, { -1, 3 } })
+            for (float tol : { 0.0f, 1.0f, 5.0f, 30.0f, 100.0f, 150.0f })
+                for (bool global : { false, true }) {
+                    add(FpMask(FormatA("wand %d,%d %g %d", sx, sy, tol, global).c_str(), cv::WandSelect(W, { sx, sy }, tol, global)));
+                    add(FpMask(FormatA("dowand %d,%d %g %d", sx, sy, tol, global).c_str(), cv::DoWand(W, { sx, sy }, tol, global)));
+                }
+        add(FpMask("rect", cv::RectMask(64, 48, { -3, 5, 30, 70 })));
+        add(FpMask("ellipse", cv::EllipseMask(64, 48, { 4, 3, 50, 40 })));
+        add(FpMask("ellipseThin", cv::EllipseMask(64, 48, { 10, 10, 10, 30 })));
+        add(FpMask("polygon", cv::PolygonMask(64, 48, { { 5, 5 }, { 60, 10 }, { 30, 45 }, { 2, 30 } })));
+        add(FpMask("polygonStar", cv::PolygonMask(64, 48, { { 32, 0 }, { 40, 47 }, { 0, 15 }, { 63, 15 }, { 24, 47 } })));
+        add(FpMask("polygon2", cv::PolygonMask(64, 48, { { 5, 5 }, { 60, 10 } })));
+        cv::Mask m = cv::EllipseMask(64, 48, { 20, 12, 44, 36 });
+        RECT b = cv::MaskBounds(m, 64, 48);
+        add(FormatA("bounds %d %d %d %d empty %d %d", b.left, b.top, b.right, b.bottom, cv::MaskEmpty(m), cv::MaskEmpty(cv::Mask(10, 0))));
+        b = cv::MaskBounds(cv::Mask(64 * 48, 0), 64, 48);
+        add(FormatA("bounds0 %d %d %d %d", b.left, b.top, b.right, b.bottom));
+        for (int k : { 1, 3, 7, 12 }) add(FpMask(FormatA("dilate%d", k).c_str(), cv::Dilate(m, 64, 48, k)));
+        for (int k : { 3, 7 }) {
+            Image t = W; uint32_t dom = 0; double share = 0;
+            bool ok = cv::Dingo7Inpaint(t, m, k, &dom, &share);
+            add(Fp(FormatA("dingo%d", k).c_str(), t) + FormatA(" ok=%d dom=%08x share=%.17g", ok, dom, share));
+        }
+        { Image t = W; bool ok = cv::Dingo7Inpaint(t, cv::Mask(64 * 48, 255), 3); add(Fp("dingoAll", t) + FormatA(" ok=%d", ok)); }
+        { Image t = W; cv::DiffusionInpaint(t, m); add(Fp("diffusion", t)); }
+        { Image t = W; cv::DiffusionInpaint(t, m, 5); add(Fp("diffusion5", t)); }
+        { Image t = A; cv::DiffusionInpaint(t, cv::RectMask(80, 50, { 0, 0, 80, 10 })); add(Fp("diffusionEdge", t)); }
+        { Image t = W; cv::SmartFill(t, m); add(Fp("smartfill", t)); }
+        { Image t(64, 48, 0xFFFFFFFF); t.FillRect({ 20, 20, 30, 30 }, 0xFF000000); cv::SmartFill(t, cv::RectMask(64, 48, { 18, 18, 32, 32 })); add(Fp("smartfillFlat", t)); }
+        for (auto* im : { &P, &A, &tiny }) add(FormatA("autotol %.9g", cv::SmartMoveAutoTolerance(*im)));
+        add(FormatA("autotol0 %.9g", cv::SmartMoveAutoTolerance(Image())));
+        add(FormatA("tolscale %.9g %.9g", cv::SmartMoveToleranceScaling(12, 2, 75, 0, 100), cv::SmartMoveToleranceScaling(5, 3, 3, 0, 1)));
+        // translations: shifted parts of a larger image
+        Image big = Pattern(700, 900, 11);
+        for (int y = 0; y < big.h; y += 37) for (int x = 20; x < 600; x++) big.at(x, y) = 0xFF000000;
+        for (auto [dx, dy, w, h] : { std::tuple{ 0, 40, 300, 400 }, { 0, -90, 640, 500 }, { 13, 7, 200, 160 }, { 0, 0, 120, 90 }, { 0, 300, 600, 560 } }) {
+            int ax = std::max(0, -dx) + 10, ay = std::max(0, -dy) + 100;
+            Image a = big.Crop({ ax, ay, ax + w, ay + h }), bb = big.Crop({ ax + dx, ay + dy, ax + dx + w, ay + dy + h });
+            double conf = 0;
+            POINT d = cv::DetectTranslation(a, bb, &conf);
+            add(FormatA("translation %d,%d %dx%d -> %d,%d conf %.17g", dx, dy, w, h, d.x, d.y, conf));
+        }
+        POINT none = cv::DetectTranslation(P, A);
+        add(FormatA("translation mismatch %d,%d", none.x, none.y));
+    }
+    // long images across pages, and the PDF writer
+    {
+        Image page(300, 2600, 0xFFFFFFFF);
+        for (int line = 0; line < 120; line++) {
+            int y0 = 12 + line * 21 + (line % 7);
+            for (int y = y0; y < y0 + 11 && y < page.h; y++)
+                for (int x = 10; x < 280 - (line % 5) * 30; x++) if ((x * 7 + y * 3 + line) % 5 < 3) page.at(x, y) = 0xFF202020;
+        }
+        auto list = [](const std::vector<int>& v) { std::string s; for (int c : v) s += FormatA(" %d", c); return s; };
+        for (int ph : { 400, 777, 3000, 10 }) add(FormatA("breaks %d:", ph) + list(ed::SmartBreaks(page, ph)));
+        add("breaks s40:" + list(ed::SmartBreaks(page, 500, 40)));
+        for (int parts : { 1, 2, 5, 9 }) add(FormatA("cuts %d:", parts) + list(ed::SmartCuts(page, parts)));
+        int k = 0;
+        for (auto& part : ed::SplitImage(page, { 900, 100, 5000, -4, 1300 }, false)) add(Fp(FormatA("split%d", k++).c_str(), part));
+        for (auto& part : ed::SplitImage(P, { 30, 60 }, true)) add(Fp(FormatA("splitV%d", k++).c_str(), part));
+        auto pdf = [&](const char* name, const Image& img, const std::vector<ed::PdfLink>& links) {
+            std::wstring f = tmpDir + L"\\fingerprint (a).pdf", err;
+            bool ok = ed::SavePdf(f, img, err, links);
+            std::vector<char> d;
+            if (ok) { std::ifstream in(f, std::ios::binary); d.assign(std::istreambuf_iterator<char>(in), {}); }
+            DeleteFileW(f.c_str());
+            add(FormatA("pdf %s ok=%d %zu %016llx err=%s", name, ok, d.size(), (unsigned long long)Fnv1a(d.data(), d.size()), WToUtf8(err).c_str()));
+        };
+        std::vector<ed::PdfLink> links = { { Gdiplus::RectF(10, 20, 80, 15), L"https://example.com/a(b)?q=ação" },
+                                           { Gdiplus::RectF(5, 1290, 100, 30), L"mailto:x@y.z" },
+                                           { Gdiplus::RectF(5, 5, 10, 10), L"file:///C:/x" },
+                                           { Gdiplus::RectF(0, 2590, 300, 40), L"http://edge" } };
+        pdf("page", page, links);
+        pdf("P", P, {});
+        pdf("wide", Pattern(400, 100, 2), { { Gdiplus::RectF(0, 0, 400, 100), L"https://w" } });
+        pdf("A", A, {});
+        pdf("empty", Image(), {});
+    }
+    return L;
+}
+
 static std::wstring Tmp(const wchar_t* name) {
     wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t);
     return std::wstring(t) + L"snapnab_test_" + name;
@@ -148,6 +353,11 @@ int wmain(int argc, wchar_t** argv) {
     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
     if (argc > 1 && std::wstring(argv[1]) == L"webpgolden") {    // the WebP fingerprints of this build
         for (auto& l : WebPFingerprints()) printf("%s\n", l.c_str());
+        return 0;
+    }
+    if (argc > 1 && std::wstring(argv[1]) == L"fxgolden") {      // the pixel fingerprints of this build
+        GdiplusSession gdip;
+        for (auto& l : PixelFingerprints(TestTempDir())) printf("%s\n", l.c_str());
         return 0;
     }
     if (argc > 2 && std::wstring(argv[1]) == L"comparesnap") {   // reads every .snap of a folder with both containers
@@ -2100,6 +2310,25 @@ int wmain(int argc, wchar_t** argv) {
         std::vector<BYTE> tooWide;
         CHECK(!EncodeToMemoryEx(Image(16384, 1, 0xFF000000), ImageFormat::WEBP, tooWide, SaveOptions()) &&
               ImageIoError() == Tr(L"Falha ao codificar WebP."), "an image wider than WebP allows fails with its message");
+    }
+
+    printf("[23] Effects, Beautify, scaling, computer vision and PDF in Rust against the former C++ code\n");
+    {
+        std::vector<std::string> want;
+        std::ifstream golden(ExeDir() + L"\\..\\..\\..\\..\\tests\\data\\pixels-cpp.txt");
+        for (std::string l; std::getline(golden, l);) {
+            if (!l.empty() && l.back() == '\r') l.pop_back();
+            if (!l.empty()) want.push_back(l);
+        }
+        std::vector<std::string> got = PixelFingerprints(TestTempDir());
+        int differ = 0;
+        for (size_t i = 0; i < got.size(); i++)
+            if (i >= want.size() || got[i] != want[i]) {
+                differ++;
+                printf("       %s (was %s)\n", got[i].c_str(), i < want.size() ? want[i].c_str() : "missing");
+            }
+        CHECK(want.size() > 800 && got.size() == want.size() && !differ,
+              "%zu pixel results the same as the C++ code's, %d differ", got.size(), differ);
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

@@ -17,7 +17,7 @@ target_link_libraries(SnapnabCommon PRIVATE ZXing::ZXing)                      #
 corrosion_import_crate(MANIFEST_PATH ${CMAKE_SOURCE_DIR}/rust/Cargo.toml CRATES snapcore CRATE_TYPES staticlib LOCKED)
 corrosion_add_target_rustflags(snapcore -C target-feature=+crt-static)
 target_link_libraries(SnapnabCommon PRIVATE snapcore)
-target_include_directories(SnapnabCommon PRIVATE ${CMAKE_SOURCE_DIR}/rust/snapcore/include)
+target_include_directories(SnapnabCommon PUBLIC ${CMAKE_SOURCE_DIR}/rust/snapcore/include)
 
 # ---- SnapEx64.dll: extended window capture hook
 add_library(SnapEx64 SHARED snapex/SnapEx64.cpp snapex/SnapEx64.def)
