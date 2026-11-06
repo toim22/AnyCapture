@@ -3,6 +3,14 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- The `.snap` container (the compound file inside each capture) is read and written by Rust code
+  (`rust/snapcore`, pilot of the Rust migration), so a damaged or hostile file is parsed by memory-safe code. Same file
+  format: captures saved by earlier versions open as before and older versions open the new ones. Building needs Rust
+  (or `-DSNAPNAB_RUST=OFF`).
+
 ## [0.4.1] — 2026-11-03
 
 ### Added

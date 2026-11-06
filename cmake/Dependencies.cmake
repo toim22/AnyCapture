@@ -3,6 +3,7 @@
 #
 #   libwebp 1.5.0     (BSD-3-Clause)  WebP encoder and decoder (Save as / open WebP, Copy as data URL)
 #   ZXing-C++ 2.2.1   (Apache-2.0)    QR code and barcode reader
+#   Corrosion 0.6.1   (MIT)           builds the Rust crates with Cargo (SNAPNAB_RUST, rust/snapcore)
 include(FetchContent)
 set(FETCHCONTENT_QUIET ON)
 if(POLICY CMP0135)
@@ -41,3 +42,13 @@ FetchContent_Declare(zxing
     EXCLUDE_FROM_ALL)
 
 FetchContent_MakeAvailable(libwebp zxing)
+
+# ---- Rust (pilot of the Rust migration): rust/snapcore reads and writes the .snap container. Needs Cargo (rustup.rs);
+#      -DSNAPNAB_RUST=OFF builds without it (the .snap container then uses the Windows structured storage API).
+option(SNAPNAB_RUST "Build the Rust parts (rust/snapcore)" ON)
+if(SNAPNAB_RUST)
+    FetchContent_Declare(corrosion
+        URL https://github.com/corrosion-rs/corrosion/archive/refs/tags/v0.6.1.tar.gz
+        URL_HASH SHA256=e9e95b1ee2bad52681f347993fb1a5af5cce458c5ce8a2636c9e476e4babf8e3)
+    FetchContent_MakeAvailable(corrosion)
+endif()

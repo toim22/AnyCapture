@@ -5,6 +5,9 @@
 - Windows 10 2004+ or Windows 11, x64
 - Visual Studio 2022 or later with the **Desktop development with C++** workload, which already includes:
   MSVC, the Windows SDK and **C++ CMake tools for Windows** (CMake + Ninja)
+- [Rust](https://rustup.rs) (stable, `x86_64-pc-windows-msvc`, the rustup default on Windows): the `.snap` container
+  is written in Rust (`rust/snapcore`). Without Rust, configure with `-DSNAPNAB_RUST=OFF` and the container uses the
+  Windows structured storage API instead (same file format).
 - To build the installer: [Inno Setup 6.5+](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
   Without it, `build.bat` produces only the folder and the zip.
 
@@ -12,7 +15,8 @@ Almost everything uses Windows APIs (Win32, GDI+, WIC, Media Foundation, WASAPI,
 open-source libraries are downloaded by CMake (`FetchContent`, pinned versions with SHA-256 checks, see
 `cmake/Dependencies.cmake`) on the first configure, so that step needs internet access: **libwebp 1.5.0** (WebP, BSD)
 and **ZXing-C++ 2.2.1** (QR/barcode reading only, Apache-2.0). CMake 3.28 or later is required (the one included with
-Visual Studio is fine). Their licenses are in `THIRD-PARTY-NOTICES.txt`, installed next to the programs.
+Visual Studio is fine). With Rust, **Corrosion 0.6.1** (MIT, the CMake integration of Cargo) is fetched the same way and
+Cargo downloads the crates pinned in `rust/snapcore/Cargo.lock` (`cfb` and its dependencies) on the first build. Their licenses are in `THIRD-PARTY-NOTICES.txt`, installed next to the programs.
 
 ## Command line
 
