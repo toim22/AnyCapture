@@ -26,10 +26,6 @@ jobs:
             Where-Object { Test-Path $_ } | Select-Object -First 1
           if (-not $iscc) { choco install innosetup -y --no-progress }
 
-      - name: Rust tests (rust/snapcore)
-        shell: cmd
-        run: cargo test --locked --release --manifest-path rust/snapcore/Cargo.toml
-
       - name: Build and package
         shell: cmd
         run: build.bat

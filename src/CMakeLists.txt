@@ -13,13 +13,6 @@ add_library(SnapnabCommon STATIC ${COMMON_SOURCES})
 target_include_directories(SnapnabCommon PUBLIC common ${CMAKE_CURRENT_BINARY_DIR}/generated)
 target_link_libraries(SnapnabCommon PUBLIC ${SNAPNAB_WIN32_LIBS} windowsapp)     # windowsapp: OCR (Windows.Media.Ocr)
 target_link_libraries(SnapnabCommon PRIVATE webp ZXing::ZXing)                 # WebP files, QR codes and barcodes
-if(SNAPNAB_RUST)       # the .snap container in Rust (rust/snapcore), with the same static CRT as the C++ code
-    corrosion_import_crate(MANIFEST_PATH ${CMAKE_SOURCE_DIR}/rust/snapcore/Cargo.toml CRATE_TYPES staticlib LOCKED)
-    corrosion_add_target_rustflags(snapcore -C target-feature=+crt-static)
-    target_link_libraries(SnapnabCommon PRIVATE snapcore)
-    target_include_directories(SnapnabCommon PRIVATE ${CMAKE_SOURCE_DIR}/rust/snapcore/include)
-    target_compile_definitions(SnapnabCommon PRIVATE SNAPNAB_RUST)
-endif()
 
 # ---- SnapEx64.dll: extended window capture hook
 add_library(SnapEx64 SHARED snapex/SnapEx64.cpp snapex/SnapEx64.def)
