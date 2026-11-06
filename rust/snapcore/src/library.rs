@@ -287,14 +287,9 @@ pub fn list(dir: &[u16], max: usize) -> Vec<Item> {
     items
 }
 
-/// Writes PNG, JPEG… (not WebP) with the settings' options, through `<path>.tmp` (SaveImageFile).
+/// Writes PNG, JPEG, WebP… with the settings' options, through `<path>.tmp` (SaveImageFile).
 fn save_image_file(p: &[u16], img: &Image, version: &str) -> bool {
-    let opt = SaveOptions {
-        jpeg_quality: 90,
-        avif_quality: reg_dword("AvifQuality", 80).clamp(1, 100) as i32,
-        strip_metadata: reg_dword("StripMetadata", 0) != 0,
-    };
-    codec::save_file(&path(p), img, Format::from_ext(&text(&file_ext(p))), &opt, version)
+    codec::save_file(&path(p), img, Format::from_ext(&text(&file_ext(p))), &SaveOptions::from_settings(), version)
 }
 
 /// Writes the thumbnail of an item (already scaled by the caller); false if it is empty or cannot be written.

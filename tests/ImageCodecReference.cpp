@@ -1,6 +1,6 @@
 // The WIC image codecs of Image.cpp as they were before they moved to Rust (rust/snapcore/src/codec.rs), kept only to
 // check that the Rust ones read and write the same files (tests.cpp, [18] "Image files: Rust and the former C++").
-// WebP is not here: it stays with libwebp in Image.cpp.
+// WebP is not here: its former build is checked through tests/data/webp-libwebp-1.5.0.txt.
 #include "Common.h"
 #include "Image.h"
 #include <wincodec.h>

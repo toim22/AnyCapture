@@ -505,6 +505,9 @@ fn decoded(r: Result<Image, DecodeError>, err: *mut i32) -> *mut Decoded {
         Ok(_) => 0,
         Err(DecodeError::Failed) => 1,
         Err(DecodeError::NoDecoder) => 2,
+        Err(DecodeError::WebpInvalid) => 3,
+        Err(DecodeError::WebpCorrupt) => 4,
+        Err(DecodeError::WebpUnreadable) => 5,
     };
     if !err.is_null() {
         unsafe { *err = code };
@@ -524,13 +527,13 @@ impl Decoded {
     }
 }
 
-/// Decodes an image in memory (not WebP); null on failure, with the reason in *err.
+/// Decodes an image in memory; null on failure, with the reason in *err.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn snapcore_image_decode(data: *const u8, len: usize, err: *mut i32) -> *mut Decoded {
     guard(std::ptr::null_mut(), || decoded(codec::decode(unsafe { bytes_arg(data, len) }), err))
 }
 
-/// Decodes an image file (not WebP); null on failure, with the reason in *err.
+/// Decodes an image file; null on failure, with the reason in *err.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn snapcore_image_load(path: *const u16, len: usize, err: *mut i32) -> *mut Decoded {
     guard(std::ptr::null_mut(), || match unsafe { path_arg(path, len) } {
@@ -627,11 +630,13 @@ pub struct EncodeRequest {
     pub format: i32,
     pub jpeg_quality: i32,
     pub avif_quality: i32,
+    pub webp_quality: i32,
+    pub webp_lossless: bool,
     pub strip_metadata: bool,
     pub version: *const u16,
 }
 
-/// Encodes the image (not WebP) into *out (free it with snapcore_buf_free); false on failure, with the reason in *err.
+/// Encodes the image into *out (free it with snapcore_buf_free); false on failure, with the reason in *err.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn snapcore_image_encode(req: *const EncodeRequest, out: *mut SnapBuf, err: *mut i32) -> bool {
     let set_err = |code: i32| {
@@ -643,7 +648,13 @@ pub unsafe extern "C" fn snapcore_image_encode(req: *const EncodeRequest, out: *
         let Some(r) = (unsafe { req.as_ref() }) else { return Err(EncodeError::Failed) };
         let (Some(img), false) = (unsafe { image_in(&r.image) }, out.is_null()) else { return Err(EncodeError::Failed) };
         let text = |p: *const u16| unsafe { from_ptr(p) }.map(to_string_lossy).unwrap_or_default();
-        let opt = SaveOptions { jpeg_quality: r.jpeg_quality, avif_quality: r.avif_quality, strip_metadata: r.strip_metadata };
+        let opt = SaveOptions {
+            jpeg_quality: r.jpeg_quality,
+            avif_quality: r.avif_quality,
+            webp_lossless: r.webp_lossless,
+            webp_quality: r.webp_quality,
+            strip_metadata: r.strip_metadata,
+        };
         codec::encode(&img, Format::from_i32(r.format), &opt, &text(r.version))
     });
     match r {
@@ -660,6 +671,10 @@ pub unsafe extern "C" fn snapcore_image_encode(req: *const EncodeRequest, out: *
         }
         Err(EncodeError::Codec) => {
             set_err(2);
+            false
+        }
+        Err(EncodeError::Webp) => {
+            set_err(3);
             false
         }
     }

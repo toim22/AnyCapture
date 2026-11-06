@@ -74,8 +74,10 @@ void snapcore_xml_close(SnapcoreXmlBuilder* b);
 bool snapcore_xml_serialize(SnapcoreXmlBuilder* b, bool declaration, SnapcoreBuf* out);
 bool snapcore_xml_save(SnapcoreXmlBuilder* b, const wchar_t* path, size_t len);
 
-// ---- image files through the Windows codecs (Image.cpp; WebP stays with libwebp). Formats as ImageFormat in Image.h.
-// Errors: decoding 1 = failed, 2 = Windows has no decoder for the file; encoding 1 = failed, 2 = the AVIF codec hint.
+// ---- image files (Image.cpp): the Windows codecs, and libwebp for WebP. Formats as ImageFormat in Image.h.
+// Errors: decoding 1 = failed, 2 = Windows has no decoder for the file, 3 = not a WebP libwebp reads, 4 = libwebp failed
+// while decoding, 5 = the WebP file could not be read whole; encoding 1 = failed, 2 = the AVIF codec hint, 3 = libwebp
+// could not encode.
 struct SnapcoreImage;                                  // a decoded image: copy it out, then snapcore_image_free
 struct SnapcoreImageInfo { uint32_t w, h; bool hasMeta, gps; double lat, lon; };
 SnapcoreImage*  snapcore_image_decode(const uint8_t* data, size_t len, int32_t* err);
@@ -97,9 +99,9 @@ struct SnapcoreImageIn {
 };
 struct SnapcoreEncodeRequest {
     SnapcoreImageIn image;
-    int32_t format, jpegQuality, avifQuality;
-    bool stripMetadata;
-    const wchar_t* version;                            // "Snapnab <version>" goes into the metadata
+    int32_t format, jpegQuality, avifQuality, webpQuality;
+    bool webpLossless, stripMetadata;
+    const wchar_t* version;                            // "Snapnab <version>" goes into the metadata (not WebP's)
 };
 bool snapcore_image_encode(const SnapcoreEncodeRequest* req, SnapcoreBuf* out, int32_t* err);
 

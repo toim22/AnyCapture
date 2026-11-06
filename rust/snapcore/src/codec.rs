@@ -2,13 +2,17 @@
 //! TIFF, and AVIF / HEIC when the Windows codecs are installed. A port of Image.cpp that makes the same WIC calls in the
 //! same order, so the files come out byte for byte the same: decoding to 32 bpp BGRA with the photo's metadata (C29) and
 //! its EXIF orientation applied; encoding with the resolution, Snapnab's metadata (unless stripped) and JPEG / BMP
-//! composed over white. WebP is not here (libwebp, Image.cpp).
+//! composed over white. WebP is read and written with libwebp 1.5.0 (libwebp-sys), as Image.cpp did, whether or not the
+//! Windows WebP codec is installed.
 
+use std::io::Read;
+use std::os::windows::fs::OpenOptionsExt;
 use std::path::Path;
 
+use libwebp_sys as webp;
 use windows::Win32::Foundation::{FILETIME, GENERIC_READ, HGLOBAL, SYSTEMTIME, WINCODEC_ERR_COMPONENTNOTFOUND};
 use windows::Win32::Graphics::Imaging::*;
-use windows::Win32::Storage::FileSystem::FileTimeToLocalFileTime;
+use windows::Win32::Storage::FileSystem::{FILE_SHARE_READ, FILE_SHARE_WRITE, FileTimeToLocalFileTime};
 use windows::Win32::System::Com::StructuredStorage::{
     CreateStreamOnHGlobal, IPropertyBag2, PROPBAG2, PROPVARIANT, PropVariantClear,
 };
@@ -25,6 +29,7 @@ use windows::Win32::UI::Shell::SHCreateMemStream;
 use windows::core::{GUID, HSTRING, PCWSTR, PSTR, PWSTR, w};
 
 use crate::image::{Image, Meta};
+use crate::reg;
 
 /// The formats of ImageFormat in Image.h, in the same order (the values cross the C ABI).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -65,17 +70,33 @@ impl Format {
     }
 }
 
-/// How a file is written (SaveOptions in Image.h; the WebP settings stay with libwebp).
+/// How a file is written (SaveOptions in Image.h).
 #[derive(Clone, Copy, Debug)]
 pub struct SaveOptions {
     pub jpeg_quality: i32,
     pub avif_quality: i32,
+    pub webp_lossless: bool,
+    pub webp_quality: i32,
     pub strip_metadata: bool,
 }
 
 impl Default for SaveOptions {
     fn default() -> Self {
-        SaveOptions { jpeg_quality: 90, avif_quality: 80, strip_metadata: false }
+        SaveOptions { jpeg_quality: 90, avif_quality: 80, webp_lossless: true, webp_quality: 90, strip_metadata: false }
+    }
+}
+
+impl SaveOptions {
+    /// SaveOptions::FromSettings: the user's choices in the registry (the JPEG quality is not one of them).
+    pub fn from_settings() -> Self {
+        let dword = |name: &str, def: u32| reg::get_dword(std::ffi::OsStr::new(name), def, None);
+        SaveOptions {
+            webp_lossless: dword("WebPLossless", 1) != 0,
+            webp_quality: dword("WebPQuality", 90).clamp(1, 100) as i32,
+            avif_quality: dword("AvifQuality", 80).clamp(1, 100) as i32,
+            strip_metadata: dword("StripMetadata", 0) != 0,
+            ..Default::default()
+        }
     }
 }
 
@@ -84,6 +105,12 @@ pub enum DecodeError {
     Failed,
     /// Windows has no decoder for the file (the C++ side then says "unsupported format")
     NoDecoder,
+    /// libwebp does not take the file as WebP ("Invalid WebP file")
+    WebpInvalid,
+    /// libwebp failed while decoding it ("Invalid WebP file", and the C++ side clears the image as before)
+    WebpCorrupt,
+    /// the WebP file could not be read whole (no message)
+    WebpUnreadable,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -91,6 +118,8 @@ pub enum EncodeError {
     Failed,
     /// AVIF could not be written: the codec hint applies (AV1 / HEIF extensions)
     Codec,
+    /// libwebp could not encode the image ("WebP encoding failed")
+    Webp,
 }
 
 // ---------------------------------------------------------------- COM
@@ -278,8 +307,77 @@ fn decode_with(f: &IWICImagingFactory, dec: &IWICBitmapDecoder) -> Option<Image>
     }
 }
 
-/// Decodes an image file.
+// ---------------------------------------------------------------- WebP (libwebp)
+
+/// RIFF....WEBP
+pub fn is_webp(d: &[u8]) -> bool {
+    d.len() >= 12 && &d[..4] == b"RIFF" && &d[8..12] == b"WEBP"
+}
+
+fn decode_webp(d: &[u8]) -> Result<Image, DecodeError> {
+    let (mut w, mut h) = (0, 0);
+    if unsafe { webp::WebPGetInfo(d.as_ptr(), d.len(), &mut w, &mut h) } == 0 || w <= 0 || h <= 0 {
+        return Err(DecodeError::WebpInvalid);
+    }
+    let mut img = Image::new(w as u32, h as u32, 0);
+    let out = img.bytes_mut();
+    if unsafe { webp::WebPDecodeBGRAInto(d.as_ptr(), d.len(), out.as_mut_ptr(), out.len(), w * 4) }.is_null() {
+        return Err(DecodeError::WebpCorrupt);
+    }
+    Ok(img)
+}
+
+fn encode_webp(img: &Image, opt: &SaveOptions) -> Result<Vec<u8>, EncodeError> {
+    let (w, h) = (img.w as i32, img.h as i32);
+    let px = img.bytes().as_ptr();
+    let mut data: *mut u8 = std::ptr::null_mut();
+    let n = unsafe {
+        if opt.webp_lossless {
+            webp::WebPEncodeLosslessBGRA(px, w, h, w * 4, &mut data)
+        } else {
+            webp::WebPEncodeBGRA(px, w, h, w * 4, opt.webp_quality as f32, &mut data)
+        }
+    };
+    let out = (n != 0 && !data.is_null()).then(|| unsafe { std::slice::from_raw_parts(data, n) }.to_vec());
+    if !data.is_null() {
+        unsafe { webp::WebPFree(data as *mut _) };
+    }
+    out.ok_or(EncodeError::Webp)
+}
+
+/// Opened as Image.cpp did: shared for reading and writing.
+fn open_shared(path: &Path) -> Option<std::fs::File> {
+    std::fs::OpenOptions::new().read(true).share_mode((FILE_SHARE_READ | FILE_SHARE_WRITE).0).open(path).ok()
+}
+
+/// The first 12 bytes say WebP.
+fn file_is_webp(path: &Path) -> bool {
+    let mut head = [0u8; 12];
+    open_shared(path).and_then(|mut f| f.read(&mut head).ok()) == Some(12) && is_webp(&head)
+}
+
+/// The whole file, if it has 1 byte to 512 MB and reads whole; empty otherwise.
+fn read_whole(path: &Path) -> Vec<u8> {
+    let Some(mut f) = open_shared(path) else { return Vec::new() };
+    let size = f.metadata().map(|m| m.len()).unwrap_or(0);
+    if size == 0 || size >= 512 * 1024 * 1024 {
+        return Vec::new();
+    }
+    let mut d = vec![0u8; size as usize];
+    if f.read_exact(&mut d).is_err() {
+        d.clear();
+    }
+    d
+}
+
+// ---------------------------------------------------------------- decoding
+
+/// Decodes an image file (WebP with libwebp, the Windows WebP codec being optional).
 pub fn load(path: &Path) -> Result<Image, DecodeError> {
+    if file_is_webp(path) {
+        let d = read_whole(path);
+        return if d.is_empty() { Err(DecodeError::WebpUnreadable) } else { decode_webp(&d) };
+    }
     let _com = ComScope::new();
     let f = factory().ok_or(DecodeError::Failed)?;
     let dec = unsafe {
@@ -294,6 +392,9 @@ pub fn load(path: &Path) -> Result<Image, DecodeError> {
 
 /// Decodes an image held in memory.
 pub fn decode(data: &[u8]) -> Result<Image, DecodeError> {
+    if is_webp(data) {
+        return decode_webp(data);
+    }
     let _com = ComScope::new();
     let f = factory().ok_or(DecodeError::Failed)?;
     let stream = unsafe { SHCreateMemStream(Some(data)) }.ok_or(DecodeError::Failed)?;
@@ -468,10 +569,13 @@ fn encode_into(
     Ok(())
 }
 
-/// Encodes the image as `fmt` (not WebP). `version` goes into the metadata ("Snapnab <version>").
+/// Encodes the image as `fmt`. `version` goes into the metadata ("Snapnab <version>"; WebP gets none).
 pub fn encode(img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> Result<Vec<u8>, EncodeError> {
     if img.is_empty() || img.px.len() != img.w as usize * img.h as usize {
         return Err(EncodeError::Failed);
+    }
+    if fmt == Format::Webp {
+        return encode_webp(img, opt);
     }
     let _com = ComScope::new();
     let f = factory().ok_or(EncodeError::Failed)?;
@@ -491,7 +595,7 @@ pub fn encode(img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> Res
     }
 }
 
-/// Writes the image to a file (SaveImageFileEx, not WebP): unknown formats and HEIC (only opened) as PNG, written whole
+/// Writes the image to a file (SaveImageFileEx): unknown formats and HEIC (only opened) as PNG, written whole
 /// to `<path>.tmp` and then put in place.
 pub fn save_file(path: &Path, img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> bool {
     let fmt = if matches!(fmt, Format::Unknown | Format::Heic) { Format::Png } else { fmt };
@@ -583,10 +687,34 @@ mod tests {
         assert!(png.windows(4).any(|w| w == b"pHYs"));
         assert_eq!(decode(b"not an image"), Err(DecodeError::Failed));
         assert_eq!(encode(&Image::default(), Format::Png, &SaveOptions::default(), "t"), Err(EncodeError::Failed));
-        assert_eq!(encode(&img, Format::Webp, &SaveOptions::default(), "t"), Err(EncodeError::Failed));
         let p = std::env::temp_dir().join(format!("snapcore-codec-{}.xyz", std::process::id()));
         std::fs::write(&p, b"plain text, no image format").unwrap();
         assert_eq!(load(&p), Err(DecodeError::NoDecoder));
         let _ = std::fs::remove_file(&p);
+    }
+
+    #[test]
+    fn webp_round_trip() {
+        let img = pattern(37, 21, true);
+        let data = encode(&img, Format::Webp, &SaveOptions::default(), "t").unwrap();
+        assert!(is_webp(&data));
+        let back = decode(&data).unwrap();
+        assert_eq!((back.w, back.h, back.meta.is_none()), (37, 21, true));
+        assert_eq!(back.px, img.px, "lossless");
+        let lossy = SaveOptions { webp_lossless: false, webp_quality: 40, ..Default::default() };
+        let small = encode(&pattern(160, 120, false), Format::Webp, &lossy, "t").unwrap();
+        assert_eq!(decode(&small).map(|i| (i.w, i.h)), Ok((160, 120)));
+        // from a file, and the failures
+        let p = std::env::temp_dir().join(format!("snapcore-codec-{}.webp", std::process::id()));
+        assert!(save_file(&p, &img, Format::Webp, &SaveOptions::default(), "t"));
+        assert_eq!(load(&p).unwrap().px, img.px);
+        let mut bad = data.clone();
+        bad.truncate(40);
+        assert_eq!(decode(&bad).map(|_| ()), Err(DecodeError::WebpCorrupt));
+        assert_eq!(decode(b"RIFF\0\0\0\0WEBPVP8 nothing").map(|_| ()), Err(DecodeError::WebpInvalid));
+        std::fs::write(&p, b"RIFF\0\0\0\0WEBPVP8 nothing").unwrap();
+        assert_eq!(load(&p).map(|_| ()), Err(DecodeError::WebpInvalid));
+        let _ = std::fs::remove_file(&p);
+        assert_eq!(encode(&Image::default(), Format::Webp, &SaveOptions::default(), "t"), Err(EncodeError::Failed));
     }
 }

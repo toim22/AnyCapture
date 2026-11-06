@@ -1,7 +1,5 @@
 #include "Image.h"
 #include "SnapcoreBridge.h"
-#include "webp/decode.h"
-#include "webp/encode.h"
 
 namespace snap {
 
@@ -180,31 +178,17 @@ std::wstring CodecHint(ImageFormat fmt) {
     return L"";
 }
 
-static bool IsWebP(const BYTE* d, size_t n) { return n >= 12 && !memcmp(d, "RIFF", 4) && !memcmp(d + 8, "WEBP", 4); }
-
-static bool DecodeWebP(const BYTE* d, size_t n, Image& out) {
-    int w = 0, h = 0;
-    if (!WebPGetInfo(d, n, &w, &h) || w <= 0 || h <= 0) { g_ioError = Tr(L"Arquivo WebP inválido."); return false; }
-    out = Image(w, h);
-    if (!WebPDecodeBGRAInto(d, n, (uint8_t*)out.px.data(), out.px.size() * 4, w * 4)) {
-        out = Image(); g_ioError = Tr(L"Arquivo WebP inválido."); return false;
-    }
-    return true;
+// the WebP failures snapcore reports: 3 libwebp does not take it as WebP, 4 libwebp failed while decoding (the image is
+// cleared), 5 the file could not be read whole (no message). True if `err` is one of them.
+static bool WebPFailure(int32_t err, Image& out) {
+    if (err == 3 || err == 4) g_ioError = Tr(L"Arquivo WebP inválido.");
+    if (err == 4) out = Image();
+    return err >= 3 && err <= 5;
 }
 
-static bool EncodeWebP(const Image& img, const SaveOptions& opt, std::vector<BYTE>& out) {
-    uint8_t* data = nullptr;
-    size_t n = opt.webpLossless ? WebPEncodeLosslessBGRA((const uint8_t*)img.px.data(), img.w, img.h, img.w * 4, &data)
-                                : WebPEncodeBGRA((const uint8_t*)img.px.data(), img.w, img.h, img.w * 4, (float)opt.webpQuality, &data);
-    if (!n || !data) { g_ioError = Tr(L"Falha ao codificar WebP."); return false; }
-    out.assign(data, data + n);
-    WebPFree(data);
-    return true;
-}
-
-// ---------------------------------------------------------------- codecs (rust/snapcore/src/codec.rs, through WIC)
+// ---------------------------------------------------------------- codecs (rust/snapcore/src/codec.rs)
 // PNG, JPEG, BMP, GIF, TIFF, AVIF and HEIC are read and written by snapcore with the Windows codecs, with the photo's
-// metadata (C29) and its EXIF orientation; WebP is read and written here with libwebp.
+// metadata (C29) and its EXIF orientation; WebP with libwebp, whether or not the Windows WebP codec is installed.
 
 SnapcoreImageIn ImageIn(const Image& img) {
     SnapcoreImageIn r{};
@@ -241,36 +225,11 @@ static bool TakeDecoded(SnapcoreImage* d, Image& out) {
     return true;
 }
 
-static std::vector<BYTE> ReadFileBytes(const std::wstring& path) {
-    std::vector<BYTE> d;
-    HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
-    if (h == INVALID_HANDLE_VALUE) return d;
-    LARGE_INTEGER sz{};
-    if (GetFileSizeEx(h, &sz) && sz.QuadPart > 0 && sz.QuadPart < 512LL * 1024 * 1024) {
-        d.resize((size_t)sz.QuadPart);
-        DWORD rd = 0;
-        if (!ReadFile(h, d.data(), (DWORD)d.size(), &rd, nullptr) || rd != d.size()) d.clear();
-    }
-    CloseHandle(h);
-    return d;
-}
-
 bool LoadImageFile(const std::wstring& path, Image& out) {
     g_ioError.clear();
-    {
-        BYTE head[12] = {};
-        HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
-        if (h != INVALID_HANDLE_VALUE) {
-            DWORD rd = 0; ReadFile(h, head, sizeof head, &rd, nullptr); CloseHandle(h);
-            if (rd == sizeof head && IsWebP(head, sizeof head)) {        // WebP: libwebp (the Windows codec is optional)
-                auto d = ReadFileBytes(path);
-                return !d.empty() && DecodeWebP(d.data(), d.size(), out);
-            }
-        }
-    }
     int32_t err = 0;
     bool ok = TakeDecoded(snapcore_image_load(path.data(), path.size(), &err), out);
-    if (!ok) {
+    if (!ok && !WebPFailure(err, out)) {
         ImageFormat fmt = FormatFromExt(FileExt(path));
         g_ioError = CodecHint(fmt);
         if (g_ioError.empty() && err == 2) g_ioError = Tr(L"Formato de imagem não suportado.");
@@ -280,9 +239,10 @@ bool LoadImageFile(const std::wstring& path, Image& out) {
 
 bool DecodeFromMemory(const BYTE* data, size_t len, Image& out) {
     g_ioError.clear();
-    if (len >= 12 && IsWebP(data, len)) return DecodeWebP(data, len, out);
     int32_t err = 0;
-    return TakeDecoded(snapcore_image_decode(data, len, &err), out);
+    if (TakeDecoded(snapcore_image_decode(data, len, &err), out)) return true;
+    WebPFailure(err, out);
+    return false;
 }
 
 bool DecodeImage(IStream* stream, Image& out) {
@@ -299,16 +259,17 @@ bool DecodeImage(IStream* stream, Image& out) {
 bool EncodeToMemoryEx(const Image& img, ImageFormat fmt, std::vector<BYTE>& out, const SaveOptions& opt) {
     g_ioError.clear();
     if (img.empty()) return false;
-    if (fmt == ImageFormat::WEBP) return EncodeWebP(img, opt, out);
     SnapcoreEncodeRequest r{};
     r.image = ImageIn(img);
     r.format = (int32_t)fmt; r.jpegQuality = opt.jpegQuality; r.avifQuality = opt.avifQuality;
+    r.webpQuality = opt.webpQuality; r.webpLossless = opt.webpLossless;
     r.stripMetadata = opt.stripMetadata;
     r.version = kAppVersion;
     SnapcoreBuf buf{};
     int32_t err = 0;
     if (!snapcore_image_encode(&r, &buf, &err)) {
         if (err == 2) g_ioError = CodecHint(fmt);
+        if (err == 3) g_ioError = Tr(L"Falha ao codificar WebP.");
         return false;
     }
     out.assign(buf.data, buf.data + buf.len);

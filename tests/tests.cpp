@@ -29,6 +29,7 @@
 #include <mfreadwrite.h>
 #include <cmath>
 #include <filesystem>
+#include <fstream>
 #include <shlobj.h>
 
 using namespace snap;
@@ -94,6 +95,43 @@ static std::wstring DigitsOfTest(const std::wstring& s) {
     return d;
 }
 
+// WebP fingerprints: the size and FNV-1a hash of what libwebp writes for fixed images (lossless and 5 qualities) and
+// of the pixels it reads back. tests/data/webp-libwebp-1.5.0.txt holds the ones of libwebp 1.5.0 as CMake built it
+// before WebP moved to Rust ("SnapnabTests webpgolden" prints those of the current build).
+static uint64_t Fnv1a(const void* d, size_t n) {
+    uint64_t h = 1469598103934665603ULL;
+    for (size_t i = 0; i < n; i++) { h ^= ((const uint8_t*)d)[i]; h *= 1099511628211ULL; }
+    return h;
+}
+
+static std::vector<std::string> WebPFingerprints() {
+    std::vector<std::pair<const char*, Image>> imgs;
+    imgs.push_back({ "pattern-37x21", Pattern(37, 21, 1) });
+    Image alpha = Pattern(64, 48, 2);
+    for (size_t i = 0; i < alpha.px.size(); i++) alpha.px[i] = (alpha.px[i] & 0xFFFFFF) | ((uint32_t)(i * 7 % 256) << 24);
+    imgs.push_back({ "alpha-64x48", alpha });
+    imgs.push_back({ "pixel-1x1", Image(1, 1, 0xFF123456) });
+    imgs.push_back({ "pattern-160x120", Pattern(160, 120, 4) });
+    Image grad(96, 64);
+    for (int y = 0; y < grad.h; y++)
+        for (int x = 0; x < grad.w; x++) grad.at(x, y) = ARGB(128 + y, x * 255 / 95, y * 4, 255 - x * 2);
+    imgs.push_back({ "gradient-96x64", grad });
+    imgs.push_back({ "clear-8x8", Image(8, 8, 0) });
+    imgs.push_back({ "pattern-640x480", Pattern(640, 480, 5) });
+    std::vector<std::string> lines;
+    for (auto& [name, img] : imgs)
+        for (int q : { 0, 1, 40, 75, 90, 100 }) {          // 0: lossless
+            SaveOptions o; o.webpLossless = q == 0; o.webpQuality = q;
+            std::vector<BYTE> enc;
+            Image dec;
+            bool ok = EncodeToMemoryEx(img, ImageFormat::WEBP, enc, o) && DecodeFromMemory(enc.data(), enc.size(), dec);
+            lines.push_back(FormatA("%s %s %zu %016llx %dx%d %016llx", name, q ? FormatA("q%d", q).c_str() : "lossless", ok ? enc.size() : 0,
+                                    (unsigned long long)Fnv1a(enc.data(), enc.size()), dec.w, dec.h,
+                                    (unsigned long long)Fnv1a(dec.px.data(), dec.px.size() * 4)));
+        }
+    return lines;
+}
+
 static std::wstring Tmp(const wchar_t* name) {
     wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t);
     return std::wstring(t) + L"snapnab_test_" + name;
@@ -108,6 +146,10 @@ int wmain(int argc, wchar_t** argv) {
         return 0;
     }
     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    if (argc > 1 && std::wstring(argv[1]) == L"webpgolden") {    // the WebP fingerprints of this build
+        for (auto& l : WebPFingerprints()) printf("%s\n", l.c_str());
+        return 0;
+    }
     if (argc > 2 && std::wstring(argv[1]) == L"comparesnap") {   // reads every .snap of a folder with both containers
         int files = 0, same = 0, bothFail = 0;
         double tRead[2] = {}, tWrite[2] = {};
@@ -2020,6 +2062,44 @@ int wmain(int argc, wchar_t** argv) {
         CHECK(!gifref::WriteGif(noDir, 10, 10, 10, 8, false, false, {}, "") && !g.Open(noDir, 10, 10, 10, 8, false, false) && g.failed() &&
               !g.AddFrame(Image(10, 10, 0)) && !g.Close(), "a GIF that cannot be created fails in both");
         DeleteFileW(ga.c_str()); DeleteFileW(gb.c_str());
+    }
+
+    printf("[22] WebP: libwebp in Rust and the former C++ build\n");
+    {
+        std::vector<std::string> want;
+        std::ifstream golden(ExeDir() + L"\\..\\..\\..\\..\\tests\\data\\webp-libwebp-1.5.0.txt");
+        for (std::string l; std::getline(golden, l);) {
+            if (!l.empty() && l.back() == '\r') l.pop_back();
+            if (!l.empty()) want.push_back(l);
+        }
+        std::vector<std::string> got = WebPFingerprints();
+        int differ = 0;
+        for (size_t i = 0; i < got.size(); i++)
+            if (i >= want.size() || got[i] != want[i]) {
+                differ++;
+                printf("       %s (was %s)\n", got[i].c_str(), i < want.size() ? want[i].c_str() : "missing");
+            }
+        CHECK(want.size() == 42 && got.size() == want.size() && !differ,
+              "%zu WebP files and their decoded pixels the same as libwebp 1.5.0 built by CMake, %d differ", got.size(), differ);
+
+        const std::wstring invalid = Tr(L"Arquivo WebP inválido.");
+        std::vector<BYTE> enc;
+        Image cut(3, 3, 0xFF112233);
+        bool okEnc = EncodeToMemoryEx(Pattern(37, 21, 1), ImageFormat::WEBP, enc, SaveOptions()) && enc.size() > 40;
+        bool okCut = okEnc && DecodeFromMemory(enc.data(), 40, cut);
+        CHECK(okEnc && !okCut && ImageIoError() == invalid && cut.empty(), "a cut WebP is refused with its message, and the image cleared");
+        const char junk[] = "RIFF\0\0\0\0WEBPVP8 nothing";
+        Image keep(2, 2, 0xFF112233);
+        bool okJunk = DecodeFromMemory((const BYTE*)junk, sizeof junk - 1, keep);
+        CHECK(!okJunk && ImageIoError() == invalid && keep.w == 2, "a file that only looks like WebP is refused with its message");
+        std::wstring wp = Tmp(L"not_really.webp");
+        { std::ofstream f(wp, std::ios::binary); f.write(junk, sizeof junk - 1); }
+        Image fromFile;
+        CHECK(!LoadImageFile(wp, fromFile) && ImageIoError() == invalid, "and so is such a file");
+        DeleteFileW(wp.c_str());
+        std::vector<BYTE> tooWide;
+        CHECK(!EncodeToMemoryEx(Image(16384, 1, 0xFF000000), ImageFormat::WEBP, tooWide, SaveOptions()) &&
+              ImageIoError() == Tr(L"Falha ao codificar WebP."), "an image wider than WebP allows fails with its message");
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);
