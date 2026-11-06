@@ -10,7 +10,7 @@ use crate::container::{Reader, Writer, is_snap};
 use crate::wide::{from_ptr, to_os, to_string_lossy};
 use crate::codec::{self, DecodeError, EncodeError, Format, SaveOptions};
 use crate::image::{Image, Meta};
-use crate::{i18n, library, log, reg, snap, xml};
+use crate::{gif, i18n, library, log, reg, snap, xml};
 use windows::Win32::Foundation::HWND;
 
 fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
@@ -963,5 +963,52 @@ pub unsafe extern "C" fn snapcore_next_auto_name(folder: *const u16, folder_len:
     guard(false, || {
         let (f, p, e) = unsafe { (wide_arg(folder, folder_len), wide_arg(prefix, prefix_len), wide_arg(ext, ext_len)) };
         wide_out(out, &library::next_auto_name(&f, &p, &e, digits))
+    })
+}
+
+// ---------------------------------------------------------------- animated GIF (Gif.cpp)
+
+/// Creates the GIF and writes its header; null if the file cannot be created (logged).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_gif_open(path: *const u16, len: usize, w: i32, h: i32, fps: f64, bpp: i32, dither: bool,
+                                           delta: bool, comment: *const u8, comment_len: usize) -> *mut gif::GifWriter {
+    guard(std::ptr::null_mut(), || {
+        let Some(p) = (unsafe { path_arg(path, len) }) else { return std::ptr::null_mut() };
+        match gif::GifWriter::open(&p, w, h, fps, bpp, dither, delta, unsafe { bytes_arg(comment, comment_len) }) {
+            Some(g) => Box::into_raw(Box::new(g)),
+            None => std::ptr::null_mut(),
+        }
+    })
+}
+
+/// Adds a frame of the GIF's size; false if it has another size or the file could not be written.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_gif_add_frame(g: *mut gif::GifWriter, frame: *const ImageIn, delay_cs: i32) -> bool {
+    guard(false, || {
+        let (Some(g), Some(f)) = (unsafe { g.as_mut() }, unsafe { frame.as_ref() }) else { return false };
+        unsafe { image_in(f) }.is_some_and(|img| g.add_frame(&img, delay_cs))
+    })
+}
+
+/// Writes the trailer, closes the file and frees `g`; false if anything could not be written.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_gif_close(g: *mut gif::GifWriter) -> bool {
+    if g.is_null() {
+        return false;
+    }
+    guard(false, || unsafe { Box::from_raw(g) }.close())
+}
+
+/// For the tests: sorts `v` by the byte at `shift` with the MSVC std::sort the GIF palette uses, or only with its heap
+/// sort (std::make_heap then std::sort_heap).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_sort_by_byte(v: *mut u32, n: usize, shift: u32, heap_only: bool) {
+    if v.is_null() || shift > 24 {
+        return;
+    }
+    guard((), || {
+        let v = unsafe { std::slice::from_raw_parts_mut(v, n) };
+        let lt = |a: &u32, b: &u32| (a >> shift) & 255 < (b >> shift) & 255;
+        if heap_only { gif::heap_sort(v, &lt) } else { gif::msvc_sort(v, lt) }
     })
 }

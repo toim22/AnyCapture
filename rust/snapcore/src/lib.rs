@@ -9,9 +9,11 @@
 //! - `image`, `codec`: images in memory and image files through the Windows codecs (WIC)
 //! - `snap`: the .snap document (index, frame documents, base and embedded images)
 //! - `library`: the capture library (its folder, thumbnails, capture names, cleanup)
+//! - `gif`: the animated GIF writer
 
 pub mod codec;
 pub mod container;
+pub mod gif;
 pub mod i18n;
 pub mod image;
 pub mod library;

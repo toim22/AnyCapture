@@ -65,6 +65,10 @@ std::wstring CaptureName(const std::wstring& lib, const std::wstring& itemPath);
 bool SetCaptureName(const std::wstring& lib, const std::wstring& itemPath, const std::wstring& name);
 std::wstring NextAutoName(const std::wstring& folder, const std::wstring& prefix, const std::wstring& ext, int digits);
 }
+namespace snap::gifref {      // the former C++ GIF writer (GifReference.cpp)
+bool WriteGif(const std::wstring& path, int w, int h, double fps, int bpp, bool dither, bool delta,
+              const std::vector<std::pair<Image, int>>& frames, const std::string& comment);
+}
 
 static int g_fail = 0;
 static std::wstring TestTempDir() { wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t); std::wstring d = t; if (!d.empty() && d.back() == L'\\') d.pop_back(); return d; }
@@ -1895,6 +1899,127 @@ int wmain(int argc, wchar_t** argv) {
         std::error_code ec;
         for (const wchar_t* d : { L"lib_list", L"lib_names_a", L"lib_names_b", L"lib_add_a", L"lib_add_b", L"lib_clean_a", L"lib_clean_b" })
             fs::remove_all(Tmp(d), ec);
+    }
+
+    printf("[21] Animated GIF: Rust and the former C++\n");
+    {
+        // the palette sort first: the MSVC std::sort, equal elements included, on the inputs the median cut gives it
+        int sortCases = 0, sortBad = 0;
+        uint32_t seed = 2463534242u;
+        auto rnd = [&] { seed ^= seed << 13; seed ^= seed >> 17; seed ^= seed << 5; return seed; };
+        for (size_t n : { 0, 1, 2, 3, 31, 32, 33, 40, 41, 42, 63, 100, 257, 1000, 4096, 40000, 120000 })
+            for (int kind = 0; kind < 7; kind++)
+                for (uint32_t shift : { 0u, 8u, 16u }) {
+                    std::vector<uint32_t> v(n);
+                    for (size_t i = 0; i < n; i++) {
+                        uint32_t r = rnd() & 0xFFFFFF, key;
+                        switch (kind) {
+                        case 0: key = rnd() & 255; break;                      // random
+                        case 1: key = rnd() % 3 * 100; break;                  // few distinct values
+                        case 2: key = 42; break;                               // all equal
+                        case 3: key = (uint32_t)(i * 255 / std::max<size_t>(1, n)); break;          // sorted
+                        case 4: key = 255 - (uint32_t)(i * 255 / std::max<size_t>(1, n)); break;    // reversed
+                        case 5: key = (uint32_t)(i < n / 2 ? i : n - i) % 256; break;               // organ pipe
+                        default: key = (uint32_t)(i % 7 == 0 ? 255 : i % 2); break;                 // nearly two values
+                        }
+                        v[i] = (r & ~(255u << shift)) | (key << shift);
+                    }
+                    auto lt = [shift](uint32_t x, uint32_t y) { return ((x >> shift) & 255) < ((y >> shift) & 255); };
+                    std::vector<uint32_t> a = v, b = v, c = v, d = v;
+                    std::sort(a.begin(), a.end(), lt);
+                    snapcore_sort_by_byte(b.data(), b.size(), shift, false);
+                    std::make_heap(c.begin(), c.end(), lt); std::sort_heap(c.begin(), c.end(), lt);   // the introsort's fallback
+                    snapcore_sort_by_byte(d.data(), d.size(), shift, true);
+                    sortCases++;
+                    if (a != b || c != d) { sortBad++; printf("       %zu elements, kind %d, shift %u: %s differently\n", n, kind, shift, a != b ? "sorted" : "heap sorted"); }
+                }
+        CHECK(!sortBad, "the palette sort orders %d inputs as std::sort does (and its heap sort as make_heap/sort_heap), equal elements included", sortCases);
+
+        // GIFs written by both: sizes, 4 and 8 bpp, dithering, delta frames, frame rates, delays, comments, frames of
+        // another size, transparency, identical frames, a file over the 1 MB buffer
+        auto readAll = [](const std::wstring& path) {
+            std::string b;
+            HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+            if (h == INVALID_HANDLE_VALUE) return std::string("<missing>");
+            b.resize(GetFileSize(h, nullptr));
+            DWORD rd = 0; ReadFile(h, b.data(), (DWORD)b.size(), &rd, nullptr); CloseHandle(h);
+            return b;
+        };
+        auto writeNew = [](const std::wstring& path, int w, int h, double fps, int bpp, bool dither, bool delta,
+                           const std::vector<std::pair<Image, int>>& frames, const std::string& comment) {
+            GifWriter g;
+            if (!g.Open(path, w, h, fps, bpp, dither, delta, comment)) return false;
+            bool ok = true;
+            for (auto& [img, delay] : frames) ok = g.AddFrame(img, delay) && ok;
+            return g.Close() && ok && !g.failed();
+        };
+        std::wstring ga = Tmp(L"ref_a.gif"), gb = Tmp(L"ref_b.gif");
+        int gifs = 0, gifBad = 0;
+        size_t biggest = 0;
+        auto compare = [&](const char* what, int w, int h, double fps, int bpp, bool dither, bool delta,
+                           const std::vector<std::pair<Image, int>>& frames, const std::string& comment) {
+            DeleteFileW(ga.c_str()); DeleteFileW(gb.c_str());
+            bool okA = gifref::WriteGif(ga, w, h, fps, bpp, dither, delta, frames, comment);
+            bool okB = writeNew(gb, w, h, fps, bpp, dither, delta, frames, comment);
+            std::string a = readAll(ga), b = readAll(gb);
+            gifs++;
+            biggest = std::max(biggest, b.size());
+            if (okA != okB || a != b) {
+                gifBad++;
+                size_t at = 0; while (at < a.size() && at < b.size() && a[at] == b[at]) at++;
+                printf("       %s (%dx%d, %d bpp%s%s, %.1f fps): %s at byte %zu of %zu/%zu\n", what, w, h, bpp, dither ? ", dithering" : "",
+                       delta ? ", delta" : "", fps, okA != okB ? "written by one only" : "different bytes", at, a.size(), b.size());
+            }
+        };
+        auto moving = [](int w, int h, int n, int seed) {      // a moving block over a pattern, with a still frame
+            std::vector<std::pair<Image, int>> f;
+            Image bg = Pattern(w, h, seed);
+            for (int i = 0; i < n; i++) {
+                Image im = bg;
+                for (int y = h / 4; y < h / 2; y++)
+                    for (int x = (i * 7) % std::max(1, w / 2); x < std::min(w, (i * 7) % std::max(1, w / 2) + w / 3); x++)
+                        im.at(x, y) = ARGB(255, (i * 40) & 255, 200, 255 - (i * 30 & 255));
+                f.push_back({ im, i == 2 ? 50 : -1 });
+                if (i == 1) f.push_back({ im, -1 });            // the same frame again
+            }
+            return f;
+        };
+        for (int bpp : { 4, 8 })
+            for (bool dither : { false, true })
+                for (bool delta : { false, true }) {
+                    compare("moving block", 120, 90, 10, bpp, dither, delta, moving(120, 90, 5, 1), "Snapnab");
+                    compare("1x1", 1, 1, 30, bpp, dither, delta, { { Image(1, 1, 0xFF00FF00), -1 }, { Image(1, 1, 0xFFFF0000), 3 } }, "");
+                    compare("odd size", 37, 21, 7.5, bpp, dither, delta, moving(37, 21, 4, 2), std::string(600, 'c'));
+                }
+        Image alpha = Pattern(64, 48, 3);
+        for (size_t i = 0; i < alpha.px.size(); i++) alpha.px[i] = (alpha.px[i] & 0xFFFFFF) | ((uint32_t)(i * 5 % 256) << 24);
+        compare("transparency", 64, 48, 0, 8, true, true, { { alpha, -1 }, { Pattern(64, 48, 4), -1 }, { alpha, 0 } }, "Snapnab");
+        compare("frames of another size", 100, 80, 1, 8, true, false, { { Pattern(300, 200, 5), 100 }, { Pattern(50, 30, 6), 100 } }, "Snapnab");
+        compare("frame rates", 50, 40, 100, 4, false, true, moving(50, 40, 3, 7), "Snapnab");
+        compare("frame rates", 50, 40, 0.3, 4, false, true, moving(50, 40, 3, 8), "Snapnab");
+        compare("over 1 MB", 640, 480, 15, 8, true, false, moving(640, 480, 6, 9), "Snapnab");
+        compare("noise (LZW dictionary resets)", 400, 300, 10, 8, false, true, { { Pattern(400, 300, 10), -1 }, { Pattern(400, 300, 11), -1 } }, "x");
+        // real images: the library's thumbnails as the frames of a GIF (only read)
+        {
+            std::vector<std::pair<Image, int>> thumbs;
+            WIN32_FIND_DATAW fd;
+            std::wstring dir = LibraryDir() + L"\\Thumbnails";
+            HANDLE h = FindFirstFileW((dir + L"\\*.png").c_str(), &fd);
+            if (h != INVALID_HANDLE_VALUE) {
+                do { Image t; if (LoadImageFile(dir + L"\\" + fd.cFileName, t)) thumbs.push_back({ t, 20 }); } while (thumbs.size() < 40 && FindNextFileW(h, &fd));
+                FindClose(h);
+            }
+            if (!thumbs.empty())
+                for (int bpp : { 4, 8 })
+                    for (bool delta : { false, true }) compare("library thumbnails", 160, 120, 5, bpp, true, delta, thumbs, "Snapnab");
+        }
+        CHECK(!gifBad, "%d GIFs written byte for byte the same (the largest %zu bytes), %d differ", gifs, biggest, gifBad);
+
+        std::wstring noDir = Tmp(L"no_such_dir\\x.gif");
+        GifWriter g;
+        CHECK(!gifref::WriteGif(noDir, 10, 10, 10, 8, false, false, {}, "") && !g.Open(noDir, 10, 10, 10, 8, false, false) && g.failed() &&
+              !g.AddFrame(Image(10, 10, 0)) && !g.Close(), "a GIF that cannot be created fails in both");
+        DeleteFileW(ga.c_str()); DeleteFileW(gb.c_str());
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

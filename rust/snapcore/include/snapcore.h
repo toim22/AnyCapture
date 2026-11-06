@@ -151,4 +151,12 @@ bool snapcore_library_set_name(const wchar_t* dir, size_t dirLen, const wchar_t*
 bool snapcore_next_auto_name(const wchar_t* folder, size_t folderLen, const wchar_t* prefix, size_t prefixLen,
                              const wchar_t* ext, size_t extLen, int32_t digits, SnapcoreWStr* out);
 
+// ---- animated GIF (Gif.cpp): frames at the GIF's size (the caller scales them)
+struct SnapcoreGif;
+SnapcoreGif* snapcore_gif_open(const wchar_t* path, size_t len, int32_t w, int32_t h, double fps, int32_t bitsPerPixel,
+                               bool dithering, bool deltaFrames, const char* comment, size_t commentLen);   // null: failed
+bool snapcore_gif_add_frame(SnapcoreGif* g, const SnapcoreImageIn* frame, int32_t delayCentiseconds);
+bool snapcore_gif_close(SnapcoreGif* g);                // frees g; false if anything could not be written
+void snapcore_sort_by_byte(uint32_t* v, size_t n, uint32_t shift, bool heapOnly);   // for the tests: the palette's std::sort
+
 }

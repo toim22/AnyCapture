@@ -6,6 +6,7 @@ add_executable(SnapnabTests
     ImageCodecReference.cpp
     SnapFileReference.cpp
     LibraryReference.cpp
+    GifReference.cpp
     ${SRC}/capture/Recorder.cpp
     ${SRC}/capture/Panoramic.cpp
     ${SRC}/capture/Webcam.cpp
