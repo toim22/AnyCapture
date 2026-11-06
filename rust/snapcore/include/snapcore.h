@@ -224,6 +224,42 @@ int32_t snapcore_pdf_save(const wchar_t* path, size_t len, const SnapcoreImageIn
 size_t snapcore_page_breaks(const SnapcoreImageIn* img, int32_t pageH, int32_t search, int32_t parts, int32_t* out, size_t cap);
 bool snapcore_split_long_pages();
 
+// ---- color texts (Color.cpp; ColorToHex / HexToColor of Util.cpp). Colors are COLORREFs.
+bool           snapcore_color_text(uint32_t c, int32_t fmt, SnapcoreWStr* out);   // fmt as color::Fmt
+const wchar_t* snapcore_color_format_name(int32_t fmt);                            // "" past the last
+void           snapcore_color_hsl(uint32_t c, double* hsl);                        // h 0..360, s and l 0..1
+double         snapcore_color_luminance(uint32_t c);
+double         snapcore_color_contrast(uint32_t a, uint32_t b);
+int32_t        snapcore_color_default_format();
+void           snapcore_color_set_default_format(int32_t fmt);
+size_t         snapcore_color_recent(uint32_t* out, size_t cap);                 // how many there are
+void           snapcore_color_add_recent(uint32_t c);
+uint32_t       snapcore_color_from_hex(const wchar_t* s, size_t len, uint32_t def);
+
+// ---- HDR capture (Hdr.cpp)
+struct SnapcoreHdrSession;
+bool    snapcore_hdr_any_monitor();
+bool    snapcore_hdr_is_area(SnapcoreRect screen);
+bool    snapcore_hdr_enabled();
+bool    snapcore_hdr_fix_capture(SnapcoreRect screen, uint32_t* px, int32_t w, int32_t h);   // in place
+uint8_t snapcore_hdr_tone_map(float scRgb, float sdrWhiteNits);
+float   snapcore_hdr_half_to_float(uint16_t h);
+SnapcoreHdrSession* snapcore_hdr_begin(SnapcoreRect screen, int32_t outW, int32_t outH);   // null: not an HDR area
+bool    snapcore_hdr_grab(SnapcoreHdrSession* s, uint32_t* bottomUp, size_t n);
+void    snapcore_hdr_end(SnapcoreHdrSession* s);
+
+// ---- OCR and faces (Ocr.cpp). Results: 0 done, 1 empty image, 2 no OCR language installed, 3 OCR failed, 4 no face
+// detection on this Windows, 5 face detection failed, 6 a Windows error whose text is in *msg.
+int32_t snapcore_ocr_text(const SnapcoreImageIn* img, SnapcoreWStr* text, SnapcoreWStr* msg);
+typedef void (*SnapcoreOcrSink)(void* ctx, const wchar_t* text, size_t len, SnapcoreRect r, bool word);   // a line, then its words
+int32_t snapcore_ocr_lines(const SnapcoreImageIn* img, SnapcoreOcrSink sink, void* ctx, SnapcoreWStr* msg);
+typedef void (*SnapcoreFaceSink)(void* ctx, SnapcoreRect r);
+int32_t snapcore_detect_faces(const SnapcoreImageIn* img, SnapcoreFaceSink sink, void* ctx, SnapcoreWStr* msg);
+
+// ---- QR codes and barcodes (Barcode.cpp): text in UTF-8, the symbology as ZXing-C++ named it ("QRCode", "EAN-13"…)
+typedef void (*SnapcoreCodeSink)(void* ctx, const char* text, size_t len, const char* format, SnapcoreRect r, bool url);
+size_t snapcore_barcode_read(const SnapcoreImageIn* img, SnapcoreCodeSink sink, void* ctx);
+
 // ---- animated GIF (Gif.cpp): frames at the GIF's size (the caller scales them)
 struct SnapcoreGif;
 SnapcoreGif* snapcore_gif_open(const wchar_t* path, size_t len, int32_t w, int32_t h, double fps, int32_t bitsPerPixel,

@@ -28,7 +28,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # PDB in Release too (the symbols go to dist/symbols, outside the package)
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "ProgramDatabase")
 
-# third-party libraries (ZXing-C++, Corrosion), built before Snapnab's own compile options are set
+# third-party code (Corrosion, which builds the Rust workspace), set up before Snapnab's own compile options are set
 include(cmake/Dependencies.cmake)
 
 add_compile_definitions(UNICODE _UNICODE NOMINMAX _CRT_SECURE_NO_WARNINGS)

@@ -15,7 +15,7 @@ fn out(img: Image) -> *mut Decoded {
 }
 
 /// The caller's pixels as an Image, changed by `f`, and written back.
-unsafe fn in_place(px: *mut u32, w: i32, h: i32, f: impl FnOnce(&mut Image)) {
+pub(crate) unsafe fn in_place(px: *mut u32, w: i32, h: i32, f: impl FnOnce(&mut Image)) {
     if px.is_null() || w <= 0 || h <= 0 {
         return;
     }

@@ -1,5 +1,5 @@
 // QR code and barcode reading (C04; ShareX dossier 01 · F10: ZXing reader with tryHarder + tryRotate + tryInvert and
-// a multi-result loop). Uses ZXing-C++ (Apache-2.0). Available as a capture output ("Read QR code"), in the Editor
+// a multi-result loop). Read by snapcore with rxing, a Rust port of ZXing (Apache-2.0). Available as a capture output ("Read QR code"), in the Editor
 // and on pinned images; the results window copies the content and opens links.
 #pragma once
 #include "Image.h"

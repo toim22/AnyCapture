@@ -1,39 +1,17 @@
 #include "Barcode.h"
 #include "Clipboard.h"
-#include "ReadBarcode.h"
+#include "SnapcoreBridge.h"
 
 namespace snap::barcode {
 
-std::vector<Result> Read(const Image& imgIn) {
+// the codes are read by snapcore (rust/snapcore/src/barcode.rs, with rxing)
+std::vector<Result> Read(const Image& img) {
     std::vector<Result> out;
-    if (imgIn.empty()) return out;
-    // transparent pixels read as white (codes are dark on light)
-    Image img = imgIn;
-    for (auto& p : img.px) if (CA(p) < 255) p = BlendOver(0xFFFFFFFF, p);
-    auto read = [&](const Image& im, double k) {
-        ZXing::ImageView view((const uint8_t*)im.px.data(), im.w, im.h, ZXing::ImageFormat::BGRX, im.w * 4);
-        ZXing::ReaderOptions opt;
-        opt.setTryHarder(true); opt.setTryRotate(true); opt.setTryInvert(true); opt.setTryDownscale(true);
-        for (auto& r : ZXing::ReadBarcodes(view, opt)) {
-            if (!r.isValid()) continue;
-            Result x;
-            x.text = Utf8ToW(r.text());
-            x.format = Utf8ToW(ZXing::ToString(r.format()));
-            auto& p = r.position();
-            int x0 = std::min({ p.topLeft().x, p.topRight().x, p.bottomLeft().x, p.bottomRight().x });
-            int y0 = std::min({ p.topLeft().y, p.topRight().y, p.bottomLeft().y, p.bottomRight().y });
-            int x1 = std::max({ p.topLeft().x, p.topRight().x, p.bottomLeft().x, p.bottomRight().x });
-            int y1 = std::max({ p.topLeft().y, p.topRight().y, p.bottomLeft().y, p.bottomRight().y });
-            x.box = { (LONG)(x0 / k), (LONG)(y0 / k), (LONG)(x1 / k) + 1, (LONG)(y1 / k) + 1 };
-            std::wstring low = ToLower(x.text);
-            x.url = low.rfind(L"http://", 0) == 0 || low.rfind(L"https://", 0) == 0;
-            bool dup = std::any_of(out.begin(), out.end(), [&](const Result& o) { return o.text == x.text && o.format == x.format; });
-            if (!dup) out.push_back(x);
-        }
+    SnapcoreImageIn in = ImageIn(img);
+    auto sink = [](void* ctx, const char* text, size_t len, const char* format, SnapcoreRect r, bool url) {
+        ((std::vector<Result>*)ctx)->push_back({ Utf8ToW(std::string(text, len)), Utf8ToW(format), { r.left, r.top, r.right, r.bottom }, url });
     };
-    read(img, 1.0);
-    // small codes on a screen capture (a few pixels per module) read better enlarged
-    if (out.empty() && img.w * img.h < 1500 * 1500) read(ScaleImage(img, img.w * 2, img.h * 2, false), 2.0);
+    snapcore_barcode_read(&in, sink, &out);
     return out;
 }
 

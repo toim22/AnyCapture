@@ -23,6 +23,8 @@
 #include "Upload.h"
 #include "Library.h"
 #include "SnapcoreBridge.h"
+#include "Barcode.h"
+#include "Hdr.h"
 #include <cstdio>
 #include <mfapi.h>
 #include <mfidl.h>
@@ -133,6 +135,84 @@ static std::vector<std::string> WebPFingerprints() {
 }
 
 // Pixel fingerprints: what the effects, Beautify, the computer vision, scaling and the PDF writer give for fixed
+// ---------------------------------------------------------------- QR codes and barcodes
+// tests/data/barcodes/*.png were made once with ZXing-C++ 2.2.1's writer (every symbology, small, rotated, inverted,
+// transparent, several codes in one picture, noise, none) and tests/data/barcodes.txt holds what the ZXing-C++ reader
+// found in each, so the reader can change and be checked ("SnapnabTests barcodegolden" prints what this build reads).
+static std::vector<std::pair<std::wstring, Image>> BarcodeImages() {
+    std::vector<std::pair<std::wstring, Image>> v;
+    std::ifstream golden(ExeDir() + L"\\..\\..\\..\\..\\tests\\data\\barcodes.txt");
+    for (std::string l; std::getline(golden, l);) {
+        size_t c = l.find(':');
+        if (c == std::string::npos) continue;
+        std::wstring name = Utf8ToW(l.substr(0, c));
+        Image img;
+        LoadImageFile(ExeDir() + L"\\..\\..\\..\\..\\tests\\data\\barcodes\\" + name + L".png", img);
+        v.push_back({ name, img });
+    }
+    return v;
+}
+
+static std::vector<std::string> BarcodeResults(const std::vector<std::pair<std::wstring, Image>>& imgs) {
+    std::vector<std::string> L;
+    for (auto& [name, img] : imgs) {
+        std::string line = WToUtf8(name) + ":";
+        for (auto& r : barcode::Read(img))
+            line += FormatA(" [%s|%s|%ld,%ld,%ld,%ld|%d]", WToUtf8(r.format).c_str(), WToUtf8(r.text).c_str(), r.box.left, r.box.top,
+                            r.box.right, r.box.bottom, r.url ? 1 : 0);
+        L.push_back(line);
+    }
+    return L;
+}
+
+// the color texts, the HDR tone mapping and OCR (Windows reads text the C++ drew), for tests/data/misc-cpp.txt
+static std::vector<std::string> MiscFingerprints() {
+    std::vector<std::string> L;
+    const COLORREF cs[] = { RGB(0, 0, 0), RGB(255, 255, 255), RGB(255, 128, 0), RGB(18, 171, 63), RGB(128, 128, 128),
+                            RGB(1, 2, 3), RGB(250, 5, 130), RGB(0, 0, 255), RGB(127, 255, 212), RGB(64, 0, 64) };
+    for (COLORREF c : cs) {
+        std::string line = FormatA("color %06x:", (unsigned)c);
+        for (int f = 0; f < color::FmtCount; f++) line += " [" + WToUtf8(color::ToText(c, (color::Fmt)f)) + "]";
+        double h, s, l;
+        color::RgbToHsl(c, h, s, l);
+        line += FormatA(" hsl %.17g %.17g %.17g lum %.17g contrast %.17g", h, s, l, color::Luminance(c), color::ContrastRatio(c, RGB(40, 90, 200)));
+        L.push_back(line);
+    }
+    for (int f = 0; f < color::FmtCount; f++) L.push_back("format " + WToUtf8(color::FmtName((color::Fmt)f)));
+    for (const wchar_t* t : { L"#12AB3F", L"#12ab3fzz", L"12AB3F", L"#FFF", L"# 12AB3F", L"#0x12AB3F", L"#-1", L"#123456789AB" })
+        L.push_back(FormatA("hex %s -> %06x", WToUtf8(t).c_str(), (unsigned)HexToColor(t, 0x777777)));
+    for (uint32_t h = 0; h < 65536; h += 997) L.push_back(FormatA("half %04x %.9g", h, hdr::HalfToFloat((uint16_t)h)));
+    for (float white : { 80.0f, 200.0f, 480.0f, 0.5f }) {
+        std::vector<uint8_t> lut(65536);
+        for (uint32_t h = 0; h < 65536; h++) lut[h] = hdr::ToneMap(hdr::HalfToFloat((uint16_t)h), white);
+        L.push_back(FormatA("tonemap %g %016llx", white, (unsigned long long)Fnv1a(lut.data(), lut.size())));
+    }
+    for (float v : { -1.0f, 0.0f, 0.001f, 0.5f, 1.0f, 2.0f, 12.5f, 1e9f })
+        L.push_back(FormatA("tone %g: %d %d", v, hdr::ToneMap(v, 80), hdr::ToneMap(v, 240)));
+    int n = 0;
+    for (const wchar_t* t : { L"Hello Snapnab 2026", L"4111 1111 1111 1111", L"Grab text from the screen", L"ABC-123 xyz" }) {
+        Image img = fx::Caption(Image(560, 4, 0xFFFFFFFF), t, true, 28, 0xFF000000, 0xFFFFFFFF);
+        std::wstring text, err;
+        bool ok = RunOcr(img, text, err);
+        std::vector<OcrLine> lines;
+        std::wstring err2;
+        bool ok2 = RunOcrLines(img, lines, err2);
+        std::string line = FormatA("ocr %d: %d [%s] %d", n++, ok, WToUtf8(text).c_str(), ok2);
+        for (auto& l : lines) {
+            line += FormatA(" {%s %ld,%ld,%ld,%ld", WToUtf8(l.text).c_str(), l.box.left, l.box.top, l.box.right, l.box.bottom);
+            for (auto& w : l.words) line += FormatA(" <%s %ld,%ld,%ld,%ld>", WToUtf8(w.text).c_str(), w.box.left, w.box.top, w.box.right, w.box.bottom);
+            line += "}";
+        }
+        for (auto& c : line) if (c == '\n') c = '|';
+        L.push_back(line);
+    }
+    std::vector<RECT> faces;
+    std::wstring ferr;
+    bool fok = DetectFaces(Pattern(200, 150, 9), faces, ferr);
+    L.push_back(FormatA("faces %d %zu", fok, faces.size()));
+    return L;
+}
+
 // inputs. tests/data/pixels-cpp.txt holds the ones of the C++ code before it moved to Rust ("SnapnabTests fxgolden"
 // prints those of the current build).
 static std::string Fp(const char* name, const Image& img) {
@@ -353,6 +433,15 @@ int wmain(int argc, wchar_t** argv) {
     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
     if (argc > 1 && std::wstring(argv[1]) == L"webpgolden") {    // the WebP fingerprints of this build
         for (auto& l : WebPFingerprints()) printf("%s\n", l.c_str());
+        return 0;
+    }
+    if (argc > 1 && std::wstring(argv[1]) == L"barcodegolden") {   // what this build reads in the barcode images
+        for (auto& l : BarcodeResults(BarcodeImages())) printf("%s\n", l.c_str());
+        return 0;
+    }
+    if (argc > 1 && std::wstring(argv[1]) == L"miscgolden") {    // the color, HDR and OCR fingerprints of this build
+        GdiplusSession gdip;
+        for (auto& l : MiscFingerprints()) printf("%s\n", l.c_str());
         return 0;
     }
     if (argc > 1 && std::wstring(argv[1]) == L"fxgolden") {      // the pixel fingerprints of this build
@@ -2329,6 +2418,71 @@ int wmain(int argc, wchar_t** argv) {
             }
         CHECK(want.size() > 800 && got.size() == want.size() && !differ,
               "%zu pixel results the same as the C++ code's, %d differ", got.size(), differ);
+    }
+
+    // the lines of a golden file next to what this build gives
+    auto compareGolden = [](const wchar_t* file, const std::vector<std::string>& got, int& differ) {
+        std::vector<std::string> want;
+        std::ifstream golden(ExeDir() + L"\\..\\..\\..\\..\\tests\\data\\" + file);
+        for (std::string l; std::getline(golden, l);) {
+            if (!l.empty() && l.back() == '\r') l.pop_back();
+            if (!l.empty()) want.push_back(l);
+        }
+        differ = 0;
+        for (size_t i = 0; i < std::max(got.size(), want.size()); i++)
+            if (i >= want.size() || i >= got.size() || got[i] != want[i]) {
+                differ++;
+                printf("       %s (was %s)\n", i < got.size() ? got[i].c_str() : "missing", i < want.size() ? want[i].c_str() : "missing");
+            }
+        return want.size();
+    };
+
+    printf("[24] QR codes and barcodes against the former ZXing-C++ reader\n");
+    {
+        // each code: "[format|text|left,top,right,bottom|url]"; the box rxing gives is where it found the code (a 1D
+        // code: the row it read, start and stop characters included), so it has to overlap the one ZXing-C++ gave
+        struct Code { std::string key; RECT box; };
+        auto parse = [](const std::string& line) {
+            std::vector<Code> v;
+            for (size_t a = line.find(" ["); a != std::string::npos; a = line.find(" [", a + 1)) {
+                size_t e = line.find(']', a);
+                std::string f = line.substr(a + 2, e - a - 2);
+                size_t p1 = f.find('|'), p2 = f.find('|', p1 + 1), p3 = f.rfind('|');
+                Code c{ f.substr(0, p2) + f.substr(p3), {} };
+                sscanf_s(f.substr(p2 + 1, p3 - p2 - 1).c_str(), "%ld,%ld,%ld,%ld", &c.box.left, &c.box.top, &c.box.right, &c.box.bottom);
+                v.push_back(c);
+            }
+            return v;
+        };
+        std::vector<std::string> want;
+        std::ifstream golden(ExeDir() + L"\\..\\..\\..\\..\\tests\\data\\barcodes.txt");
+        for (std::string l; std::getline(golden, l);) {
+            if (!l.empty() && l.back() == '\r') l.pop_back();
+            if (!l.empty()) want.push_back(l);
+        }
+        auto imgs = BarcodeImages();
+        std::vector<std::string> got = BarcodeResults(imgs);
+        int differ = 0, boxes = 0, codes = 0;
+        for (size_t i = 0; i < want.size(); i++) {
+            auto w = parse(want[i]), g = i < got.size() ? parse(got[i]) : std::vector<Code>{};
+            bool same = w.size() == g.size();
+            for (size_t k = 0; same && k < w.size(); k++) {
+                same = w[k].key == g[k].key;
+                RECT x;
+                if (same && !IntersectRect(&x, &w[k].box, &g[k].box)) boxes++;
+            }
+            codes += (int)w.size();
+            if (!same) { differ++; printf("       %s (was %s)\n", i < got.size() ? got[i].c_str() : "missing", want[i].c_str()); }
+        }
+        CHECK(want.size() == 23 && imgs.size() == want.size() && got.size() == want.size() && !differ && !boxes && codes == 23,
+              "%zu images: the %d codes ZXing-C++ read, read alike (%d differ, %d boxes elsewhere)", want.size(), codes, differ, boxes);
+    }
+
+    printf("[25] Color texts, HDR tone mapping and OCR against the former C++ code\n");
+    {
+        int differ = 0;
+        size_t n = compareGolden(L"misc-cpp.txt", MiscFingerprints(), differ);
+        CHECK(n > 100 && !differ, "%zu results the same as the C++ code's, %d differ", n, differ);
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

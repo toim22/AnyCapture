@@ -337,14 +337,14 @@ int DpiForWindow(HWND hwnd) {
 }
 
 std::wstring ColorToHex(COLORREF c) {
-    return Format(L"#%02X%02X%02X", GetRValue(c), GetGValue(c), GetBValue(c));
+    SnapcoreWStr s{};
+    if (!snapcore_color_text(c, 0, &s)) return L"";
+    std::wstring r(s.data, s.len);
+    snapcore_wstr_free(s);
+    return r;
 }
 
-COLORREF HexToColor(const std::wstring& s, COLORREF def) {
-    if (s.size() < 7 || s[0] != L'#') return def;
-    unsigned v = wcstoul(s.c_str() + 1, nullptr, 16);
-    return RGB((v >> 16) & 255, (v >> 8) & 255, v & 255);
-}
+COLORREF HexToColor(const std::wstring& s, COLORREF def) { return snapcore_color_from_hex(s.data(), s.size(), def); }
 
 bool PickColor(HWND owner, COLORREF& c) {
     static COLORREF custom[16] = { RGB(242,38,19), RGB(255,214,0), RGB(46,204,64), RGB(0,116,217),

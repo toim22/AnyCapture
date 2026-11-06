@@ -12,7 +12,6 @@ file(GLOB COMMON_SOURCES CONFIGURE_DEPENDS common/*.cpp common/*.h)
 add_library(SnapnabCommon STATIC ${COMMON_SOURCES})
 target_include_directories(SnapnabCommon PUBLIC common ${CMAKE_CURRENT_BINARY_DIR}/generated)
 target_link_libraries(SnapnabCommon PUBLIC ${SNAPNAB_WIN32_LIBS} windowsapp)     # windowsapp: OCR (Windows.Media.Ocr)
-target_link_libraries(SnapnabCommon PRIVATE ZXing::ZXing)                      # QR codes and barcodes
 # the shared Rust layer (rust/snapcore, with libwebp), with the same static CRT as the C++ code
 corrosion_import_crate(MANIFEST_PATH ${CMAKE_SOURCE_DIR}/rust/Cargo.toml CRATES snapcore CRATE_TYPES staticlib LOCKED)
 corrosion_add_target_rustflags(snapcore -C target-feature=+crt-static)

@@ -16,19 +16,27 @@
 //! - `beautify`: Beautify (background, padding, rounded corners, shadow)
 //! - `cv`: computer vision (magic wand, masks, inpainting, translation detection)
 //! - `pdf`: the PDF writer and the page breaks of long captures
+//! - `color`: color values as text and the recent colors
+//! - `hdr`: HDR screenshots and recordings (DXGI duplication, tone mapping)
+//! - `ocr`: text recognition and face detection (Windows OCR and FaceAnalysis)
+//! - `barcode`: QR codes and barcodes (rxing)
 
+pub mod barcode;
 pub mod beautify;
 pub mod codec;
+pub mod color;
 pub mod container;
 pub mod crt;
 pub mod cv;
 pub mod fx;
 pub mod gdip;
 pub mod gif;
+pub mod hdr;
 pub mod i18n;
 pub mod image;
 pub mod library;
 pub mod log;
+pub mod ocr;
 pub mod paths;
 pub mod pdf;
 pub mod reg;
@@ -37,4 +45,5 @@ pub mod wide;
 pub mod xml;
 
 mod ffi;
+mod ffi_more;
 mod ffi_pixels;
