@@ -308,4 +308,101 @@ bool snapcore_gif_add_frame(SnapcoreGif* g, const SnapcoreImageIn* frame, int32_
 bool snapcore_gif_close(SnapcoreGif* g);                // frees g; false if anything could not be written
 void snapcore_sort_by_byte(uint32_t* v, size_t n, uint32_t shift, bool heapOnly);   // for the tests: the palette's std::sort
 
+
+// ---- the editor's objects and painters (Render.cpp → rust/snapcore/src/render.rs). An object is handed over as a
+// SnapcoreObj pointing into the C++ DrawObj (valid during the call; flags as 0 / 1); GDI+ objects by their native
+// pointers (GpGraphics*, GpPath*, GpPen*), drawn into with the same calls the C++ made.
+struct SnapcorePointF { float x, y; };
+struct SnapcoreRectF { float x, y, w, h; };
+struct SnapcoreGradStop { float pos; uint32_t color; };
+struct SnapcoreGradient { int32_t type; float angle; const SnapcoreGradStop* stops; size_t count; };
+struct SnapcoreStyle {
+    uint32_t stroke, fill, textColor;
+    float width;
+    int32_t opacity, shadow, shadowDir;
+    uint32_t shadowColor;
+    int32_t shadowOpacity, shadowBlur, shadowDist;
+    const wchar_t* font;
+    float fontSize;
+    int32_t bold, italic, underline, alignH, alignV;
+    float padding;
+    int32_t arrowStart, arrowEnd;
+    float startSize, endSize;
+    int32_t dash, bezier, calloutShape, shaded;
+    uint32_t tailColor;
+    float tailWidth;
+    int32_t shapeKind, stepShape, stepType, magnifyShape, magnifyScale, magnifyLink, hideKind, antialias, amount;
+    float lineSpacing;
+    uint32_t stepOutline;
+    float stepOutlineWidth;
+    int32_t areaShape;
+    SnapcoreGradient grad;
+    int32_t bgBlur, bgBlurAmount, loupe, loupeHandle, textOnly, snapText, sketch, sketchSeed, vertical, textOnPath;
+};
+struct SnapcoreObj {
+    int32_t type;
+    SnapcorePointF p1, p2, tail, ctrl;
+    const SnapcorePointF* pts;
+    size_t ptsCount;
+    const wchar_t* text;
+    int32_t stepValue;
+    SnapcoreStyle style;
+    const uint32_t* picture;                           // picW × picH, or null
+    int32_t picW, picH;
+    const SnapcoreObj* children;
+    size_t childCount;
+    const wchar_t* name;
+    int32_t hidden, locked, floating;
+    const SnapcoreRectF* textBoxes;
+    size_t textBoxCount;
+    const float* pressure;
+    size_t pressureCount;
+    float picDpi;                                      // the picture's resolution (0 = none)
+};
+// RenderObject: graphics is a GpGraphics over px (w × h), which the painter also changes directly (it flushes first)
+void snapcore_render_object(void* graphics, uint32_t* px, int32_t w, int32_t h, const SnapcoreObj* o, bool hideText);
+void snapcore_shape_path(void* path, int32_t kind, SnapcoreRectF r);           // added to the GpPath
+void snapcore_callout_body_path(void* path, int32_t shape, SnapcoreRectF r);
+void snapcore_area_path(void* path, const SnapcoreObj* o);
+SnapcoreRectF snapcore_obj_rect(const SnapcoreObj* o, int32_t which);
+                                                       // 0 bounds, 1 callout text area, 2 arrow label, 3 magnifier + handle
+float snapcore_text_block_height(const SnapcoreObj* o, float width);
+float snapcore_stamp_aspect(const wchar_t* id);
+SnapcoreImage* snapcore_stamp_image(const wchar_t* id, int32_t px, int32_t which);   // 0 stamp, 1 emoji, 2 cursor; null if empty
+void* snapcore_fill_brush(uint32_t color, const SnapcoreGradient* g, SnapcoreRectF r, int32_t opacity);   // a new GpBrush
+void snapcore_fill_gradient_mask(uint32_t* px, int32_t w, int32_t h, const uint8_t* mask, size_t maskLen, SnapcoreRect b,
+                                 const SnapcoreGradient* g, int32_t opacity);  // mask: w × h bytes, or empty
+void snapcore_draw_cap_glyph(void* graphics, int32_t cap, SnapcoreRectF r, uint32_t color, bool atStart);
+void snapcore_apply_dash(void* pen, int32_t dash);
+bool snapcore_step_label(int32_t value, int32_t type, SnapcoreWStr* out);
+float snapcore_cap_length(float width, float size);
+
+// ---- the objects as XML (Serialize.cpp, Document::Save / Load → rust/snapcore/src/serial.rs). Objects snapcore read come
+// back as a list of SnapcoreObj, valid until snapcore_objs_free; the C++ copies them out.
+struct SnapcoreObjList;
+struct SnapcoreDocInfo {
+    const wchar_t *captureMode, *windowTitle, *application, *created, *tags;
+    int32_t nextStep;
+    const float* guidesX;
+    size_t guidesXCount;
+    const float* guidesY;
+    size_t guidesYCount;
+};
+size_t             snapcore_objs_count(const SnapcoreObjList* l);
+const SnapcoreObj* snapcore_objs_get(const SnapcoreObjList* l, size_t i);
+const wchar_t*     snapcore_objs_source(const SnapcoreObjList* l);     // clipboard: the source document; null if not objects
+void               snapcore_objs_free(SnapcoreObjList* l);
+bool snapcore_objects_to_clip(const SnapcoreObj* objs, size_t n, const wchar_t* source, SnapcoreBuf* out);   // UTF-8
+SnapcoreObjList* snapcore_objects_from_clip(const uint8_t* text, size_t len);
+bool snapcore_doc_save(const wchar_t* path, size_t len, const SnapcoreDocInfo* info, const SnapcoreImageIn* base,
+                       const SnapcoreObj* objs, size_t n, const wchar_t* version);
+SnapcoreObjList* snapcore_doc_load(const wchar_t* path, size_t len);   // null: not a readable .snap
+bool snapcore_doc_info(const SnapcoreObjList* l, SnapcoreDocInfo* out);
+SnapcoreImage* snapcore_doc_take_base(SnapcoreObjList* l);             // once
+bool snapcore_hit_test(const SnapcoreObj* o, float x, float y, float tol);
+bool snapcore_grad_stops_string(const SnapcoreGradient* g, SnapcoreBuf* out);
+// the gradient from the FillGradient / GradientAngle / GradientStops values (UTF-8, null = missing)
+bool snapcore_grad_from_attrs(const char* kind, const char* angle, const char* stops, int32_t* outKind, float* outAngle,
+                              void (*stop)(void* ctx, float pos, uint32_t color), void* ctx);
+
 }

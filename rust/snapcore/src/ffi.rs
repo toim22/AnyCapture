@@ -31,7 +31,7 @@ pub struct SnapWStr {
     pub len: usize,
 }
 
-unsafe fn path_arg(path: *const u16, len: usize) -> Option<PathBuf> {
+pub(crate) unsafe fn path_arg(path: *const u16, len: usize) -> Option<PathBuf> {
     if path.is_null() {
         return None;
     }

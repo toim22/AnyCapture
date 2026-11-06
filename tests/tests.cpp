@@ -417,9 +417,631 @@ static std::vector<std::string> PixelFingerprints(const std::wstring& tmpDir) {
     return L;
 }
 
+// an object read from its XML element, and an object written and read back (through the Editor's clipboard format,
+// which holds the same elements as the .snap)
+static std::shared_ptr<snap::ed::DrawObj> ReadObjXml(const XmlNode& n) {
+    auto v = snap::ed::ObjectsFromClip("<SnapnabObjects><Objects>" + XmlSerialize(n, false) + "</Objects></SnapnabObjects>");
+    return v.empty() ? nullptr : std::make_shared<snap::ed::DrawObj>(v[0]);
+}
+static std::shared_ptr<snap::ed::DrawObj> ObjRoundTrip(const snap::ed::DrawObj& o) {
+    auto v = snap::ed::ObjectsFromClip(snap::ed::ObjectsToClip({ o }, L""));
+    return v.empty() ? nullptr : std::make_shared<snap::ed::DrawObj>(v[0]);
+}
+
 static std::wstring Tmp(const wchar_t* name) {
     wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t);
     return std::wstring(t) + L"snapnab_test_" + name;
+}
+
+// The drawing of every object type and style variation on a generated image, with the geometry the editor asks the
+// painters for (bounds, text and label boxes, shape outlines, stamps). tests/data/render-cpp.txt holds what the C++
+// painters gave before they moved to Rust ("SnapnabTests rendergolden" prints those of the current build).
+static std::vector<std::string> RenderFingerprints() {
+    using namespace snap::ed;
+    using Gdiplus::PointF;
+    using Gdiplus::RectF;
+    std::vector<std::string> L;
+    Image base(200, 150, 0);
+    for (int y = 0; y < base.h; y++)
+        for (int x = 0; x < base.w; x++)
+            base.at(x, y) = ARGB(255, (x * 5 + y) & 255, (y * 7) & 255, ((x / 10 + y / 10) % 2) ? 230 : 40);
+    auto hashImg = [](const Image& im) { return (unsigned long long)Fnv1a(im.px.data(), im.px.size() * 4); };
+    auto box = [](RectF r) { return FormatA("%.3f,%.3f,%.3f,%.3f", r.X, r.Y, r.Width, r.Height); };
+    auto render = [&](const std::string& name, const std::vector<DrawObj>& objs, bool hideFirst = false) {
+        Document d;
+        d.SetBase(base);
+        for (auto& o : objs) d.st.objs.push_back(std::make_shared<DrawObj>(o));
+        Image out = d.Render(hideFirst ? d.st.objs[0].get() : nullptr);
+        L.push_back(FormatA("%s %016llx b=%s", name.c_str(), hashImg(out), box(objs[0].Bounds()).c_str()));
+    };
+    auto add = [&](const std::string& name, const DrawObj& o) { render(name, { o }); };
+    auto obj = [](ObjType t, float x1, float y1, float x2, float y2) {
+        DrawObj o;
+        o.type = t;
+        o.p1 = { x1, y1 };
+        o.p2 = { x2, y2 };
+        o.ctrl = { (x1 + x2) / 2, (y1 + y2) / 2 - 40 };
+        return o;
+    };
+    auto pathFp = [](Gdiplus::GraphicsPath& gp) {
+        Gdiplus::PathData pd;
+        gp.GetPathData(&pd);
+        uint64_t h = Fnv1a(pd.Points, pd.Count * sizeof(PointF)) * 31 + Fnv1a(pd.Types, pd.Count);
+        return FormatA("%d %016llx", pd.Count, (unsigned long long)h);
+    };
+    std::vector<PointF> zig;
+    for (int i = 0; i < 24; i++) zig.push_back({ 20.0f + i * 7, 75.0f + (float)std::sin(i * 0.7) * 40 });
+
+    // lines and arrows: every pair of ends, dashes, curves, hand-drawn strokes and labels
+    for (int a = 0; a < CapCount; a++)
+        for (int b = 0; b < CapCount; b++) {
+            DrawObj o = obj(ObjType::Arrow, 30, 110, 170, 40);
+            o.style.arrowStart = a; o.style.arrowEnd = b;
+            o.style.startSize = 1.0f + a % 4; o.style.endSize = 2.0f + b % 3; o.style.width = 2.0f + (a + b) % 6;
+            o.style.shadow = (a + b) % 2 == 0; o.style.shadowDir = (a * 3 + b) % 9;
+            o.style.bezier = (a + b) % 3 == 0;
+            add(FormatA("arrow %d %d", a, b), o);
+        }
+    for (int d = 0; d < DashCount; d++)
+        for (int c = 0; c < 2; c++) {
+            DrawObj o = obj(ObjType::Line, 20, 20, 180, 130);
+            o.style.dash = d; o.style.width = 5; o.style.bezier = c == 1; o.style.arrowStart = c ? CapRound : CapFlat; o.style.arrowEnd = CapFlat;
+            o.style.stroke = 0xFF2060E0; o.style.opacity = 80 - d * 5;
+            add(FormatA("line dash %d %d", d, c), o);
+        }
+    for (int c = 0; c < 4; c++) {
+        DrawObj o = obj(ObjType::Arrow, 25, 120, 175, 30);
+        o.style.sketch = true; o.style.sketchSeed = 1 + c * 6; o.style.bezier = c % 2 == 1; o.style.width = 3.0f + c * 2;
+        o.style.arrowStart = c == 3 ? CapArrowOpen : CapFlat;
+        add(FormatA("arrow sketch %d", c), o);
+    }
+    {
+        DrawObj o = obj(ObjType::Arrow, 100, 75, 104, 78);
+        add("arrow short", o);
+        o.p2 = { 100.2f, 75.1f };
+        add("arrow tiny", o);
+    }
+    const wchar_t* labels[] = { L"Look here", L"Two\nlines", L"A much longer label that wraps around", L"Ends\n" };
+    for (int i = 0; i < 4; i++)
+        for (int c = 0; c < 2; c++) {
+            DrawObj o = obj(ObjType::Arrow, 120, 60 + i * 10.0f, 40, 120);
+            o.text = labels[i]; o.style.bezier = c == 1; o.style.fontSize = 14.0f + i * 3; o.style.arrowStart = i % 2 ? CapArrow : CapFlat;
+            o.style.italic = i == 2; o.style.underline = i == 3; o.style.bold = i != 1;
+            add(FormatA("arrow label %d %d", i, c), o);
+            Gdiplus::RectF lr = ArrowLabelRect(o);
+            L.push_back(FormatA("arrow label rect %d %d %s", i, c, box(lr).c_str()));
+        }
+    for (int i = 0; i < 4; i++) {
+        DrawObj o = obj(i < 2 ? ObjType::Line : ObjType::Arrow, i % 2 ? 180.0f : 20.0f, 100, i % 2 ? 20.0f : 180.0f, 60);
+        o.text = L"Text along a path"; o.style.textOnPath = true; o.style.bezier = i >= 2; o.style.fontSize = 16; o.style.sketch = i == 3;
+        add(FormatA("text on path %d", i), o);
+    }
+
+    // shapes: every outline, fills, gradients, dashes and hand-drawn outlines
+    for (int k = 0; k < ShapeCount; k++)
+        for (int v = 0; v < 3; v++) {
+            DrawObj o = obj(ObjType::Shape, 30, 25, 165 - v * 20.0f, 125);
+            o.style.shapeKind = k; o.style.width = v == 2 ? 0.0f : 3.0f + v * 3; o.style.fill = v ? 0x9020C0F0 : 0;
+            o.style.dash = (k + v) % DashCount; o.style.sketch = v == 1 && k % 2 == 0; o.style.sketchSeed = k + 2;
+            add(FormatA("shape %d %d", k, v), o);
+        }
+    {
+        ObjType old[] = { ObjType::Rect, ObjType::Ellipse, ObjType::RoundRect };
+        for (int i = 0; i < 3; i++) { DrawObj o = obj(old[i], 160, 120, 40, 30); o.style.fill = 0xFFFFFFFF; add(FormatA("old shape %d", i), o); }
+    }
+    for (int g = 0; g < 6; g++) {
+        DrawObj o = obj(ObjType::Shape, 20, 20, 180, 130);
+        o.style.shapeKind = g % 3 == 2 ? ShapeEllipse : ShapeRect;
+        o.style.grad.type = g < 4 ? 1 : 2;
+        o.style.grad.angle = g * 37.0f;
+        o.style.grad.stops = { { 0.0f, 0xFFFF0000 }, { 1.0f, 0x800000FF } };
+        if (g % 2) o.style.grad.stops = { { 0.2f, 0xFF00FF00 }, { 0.5f, 0xFFFFFF00 }, { 0.7f, 0x40FF00FF }, { 0.9f, 0xFF000000 } };
+        o.style.opacity = 100 - g * 7;
+        add(FormatA("gradient %d", g), o);
+        auto br = FillBrush(o.style.fill, o.style.grad, o.Rect(), 70 + g * 5);
+        Image im(80, 60, 0);
+        {
+            auto bmp = im.WrapGdip();
+            Gdiplus::Graphics gg(bmp.get());
+            gg.FillRectangle(br.get(), 0, 0, 80, 60);
+        }
+        L.push_back(FormatA("fill brush %d %016llx", g, hashImg(im)));
+        std::vector<uint8_t> mask(base.px.size());
+        for (size_t i = 0; i < mask.size(); i++) mask[i] = (uint8_t)(i * 7 % 256);
+        Image fm = base;
+        FillGradientMask(fm, g % 2 ? mask : std::vector<uint8_t>{}, { 10, 5, 190, 140 }, o.style.grad, 90);
+        L.push_back(FormatA("gradient mask %d %016llx", g, hashImg(fm)));
+    }
+
+    // pen strokes
+    {
+        DrawObj o = obj(ObjType::Pen, 0, 0, 0, 0);
+        o.pts = zig; o.style.width = 6; o.style.stroke = 0xFF10A040;
+        add("pen", o);
+        o.style.dash = DashDot; add("pen dash", o);
+        o.style.dash = DashSolid;
+        for (size_t i = 0; i < o.pts.size(); i++) o.pressure.push_back((float)(i % 7) / 6);
+        add("pen pressure", o);
+        o.pressure.clear();
+        o.pts = { { 100, 75 } }; o.style.width = 12;
+        add("pen dot", o);
+    }
+
+    // highlighters, hides and spotlights: rectangles, every area outline, polygons, freehand, words only, old strokes
+    ObjType areas[] = { ObjType::Highlighter, ObjType::Blur, ObjType::Pixelate, ObjType::Spotlight };
+    std::vector<PointF> poly = { { 30, 30 }, { 170, 40 }, { 150, 130 }, { 60, 110 }, { 20, 70 } };
+    for (int t = 0; t < 4; t++)
+        for (int s = 0; s < AreaShapeCount + 1; s++) {
+            DrawObj o = obj(areas[t], 35, 30, 165, 120);
+            o.style.stroke = 0xFFFFE000; o.style.opacity = t ? 100 : 55; o.style.amount = 4 + s * 2; o.style.shadow = s % 2 == 1;
+            if (s < AreaShapeCount) {
+                o.style.areaShape = s;
+                if (IsPointArea(s)) o.pts = poly;
+            } else {
+                o.style.textOnly = true;
+                o.textBoxes = { { 40, 40, 50, 14 }, { 100, 42, 60, 12 }, { 40, 80, 90, 16 } };
+            }
+            add(FormatA("area %d %d", t, s), o);
+        }
+    {
+        DrawObj o = obj(ObjType::Highlighter, 0, 0, 0, 0);
+        o.pts = zig; o.style.width = 14; o.style.stroke = 0xFFFFE000; o.style.opacity = 70;
+        add("highlighter freehand", o);
+        o.pts = { { 80, 80 } };
+        add("highlighter freehand dot", o);
+    }
+
+    // texts: alignments, line spacing, vertical, hand-drawn, outline and the old background box
+    for (int h = 0; h < 3; h++)
+        for (int v = 0; v < 3; v++) {
+            DrawObj o = obj(ObjType::Text, 15, 10, 185, 140);
+            o.text = L"Snapnab text\nsecond line"; o.style.alignH = h; o.style.alignV = v; o.style.fontSize = 18.0f + h * 4;
+            o.style.textColor = 0xFF102030; o.style.width = (float)v; o.style.stroke = 0xFFFFFFFF;
+            add(FormatA("text %d %d", h, v), o);
+        }
+    const wchar_t* texts[] = { L"Spacing\nbetween\nlines", L"Ends with enter\n\n", L"Supercalifragilisticexpialidocious word", L"" };
+    for (int i = 0; i < 4; i++)
+        for (int v = 0; v < 3; v++) {
+            DrawObj o = obj(ObjType::Text, 20, 15, 180, 135);
+            o.text = texts[i]; o.style.lineSpacing = 0.8f + v * 0.9f; o.style.alignV = v; o.style.alignH = 2 - v; o.style.fontSize = 17;
+            o.style.font = v == 1 ? L"Georgia" : v == 2 ? L"No Such Font Here" : L"Segoe UI";
+            add(FormatA("text spacing %d %d", i, v), o);
+            for (float w : { 30.0f, 90.0f, 170.0f }) L.push_back(FormatA("text height %d %d %.0f %.4f", i, v, w, TextBlockHeight(o, w)));
+        }
+    {
+        DrawObj o = obj(ObjType::Text, 20, 10, 180, 140);
+        o.text = L"Vertical text"; o.style.vertical = true; o.style.fontSize = 22;
+        add("text vertical", o);
+        L.push_back(FormatA("text vertical height %.4f", TextBlockHeight(o, 120)));
+        o.style.vertical = false; o.style.sketch = true; o.style.italic = true; o.style.underline = true;
+        add("text sketch", o);
+        o.style.sketch = false; o.style.fill = 0xC0FFFFFF; o.style.padding = 12;
+        add("text box", o);
+        o.style.opacity = 40; o.style.shadow = false;
+        add("text faded", o);
+    }
+
+    // callouts: the 24 shapes, tips everywhere, shaded, frosted glass, leaders, text boxes
+    for (int c = 0; c < kCalloutShapes; c++)
+        for (int t = 0; t < 4; t++) {
+            DrawObj o = obj(ObjType::Callout, 50, 40, 150, 100);
+            PointF tips[] = { { 190, 140 }, { 100, 70 }, { 10, 70 }, { 100, 5 } };
+            o.tail = tips[t]; o.text = L"Callout text here"; o.style.calloutShape = c; o.style.fontSize = 13;
+            o.style.fill = 0xFFFFFFF0; o.style.stroke = 0xFF303030; o.style.width = t == 3 ? 0.0f : 2.0f + t;
+            o.style.shaded = t == 1; o.style.arrowEnd = t; o.style.tailWidth = 3.0f + t;
+            add(FormatA("callout %d %d", c, t), o);
+            L.push_back(FormatA("callout text rect %d %d %s", c, t, box(CalloutTextRect(o)).c_str()));
+        }
+    {
+        DrawObj o = obj(ObjType::Callout, 40, 30, 160, 110);
+        o.tail = { 190, 140 }; o.text = L"Frosted"; o.style.bgBlur = true; o.style.bgBlurAmount = 6; o.style.fill = 0x80FFFFFF;
+        add("callout frosted", o);
+        o.style.vertical = true; o.style.bgBlur = false; o.style.lineSpacing = 1.4f;
+        add("callout vertical", o);
+        render("callout hidden text", { o }, true);
+    }
+    for (int c = 0; c < kCalloutShapes; c++) {
+        Gdiplus::GraphicsPath gp;
+        CalloutBodyPath(gp, c, RectF(10, 20, 120, 70));
+        L.push_back(FormatA("callout body %d %s", c, pathFp(gp).c_str()));
+    }
+    for (int k = 0; k < ShapeCount; k++) {
+        Gdiplus::GraphicsPath gp;
+        ShapePath(gp, k, RectF(5, 10, 90, 60));
+        L.push_back(FormatA("shape path %d %s", k, pathFp(gp).c_str()));
+    }
+    for (int s = 0; s < AreaShapeCount; s++) {
+        DrawObj o = obj(ObjType::Spotlight, 10, 10, 90, 70);
+        o.style.areaShape = s;
+        if (IsPointArea(s)) o.pts = poly;
+        Gdiplus::GraphicsPath gp;
+        AreaPath(gp, o);
+        L.push_back(FormatA("area path %d %s", s, pathFp(gp).c_str()));
+    }
+
+    // steps: shapes, number styles, outlines
+    for (int s = 0; s < 4; s++)
+        for (int t = 0; t < StepTypeCount; t++) {
+            DrawObj o = obj(ObjType::Step, 100, 75, 100, 75);
+            int vals[] = { 1, 12, 123, 27, 3999 };
+            o.stepValue = vals[t]; o.style.stepShape = s; o.style.stepType = t; o.style.fontSize = 20.0f + s * 6;
+            o.style.textColor = 0xFFFFFFFF; o.style.stepOutlineWidth = t % 2 ? 3.0f : 0.0f;
+            add(FormatA("step %d %d", s, t), o);
+        }
+    for (int v : { 1, 26, 27, 52, 702, 703, 1994, 3999, 5000 })
+        for (int t = 0; t < StepTypeCount; t++) L.push_back(FormatA("step label %d %d %s", v, t, WToUtf8(StepLabel(v, t)).c_str()));
+    for (float w : { 1.0f, 4.0f, 9.0f }) for (float s : { 0.5f, 3.0f, 6.0f }) L.push_back(FormatA("cap length %.1f %.1f %.4f", w, s, CapLength(w, s)));
+
+    // stamps: emoji, labels (Latin, CJK, Devanagari) and every cursor
+    std::vector<std::wstring> stamps = { std::wstring{ (wchar_t)0xD83D, (wchar_t)0xDE00 }, std::wstring(1, (wchar_t)0x2705),
+                                         L"label:2E7D32:Before", L"label:C62828:Wrong", std::wstring(L"label:1565C0:") + (wchar_t)0x4E2D + (wchar_t)0x6587,
+                                         std::wstring(L"label:6A1B9A:") + (wchar_t)0x0939 + (wchar_t)0x093F, L"label:bad" };
+    for (auto& c : { L"arrow", L"arrowdark", L"hand", L"ibeam", L"wait", L"cross", L"move", L"resize", L"click", L"clickright" })
+        stamps.push_back(std::wstring(L"cursor:") + c);
+    for (size_t i = 0; i < stamps.size(); i++) {
+        DrawObj o = obj(ObjType::Stamp, 40, 20, 160, 130);
+        o.text = stamps[i]; o.style.shadow = i % 2 == 0;
+        add(FormatA("stamp %zu", i), o);
+        Image si = StampImage(stamps[i], 70);
+        L.push_back(FormatA("stamp image %zu %dx%d %016llx aspect %.4f", i, si.w, si.h, hashImg(si), StampAspect(stamps[i])));
+    }
+
+    // magnifiers: shapes, connected, loupes
+    for (int m = 0; m < MagnifyKindCount; m++)
+        for (int v = 0; v < 4; v++) {
+            DrawObj o = obj(ObjType::Magnify, 100, 50, 180, 130);
+            o.tail = { 50, 50 }; o.style.magnifyShape = m; o.style.magnifyScale = 150 + v * 100; o.style.magnifyLink = v % 2 == 1;
+            o.style.loupe = v >= 2; o.style.loupeHandle = v == 2; o.style.width = 2.0f + v; o.style.stroke = 0xFF404040 + v * 0x200000;
+            add(FormatA("magnify %d %d", m, v), o);
+            L.push_back(FormatA("magnifier extra %d %d %s", m, v, box(MagnifierExtra(o)).c_str()));
+        }
+
+    // embedded pictures, groups, several objects together
+    {
+        auto pic = std::make_shared<Image>(30, 20, 0);
+        for (int y = 0; y < 20; y++) for (int x = 0; x < 30; x++) pic->at(x, y) = ARGB(200 + y, x * 8, y * 12, 128);
+        DrawObj o = obj(ObjType::Picture, 30, 30, 150, 110);
+        o.picture = pic; o.style.width = 0;
+        add("picture", o);
+        o.style.width = 3; o.style.stroke = 0xFF000000; o.style.opacity = 70;
+        add("picture framed", o);
+        DrawObj g = obj(ObjType::Group, 0, 0, 0, 0);
+        g.children = { obj(ObjType::Arrow, 20, 20, 120, 100), obj(ObjType::Shape, 90, 40, 180, 140) };
+        g.children[1].style.fill = 0x8000FF00;
+        g.UpdateGroupRect();
+        add("group", g);
+        DrawObj b = obj(ObjType::Blur, 0, 0, 200, 70);
+        b.style.amount = 8;
+        render("stack", { g.children[0], b, g.children[1], o });
+    }
+
+    // the line end samples of the menus
+    for (int c = 0; c < CapCount; c++)
+        for (int s = 0; s < 2; s++) {
+            Image im(60, 24, 0xFFFFFFFF);
+            {
+                auto bmp = im.WrapGdip();
+                Gdiplus::Graphics gg(bmp.get());
+                gg.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+                DrawCapGlyph(gg, c, RectF(0, 0, 60, 24), Gdiplus::Color(255, 20, 20, 20), s == 1);
+            }
+            L.push_back(FormatA("cap glyph %d %d %016llx", c, s, hashImg(im)));
+        }
+    return L;
+}
+
+// The editor's objects as the .snap and the clipboard store them (XML), read back, from hand-written and older files,
+// with hit-testing on a grid and a document saved and loaded. tests/data/doc-cpp.txt holds what the C++ code gave
+// before it moved to Rust ("SnapnabTests docgolden" prints those of the current build).
+static std::vector<std::string> DocFingerprints() {
+    using namespace snap::ed;
+    using Gdiplus::PointF;
+    using Gdiplus::RectF;
+    std::vector<std::string> L;
+    auto oneLine = [](std::string s) {
+        std::string o;
+        for (char c : s) o += c == '\n' ? std::string("\\n") : c == '\r' ? std::string("\\r") : std::string(1, c);
+        return o;
+    };
+    // an object's XML as the clipboard (and the .snap) store it; a picture's PNG by its hash
+    auto xmlOf = [&](const DrawObj& o) {
+        std::string s = ObjectsToClip({ o }, L"");
+        size_t a = s.find("<Objects>"), b = s.find("</Objects>");
+        std::string x = a != std::string::npos && b != std::string::npos ? s.substr(a + 9, b - a - 9) : s;
+        if (size_t e = s.find("<Embedded"); e != std::string::npos)
+            x += FormatA(" [%016llx]", (unsigned long long)Fnv1a(s.data() + e, s.size() - e));
+        return oneLine(x);
+    };
+    auto readXml = [](const std::string& objXml) {
+        auto v = ObjectsFromClip("<SnapnabObjects Source=\"\"><Objects>" + objXml + "</Objects></SnapnabObjects>");
+        return v.empty() ? ObjPtr() : std::make_shared<DrawObj>(v[0]);
+    };
+    auto extra = [](const DrawObj& o) {
+        return FormatA("t=%d hk=%d ms=%d sv=%d aa=%d ctrl=%.3f,%.3f tail=%.3f,%.3f p=%.3f,%.3f,%.3f,%.3f kids=%zu pic=%d",
+                       (int)o.type, o.style.hideKind, o.style.magnifyScale, o.stepValue, o.style.antialias, o.ctrl.X, o.ctrl.Y,
+                       o.tail.X, o.tail.Y, o.p1.X, o.p1.Y, o.p2.X, o.p2.Y, o.children.size(),
+                       o.picture ? o.picture->w * 1000 + o.picture->h : -1);
+    };
+    auto obj = [](ObjType t, float x1, float y1, float x2, float y2) {
+        DrawObj o;
+        o.type = t;
+        o.p1 = { x1, y1 };
+        o.p2 = { x2, y2 };
+        o.ctrl = { (x1 + x2) / 2, (y1 + y2) / 2 - 40 };
+        return o;
+    };
+
+    // a set of objects that touches every attribute
+    std::vector<std::pair<std::string, DrawObj>> S;
+    {
+        DrawObj o = obj(ObjType::Arrow, 30, 110, 170, 40);
+        o.style.bezier = true; o.style.dash = 3; o.style.arrowStart = CapDiamond; o.style.startSize = 2.5f; o.style.width = 6;
+        o.text = L"Label <&> \"q\" 'a'\nnext\tline"; o.style.font = L"Segoe UI"; o.style.italic = true; o.style.fontSize = 13.25f;
+        S.push_back({ "arrow label", o });
+        DrawObj l = obj(ObjType::Line, -12.5f, 0.00005f, 1e7f, -0.00015f);
+        l.style.stroke = 0x80FF0000; l.style.opacity = 35; l.style.shadow = false; l.name = L"Línea ✓"; l.locked = true;
+        S.push_back({ "line", l });
+    }
+    for (int k = 0; k < ShapeCount; k++) {
+        DrawObj o = obj(ObjType::Shape, 30, 25, 165, 125);
+        o.style.shapeKind = k; o.style.fill = k % 2 ? 0x9020C0F0 : 0; o.style.width = 1.0f + k;
+        if (k == 2) o.style.grad = { 1, 37.5f, { { 0, 0xFF112233 }, { 0.4f, 0x80445566 }, { 1, 0xFFFFFFFF } } };
+        if (k == 5) o.style.grad = { 2, 90, { { 0.125f, 0xFF000000 }, { 0.875f, 0x00FFFFFF } } };
+        if (k == 3) o.style.sketch = true, o.style.sketchSeed = 42;
+        S.push_back({ FormatA("shape %d", k), o });
+    }
+    S.push_back({ "old rect", obj(ObjType::Rect, 160, 120, 40, 30) });
+    S.push_back({ "old ellipse", obj(ObjType::Ellipse, 10, 10, 90, 60) });
+    S.push_back({ "old roundrect", obj(ObjType::RoundRect, 50, 50, 150, 100) });
+    {
+        DrawObj o = obj(ObjType::Pen, 0, 0, 0, 0);
+        for (int i = 0; i < 12; i++) { o.pts.push_back({ 20.0f + i * 13.3f, 75.0f + (float)std::sin(i * 0.7) * 40 }); o.pressure.push_back(i / 11.0f); }
+        o.p1 = o.pts.front(); o.p2 = o.pts.back();
+        o.style.arrowEnd = CapArrow;
+        S.push_back({ "pen pressure", o });
+        o.pressure.pop_back();
+        S.push_back({ "pen pressure mismatch", o });
+    }
+    {
+        DrawObj o = obj(ObjType::Highlighter, 20, 30, 120, 60);
+        o.style.stroke = 0x80FFFF00;
+        S.push_back({ "highlighter", o });
+        o.style.areaShape = AreaPolygon;
+        o.pts = { { 20, 30 }, { 120, 40 }, { 90, 90 }, { 25, 70 } };
+        S.push_back({ "highlighter polygon", o });
+    }
+    {
+        DrawObj o = obj(ObjType::Text, 20, 20, 180, 120);
+        o.text = L"Héllo wörld — 日本語 😀\r\nline two"; o.name = L"Title"; o.hidden = true; o.floating = true;
+        o.style.lineSpacing = 1.35f; o.style.alignH = 2; o.style.alignV = 1; o.style.padding = 7.5f; o.style.underline = true;
+        o.style.textOnly = true; o.textBoxes = { RectF(20, 20, 50.25f, 12), RectF(30.5f, 40, 60, 14.75f) };
+        o.style.snapText = true; o.style.vertical = true; o.style.textOnPath = true;
+        S.push_back({ "text", o });
+        DrawObj e = obj(ObjType::Text, 5, 5, 6, 6);
+        S.push_back({ "text empty", e });
+    }
+    for (int c : { 0, 13, 16, 22, 23 }) {
+        DrawObj o = obj(ObjType::Callout, 40, 30, 160, 90);
+        o.text = L"Callout"; o.tail = { 20, 130 }; o.style.calloutShape = c; o.style.shaded = c == 13;
+        o.style.tailColor = 0xFF00AA00; o.style.tailWidth = 4.5f; o.style.bgBlur = c == 22; o.style.bgBlurAmount = 12;
+        o.style.grad = { 1, 0, { { 0, 0xFF000000 }, { 1, 0xFFFFFFFF } } };
+        S.push_back({ FormatA("callout %d", c), o });
+    }
+    for (int i = 0; i < 3; i++) {
+        DrawObj o = obj(ObjType::Step, 60, 60, 92, 92);
+        o.stepValue = 3 + i * 10; o.style.stepShape = i; o.style.stepType = i + 1;
+        if (i == 1) { o.style.stepOutline = 0xFF123456; o.style.stepOutlineWidth = 2.5f; }
+        S.push_back({ FormatA("step %d", i), o });
+    }
+    {
+        DrawObj o = obj(ObjType::Stamp, 50, 50, 98, 98);
+        o.text = L"label:FF8800:Before";
+        S.push_back({ "stamp", o });
+    }
+    {
+        ObjType hide[] = { ObjType::Blur, ObjType::Pixelate, ObjType::Spotlight };
+        for (int i = 0; i < 3; i++) {
+            DrawObj o = obj(hide[i], 30, 30, 150, 110);
+            o.style.amount = 4 + i * 7; o.style.areaShape = i == 0 ? ShapeEllipse : i == 1 ? AreaFreehand : ShapeRect;
+            if (i == 1) { o.pts = { { 30, 30 }, { 150, 40 }, { 140, 110 }, { 40, 100 }, { 35, 60 } }; o.style.hideKind = 1; }
+            S.push_back({ FormatA("hide %d", i), o });
+        }
+    }
+    {
+        DrawObj o = obj(ObjType::Magnify, 100, 20, 180, 100);
+        o.tail = { 40, 120 }; o.style.magnifyShape = 1; o.style.magnifyScale = 250; o.style.magnifyLink = true; o.style.amount = 6;
+        o.style.loupe = true; o.style.loupeHandle = false;
+        S.push_back({ "magnify", o });
+        o.style.loupe = false;
+        S.push_back({ "magnify plain", o });
+    }
+    {
+        DrawObj o = obj(ObjType::Picture, 10, 10, 40, 30);
+        Image pic(3, 2, 0);
+        for (int i = 0; i < 6; i++) pic.px[i] = 0xFF000000u | (uint32_t)(i * 0x2A1B0C);
+        o.picture = std::make_shared<Image>(pic);
+        S.push_back({ "picture", o });
+    }
+    {
+        DrawObj g = obj(ObjType::Group, 0, 0, 0, 0);
+        g.children.push_back(S[0].second);
+        g.children.push_back(S[14].second);
+        DrawObj inner = obj(ObjType::Group, 0, 0, 0, 0);
+        inner.children.push_back(obj(ObjType::Line, 5, 5, 25, 45));
+        inner.UpdateGroupRect();
+        g.children.push_back(inner);
+        g.UpdateGroupRect();
+        g.name = L"Group 1";
+        S.push_back({ "group", g });
+    }
+    {
+        DrawObj o = obj(ObjType::Link, 10, 10, 90, 30);
+        o.text = L"https://example.com/a?b=1&c=é";
+        S.push_back({ "link", o });
+    }
+
+    for (auto& [name, o] : S) L.push_back(FormatA("xml %s %s", name.c_str(), xmlOf(o).c_str()));
+
+    // read back: the XML of what was read, and what the XML does not show
+    for (auto& [name, o] : S) {
+        auto r = ObjectsFromClip(ObjectsToClip({ o }, L""));
+        L.push_back(FormatA("read %s %zu", name.c_str(), r.size()));
+        if (r.empty()) continue;
+        auto& rr = r[0];
+        L.push_back(FormatA("read %s %s %s", name.c_str(), extra(rr).c_str(), xmlOf(rr).c_str()));
+    }
+
+    // hand-written and older files
+    const char* hand[] = {
+        "<Rect X1=\"10\" Y1=\"20\" X2=\"5\" Y2=\"7\"/>",
+        "<Ellipse X1=\"1\" Y1=\"2\" X2=\"30\" Y2=\"40\" PenColor=\"#123456\"/>",
+        "<RoundRect/>",
+        "<Highlight X1=\"1\" Y1=\"1\" X2=\"50\" Y2=\"9\" AreaShape=\"99\"/>",
+        "<Callout CalloutShape=\"2\"/>",
+        "<Callout CalloutShape=\"9\"/>",
+        "<Callout CalloutShape=\"-1\" CalloutKind=\"30\"/>",
+        "<Callout CalloutKind=\"17\" TailX=\"3.5\" TailY=\"-4\"/>",
+        "<Pixelate Amount=\"5\"/>",
+        "<Link X1=\"0\" Url=\"\"/>",
+        "<Link X1=\"4\" Y1=\"5\" X2=\"6\" Y2=\"7\" Url=\"http://x\"/>",
+        "<Group/>",
+        "<Group><Bogus/></Group>",
+        "<Group Name=\"g\"><Arrow X1=\"1\" Y1=\"2\" X2=\"30\" Y2=\"40\"/><Text X1=\"0\" Y1=\"0\" X2=\"10\" Y2=\"10\" Text=\"t\"/></Group>",
+        "<Bogus X1=\"1\"/>",
+        "<Image StreamName=\"missing.png\"/>",
+        "<Image/>",
+        "<Arrow PenColor=\"#1\" FillColor=\"zz\" TextColor=\"#0x7FABCDEF\" ShadowColor=\"#FFFFFFFFFF\" TailColor=\"#-1\"/>",
+        "<Arrow PenColor=\"#abcdeg\" FillColor=\"#\" TextColor=\"# 12\" ShadowColor=\"#+0000FF\"/>",
+        "<Pen Points=\"1,2 3,4 junk 5,6\" Pressure=\"0.5 1.5 -1 x 0.25\"/>",
+        "<Pen Points=\" 1,2\" Pressure=\" 0.5\"/>",
+        "<Pen Points=\"1 ,2 3,4\"/>",
+        "<Pen Points=\"1, 2   3,\t4\"/>",
+        "<Pen Points=\"1,2\"/>",
+        "<Pen Points=\"0x10,2 1e2,-3.5e-1 .5,5. +7,-0 \"/>",
+        "<Pen Points=\"1.25e,3 4,5\"/>",
+        "<Pen Points=\"inf,1 2,3\"/>",
+        "<Text TextBoxes=\"1,2,3,4 5,6,7 8\" LineSpacing=\"9\" AlignH=\"-3\" AlignV=\"7\" Bold=\"0\" TextOnly=\"1\"/>",
+        "<Text TextBoxes=\"1,2,3,4 5,6,7,8\" LineSpacing=\"0.1\"/>",
+        "<Shape FillGradient=\"1\" GradientAngle=\"45.5\" GradientStops=\"1:#FF0000FF;0:#00FF00;0.5:bad;2:#FFFFFFFF;x\" ToolShape=\"99\"/>",
+        "<Shape FillGradient=\"2\" GradientStops=\"0:#FF000000\"/>",
+        "<Shape FillGradient=\"7\" GradientStops=\";;0.3:#FF0000FF;-1:#FF00FF00;\"/>",
+        "<Shape FillGradient=\"-2\" GradientAngle=\"abc\" GradientStops=\"0.25:#FF0000FF;0.25:#FF00FF00;0.1:\"/>",
+        "<Magnify Amount=\"3\"/>",
+        "<Magnify Amount=\"40\" MagnifyShape=\"12\" LoupeHandle=\"0\"/>",
+        "<Magnify MagnifyScale=\"5000\"/>",
+        "<Step StepValue=\"-4\" StepStyle=\"7\" StepSequenceType=\"-1\" StepOutlineWidth=\"99\"/>",
+        "<Arrow X1=\" 12.5abc\" Y1=\"+7x\" X2=\"1e2\" Y2=\".5\" PenWidth=\"-.e3\" Opacity=\" -12 \" ShadowDir=\"12\" Shadow=\"0\"/>",
+        "<Arrow X1=\"0x1A\" Y1=\"inf\" X2=\"1e400\" Y2=\"-0\" PenWidth=\"0x1p3\" Opacity=\"99999999999\"/>",
+        "<Arrow ArrowStartCap=\"20\" ArrowEndCap=\"-5\" DashType=\"9\" Bezier=\"2\" StartSize=\"3.25\"/>",
+        "<Arrow X1=\"10\" Y1=\"20\" X2=\"30\" Y2=\"40\" Bezier=\"1\"/>",
+        "<Text FaceName=\"Consolas\" FontSize=\"0\" Italic=\"1\" Underline=\"1\" TextPadding=\"-2\" Text=\"a&amp;b&#10;c\"/>",
+        "<Callout BackgroundBlur=\"1\" BackgroundBlurAmount=\"99\" Shaded=\"1\"/>",
+        "<Callout BackgroundBlur=\"1\" BackgroundBlurAmount=\"0\"/>",
+        "<Blur AreaShape=\"9\" Points=\"1,1 50,1 25,40 \"/>",
+        "<Spotlight Amount=\"-3\"/>",
+        "<Stamp Text=\"cursor:arrow\" Hidden=\"1\" Locked=\"5\" Floating=\"0\" Name=\"s\"/>",
+        "<Text Sketch=\"1\" SketchSeed=\"77\" VerticalText=\"1\" TextOnPath=\"1\" SnapText=\"1\"/>",
+    };
+    for (const char* h : hand) {
+        ObjPtr r = readXml(h);
+        L.push_back(r ? FormatA("hand %s -> %s %s", h, extra(*r).c_str(), xmlOf(*r).c_str()) : FormatA("hand %s -> null", h));
+    }
+
+    // gradient stops as the quick styles store them
+    {
+        Gradient gs[] = { {}, { 1, 0, { { 0, 0xFF000000 } } }, { 1, 0, { { 0.0005f, 0x01020304 }, { 0.9995f, 0xFFFFFFFF }, { 1, 0 } } },
+                          { 2, -45, { { 0.3333333f, 0xFFABCDEF }, { 0.6666667f, 0x00000000 } } } };
+        for (auto& g : gs) {
+            XmlNode n("G");
+            GradToXml(n, g);
+            Gradient back = GradFromXml(n);
+            L.push_back(FormatA("grad [%s] %s back=%d", GradStopsToString(g).c_str(), oneLine(XmlSerialize(n, false)).c_str(), back == g));
+        }
+    }
+
+    // hit-testing on a grid, at two tolerances
+    for (auto& [name, o] : S) {
+        for (float tol : { 0.0f, 4.0f }) {
+            std::string bits;
+            int hits = 0;
+            for (int y = -10; y < 160; y += 5)
+                for (int x = -10; x < 210; x += 5) {
+                    bool h = o.HitTest(PointF((float)x + 0.5f, (float)y + 0.25f), tol);
+                    bits += h ? '1' : '0';
+                    hits += h;
+                }
+            L.push_back(FormatA("hit %s %.0f %d %016llx", name.c_str(), tol, hits, (unsigned long long)Fnv1a(bits.data(), bits.size())));
+        }
+    }
+
+    // the clipboard: written, read back; and texts that are not objects
+    {
+        std::vector<DrawObj> objs;
+        for (auto& [name, o] : S) objs.push_back(o);
+        std::string clip = ObjectsToClip(objs, L"C:\\Docs\\é 1.snap");
+        L.push_back(FormatA("clip %zu %016llx", clip.size(), (unsigned long long)Fnv1a(clip.data(), clip.size())));
+        std::wstring src;
+        auto back = ObjectsFromClip(clip, &src);
+        std::string all;
+        for (auto& o : back) all += extra(o) + xmlOf(o) + "\n";
+        L.push_back(FormatA("clip back %zu %s %016llx", back.size(), WToUtf8(src).c_str(), (unsigned long long)Fnv1a(all.data(), all.size())));
+        const char* bad[] = { "", "<Other/>", "<SnapnabObjects><Objects><Arrow X1=\"1\"/><Nope/></Objects></SnapnabObjects>",
+                              "<SnapnabObjects Source=\"s\"><Objects><Image StreamName=\"Image_1.png\"/></Objects>"
+                              "<Embedded Name=\"Image_1.png\" Data=\"!!!\"/></SnapnabObjects>",
+                              "<SnapnabObjects Source=\"x\">" };
+        for (const char* b : bad) {
+            std::wstring s = L"unset";
+            auto r = ObjectsFromClip(b, &s);
+            std::string x;
+            for (auto& o : r) x += xmlOf(o) + ";";
+            L.push_back(FormatA("clip bad %zu [%s] %s", r.size(), WToUtf8(s).c_str(), x.c_str()));
+        }
+    }
+
+    // a document saved as .snap and read back
+    {
+        std::wstring file = Tmp(L"docgolden.snap");
+        Document d;
+        Image base(40, 30, 0);
+        for (int i = 0; i < 40 * 30; i++) base.px[i] = 0xFF000000u | (uint32_t)(i * 2654435761u >> 8);
+        d.SetBase(base);
+        d.path = file;
+        d.captureMode = L"Região"; d.windowTitle = L"Window — “title”"; d.application = L"app.exe"; d.created = L"2026-01-02T03:04:05";
+        d.tags = L"a,b,ç"; d.st.nextStep = 7; d.guidesX = { 10.5f, 20 }; d.guidesY = { 0.125f };
+        for (auto& [name, o] : S) d.st.objs.push_back(std::make_shared<DrawObj>(o));
+        bool saved = d.Save();
+        XmlNode doc;
+        bool docRead = LoadSnapDocument(file, doc);
+        std::string dx = XmlSerialize(doc, false);
+        L.push_back(FormatA("doc saved %d %d %zu %016llx", saved, docRead, dx.size(), (unsigned long long)Fnv1a(dx.data(), dx.size())));
+        auto r = Document::Load(file);
+        if (r) {
+            std::string all;
+            for (auto& o : r->st.objs) all += extra(*o) + xmlOf(*o) + "\n";
+            std::string g;
+            for (float x : r->guidesX) g += FormatA("x%.3f ", x);
+            for (float y : r->guidesY) g += FormatA("y%.3f ", y);
+            L.push_back(FormatA("doc loaded %s|%s|%s|%s|%s|%d|%s|%dx%d %016llx|%zu %016llx", WToUtf8(r->captureMode).c_str(),
+                                WToUtf8(r->windowTitle).c_str(), WToUtf8(r->application).c_str(), WToUtf8(r->created).c_str(),
+                                WToUtf8(r->tags).c_str(), r->st.nextStep, g.c_str(), r->w(), r->h(),
+                                (unsigned long long)Fnv1a(r->st.base->px.data(), r->st.base->px.size() * 4), r->st.objs.size(),
+                                (unsigned long long)Fnv1a(all.data(), all.size())));
+            L.push_back(FormatA("doc title %s", WToUtf8(r->title).c_str()));
+        } else {
+            L.push_back("doc loaded null");
+        }
+        Document e;
+        e.SetBase(Image(4, 3, 0xFF00FF00));
+        e.path = Tmp(L"docgolden2.snap");
+        bool s2 = e.Save();
+        auto r2 = Document::Load(e.path);
+        L.push_back(FormatA("doc empty %d %s %d %zu %zu", s2, r2 ? WToUtf8(r2->title).c_str() : "null", r2 ? r2->st.nextStep : -1,
+                            r2 ? r2->st.objs.size() : 0, r2 ? r2->guidesX.size() + r2->guidesY.size() : 9));
+        DeleteFileW(file.c_str());
+        DeleteFileW(e.path.c_str());
+        L.push_back(FormatA("doc missing %d", Document::Load(Tmp(L"docgolden_missing.snap")) != nullptr));
+    }
+    return L;
 }
 
 int wmain(int argc, wchar_t** argv) {
@@ -442,6 +1064,16 @@ int wmain(int argc, wchar_t** argv) {
     if (argc > 1 && std::wstring(argv[1]) == L"miscgolden") {    // the color, HDR and OCR fingerprints of this build
         GdiplusSession gdip;
         for (auto& l : MiscFingerprints()) printf("%s\n", l.c_str());
+        return 0;
+    }
+    if (argc > 1 && std::wstring(argv[1]) == L"rendergolden") {  // the drawing of the editor objects in this build
+        GdiplusSession gdip;
+        for (auto& l : RenderFingerprints()) printf("%s\n", l.c_str());
+        return 0;
+    }
+    if (argc > 1 && std::wstring(argv[1]) == L"docgolden") {     // the editor objects' XML, files and hit-testing in this build
+        GdiplusSession gdip;
+        for (auto& l : DocFingerprints()) printf("%s\n", l.c_str());
         return 0;
     }
     if (argc > 1 && std::wstring(argv[1]) == L"fxgolden") {      // the pixel fingerprints of this build
@@ -1063,11 +1695,10 @@ int wmain(int argc, wchar_t** argv) {
         // objects written by older versions: the new properties take their defaults
         XmlNode old("Rect");
         old.setd("X1", 1).setd("Y1", 2).setd("X2", 30).setd("Y2", 40).set("PenColor", "#FFFF0000").seti("Opacity", 100);
-        SnapFrame dummy;
-        auto oo = ed::ObjFromXml(old, dummy);
+        auto oo = ReadObjXml(old);
         XmlNode oldHl("Highlight");
         oldHl.setd("X1", 1).setd("Y1", 2).setd("X2", 30).setd("Y2", 40).set("Points", "1.0,2.0 10.0,20.0 30.0,40.0 ");
-        auto oh = ed::ObjFromXml(oldHl, dummy);
+        auto oh = ReadObjXml(oldHl);
         CHECK(oo && !oo->hidden && !oo->locked && oo->name.empty() && !oo->style.grad.Active() && oo->style.lineSpacing == 1.0f &&
               oo->style.areaShape == ed::ShapeRect && oo->style.stepOutlineWidth == 0 && !oo->style.bgBlur && !oo->style.loupe &&
               oh && oh->IsPath() && !oh->IsPointShape(), "old objects open with the defaults (old freehand highlighter still a path)");
@@ -1375,9 +2006,7 @@ int wmain(int argc, wchar_t** argv) {
             DrawObj p; p.type = ObjType::Pen; p.pts = { { 1, 1 }, { 5, 5 }, { 9, 4 } }; p.pressure = { 0.2f, 0.6f, 1.0f };
             DrawObj t; t.type = ObjType::Text; t.p1 = { 0, 0 }; t.p2 = { 80, 200 }; t.text = L"縦書き"; t.style.vertical = true;
             DrawObj hl; hl.type = ObjType::Blur; hl.p1 = { 0, 0 }; hl.p2 = { 100, 40 }; hl.style.textOnly = true; hl.textBoxes = { Gdiplus::RectF(5, 5, 30, 12) };
-            SnapFrame fr; int counter = 1;
-            auto r1 = ObjFromXml(ObjToXml(o, fr, counter), fr), r2 = ObjFromXml(ObjToXml(p, fr, counter), fr);
-            auto r3 = ObjFromXml(ObjToXml(t, fr, counter), fr), r4 = ObjFromXml(ObjToXml(hl, fr, counter), fr);
+            auto r1 = ObjRoundTrip(o), r2 = ObjRoundTrip(p), r3 = ObjRoundTrip(t), r4 = ObjRoundTrip(hl);
             CHECK(r1 && r1->style.sketch && r1->style.sketchSeed == 42 && r1->style.textOnPath && r1->HasLabel() && r1->text == L"along" &&
                   r2 && r2->pressure.size() == 3 && std::fabs(r2->pressure[1] - 0.6f) < 0.01f && r3 && r3->style.vertical &&
                   r4 && r4->style.textOnly && r4->textBoxes.size() == 1, "new object properties survive the .snap round trip");
@@ -2485,6 +3114,20 @@ int wmain(int argc, wchar_t** argv) {
         int differ = 0;
         size_t n = compareGolden(L"misc-cpp.txt", MiscFingerprints(), differ);
         CHECK(n > 100 && !differ, "%zu results the same as the C++ code's, %d differ", n, differ);
+    }
+
+    printf("[26] Editor objects drawn as the former C++ painters drew them\n");
+    {
+        int differ = 0;
+        size_t n = compareGolden(L"render-cpp.txt", RenderFingerprints(), differ);
+        CHECK(n > 600 && !differ, "%zu drawings and measures the same as the C++ code's, %d differ", n, differ);
+    }
+
+    printf("[27] Editor objects saved, read and hit-tested as the former C++ code did\n");
+    {
+        int differ = 0;
+        size_t n = compareGolden(L"doc-cpp.txt", DocFingerprints(), differ);
+        CHECK(n > 200 && !differ, "%zu objects, files and hit tests the same as the C++ code's, %d differ", n, differ);
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

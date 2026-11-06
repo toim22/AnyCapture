@@ -1,4 +1,4 @@
-#include "Document.h"
+#include "ObjBridge.h"
 #include "Library.h"
 #include <cmath>
 
@@ -35,164 +35,13 @@ bool DrawObj::CalloutHasTail() const {
     }
 }
 
-std::wstring StepLabel(int v, int type) {
-    v = std::max(1, v);
-    auto letters = [](int n, wchar_t a) {
-        std::wstring s;
-        while (n > 0) { n--; s.insert(s.begin(), (wchar_t)(a + n % 26)); n /= 26; }
-        return s;
-    };
-    auto roman = [](int n, bool lower) {
-        static const int val[] = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
-        static const wchar_t* sym[] = { L"M", L"CM", L"D", L"CD", L"C", L"XC", L"L", L"XL", L"X", L"IX", L"V", L"IV", L"I" };
-        std::wstring s;
-        for (int i = 0; i < 13; i++) while (n >= val[i]) { s += sym[i]; n -= val[i]; }
-        if (lower) for (auto& c : s) c = (wchar_t)towlower(c);
-        return s;
-    };
-    switch (type) {
-    case StepUpper: return letters(v, L'A');
-    case StepLower: return letters(v, L'a');
-    case StepRoman: return roman(std::min(v, 3999), false);
-    case StepRomanLower: return roman(std::min(v, 3999), true);
-    default: return std::to_wstring(v);
-    }
-}
+// the area drawn (stroke, ends, callout tip, label, shadow), measured by snapcore (rust/snapcore/src/doc.rs)
+RectF DrawObj::Bounds() const { return ObjRect(*this, 0); }
 
-float CapLength(float w, float size) { return std::max(8.0f, w * (1.0f + std::max(1.0f, size) * 0.6f)); }
-
-static void Grow(RectF& r, PointF p) {
-    float x0 = std::min(r.X, p.X), y0 = std::min(r.Y, p.Y), x1 = std::max(r.GetRight(), p.X), y1 = std::max(r.GetBottom(), p.Y);
-    r = RectF(x0, y0, x1 - x0, y1 - y0);
-}
-
-RectF DrawObj::Bounds() const {
-    if (type == ObjType::Group) {
-        if (children.empty()) return Rect();
-        RectF u = children[0].Bounds();
-        for (auto& c : children) RectF::Union(u, u, c.Bounds());
-        return u;
-    }
-    RectF r;
-    if ((IsPath() || IsPointShape()) && !pts.empty()) {
-        float x0 = pts[0].X, y0 = pts[0].Y, x1 = x0, y1 = y0;
-        for (auto& p : pts) { x0 = std::min(x0, p.X); y0 = std::min(y0, p.Y); x1 = std::max(x1, p.X); y1 = std::max(y1, p.Y); }
-        r = RectF(x0, y0, x1 - x0, y1 - y0);
-    } else r = Rect();
-    float pad = style.width / 2;
-    switch (type) {
-    case ObjType::Step: {
-        float d = style.fontSize * 1.5f;
-        r = RectF(p1.X - d / 2, p1.Y - d / 2, d, d);
-        if (style.stepShape == 1) r.Width += d * 0.45f;           // teardrop: tip to the right
-        pad = style.stepOutlineWidth > 0 ? style.stepOutlineWidth / 2 + 1 : 0;
-        break;
-    }
-    case ObjType::Callout:
-        if (CalloutHasTail()) Grow(r, tail);
-        pad = std::max(style.width, style.tailWidth) / 2 + CapLength(style.tailWidth, style.endSize);
-        break;
-    case ObjType::Arrow: case ObjType::Line:
-        if (style.bezier) Grow(r, ctrl);
-        pad = style.width / 2 + CapLength(style.width, std::max(style.startSize, style.endSize));
-        if (HasLabel() && !text.empty() && style.textOnPath) {     // text along the line (C37): beside it
-            float m = style.fontSize * 1.6f + style.width;
-            r.Inflate(m, m);
-        } else if (HasLabel() && !text.empty()) {   // the label beyond the tail (with its outline)
-            RectF lb = ArrowLabelRect(*this);
-            lb.Inflate(style.width + 2 - pad, style.width + 2 - pad);
-            RectF::Union(r, r, lb);
-        }
-        break;
-    case ObjType::Magnify:
-        if (style.magnifyLink) {
-            float k = std::max(1.1f, style.magnifyScale / 100.0f), sw = r.Width / k / 2, sh = r.Height / k / 2;
-            Grow(r, PointF(tail.X - sw, tail.Y - sh)); Grow(r, PointF(tail.X + sw, tail.Y + sh));
-        }
-        if (style.loupe) {                                          // thick rim and handle
-            RectF ex = MagnifierExtra(*this);
-            RectF::Union(r, r, ex);
-            float rim = std::max(4.0f, std::min(Rect().Width, Rect().Height) * 0.055f + style.width * 0.5f);
-            pad = std::max(pad, rim);
-        }
-        break;
-    case ObjType::Text: pad = style.width; break;
-    case ObjType::Highlighter: if (pts.empty() || IsPointShape()) pad = 0; break;
-    case ObjType::Stamp: case ObjType::Picture: case ObjType::Link: pad = 0; break;
-    default: break;
-    }
-    if (style.shadow && type != ObjType::Highlighter && type != ObjType::Blur && type != ObjType::Pixelate && type != ObjType::Spotlight &&
-        type != ObjType::Link)
-        pad += style.shadowBlur * 2 + style.shadowDist + 2;
-    r.Inflate(pad, pad);
-    return r;
-}
-
-static float DistSeg(PointF p, PointF a, PointF b) {
-    float dx = b.X - a.X, dy = b.Y - a.Y;
-    float l2 = dx * dx + dy * dy;
-    float t = l2 > 0 ? std::clamp(((p.X - a.X) * dx + (p.Y - a.Y) * dy) / l2, 0.0f, 1.0f) : 0;
-    float qx = a.X + t * dx - p.X, qy = a.Y + t * dy - p.Y;
-    return std::sqrt(qx * qx + qy * qy);
-}
-
-static float DistQuad(PointF p, PointF a, PointF c, PointF b) {     // quadratic curve a-c-b, sampled
-    float best = 1e9f;
-    PointF prev = a;
-    for (int i = 1; i <= 24; i++) {
-        float t = i / 24.0f, u = 1 - t;
-        PointF q(u * u * a.X + 2 * u * t * c.X + t * t * b.X, u * u * a.Y + 2 * u * t * c.Y + t * t * b.Y);
-        best = std::min(best, DistSeg(p, prev, q));
-        prev = q;
-    }
-    return best;
-}
-
+// on the object, 'tol' pixels around it counting: rust/snapcore/src/doc.rs (DrawObj::hit_test)
 bool DrawObj::HitTest(PointF p, float tol) const {
-    float t = tol + style.width / 2;
-    switch (type) {
-    case ObjType::Group:
-        for (auto& c : children) if (c.HitTest(p, tol)) return true;
-        return false;
-    case ObjType::Arrow: case ObjType::Line:
-        if (HasLabel() && !text.empty()) { RectF lb = ArrowLabelRect(*this); lb.Inflate(tol, tol); if (lb.Contains(p)) return true; }
-        return (style.bezier ? DistQuad(p, p1, ctrl, p2) : DistSeg(p, p1, p2)) <= t + 2;
-    case ObjType::Pen: case ObjType::Highlighter:
-        if (type == ObjType::Highlighter && (pts.empty() || IsPointShape())) {
-            if (style.areaShape == ShapeRect && !IsPointShape()) { RectF r = Rect(); r.Inflate(tol, tol); return r.Contains(p); }
-            Gdiplus::GraphicsPath gp; AreaPath(gp, *this);
-            Gdiplus::Pen pen(Gdiplus::Color(255, 0, 0, 0), std::max(2.0f, tol * 2));
-            return gp.IsVisible(p) || gp.IsOutlineVisible(p, &pen);
-        }
-        for (size_t i = 1; i < pts.size(); i++) if (DistSeg(p, pts[i - 1], pts[i]) <= t) return true;
-        return pts.size() == 1 && DistSeg(p, pts[0], pts[0]) <= t;
-    case ObjType::Rect: case ObjType::RoundRect: case ObjType::Ellipse: case ObjType::Shape: {
-        Gdiplus::GraphicsPath gp;
-        ShapePath(gp, Kind(), Rect());
-        if ((style.fill >> 24) && gp.IsVisible(p)) return true;
-        Gdiplus::Pen pen(Gdiplus::Color(255, 0, 0, 0), std::max(2.0f, t * 2));
-        return gp.IsOutlineVisible(p, &pen) != FALSE;
-    }
-    case ObjType::Callout: {
-        RectF r = Rect(); r.Inflate(tol, tol);
-        if (r.Contains(p)) return true;
-        if (!CalloutHasTail()) return false;
-        RectF c = Rect();
-        return DistSeg(p, tail, PointF(c.X + c.Width / 2, c.Y + c.Height / 2)) <= std::max(t, style.tailWidth / 2 + tol) + 6;
-    }
-    case ObjType::Magnify: {
-        RectF r = Rect(); r.Inflate(tol, tol);
-        if (r.Contains(p)) return true;
-        return style.magnifyLink && DistSeg(p, tail, tail) <= std::max(12.0f, r.Width / std::max(1.1f, style.magnifyScale / 100.0f) / 2);
-    }
-    case ObjType::Blur: case ObjType::Pixelate: case ObjType::Spotlight: {
-        if (style.areaShape == ShapeRect && !IsPointShape()) { RectF r = Rect(); r.Inflate(tol, tol); return r.Contains(p); }
-        Gdiplus::GraphicsPath gp; AreaPath(gp, *this);
-        Gdiplus::Pen pen(Gdiplus::Color(255, 0, 0, 0), std::max(2.0f, tol * 2));
-        return gp.IsVisible(p) || gp.IsOutlineVisible(p, &pen);
-    }
-    default: { RectF b = Bounds(); b.Inflate(tol, tol); return b.Contains(p); }
-    }
+    ObjC c(*this);
+    return snapcore_hit_test(&c.c, p.X, p.Y, tol);
 }
 
 void DrawObj::Move(float dx, float dy) {
@@ -300,21 +149,15 @@ Image Document::Render(const DrawObj* hideText) const {
 }
 
 // ---------------------------------------------------------------- file
+// the .snap: rust/snapcore/src/serial.rs (DocFile) writes the base, the objects and the capture's details
 bool Document::Save() {
     if (isVideo || path.empty() || !st.base) return false;
-    SnapFrame f;
-    f.base = *st.base;
-    f.doc.setW("CaptureMode", captureMode).setW("WindowTitle", windowTitle).setW("Application", application);
-    f.doc.setW("Created", created).seti("NextStep", st.nextStep).setW("Tags", tags);
-    if (!guidesX.empty() || !guidesY.empty()) {          // ruler guides
-        XmlNode& gn = f.doc.add("Guides");
-        for (float x : guidesX) gn.add("Guide").set("Axis", "X").setd("Pos", x);
-        for (float y : guidesY) gn.add("Guide").set("Axis", "Y").setd("Pos", y);
-    }
-    XmlNode& objs = f.doc.add("Objects");
-    int counter = 1;
-    for (auto& o : st.objs) objs.children.push_back(ObjToXml(*o, f, counter));
-    if (!SaveSnapFile(path, { f })) return false;
+    ObjsC objs;
+    for (auto& o : st.objs) objs.Add(*o);
+    SnapcoreDocInfo info{ captureMode.c_str(), windowTitle.c_str(), application.c_str(), created.c_str(), tags.c_str(), st.nextStep,
+                          guidesX.data(), guidesX.size(), guidesY.data(), guidesY.size() };
+    SnapcoreImageIn base = ImageIn(*st.base);
+    if (!snapcore_doc_save(path.c_str(), path.size(), &info, &base, objs.c.data(), objs.c.size(), kAppVersion)) return false;
     modified = false;
     return true;
 }
@@ -355,25 +198,27 @@ std::unique_ptr<Document> Document::Load(const std::wstring& file) {
         return d;
     }
     if (ext == L".snap") {
-        std::vector<SnapFrame> frames;
-        if (!LoadSnapFile(file, frames)) return nullptr;
+        SnapcoreObjList* l = snapcore_doc_load(file.c_str(), file.size());
+        if (!l) return nullptr;
         auto d = std::make_unique<Document>();
-        SnapFrame& f = frames[0];
+        SnapcoreDocInfo info{};
+        snapcore_doc_info(l, &info);
         d->path = file;
-        d->captureMode = f.doc.getW("CaptureMode");
-        d->windowTitle = f.doc.getW("WindowTitle");
-        d->application = f.doc.getW("Application");
-        d->created = f.doc.getW("Created");
-        d->st.nextStep = f.doc.geti("NextStep", 1);
-        d->tags = f.doc.getW("Tags");
+        d->captureMode = info.captureMode;
+        d->windowTitle = info.windowTitle;
+        d->application = info.application;
+        d->created = info.created;
+        d->st.nextStep = info.nextStep;
+        d->tags = info.tags;
         d->title = d->windowTitle.empty() ? (d->captureMode.empty() ? FileNameOf(file) : d->captureMode) : d->windowTitle;
         std::wstring name = CaptureName(file);          // name given in the library
         if (!name.empty()) d->title = name;
-        d->SetBase(std::move(f.base));
-        if (const XmlNode* gn = f.doc.child("Guides"))
-            for (auto& c : gn->children) (c.get("Axis") == "Y" ? d->guidesY : d->guidesX).push_back((float)c.getd("Pos"));
-        if (const XmlNode* objs = f.doc.child("Objects"))
-            for (auto& n : objs->children) if (auto o = ObjFromXml(n, f)) d->st.objs.push_back(o);
+        d->guidesX.assign(info.guidesX, info.guidesX + info.guidesXCount);
+        d->guidesY.assign(info.guidesY, info.guidesY + info.guidesYCount);
+        d->SetBase(TakeImage(snapcore_doc_take_base(l)));
+        for (size_t i = 0, n = snapcore_objs_count(l); i < n; i++)
+            d->st.objs.push_back(std::make_shared<DrawObj>(ObjFromC(*snapcore_objs_get(l, i))));
+        snapcore_objs_free(l);
         return d;
     }
     Image img;

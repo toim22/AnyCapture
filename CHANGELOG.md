@@ -14,6 +14,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   are listed top to bottom.
 - The uploads, the sign-in to Dropbox, Google Drive and OneDrive and the AI assistant's requests run in Rust. The
   `{regex:…}` of a custom uploader (.sxcu) uses Rust's regular expressions: no look-around or backreferences.
+- The Editor's objects (arrows, shapes, texts, callouts, steps, stamps, magnifiers, hide areas, shadows) are drawn by
+  Rust code, pixel for pixel as before; their saving and opening in the .snap, copy and paste between images and
+  clicking on them run in Rust too, reading and writing the same files.
 
 ## [0.4.1] — 2026-11-03
 

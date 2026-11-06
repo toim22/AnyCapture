@@ -180,6 +180,7 @@ Gdiplus::RectF CalloutTextRect(const DrawObj& o);                               
 Gdiplus::RectF ArrowLabelRect(const DrawObj& o);                                           // arrow label box, beyond the tail
 void AreaPath(Gdiplus::GraphicsPath& gp, const DrawObj& o);                                // outline of a highlighter/spotlight/hide area
 Gdiplus::RectF MagnifierExtra(const DrawObj& o);                                           // lens rectangle plus the loupe handle
+Gdiplus::RectF ObjRect(const DrawObj& o, int which);                // 0 Bounds, 1 CalloutTextRect, 2 ArrowLabelRect, 3 MagnifierExtra
 float StampAspect(const std::wstring& id);                                                 // width/height of a stamp's image
 Image StampImage(const std::wstring& id, int px);                                          // stamp image (emoji, file or label)
 std::unique_ptr<Gdiplus::Brush> FillBrush(uint32_t color, const Gradient& g, Gdiplus::RectF r, int opacity = 100);
@@ -187,10 +188,9 @@ void FillGradientMask(Image& img, const std::vector<uint8_t>& mask, RECT bounds,
 float TextBlockHeight(const DrawObj& o, float width);                                    // height of the text wrapped to the width
 void DrawCapGlyph(Gdiplus::Graphics& g, int cap, Gdiplus::RectF r, Gdiplus::Color c, bool atStart);   // sample for menus
 void ApplyDash(Gdiplus::Pen& p, int dash);
-void ApplyOpacityLayer(Image& canvas, const Image& layer, int opacity);
 Gdiplus::Color Gc(uint32_t argb, int opacityPercent = 100);
 
-// XML serialization of objects (Serialize.cpp)
+// XML serialization of objects (Serialize.cpp → rust/snapcore/src/serial.rs)
 std::string GradStopsToString(const Gradient& g);                 // "0:#FF112233;1:#FF445566"
 Gradient GradFromXml(const XmlNode& n);                           // FillGradient / GradientAngle / GradientStops
 void GradToXml(XmlNode& n, const Gradient& g);
@@ -199,8 +199,6 @@ std::vector<DrawObj> ObjectsFromClip(const std::string& xml, std::wstring* sourc
 // source formatting of the clipboard text (Rich Text Format or HTML): font, size (px), color, bold/italic/underline
 bool ParseRtfFormat(const std::string& rtf, Style& out);
 bool ParseHtmlFormat(const std::string& html, Style& out);
-XmlNode ObjToXml(const DrawObj& o, SnapFrame& frame, int& imgCounter);
-ObjPtr ObjFromXml(const XmlNode& n, const SnapFrame& frame);
 
 // PDF (Pdf.cpp); OCR (RunOcr) lives in common/Ocr.h, shared with the capture
 struct PdfLink { Gdiplus::RectF r; std::wstring url; };             // clickable area (image pixels) captured with the image

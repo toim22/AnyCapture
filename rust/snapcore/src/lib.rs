@@ -23,6 +23,8 @@
 //! - `net`: HTTPS (WinHTTP), SHA-256/HMAC, JSON and the secrets in the Credential Manager
 //! - `upload`: the upload destinations, their settings, the sign-in and the custom uploader syntax
 //! - `ai`: the AI assistant's request
+//! - `doc`, `render`, `stamps`: the editor's objects, their painters and the stamp images (emoji, labels, cursors)
+//! - `serial`: the editor's objects as XML, in the .snap and on the clipboard
 
 pub mod ai;
 pub mod barcode;
@@ -32,6 +34,7 @@ pub mod color;
 pub mod container;
 pub mod crt;
 pub mod cv;
+pub mod doc;
 pub mod fx;
 pub mod gdip;
 pub mod gif;
@@ -45,12 +48,16 @@ pub mod ocr;
 pub mod paths;
 pub mod pdf;
 pub mod reg;
+pub mod render;
+pub mod serial;
 pub mod snap;
+pub mod stamps;
 pub mod upload;
 pub mod wide;
 pub mod xml;
 
 mod ffi;
+mod ffi_doc;
 mod ffi_more;
 mod ffi_net;
 mod ffi_pixels;
