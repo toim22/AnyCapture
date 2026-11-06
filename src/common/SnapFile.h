@@ -19,8 +19,9 @@ bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames);
 bool LoadSnapDocument(const std::wstring& path, XmlNode& doc);      // only the first frame's XML (no images): tags, mode…
 bool IsSnapFile(const std::wstring& path);
 
-// Who reads and writes the compound file: snapcore (Rust, rust/snapcore; what the programs use) or the Windows
-// structured storage API. Both produce the same format; the tests switch to check one against the other.
+// Who reads and writes the document: snapcore (Rust, rust/snapcore/src/snap.rs; what the programs use) or the former
+// C++ code over the Windows structured storage API. Both produce the same format; the tests switch to check one against
+// the other.
 enum class SnapBackend { Rust, Windows };
 void SetSnapBackend(SnapBackend b);
 SnapBackend GetSnapBackend();

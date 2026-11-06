@@ -41,6 +41,11 @@ bool DecodeFromMemory(const BYTE* data, size_t len, Image& out);
 bool EncodeToMemoryEx(const Image& img, ImageFormat fmt, std::vector<BYTE>& out, const SaveOptions& opt);
 bool EncodeJpegWithOrientation(const Image& img, int orientation, std::vector<BYTE>& out);
 }
+namespace snap::snapref {     // the former C++ .snap reading and writing (SnapFileReference.cpp)
+bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames);
+bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames);
+bool LoadSnapDocument(const std::wstring& path, XmlNode& doc);
+}
 
 static int g_fail = 0;
 static std::wstring TestTempDir() { wchar_t t[MAX_PATH]; GetTempPathW(MAX_PATH, t); std::wstring d = t; if (!d.empty() && d.back() == L'\\') d.pop_back(); return d; }
@@ -1366,6 +1371,230 @@ int wmain(int argc, wchar_t** argv) {
         DeleteFileW(sp.c_str());
         CHECK(saved && onDisk == std::string(expect.begin(), expect.end()) && GetFileAttributesW((sp + L".tmp").c_str()) == INVALID_FILE_ATTRIBUTES,
               "SaveImageFileEx writes the encoder's bytes and leaves no .tmp behind");
+    }
+
+    printf("[19] .snap documents: Rust and the former C++\n");
+    {
+        // snapcore (snap.rs) must write the bytes and read the documents the C++ code did, over the same container
+        SnapBackend def = GetSnapBackend();
+        SetSnapBackend(SnapBackend::Rust);
+        auto readAll = [](const std::wstring& path) {
+            std::string b;
+            HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+            if (h == INVALID_HANDLE_VALUE) return b;
+            b.resize(GetFileSize(h, nullptr));
+            DWORD rd = 0; ReadFile(h, b.data(), (DWORD)b.size(), &rd, nullptr); CloseHandle(h);
+            return b;
+        };
+        // the compound file records when each storage was created and modified: those times are cleared before comparing
+        // (the directory entries of 128 bytes, found through the FAT sectors the header lists)
+        auto withoutTimes = [](std::string b) {
+            auto u32 = [&](size_t o) { uint32_t v = 0; if (o + 4 <= b.size()) memcpy(&v, b.data() + o, 4); return v; };
+            const size_t base = 24;                                         // the .snap header
+            if (b.size() < base + 512) return b;
+            uint16_t shift = 0; memcpy(&shift, b.data() + base + 0x1E, 2);
+            if (shift != 9 && shift != 12) return b;
+            size_t sec = (size_t)1 << shift;
+            auto at = [&](uint32_t n) { return base + (size_t)(n + 1) * sec; };
+            std::vector<uint32_t> fat;
+            for (int i = 0; i < 109; i++) {
+                uint32_t fs = u32(base + 0x4C + i * 4);
+                if (fs >= 0xFFFFFFFA) break;
+                for (size_t k = 0; k < sec / 4; k++) fat.push_back(u32(at(fs) + k * 4));
+            }
+            for (uint32_t n = u32(base + 0x30), guard = 0; n < fat.size() && guard < 100000; n = fat[n], guard++)
+                for (size_t e = 0; e < sec / 128; e++) {
+                    size_t o = at(n) + e * 128 + 100;
+                    if (o + 16 <= b.size()) memset(b.data() + o, 0, 16);
+                }
+            return b;
+        };
+        auto sameImage = [](const Image& a, const Image& b) {
+            if (a.w != b.w || a.h != b.h || a.px != b.px || !a.meta != !b.meta) return false;
+            if (!a.meta) return true;
+            const ImageMeta &x = *a.meta, &y = *b.meta;
+            return x.dateTaken == y.dateTaken && x.make == y.make && x.model == y.model && x.software == y.software &&
+                   x.gps == y.gps && x.lat == y.lat && x.lon == y.lon;
+        };
+        auto sameFrames = [&](const std::vector<SnapFrame>& a, const std::vector<SnapFrame>& b) {
+            if (a.size() != b.size()) return false;
+            for (size_t i = 0; i < a.size(); i++) {
+                if (!sameImage(a[i].base, b[i].base) || XmlSerialize(a[i].doc) != XmlSerialize(b[i].doc) ||
+                    a[i].embedded.size() != b[i].embedded.size()) return false;
+                for (auto& [k, v] : a[i].embedded)
+                    if (!b[i].embedded.count(k) || !sameImage(v, b[i].embedded.at(k))) return false;
+            }
+            return true;
+        };
+
+        // generated documents: frames, objects, embedded images, photo metadata (GPS values on the rounding ties of
+        // "%.4f" too), a Metadata element already there, an empty base image
+        std::vector<std::pair<std::string, std::vector<SnapFrame>>> docs;
+        {
+            SnapFrame a; a.base = Pattern(40, 30, 11);
+            a.doc.setW("CaptureMode", L"Region ç → 中文").set("Tags", "a;b & <c>");
+            XmlNode& objs = a.doc.add("Objects");
+            objs.add("Arrow").seti("X1", -5).setd("Width", 2.5);
+            objs.add("Image").set("StreamName", "Image_1.png");
+            objs.add("Group").add("Image").set("StreamName", "Image_2.png");
+            objs.add("Image").set("StreamName", "Missing.png");
+            a.embedded["Image_1.png"] = Pattern(10, 8, 12);
+            a.embedded["Image_2.png"] = Image(3, 2, 0x80FF0000);
+            a.embedded["Unreferenced.png"] = Pattern(5, 5, 13);
+            docs.push_back({ "objects and embedded images", { a } });
+            SnapFrame b; b.base = Pattern(64, 48, 14);
+            b.doc.add("Objects").add("Text").setW("Text", L"segunda moldura ✓");
+            docs.push_back({ "two frames", { a, b } });
+        }
+        const double ties[] = { 0.03125, -0.03125, 0.09375, 0.15625, -0.21875, 12.40625, -23.5505, -46.6333, 0, 179.99995, 1e-9, -0.00005 };
+        for (size_t i = 0; i < std::size(ties); i++) {
+            SnapFrame f; f.base = Pattern(16, 12, (int)i);
+            auto m = std::make_shared<ImageMeta>();
+            m->dateTaken = L"2024:05:06 07:08:09"; m->make = L"Maker ç"; m->model = L"Model 中";
+            m->gps = true; m->lat = ties[i]; m->lon = ties[std::size(ties) - 1 - i];
+            f.base.meta = m;
+            docs.push_back({ FormatA("photo, GPS %.6f %.6f", m->lat, m->lon), { f } });
+        }
+        {
+            SnapFrame f; f.base = Pattern(16, 12, 20);
+            auto m = std::make_shared<ImageMeta>(); m->software = L"Camera app";
+            f.base.meta = m;
+            docs.push_back({ "photo without GPS", { f } });
+            f.doc.add("Metadata").set("Make", "kept as it is");
+            docs.push_back({ "Metadata element already there", { f } });
+        }
+        {
+            SnapFrame f;
+            docs.push_back({ "empty base image", { f } });
+            docs.push_back({ "no frames", {} });
+        }
+        std::wstring pa = Tmp(L"ref_a.snap"), pb = Tmp(L"ref_b.snap");
+        int writeBad = 0, readBad = 0;
+        for (auto& [name, frames] : docs) {
+            DeleteFileW(pa.c_str()); DeleteFileW(pb.c_str());
+            bool okA = snapref::SaveSnapFile(pa, frames), okB = SaveSnapFile(pb, frames);
+            std::string ba = withoutTimes(readAll(pa)), bb = withoutTimes(readAll(pb));
+            if (okA != okB || ba != bb) {
+                writeBad++;
+                // which stream differs (or the container itself)
+                std::string where = "the container";
+                std::vector<std::string> streams = { "Index" };
+                for (size_t i = 0; i < frames.size(); i++) {
+                    std::string fr = FormatA("Frame%zu/", i);
+                    streams.push_back(fr + "Document");
+                    streams.push_back(fr + "ImageStorage/Image_0.png");
+                    for (auto& e : frames[i].embedded) streams.push_back(fr + "ImageStorage/" + e.first);
+                }
+                SnapcoreReader *xa = snapcore_open(pa.c_str(), pa.size()), *xb = snapcore_open(pb.c_str(), pb.size());
+                for (auto& st : streams) {
+                    SnapcoreBuf a{}, b{};
+                    bool ra = xa && snapcore_read(xa, st.data(), st.size(), &a), rb = xb && snapcore_read(xb, st.data(), st.size(), &b);
+                    bool differ = ra != rb || (ra && std::string((const char*)a.data, a.len) != std::string((const char*)b.data, b.len));
+                    if (differ && where == "the container") {
+                        where = st;
+                        if (ra && rb && st.find("Document") != std::string::npos)
+                            printf("         C++:  %.*s\n         Rust: %.*s\n", (int)a.len, (const char*)a.data, (int)b.len, (const char*)b.data);
+                    }
+                    if (ra) snapcore_buf_free(a);
+                    if (rb) snapcore_buf_free(b);
+                }
+                snapcore_close(xa); snapcore_close(xb);
+                printf("       %s: %s\n", name.c_str(), okA != okB ? "saved by one only" : ("different bytes in " + where).c_str());
+            }
+            std::vector<SnapFrame> ra, rb;
+            XmlNode da, db;
+            bool lA = snapref::LoadSnapFile(pb, ra), lB = LoadSnapFile(pb, rb);
+            bool dA = snapref::LoadSnapDocument(pb, da), dB = LoadSnapDocument(pb, db);
+            if (lA != lB || (lA && !sameFrames(ra, rb)) || dA != dB || XmlSerialize(da) != XmlSerialize(db)) {
+                readBad++;
+                printf("       %s: read differently\n", name.c_str());
+            }
+        }
+        CHECK(!writeBad, "%zu generated documents saved byte for byte the same, but for the storage times (%d differ)", docs.size(), writeBad);
+        CHECK(!readBad, "and read the same (frames, documents, images, metadata), %d differ", readBad);
+
+        // odd files made stream by stream: a malformed document, another base image name, a frame without its
+        // document, a malformed index, an index without frames, damaged and missing files, a file that is not a .snap
+        std::vector<BYTE> png0, png1;
+        EncodeToMemory(Pattern(20, 10, 21), ImageFormat::PNG, png0);
+        EncodeToMemory(Pattern(6, 6, 22), ImageFormat::PNG, png1);
+        using Streams = std::vector<std::pair<std::string, std::string>>;
+        auto make = [&](const Streams& streams) {
+            SnapcoreWriter* w = snapcore_create(pa.c_str(), pa.size());
+            for (auto& [k, v] : streams) snapcore_write(w, k.data(), k.size(), (const uint8_t*)v.data(), v.size());
+            snapcore_finish(w);
+        };
+        std::string p0(png0.begin(), png0.end()), p1(png1.begin(), png1.end());
+        const std::string idx1 = "<Index><FrameList><Frame Name=\"Frame0\"/></FrameList></Index>";
+        const std::string idx2 = "<Index><FrameList><Frame Name=\"Frame0\"/><Frame Name=\"Frame1\"/></FrameList></Index>";
+        std::vector<std::pair<const char*, Streams>> odd = {
+            { "malformed document", { { "Index", idx1 }, { "Frame0/Document", "<Document A=\"1\"><Objects><Image StreamName=\"x.png\"/>" },
+                                      { "Frame0/ImageStorage/Image_0.png", p0 }, { "Frame0/ImageStorage/x.png", p1 } } },
+            { "another base image", { { "Index", idx1 }, { "Frame0/Document", "<Document BaseImage=\"b.png\"/>" },
+                                      { "Frame0/ImageStorage/b.png", p0 } } },
+            { "base image missing", { { "Index", idx1 }, { "Frame0/Document", "<Document/>" } } },
+            { "second frame without its document", { { "Index", idx2 }, { "Frame0/Document", "<Document/>" },
+                                      { "Frame0/ImageStorage/Image_0.png", p0 } } },
+            { "second frame without its base image", { { "Index", idx2 }, { "Frame0/Document", "<Document/>" },
+                                      { "Frame0/ImageStorage/Image_0.png", p0 }, { "Frame1/Document", "<Document/>" } } },
+            { "malformed index", { { "Index", "<Index><FrameList>" }, { "Frame0/Document", "<Document/>" },
+                                   { "Frame0/ImageStorage/Image_0.png", p0 } } },
+            { "index without frames", { { "Index", "<Index/>" } } },
+            { "metadata with odd values", { { "Index", idx1 },
+                                      { "Frame0/Document", "<Document><Metadata Gps=\" 7x\" Latitude=\"-1.5e1z\" Longitude=\".\" Make=\"&amp;\"/></Document>" },
+                                      { "Frame0/ImageStorage/Image_0.png", p0 } } },
+            { "empty metadata", { { "Index", idx1 }, { "Frame0/Document", "<Document><Metadata Gps=\"0\"/></Document>" },
+                                  { "Frame0/ImageStorage/Image_0.png", p0 } } },
+        };
+        int oddBad = 0;
+        auto compareFile = [&](const std::wstring& path, const char* name) {
+            std::vector<SnapFrame> ra, rb;
+            XmlNode da("Before"), db("Before");
+            bool lA = snapref::LoadSnapFile(path, ra), lB = LoadSnapFile(path, rb);
+            bool dA = snapref::LoadSnapDocument(path, da), dB = LoadSnapDocument(path, db);
+            bool same = lA == lB && (!lA || sameFrames(ra, rb)) && dA == dB && XmlSerialize(da) == XmlSerialize(db);
+            if (!same) printf("       %s: read differently (C++ %s, Rust %s)\n", name, lA ? "ok" : "refused", lB ? "ok" : "refused");
+            return same;
+        };
+        for (auto& [name, streams] : odd) {
+            make(streams);
+            if (!compareFile(pa, name)) oddBad++;
+        }
+        SaveSnapFile(pa, docs[1].second);
+        std::string good = readAll(pa);
+        auto writeBytes = [&](const std::string& b) {
+            HANDLE h = CreateFileW(pa.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
+            DWORD wr = 0; WriteFile(h, b.data(), (DWORD)b.size(), &wr, nullptr); CloseHandle(h);
+        };
+        std::string garbage = good.substr(0, 24);
+        for (int i = 0; i < 8192; i++) garbage += (char)((i * 2654435761u) >> 13);
+        std::pair<const char*, std::string> bad[] = { { "garbage after the header", garbage }, { "cut in half", good.substr(0, good.size() / 2) },
+                                                      { "header only", good.substr(0, 24) }, { "a text file", "not a .snap at all" }, { "empty file", "" } };
+        for (auto& [name, bytes] : bad) {
+            writeBytes(bytes);
+            if (!compareFile(pa, name)) oddBad++;
+        }
+        DeleteFileW(pa.c_str()); DeleteFileW(pb.c_str());
+        if (!compareFile(pa, "missing file")) oddBad++;
+        CHECK(!oddBad, "%zu odd, damaged and missing files read alike, %d differ", odd.size() + std::size(bad) + 1, oddBad);
+
+        // a save that cannot open its file leaves nothing behind, in both
+        std::wstring noDir = Tmp(L"no_such_dir\\x.snap");
+        CHECK(!snapref::SaveSnapFile(noDir, docs[0].second) && !SaveSnapFile(noDir, docs[0].second), "saving into a missing folder fails in both");
+
+        // the user's library: every .snap read alike, frames and documents (only read)
+        int files = 0, libBad = 0;
+        WIN32_FIND_DATAW fd;
+        HANDLE h = FindFirstFileW((LibraryDir() + L"\\*.snap").c_str(), &fd);
+        if (h != INVALID_HANDLE_VALUE) {
+            do {
+                files++;
+                if (!compareFile(LibraryDir() + L"\\" + fd.cFileName, WToUtf8(fd.cFileName).c_str())) libBad++;
+            } while (FindNextFileW(h, &fd));
+            FindClose(h);
+        }
+        CHECK(!libBad, "%d .snap files of the library read alike (frames, images, metadata, documents), %d differ", files, libBad);
+        SetSnapBackend(def);
     }
 
     printf("\n%s (%d failure(s))\n", g_fail ? "FAILED" : "ALL OK", g_fail);

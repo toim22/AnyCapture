@@ -8,7 +8,7 @@
 
 extern "C" {
 
-// ---- the .snap container (SnapFile.cpp; the PNG inside the streams stays in C++)
+// ---- the .snap container (the tests read streams with it; SnapFile.cpp uses the .snap functions below)
 struct SnapcoreReader;
 struct SnapcoreWriter;
 struct SnapcoreBuf { uint8_t* data; size_t len; };       // allocated by snapcore: free with snapcore_buf_free
@@ -85,18 +85,39 @@ const uint32_t* snapcore_image_pixels(const SnapcoreImage* img);                
 const wchar_t*  snapcore_image_meta_text(const SnapcoreImage* img, uint32_t field);
                                                        // 0 date taken, 1 make, 2 model, 3 software ("" if none)
 void            snapcore_image_free(SnapcoreImage* img);
-struct SnapcoreEncodeRequest {
+// an image handed to snapcore (copied: the pointers need to live during the call only); strings may be null
+struct SnapcoreImageIn {
     uint32_t w, h;
     const uint32_t* px;
     float dpi;
-    int32_t format, jpegQuality, avifQuality;
-    bool stripMetadata;
-    bool hasMeta;                                      // the metadata of the source photo (strings may be null)
+    bool hasMeta;                                      // the metadata of the source photo
     const wchar_t *dateTaken, *make, *model, *software;
     bool gps;
     double lat, lon;
+};
+struct SnapcoreEncodeRequest {
+    SnapcoreImageIn image;
+    int32_t format, jpegQuality, avifQuality;
+    bool stripMetadata;
     const wchar_t* version;                            // "Snapnab <version>" goes into the metadata
 };
 bool snapcore_image_encode(const SnapcoreEncodeRequest* req, SnapcoreBuf* out, int32_t* err);
+
+// ---- .snap documents (SnapFile.cpp): the index, each frame's document, base image and embedded images
+struct SnapcoreSnapSave;                               // a .snap handed over frame by frame, then saved
+SnapcoreSnapSave* snapcore_snap_new();
+bool snapcore_snap_add_frame(SnapcoreSnapSave* s, const SnapcoreImageIn* base, SnapcoreXmlBuilder* doc);   // doc consumed
+bool snapcore_snap_add_embedded(SnapcoreSnapSave* s, const char* name, size_t len, const SnapcoreImageIn* img);
+bool snapcore_snap_save(SnapcoreSnapSave* s, const wchar_t* path, size_t len, const wchar_t* version);   // frees s
+struct SnapcoreSnap;                                   // a .snap read: copy it out, then snapcore_snap_free
+SnapcoreSnap*        snapcore_snap_load(const wchar_t* path, size_t len);         // null: not readable
+size_t               snapcore_snap_frames(const SnapcoreSnap* h);
+void                 snapcore_snap_frame_doc(const SnapcoreSnap* h, size_t i, const SnapcoreXmlSink* sink, void* ctx);
+const SnapcoreImage* snapcore_snap_frame_base(const SnapcoreSnap* h, size_t i);   // not to be freed
+size_t               snapcore_snap_embedded_count(const SnapcoreSnap* h, size_t i);
+const SnapcoreImage* snapcore_snap_embedded(const SnapcoreSnap* h, size_t i, size_t k, const char** name, size_t* len);
+void                 snapcore_snap_free(SnapcoreSnap* h);
+int32_t snapcore_snap_load_document(const wchar_t* path, size_t len, const SnapcoreXmlSink* sink, void* ctx);
+                                                       // the first frame's document: -1 not read, 0 malformed, 1 read
 
 }

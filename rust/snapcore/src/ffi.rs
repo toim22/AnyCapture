@@ -10,7 +10,7 @@ use crate::container::{Reader, Writer, is_snap};
 use crate::wide::{from_ptr, to_os, to_string_lossy};
 use crate::codec::{self, DecodeError, EncodeError, Format, SaveOptions};
 use crate::image::{Image, Meta};
-use crate::{i18n, log, reg, xml};
+use crate::{i18n, log, reg, snap, xml};
 
 fn guard<T>(fallback: T, f: impl FnOnce() -> T) -> T {
     catch_unwind(AssertUnwindSafe(f)).unwrap_or(fallback)
@@ -509,12 +509,18 @@ fn decoded(r: Result<Image, DecodeError>, err: *mut i32) -> *mut Decoded {
         unsafe { *err = code };
     }
     let Ok(img) = r else { return std::ptr::null_mut() };
-    let text = |s: &str| crate::wide::to_wide(s);
-    let texts = match &img.meta {
-        Some(m) => [text(&m.date_taken), text(&m.make), text(&m.model), text(&m.software)],
-        None => [vec![0], vec![0], vec![0], vec![0]],
-    };
-    Box::into_raw(Box::new(Decoded { img, texts }))
+    Box::into_raw(Box::new(Decoded::new(img)))
+}
+
+impl Decoded {
+    fn new(img: Image) -> Self {
+        let text = |s: &str| crate::wide::to_wide(s);
+        let texts = match &img.meta {
+            Some(m) => [text(&m.date_taken), text(&m.make), text(&m.model), text(&m.software)],
+            None => [vec![0], vec![0], vec![0], vec![0]],
+        };
+        Decoded { img, texts }
+    }
 }
 
 /// Decodes an image in memory (not WebP); null on failure, with the reason in *err.
@@ -571,17 +577,14 @@ pub unsafe extern "C" fn snapcore_image_free(d: *mut Decoded) {
     }
 }
 
-/// An image to encode and how (SaveOptions and ImageMeta of Image.h); the strings are nul-terminated UTF-16 or null.
+/// An image handed over by the C++ side (Image and ImageMeta of Image.h); the strings are nul-terminated UTF-16 or
+/// null. It is copied: the pointers need to live during the call only.
 #[repr(C)]
-pub struct EncodeRequest {
+pub struct ImageIn {
     pub w: u32,
     pub h: u32,
     pub px: *const u32,
     pub dpi: f32,
-    pub format: i32,
-    pub jpeg_quality: i32,
-    pub avif_quality: i32,
-    pub strip_metadata: bool,
     pub has_meta: bool,
     pub date_taken: *const u16,
     pub make: *const u16,
@@ -590,6 +593,40 @@ pub struct EncodeRequest {
     pub gps: bool,
     pub lat: f64,
     pub lon: f64,
+}
+
+/// A copy of the image; None if the pixels are missing.
+unsafe fn image_in(r: &ImageIn) -> Option<Image> {
+    let n = r.w as usize * r.h as usize;
+    if n > 0 && r.px.is_null() {
+        return None;
+    }
+    let text = |p: *const u16| unsafe { from_ptr(p) }.map(to_string_lossy).unwrap_or_default();
+    Some(Image {
+        w: r.w,
+        h: r.h,
+        px: if n > 0 { unsafe { std::slice::from_raw_parts(r.px, n) }.to_vec() } else { Vec::new() },
+        dpi: r.dpi,
+        meta: r.has_meta.then(|| Meta {
+            date_taken: text(r.date_taken),
+            make: text(r.make),
+            model: text(r.model),
+            software: text(r.software),
+            gps: r.gps,
+            lat: r.lat,
+            lon: r.lon,
+        }),
+    })
+}
+
+/// An image to encode and how (SaveOptions of Image.h).
+#[repr(C)]
+pub struct EncodeRequest {
+    pub image: ImageIn,
+    pub format: i32,
+    pub jpeg_quality: i32,
+    pub avif_quality: i32,
+    pub strip_metadata: bool,
     pub version: *const u16,
 }
 
@@ -603,26 +640,8 @@ pub unsafe extern "C" fn snapcore_image_encode(req: *const EncodeRequest, out: *
     };
     let r = guard(Err(EncodeError::Failed), || {
         let Some(r) = (unsafe { req.as_ref() }) else { return Err(EncodeError::Failed) };
-        let n = r.w as usize * r.h as usize;
-        if out.is_null() || (n > 0 && r.px.is_null()) {
-            return Err(EncodeError::Failed);
-        }
+        let (Some(img), false) = (unsafe { image_in(&r.image) }, out.is_null()) else { return Err(EncodeError::Failed) };
         let text = |p: *const u16| unsafe { from_ptr(p) }.map(to_string_lossy).unwrap_or_default();
-        let img = Image {
-            w: r.w,
-            h: r.h,
-            px: if n > 0 { unsafe { std::slice::from_raw_parts(r.px, n) }.to_vec() } else { Vec::new() },
-            dpi: r.dpi,
-            meta: r.has_meta.then(|| Meta {
-                date_taken: text(r.date_taken),
-                make: text(r.make),
-                model: text(r.model),
-                software: text(r.software),
-                gps: r.gps,
-                lat: r.lat,
-                lon: r.lon,
-            }),
-        };
         let opt = SaveOptions { jpeg_quality: r.jpeg_quality, avif_quality: r.avif_quality, strip_metadata: r.strip_metadata };
         codec::encode(&img, Format::from_i32(r.format), &opt, &text(r.version))
     });
@@ -643,4 +662,140 @@ pub unsafe extern "C" fn snapcore_image_encode(req: *const EncodeRequest, out: *
             false
         }
     }
+}
+
+// ---------------------------------------------------------------- .snap documents (SnapFile.cpp)
+
+/// A .snap being handed over frame by frame, then saved.
+#[derive(Default)]
+pub struct SnapSave {
+    frames: Vec<snap::Frame>,
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn snapcore_snap_new() -> *mut SnapSave {
+    guard(std::ptr::null_mut(), || Box::into_raw(Box::default()))
+}
+
+/// Adds a frame: its base image and its document (the builder is consumed). False if the image has no pixels.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_add_frame(s: *mut SnapSave, base: *const ImageIn, doc: *mut XmlBuilder) -> bool {
+    guard(false, || {
+        let doc = if doc.is_null() { xml::Node::default() } else { unsafe { Box::from_raw(doc) }.finish() };
+        let (Some(s), Some(base)) = (unsafe { s.as_mut() }, unsafe { base.as_ref() }) else { return false };
+        let Some(base) = (unsafe { image_in(base) }) else { return false };
+        s.frames.push(snap::Frame { base, doc, embedded: Default::default() });
+        true
+    })
+}
+
+/// Adds an image the last frame's objects embed (by StreamName).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_add_embedded(s: *mut SnapSave, name: *const u8, len: usize, img: *const ImageIn) -> bool {
+    guard(false, || {
+        let (Some(f), Some(img)) = (unsafe { s.as_mut() }.and_then(|s| s.frames.last_mut()), unsafe { img.as_ref() })
+        else {
+            return false;
+        };
+        let Some(img) = (unsafe { image_in(img) }) else { return false };
+        f.embedded.insert(unsafe { text_arg(name, len) }, img);
+        true
+    })
+}
+
+/// Writes the .snap file and frees `s`; `version` is the program's (the Index's SoftwareVersion).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_save(s: *mut SnapSave, path: *const u16, len: usize, version: *const u16) -> bool {
+    guard(false, || {
+        if s.is_null() {
+            return false;
+        }
+        let s = unsafe { Box::from_raw(s) };
+        let version = unsafe { from_ptr(version) }.map(to_string_lossy).unwrap_or_default();
+        unsafe { path_arg(path, len) }.is_some_and(|p| snap::save(&p, &s.frames, &version))
+    })
+}
+
+/// A .snap read by snapcore, held until the C++ side has copied it.
+pub struct SnapLoaded {
+    frames: Vec<(Decoded, xml::Node, Vec<(String, Decoded)>)>,
+}
+
+/// Reads every frame of a .snap; null if it is not one, is damaged or has no base image.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_load(path: *const u16, len: usize) -> *mut SnapLoaded {
+    guard(std::ptr::null_mut(), || {
+        let Some(frames) = (unsafe { path_arg(path, len) }).and_then(|p| snap::load(&p)) else { return std::ptr::null_mut() };
+        let frames = frames
+            .into_iter()
+            .map(|f| (Decoded::new(f.base), f.doc, f.embedded.into_iter().map(|(k, v)| (k, Decoded::new(v))).collect()))
+            .collect();
+        Box::into_raw(Box::new(SnapLoaded { frames }))
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_frames(h: *const SnapLoaded) -> usize {
+    guard(0, || unsafe { h.as_ref() }.map_or(0, |h| h.frames.len()))
+}
+
+/// Sends frame i's document to the sink (as snapcore_xml_parse does).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_frame_doc(h: *const SnapLoaded, i: usize, sink: *const XmlSink, ctx: *mut c_void) {
+    guard((), || {
+        if let (Some(f), Some(sink)) = (unsafe { h.as_ref() }.and_then(|h| h.frames.get(i)), unsafe { sink.as_ref() }) {
+            emit(&f.1, sink, ctx);
+        }
+    })
+}
+
+/// Frame i's base image (read it with snapcore_image_info / _pixels / _meta_text; do not free it).
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_frame_base(h: *const SnapLoaded, i: usize) -> *const Decoded {
+    guard(std::ptr::null(), || unsafe { h.as_ref() }.and_then(|h| h.frames.get(i)).map_or(std::ptr::null(), |f| &f.0))
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_embedded_count(h: *const SnapLoaded, i: usize) -> usize {
+    guard(0, || unsafe { h.as_ref() }.and_then(|h| h.frames.get(i)).map_or(0, |f| f.2.len()))
+}
+
+/// Frame i's k-th embedded image and its StreamName (UTF-8, not nul-terminated); do not free it.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_embedded(h: *const SnapLoaded, i: usize, k: usize, name: *mut *const u8, len: *mut usize) -> *const Decoded {
+    guard(std::ptr::null(), || {
+        let Some((n, d)) = unsafe { h.as_ref() }.and_then(|h| h.frames.get(i)).and_then(|f| f.2.get(k)) else {
+            return std::ptr::null();
+        };
+        if !name.is_null() && !len.is_null() {
+            unsafe {
+                *name = n.as_ptr();
+                *len = n.len();
+            }
+        }
+        d
+    })
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_free(h: *mut SnapLoaded) {
+    if !h.is_null() {
+        guard((), || drop(unsafe { Box::from_raw(h) }));
+    }
+}
+
+/// Only the first frame's document: -1 if it cannot be read (nothing is sent), 0 if malformed (the partial tree is
+/// sent), 1 if read.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn snapcore_snap_load_document(path: *const u16, len: usize, sink: *const XmlSink, ctx: *mut c_void) -> i32 {
+    guard(-1, || {
+        let (Some(p), Some(sink)) = (unsafe { path_arg(path, len) }, unsafe { sink.as_ref() }) else { return -1 };
+        match snap::load_document(&p) {
+            Some((doc, ok)) => {
+                emit(&doc, sink, ctx);
+                ok as i32
+            }
+            None => -1,
+        }
+    })
 }

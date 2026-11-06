@@ -1,7 +1,7 @@
 // XmlNode stays here for the C++ code; reading and writing XML text lives in rust/snapcore/src/xml.rs.
 #include "Xml.h"
 #include "Common.h"
-#include "snapcore.h"
+#include "SnapcoreBridge.h"
 #include <cstdlib>
 #include <cstdio>
 
@@ -51,7 +51,9 @@ void SinkClose(void* ctx) { static_cast<Building*>(ctx)->open.pop_back(); }
 
 const SnapcoreXmlSink kSink{ SinkOpen, SinkAttr, SinkText, SinkClose };
 
-SnapcoreXmlBuilder* Build(const XmlNode& root) {
+} // namespace
+
+SnapcoreXmlBuilder* XmlToSnapcore(const XmlNode& root) {
     SnapcoreXmlBuilder* b = snapcore_xml_builder_new();
     auto feed = [b](auto& self, const XmlNode& n) -> void {
         snapcore_xml_open(b, n.name.data(), n.name.size());
@@ -64,12 +66,16 @@ SnapcoreXmlBuilder* Build(const XmlNode& root) {
     return b;
 }
 
-} // namespace
+void XmlFromSnapcore(XmlNode& root, const std::function<void(const SnapcoreXmlSink* sink, void* ctx)>& send) {
+    root = XmlNode();
+    Building b{ &root, {} };
+    send(&kSink, &b);
+}
 
 std::string XmlSerialize(const XmlNode& root, bool decl) {
     std::string out;
     SnapcoreBuf buf{};
-    if (snapcore_xml_serialize(Build(root), decl, &buf)) {
+    if (snapcore_xml_serialize(XmlToSnapcore(root), decl, &buf)) {
         out.assign(reinterpret_cast<const char*>(buf.data), buf.len);
         snapcore_buf_free(buf);
     }
@@ -91,7 +97,7 @@ bool XmlLoadFile(const std::wstring& path, XmlNode& root) {
 }
 
 bool XmlSaveFile(const std::wstring& path, const XmlNode& root) {
-    return snapcore_xml_save(Build(root), path.data(), path.size());
+    return snapcore_xml_save(XmlToSnapcore(root), path.data(), path.size());
 }
 
 } // namespace snap

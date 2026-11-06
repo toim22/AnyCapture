@@ -7,6 +7,7 @@
 //! - `i18n`: the interface language and the lang\<code>.po catalogs
 //! - `xml`: the XML reader and writer (presets, .snap documents, Names.xml)
 //! - `image`, `codec`: images in memory and image files through the Windows codecs (WIC)
+//! - `snap`: the .snap document (index, frame documents, base and embedded images)
 
 pub mod codec;
 pub mod container;
@@ -15,6 +16,7 @@ pub mod image;
 pub mod log;
 pub mod paths;
 pub mod reg;
+pub mod snap;
 pub mod wide;
 pub mod xml;
 

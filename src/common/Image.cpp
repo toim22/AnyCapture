@@ -1,5 +1,5 @@
 #include "Image.h"
-#include "snapcore.h"
+#include "SnapcoreBridge.h"
 #include "webp/decode.h"
 #include "webp/encode.h"
 
@@ -206,9 +206,18 @@ static bool EncodeWebP(const Image& img, const SaveOptions& opt, std::vector<BYT
 // PNG, JPEG, BMP, GIF, TIFF, AVIF and HEIC are read and written by snapcore with the Windows codecs, with the photo's
 // metadata (C29) and its EXIF orientation; WebP is read and written here with libwebp.
 
-// the copy snapcore decoded, moved into an Image
-static bool TakeDecoded(SnapcoreImage* d, Image& out) {
-    if (!d) return false;
+SnapcoreImageIn ImageIn(const Image& img) {
+    SnapcoreImageIn r{};
+    r.w = (uint32_t)img.w; r.h = (uint32_t)img.h; r.px = img.px.data(); r.dpi = img.dpi;
+    if (const ImageMeta* m = img.meta.get()) {
+        r.hasMeta = true;
+        r.dateTaken = m->dateTaken.c_str(); r.make = m->make.c_str(); r.model = m->model.c_str(); r.software = m->software.c_str();
+        r.gps = m->gps; r.lat = m->lat; r.lon = m->lon;
+    }
+    return r;
+}
+
+void CopyDecoded(const SnapcoreImage* d, Image& out) {
     SnapcoreImageInfo info{};
     snapcore_image_info(d, &info);
     out = Image((int)info.w, (int)info.h);
@@ -222,6 +231,12 @@ static bool TakeDecoded(SnapcoreImage* d, Image& out) {
         m->gps = info.gps; m->lat = info.lat; m->lon = info.lon;
         out.meta = m;
     }
+}
+
+// the copy snapcore decoded, moved into an Image
+static bool TakeDecoded(SnapcoreImage* d, Image& out) {
+    if (!d) return false;
+    CopyDecoded(d, out);
     snapcore_image_free(d);
     return true;
 }
@@ -285,16 +300,10 @@ bool EncodeToMemoryEx(const Image& img, ImageFormat fmt, std::vector<BYTE>& out,
     g_ioError.clear();
     if (img.empty()) return false;
     if (fmt == ImageFormat::WEBP) return EncodeWebP(img, opt, out);
-    const ImageMeta* m = img.meta.get();
     SnapcoreEncodeRequest r{};
-    r.w = (uint32_t)img.w; r.h = (uint32_t)img.h; r.px = img.px.data(); r.dpi = img.dpi;
+    r.image = ImageIn(img);
     r.format = (int32_t)fmt; r.jpegQuality = opt.jpegQuality; r.avifQuality = opt.avifQuality;
     r.stripMetadata = opt.stripMetadata;
-    if (m) {
-        r.hasMeta = true;
-        r.dateTaken = m->dateTaken.c_str(); r.make = m->make.c_str(); r.model = m->model.c_str(); r.software = m->software.c_str();
-        r.gps = m->gps; r.lat = m->lat; r.lon = m->lon;
-    }
     r.version = kAppVersion;
     SnapcoreBuf buf{};
     int32_t err = 0;

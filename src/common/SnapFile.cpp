@@ -1,6 +1,6 @@
 #include "SnapFile.h"
 #include <wrl/client.h>
-#include "snapcore.h"
+#include "SnapcoreBridge.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -11,9 +11,10 @@ static const BYTE kHeader[24] = { 0xCB, 'S', 'N', 'A', 'P', 'N', 'A', 'B',
                                   0x5A, 0x3C, 0x91, 0x0E, 0x6B, 0x2D, 0x4F, 0x18,
                                   0xA7, 0x44, 0xC2, 0x9B, 0x10, 0x7E, 0xD3, 0x55 };
 
-// The container: named streams in nested storages, addressed by paths such as "Frame0/ImageStorage/Image_0.png".
-// Two implementations: snapcore (Rust, rust/snapcore — the one the programs use) and the Windows structured
-// storage API (the original one, kept so the tests can check that each reads what the other writes).
+// Two implementations: snapcore (Rust, rust/snapcore/src/snap.rs — the one the programs use) reads and writes the
+// whole document, and the code below over the Windows structured storage API (the original one, kept so the tests can
+// check that each reads what the other writes). The container: named streams in nested storages, addressed by paths
+// such as "Frame0/ImageStorage/Image_0.png".
 namespace {
 
 struct ContainerReader {
@@ -167,53 +168,7 @@ private:
     std::map<std::string, ComPtr<IStorage>> storages_;
 };
 
-// ---------------------------------------------------------------- snapcore (Rust)
-class RustReader : public ContainerReader {
-public:
-    ~RustReader() override { snapcore_close(r_); }
-    bool Open(const std::wstring& path) { r_ = snapcore_open(path.c_str(), path.size()); return r_ != nullptr; }
-    bool Read(const std::string& stream, std::string& out) override {
-        SnapcoreBuf b{};
-        if (!snapcore_read(r_, stream.data(), stream.size(), &b)) return false;
-        out.assign((const char*)b.data, b.len);
-        snapcore_buf_free(b);
-        return true;
-    }
-private:
-    SnapcoreReader* r_ = nullptr;
-};
-
-class RustWriter : public ContainerWriter {
-public:
-    ~RustWriter() override { snapcore_abort(w_); }
-    bool Create(const std::wstring& path) { w_ = snapcore_create(path.c_str(), path.size()); return w_ != nullptr; }
-    bool Write(const std::string& stream, const void* data, size_t len) override {
-        return snapcore_write(w_, stream.data(), stream.size(), (const uint8_t*)data, len);
-    }
-    bool Finish() override { bool ok = snapcore_finish(w_); w_ = nullptr; return ok; }
-private:
-    SnapcoreWriter* w_ = nullptr;
-};
-
 SnapBackend g_backend = SnapBackend::Rust;
-
-std::unique_ptr<ContainerReader> OpenContainer(const std::wstring& path) {
-    if (g_backend == SnapBackend::Rust) {
-        auto r = std::make_unique<RustReader>();
-        return r->Open(path) ? std::move(r) : nullptr;
-    }
-    auto r = std::make_unique<ComReader>();
-    return r->Open(path) ? std::move(r) : nullptr;
-}
-
-std::unique_ptr<ContainerWriter> CreateContainer(const std::wstring& path) {
-    if (g_backend == SnapBackend::Rust) {
-        auto w = std::make_unique<RustWriter>();
-        return w->Create(path) ? std::move(w) : nullptr;
-    }
-    auto w = std::make_unique<ComWriter>();
-    return w->Create(path) ? std::move(w) : nullptr;
-}
 
 bool WritePng(ContainerWriter& w, const std::string& stream, const Image& img) {
     std::vector<BYTE> png;
@@ -227,18 +182,14 @@ bool ReadPng(ContainerReader& r, const std::string& stream, Image& img) {
     return DecodeFromMemory((const BYTE*)data.data(), data.size(), img);
 }
 
-} // namespace
+// ---------------------------------------------------------------- the document over the Windows API
 
-void SetSnapBackend(SnapBackend b) { g_backend = b; }
-
-SnapBackend GetSnapBackend() { return g_backend; }
-
-bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames) {
+bool SaveWindows(const std::wstring& path, const std::vector<SnapFrame>& frames) {
     std::wstring tmp = path + L".saving";
     bool ok = false;
     {
-        auto w = CreateContainer(tmp);
-        if (!w) { Log(L"SaveSnapFile: could not open %s", tmp.c_str()); return false; }
+        auto w = std::make_unique<ComWriter>();
+        if (!w->Create(tmp)) { Log(L"SaveSnapFile: could not open %s", tmp.c_str()); return false; }
         XmlNode index("Index");
         XmlNode& list = index.add("FrameList");
         index.set("SoftwareVersion", WToUtf8(kAppVersion));
@@ -270,26 +221,15 @@ bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames
     return MoveFileExW(tmp.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING) != 0;
 }
 
-bool IsSnapFile(const std::wstring& path) {
-    HANDLE f = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-    if (f == INVALID_HANDLE_VALUE) return false;
-    BYTE h[24]{}; DWORD rd = 0;
-    ReadFile(f, h, 24, &rd, nullptr);
-    CloseHandle(f);
-    return rd == 24 && memcmp(h, kHeader, 24) == 0;
-}
-
-bool LoadSnapDocument(const std::wstring& path, XmlNode& doc) {
-    if (!IsSnapFile(path)) return false;
-    auto r = OpenContainer(path);
+bool LoadDocumentWindows(const std::wstring& path, XmlNode& doc) {
+    auto r = std::make_unique<ComReader>();
     std::string xml;
-    return r && r->Read("Frame0/Document", xml) && XmlParse(xml, doc);
+    return r->Open(path) && r->Read("Frame0/Document", xml) && XmlParse(xml, doc);
 }
 
-bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames) {
-    if (!IsSnapFile(path)) return false;
+bool LoadWindows(const std::wstring& path, std::vector<SnapFrame>& frames) {
     bool ok = false;
-    if (auto r = OpenContainer(path)) {
+    if (auto r = std::make_unique<ComReader>(); r->Open(path)) {
         std::string idx;
         XmlNode index;
         if (r->Read("Index", idx) && XmlParse(idx, index)) {
@@ -328,6 +268,79 @@ bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames) {
     }
     if (!ok) Log(L"LoadSnapFile failed: %s", path.c_str());
     return ok;
+}
+
+// ---------------------------------------------------------------- the document in snapcore (Rust)
+
+bool SaveRust(const std::wstring& path, const std::vector<SnapFrame>& frames) {
+    SnapcoreSnapSave* s = snapcore_snap_new();
+    if (!s) return false;
+    bool ok = true;
+    for (size_t i = 0; i < frames.size() && ok; i++) {
+        SnapcoreImageIn base = ImageIn(frames[i].base);
+        ok = snapcore_snap_add_frame(s, &base, XmlToSnapcore(frames[i].doc));
+        for (auto& [name, img] : frames[i].embedded) {
+            SnapcoreImageIn in = ImageIn(img);
+            ok = ok && snapcore_snap_add_embedded(s, name.data(), name.size(), &in);
+        }
+    }
+    if (!ok) {                  // an image without its pixels: nothing is written (a null path only frees s)
+        snapcore_snap_save(s, nullptr, 0, nullptr);
+        Log(L"SaveSnapFile failed: %s", path.c_str());
+        return false;
+    }
+    return snapcore_snap_save(s, path.c_str(), path.size(), kAppVersion);     // logs its failures
+}
+
+bool LoadRust(const std::wstring& path, std::vector<SnapFrame>& frames) {
+    SnapcoreSnap* h = snapcore_snap_load(path.c_str(), path.size());
+    if (!h) return false;       // logged by snapcore
+    frames.clear();
+    for (size_t i = 0, n = snapcore_snap_frames(h); i < n; i++) {
+        SnapFrame f;
+        XmlFromSnapcore(f.doc, [&](const SnapcoreXmlSink* sink, void* ctx) { snapcore_snap_frame_doc(h, i, sink, ctx); });
+        CopyDecoded(snapcore_snap_frame_base(h, i), f.base);
+        for (size_t k = 0, m = snapcore_snap_embedded_count(h, i); k < m; k++) {
+            const char* name = nullptr;
+            size_t len = 0;
+            if (const SnapcoreImage* e = snapcore_snap_embedded(h, i, k, &name, &len)) CopyDecoded(e, f.embedded[std::string(name, len)]);
+        }
+        frames.push_back(std::move(f));
+    }
+    snapcore_snap_free(h);
+    return true;
+}
+
+bool LoadDocumentRust(const std::wstring& path, XmlNode& doc) {
+    XmlNode n;
+    int r = -1;
+    XmlFromSnapcore(n, [&](const SnapcoreXmlSink* sink, void* ctx) {
+        r = snapcore_snap_load_document(path.c_str(), path.size(), sink, ctx);
+    });
+    if (r >= 0) doc = std::move(n);          // as before: a file that cannot be read leaves the tree as it was
+    return r == 1;
+}
+
+} // namespace
+
+void SetSnapBackend(SnapBackend b) { g_backend = b; }
+
+SnapBackend GetSnapBackend() { return g_backend; }
+
+bool SaveSnapFile(const std::wstring& path, const std::vector<SnapFrame>& frames) {
+    return g_backend == SnapBackend::Rust ? SaveRust(path, frames) : SaveWindows(path, frames);
+}
+
+bool IsSnapFile(const std::wstring& path) { return snapcore_is_snap(path.c_str(), path.size()); }
+
+bool LoadSnapDocument(const std::wstring& path, XmlNode& doc) {
+    if (!IsSnapFile(path)) return false;
+    return g_backend == SnapBackend::Rust ? LoadDocumentRust(path, doc) : LoadDocumentWindows(path, doc);
+}
+
+bool LoadSnapFile(const std::wstring& path, std::vector<SnapFrame>& frames) {
+    if (g_backend == SnapBackend::Rust) return LoadRust(path, frames);     // not a .snap: refused without a log line
+    return IsSnapFile(path) && LoadWindows(path, frames);
 }
 
 } // namespace snap

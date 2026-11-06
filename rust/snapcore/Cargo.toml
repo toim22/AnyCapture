@@ -1,7 +1,7 @@
 [package]
 name = "snapcore"
 version = "0.1.0"
-description = "Snapnab's shared Rust layer: the .snap container, the log, the registry settings, the translations, XML and image files"
+description = "Snapnab's shared Rust layer: the .snap documents, the log, the registry settings, the translations, XML and image files"
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
