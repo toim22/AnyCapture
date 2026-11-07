@@ -203,7 +203,15 @@ fn render_count(hwnd: isize) {
             g.draw_lines(&chev, &[gdip::pt(x - a / 2.0, cy - a), gdip::pt(x + a / 2.0, cy), gdip::pt(x - a / 2.0, cy + a)]);
         }
     }
-    // premultiplied for UpdateLayeredWindow
+    present(hwnd, &img, (wr.left, wr.top));
+}
+
+/// UpdateLayeredWindow with `img` (straight ARGB, premultiplied here) at `pos`.
+pub fn present(hwnd: isize, img: &Image, pos: (i32, i32)) {
+    let (ww, hh) = (img.wi(), img.hi());
+    if ww <= 0 || hh <= 0 {
+        return;
+    }
     unsafe {
         let screen = GetDC(None);
         let mem = CreateCompatibleDC(Some(screen));
@@ -228,7 +236,7 @@ fn render_count(hwnd: isize) {
                 *d = (a << 24) | (pm((p >> 16) & 0xFF) << 16) | (pm((p >> 8) & 0xFF) << 8) | pm(p & 0xFF);
             }
             let old = SelectObject(mem, bmp.into());
-            let (src, dst_pt, sz) = (POINT { x: 0, y: 0 }, POINT { x: wr.left, y: wr.top }, SIZE { cx: ww, cy: hh });
+            let (src, dst_pt, sz) = (POINT { x: 0, y: 0 }, POINT { x: pos.0, y: pos.1 }, SIZE { cx: ww, cy: hh });
             let bf = BLENDFUNCTION { BlendOp: AC_SRC_OVER as u8, BlendFlags: 0, SourceConstantAlpha: 255, AlphaFormat: AC_SRC_ALPHA as u8 };
             let _ = UpdateLayeredWindow(h(hwnd), Some(screen), Some(&dst_pt), Some(&sz), Some(mem), Some(&src), COLORREF(0), Some(&bf),
                                         ULW_ALPHA);

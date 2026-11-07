@@ -28,6 +28,7 @@ use windows::core::{PCWSTR, w};
 
 pub enum Field {
     Label(String),
+    Text { label: String, text: String },
     Int { label: String, value: i32, min: i32, max: i32 },
 }
 
@@ -136,6 +137,12 @@ pub fn run(owner: isize, title: &str, fields: &mut [Field]) -> bool {
                     child(Default::default(), w!("STATIC"), text, st, pad, yy + if sp > 1 { scale(3, dpi) } else { 0 }, width - 2 * pad,
                           ctl_h + (sp - 1) * row_h, id);
                 }
+                Field::Text { label, text } => {
+                    child(Default::default(), w!("STATIC"), label, SS_LEFT | SS_CENTERIMAGE, pad, yy, label_w - scale(8, dpi), ctl_h, 0);
+                    let e = child(WS_EX_CLIENTEDGE, w!("EDIT"), text, WS_TABSTOP.0 | ES_AUTOHSCROLL as u32, cx, yy,
+                                  width - pad - cx, ctl_h, id);
+                    first.get_or_insert(e);
+                }
                 Field::Int { label, value, min, max } => {
                     child(Default::default(), w!("STATIC"), label, SS_LEFT | SS_CENTERIMAGE, pad, yy, label_w - scale(8, dpi),
                           ctl_h, 0);
@@ -177,12 +184,17 @@ pub fn run(owner: isize, title: &str, fields: &mut [Field]) -> bool {
         if DONE.with(|d| d.get()) == Some(true) {
             done = true;
             for (i, f) in fields.iter_mut().enumerate() {
-                if let Field::Int { value, min, max, .. } = f {
-                    let e = windows::Win32::UI::WindowsAndMessaging::GetDlgItem(Some(h), ID_FIELD + i as i32).unwrap_or_default();
-                    let mut buf = [0u16; 32];
-                    let n = GetWindowTextW(e, &mut buf) as usize;
-                    let s: String = String::from_utf16_lossy(&buf[..n]).chars().filter(|c| c.is_ascii_digit() || *c == '-').collect();
-                    *value = s.parse::<i32>().unwrap_or(*value).clamp(*min, *max);
+                let e = windows::Win32::UI::WindowsAndMessaging::GetDlgItem(Some(h), ID_FIELD + i as i32).unwrap_or_default();
+                let mut buf = vec![0u16; 4096];
+                let n = GetWindowTextW(e, &mut buf) as usize;
+                let got = String::from_utf16_lossy(&buf[..n]);
+                match f {
+                    Field::Int { value, min, max, .. } => {
+                        let s: String = got.chars().filter(|c| c.is_ascii_digit() || *c == '-').collect();
+                        *value = s.parse::<i32>().unwrap_or(*value).clamp(*min, *max);
+                    }
+                    Field::Text { text, .. } => *text = got,
+                    Field::Label(_) => {}
                 }
             }
         }

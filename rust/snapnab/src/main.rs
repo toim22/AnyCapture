@@ -4,9 +4,14 @@
 
 #![windows_subsystem = "windows"]
 
+mod camwin;
 mod engine;
 mod form;
 mod hotkeys;
+mod oneclick;
+mod pins;
+mod qr;
+mod quick;
 mod rawwin;
 mod tray;
 
@@ -53,6 +58,17 @@ mod id {
     pub const LIBRARY_FOLDER: u32 = 1011;
     pub const LOGS: u32 = 1012;
     pub const SHOW: u32 = 1013;
+    pub const ONECLICK: u32 = 1014;
+    pub const PIN_CLIPBOARD: u32 = 1029;
+    pub const PIN_FILE: u32 = 1030;
+    pub const PINS_SHOW: u32 = 1031;
+    pub const PINS_HIDE: u32 = 1032;
+    pub const PINS_CLOSE: u32 = 1033;
+    pub const PINS_REOPEN: u32 = 1034;
+    pub const PINS_CLICKTHROUGH: u32 = 1035;
+    pub const QR_REGION: u32 = 1038;
+    pub const CAPTURE_PIN: u32 = 1040;
+    pub const PIN_HISTORY_BASE: u32 = 1500;
     pub const PRESET_BASE: u32 = 2000;
     // control IDs of the C++ window that are also commands
     pub const IDC_CAPTURE: u32 = 119;
@@ -136,6 +152,31 @@ impl CaptureApp {
         self.engine.activate(ctl, &env, p);
     }
 
+    /// ToolPreset: a region selection whose only output is the tool (QR, pin, text, upload).
+    fn tool_preset(&self, t: cmdline::Tool) -> Preset {
+        let mut p = self.store.first_of_kind(CaptureKind::Image);
+        p.kind = CaptureKind::Image;
+        p.selection = Selection::Region;
+        p.region_fixed = false;
+        p.delay_seconds = 0;
+        p.effects = Default::default();
+        (p.preview_in_editor, p.copy_to_clipboard, p.window_objects) = (false, false, false);
+        (p.save_to_file, p.open_in_program, p.office) = (false, false, -1);
+        p.grab_text = t == cmdline::Tool::Text;
+        p.pin_to_screen = t == cmdline::Tool::Pin;
+        p.read_qr = t == cmdline::Tool::Qr;
+        p.upload = t == cmdline::Tool::Upload;
+        p
+    }
+
+    /// PinFromFile: the Open dialog, then the pin.
+    fn pin_from_file(&self) {
+        let Some(path) = engine::open_file_dialog(&tr("Fixar imagem na tela")) else { return };
+        if !pins::pin_file(&path) {
+            engine::message_box(tr("Não foi possível abrir a imagem.\n\n") + &path, "Snapnab".into());
+        }
+    }
+
     /// RegisterHotkeys: the image and video keys (Print Screen and Shift+Print Screen by default), the tools that
     /// have one set in Options, and each preset's own key.
     fn register_hotkeys(&mut self) {
@@ -186,6 +227,7 @@ impl CaptureApp {
     /// After the engine ran: the recording keys follow the HUD, and volumes changed in its panel go to the preset
     /// (onPresetVolumes: the preset with the same name and kind).
     fn after_engine(&mut self) {
+        oneclick::set_busy(self.engine.busy()); // hidden during a capture
         let active = self.engine.video_active();
         if active != self.video_keys {
             self.set_video_keys(active);
@@ -219,6 +261,10 @@ impl CaptureApp {
                 self.engine.video_stop(ctl, &env);
             }
             HK_VIDEO_ZOOM => self.engine.video_toggle_zoom(),
+            HK_CAPTURE_PIN => self.start_capture(ctl, &self.tool_preset(cmdline::Tool::Pin)),
+            HK_PIN_CLIP => {
+                pins::pin_clipboard();
+            }
             i if i >= HK_PRESET_BASE && ((i - HK_PRESET_BASE) as usize) < self.store.presets.len() => {
                 let p = self.store.presets[(i - HK_PRESET_BASE) as usize].clone();
                 self.start_capture(ctl, &p);
@@ -326,6 +372,23 @@ impl CaptureApp {
             id::LIBRARY_FOLDER => shell_open(&String::from_utf16_lossy(&snapcore::library::library_dir())),
             id::LOGS => shell_open(&snapcore::paths::logs_dir().to_string_lossy()),
             id::ABOUT => about(),
+            id::ONECLICK => set_one_click(!oneclick::enabled()),
+            id::QR_REGION => self.start_capture(ctl, &self.tool_preset(cmdline::Tool::Qr)),
+            id::CAPTURE_PIN => self.start_capture(ctl, &self.tool_preset(cmdline::Tool::Pin)),
+            id::PIN_CLIPBOARD => {
+                pins::pin_clipboard();
+            }
+            id::PIN_FILE => self.pin_from_file(),
+            id::PINS_SHOW => pins::show_all(true),
+            id::PINS_HIDE => pins::show_all(false),
+            id::PINS_CLOSE => pins::close_all(),
+            id::PINS_REOPEN => {
+                pins::reopen_history(0);
+            }
+            id::PINS_CLICKTHROUGH => pins::click_through_off_all(),
+            h if (id::PIN_HISTORY_BASE..id::PIN_HISTORY_BASE + 10).contains(&h) => {
+                pins::reopen_history((h - id::PIN_HISTORY_BASE) as usize);
+            }
             _ => log::write(&format!("Command {cmd}: not in the Rust app yet")),
         }
     }
@@ -345,9 +408,33 @@ impl CaptureApp {
         let sub = tray::Menu::new(presets.iter().map(|(i, n)| Cmd(*i, n)).collect());
         let (img, vid, show, ed, quit, pre) = (tr("Capturar imagem"), tr("Gravar vídeo"), tr("Abrir a janela de captura"),
                                                tr("Abrir o Editor"), tr("Sair"), tr("Presets"));
+        let qr = tr("Ler código QR");
+        let one = tr("Mostrar o One Click");
+        let n = pins::count();
+        let pins_t = if n > 0 { tr("Imagens fixadas (%zu)").replace("%zu", &n.to_string()) } else { tr("Imagens fixadas") };
         let m = tray::Menu::new(vec![Cmd(id::CAPTURE_IMAGE, &img), Cmd(id::CAPTURE_VIDEO, &vid), Sub(&pre, sub), Separator,
-                                     Cmd(id::SHOW, &show), Cmd(id::OPEN_EDITOR, &ed), Separator, Cmd(id::EXIT, &quit)]);
+                                     Cmd(id::QR_REGION, &qr), Sub(&pins_t, pins_submenu()), Separator,
+                                     Cmd(id::SHOW, &show), Checked(id::ONECLICK, &one, oneclick::enabled()),
+                                     Cmd(id::OPEN_EDITOR, &ed), Separator, Cmd(id::EXIT, &quit)]);
         m.track(self.hwnd, Some(id::SHOW));
+    }
+
+    /// OneClickMenu: the gear of the One Click panel.
+    fn one_click_menu(&self, x: i32, y: i32) {
+        use tray::Item::*;
+        let presets: Vec<_> = self.store.presets.iter().enumerate()
+            .map(|(i, p)| (id::PRESET_BASE + i as u32, i18n::tr_str(&p.name))).collect();
+        let sub = tray::Menu::new(presets.iter().map(|(i, n)| Cmd(*i, n)).collect());
+        let t = [tr("Capturar imagem"), tr("Gravar vídeo"), tr("Presets"), tr("Abrir a janela de captura"), tr("Ocultar o One Click")];
+        let m = tray::Menu::new(vec![Cmd(id::CAPTURE_IMAGE, &t[0]), Cmd(id::CAPTURE_VIDEO, &t[1]), Sub(&t[2], sub), Separator,
+                                     Cmd(id::SHOW, &t[3]), Cmd(id::ONECLICK, &t[4])]);
+        let c = m.choose(self.hwnd, x, y);
+        if c != 0 {
+            unsafe {
+                let _ = windows::Win32::UI::WindowsAndMessaging::PostMessageW(Some(HWND(self.hwnd as _)), WM_COMMAND,
+                                                                              WPARAM(c as usize), LPARAM(0));
+            }
+        }
     }
 
     fn tray_event(&mut self, ctl: &mut Ctl, lp: isize) {
@@ -429,6 +516,20 @@ impl CaptureApp {
                     self.notify("Snapnab", &tr("/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."));
                     handled = true;
                 }
+                Cmd::PinFile(f) => {
+                    if !pins::pin_file(&f) {
+                        self.notify("Snapnab", &(tr("Não foi possível fixar: ") + &f));
+                    }
+                    handled = true;
+                }
+                Cmd::PinClipboard => {
+                    pins::pin_clipboard();
+                    handled = true;
+                }
+                Cmd::Tool(t) => {
+                    self.start_capture(ctl, &self.tool_preset(t));
+                    handled = true;
+                }
                 Cmd::Delay(_) | Cmd::Output(_) => {}
                 other => {
                     log::write(&format!("Command line: {other:?} is not in the Rust app yet"));
@@ -448,6 +549,11 @@ impl CaptureApp {
                 self.start_capture(ctl, &self.store.first_of_kind(k));
             }
             ipc::code::EDITOR_CLOSED => log::write("Editor closed"),
+            ipc::code::PIN_FILE => {
+                if !m.text.is_empty() && !pins::pin_file(&m.text) {
+                    log::write(&format!("Pin: could not open {}", m.text));
+                }
+            }
             ipc::code::RELOAD_CONFIG => {
                 self.store = PresetStore::load();
                 self.register_hotkeys();
@@ -473,6 +579,44 @@ impl CaptureApp {
             }
         }
     }
+}
+
+/// PinsSubmenu: pin from the clipboard, a file or a capture; the pins on the screen; the history.
+fn pins_submenu() -> tray::Menu {
+    use tray::Item::*;
+    let t = [tr("Fixar da área de transferência"), tr("Fixar um arquivo…"), tr("Capturar e fixar"), tr("Mostrar todas"),
+             tr("Ocultar todas"), tr("Fechar todas"), tr("Desligar \"atravessar cliques\""), tr("Reabrir a última fechada"),
+             tr("Histórico")];
+    let has = pins::count() > 0;
+    let hist = pins::history_files();
+    let when: Vec<String> = hist
+        .iter()
+        .take(10)
+        .map(|f| {
+            let ft = std::fs::metadata(f)
+                .and_then(|m| m.modified())
+                .ok()
+                .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
+                .map(|d| (d.as_nanos() / 100) as u64 + 116_444_736_000_000_000)
+                .unwrap_or(0);
+            engine::local_time(ft)
+        })
+        .collect();
+    let on = |id: u32, i: usize, en: bool| if en { Cmd(id, &t[i]) } else { Disabled(&t[i]) };
+    let mut items = vec![Cmd(id::PIN_CLIPBOARD, &t[0]), Cmd(id::PIN_FILE, &t[1]), Cmd(id::CAPTURE_PIN, &t[2]), Separator,
+                         on(id::PINS_SHOW, 3, has), on(id::PINS_HIDE, 4, has), on(id::PINS_CLOSE, 5, has),
+                         on(id::PINS_CLICKTHROUGH, 6, has), on(id::PINS_REOPEN, 7, !hist.is_empty())];
+    if !when.is_empty() {
+        let h = tray::Menu::new(when.iter().enumerate().map(|(i, w)| Cmd(id::PIN_HISTORY_BASE + i as u32, w)).collect());
+        items.push(Sub(&t[8], h));
+    }
+    tray::Menu::new(items)
+}
+
+/// SetOneClick: the panel and its setting.
+fn set_one_click(on: bool) {
+    reg::set_dword(OsStr::new("OneClickEnabled"), on as u32, None);
+    oneclick::show(on);
 }
 
 fn shell_open(path: &str) {
@@ -524,6 +668,10 @@ impl App for CaptureApp {
         unsafe {
             let _ = AddClipboardFormatListener(HWND(self.hwnd as _));
             self.last_clip_seq = windows::Win32::System::DataExchange::GetClipboardSequenceNumber();
+        }
+        pins::init(ctl.waker());
+        if reg::get_dword(OsStr::new("OneClickEnabled"), 0, None) != 0 {
+            oneclick::show(true);
         }
         let waker = ctl.waker();
         self.ipc = Notify::start(Channel::Capture, move |m| waker.send(Ev::Ipc(m)));
@@ -598,6 +746,32 @@ impl App for CaptureApp {
             Ok(ev) => {
                 match *ev {
                     Ev::Ipc(m) => self.on_ipc(ctl, m),
+                }
+                return;
+            }
+            Err(ev) => ev,
+        };
+        let ev = match ev.downcast::<pins::UiEv>() {
+            Ok(ev) => {
+                match *ev {
+                    pins::UiEv::Notify(t, x) => self.notify(&t, &x),
+                    pins::UiEv::Qr(img) => qr::show(img),
+                    pins::UiEv::Editor(path) => {
+                        if let Some(i) = &self.ipc {
+                            i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
+                        }
+                        engine::deliver_to_editor(&env!(self), &path);
+                    }
+                    pins::UiEv::LibraryChanged => {
+                        if let Some(i) = &self.ipc {
+                            i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
+                        }
+                    }
+                    pins::UiEv::Capture => self.start_capture(ctl, &self.current()),
+                    pins::UiEv::OneClickMenu(x, y) => {
+                        self.one_click_menu(x, y);
+                        oneclick::menu_closed();
+                    }
                 }
                 return;
             }

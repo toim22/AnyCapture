@@ -194,6 +194,19 @@ pub fn get_image() -> Option<Image> {
     out
 }
 
+/// The Unicode text on the clipboard (empty when there is none).
+pub fn get_text() -> String {
+    if !open(0, 10, 30) {
+        return String::new();
+    }
+    let bytes = unsafe { data(CF_UNICODETEXT.0 as u32) }.unwrap_or_default();
+    unsafe {
+        let _ = CloseClipboard();
+    }
+    let w: Vec<u16> = bytes.chunks_exact(2).map(|c| u16::from_le_bytes([c[0], c[1]])).take_while(|&c| c != 0).collect();
+    String::from_utf16_lossy(&w)
+}
+
 /// CopyText
 pub fn copy_text(owner: isize, text: &str) -> bool {
     if !open(owner, 10, 30) {

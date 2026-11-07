@@ -56,6 +56,7 @@ pub mod pdf;
 pub mod presets;
 pub mod panorama;
 pub mod recorder;
+pub mod webcam;
 pub mod reg;
 pub mod render;
 pub mod screen;

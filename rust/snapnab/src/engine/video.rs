@@ -170,8 +170,13 @@ impl Engine {
         v.view = View::default();
         (v.view.mic_on, v.view.sys_on, v.view.audio_only) = (p.microphone, p.system_audio, p.audio_only);
         (v.view.mic_volume, v.view.sys_volume, v.view.auto_gain) = (p.mic_volume, p.sys_volume, p.auto_gain);
-        if p.webcam {
-            log::write("CaptureEngine: the webcam is not in the Rust app yet");
+        if p.webcam && !p.audio_only {
+            let st = crate::camwin::Style { shape: p.webcam_shape.clamp(0, 4), chroma: p.chroma_key, key: p.chroma_color,
+                                            tolerance: p.chroma_tolerance };
+            match crate::camwin::start(&p.webcam_device, area, st) {
+                Ok(()) => (v.view.cam_available, v.view.cam_on) = (true, true),
+                Err(e) => env.notify(&tr("Snapnab — webcam"), &e),
+            }
         }
         v.rec.set_mic_volume(p.mic_volume);
         v.rec.set_sys_volume(p.sys_volume);
@@ -264,6 +269,7 @@ impl Engine {
         }
         rawwin::destroy(&mut v.border);
         v.view.volume_open = false;
+        crate::camwin::stop();
     }
 
     fn start_recording(&mut self, ctl: &mut Ctl, env: &Env) {
@@ -489,8 +495,9 @@ impl Engine {
                 i.send_int(ipc::Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
             }
             let overlay = mode == 1 || mode == 2;
-            if overlay {
-                log::write("Output: the quick access overlay is not in the Rust app yet");
+            if overlay && !first.is_empty() {
+                let name = std::path::Path::new(&path).file_name().map(|f| f.to_string_lossy().into_owned()).unwrap_or_default();
+                crate::quick::show(&first, &path, true, &name);
             }
             if self.preset.preview_in_editor && (mode == 0 || mode == 2) {
                 super::deliver_to_editor(env, &path);
@@ -628,7 +635,10 @@ impl Engine {
                             self.video.rec.set_sys_muted(!self.video.rec.sys_muted());
                         }
                     }
-                    Btn::Cam => self.video.view.cam_on = !self.video.view.cam_on,
+                    Btn::Cam => {
+                        self.video.view.cam_on = !self.video.view.cam_on;
+                        crate::camwin::set_visible(self.video.view.cam_on);
+                    }
                     Btn::Snapshot if !idle => self.snapshot(env),
                     Btn::Volume => self.toggle_volume(ctl),
                     Btn::Zoom if !idle => self.video_toggle_zoom(),

@@ -129,7 +129,7 @@ fn after_capture_mode() -> u32 {
 }
 
 /// DefaultSaveDir: Options › Output folder, or Pictures\Snapnab.
-fn default_save_dir() -> String {
+pub(crate) fn default_save_dir() -> String {
     if let Some(d) = reg::get_string(OsStr::new("OutputFolder"), None).filter(|d| !d.is_empty()) {
         return d.to_string_lossy().into_owned();
     }
@@ -148,7 +148,7 @@ fn save_image(path: &str, img: &Image) -> bool {
                      VERSION)
 }
 
-fn message_box(text: String, title: String) {
+pub(crate) fn message_box(text: String, title: String) {
     std::thread::spawn(move || unsafe {
         let (t, c) = (to_wide(&text), to_wide(&title));
         MessageBoxW(None, PCWSTR(t.as_ptr()), PCWSTR(c.as_ptr()), MB_ICONWARNING);
@@ -170,6 +170,8 @@ fn child_at(top: isize, x: i32, y: i32) -> Option<(isize, Rect)> {
 }
 
 pub struct Engine {
+    /// where the last capture was on the screen (a pinned capture opens there)
+    origin: Option<(i32, i32)>,
     state: State,
     since: Instant,
     preset: Preset,
@@ -189,6 +191,7 @@ pub struct Engine {
 impl Engine {
     pub fn new() -> Engine {
         Engine {
+            origin: None,
             state: State::Idle,
             since: Instant::now(),
             preset: Preset::default(),
@@ -671,6 +674,7 @@ impl Engine {
     /// InputCaptured: the preset's effects, the cursor as an object, then the outputs.
     fn input_captured(&mut self, ctl: &mut Ctl, env: &Env, mut img: Image, info: CaptureInfo, origin: Option<(i32, i32)>) {
         self.set_state(State::HaveInput);
+        self.origin = origin;
         let o = origin.unwrap_or((0, 0));
         if !matches!(self.preset.selection, Selection::Clipboard | Selection::File) {
             sounds::play_capture_sound(); // C31
@@ -783,7 +787,14 @@ impl Engine {
                 log::write(&format!("Output: failed to save {}", p.output_path));
             }
         }
-        for (on, what) in [(p.read_qr, "QR reading"), (p.pin_to_screen, "pinning"), (p.office >= 0, "Office"), (p.upload, "upload")] {
+        if p.read_qr {
+            crate::qr::show(img.clone());
+        }
+        if p.pin_to_screen {
+            let t = if info.window_title.is_empty() { text(&info.mode) } else { text(&info.window_title) };
+            crate::pins::pin(img.clone(), &t, self.origin.take());
+        }
+        for (on, what) in [(p.office >= 0, "Office"), (p.upload, "upload")] {
             if on {
                 log::write(&format!("Output: {what} is not in the Rust app yet"));
             }
@@ -816,15 +827,18 @@ impl Engine {
         if let Some(i) = env.ipc {
             i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
         }
-        // after the capture: the Editor (as the preset says), or the balloon; the quick access overlay comes later
+        // after the capture: the Editor (as the preset says), the quick access overlay (C08) instead of it, both, or
+        // neither (only the clipboard, with the balloon below)
         let other = p.grab_text || p.read_qr || p.pin_to_screen; // outputs that are already the feedback
         let editor = mode == 0 || mode == 2;
-        if mode == 1 || mode == 2 {
-            log::write("Output: the quick access overlay is not in the Rust app yet");
+        let overlay = mode == 1 || mode == 2;
+        if overlay && !other && let Some(l) = &lib {
+            let title = if info.window_title.is_empty() { text(&info.mode) } else { text(&info.window_title) };
+            crate::quick::show(img, l, false, &title);
         }
         match lib {
             Some(lib) if p.preview_in_editor && editor && !p.output_clipboard_only => deliver_to_editor(env, &lib),
-            _ if other => {}
+            _ if other || overlay => {}
             _ => {
                 let mut t = tr("Captura adicionada à biblioteca");
                 for d in &done {
@@ -990,7 +1004,7 @@ fn capture_windows_as_objects(area: Rect, screen_img: &Image) -> Option<Layers> 
 }
 
 /// "dd/mm hh:mm" of a FILETIME in local time.
-fn local_time(ft: u64) -> String {
+pub(crate) fn local_time(ft: u64) -> String {
     use windows::Win32::Foundation::{FILETIME, SYSTEMTIME};
     use windows::Win32::System::Time::{FileTimeToSystemTime, SystemTimeToTzSpecificLocalTime};
     let f = FILETIME { dwLowDateTime: ft as u32, dwHighDateTime: (ft >> 32) as u32 };
@@ -1003,7 +1017,7 @@ fn local_time(ft: u64) -> String {
 }
 
 /// The Open dialog for an image (ImageOpenFilter).
-fn open_file_dialog(title: &str) -> Option<String> {
+pub(crate) fn open_file_dialog(title: &str) -> Option<String> {
     use windows::Win32::UI::Controls::Dialogs::{GetOpenFileNameW, OFN_FILEMUSTEXIST, OFN_PATHMUSTEXIST, OPENFILENAMEW};
     let filter: Vec<u16> = tr("Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|")
         .encode_utf16()
