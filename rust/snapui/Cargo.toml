@@ -18,7 +18,16 @@ winit = { version = "0.30.13", default-features = false, features = ["rwh_06"] }
 
 [dependencies.windows]
 version = "0.62.2"
-features = ["Win32_Foundation", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"]
+features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_UI_Controls",
+    "Win32_UI_Controls_Dialogs",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+]
 
 [dev-dependencies]
 egui_kittest = { version = "0.37", features = ["wgpu", "snapshot"] }

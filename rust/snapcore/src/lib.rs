@@ -62,6 +62,7 @@ pub mod reg;
 pub mod render;
 pub mod screen;
 pub mod serial;
+pub mod settings;
 pub mod snap;
 pub mod sounds;
 pub mod stamps;

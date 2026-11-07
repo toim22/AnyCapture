@@ -31,8 +31,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   dot on the tray icon), the clean desktop during captures, the automatic library cleanup, the tray's *Open the
   Editor after capturing* switch and the whole automation command line (`/region`, `/window`, `/monitor`,
   `/fullscreen`, `/delay`, `/ocr`, `/qr`, `/upload`, `/pin`, `/output`, `/colorpicker`, `/focus`, `/interval`), and
-  the upload and Word, PowerPoint, Excel and OneNote outputs. The Options and Presets dialogs are still missing; it
-  is not shipped.
+  the upload and Word, PowerPoint, Excel and OneNote outputs. The capture window is drawn in egui too (menus, the
+  Image and Video tabs, selection, effects, share, quality and webcam boxes with their gears, switches, delay, the
+  capture button and the preset list), with Options, the preset forms (new, rename, duplicate, delete, hotkey),
+  presets and settings export and import (replace or merge, with the restart of both programs), the effect settings,
+  the output and fixed region forms, the video options and the upload destinations. Its controls are found by UI
+  Automation under the names of the former Win32 controls. It is not shipped.
 
 ## [0.4.1] — 2026-11-03
 

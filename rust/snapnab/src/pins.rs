@@ -66,6 +66,14 @@ pub enum UiEv {
     IntervalArea(snapcore::image::Rect, isize),
     /// the interval capture runs (and how many images so far)
     IntervalStatus(bool, i32),
+    /// a change of the presets from a form (run on the app's thread, then saved and the hotkeys registered again)
+    Store(crate::dialogs::StoreEdit),
+    /// a preset's hotkey chosen in its form: index, modifiers, virtual key
+    PresetHotkey(usize, u32, u32),
+    /// Options saved: the hotkeys and settings are read again, and the Editor told (RELOAD_CONFIG)
+    Reload,
+    /// the language changed: Snapnab and the Editor restart
+    RestartApps,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

@@ -6,8 +6,9 @@
 
 mod camwin;
 mod desk;
+mod dialogs;
 mod engine;
-mod form;
+use snapui::form;
 mod hotkeys;
 mod interval;
 mod oneclick;
@@ -17,6 +18,7 @@ mod quick;
 mod share;
 mod rawwin;
 mod tray;
+mod upload_ui;
 
 use std::ffi::OsStr;
 use std::sync::atomic::{AtomicU32, Ordering};
@@ -44,60 +46,7 @@ use windows::core::{PCWSTR, w};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-/// Command IDs, numbered as in the C++ app (the e2e suite posts them as WM_COMMAND).
-#[allow(dead_code)]
-mod id {
-    pub const EXIT: u32 = 1000;
-    pub const OPEN_EDITOR: u32 = 1001;
-    pub const CAPTURE_IMAGE: u32 = 1002;
-    pub const CAPTURE_VIDEO: u32 = 1003;
-    pub const CAPTURE_CLIPBOARD: u32 = 1004;
-    pub const CAPTURE_FILE: u32 = 1005;
-    pub const REPEAT: u32 = 1006;
-    pub const OPTIONS: u32 = 1007;
-    pub const PRESET_IMPORT: u32 = 1008;
-    pub const PRESET_EXPORT: u32 = 1009;
-    pub const ABOUT: u32 = 1010;
-    pub const LIBRARY_FOLDER: u32 = 1011;
-    pub const LOGS: u32 = 1012;
-    pub const SHOW: u32 = 1013;
-    pub const ONECLICK: u32 = 1014;
-    pub const SHOW_PRESETS: u32 = 1015;
-    pub const PRESET_FROM_CURRENT: u32 = 1016;
-    pub const PRESET_NEW: u32 = 1017;
-    pub const PRESET_HELP: u32 = 1018;
-    pub const PRESET_RUN: u32 = 1019;
-    pub const PRESET_RENAME: u32 = 1020;
-    pub const PRESET_DUP: u32 = 1021;
-    pub const PRESET_HOTKEY: u32 = 1022;
-    pub const PRESET_DEL: u32 = 1023;
-    pub const SETTINGS_EXPORT: u32 = 1024;
-    pub const SETTINGS_IMPORT: u32 = 1025;
-    pub const SETTINGS_BACKUPS: u32 = 1026;
-    pub const MANUAL: u32 = 1027;
-    pub const COLOR_PICKER: u32 = 1028;
-    pub const PIN_CLIPBOARD: u32 = 1029;
-    pub const PIN_FILE: u32 = 1030;
-    pub const PINS_SHOW: u32 = 1031;
-    pub const PINS_HIDE: u32 = 1032;
-    pub const PINS_CLOSE: u32 = 1033;
-    pub const PINS_REOPEN: u32 = 1034;
-    pub const PINS_CLICKTHROUGH: u32 = 1035;
-    pub const INTERVAL: u32 = 1036;
-    pub const FOCUS: u32 = 1037;
-    pub const QR_REGION: u32 = 1038;
-    pub const UPLOAD_SETTINGS: u32 = 1039;
-    pub const CAPTURE_PIN: u32 = 1040;
-    pub const CLEANUP_NOW: u32 = 1041;
-    pub const RECORD_AUDIO: u32 = 1042;
-    pub const AUDIO_FOLDER: u32 = 1043;
-    pub const AFTER_EDITOR: u32 = 1044;
-    pub const PIN_HISTORY_BASE: u32 = 1500;
-    pub const PRESET_BASE: u32 = 2000;
-    // control IDs of the C++ window that are also commands
-    pub const IDC_CAPTURE: u32 = 119;
-    pub const IDC_OPEN_EDITOR: u32 = 122;
-}
+use snapnab_app::id;
 
 const TRAY_CLICK_TIMER: usize = 0x5E1;
 /// the automatic library cleanup (C41): soon after the start, then every 6 h
@@ -138,6 +87,8 @@ struct CaptureApp {
     waker: Option<snapui::host::Waker>,
     /// the interval capture waiting for its region or window
     pending_interval: Option<interval::Settings>,
+    /// what the capture window shows besides the presets
+    view: window::View,
 }
 
 /// The engine's view of the app (disjoint fields: the engine itself stays borrowable).
@@ -197,6 +148,55 @@ impl CaptureApp {
         p.read_qr = t == cmdline::Tool::Qr;
         p.upload = t == cmdline::Tool::Upload;
         p
+    }
+
+    /// The presets changed (a form, a menu, an import): saved, the hotkeys registered again, the window redrawn.
+    fn presets_changed(&mut self, ctl: &mut Ctl) {
+        let n = self.store.presets.len() as i32;
+        self.store.selected = self.store.selected.clamp(0, (n - 1).max(0));
+        self.store.save();
+        self.register_hotkeys();
+        if let Some(m) = self.main {
+            ctl.repaint(m);
+        }
+    }
+
+    /// EditPresetHotkey (after its form): a key another Snapnab action uses is refused; one another program owns is
+    /// served by the keyboard hook, and the user is told.
+    fn set_preset_hotkey(&mut self, ctl: &mut Ctl, index: usize, mods: u32, vk: u32) {
+        let Some(p) = self.store.presets.get_mut(index) else { return };
+        let old = (p.hotkey_mods, p.hotkey_vk);
+        (p.hotkey_mods, p.hotkey_vk) = (mods, vk);
+        let r = match self.hk.as_mut() {
+            Some(hk) => hk.set(hotkeys::HK_PRESET_BASE + index as i32, mods, vk),
+            None => hotkeys::Result::Ok,
+        };
+        use windows::Win32::UI::WindowsAndMessaging::{MB_ICONINFORMATION, MB_ICONWARNING};
+        if r == hotkeys::Result::InternalConflict {
+            (p.hotkey_mods, p.hotkey_vk) = old;
+            dialogs::message_async(self.hwnd, tr("Esse atalho já está em uso por outra ação do Snapnab."), tr("Conflito de atalho"), MB_ICONWARNING);
+            return;
+        }
+        self.store.save(); // saved before the notice below (it waits for the user)
+        if let Some(m) = self.main {
+            ctl.repaint(m);
+        }
+        if r == hotkeys::Result::HookedFallback {
+            dialogs::message_async(self.hwnd, tr("Outro programa já usa esse atalho. O Snapnab vai interceptá-lo por um gancho de teclado."),
+                                   tr("Atalho"), MB_ICONINFORMATION);
+        }
+    }
+
+    /// RestartApps: the Editor restarts itself; this app starts a new copy that waits for it to end, then exits.
+    fn restart_apps(&mut self, ctl: &mut Ctl) {
+        let editor = unsafe { windows::Win32::UI::WindowsAndMessaging::FindWindowW(w!("SnapnabEditor"), PCWSTR::null()) }
+            .is_ok_and(|h| !h.0.is_null());
+        if editor && let Some(i) = &self.ipc {
+            i.send_int(Channel::Editor, ipc::code::RESTART_EDITOR, 0, true);
+        }
+        if instance::launch_sibling("Snapnab.exe", &instance::restart_args(), false) {
+            self.exit(ctl);
+        }
     }
 
     fn library_changed(&self) {
@@ -432,6 +432,48 @@ impl CaptureApp {
             id::LIBRARY_FOLDER => shell_open(&String::from_utf16_lossy(&snapcore::library::library_dir())),
             id::LOGS => shell_open(&snapcore::paths::logs_dir().to_string_lossy()),
             id::ABOUT => about(),
+            id::OPTIONS => dialogs::options(self.hwnd),
+            id::PRESET_NEW => dialogs::preset_new(self.hwnd, &self.store, &self.current()),
+            id::PRESET_FROM_CURRENT => dialogs::preset_from_current(self.hwnd, &self.current()),
+            id::PRESET_RENAME => dialogs::preset_rename(self.hwnd, self.store.selected.max(0) as usize, &self.current().name),
+            id::PRESET_DUP => {
+                dialogs::preset_duplicate(&mut self.store);
+                self.presets_changed(ctl);
+            }
+            id::PRESET_DEL => dialogs::preset_delete(self.hwnd, &self.store),
+            id::PRESET_HOTKEY => dialogs::preset_hotkey(self.hwnd, self.store.selected.max(0) as usize, &self.current()),
+            id::PRESET_HELP => dialogs::preset_help(self.hwnd),
+            id::PRESET_RUN => self.start_capture(ctl, &self.current()),
+            id::PRESET_EXPORT => dialogs::presets_export(self.hwnd, &self.store),
+            id::PRESET_IMPORT => dialogs::presets_import(self.hwnd),
+            id::SETTINGS_EXPORT => {
+                self.store.save();
+                dialogs::settings_export(self.hwnd);
+            }
+            id::SETTINGS_IMPORT => dialogs::settings_import(self.hwnd, &self.store),
+            id::SETTINGS_BACKUPS => {
+                let d = snapcore::settings::backup_dir();
+                let _ = std::fs::create_dir_all(&d);
+                shell_open(&d.to_string_lossy());
+            }
+            id::UPLOAD_SETTINGS => upload_ui::configure(self.hwnd),
+            id::IDC_TAB_IMAGE | id::IDC_TAB_VIDEO => {
+                let k = if cmd == id::IDC_TAB_VIDEO { CaptureKind::Video } else { CaptureKind::Image };
+                let i = self.store.selected.max(0) as usize;
+                if let Some(p) = self.store.presets.get_mut(i)
+                    && p.kind != k
+                {
+                    window::set_kind(p, k);
+                    self.presets_changed(ctl);
+                }
+            }
+            id::SHOW_PRESETS | id::IDC_PRESETS_LABEL => {
+                let open = reg::get_dword(OsStr::new("CapturePresetsOpen"), 0, None) == 0;
+                reg::set_dword(OsStr::new("CapturePresetsOpen"), open as u32, None);
+                if let Some(m) = self.main {
+                    ctl.repaint(m);
+                }
+            }
             id::ONECLICK => set_one_click(!oneclick::enabled()),
             id::COLOR_PICKER => desk::run_color_picker(),
             id::FOCUS => desk::focus_toggle(),
@@ -743,20 +785,77 @@ impl CaptureApp {
 
     /// The capture window (drawn by `window::draw`) and what its clicks ask for.
     fn main_ui(&mut self, ctl: &mut Ctl, ui: &mut egui::Ui) {
-        for a in window::draw(&mut self.store, ui) {
+        self.view.one_click = oneclick::enabled();
+        self.view.presets_open = reg::get_dword(OsStr::new("CapturePresetsOpen"), 0, None) != 0;
+        let get = |n: &str, d: u32| hotkeys::unpack(reg::get_dword(OsStr::new(n), d, None));
+        let ((im, iv), (vm, vv)) = (get("ImageHotkey", hotkeys::pack(0, 0x2C)),
+                                    get("VideoHotkey", hotkeys::pack(windows::Win32::UI::Input::KeyboardAndMouse::MOD_SHIFT.0, 0x2C)));
+        (self.view.image_hotkey, self.view.video_hotkey) = (hotkeys::to_text(im, iv), hotkeys::to_text(vm, vv));
+        let actions = window::draw(&mut self.store, &mut self.view, &hotkeys::to_text, ui);
+        for a in actions {
+            let (hwnd, i) = (self.hwnd, self.store.selected.max(0) as usize);
             match a {
                 Action::Changed => {
                     self.store.save();
                     self.register_hotkeys();
                 }
+                Action::Command(c) => self.command(ctl, c),
                 Action::Capture => self.start_capture(ctl, &self.current()),
-                Action::OpenEditor => self.open_editor(),
-                Action::LibraryFolder => self.command(ctl, id::LIBRARY_FOLDER),
-                Action::Logs => self.command(ctl, id::LOGS),
-                Action::About => about(),
-                Action::Exit => self.exit(ctl),
+                Action::EditFx(k) => dialogs::edit_fx(hwnd, i, k, &self.current()),
+                Action::ShareChosen(s) => share_chosen(hwnd, s),
+                Action::ShareGear => match window::share_of(&self.current()) {
+                    window::Share::File => dialogs::file_output(hwnd, i, &self.current()),
+                    window::Share::Program => dialogs::program_output(hwnd, i, &self.current()),
+                    window::Share::Upload => upload_ui::configure(hwnd),
+                    window::Share::PowerPoint => dialogs::powerpoint_options(hwnd),
+                    _ => {}
+                },
+                Action::FixedRegion => dialogs::fixed_region(hwnd, i, &self.current()),
+                Action::VideoOptions => dialogs::video_options(hwnd, i, &self.current()),
+                Action::ChromaKey => dialogs::chroma_key(hwnd, i, &self.current()),
+                Action::ListCameras => {
+                    self.view.cams = snapcore::webcam::list_cameras().into_iter().map(|c| (c.name, c.link)).collect();
+                }
+                Action::PresetHotkey(i) => {
+                    if let Some(p) = self.store.presets.get(i) {
+                        dialogs::preset_hotkey(hwnd, i, p);
+                    }
+                }
+                Action::PresetsToggled => {}
             }
         }
+        self.fit_window(ctl);
+    }
+
+    /// ResizeToContent: the window grows with the preset list.
+    fn fit_window(&self, ctl: &Ctl) {
+        let mut v = self.view.clone();
+        v.presets_open = reg::get_dword(OsStr::new("CapturePresetsOpen"), 0, None) != 0;
+        let h = window::height(&self.store, &v);
+        if let Some(w) = self.main.and_then(|k| ctl.window(k)) {
+            let scale = w.scale_factor();
+            let cur = w.inner_size().to_logical::<f32>(scale);
+            if (cur.height - h).abs() > 1.0 || (cur.width - window::WIDTH).abs() > 1.0 {
+                let _ = w.request_inner_size(winit::dpi::LogicalSize::new(window::WIDTH, h));
+            }
+        }
+    }
+}
+
+/// A new output in the "Share" box: Office that is not installed is said; an upload not configured opens its settings.
+fn share_chosen(hwnd: isize, s: window::Share) {
+    use window::Share;
+    use windows::Win32::UI::WindowsAndMessaging::MB_ICONINFORMATION;
+    if (Share::Word as i32..=Share::OneNote as i32).contains(&(s as i32)) {
+        if let Some(t) = snapcore::office::Target::from_i32(s as i32 - Share::Word as i32)
+            && !snapcore::office::available(t)
+        {
+            dialogs::message_async(hwnd, tr("O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação).")
+                                       .replace("%s", t.name()), "Snapnab".into(), MB_ICONINFORMATION);
+        }
+    }
+    if s == Share::Upload && !snapcore::upload::Settings::load().configured() {
+        upload_ui::configure(hwnd);
     }
 }
 
@@ -842,7 +941,7 @@ fn set_one_click(on: bool) {
     oneclick::show(on);
 }
 
-fn shell_open(path: &str) {
+pub(crate) fn shell_open(path: &str) {
     let p = snapcore::wide::to_wide(path);
     unsafe {
         ShellExecuteW(None, w!("open"), PCWSTR(p.as_ptr()), PCWSTR::null(), PCWSTR::null(), SW_SHOWNORMAL);
@@ -866,7 +965,10 @@ impl App for CaptureApp {
         let spec = WindowSpec {
             class: ipc::CAPTURE_WND_CLASS,
             title: "Snapnab".into(),
-            size: (640.0, 330.0),
+            size: {
+                let v = window::View { presets_open: reg::get_dword(OsStr::new("CapturePresetsOpen"), 0, None) != 0, ..Default::default() };
+                (window::WIDTH, window::height(&self.store, &v))
+            },
             visible: false,
             resizable: false,
             intercept: Some(intercept),
@@ -1040,6 +1142,18 @@ impl App for CaptureApp {
                         self.one_click_menu(x, y);
                         oneclick::menu_closed();
                     }
+                    pins::UiEv::Store(f) => {
+                        f(&mut self.store);
+                        self.presets_changed(ctl);
+                    }
+                    pins::UiEv::PresetHotkey(i, m, v) => self.set_preset_hotkey(ctl, i, m, v),
+                    pins::UiEv::Reload => {
+                        self.register_hotkeys();
+                        if let Some(i) = &self.ipc {
+                            i.send_int(Channel::Editor, ipc::code::RELOAD_CONFIG, 0, false);
+                        }
+                    }
+                    pins::UiEv::RestartApps => self.restart_apps(ctl),
                 }
                 return;
             }
@@ -1102,6 +1216,7 @@ fn main() {
         last: None,
         video_keys: false,
         pending_interval: None,
+        view: Default::default(),
         waker: None,
     };
     if let Err(e) = snapui::host::run(app, |_| {}) {
@@ -1109,4 +1224,9 @@ fn main() {
     }
     log::write("Snapnab exited");
     drop(mutex);
+}
+
+/// The name of effect k (translated where it is shown).
+pub(crate) fn window_fx_name(k: usize) -> &'static str {
+    window::FX_NAMES[k.min(window::FX_NAMES.len() - 1)]
 }

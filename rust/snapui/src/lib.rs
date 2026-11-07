@@ -8,6 +8,7 @@ use std::sync::{Arc, OnceLock};
 
 use egui::{FontData, FontDefinitions, FontFamily};
 
+pub mod form;
 pub mod host;
 pub mod icons;
 
