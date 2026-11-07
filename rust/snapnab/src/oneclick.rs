@@ -21,7 +21,14 @@ use windows::Win32::UI::WindowsAndMessaging::{
     WM_DISPLAYCHANGE, WM_DPICHANGED, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEACTIVATE, WM_MOUSEMOVE, WM_TIMER, WNDCLASSW,
     WS_EX_LAYERED, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP,
 };
-use windows::core::w;
+use windows::Win32::UI::Controls::{
+    TOOLTIPS_CLASSW, TTF_ABSOLUTE, TTF_TRACK, TTM_ADDTOOLW, TTM_TRACKACTIVATE, TTM_TRACKPOSITION, TTS_ALWAYSTIP, TTS_NOPREFIX,
+    TTTOOLINFOW,
+};
+use windows::Win32::UI::WindowsAndMessaging::{SendMessageW, WINDOW_STYLE};
+use windows::core::{PCWSTR, PWSTR, w};
+
+use snapnab_app::tr;
 
 use crate::pins::{UiEv, send};
 
@@ -54,6 +61,9 @@ struct State {
     win: RECT,
     panel_at: POINT,
     left_at: u64,
+    /// the "Start a capture" tooltip under the capture button
+    tip: isize,
+    tip_on: bool,
 }
 
 thread_local! {
@@ -261,6 +271,33 @@ impl State {
         if dirty {
             self.render();
         }
+        self.show_tip(self.hot == 1 && !self.down);
+    }
+
+    /// ShowTip: the tooltip next to the panel, on the side away from the edge.
+    fn show_tip(&mut self, on: bool) {
+        if self.tip == 0 || on == self.tip_on {
+            return;
+        }
+        self.tip_on = on;
+        let ti = TTTOOLINFOW { cbSize: std::mem::size_of::<TTTOOLINFOW>() as u32, hwnd: HWND(self.hwnd as _), uId: 1, ..Default::default() };
+        let tip = HWND(self.tip as _);
+        unsafe {
+            if on {
+                let dpi = self.dpi();
+                let r = self.win;
+                let (mut x, mut y) = (r.left + self.panel_at.x + self.panel_size(dpi).0 / 2, r.bottom + sc(4, dpi));
+                match self.edge {
+                    2 => y = r.top - sc(28, dpi),
+                    1 => (x, y) = (r.left - sc(120, dpi), (r.top + r.bottom) / 2),
+                    3 => (x, y) = (r.right + sc(4, dpi), (r.top + r.bottom) / 2),
+                    _ => {}
+                }
+                let xy = ((x as u32) & 0xFFFF) | (((y as u32) & 0xFFFF) << 16);
+                SendMessageW(tip, TTM_TRACKPOSITION, None, Some(LPARAM(xy as isize)));
+            }
+            SendMessageW(tip, TTM_TRACKACTIVATE, Some(WPARAM(on as usize)), Some(LPARAM(&ti as *const _ as isize)));
+        }
     }
 
     /// Snaps to the edge of the monitor nearest to where the panel was dropped.
@@ -317,6 +354,7 @@ unsafe extern "system" fn proc(hwnd: HWND, m: u32, wp: WPARAM, lp: LPARAM) -> LR
             let p = cursor();
             S.with(|s| {
                 let mut s = s.borrow_mut();
+                s.show_tip(false);
                 s.down = true;
                 s.pressed = s.hit(p).max(0);
                 s.drag_start = p;
@@ -425,6 +463,7 @@ pub fn show(on: bool) {
         let mut s = s.borrow_mut();
         s.enabled = on;
         if !on {
+            s.show_tip(false);
             if s.hwnd != 0 {
                 unsafe {
                     let _ = KillTimer(Some(HWND(s.hwnd as _)), TIMER);
@@ -454,6 +493,25 @@ pub fn show(on: bool) {
                 let _ = SetWindowDisplayAffinity(h, WDA_EXCLUDEFROMCAPTURE); // never in the captures
             }
             s.hwnd = h.0 as isize;
+            if let Ok(tip) = unsafe {
+                CreateWindowExW(WS_EX_TOPMOST, TOOLTIPS_CLASSW, PCWSTR::null(), WS_POPUP | WINDOW_STYLE(TTS_NOPREFIX | TTS_ALWAYSTIP), 0, 0, 0,
+                                0, Some(h), None, None, None)
+            } {
+                let text = snapcore::wide::to_wide(tr("Iniciar uma captura"));
+                let ti = TTTOOLINFOW {
+                    cbSize: std::mem::size_of::<TTTOOLINFOW>() as u32,
+                    uFlags: TTF_TRACK | TTF_ABSOLUTE,
+                    hwnd: h,
+                    uId: 1,
+                    lpszText: PWSTR(text.as_ptr() as *mut u16),
+                    ..Default::default()
+                };
+                unsafe {
+                    let _ = SetWindowDisplayAffinity(tip, WDA_EXCLUDEFROMCAPTURE);
+                    SendMessageW(tip, TTM_ADDTOOLW, None, Some(LPARAM(&ti as *const _ as isize)));
+                }
+                s.tip = tip.0 as isize;
+            }
         }
         let get = |n: &str, d: u32| reg::get_dword(OsStr::new(n), d, None);
         s.edge = (get("OneClickEdge", 0) as i32).clamp(0, 3);
@@ -482,6 +540,7 @@ pub fn set_busy(busy: bool) {
             return;
         }
         if busy {
+            s.show_tip(false);
             unsafe {
                 let _ = ShowWindow(HWND(s.hwnd as _), SW_HIDE);
             }

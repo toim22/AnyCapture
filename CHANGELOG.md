@@ -6,43 +6,25 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ## [Unreleased]
 
 ### Changed
-- The `.snap` container (the compound file inside each capture) is read and written by Rust code
-  (`rust/snapcore`, pilot of the Rust migration), so a damaged or hostile file is parsed by memory-safe code. Same file
-  format: captures saved by earlier versions open as before and older versions open the new ones. Building needs Rust
-  (or `-DSNAPNAB_RUST=OFF`).
+- **Snapnab is now written in Rust.** Both programs, `Snapnab.exe` (capture) and `SnapnabEditor.exe` (Editor), and
+  `SnapEx64.dll` were rewritten in Rust; the interface is drawn with egui on the GPU (wgpu) and stays accessible to
+  screen readers and UI Automation (AccessKit), with the controls under the names of the former Win32 controls. The C++
+  code is gone. Same features, same files: captures, presets, settings, the library and the `.snap` documents written
+  by earlier versions open as before, and the same command line, hotkeys and window classes work as before. The move
+  went one part at a time behind the unchanged end-to-end suite, and the parts that compute something (effects,
+  Beautify, the Editor's drawings, the `.snap` and clipboard XML, WebP, PDF, OCR, the network layer, presets) are
+  checked against what the C++ code gave for the same input.
+- A damaged or hostile `.snap`, image or upload response is now parsed by memory-safe code.
 - QR codes and barcodes are read by rxing, a Rust port of ZXing, instead of ZXing-C++; several codes in one picture
   are listed top to bottom.
-- The uploads, the sign-in to Dropbox, Google Drive and OneDrive and the AI assistant's requests run in Rust. The
-  `{regex:…}` of a custom uploader (.sxcu) uses Rust's regular expressions: no look-around or backreferences.
-- The Editor's objects (arrows, shapes, texts, callouts, steps, stamps, magnifiers, hide areas, shadows) are drawn by
-  Rust code, pixel for pixel as before; their saving and opening in the .snap, copy and paste between images and
-  clicking on them run in Rust too, reading and writing the same files.
-- Work in progress on the `rust-rewrite` branch: a new capture app (`Snapnab.exe`) in Rust with an egui interface
-  drawn on the GPU. It already starts in the tray, keeps one instance, takes the forwarded command line, talks to the
-  Editor and reads and writes the same presets file. It now captures images too: the selection of a region, window
-  or object, fixed size, freehand and several areas, full screen, monitor, clipboard and file, with the capture effects
-  and the library, clipboard, file and program outputs, started by the tray, the window, the command line or the
-  hotkeys. It records video too: the HUD over the area with pause, restart, cancel, the snapshot, the microphone,
-  system audio and volume controls, the countdown, the cursor and click overlays and the recording hotkeys, and audio
-  only recordings. The scrolling window, extended window and panoramic captures work too, with SnapEx64.dll
-  rewritten in Rust. The webcam bubble in recordings, pinned images (from a capture, a file or the clipboard, with
-  zoom, opacity, quick annotation and the history), the QR code results, the quick access overlay after a capture
-  and the One Click panel are in too, with the screen color picker, the screen focus, the interval capture (the red
-  dot on the tray icon), the clean desktop during captures, the automatic library cleanup, the tray's *Open the
-  Editor after capturing* switch and the whole automation command line (`/region`, `/window`, `/monitor`,
-  `/fullscreen`, `/delay`, `/ocr`, `/qr`, `/upload`, `/pin`, `/output`, `/colorpicker`, `/focus`, `/interval`), and
-  the upload and Word, PowerPoint, Excel and OneNote outputs. The capture window is drawn in egui too (menus, the
-  Image and Video tabs, selection, effects, share, quality and webcam boxes with their gears, switches, delay, the
-  capture button and the preset list), with Options, the preset forms (new, rename, duplicate, delete, hotkey),
-  presets and settings export and import (replace or merge, with the restart of both programs), the effect settings,
-  the output and fixed region forms, the video options and the upload destinations. Its controls are found by UI
-  Automation under the names of the former Win32 controls. The Editor (`SnapnabEditor.exe`) is rewritten in
-  Rust and egui as well: the canvas with every drawing tool, the Properties, Effects and Layers panels, the toolbar
-  (automatic or customized), the recent captures tray and the library view, the menus and shortcuts, copy and paste
-  (objects, images, formatted text), Grab Text, the QR reader, Combine, Compare, Hide sensitive data, Remove
-  background, Split image, Beautify, the date stamp, the contrast checker, the AI assistant, batch processing,
-  printing, e-mail, the Office and upload outputs, pinning, and the video view (playback with sound, cuts, MP4 and GIF
-  export, frame to image). It is not shipped.
+- The `{regex:…}` of a custom uploader (.sxcu) uses Rust's regular expressions: no look-around or backreferences.
+- Building needs Rust (the MSVC toolchain) and the Visual Studio build tools instead of CMake: `build.bat` runs
+  `cargo build` and packages `dist\` as before. The C runtime is linked statically, so the programs need no Visual C++
+  redistributable.
+
+### Added
+- `SnapnabTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
+  and for debugging.
 
 ## [0.4.1] — 2026-11-03
 

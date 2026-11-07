@@ -18,14 +18,19 @@ pub fn load_image(path: &str) -> Option<Image> {
     codec::load(Path::new(path)).ok()
 }
 
+/// Why an image file could not be opened (the codec to install, an invalid WebP…), or "".
+pub fn load_error(path: &str) -> String {
+    match codec::load(Path::new(path)) {
+        Ok(_) => String::new(),
+        Err(e) => e.text(Format::from_ext(&crate::doc::ext_of(path))),
+    }
+}
+
+/// Writes an image file; the error is why it failed ("" when there is nothing more to say).
 pub fn save_image(path: &str, img: &Image, jpeg_quality: i32) -> Result<(), String> {
     let ext = crate::doc::ext_of(path);
     let opt = SaveOptions { jpeg_quality, ..SaveOptions::from_settings() };
-    if codec::save_file(Path::new(path), img, Format::from_ext(&ext), &opt, crate::VERSION) {
-        Ok(())
-    } else {
-        Err(snapcore::tr!("Não foi possível salvar o arquivo."))
-    }
+    codec::save_file_why(Path::new(path), img, Format::from_ext(&ext), &opt, crate::VERSION)
 }
 
 pub fn save_pdf(path: &str, img: &Image, links: &[(snapcore::doc::RectF, String)]) -> Result<(), String> {

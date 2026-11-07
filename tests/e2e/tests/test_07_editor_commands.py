@@ -1,4 +1,4 @@
-"""Editor menus (src/editor/main.cpp): Image geometry and effects, object arrangement, clipboard, OCR, documents and
+"""Editor menus (rust/snapedit/src/app/commands.rs): Image geometry and effects, object arrangement, clipboard, OCR, documents and
 view commands. Results come from the saved .snap and from the composed image."""
 import pytest
 import win32con

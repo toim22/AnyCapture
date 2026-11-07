@@ -1,5 +1,5 @@
-//! snapcore — Snapnab's shared Rust layer, linked into both programs while the C++ code moves to Rust
-//! (docs/ARCHITECTURE.md). The C++ side reaches it through the C ABI in `ffi` (declared in include/snapcore.h).
+//! snapcore — Snapnab's shared Rust layer, used by both programs (Snapnab.exe and SnapnabEditor.exe) and by
+//! SnapnabTool.exe (docs/ARCHITECTURE.md).
 //!
 //! - `container`: the compound file inside every .snap
 //! - `log`: %LOCALAPPDATA%\Snapnab\Logs\<program>.log
@@ -39,6 +39,7 @@ pub mod container;
 pub mod crt;
 pub mod cv;
 pub mod doc;
+pub mod dragout;
 pub mod fx;
 pub mod gdip;
 pub mod gif;
@@ -48,6 +49,7 @@ pub mod image;
 pub mod instance;
 pub mod ipc;
 pub mod library;
+pub mod links;
 pub mod log;
 pub mod net;
 pub mod ocr;
@@ -71,8 +73,3 @@ pub mod video;
 pub mod wide;
 pub mod xml;
 
-mod ffi;
-mod ffi_doc;
-mod ffi_more;
-mod ffi_net;
-mod ffi_pixels;

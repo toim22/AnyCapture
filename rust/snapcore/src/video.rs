@@ -626,6 +626,71 @@ unsafe fn play(path: &str, from: i64, cuts: &[Interval], run: &AtomicBool) {
 }
 
 /// "mm:ss.ss"
+/// Reads only the audio track and reports it (the e2e suite checks that a recording has sound; the former
+/// `SnapnabTests.exe audio`): the samples, the end of the stream and the peak level.
+pub fn audio_report(path: &str) -> String {
+    use std::fmt::Write;
+    let _com = Com::mta();
+    let mut out = String::new();
+    unsafe {
+        if MFStartup(MF_VERSION, MFSTARTUP_FULL).is_err() {
+            return "MFStartup failed\n".into();
+        }
+        let wp = to_wide(path);
+        let rd = match MFCreateSourceReaderFromURL(PCWSTR(wp.as_ptr()), None) {
+            Ok(r) => {
+                out += "open 0x00000000\n";
+                r
+            }
+            Err(e) => {
+                let _ = writeln!(out, "open 0x{:08X}", e.code().0 as u32);
+                let _ = MFShutdown();
+                return out;
+            }
+        };
+        let _ = rd.SetStreamSelection(ALL_STREAMS, false);
+        let _ = rd.SetStreamSelection(FIRST_AUDIO, true);
+        if let Ok(mt) = MFCreateMediaType() {
+            let _ = mt.SetGUID(&MF_MT_MAJOR_TYPE, &MFMediaType_Audio);
+            let _ = mt.SetGUID(&MF_MT_SUBTYPE, &MFAudioFormat_PCM);
+            let _ = mt.SetUINT32(&MF_MT_AUDIO_BITS_PER_SAMPLE, 16);
+            let hr = rd.SetCurrentMediaType(FIRST_AUDIO, None, &mt).map_or_else(|e| e.code().0 as u32, |_| 0);
+            let _ = writeln!(out, "settype 0x{hr:08X}");
+        }
+        let mut peak = 0i32;
+        for i in 0..10000 {
+            let (mut flags, mut ts, mut s) = (0u32, 0i64, None);
+            if let Err(e) = rd.ReadSample(FIRST_AUDIO, 0, None, Some(&mut flags), Some(&mut ts), Some(&mut s)) {
+                let _ = writeln!(out, "sample {i} FAILED 0x{:08X}", e.code().0 as u32);
+                break;
+            }
+            if flags & EOS != 0 {
+                let _ = writeln!(out, "EOS after {i} samples, last ts {:.3}", ts as f64 / 1e7);
+                break;
+            }
+            if i < 3 || i % 50 == 0 {
+                let _ = writeln!(out, "sample {i} ts {:.3} flags {flags}", ts as f64 / 1e7);
+            }
+            if let Some(s) = s
+                && let Ok(b) = s.ConvertToContiguousBuffer()
+            {
+                let (mut p, mut len) = (std::ptr::null_mut::<u8>(), 0u32);
+                if b.Lock(&mut p, None, Some(&mut len)).is_ok() {
+                    let data = std::slice::from_raw_parts(p as *const u8, len as usize);
+                    for c in data.chunks_exact(2) {
+                        peak = peak.max((i16::from_le_bytes([c[0], c[1]]) as i32).abs());
+                    }
+                    let _ = b.Unlock();
+                }
+            }
+        }
+        let _ = writeln!(out, "audio peak: {peak} of 32767 ({:.1}%)", peak as f64 * 100.0 / 32767.0);
+        drop(rd);
+        let _ = MFShutdown();
+    }
+    out
+}
+
 pub fn fmt_time(t: i64) -> String {
     let s = t as f64 / HNS as f64;
     let m = (s / 60.0) as i32;

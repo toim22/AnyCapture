@@ -1112,6 +1112,8 @@ fn batch_dialog(owner: isize, files: Vec<String>, load: &dyn Fn(&str) -> Option<
             tr("Escolha a pasta de destino.")
         } else if std::fs::create_dir_all(&dir).is_err() {
             tr("Não foi possível criar a pasta de destino.")
+        } else if f[8].int() == 4 && !snapcore::codec::can_encode(snapcore::codec::Format::Avif) {
+            snapcore::codec::codec_hint(snapcore::codec::Format::Avif)
         } else {
             break dir;
         };

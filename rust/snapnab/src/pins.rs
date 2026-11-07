@@ -43,6 +43,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
     WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_EX_TRANSPARENT, WS_POPUP,
 };
 use windows::Win32::Foundation::SIZE;
+use windows::Win32::UI::WindowsAndMessaging::{GetSystemMetrics, SM_CXDRAG};
 use windows::core::{PCWSTR, w};
 
 use crate::tray::{Item, Menu};
@@ -51,6 +52,8 @@ use crate::tray::{Item, Menu};
 pub enum UiEv {
     Notify(String, String),
     Qr(Image),
+    /// upload a capture (the image, and its library file)
+    Upload(Image, String),
     /// a library file to open in the Editor
     Editor(String),
     LibraryChanged,
@@ -795,6 +798,19 @@ unsafe extern "system" fn pin_proc(hwnd: HWND, m: u32, wp: WPARAM, lp: LPARAM) -
                     }
                 }
                 p.refresh(true);
+            } else if p.drag == 3 {
+                let s = cursor();
+                if (s.x - p.down.x).abs() + (s.y - p.down.y).abs() > unsafe { GetSystemMetrics(SM_CXDRAG) } {
+                    p.drag = 0;
+                    unsafe {
+                        let _ = ReleaseCapture();
+                    }
+                    let name = if p.title.is_empty() { "Snapnab".to_string() } else { p.title.clone() };
+                    let img = p.composed.clone();
+                    if let Some(f) = snapcore::dragout::temp_image_file(&img, &name, false, crate::VERSION) {
+                        snapcore::dragout::drag_files_out(hw, &[f], Some(&img), true);
+                    }
+                }
             }
             LRESULT(0)
         }
@@ -851,6 +867,12 @@ unsafe extern "system" fn pin_proc(hwnd: HWND, m: u32, wp: WPARAM, lp: LPARAM) -
             p.down = cursor();
             let wr = p.window_rect();
             p.win_at_down = POINT { x: wr.left, y: wr.top };
+            if wp.0 & 0x0008 != 0 {
+                // MK_CONTROL — Ctrl+drag: the image goes out as a file
+                p.drag = 3;
+                unsafe { SetCapture(hwnd) };
+                return LRESULT(0);
+            }
             if !p.locked {
                 p.drag = 1;
                 unsafe { SetCapture(hwnd) };

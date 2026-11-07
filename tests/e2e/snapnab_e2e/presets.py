@@ -1,9 +1,9 @@
-"""Writes Presets1.xml with the presets a test needs (same format the program saves, src/capture/Presets.cpp)."""
+"""Writes Presets1.xml with the presets a test needs (same format the program saves, rust/snapcore/src/presets.rs)."""
 from xml.sax.saxutils import quoteattr
 
 from .config import DATA_DIR
 
-# Selection (src/capture/Presets.h)
+# Selection (rust/snapcore/src/presets.rs)
 SEL = {n: i for i, n in enumerate(["Region", "Window", "FullScreen", "Monitor", "FixedRegion", "Freehand", "MultiArea",
                                    "Object", "Scrolling", "ExtendedWindow", "Menu", "Clipboard", "File", "Panoramic"])}
 FILE_TYPES = {"png": 0, "jpg": 1, "bmp": 2, "gif": 3, "tif": 4}

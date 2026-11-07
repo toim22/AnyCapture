@@ -9,11 +9,18 @@ use snapcore::image::Image;
 use snapcore::serial::DocFile;
 
 /// One state of the document (what an undo step brings back); objects are shared until one is changed.
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct DocState {
     pub base: Arc<Image>,
     pub objs: Vec<Arc<DrawObj>>,
     pub next_step: i32,
+}
+
+impl Default for DocState {
+    /// the next Step object starts at 1, as in the C++ Document
+    fn default() -> Self {
+        DocState { base: Arc::default(), objs: Vec::new(), next_step: 1 }
+    }
 }
 
 #[derive(Default)]

@@ -24,6 +24,7 @@ use snapcore::library::{self, CaptureInfo};
 use snapcore::presets::{CaptureKind, Preset, Selection};
 use snapcore::wide::to_wide;
 use snapcore::xml::Node;
+use snapcore::links::{self, CapturedLink};
 use snapcore::{clip, cv, fx, gdip, hdr, i18n, instance, log, ocr, paths, reg, screen, sounds};
 use snapnab_app::select::{self, Mode, Outcome, Overlay, Selected, Setup, WinInfo};
 use snapnab_app::tr;
@@ -181,6 +182,8 @@ pub struct Engine {
     vs: Rect,
     /// the cursor kept apart (Options › cursor as an object, C25) and its screen position
     cursor: Option<(Image, (i32, i32))>,
+    /// the links of web pages and documents under the captured area (F32), in screen coordinates
+    links: Vec<CapturedLink>,
     overlay: Option<OverlayWin>,
     delay: Option<DelayWin>,
     texts: Vec<TextWin>,
@@ -201,6 +204,7 @@ impl Engine {
             frozen: Image::default(),
             vs: Rect::default(),
             cursor: None,
+            links: Vec::new(),
             overlay: None,
             delay: None,
             texts: Vec::new(),
@@ -393,12 +397,14 @@ impl Engine {
         self.pick_only = false;
         self.frozen = Image::default();
         self.cursor = None;
+        self.links.clear();
         self.set_state(State::Idle);
     }
 
     fn begin_input(&mut self, ctl: &mut Ctl, env: &Env) {
         self.set_state(State::InputSelecting);
         self.cursor = None;
+        self.links.clear();
         let p = self.preset.clone();
         let video = p.kind == CaptureKind::Video;
         self.vs = screen::virtual_screen();
@@ -448,11 +454,15 @@ impl Engine {
                 let r = if p.selection == Selection::FullScreen { self.vs } else { screen::monitor_rect(cx, cy, false) };
                 self.set_state(State::Capturing);
                 let img = self.freeze(r, p.capture_cursor);
+                let links = if p.capture_links { links::find_links(r, 900) } else { Vec::new() };
                 if p.window_objects {
                     // each window as a separate object over the desktop background (the outputs get the screen as it was)
                     let plain = self.freeze(r, false);
-                    if let Some(ly) = capture_windows_as_objects(r, &plain) {
+                    if let Some(mut ly) = capture_windows_as_objects(r, &plain) {
                         sounds::play_capture_sound();
+                        for l in &links {
+                            add_link(&mut ly.objects, l.rect.offset(-r.left, -r.top), &l.url);
+                        }
                         info.mode = wtext(&tr("Janelas como objetos"));
                         self.set_state(State::Outputting);
                         self.output(ctl, env, &img, &info, Some(ly));
@@ -460,6 +470,7 @@ impl Engine {
                         return;
                     }
                 }
+                self.links = links;
                 self.input_captured(ctl, env, img, info, Some((r.left, r.top)));
                 return;
             }
@@ -662,6 +673,10 @@ impl Engine {
             _ => {}
         }
         let local = s.rect.offset(-self.vs.left, -self.vs.top);
+        // links of web pages and documents under the captured area (found before the screen changes)
+        if p.capture_links {
+            self.links = links::find_links(s.rect, 900);
+        }
         let frozen = std::mem::take(&mut self.frozen);
         let img = match p.selection {
             Selection::Freehand => {
@@ -728,9 +743,24 @@ impl Engine {
         }
         let out = fx::apply_capture_effects(&img, &self.preset.effects); // the preset's effects (CEffectSettings*)
         self.set_state(State::Outputting);
+        // the links follow the image: scale and border move them; other effects that change the geometry drop them
+        let links = std::mem::take(&mut self.links);
+        let e = &self.preset.effects;
+        let mut objects = Node::new("Objects");
+        if !links.is_empty() && !e.trim && !e.rotate && !e.caption && !e.edge && !e.shadow {
+            let k = if e.scale { e.scale_percent as f64 / 100.0 } else { 1.0 };
+            let off = if e.border { e.border_width } else { 0 };
+            let at = |v: i32, o: i32| ((v - o) as f64 * k).round() as i32 + off;
+            for l in &links {
+                let a = Rect::new(at(l.rect.left, o.0), at(l.rect.top, o.1), at(l.rect.right, o.0), at(l.rect.bottom, o.1));
+                let vis = a.intersect(&Rect::new(0, 0, out.wi(), out.hi()));
+                if !vis.is_empty() {
+                    add_link(&mut objects, vis, &l.url);
+                }
+            }
+        }
         match cursor {
             Some((c, cp)) => {
-                let mut objects = Node::new("Objects");
                 objects
                     .add("Image")
                     .set("X1", cp.0.to_string())
@@ -745,6 +775,9 @@ impl Engine {
                 flat.blit(&c, cp.0, cp.1, true);
                 let embedded = BTreeMap::from([("Cursor.png".to_string(), c)]);
                 self.output(ctl, env, &flat, &info, Some(Layers { base: out, objects, embedded }));
+            }
+            None if !objects.children.is_empty() => {
+                self.output(ctl, env, &out, &info, Some(Layers { base: out.clone(), objects, embedded: BTreeMap::new() }))
             }
             None => self.output(ctl, env, &out, &info, None),
         }
@@ -988,6 +1021,17 @@ pub fn deliver_to_editor(env: &Env, path: &str) {
 
 /// CaptureWindowsAsObjects (F31): the desktop background with the taskbars, and each window as an image object (even
 /// the parts other windows cover), from the back to the front, named after its title.
+/// A `<Link>` object: a clickable area of the image with its URL.
+fn add_link(objects: &mut Node, r: Rect, url: &str) {
+    objects
+        .add("Link")
+        .set("X1", r.left.to_string())
+        .set("Y1", r.top.to_string())
+        .set("X2", r.right.to_string())
+        .set("Y2", r.bottom.to_string())
+        .set("Url", url);
+}
+
 fn capture_windows_as_objects(area: Rect, screen_img: &Image) -> Option<Layers> {
     let (wins, bars) = screen::windows_for_objects(area);
     if wins.is_empty() {

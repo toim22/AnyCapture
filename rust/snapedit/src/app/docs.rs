@@ -180,7 +180,9 @@ impl Editor {
         }
         let ext = ext_of(&path);
         let Some(d) = Document::load(&path) else {
-            self.warn(tr("Não foi possível abrir:\n") + &path);
+            // e.g. the HEIC/AVIF codec is not installed
+            let why = if ext == ".snap" { String::new() } else { files::load_error(&path) };
+            self.warn(tr("Não foi possível abrir:\n") + &path + &if why.is_empty() { String::new() } else { format!("\n\n{why}") });
             return false;
         };
         if ext != ".snap" && ext != ".mp4" {
@@ -277,6 +279,10 @@ impl Editor {
                     set_reg_root("WebPLossless", f[0].on() as u32);
                     set_reg_root("WebPQuality", f[1].int() as u32);
                 } else if ext == ".avif" {
+                    if !snapcore::codec::can_encode(snapcore::codec::Format::Avif) {
+                        native::message(owner, &snapcore::codec::avif_unavailable_text(), "Snapnab Editor", MB_ICONWARNING);
+                        return None;
+                    }
                     let mut f = vec![Field::Int { label: tr("Qualidade AVIF (1–100)"), value: reg_root("AvifQuality", 80) as i32, min: 1, max: 100 }];
                     if !form::run(owner, "AVIF", &mut f) {
                         return None;

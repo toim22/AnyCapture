@@ -955,7 +955,59 @@ impl Editor {
             }
             T::Batch(v) => self.run_batch(v),
             T::ShowLibrary(on) => self.show_library(on),
+            T::DragOut(paths, item) => self.drag_out(paths, &item),
         }
+    }
+
+    /// FilesForDrag: images go as PNG with the annotations (in %TEMP%\Snapnab, named after the capture's time),
+    /// videos as the library's MP4.
+    fn files_for_drag(&self, paths: &[String]) -> Vec<String> {
+        use std::os::windows::fs::MetadataExt;
+        let dir = std::env::temp_dir().join("Snapnab");
+        let _ = std::fs::create_dir_all(&dir);
+        let mut out: Vec<String> = Vec::new();
+        for p in paths {
+            if snapedit_app::doc::ext_of(p) == ".mp4" {
+                out.push(p.clone());
+                continue;
+            }
+            let Some((img, _)) = self.load_item_image(p) else { continue };
+            let ft = std::fs::metadata(p).map(|m| m.last_write_time()).unwrap_or(0);
+            let base = dir.join(format!("{}_{}", tr("Captura"), snapedit_app::tray::file_stamp(ft))).to_string_lossy().into_owned();
+            let mut f = format!("{base}.png");
+            let mut n = 2;
+            while out.contains(&f) {
+                f = format!("{base}_{n}.png");
+                n += 1;
+            }
+            if snapcore::codec::save_file(std::path::Path::new(&f), &img, snapcore::codec::Format::Png,
+                                          &snapcore::codec::SaveOptions::from_settings(), super::VERSION)
+            {
+                out.push(f);
+            }
+        }
+        out
+    }
+
+    /// LibraryTray::StartDrag: the items go to another program; a drop back onto the Editor itself is discarded.
+    fn drag_out(&mut self, paths: Vec<String>, item: &str) {
+        use windows::Win32::UI::Shell::{DragFinish, HDROP};
+        use windows::Win32::UI::WindowsAndMessaging::{MSG, PM_REMOVE, PeekMessageW, WM_DROPFILES};
+        let files = self.files_for_drag(&paths);
+        if files.is_empty() {
+            snapcore::log::write(&format!("Tray: nothing to drag ({} items)", paths.len()));
+            return;
+        }
+        let original = files.iter().any(|f| paths.contains(f));
+        let thumb = snapedit_app::files::load_thumbnail(item);
+        let effect = snapcore::dragout::drag_files_out(self.hwnd, &files, thumb.as_ref(), !original);
+        // dropping back onto the Editor's own window arrives as a WM_DROPFILES posted only after the drag ends:
+        // discard it here so a copy of the item is not imported
+        let mut m = MSG::default();
+        while unsafe { PeekMessageW(&mut m, None, WM_DROPFILES, WM_DROPFILES, PM_REMOVE) }.as_bool() {
+            unsafe { DragFinish(HDROP(m.wParam.0 as _)) };
+        }
+        snapcore::log::write(&format!("Tray: dragged {} file(s), effect {effect}", files.len()));
     }
 }
 

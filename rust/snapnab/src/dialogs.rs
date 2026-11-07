@@ -506,6 +506,10 @@ pub fn file_output(owner: isize, index: usize, p: &Preset) {
             return;
         }
         let (fmt, prefix, folder) = (FileFormat::from_index(f[0].int()), f[1].text().to_owned(), f[2].text().to_owned());
+        if fmt == FileFormat::Avif && !snapcore::codec::can_encode(snapcore::codec::Format::Avif) {
+            crate::engine::message_box(snapcore::codec::avif_unavailable_text(), "Snapnab".into());
+            return;
+        }
         edit(move |s| {
             if let Some(p) = s.presets.get_mut(index) {
                 (p.file_format, p.file_prefix, p.folder) = (fmt, prefix, folder);
@@ -626,8 +630,9 @@ pub fn chroma_key(owner: isize, index: usize, p: &Preset) {
     std::thread::spawn(move || {
         let mut f = [check(&tr("Remover o fundo da webcam"), p.chroma_key), Field::Color { label: tr("Cor do fundo"), color: p.chroma_color },
                      int(&tr("Tolerância (0–100)"), p.chroma_tolerance, 0, 100),
-                     Field::Label(tr("Use um fundo liso e bem iluminado (tela verde é o ideal)."))];
-        if !form::run(owner, &tr("Remover o fundo"), &mut f) {
+                     Field::Label(tr("Use um fundo liso e bem iluminado (tela verde é o ideal).")),
+                     Field::Label(tr("Com o fundo removido, a webcam aparece sem moldura."))];
+        if !form::run(owner, &tr("Remover o fundo (chroma key)"), &mut f) {
             return;
         }
         let (on, color, tol) = (f[0].on(), f[1].color(), f[2].int());

@@ -947,8 +947,10 @@ pub(crate) fn shell_open(path: &str) {
 }
 
 fn about() {
-    let text = format!("Snapnab {VERSION}{}\n\n{}\n{}", tr(" — captura de tela e gravação de vídeo"),
+    let text = format!("Snapnab {VERSION}{}\nCopyright © 2026 Antonio Rezende\n{}\n\n{}{}", tr(" — captura de tela e gravação de vídeo"),
                        tr("Software livre sob a GNU General Public License versão 3."),
+                       tr("Processo de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicando-se por memória\n\
+                           compartilhada (canal IPC) e WM_COPYDATA. Capturas ficam na biblioteca:\n"),
                        String::from_utf16_lossy(&snapcore::library::library_dir()));
     std::thread::spawn(move || unsafe {
         let t = snapcore::wide::to_wide(text);
@@ -1008,8 +1010,7 @@ impl App for CaptureApp {
         if !rec.is_empty() {
             let name = std::path::Path::new(&rec[0]).file_name().map(|f| f.to_string_lossy().into_owned()).unwrap_or_default();
             self.notify(&tr("Snapnab — gravação recuperada"),
-                        &(tr("%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca.
-").replace("%zu", &rec.len().to_string()) + &name));
+                        &(tr("%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca.").replace("%zu", &rec.len().to_string()) + "\n" + &name));
             if let Some(i) = &self.ipc {
                 i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
             }
@@ -1092,6 +1093,10 @@ impl App for CaptureApp {
                 match *ev {
                     pins::UiEv::Notify(t, x) => self.notify(&t, &x),
                     pins::UiEv::Qr(img) => qr::show(img),
+                    pins::UiEv::Upload(img, lib) => {
+                        let title = std::path::Path::new(&lib).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
+                        share::upload(self.hwnd, img, lib, title);
+                    }
                     pins::UiEv::Editor(path) => {
                         if let Some(i) = &self.ipc {
                             i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);

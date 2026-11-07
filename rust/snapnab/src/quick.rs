@@ -23,6 +23,7 @@ use windows::Win32::Graphics::GdiPlus::{FontStyleBold, SmoothingModeAntiAlias, S
 use windows::Win32::UI::Controls::WM_MOUSELEAVE;
 use windows::Win32::UI::HiDpi::GetDpiForWindow;
 use windows::Win32::UI::Input::KeyboardAndMouse::{ReleaseCapture, SetCapture, TME_LEAVE, TRACKMOUSEEVENT, TrackMouseEvent};
+use windows::Win32::UI::WindowsAndMessaging::{GetSystemMetrics, SM_CXDRAG, SM_CYDRAG};
 use windows::Win32::UI::WindowsAndMessaging::{
     CS_DROPSHADOW, CreateWindowExW, DefWindowProcW, DestroyWindow, GWLP_USERDATA, GetClientRect, GetWindowLongPtrW,
     HWND_TOPMOST, IDC_ARROW, IDC_HAND, LoadCursorW, MA_NOACTIVATE, RegisterClassW, SWP_NOACTIVATE, SWP_SHOWWINDOW, SetCursor,
@@ -70,6 +71,8 @@ struct Card {
     /// seconds until it closes (0 = never)
     left: i32,
     pressed: bool,
+    /// where the button went down (client coordinates)
+    down: POINT,
     thumb_r: RECT,
     btn: Vec<(RECT, Act)>,
 }
@@ -281,21 +284,29 @@ fn do_act(hc: isize, a: Act) {
 }
 
 fn context_menu(hc: isize, at: POINT) {
+    const COPY_AS: u32 = 1;
     const QR: u32 = 2;
+    const UPLOAD: u32 = 3;
     const CLOSE_ALL: u32 = 4;
     let c = unsafe { card(h(hc)) };
     if c.is_null() {
         return;
     }
     let video = unsafe { (*c).video };
+    let has_img = unsafe { !(*c).img.is_empty() };
+    let copy_as = tr("Copiar como…");
     let qr = tr("Ler código QR");
+    let up = tr("Enviar (upload) e copiar o link");
     let all = tr("Fechar todas");
     let names: Vec<String> = ACTS.iter().map(|&a| tip(a)).collect();
-    let mut items = Vec::new();
+    let mut items = vec![Item::Cmd(COPY_AS, &copy_as)];
     if !video {
         items.push(Item::Cmd(QR, &qr));
-        items.push(Item::Separator);
     }
+    if has_img {
+        items.push(Item::Cmd(UPLOAD, &up));
+    }
+    items.push(Item::Separator);
     for (i, a) in ACTS.iter().enumerate() {
         if !(video && *a == Act::Pin) {
             items.push(Item::Cmd(100 + i as u32, &names[i]));
@@ -308,7 +319,12 @@ fn context_menu(hc: isize, at: POINT) {
         return;
     }
     match id {
+        COPY_AS => {
+            let (img, file, title) = unsafe { ((*c).img.clone(), if (*c).video { (*c).lib.clone() } else { String::new() }, (*c).title.clone()) };
+            crate::share::copy_as_menu(hc, (at.x, at.y), &img, &file, &title);
+        }
         QR => send(UiEv::Qr(unsafe { (*c).img.clone() })),
+        UPLOAD => send(UiEv::Upload(unsafe { (*c).img.clone() }, unsafe { (*c).lib.clone() })),
         CLOSE_ALL => close_all(),
         i if (100..100 + ACTS.len() as u32).contains(&i) => do_act(hc, ACTS[(i - 100) as usize]),
         _ => {}
@@ -368,10 +384,29 @@ unsafe extern "system" fn card_proc(hwnd: HWND, m: u32, wp: WPARAM, lp: LPARAM) 
                     let _ = TrackMouseEvent(&mut t);
                 }
             }
-            let hot = hit(c, lp_point(lp));
+            let p = lp_point(lp);
+            let hot = hit(c, p);
             if hot != c.hot {
                 c.hot = hot;
                 invalidate(hc);
+            }
+            let (dx, dy) = unsafe { (GetSystemMetrics(SM_CXDRAG), GetSystemMetrics(SM_CYDRAG)) };
+            if c.pressed && in_rect(&c.thumb_r, c.down) && ((p.x - c.down.x).abs() > dx || (p.y - c.down.y).abs() > dy) {
+                c.pressed = false;
+                unsafe {
+                    let _ = ReleaseCapture();
+                }
+                // the capture goes into another program
+                let file = if c.video {
+                    Some(c.lib.clone())
+                } else {
+                    let name = if c.title.is_empty() { format!("Snapnab_{}", String::from_utf16_lossy(&library::time_stamp(false))) } else { c.title.clone() };
+                    snapcore::dragout::temp_image_file(&c.img, &name, false, crate::VERSION)
+                };
+                if let Some(f) = file.filter(|f| !f.is_empty()) {
+                    let (thumb, video) = (c.thumb.clone(), c.video);
+                    snapcore::dragout::drag_files_out(hwnd.0 as isize, &[f], Some(&thumb), !video);
+                }
             }
             LRESULT(0)
         }
@@ -383,6 +418,7 @@ unsafe extern "system" fn card_proc(hwnd: HWND, m: u32, wp: WPARAM, lp: LPARAM) 
         }
         WM_LBUTTONDOWN => {
             unsafe {
+                (*ptr).down = lp_point(lp);
                 (*ptr).pressed = true;
                 SetCapture(hwnd);
             }
@@ -486,6 +522,7 @@ pub fn show(img: &Image, lib: &str, video: bool, title: &str) {
         hot: None,
         left,
         pressed: false,
+        down: POINT::default(),
         thumb_r: RECT::default(),
         btn: Vec::new(),
     });

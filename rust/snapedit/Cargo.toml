@@ -1,6 +1,6 @@
 [package]
 name = "snapedit"
-version = "0.4.1"
+version.workspace = true
 description = "SnapnabEditor.exe, the image and video editor, in egui on top of snapcore and snapui"
 edition.workspace = true
 license.workspace = true
@@ -23,6 +23,9 @@ winit = { version = "0.30.13", default-features = false }
 
 [dev-dependencies]
 egui_kittest = { version = "0.37", features = ["wgpu", "snapshot"] }
+
+[build-dependencies]
+embed-resource = "3.0.12"
 
 [dependencies.windows]
 version = "0.62.2"

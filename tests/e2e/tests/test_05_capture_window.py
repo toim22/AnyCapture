@@ -1,4 +1,4 @@
-"""The capture window (src/capture/main.cpp): tabs, switches, combo boxes, the capture button, preset management,
+"""The capture window (rust/snapnab/src/window.rs): tabs, switches, combo boxes, the capture button, preset management,
 Options, preset and settings export/import, One Click, About and the folder shortcuts."""
 import re
 import time

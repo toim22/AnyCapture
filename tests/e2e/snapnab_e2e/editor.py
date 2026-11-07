@@ -1,6 +1,6 @@
 """Editor driver: opens a known image, draws on the canvas with the real mouse, saves and reads the result back.
 
-Oracles: the .snap written by File › Save (objects as XML through `SnapnabTests.exe dump`) and the composed image that
+Oracles: the .snap written by File › Save (objects as XML through `SnapnabTool.exe dump`) and the composed image that
 Copy all (Ctrl+Shift+C) puts on the clipboard (pixels)."""
 import time
 
@@ -10,7 +10,7 @@ from . import apps, library, regs, uia, win
 from .apps import EditorCmd as M
 from .library import LibraryWatcher
 
-KMARGIN = 40          # Canvas.cpp kMargin
+KMARGIN = 40          # canvas.rs MARGIN
 
 # the test picture: white, a blue block, a green block and dark text (OCR / magic wand / fill targets)
 W, H = 1600, 1000

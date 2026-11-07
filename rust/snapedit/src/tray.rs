@@ -30,6 +30,8 @@ pub enum TrayAction {
     Compare(Vec<String>),
     Batch(Vec<String>),
     ShowLibrary(bool),
+    /// dragging items to another program (TrayDragDrop): the paths and the item whose thumbnail follows the cursor
+    DragOut(Vec<String>, String),
 }
 
 pub struct LibraryTray {
@@ -73,6 +75,19 @@ pub fn item_date(ft: u64) -> String {
         let _ = SystemTimeToTzSpecificLocalTime(None, &st, &mut lt);
     }
     format!("{:02}/{:02} {:02}:{:02}", lt.wDay, lt.wMonth, lt.wHour, lt.wMinute)
+}
+
+/// "YYYY-MM-DD_HH-MM-SS" of a FILETIME, in local time (the names of the dragged captures).
+pub fn file_stamp(ft: u64) -> String {
+    use windows::Win32::Foundation::{FILETIME, SYSTEMTIME};
+    use windows::Win32::System::Time::{FileTimeToSystemTime, SystemTimeToTzSpecificLocalTime};
+    let f = FILETIME { dwLowDateTime: ft as u32, dwHighDateTime: (ft >> 32) as u32 };
+    let (mut st, mut lt) = (SYSTEMTIME::default(), SYSTEMTIME::default());
+    unsafe {
+        let _ = FileTimeToSystemTime(&f, &mut st);
+        let _ = SystemTimeToTzSpecificLocalTime(None, &st, &mut lt);
+    }
+    format!("{:04}-{:02}-{:02}_{:02}-{:02}-{:02}", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond)
 }
 
 impl LibraryTray {
@@ -214,8 +229,14 @@ impl LibraryTray {
 
     pub fn set_current(&mut self, path: &str) {
         self.current = path.to_owned();
-        self.add_recent(path);
+        // a capture that is not in the tray yet comes in at the front; one already there keeps its place, so going
+        // back to an older capture to copy or edit it does not make it look like the latest (issue #2)
+        if self.mode == Mode::Tray && !self.recent.iter().any(|r| eq(r, path)) {
+            self.add_recent(path);
+        }
         self.reload();
+        // opening an item leaves only it selected
+        self.selection = self.items.iter().map(p).filter(|x| eq(x, path)).collect();
     }
 
     pub fn invalidate_thumb(&mut self, path: &str) {
@@ -284,7 +305,7 @@ impl LibraryTray {
                 let sel = self.selection.iter().any(|s| eq(s, &path));
                 let cur = eq(&path, &self.current);
                 let t = self.thumb(&ctx, it);
-                let (r, resp) = ui.allocate_exact_size(cell, Sense::click());
+                let (r, resp) = ui.allocate_exact_size(cell, Sense::click_and_drag());
                 crate::panels::tag(ui, &resp, &format!("{name}.{i}"));
                 let fill = if sel { Color32::from_rgb(204, 228, 255) } else if resp.hovered() { Color32::from_gray(235) } else { Color32::TRANSPARENT };
                 ui.painter().rect_filled(r, 6.0, fill);
@@ -319,6 +340,10 @@ impl LibraryTray {
                 }
                 if resp.double_clicked() {
                     acts.push(TrayAction::Open(path.clone()));
+                }
+                if resp.drag_started() {
+                    let paths = if sel { self.selected_paths() } else { vec![path.clone()] };
+                    acts.push(TrayAction::DragOut(paths, path.clone()));
                 }
                 if resp.secondary_clicked() && !sel {
                     self.selection = vec![path.clone()];

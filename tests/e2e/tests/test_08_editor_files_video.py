@@ -10,7 +10,7 @@ from snapnab_e2e.apps import EditorCmd as M
 from snapnab_e2e.editor import BLUE, EditorSession, close, make_picture
 from snapnab_e2e.library import LibraryWatcher
 
-# VideoView buttons (src/editor/Video.cpp)
+# video view buttons (rust/snapedit/src/app/video.rs)
 # the video view's buttons: WM_COMMAND to the Editor's main window (the view is drawn inside it)
 B_PLAY, B_PREV, B_NEXT, B_MARKIN, B_MARKOUT, B_CUT, B_UNDOCUT, B_SAVEMP4, B_SAVEFRAME, B_GIF, B_PLAYER = range(2001, 2012)
 

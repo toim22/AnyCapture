@@ -161,6 +161,8 @@ pub struct Ctl<'a> {
     proxy: &'a EventLoopProxy<HostEvent>,
     /// windows closed while they were drawing their own frame (out of `wins` for that time)
     closed: &'a mut Vec<WinKey>,
+    /// the window drawing its frame now (out of `wins` meanwhile): its key, window and handle
+    current: Option<(WinKey, Arc<Window>, isize)>,
 }
 
 /// Takes the subclass off before its data goes away with the window.
@@ -283,21 +285,25 @@ impl Ctl<'_> {
         }
     }
 
+    fn drawing(&self, win: WinKey) -> Option<&(WinKey, Arc<Window>, isize)> {
+        self.current.as_ref().filter(|c| c.0 == win && !self.closed.contains(&win))
+    }
+
     pub fn exists(&self, win: WinKey) -> bool {
-        self.wins.contains_key(&win)
+        self.wins.contains_key(&win) || self.drawing(win).is_some()
     }
 
     pub fn hwnd(&self, win: WinKey) -> isize {
-        self.wins.get(&win).map_or(0, |w| w.hwnd)
+        self.wins.get(&win).map(|w| w.hwnd).or_else(|| self.drawing(win).map(|c| c.2)).unwrap_or(0)
     }
 
     pub fn window(&self, win: WinKey) -> Option<Arc<Window>> {
-        self.wins.get(&win).map(|w| w.window.clone())
+        self.wins.get(&win).map(|w| w.window.clone()).or_else(|| self.drawing(win).map(|c| c.1.clone()))
     }
 
     pub fn repaint(&self, win: WinKey) {
-        if let Some(w) = self.wins.get(&win) {
-            w.window.request_redraw();
+        if let Some(w) = self.window(win) {
+            w.request_redraw();
         }
     }
 
@@ -350,7 +356,10 @@ struct Host<A: App> {
 
 macro_rules! ctl {
     ($s:ident, $el:ident) => {
-        &mut Ctl { el: $el, wins: &mut $s.wins, gpu: &mut $s.gpu, proxy: &$s.proxy, closed: &mut $s.closed }
+        &mut Ctl { el: $el, wins: &mut $s.wins, gpu: &mut $s.gpu, proxy: &$s.proxy, closed: &mut $s.closed, current: None }
+    };
+    ($s:ident, $el:ident, $cur:expr) => {
+        &mut Ctl { el: $el, wins: &mut $s.wins, gpu: &mut $s.gpu, proxy: &$s.proxy, closed: &mut $s.closed, current: $cur }
     };
 }
 
@@ -360,7 +369,8 @@ impl<A: App> Host<A> {
         w.repaint_at = None;
         let input = w.state.take_egui_input(&w.window);
         let ctx = w.ctx.clone();
-        let out = ctx.run_ui(input, |ui| self.app.ui(ctl!(self, el), key, ui));
+        let cur = Some((key, w.window.clone(), w.hwnd));
+        let out = ctx.run_ui(input, |ui| self.app.ui(ctl!(self, el, cur.clone()), key, ui));
         // the app may have closed this window during its own frame
         if let Some(i) = self.closed.iter().position(|&k| k == key) {
             self.closed.swap_remove(i);

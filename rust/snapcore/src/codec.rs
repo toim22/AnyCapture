@@ -598,15 +598,77 @@ pub fn encode(img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> Res
 /// Writes the image to a file (SaveImageFileEx): unknown formats and HEIC (only opened) as PNG, written whole
 /// to `<path>.tmp` and then put in place.
 pub fn save_file(path: &Path, img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> bool {
+    save_file_why(path, img, fmt, opt, version).is_ok()
+}
+
+/// `save_file` with the reason it failed, as ImageIoError gave it ("" when there is nothing more to say).
+pub fn save_file_why(path: &Path, img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> Result<(), String> {
     let fmt = if matches!(fmt, Format::Unknown | Format::Heic) { Format::Png } else { fmt };
-    let Ok(data) = encode(img, fmt, opt, version) else { return false };
+    let data = encode(img, fmt, opt, version).map_err(|e| e.text(fmt))?;
     let mut tmp = path.as_os_str().to_owned();
     tmp.push(".tmp");
     if std::fs::write(&tmp, &data).is_err() {
         let _ = std::fs::remove_file(&tmp);
-        return false;
+        return Err(String::new());
     }
-    std::fs::rename(&tmp, path).is_ok()
+    std::fs::rename(&tmp, path).map_err(|_| String::new())
+}
+
+/// CanEncode: AVIF needs an AV1 encoder (tried once on a tiny image); HEIC is only read.
+pub fn can_encode(fmt: Format) -> bool {
+    static AVIF: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    match fmt {
+        Format::Avif => *AVIF.get_or_init(|| {
+            let o = SaveOptions { strip_metadata: true, ..Default::default() };
+            encode(&Image::new(16, 16, 0xFF808080), Format::Avif, &o, "").is_ok_and(|d| !d.is_empty())
+        }),
+        Format::Heic | Format::Unknown => false,
+        _ => true,
+    }
+}
+
+/// CodecHint: what to install for HEIC and AVIF ("" for the other formats).
+pub fn codec_hint(fmt: Format) -> String {
+    match fmt {
+        Format::Heic => crate::tr!(
+            "Para abrir fotos HEIC, instale da Microsoft Store as extensões \"Extensões de Imagem HEIF\" e \"Extensões de Vídeo HEVC\"."
+        ),
+        Format::Avif => crate::tr!(
+            "Para usar AVIF, instale da Microsoft Store a \"Extensão de Vídeo AV1\" e as \"Extensões de Imagem HEIF\". \
+             Salvar em AVIF também precisa de um codificador AV1 (placas de vídeo recentes)."
+        ),
+        _ => String::new(),
+    }
+}
+
+/// The message when AVIF cannot be written here (before asking for the quality).
+pub fn avif_unavailable_text() -> String {
+    crate::tr!("Este computador não consegue salvar em AVIF.\n\n") + &codec_hint(Format::Avif)
+}
+
+impl DecodeError {
+    /// What ImageIoError said after a failed read of a file of format `fmt`.
+    pub fn text(self, fmt: Format) -> String {
+        match self {
+            DecodeError::WebpInvalid | DecodeError::WebpCorrupt => crate::tr!("Arquivo WebP inválido."),
+            DecodeError::WebpUnreadable => String::new(),
+            DecodeError::NoDecoder | DecodeError::Failed => {
+                let hint = codec_hint(fmt);
+                if hint.is_empty() && self == DecodeError::NoDecoder { crate::tr!("Formato de imagem não suportado.") } else { hint }
+            }
+        }
+    }
+}
+
+impl EncodeError {
+    /// What ImageIoError said after a failed write as `fmt`.
+    pub fn text(self, fmt: Format) -> String {
+        match self {
+            EncodeError::Webp => crate::tr!("Falha ao codificar WebP."),
+            EncodeError::Codec => codec_hint(fmt),
+            EncodeError::Failed => String::new(),
+        }
+    }
 }
 
 #[cfg(test)]

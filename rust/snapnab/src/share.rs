@@ -45,6 +45,51 @@ pub fn office(img: Image, target: i32) {
     });
 }
 
+/// CopyAsMenu (Clipboard.cpp), for the quick access overlay: the image, the file (the video itself or a PNG copy),
+/// its path, Base64 and data URLs.
+pub fn copy_as_menu(owner: isize, at: (i32, i32), img: &Image, file: &str, title: &str) -> bool {
+    use crate::tray::{Item, Menu};
+    let video = file.to_lowercase().ends_with(".mp4");
+    let t = [tr("Imagem"), tr("Arquivo (para colar no Explorer, e-mail, chat)"), tr("Caminho do arquivo"), tr("Base64 (PNG)"),
+             tr("Data URL (PNG)"), tr("Data URL (WebP)")];
+    let mut items = Vec::new();
+    if !video {
+        items.push(Item::Cmd(1, &t[0]));
+    }
+    items.push(Item::Cmd(2, &t[1]));
+    items.push(Item::Cmd(3, &t[2]));
+    if !video {
+        items.push(Item::Separator);
+        items.push(Item::Cmd(4, &t[3]));
+        items.push(Item::Cmd(5, &t[4]));
+        items.push(Item::Cmd(6, &t[5]));
+    }
+    let id = Menu::new(items).choose(owner, at.0, at.1);
+    // the file for File / File path: the video itself, or a PNG copy of the image (the library keeps .snap)
+    let real_file = || -> Option<String> {
+        if video || (!file.is_empty() && !file.to_lowercase().ends_with(".snap")) {
+            return Some(file.to_string());
+        }
+        let mut name = if title.is_empty() { format!("Snapnab_{}", stamp()) } else { title.to_string() };
+        if let Some(i) = name.rfind('.')
+            && codec::Format::from_ext(&name[i..].to_lowercase()) != codec::Format::Unknown
+        {
+            name.truncate(i); // "shot.png" -> "shot"
+        }
+        snapcore::dragout::temp_image_file(img, &name, false, crate::VERSION)
+    };
+    let enc = |f| snapcore::net::base64(&codec::encode(img, f, &codec::SaveOptions::from_settings(), crate::VERSION).unwrap_or_default());
+    match id {
+        1 => snapcore::clip::copy_image(owner, img, crate::VERSION),
+        2 => real_file().is_some_and(|f| snapcore::clip::copy_files(owner, &[f])),
+        3 => real_file().is_some_and(|f| snapcore::clip::copy_text(owner, &f)),
+        4 => snapcore::clip::copy_text(owner, &enc(codec::Format::Png)),
+        5 => snapcore::clip::copy_text(owner, &format!("data:image/png;base64,{}", enc(codec::Format::Png))),
+        6 => snapcore::clip::copy_text(owner, &format!("data:image/webp;base64,{}", enc(codec::Format::Webp))),
+        _ => false,
+    }
+}
+
 /// UploadCapture: asks to set the destination up when there is none, then sends; the link goes to the clipboard
 /// (CopyLink) and to the library item (Uploads.xml).
 pub fn upload(owner: isize, img: Image, lib: String, title: String) {
