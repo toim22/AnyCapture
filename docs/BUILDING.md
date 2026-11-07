@@ -69,10 +69,14 @@ What the installer does:
   administrator with that folder;
 - the wizard comes in the same 12 languages as the program, chosen from the Windows language: 7 official Inno Setup
   translations and 5 in `packaging/installer/Languages/` (Chinese, Hindi, Bengali, Indonesian and Urdu); it follows
-  the Windows light/dark theme and uses the Snapnab icon (`WizardLarge.png`, `WizardSmall.png`);
+  the Windows light/dark theme in Inno Setup's Windows 11 style, with a Welcome page and the Snapnab pictures
+  (`WizardLarge-*.png`, `WizardLarge-dark-*.png` and `WizardSmall-*.png`, one per display scale, drawn from the app
+  icon by `python packaging/installer/wizard_images.py`);
 - Start menu shortcuts (Snapnab and Snapnab Editor), an optional desktop shortcut and "start with Windows"
   (the same value that *Options › Start with Windows* writes);
-- closes Snapnab if it is running, and on an update installs over the previous version keeping the settings;
+- closes Snapnab if it is running, and on an update installs over the previous version keeping the settings: in
+  the same folder and mode (all users or just this one) as before, with no question; installing for all users also
+  removes a copy that was installed only for this user;
 - uninstalls from *Settings › Apps*; captures, presets and settings stay in the user profile.
 
 The executable is not digitally signed, so SmartScreen may warn on the first run until the file gains
