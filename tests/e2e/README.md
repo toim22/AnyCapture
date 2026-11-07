@@ -26,6 +26,10 @@ Don't touch the mouse or keyboard while it runs: the tests draw, click and type,
 |---|---|---|
 | `SNAPNAB_DIR` | `C:\Program Files\Snapnab` | the program under test (e.g. `dist\Snapnab` for a fresh build) |
 | `SNAPNAB_TESTS_EXE` | `out\build\release\bin\SnapnabTests.exe` | engine tests and `dump file.snap` |
+| `SNAPNAB_UPLOADERS_FILE` | (set by `test_11_share.py`) | the upload settings the app reads instead of `Uploaders.xml`: the upload tests send to a fake server on 127.0.0.1 and never touch the user's destinations |
+
+If a run is killed before it puts your data back, its backup stays in `artifacts/backup-*` and the next run refuses to
+start until it is restored (see the backup's `README.txt`).
 
 Results: `artifacts/report.html`, plus a full-screen screenshot of each failure (`artifacts/FAIL_*.png`).
 

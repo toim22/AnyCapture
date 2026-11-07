@@ -30,8 +30,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   and the One Click panel are in too, with the screen color picker, the screen focus, the interval capture (the red
   dot on the tray icon), the clean desktop during captures, the automatic library cleanup, the tray's *Open the
   Editor after capturing* switch and the whole automation command line (`/region`, `/window`, `/monitor`,
-  `/fullscreen`, `/delay`, `/ocr`, `/qr`, `/upload`, `/pin`, `/output`, `/colorpicker`, `/focus`, `/interval`). The
-  Options and Presets dialogs are still missing; it is not shipped.
+  `/fullscreen`, `/delay`, `/ocr`, `/qr`, `/upload`, `/pin`, `/output`, `/colorpicker`, `/focus`, `/interval`), and
+  the upload and Word, PowerPoint, Excel and OneNote outputs. The Options and Presets dialogs are still missing; it
+  is not shipped.
 
 ## [0.4.1] — 2026-11-03
 
