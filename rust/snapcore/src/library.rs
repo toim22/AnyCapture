@@ -350,7 +350,12 @@ pub fn delete_item(dir: &[u16], item: &[u16], owner: HWND) -> bool {
         fFlags: (FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT).0 as u16,
         ..Default::default()
     };
-    let ok = unsafe { SHFileOperationW(&mut op) } == 0;
+    // the e2e suite deletes for real (SNAPNAB_NO_RECYCLE=1): its files must not fill the user's Recycle Bin
+    let ok = if std::env::var_os("SNAPNAB_NO_RECYCLE").is_some_and(|v| v == "1") {
+        delete_file(&nul(item))
+    } else {
+        unsafe { SHFileOperationW(&mut op) == 0 }
+    };
     delete_file(&thumb_path_for(dir, item));
     if ok && !name(dir, item).is_empty() {
         set_name(dir, item, &[]);

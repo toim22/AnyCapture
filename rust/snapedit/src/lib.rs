@@ -1,10 +1,25 @@
 //! The parts of SnapnabEditor.exe that do not need its windows running, so the tests reach them: the document and its
 //! undo history, the canvas (tools, selection, zoom) and the panels' drawing.
 
+#![recursion_limit = "256"]
+
 pub mod canvas;
+pub mod canvas_ui;
+pub mod clipfmt;
 pub mod doc;
+pub mod edtools;
+pub mod effects;
 pub mod files;
+pub mod ids;
+pub mod menu;
+pub mod native;
+pub mod panels;
+pub mod props;
+pub mod stamp_data;
+pub mod stamps;
+pub mod styles;
 pub mod tools;
+pub mod tray;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 

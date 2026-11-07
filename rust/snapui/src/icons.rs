@@ -21,6 +21,8 @@ pub enum Icon {
     Sliders,
     Cursor,
     Focus,
+    Lock,
+    Pin,
 }
 
 struct Pen<'a> {
@@ -191,6 +193,19 @@ pub fn draw(p: &Painter, icon: Icon, r: Rect, c: Color32) {
             g.fill_rect(2.0, 4.0, 20.0, 16.0, g.faint());
             g.rect(2.0, 4.0, 20.0, 16.0);
             g.ellipse(8.0, 7.0, 10.0, 10.0, None);
+        }
+        Icon::Lock => {
+            // a padlock: the shackle over a filled body
+            g.arc(7.0, 3.0, 10.0, 12.0, 180.0, 180.0);
+            g.line(7.0, 9.0, 7.0, 11.0);
+            g.line(17.0, 9.0, 17.0, 11.0);
+            g.fill_rect(5.0, 11.0, 14.0, 10.0, c);
+        }
+        Icon::Pin => {
+            // a push pin: the head, the collar and the needle
+            g.fill_rect(8.0, 3.0, 8.0, 7.0, c);
+            g.fill_rect(5.0, 10.0, 14.0, 3.0, c);
+            g.line(12.0, 13.0, 12.0, 21.0);
         }
     }
 }

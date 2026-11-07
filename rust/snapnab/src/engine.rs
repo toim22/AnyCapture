@@ -823,7 +823,7 @@ impl Engine {
             }
         }
         if p.read_qr {
-            crate::qr::show(img.clone());
+            snapui::qr::show(img.clone());
         }
         if p.pin_to_screen {
             let t = if info.window_title.is_empty() { text(&info.mode) } else { text(&info.window_title) };

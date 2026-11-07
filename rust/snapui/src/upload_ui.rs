@@ -5,7 +5,6 @@ use std::ffi::OsStr;
 
 use snapcore::upload::{Dest, Settings, SignIn};
 use snapcore::{net, reg};
-use snapnab_app::tr;
 use windows::Win32::Foundation::{HWND, LPARAM, S_OK, WPARAM};
 use windows::Win32::UI::Controls::{
     TASKDIALOG_NOTIFICATIONS, TASKDIALOGCONFIG, TDCBF_CANCEL_BUTTON, TDF_ALLOW_DIALOG_CANCELLATION, TDF_CALLBACK_TIMER,
@@ -14,8 +13,16 @@ use windows::Win32::UI::Controls::{
 use windows::Win32::UI::WindowsAndMessaging::{IDOK, IDYES, MB_ICONINFORMATION, MB_ICONQUESTION, MB_ICONWARNING, MB_YESNO, SendMessageW};
 use windows::core::{HRESULT, PCWSTR};
 
-use crate::dialogs::message;
 use crate::form::{self, Field};
+
+fn tr(s: &str) -> String {
+    snapcore::i18n::tr_str(s)
+}
+
+fn message(owner: isize, text: &str, title: &str, flags: windows::Win32::UI::WindowsAndMessaging::MESSAGEBOX_STYLE) -> windows::Win32::UI::WindowsAndMessaging::MESSAGEBOX_RESULT {
+    let (t, c) = (snapcore::wide::to_wide(text), snapcore::wide::to_wide(title));
+    unsafe { windows::Win32::UI::WindowsAndMessaging::MessageBoxW((owner != 0).then(|| HWND(owner as _)), PCWSTR(t.as_ptr()), PCWSTR(c.as_ptr()), flags) }
+}
 
 const MASK: &str = "********";
 
@@ -90,7 +97,7 @@ pub fn configure_now(owner: isize) -> bool {
         }
         Dest::Custom => {
             let filter = tr("Enviador personalizado (*.sxcu;*.json)|*.sxcu;*.json|");
-            if let Some(path) = crate::dialogs::open_dialog(owner, &tr("Importar enviador (.sxcu)"), &filter) {
+            if let Some(path) = open_dialog(owner, &tr("Importar enviador (.sxcu)"), &filter) {
                 let mut d = std::fs::read(&path).unwrap_or_default();
                 if d.starts_with(&[0xEF, 0xBB, 0xBF]) {
                     d.drain(..3);
@@ -164,7 +171,7 @@ pub fn configure_now(owner: isize) -> bool {
 /// address (a task dialog waits for it).
 fn sign_in(owner: isize, s: &Settings) -> Result<(), String> {
     let mut si = SignIn::begin(s)?;
-    crate::shell_open(&si.url);
+    shell_open(&si.url);
     let mut code = String::new();
     if s.dest == Dest::Dropbox {
         let mut f = [Field::Label(tr("Autorize no navegador e cole aqui o código que o Dropbox mostrar.")), text(&tr("Código"), "")];
@@ -216,4 +223,34 @@ fn wait_for_browser(owner: isize, si: &mut SignIn) -> bool {
     let mut btn = 0;
     let _ = unsafe { TaskDialogIndirect(&tc, Some(&mut btn), None, None) };
     ctx.got
+}
+
+fn shell_open(target: &str) {
+    let t = snapcore::wide::to_wide(target);
+    unsafe {
+        windows::Win32::UI::Shell::ShellExecuteW(None, windows::core::w!("open"), PCWSTR(t.as_ptr()), PCWSTR::null(), PCWSTR::null(),
+                                                 windows::Win32::UI::WindowsAndMessaging::SW_SHOWNORMAL);
+    }
+}
+
+fn open_dialog(owner: isize, title: &str, filter: &str) -> Option<String> {
+    use windows::Win32::UI::Controls::Dialogs::{GetOpenFileNameW, OFN_FILEMUSTEXIST, OFN_PATHMUSTEXIST, OPENFILENAMEW};
+    let filter: Vec<u16> = filter.encode_utf16().map(|c| if c == '|' as u16 { 0 } else { c }).chain([0]).collect();
+    let t = snapcore::wide::to_wide(title);
+    let mut buf = vec![0u16; 4096];
+    let mut ofn = OPENFILENAMEW {
+        lStructSize: std::mem::size_of::<OPENFILENAMEW>() as u32,
+        hwndOwner: HWND(owner as _),
+        lpstrFilter: PCWSTR(filter.as_ptr()),
+        lpstrFile: windows::core::PWSTR(buf.as_mut_ptr()),
+        nMaxFile: buf.len() as u32,
+        lpstrTitle: if title.is_empty() { PCWSTR::null() } else { PCWSTR(t.as_ptr()) },
+        Flags: OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
+        ..Default::default()
+    };
+    if !unsafe { GetOpenFileNameW(&mut ofn) }.as_bool() {
+        return None;
+    }
+    let n = buf.iter().position(|&c| c == 0).unwrap_or(0);
+    Some(String::from_utf16_lossy(&buf[..n]))
 }

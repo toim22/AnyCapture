@@ -243,6 +243,25 @@ Where the Rust version could not do a thing the way the C++ did, it was decided 
 - The Beautify effect of a capture preset is edited in a plain form: the named Beautify presets (the picker and
   "save as preset") come with the Editor's Beautify dialog in phase 6.
 - The quick access overlay after a capture has no drag-out of the image and no "Copy as…" menu yet.
+- The Editor (phase 6) is one egui window with the C++ class names and WM_COMMAND numbers. The canvas, the right
+  column (Properties, Effects, Layers), the toolbar, the footer and the trays are egui widgets with AutomationIds
+  (`SnapnabCanvas`, `SnapnabEffects`, `SnapnabEffects.Apply`, `SnapnabLayers`, `SnapnabToolbar.<id>`, …), not child
+  windows; the e2e suite finds them through UI Automation.
+- The forms that showed a live preview in the C++ (Combine, Hide sensitive data, Remove background, Beautify, Split
+  image, Batch) are plain forms (`snapui::form`): the result shows on the canvas after OK and Undo takes it back.
+- The canvas color uses the Windows color dialog; the contrast checker has no screen eyedropper (the color dialog and
+  Copy HEX only).
+- The read-QR and upload dialogs moved to `snapui`, so the capture app and the Editor share them.
+- The text windows (Grab Text, shortcuts), Compare, the contrast checker, the AI assistant, Customize toolbar and the
+  Magnify intro are egui windows of their own with the C++ class names (`SnapnabTextWnd`, `SnapnabCompare`, …). They do
+  not disable the Editor while open (the C++ ran them as modal loops). Grab Text's text is the UI Automation value of
+  `SnapnabTextWnd.Text`.
+- Customize toolbar is a list (add from the catalog, move up/down, remove) instead of drag and drop on the bar.
+- The video view is drawn inside the main window (the C++ was a child window, `SnapnabVideoView`, now the
+  AutomationId of its area). Its buttons post `WM_COMMAND` 2001–2011 (the C++ B_* + 2000) to the main window, and the
+  long saves (MP4, GIF) show the shell's progress dialog.
+- `SNAPNAB_NO_RECYCLE=1` deletes instead of sending to the Recycle Bin (only for the test runs, which must not fill the
+  user's Recycle Bin).
 
 ## Tests
 

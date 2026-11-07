@@ -182,10 +182,11 @@ class Editor:
     def tool(self, name):
         self.send_command(EditorCmd.T_TOOL_BASE + TOOLS.index(name))
 
-    def canvas(self):
-        c = win.children(self.hwnd, "SnapnabCanvas")
-        assert c, "canvas not found"
-        return c[0]
+    def canvas_rect(self):
+        """The canvas area on the screen (egui draws it inside the main window; UI Automation finds it)."""
+        from . import uia
+        r = uia.find(self.hwnd, "SnapnabCanvas").rectangle()
+        return r.left, r.top, r.right, r.bottom
 
     def popups(self, cls=None):
         return win.owned_popups(self.pid, cls) if self.pid else []

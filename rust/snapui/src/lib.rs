@@ -11,6 +11,8 @@ use egui::{FontData, FontDefinitions, FontFamily};
 pub mod form;
 pub mod host;
 pub mod icons;
+pub mod qr;
+pub mod upload_ui;
 
 /// Windows' own fonts, so every language Snapnab ships has its letters: Segoe UI (Latin, Greek, Cyrillic, Arabic,
 /// Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and Segoe UI Emoji.

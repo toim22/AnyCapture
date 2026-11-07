@@ -8,17 +8,15 @@ mod camwin;
 mod desk;
 mod dialogs;
 mod engine;
-use snapui::form;
+use snapui::{form, qr, upload_ui};
 mod hotkeys;
 mod interval;
 mod oneclick;
 mod pins;
-mod qr;
 mod quick;
 mod share;
 mod rawwin;
 mod tray;
-mod upload_ui;
 
 use std::ffi::OsStr;
 use std::sync::atomic::{AtomicU32, Ordering};

@@ -47,13 +47,57 @@ pub fn set_capture_name(path: &str, name: &str) -> bool {
     library::set_name(&library::dir_of(&p), &p, &w(name))
 }
 
+/// The library thumbnail of an item (160 × 120 at most).
 pub fn write_thumbnail(path: &str, img: &Image) -> bool {
     let p = w(path);
-    library::write_thumbnail(&library::dir_of(&p), &p, img, crate::VERSION)
+    let t = snapcore::gdip::make_thumbnail(img, 160, 120);
+    library::write_thumbnail(&library::dir_of(&p), &p, &t, crate::VERSION)
 }
 
 /// A new .snap path in the library.
 pub fn new_library_path() -> String {
     let dir = library_dir();
     format!("{dir}\\{}.snap", String::from_utf16_lossy(&library::new_guid()))
+}
+
+/// The library thumbnail of an item, if it was written.
+pub fn load_thumbnail(path: &str) -> Option<Image> {
+    let p = w(path);
+    let t = String::from_utf16_lossy(&library::thumb_path_for(&library::dir_of(&p), &p));
+    load_image(&t)
+}
+
+/// Pictures\\Snapnab (or the OutputFolder setting), created if missing.
+pub fn default_save_dir() -> String {
+    use windows::Win32::UI::Shell::{FOLDERID_Pictures, KNOWN_FOLDER_FLAG, SHGetKnownFolderPath};
+    let set = snapcore::reg::get_string(std::ffi::OsStr::new("OutputFolder"), None).map(|s| s.to_string_lossy().into_owned());
+    let d = match set.filter(|s| !s.trim().is_empty()) {
+        Some(s) => s,
+        None => {
+            let pics = unsafe { SHGetKnownFolderPath(&FOLDERID_Pictures, KNOWN_FOLDER_FLAG(0), None) }
+                .map(|p| unsafe {
+                    let s = p.to_string().unwrap_or_default();
+                    windows::Win32::System::Com::CoTaskMemFree(Some(p.0 as *const _));
+                    s
+                })
+                .unwrap_or_default();
+            format!("{pics}\\Snapnab")
+        }
+    };
+    let _ = std::fs::create_dir_all(&d);
+    d
+}
+
+/// The file name of the document's title, without the characters Windows refuses.
+pub fn safe_name(title: &str, extra: &str) -> String {
+    title.chars().map(|c| if "\\/:*?\"<>|".contains(c) || extra.contains(c) { '_' } else { c }).collect()
+}
+
+/// Writes the composed image to a temporary PNG (e-mail, external program, Office, pin).
+pub fn temp_export(title: &str, img: &Image) -> String {
+    let base = safe_name(title, ". ");
+    let base: String = if base.is_empty() { "Snapnab".into() } else { base.chars().take(40).collect() };
+    let p = std::env::temp_dir().join(format!("{base}.png")).to_string_lossy().into_owned();
+    let _ = save_image(&p, img, 90);
+    p
 }

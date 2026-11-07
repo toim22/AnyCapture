@@ -5,6 +5,8 @@ import time
 import pytest
 
 sys.path.insert(0, os.path.dirname(__file__))
+# the programs started by the tests delete library items for real instead of sending them to the Recycle Bin
+os.environ["SNAPNAB_NO_RECYCLE"] = "1"
 
 from snapnab_e2e import apps, win  # noqa: E402  (win sets the DPI awareness first)
 from snapnab_e2e.config import ARTIFACTS, CAPTURE_EXE, EDITOR_EXE  # noqa: E402

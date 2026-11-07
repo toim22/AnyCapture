@@ -36,7 +36,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   capture button and the preset list), with Options, the preset forms (new, rename, duplicate, delete, hotkey),
   presets and settings export and import (replace or merge, with the restart of both programs), the effect settings,
   the output and fixed region forms, the video options and the upload destinations. Its controls are found by UI
-  Automation under the names of the former Win32 controls. It is not shipped.
+  Automation under the names of the former Win32 controls. The Editor (`SnapnabEditor.exe`) is rewritten in
+  Rust and egui as well: the canvas with every drawing tool, the Properties, Effects and Layers panels, the toolbar
+  (automatic or customized), the recent captures tray and the library view, the menus and shortcuts, copy and paste
+  (objects, images, formatted text), Grab Text, the QR reader, Combine, Compare, Hide sensitive data, Remove
+  background, Split image, Beautify, the date stamp, the contrast checker, the AI assistant, batch processing,
+  printing, e-mail, the Office and upload outputs, pinning, and the video view (playback with sound, cuts, MP4 and GIF
+  export, frame to image). It is not shipped.
 
 ## [0.4.1] — 2026-11-03
 

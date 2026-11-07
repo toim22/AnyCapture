@@ -4,7 +4,6 @@
 use snapcore::image::Image;
 use snapcore::wide::to_wide;
 use snapcore::{barcode, clip};
-use snapnab_app::tr;
 use windows::Win32::UI::Controls::{
     TASKDIALOG_BUTTON, TASKDIALOG_FLAGS, TASKDIALOGCONFIG, TDCBF_CLOSE_BUTTON, TDF_ALLOW_DIALOG_CANCELLATION,
     TDF_USE_COMMAND_LINKS, TaskDialogIndirect,
@@ -88,4 +87,8 @@ fn results(codes: &[barcode::Code]) {
             clip::copy_text(0, &all.join("\r\n\r\n"));
         }
     }
+}
+
+fn tr(s: &str) -> String {
+    snapcore::i18n::tr_str(s)
 }

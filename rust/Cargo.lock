@@ -3157,6 +3157,7 @@ version = "0.4.1"
 dependencies = [
  "egui",
  "egui_kittest",
+ "regex",
  "snapcore",
  "snapui",
  "windows",

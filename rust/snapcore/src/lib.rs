@@ -67,6 +67,7 @@ pub mod snap;
 pub mod sounds;
 pub mod stamps;
 pub mod upload;
+pub mod video;
 pub mod wide;
 pub mod xml;
 
