@@ -253,7 +253,21 @@ pub fn toolbar(ui: &mut egui::Ui, center: &[Entry], active: Tool, effect_name: &
         }
         ui.add_space(6.0);
         ui.separator();
-        ui.add_space(6.0);
+        // the tools and items are centered on the window, as long as they clear both ends
+        let outputs = [
+            (T_SHARE, "Compartilhar", "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"),
+            (T_SAVE, "Salvar como", "Salvar como arquivo (Ctrl+Shift+S)"),
+            (T_COPYALL, "Copiar tudo", "Copiar a imagem inteira (Ctrl+Shift+C)"),
+        ];
+        let spacing = ui.spacing().item_spacing.x;
+        let right_w: f32 = outputs.iter().map(|o| icons::tile_width(ui, &tr(o.1)) + spacing).sum();
+        let width_id = egui::Id::NULL.with("snapedit.toolbar.center");
+        let center_w = ui.ctx().data(|d| d.get_temp::<f32>(width_id)).unwrap_or(0.0);
+        let full = ui.max_rect();
+        let left_end = ui.cursor().left() + 6.0;
+        let start = (full.center().x - center_w / 2.0).min(full.right() - right_w - 12.0 - center_w).max(left_end);
+        ui.add_space(start - ui.cursor().left());
+        let x0 = ui.cursor().left();
         for e in center {
             if e.kind == EntryKind::Spacer {
                 ui.add_space(6.0);
@@ -282,12 +296,14 @@ pub fn toolbar(ui: &mut egui::Ui, center: &[Entry], active: Tool, effect_name: &
         if r.clicked() {
             acts.push(BarAction::More(r.rect.left_bottom()));
         }
+        let w = r.rect.right() - x0;
+        if (w - center_w).abs() > 0.5 {
+            // measured now: drawn centered from the next pass on, without showing this one
+            ui.ctx().data_mut(|d| d.insert_temp(width_id, w));
+            ui.ctx().request_discard("toolbar centering");
+        }
         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-            for (id, label, h) in [
-                (T_SHARE, "Compartilhar", "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"),
-                (T_SAVE, "Salvar como", "Salvar como arquivo (Ctrl+Shift+S)"),
-                (T_COPYALL, "Copiar tudo", "Copiar a imagem inteira (Ctrl+Shift+C)"),
-            ] {
+            for (id, label, h) in outputs {
                 let r = icons::tile(ui, command_icon(id).unwrap_or(Icon::Gear), &tr(label), false, None);
                 tag(ui, &r, &format!("SnapnabToolbar.{id}"));
                 hint(&r, &tr(h), &mut acts);

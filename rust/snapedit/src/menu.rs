@@ -1,6 +1,5 @@
-//! The Editor's menu bar (BuildMenu), its keyboard shortcuts (BuildAccel) and the tool letters (HandleToolKey).
-//! The C++ Editor drew the menus in its own title bar; here they are the window's native menu bar (decision
-//! recorded in docs/ARCHITECTURE.md), with the same commands and texts.
+//! The Editor's menus (BuildMenu), its keyboard shortcuts (BuildAccel) and the tool letters (HandleToolKey). As in
+//! the C++ Editor, the menus are on the window's own title bar (snapui's caption.rs), with the same commands and texts.
 
 use egui::{Key, Modifiers};
 use snapcore::office::{self, Target};
@@ -9,6 +8,7 @@ use crate::canvas::Tool;
 use crate::ids::*;
 use crate::native::{Item, Menu};
 use crate::tr;
+use snapcore::icons::Icon;
 
 fn cmd(id: u32, t: &str) -> Item {
     Item::Cmd(id, tr(t))
@@ -69,7 +69,8 @@ pub fn tools_menu() -> Menu {
     Menu::popup(TOOLS.iter().map(|(t, _)| Item::Cmd(M_MORE_TOOL_BASE + t.index() as u32, t.name())).collect())
 }
 
-pub fn build_menu() -> Menu {
+/// The title bar's menus: File, Edit, Image, Tools, View and Help.
+pub fn build_menu() -> Vec<(String, Menu)> {
     let file = Menu::popup(vec![
         cmd(M_NEW_CAPTURE, "Nova &captura\tCtrl+Shift+N"),
         cmd(M_NEW_VIDEO, "Nova &gravação de vídeo"),
@@ -87,7 +88,7 @@ pub fn build_menu() -> Menu {
         cmd(M_OPEN_PROGRAM, "Abrir em &programa externo…"),
         cmd(M_PIN, "Fi&xar na tela\tCtrl+Shift+P"),
         cmd(M_UPLOAD, "Enviar (&upload)"),
-        Item::Sub(tr("Enviar &para"), office_menu()),
+        Item::SubIcon(tr("Enviar &para"), office_menu(), Icon::Share),
         Item::Separator,
         cmd(M_COMBINE, "Com&binar imagens…"),
         cmd(M_COMPARE, "Comparar ima&gens…"),
@@ -153,7 +154,7 @@ pub fn build_menu() -> Menu {
         cmd(M_SEND_BACKWARD, "Enviar para &trás\tCtrl+Shift+B"),
         cmd(M_BACK, "Enviar para o plano de &fundo"),
         Item::Separator,
-        Item::Sub(tr("&Alinhar"), align),
+        Item::SubIcon(tr("&Alinhar"), align, Icon::AlignLeft),
         Item::Separator,
         cmd(M_FLIP_V, "Espelhar na &vertical"),
         cmd(M_FLIP_H, "Espelhar na &horizontal"),
@@ -165,10 +166,10 @@ pub fn build_menu() -> Menu {
         cmd(M_ROT_FREE, "Ângulo &personalizado…"),
     ]);
     let img = Menu::popup(vec![
-        Item::Sub(tr("Ferramen&tas"), tools_menu()),
-        Item::Sub(tr("&Efeitos"), fxm),
+        Item::SubIcon(tr("Ferramen&tas"), tools_menu(), Icon::Pen),
+        Item::SubIcon(tr("&Efeitos"), fxm, Icon::Effects),
         Item::Separator,
-        Item::Sub(tr("&Organizar"), arrange),
+        Item::SubIcon(tr("&Organizar"), arrange, Icon::Layers),
         cmd(M_GROUP, "A&grupar\tCtrl+Shift+G"),
         cmd(M_UNGROUP, "Desagr&upar\tCtrl+Shift+U"),
         cmd(M_LOCK, "&Bloquear objeto\tCtrl+L"),
@@ -182,7 +183,7 @@ pub fn build_menu() -> Menu {
         cmd(M_CANVAS, "Redimensionar &canvas…"),
         cmd(M_APPLY_TEMPLATE, "Aplicar mode&lo…\tCtrl+Alt+C"),
         Item::Separator,
-        Item::Sub(tr("&Girar"), rotate),
+        Item::SubIcon(tr("&Girar"), rotate, Icon::Rotate),
         cmd(M_SNAPPING, "Encai&xe no canvas\tCtrl+;"),
         cmd(M_CANVAS_COLOR, "Cor do canva&s…"),
         Item::Separator,
@@ -220,7 +221,7 @@ pub fn build_menu() -> Menu {
         cmd(M_ADD_CAPTURE, "Adicionar ca&ptura"),
         Item::Separator,
         cmd(M_DATESTAMP, "Inserir data e &hora\tCtrl+Shift+D"),
-        Item::Sub(tr("Inserir c&ursor"), cursors),
+        Item::SubIcon(tr("Inserir c&ursor"), cursors, Icon::Cursor),
         cmd(M_DATESTAMP_FMT, "Formato da data e hora…"),
         Item::Separator,
         cmd(M_CONTRAST, "Verificador de &contraste…"),
@@ -229,14 +230,14 @@ pub fn build_menu() -> Menu {
         cmd(M_AI_SETTINGS, "Configurar o assistente de IA…"),
         cmd(M_UPLOAD_SETTINGS, "Configurar o &upload…"),
     ]);
-    Menu::bar(vec![
-        Item::Sub(tr("&Arquivo"), file),
-        Item::Sub(tr("&Editar"), edit),
-        Item::Sub(tr("&Imagem"), img),
-        Item::Sub(tr("&Ferramentas"), tools),
-        Item::Sub(tr("E&xibir"), view),
-        Item::Sub(tr("A&juda"), help),
-    ])
+    vec![
+        (tr("&Arquivo"), file),
+        (tr("&Editar"), edit),
+        (tr("&Imagem"), img),
+        (tr("&Ferramentas"), tools),
+        (tr("E&xibir"), view),
+        (tr("A&juda"), help),
+    ]
 }
 
 /// The accelerator table: (ctrl, shift, alt, key) → command.

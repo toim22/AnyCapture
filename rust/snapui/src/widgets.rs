@@ -233,3 +233,9 @@ pub fn flat_button(ui: &mut Ui, icon: Option<Icon>, text: &str, accent_text: boo
     }
     r
 }
+
+/// Gives a widget its UI Automation id (AutomationId), which the e2e suite looks for.
+pub fn set_aid(ui: &Ui, r: &Response, aid: &str) {
+    let aid = aid.to_owned();
+    ui.ctx().accesskit_node_builder(r.id, |nb| nb.set_author_id(aid));
+}

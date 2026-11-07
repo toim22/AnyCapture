@@ -1,4 +1,4 @@
-//! The capture window (comp_1 §2, src/capture/main.cpp): the menus on top; the Image / Video tabs on the left; the
+//! The capture window (comp_1 §2, src/capture/main.cpp): the menus on the title bar; the Image / Video tabs on the left; the
 //! selection, effects and share (or quality and webcam) fields; the switches; the round capture button; the bottom
 //! bar (⚙ Presets, +, Open Editor) and the preset list below it. Drawing returns what the clicks ask for; the app
 //! does it. Each control carries the C++ control's name as its UI Automation id (AutomationId "IDC_SELECTION"…), so
@@ -134,6 +134,8 @@ pub struct View {
     pub fx_add_mode: bool,
     /// open the webcam menu (the frame after the click, once the cameras are listed)
     pub webcam_menu: bool,
+    /// the window (its title bar opens the menus); 0 in the tests
+    pub hwnd: isize,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -181,75 +183,96 @@ pub fn height(store: &PresetStore, view: &View) -> f32 {
     if view.presets_open { base + 8.0 + 30.0 * store.presets.len().clamp(2, 8) as f32 } else { base }
 }
 
-pub const WIDTH: f32 = 800.0;
+pub const WIDTH: f32 = 840.0;
 
-fn menu_item(ui: &mut egui::Ui, out: &mut Vec<Action>, text: &str, cmd: u32) {
-    if ui.button(tr(text)).clicked() {
-        out.push(Action::Command(cmd));
-        ui.close();
-    }
+/// BuildMenu: File, Capture, View and Help, on the title bar (snapui's caption.rs). A chosen command arrives as
+/// WM_COMMAND, as the C++ menus sent it.
+pub fn menus() -> Vec<(String, snapui::menu::Menu)> {
+    use snapui::menu::{Item, Menu};
+    let c = |id: u32, t: String| Item::Cmd(id, t);
+    let file = Menu::popup(vec![
+        c(id::OPEN_EDITOR, tr("Abrir o Editor")),
+        c(id::LIBRARY_FOLDER, tr("Abrir a pasta da biblioteca")),
+        c(id::LOGS, tr("Abrir a pasta de logs")),
+        Item::Separator,
+        c(id::PRESET_IMPORT, tr("Importar presets…")),
+        c(id::PRESET_EXPORT, tr("Exportar presets…")),
+        Item::Separator,
+        c(id::SETTINGS_EXPORT, tr("Exportar todas as configurações…")),
+        c(id::SETTINGS_IMPORT, tr("Importar todas as configurações…")),
+        c(id::SETTINGS_BACKUPS, tr("Abrir a pasta de backups")),
+        Item::Separator,
+        c(id::UPLOAD_SETTINGS, tr("Configurar o upload…")),
+        c(id::CLEANUP_NOW, tr("Limpar a biblioteca agora")),
+        c(id::OPTIONS, tr("Opções…")),
+        Item::Separator,
+        c(id::EXIT, tr("Sair do Snapnab")),
+    ]);
+    let pin = Menu::popup(vec![
+        c(id::CAPTURE_PIN, tr("Capturar e fixar")),
+        c(id::PIN_CLIPBOARD, tr("Fixar da área de transferência")),
+        c(id::PIN_FILE, tr("Fixar um arquivo…")),
+        c(id::PINS_CLOSE, tr("Fechar todas")),
+    ]);
+    let capture = Menu::popup(vec![
+        c(id::CAPTURE_IMAGE, tr("Capturar imagem")),
+        c(id::CAPTURE_VIDEO, tr("Gravar vídeo")),
+        c(id::REPEAT, tr("Repetir a última captura")),
+        Item::Separator,
+        c(id::CAPTURE_CLIPBOARD, tr("Da área de transferência")),
+        c(id::CAPTURE_FILE, tr("De um arquivo gráfico…")),
+        Item::Separator,
+        c(id::COLOR_PICKER, tr("Conta-gotas de tela")),
+        c(id::QR_REGION, tr("Ler código QR")),
+        Item::SubIcon(tr("Fixar na tela"), pin, Icon::Pin),
+        c(id::INTERVAL, tr("Captura por intervalo…")),
+        c(id::FOCUS, tr("Foco de tela (apresentações)")),
+        c(id::RECORD_AUDIO, tr("Gravar só o áudio")),
+        c(id::AUDIO_FOLDER, tr("Abrir a pasta dos áudios")),
+    ]);
+    let view = Menu::popup(vec![
+        Item::Checked(id::ONECLICK, tr("Mostrar o One Click"), false),
+        Item::Checked(id::SHOW_PRESETS, tr("Lista de presets"), false),
+    ]);
+    let help = Menu::popup(vec![
+        c(id::MANUAL, tr("Manual do Snapnab")),
+        c(id::PRESET_HELP, tr("Como usar os presets")),
+        Item::Separator,
+        c(id::ABOUT, tr("Sobre o Snapnab")),
+    ]);
+    vec![(tr("&Arquivo"), file), (tr("&Captura"), capture), (tr("E&xibir"), view), (tr("A&juda"), help)]
 }
 
-fn check_item(ui: &mut egui::Ui, out: &mut Vec<Action>, text: &str, on: bool, cmd: u32) {
-    let mut v = on;
-    if ui.checkbox(&mut v, tr(text)).clicked() {
-        out.push(Action::Command(cmd));
-        ui.close();
-    }
+/// The icons of the menu commands.
+pub fn menu_icon(cmd: u32) -> Option<Icon> {
+    Some(match cmd {
+        id::OPEN_EDITOR => Icon::Editor,
+        id::LIBRARY_FOLDER => Icon::Library,
+        id::LOGS | id::SETTINGS_BACKUPS | id::AUDIO_FOLDER => Icon::Folder,
+        id::UPLOAD_SETTINGS => Icon::Upload,
+        id::CLEANUP_NOW => Icon::Trash,
+        id::OPTIONS => Icon::Gear,
+        id::CAPTURE_IMAGE => Icon::Capture,
+        id::CAPTURE_VIDEO => Icon::VideoFill,
+        id::REPEAT => Icon::Restart,
+        id::CAPTURE_CLIPBOARD | id::PIN_CLIPBOARD => Icon::Clipboard,
+        id::CAPTURE_FILE | id::PIN_FILE => Icon::Image,
+        id::COLOR_PICKER => Icon::Eyedropper,
+        id::QR_REGION => Icon::Qr,
+        id::CAPTURE_PIN => Icon::Pin,
+        id::PINS_CLOSE => Icon::Cancel,
+        id::INTERVAL => Icon::Clock,
+        id::FOCUS => Icon::Focus,
+        id::RECORD_AUDIO => Icon::Mic,
+        _ => return None,
+    })
 }
 
-/// BuildMenu: File, Capture, View, Help.
-fn menu_bar(ui: &mut egui::Ui, view: &View, out: &mut Vec<Action>) {
-    egui::MenuBar::new().ui(ui, |ui| {
-        ui.menu_button(tr("Arquivo"), |ui| {
-            menu_item(ui, out, "Abrir o Editor", id::OPEN_EDITOR);
-            menu_item(ui, out, "Abrir a pasta da biblioteca", id::LIBRARY_FOLDER);
-            menu_item(ui, out, "Abrir a pasta de logs", id::LOGS);
-            ui.separator();
-            menu_item(ui, out, "Importar presets…", id::PRESET_IMPORT);
-            menu_item(ui, out, "Exportar presets…", id::PRESET_EXPORT);
-            ui.separator();
-            menu_item(ui, out, "Exportar todas as configurações…", id::SETTINGS_EXPORT);
-            menu_item(ui, out, "Importar todas as configurações…", id::SETTINGS_IMPORT);
-            menu_item(ui, out, "Abrir a pasta de backups", id::SETTINGS_BACKUPS);
-            ui.separator();
-            menu_item(ui, out, "Configurar o upload…", id::UPLOAD_SETTINGS);
-            menu_item(ui, out, "Limpar a biblioteca agora", id::CLEANUP_NOW);
-            menu_item(ui, out, "Opções…", id::OPTIONS);
-            ui.separator();
-            menu_item(ui, out, "Sair do Snapnab", id::EXIT);
-        });
-        ui.menu_button(tr("Captura"), |ui| {
-            menu_item(ui, out, "Capturar imagem", id::CAPTURE_IMAGE);
-            menu_item(ui, out, "Gravar vídeo", id::CAPTURE_VIDEO);
-            menu_item(ui, out, "Repetir a última captura", id::REPEAT);
-            ui.separator();
-            menu_item(ui, out, "Da área de transferência", id::CAPTURE_CLIPBOARD);
-            menu_item(ui, out, "De um arquivo gráfico…", id::CAPTURE_FILE);
-            ui.separator();
-            menu_item(ui, out, "Conta-gotas de tela", id::COLOR_PICKER);
-            menu_item(ui, out, "Ler código QR", id::QR_REGION);
-            ui.menu_button(tr("Fixar na tela"), |ui| {
-                menu_item(ui, out, "Capturar e fixar", id::CAPTURE_PIN);
-                menu_item(ui, out, "Fixar da área de transferência", id::PIN_CLIPBOARD);
-                menu_item(ui, out, "Fixar um arquivo…", id::PIN_FILE);
-                menu_item(ui, out, "Fechar todas", id::PINS_CLOSE);
-            });
-            menu_item(ui, out, "Captura por intervalo…", id::INTERVAL);
-            menu_item(ui, out, "Foco de tela (apresentações)", id::FOCUS);
-            menu_item(ui, out, "Gravar só o áudio", id::RECORD_AUDIO);
-            menu_item(ui, out, "Abrir a pasta dos áudios", id::AUDIO_FOLDER);
-        });
-        ui.menu_button(tr("Exibir"), |ui| {
-            check_item(ui, out, "Mostrar o One Click", view.one_click, id::ONECLICK);
-            check_item(ui, out, "Lista de presets", view.presets_open, id::SHOW_PRESETS);
-        });
-        ui.menu_button(tr("Ajuda"), |ui| {
-            menu_item(ui, out, "Manual do Snapnab", id::MANUAL);
-            menu_item(ui, out, "Como usar os presets", id::PRESET_HELP);
-            ui.separator();
-            menu_item(ui, out, "Sobre o Snapnab", id::ABOUT);
-        });
+/// The View menu's checks, applied when a menu opens.
+fn menu_states(view: &View) {
+    snapui::menu::set_states(snapui::menu::MenuStates {
+        enabled: Vec::new(),
+        checked: vec![(id::ONECLICK, view.one_click), (id::SHOW_PRESETS, view.presets_open)],
     });
 }
 
@@ -721,7 +744,8 @@ fn preset_list(ui: &mut egui::Ui, store: &mut PresetStore, hk_text: &dyn Fn(u32,
 /// Draws the window; `hk_text` writes a hotkey ("Ctrl+Alt+F12").
 pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32) -> String, ui: &mut egui::Ui) -> Vec<Action> {
     let mut out = Vec::new();
-    egui::Panel::top("menu").show(ui, |ui| menu_bar(ui, view, &mut out));
+    snapui::caption::bar(ui, view.hwnd, "");
+    menu_states(view);
     if store.presets.is_empty() {
         return out;
     }

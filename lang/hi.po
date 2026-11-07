@@ -59,7 +59,7 @@ msgstr "WebP एन्कोड करने में विफल।"
 msgid "L"
 msgstr "चौ"
 
-#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:355 rust/snapedit/src/app/commands.rs:88
+#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:299 rust/snapedit/src/app/commands.rs:91
 msgid "Abrir"
 msgstr "खोलें"
 
@@ -162,7 +162,7 @@ msgstr "विस्तारित विंडो"
 msgid "Menu"
 msgstr "मेनू"
 
-#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:775
+#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:777
 msgid "Área de transferência"
 msgstr "क्लिपबोर्ड"
 
@@ -170,11 +170,11 @@ msgstr "क्लिपबोर्ड"
 msgid "Arquivo gráfico"
 msgstr "ग्राफ़िक फ़ाइल"
 
-#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:741
+#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:765
 msgid "Novo preset"
 msgstr "नया प्रीसेट"
 
-#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:254 rust/snapedit/src/app/docs.rs:484
+#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:1019 rust/snapedit/src/app/docs.rs:254 rust/snapedit/src/app/docs.rs:484
 msgid "Captura"
 msgstr "कैप्चर"
 
@@ -264,7 +264,7 @@ msgstr "अमान्य सेटिंग्स फ़ाइल।"
 msgid "Não foi possível gravar "
 msgstr "नहीं लिखा जा सका: "
 
-#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:568 rust/snapnab/src/window.rs:579
+#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:591 rust/snapnab/src/window.rs:602
 msgid "Desligado"
 msgstr "बंद"
 
@@ -379,7 +379,7 @@ msgstr "कोई अपलोड गंतव्य सेट नहीं ह�
 msgid "Não foi possível ler o arquivo."
 msgstr "फ़ाइल नहीं पढ़ी जा सकी।"
 
-#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:254
+#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:290
 msgid "Não foi possível preparar a imagem."
 msgstr "छवि तैयार नहीं की जा सकी।"
 
@@ -530,11 +530,11 @@ msgstr "तीर के आरंभ पर पाठ लिखने के �
 msgid "Mover"
 msgstr "खिसकाएँ"
 
-#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:365
+#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:381
 msgid "Seta"
 msgstr "तीर"
 
-#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:366
+#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:382
 msgid "Linha"
 msgstr "रेखा"
 
@@ -542,11 +542,11 @@ msgstr "रेखा"
 msgid "Forma"
 msgstr "आकृति"
 
-#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:367
+#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:383
 msgid "Caneta"
 msgstr "पेन"
 
-#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:368
+#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:384
 msgid "Marcador"
 msgstr "हाइलाइटर"
 
@@ -554,7 +554,7 @@ msgstr "हाइलाइटर"
 msgid "Texto"
 msgstr "पाठ"
 
-#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:370
+#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:386
 msgid "Balão"
 msgstr "कॉलआउट"
 
@@ -562,7 +562,7 @@ msgstr "कॉलआउट"
 msgid "Passos"
 msgstr "चरण"
 
-#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:376 rust/snapedit/src/stamps.rs:234
+#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:392 rust/snapedit/src/stamps.rs:234
 msgid "Carimbo"
 msgstr "मुहर"
 
@@ -570,11 +570,11 @@ msgstr "मुहर"
 msgid "Ocultar"
 msgstr "छिपाएँ"
 
-#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:381
+#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:397
 msgid "Destaque"
 msgstr "स्पॉटलाइट"
 
-#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:382
+#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:398
 msgid "Lupa"
 msgstr "आवर्धक"
 
@@ -718,7 +718,7 @@ msgstr "प्रभाव"
 msgid "Efeitos rápidos"
 msgstr "त्वरित प्रभाव"
 
-#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/snapnab/src/window.rs:708
+#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/snapnab/src/window.rs:731
 msgid "Excluir"
 msgstr "हटाएँ"
 
@@ -730,11 +730,11 @@ msgstr "+ त्वरित प्रभावों में जोड़े�
 msgid "Aplicar"
 msgstr "लागू करें"
 
-#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:538 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
+#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
 msgid "Cancelar"
 msgstr "रद्द करें"
 
-#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:577 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:579 rust/snapnab/src/window.rs:87
 msgid "Borda"
 msgstr "बॉर्डर"
 
@@ -754,7 +754,7 @@ msgstr "चौड़ाई"
 msgid "Cor"
 msgstr "रंग"
 
-#: rust/snapedit/src/effects.rs:100 rust/snapedit/src/effects.rs:121 rust/snapedit/src/effects.rs:335 rust/snapedit/src/app/commands.rs:579
+#: rust/snapedit/src/effects.rs:100 rust/snapedit/src/effects.rs:121 rust/snapedit/src/effects.rs:335 rust/snapedit/src/app/commands.rs:581
 msgid "Sombra"
 msgstr "छाया"
 
@@ -766,7 +766,7 @@ msgstr "छवि के पीछे हल्की छाया, जो क�
 msgid "Deslocamento"
 msgstr "खिसकाव"
 
-#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:379
+#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:395
 msgid "Desfoque"
 msgstr "धुंधला"
 
@@ -794,7 +794,7 @@ msgstr "लंबवत"
 msgid "Inclinação"
 msgstr "झुकाव"
 
-#: rust/snapedit/src/effects.rs:110 rust/snapedit/src/effects.rs:339 rust/snapedit/src/app/commands.rs:580
+#: rust/snapedit/src/effects.rs:110 rust/snapedit/src/effects.rs:339 rust/snapedit/src/app/commands.rs:582
 msgid "Dobra de página"
 msgstr "मुड़ा कोना"
 
@@ -810,7 +810,7 @@ msgstr "आकार"
 msgid "Pequena"
 msgstr "छोटा"
 
-#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
+#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
 msgid "Média"
 msgstr "मध्यम"
 
@@ -878,7 +878,7 @@ msgstr "ढलान"
 msgid "Em cima"
 msgstr "ऊपर"
 
-#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:672
+#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:672
 msgid "Direita"
 msgstr "दाएँ"
 
@@ -886,7 +886,7 @@ msgstr "दाएँ"
 msgid "Embaixo"
 msgstr "नीचे"
 
-#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:673
+#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:673
 msgid "Esquerda"
 msgstr "बाएँ"
 
@@ -938,11 +938,11 @@ msgstr "तीक्ष्णता"
 msgid "Intensidade"
 msgstr "तीव्रता"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
+#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
 msgid "Baixa"
 msgstr "कम"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
+#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
 msgid "Alta"
 msgstr "उच्च"
 
@@ -994,7 +994,7 @@ msgstr "नया रंग"
 msgid "Tornar transparente"
 msgstr "पारदर्शी बनाएँ"
 
-#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004 rust/snapedit/src/props.rs:1104 rust/snapedit/src/app/windows_aux.rs:636
+#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004 rust/snapedit/src/props.rs:1104 rust/snapedit/src/app/windows_aux.rs:686
 msgid "Tolerância"
 msgstr "सहनशीलता"
 
@@ -1102,55 +1102,55 @@ msgstr "क्लिक संकेतक"
 msgid "Clique direito"
 msgstr "दायाँ क्लिक"
 
-#: rust/snapedit/src/menu.rs:90
+#: rust/snapedit/src/menu.rs:91
 msgid "Enviar &para"
 msgstr "यहाँ भेजें(&P)"
 
-#: rust/snapedit/src/menu.rs:156
+#: rust/snapedit/src/menu.rs:157
 msgid "&Alinhar"
 msgstr "संरेखित करें(&A)"
 
-#: rust/snapedit/src/menu.rs:168
+#: rust/snapedit/src/menu.rs:169
 msgid "Ferramen&tas"
 msgstr "टूल(&T)"
 
-#: rust/snapedit/src/menu.rs:169
+#: rust/snapedit/src/menu.rs:170
 msgid "&Efeitos"
 msgstr "प्रभाव(&E)"
 
-#: rust/snapedit/src/menu.rs:171
+#: rust/snapedit/src/menu.rs:172
 msgid "&Organizar"
 msgstr "व्यवस्थित करें(&R)"
 
-#: rust/snapedit/src/menu.rs:185
+#: rust/snapedit/src/menu.rs:186
 msgid "&Girar"
 msgstr "घुमाएँ(&O)"
 
-#: rust/snapedit/src/menu.rs:223
+#: rust/snapedit/src/menu.rs:224
 msgid "Inserir c&ursor"
 msgstr "कर्सर डालें(&U)"
 
-#: rust/snapedit/src/menu.rs:233
+#: rust/snapedit/src/menu.rs:234 rust/snapnab/src/window.rs:243
 msgid "&Arquivo"
 msgstr "फ़ाइल(&F)"
 
-#: rust/snapedit/src/menu.rs:234
+#: rust/snapedit/src/menu.rs:235
 msgid "&Editar"
 msgstr "संपादन(&E)"
 
-#: rust/snapedit/src/menu.rs:235
+#: rust/snapedit/src/menu.rs:236
 msgid "&Imagem"
 msgstr "छवि(&I)"
 
-#: rust/snapedit/src/menu.rs:236
+#: rust/snapedit/src/menu.rs:237
 msgid "&Ferramentas"
 msgstr "टूल्स(&F)"
 
-#: rust/snapedit/src/menu.rs:237
+#: rust/snapedit/src/menu.rs:238 rust/snapnab/src/window.rs:243
 msgid "E&xibir"
 msgstr "दृश्य(&V)"
 
-#: rust/snapedit/src/menu.rs:238
+#: rust/snapedit/src/menu.rs:239 rust/snapnab/src/window.rs:243
 msgid "A&juda"
 msgstr "सहायता(&H)"
 
@@ -1238,431 +1238,431 @@ msgstr "स्पॉटलाइट (G)"
 msgid "Conta-gotas (I)"
 msgstr "रंग पिकर (I)"
 
-#: rust/snapedit/src/menu.rs:74
+#: rust/snapedit/src/menu.rs:75
 msgid "Nova &captura\tCtrl+Shift+N"
 msgstr "नया कैप्चर(&C)\tCtrl+Shift+N"
 
-#: rust/snapedit/src/menu.rs:75
+#: rust/snapedit/src/menu.rs:76
 msgid "Nova &gravação de vídeo"
 msgstr "नई वीडियो रिकॉर्डिंग(&R)"
 
-#: rust/snapedit/src/menu.rs:76
+#: rust/snapedit/src/menu.rs:77
 msgid "Novo da área de &transferência"
 msgstr "क्लिपबोर्ड से नया(&B)"
 
-#: rust/snapedit/src/menu.rs:77
+#: rust/snapedit/src/menu.rs:78
 msgid "Nova &imagem…"
 msgstr "नई छवि(&I)…"
 
-#: rust/snapedit/src/menu.rs:79
+#: rust/snapedit/src/menu.rs:80
 msgid "&Abrir…\tCtrl+O"
 msgstr "खोलें(&O)…\tCtrl+O"
 
-#: rust/snapedit/src/menu.rs:80
+#: rust/snapedit/src/menu.rs:81
 msgid "&Salvar\tCtrl+S"
 msgstr "सहेजें(&S)\tCtrl+S"
 
-#: rust/snapedit/src/menu.rs:81
+#: rust/snapedit/src/menu.rs:82
 msgid "Salvar &como…\tCtrl+Shift+S"
 msgstr "इस रूप में सहेजें(&A)…\tCtrl+Shift+S"
 
-#: rust/snapedit/src/menu.rs:82
+#: rust/snapedit/src/menu.rs:83
 msgid "&Duplicar"
 msgstr "प्रति बनाएँ(&D)"
 
-#: rust/snapedit/src/menu.rs:83
+#: rust/snapedit/src/menu.rs:84
 msgid "&Excluir (Lixeira)"
 msgstr "हटाएँ (रीसायकल बिन)(&L)"
 
-#: rust/snapedit/src/menu.rs:85
+#: rust/snapedit/src/menu.rs:86
 msgid "&Imprimir…\tCtrl+P"
 msgstr "प्रिंट करें(&P)…\tCtrl+P"
 
-#: rust/snapedit/src/menu.rs:86
+#: rust/snapedit/src/menu.rs:87
 msgid "Enviar por &e-mail…"
 msgstr "ईमेल से भेजें(&E)…"
 
-#: rust/snapedit/src/menu.rs:87
+#: rust/snapedit/src/menu.rs:88
 msgid "Abrir em &programa externo…"
 msgstr "बाहरी प्रोग्राम में खोलें(&G)…"
 
-#: rust/snapedit/src/menu.rs:88
+#: rust/snapedit/src/menu.rs:89
 msgid "Fi&xar na tela\tCtrl+Shift+P"
 msgstr "स्क्रीन पर पिन करें(&X)\tCtrl+Shift+P"
 
-#: rust/snapedit/src/menu.rs:89
+#: rust/snapedit/src/menu.rs:90
 msgid "Enviar (&upload)"
 msgstr "अपलोड करें(&U)"
 
-#: rust/snapedit/src/menu.rs:92
+#: rust/snapedit/src/menu.rs:93
 msgid "Com&binar imagens…"
 msgstr "छवियाँ मिलाएँ(&B)…"
 
-#: rust/snapedit/src/menu.rs:93
+#: rust/snapedit/src/menu.rs:94
 msgid "Comparar ima&gens…"
 msgstr "छवियों की तुलना करें(&G)…"
 
-#: rust/snapedit/src/menu.rs:94
+#: rust/snapedit/src/menu.rs:95
 msgid "Processamento em &lote…"
 msgstr "बैच प्रोसेसिंग(&L)…"
 
-#: rust/snapedit/src/menu.rs:96
+#: rust/snapedit/src/menu.rs:97
 msgid "Abrir a pasta da &biblioteca"
 msgstr "लाइब्रेरी फ़ोल्डर खोलें(&L)"
 
-#: rust/snapedit/src/menu.rs:97
+#: rust/snapedit/src/menu.rs:98
 msgid "&Fechar documento\tCtrl+W"
 msgstr "दस्तावेज़ बंद करें(&W)\tCtrl+W"
 
-#: rust/snapedit/src/menu.rs:98
+#: rust/snapedit/src/menu.rs:99
 msgid "Sai&r"
 msgstr "बाहर निकलें(&X)"
 
-#: rust/snapedit/src/menu.rs:101
+#: rust/snapedit/src/menu.rs:102
 msgid "&Desfazer\tCtrl+Z"
 msgstr "पूर्ववत करें(&U)\tCtrl+Z"
 
-#: rust/snapedit/src/menu.rs:102
+#: rust/snapedit/src/menu.rs:103
 msgid "&Refazer\tCtrl+Y"
 msgstr "फिर से करें(&R)\tCtrl+Y"
 
-#: rust/snapedit/src/menu.rs:103
+#: rust/snapedit/src/menu.rs:104
 msgid "Desfazer &tudo"
 msgstr "सब पूर्ववत करें(&L)"
 
-#: rust/snapedit/src/menu.rs:105 rust/snapedit/src/app/commands.rs:827
+#: rust/snapedit/src/menu.rs:106 rust/snapedit/src/app/commands.rs:864
 msgid "Recor&tar\tCtrl+X"
 msgstr "काटें(&T)\tCtrl+X"
 
-#: rust/snapedit/src/menu.rs:106 rust/snapedit/src/app/commands.rs:828 rust/snapedit/src/app/commands.rs:862
+#: rust/snapedit/src/menu.rs:107 rust/snapedit/src/app/commands.rs:865 rust/snapedit/src/app/commands.rs:899
 msgid "&Copiar\tCtrl+C"
 msgstr "कॉपी करें(&C)\tCtrl+C"
 
-#: rust/snapedit/src/menu.rs:107
+#: rust/snapedit/src/menu.rs:108
 msgid "Copiar t&udo\tCtrl+Shift+C"
 msgstr "सब कॉपी करें(&O)\tCtrl+Shift+C"
 
-#: rust/snapedit/src/menu.rs:108
+#: rust/snapedit/src/menu.rs:109
 msgid "Copiar co&mo…"
 msgstr "इस रूप में कॉपी करें(&M)…"
 
-#: rust/snapedit/src/menu.rs:109 rust/snapedit/src/app/commands.rs:829 rust/snapedit/src/app/commands.rs:858
+#: rust/snapedit/src/menu.rs:110 rust/snapedit/src/app/commands.rs:866 rust/snapedit/src/app/commands.rs:895
 msgid "C&olar\tCtrl+V"
 msgstr "चिपकाएँ(&P)\tCtrl+V"
 
-#: rust/snapedit/src/menu.rs:110 rust/snapedit/src/app/commands.rs:830 rust/snapedit/src/app/commands.rs:859
+#: rust/snapedit/src/menu.rs:111 rust/snapedit/src/app/commands.rs:867 rust/snapedit/src/app/commands.rs:896
 msgid "Colar no &mesmo lugar\tCtrl+Shift+V"
 msgstr "उसी जगह चिपकाएँ(&I)\tCtrl+Shift+V"
 
-#: rust/snapedit/src/menu.rs:111 rust/snapedit/src/app/commands.rs:831
+#: rust/snapedit/src/menu.rs:112 rust/snapedit/src/app/commands.rs:868
 msgid "E&xcluir\tDel"
 msgstr "हटाएँ(&D)\tDel"
 
-#: rust/snapedit/src/menu.rs:112 rust/snapedit/src/app/commands.rs:870
+#: rust/snapedit/src/menu.rs:113 rust/snapedit/src/app/commands.rs:907
 msgid "Selecionar tu&do\tCtrl+A"
 msgstr "सब चुनें(&A)\tCtrl+A"
 
-#: rust/snapedit/src/menu.rs:113 rust/snapedit/src/app/commands.rs:863
+#: rust/snapedit/src/menu.rs:114 rust/snapedit/src/app/commands.rs:900
 msgid "Cortar para a &seleção"
 msgstr "चयन तक क्रॉप करें(&S)"
 
-#: rust/snapedit/src/menu.rs:114 rust/snapedit/src/app/commands.rs:864
+#: rust/snapedit/src/menu.rs:115 rust/snapedit/src/app/commands.rs:901
 msgid "&Levantar a seleção (peça solta)\tCtrl+Shift+L"
 msgstr "चयन उठाएँ (अलग टुकड़ा)(&L)\tCtrl+Shift+L"
 
-#: rust/snapedit/src/menu.rs:115
+#: rust/snapedit/src/menu.rs:116
 msgid "Soltar a &peça na imagem\tEnter"
 msgstr "टुकड़े को छवि में छोड़ें(&P)\tEnter"
 
-#: rust/snapedit/src/menu.rs:117
+#: rust/snapedit/src/menu.rs:118
 msgid "Colar texto sem &formatação"
 msgstr "बिना फ़ॉर्मेटिंग पाठ चिपकाएँ(&F)"
 
-#: rust/snapedit/src/menu.rs:118
+#: rust/snapedit/src/menu.rs:119
 msgid "Seleção encaixa nas &bordas da imagem"
 msgstr "चयन छवि के किनारों से चिपके(&E)"
 
-#: rust/snapedit/src/menu.rs:119
+#: rust/snapedit/src/menu.rs:120
 msgid "Desen&har e segurar vira forma (Caneta)"
 msgstr "बनाएँ और रोकें से आकृति बनती है(&H) (पेन)"
 
-#: rust/snapedit/src/menu.rs:121
+#: rust/snapedit/src/menu.rs:122
 msgid "&Grab Text (OCR)\tCtrl+Shift+O"
 msgstr "पाठ निकालें (OCR)(&G)\tCtrl+Shift+O"
 
-#: rust/snapedit/src/menu.rs:124
+#: rust/snapedit/src/menu.rs:125
 msgid "&Borda"
 msgstr "बॉर्डर(&B)"
 
-#: rust/snapedit/src/menu.rs:125
+#: rust/snapedit/src/menu.rs:126
 msgid "Bor&das"
 msgstr "किनारे(&E)"
 
-#: rust/snapedit/src/menu.rs:126
+#: rust/snapedit/src/menu.rs:127
 msgid "&Informações da captura"
 msgstr "कैप्चर जानकारी(&I)"
 
-#: rust/snapedit/src/menu.rs:127
+#: rust/snapedit/src/menu.rs:128
 msgid "&Perspectiva"
 msgstr "परिप्रेक्ष्य(&P)"
 
-#: rust/snapedit/src/menu.rs:128
+#: rust/snapedit/src/menu.rs:129
 msgid "D&obra de página"
 msgstr "मुड़ा कोना(&U)"
 
-#: rust/snapedit/src/menu.rs:129
+#: rust/snapedit/src/menu.rs:130
 msgid "&Sombra"
 msgstr "छाया(&S)"
 
-#: rust/snapedit/src/menu.rs:130
+#: rust/snapedit/src/menu.rs:131
 msgid "&Filtros"
 msgstr "फ़िल्टर(&F)"
 
-#: rust/snapedit/src/menu.rs:131
+#: rust/snapedit/src/menu.rs:132
 msgid "&Ajuste de cores"
 msgstr "रंग समायोजन(&A)"
 
-#: rust/snapedit/src/menu.rs:132
+#: rust/snapedit/src/menu.rs:133
 msgid "Substituição de co&r"
 msgstr "रंग बदलें(&R)"
 
-#: rust/snapedit/src/menu.rs:133
+#: rust/snapedit/src/menu.rs:134
 msgid "Spotlight e &lupa"
 msgstr "स्पॉटलाइट और आवर्धक(&M)"
 
-#: rust/snapedit/src/menu.rs:134
+#: rust/snapedit/src/menu.rs:135
 msgid "&Marca d'água"
 msgstr "वॉटरमार्क(&W)"
 
-#: rust/snapedit/src/menu.rs:136
+#: rust/snapedit/src/menu.rs:137
 msgid "&Embelezar…"
 msgstr "सुंदर बनाएँ(&E)…"
 
-#: rust/snapedit/src/menu.rs:139
+#: rust/snapedit/src/menu.rs:140
 msgid "À &esquerda"
 msgstr "बाएँ(&L)"
 
-#: rust/snapedit/src/menu.rs:140
+#: rust/snapedit/src/menu.rs:141
 msgid "Ao &centro"
 msgstr "बीच में(&C)"
 
-#: rust/snapedit/src/menu.rs:141
+#: rust/snapedit/src/menu.rs:142
 msgid "À &direita"
 msgstr "दाएँ(&R)"
 
-#: rust/snapedit/src/menu.rs:143
+#: rust/snapedit/src/menu.rs:144
 msgid "Em &cima"
 msgstr "ऊपर(&T)"
 
-#: rust/snapedit/src/menu.rs:144
+#: rust/snapedit/src/menu.rs:145
 msgid "No &meio"
 msgstr "मध्य(&M)"
 
-#: rust/snapedit/src/menu.rs:145
+#: rust/snapedit/src/menu.rs:146
 msgid "Em&baixo"
 msgstr "नीचे(&B)"
 
-#: rust/snapedit/src/menu.rs:147
+#: rust/snapedit/src/menu.rs:148
 msgid "Distribuir na &horizontal"
 msgstr "क्षैतिज वितरित करें(&H)"
 
-#: rust/snapedit/src/menu.rs:148
+#: rust/snapedit/src/menu.rs:149
 msgid "Distribuir na &vertical"
 msgstr "लंबवत वितरित करें(&V)"
 
-#: rust/snapedit/src/menu.rs:151 rust/snapedit/src/app/commands.rs:839
+#: rust/snapedit/src/menu.rs:152 rust/snapedit/src/app/commands.rs:876
 msgid "Trazer para a &frente\tCtrl+Shift+F"
 msgstr "आगे लाएँ(&F)\tCtrl+Shift+F"
 
-#: rust/snapedit/src/menu.rs:152 rust/snapedit/src/app/commands.rs:838
+#: rust/snapedit/src/menu.rs:153 rust/snapedit/src/app/commands.rs:875
 msgid "Trazer para o &primeiro plano"
 msgstr "सबसे आगे लाएँ(&O)"
 
-#: rust/snapedit/src/menu.rs:153 rust/snapedit/src/app/commands.rs:840
+#: rust/snapedit/src/menu.rs:154 rust/snapedit/src/app/commands.rs:877
 msgid "Enviar para &trás\tCtrl+Shift+B"
 msgstr "पीछे भेजें(&B)\tCtrl+Shift+B"
 
-#: rust/snapedit/src/menu.rs:154 rust/snapedit/src/app/commands.rs:841
+#: rust/snapedit/src/menu.rs:155 rust/snapedit/src/app/commands.rs:878
 msgid "Enviar para o plano de &fundo"
 msgstr "सबसे पीछे भेजें(&K)"
 
-#: rust/snapedit/src/menu.rs:158
+#: rust/snapedit/src/menu.rs:159
 msgid "Espelhar na &vertical"
 msgstr "लंबवत पलटें(&V)"
 
-#: rust/snapedit/src/menu.rs:159
+#: rust/snapedit/src/menu.rs:160
 msgid "Espelhar na &horizontal"
 msgstr "क्षैतिज पलटें(&H)"
 
-#: rust/snapedit/src/menu.rs:162
+#: rust/snapedit/src/menu.rs:163
 msgid "Sentido &horário\tCtrl+R"
 msgstr "दक्षिणावर्त(&C)\tCtrl+R"
 
-#: rust/snapedit/src/menu.rs:163
+#: rust/snapedit/src/menu.rs:164
 msgid "Sentido &anti-horário"
 msgstr "वामावर्त(&W)"
 
-#: rust/snapedit/src/menu.rs:164
+#: rust/snapedit/src/menu.rs:165
 msgid "&180 graus"
 msgstr "180 डिग्री(&1)"
 
-#: rust/snapedit/src/menu.rs:165
+#: rust/snapedit/src/menu.rs:166
 msgid "Ângulo &personalizado…"
 msgstr "कस्टम कोण(&A)…"
 
-#: rust/snapedit/src/menu.rs:172 rust/snapedit/src/app/commands.rs:852
+#: rust/snapedit/src/menu.rs:173 rust/snapedit/src/app/commands.rs:889
 msgid "A&grupar\tCtrl+Shift+G"
 msgstr "समूह बनाएँ(&G)\tCtrl+Shift+G"
 
-#: rust/snapedit/src/menu.rs:173 rust/snapedit/src/app/commands.rs:855
+#: rust/snapedit/src/menu.rs:174 rust/snapedit/src/app/commands.rs:892
 msgid "Desagr&upar\tCtrl+Shift+U"
 msgstr "समूह तोड़ें(&U)\tCtrl+Shift+U"
 
-#: rust/snapedit/src/menu.rs:174
+#: rust/snapedit/src/menu.rs:175
 msgid "&Bloquear objeto\tCtrl+L"
 msgstr "ऑब्जेक्ट लॉक करें(&L)\tCtrl+L"
 
-#: rust/snapedit/src/menu.rs:175
+#: rust/snapedit/src/menu.rs:176
 msgid "Desblo&quear objeto\tCtrl+Shift+K"
 msgstr "ऑब्जेक्ट अनलॉक करें(&U)\tCtrl+Shift+K"
 
-#: rust/snapedit/src/menu.rs:177
+#: rust/snapedit/src/menu.rs:178
 msgid "&Mesclar\tCtrl+T"
 msgstr "मिलाएँ(&M)\tCtrl+T"
 
-#: rust/snapedit/src/menu.rs:178
+#: rust/snapedit/src/menu.rs:179
 msgid "Mesclar t&udo\tCtrl+Shift+T"
 msgstr "सब मिलाएँ(&L)\tCtrl+Shift+T"
 
-#: rust/snapedit/src/menu.rs:180
+#: rust/snapedit/src/menu.rs:181
 msgid "A&parar"
 msgstr "ट्रिम करें(&P)"
 
-#: rust/snapedit/src/menu.rs:181
+#: rust/snapedit/src/menu.rs:182
 msgid "&Redimensionar imagem…"
 msgstr "छवि का आकार बदलें(&R)…"
 
-#: rust/snapedit/src/menu.rs:182
+#: rust/snapedit/src/menu.rs:183
 msgid "Redimensionar &canvas…"
 msgstr "कैनवास का आकार बदलें(&C)…"
 
-#: rust/snapedit/src/menu.rs:183
+#: rust/snapedit/src/menu.rs:184
 msgid "Aplicar mode&lo…\tCtrl+Alt+C"
 msgstr "टेम्पलेट लागू करें(&L)…\tCtrl+Alt+C"
 
-#: rust/snapedit/src/menu.rs:186
+#: rust/snapedit/src/menu.rs:187
 msgid "Encai&xe no canvas\tCtrl+;"
 msgstr "कैनवास पर स्नैप(&X)\tCtrl+;"
 
-#: rust/snapedit/src/menu.rs:187
+#: rust/snapedit/src/menu.rs:188
 msgid "Cor do canva&s…"
 msgstr "कैनवास का रंग(&S)…"
 
-#: rust/snapedit/src/menu.rs:189
+#: rust/snapedit/src/menu.rs:190
 msgid "Etiquetar &imagem…"
 msgstr "छवि टैग करें(&I)…"
 
-#: rust/snapedit/src/menu.rs:192
+#: rust/snapedit/src/menu.rs:193
 msgid "&Ampliar\tCtrl++"
 msgstr "ज़ूम इन(&I)\tCtrl++"
 
-#: rust/snapedit/src/menu.rs:193
+#: rust/snapedit/src/menu.rs:194
 msgid "&Reduzir\tCtrl+-"
 msgstr "ज़ूम आउट(&O)\tCtrl+-"
 
-#: rust/snapedit/src/menu.rs:194
+#: rust/snapedit/src/menu.rs:195
 msgid "&Tamanho real\tCtrl+1"
 msgstr "वास्तविक आकार(&A)\tCtrl+1"
 
-#: rust/snapedit/src/menu.rs:195
+#: rust/snapedit/src/menu.rs:196
 msgid "A&justar à janela\tCtrl+0"
 msgstr "विंडो में फ़िट करें(&F)\tCtrl+0"
 
-#: rust/snapedit/src/menu.rs:197
+#: rust/snapedit/src/menu.rs:198
 msgid "&Cor de fundo da área…"
 msgstr "क्षेत्र की पृष्ठभूमि का रंग(&B)…"
 
-#: rust/snapedit/src/menu.rs:198
+#: rust/snapedit/src/menu.rs:199
 msgid "Ré&guas e guias\tCtrl+Shift+R"
 msgstr "रूलर और गाइड(&R)\tCtrl+Shift+R"
 
-#: rust/snapedit/src/menu.rs:199
+#: rust/snapedit/src/menu.rs:200
 msgid "Remover as gu&ias"
 msgstr "गाइड हटाएँ(&G)"
 
-#: rust/snapedit/src/menu.rs:201
+#: rust/snapedit/src/menu.rs:202
 msgid "Painel de &efeitos"
 msgstr "प्रभाव पैनल(&E)"
 
-#: rust/snapedit/src/menu.rs:202
+#: rust/snapedit/src/menu.rs:203
 msgid "Painel de ca&madas"
 msgstr "लेयर पैनल(&L)"
 
-#: rust/snapedit/src/menu.rs:203
+#: rust/snapedit/src/menu.rs:204
 msgid "&Biblioteca"
 msgstr "लाइब्रेरी(&L)"
 
-#: rust/snapedit/src/menu.rs:204
+#: rust/snapedit/src/menu.rs:205
 msgid "Capturas &recentes (bandeja)"
 msgstr "हाल के कैप्चर (ट्रे)(&R)"
 
-#: rust/snapedit/src/menu.rs:206
+#: rust/snapedit/src/menu.rs:207
 msgid "&Personalizar a barra de ferramentas…"
 msgstr "टूलबार अनुकूलित करें(&C)…"
 
-#: rust/snapedit/src/menu.rs:209
+#: rust/snapedit/src/menu.rs:210
 msgid "&Manual do Snapnab\tF1"
 msgstr "Snapnab &मैनुअल\tF1"
 
-#: rust/snapedit/src/menu.rs:210
+#: rust/snapedit/src/menu.rs:211
 msgid "&Atalhos de teclado"
 msgstr "कीबोर्ड शॉर्टकट(&K)"
 
-#: rust/snapedit/src/menu.rs:211
+#: rust/snapedit/src/menu.rs:212
 msgid "&Sobre o Snapnab Editor"
 msgstr "Snapnab Editor के बारे में(&A)"
 
-#: rust/snapedit/src/menu.rs:216
+#: rust/snapedit/src/menu.rs:217
 msgid "Ler código &QR\tCtrl+Shift+Q"
 msgstr "QR कोड पढ़ें(&Q)\tCtrl+Shift+Q"
 
-#: rust/snapedit/src/menu.rs:217
+#: rust/snapedit/src/menu.rs:218
 msgid "&Ocultar dados sensíveis…\tCtrl+Shift+E"
 msgstr "संवेदनशील डेटा छिपाएँ(&O)…\tCtrl+Shift+E"
 
-#: rust/snapedit/src/menu.rs:218
+#: rust/snapedit/src/menu.rs:219
 msgid "Remover o &fundo…"
 msgstr "पृष्ठभूमि हटाएँ(&F)…"
 
-#: rust/snapedit/src/menu.rs:219
+#: rust/snapedit/src/menu.rs:220
 msgid "&Dividir imagem…"
 msgstr "छवि बाँटें(&D)…"
 
-#: rust/snapedit/src/menu.rs:220
+#: rust/snapedit/src/menu.rs:221
 msgid "Adicionar ca&ptura"
 msgstr "कैप्चर जोड़ें(&P)"
 
-#: rust/snapedit/src/menu.rs:222
+#: rust/snapedit/src/menu.rs:223
 msgid "Inserir data e &hora\tCtrl+Shift+D"
 msgstr "तिथि और समय डालें(&H)\tCtrl+Shift+D"
 
-#: rust/snapedit/src/menu.rs:224
+#: rust/snapedit/src/menu.rs:225
 msgid "Formato da data e hora…"
 msgstr "तिथि और समय का प्रारूप…"
 
-#: rust/snapedit/src/menu.rs:226
+#: rust/snapedit/src/menu.rs:227
 msgid "Verificador de &contraste…"
 msgstr "कंट्रास्ट जाँचकर्ता(&C)…"
 
-#: rust/snapedit/src/menu.rs:227
+#: rust/snapedit/src/menu.rs:228
 msgid "&Assistente de IA…"
 msgstr "AI सहायक(&A)…"
 
-#: rust/snapedit/src/menu.rs:229
+#: rust/snapedit/src/menu.rs:230
 msgid "Configurar o assistente de IA…"
 msgstr "AI सहायक सेट करें…"
 
-#: rust/snapedit/src/menu.rs:230
+#: rust/snapedit/src/menu.rs:231
 msgid "Configurar o &upload…"
 msgstr "अपलोड सेट करें(&U)…"
 
@@ -1674,69 +1674,69 @@ msgstr "प्रभाव: "
 msgid " — abre os ajustes no painel de efeitos"
 msgstr " — प्रभाव पैनल में सेटिंग्स खोलता है"
 
-#: rust/snapedit/src/panels.rs:308
+#: rust/snapedit/src/panels.rs:324
 msgid "Mais"
 msgstr "और"
 
-#: rust/snapedit/src/panels.rs:371
+#: rust/snapedit/src/panels.rs:387
 #, c-format
 msgid "Passo %s"
 msgstr "चरण %s"
 
-#: rust/snapedit/src/panels.rs:380 rust/snapedit/src/props.rs:1063
+#: rust/snapedit/src/panels.rs:396 rust/snapedit/src/props.rs:1063
 msgid "Pixelado"
 msgstr "पिक्सेलेट"
 
-#: rust/snapedit/src/panels.rs:383
+#: rust/snapedit/src/panels.rs:399
 msgid "Peça solta"
 msgstr "अलग किया टुकड़ा"
 
-#: rust/snapedit/src/panels.rs:383 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/panels.rs:399 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Imagem"
 msgstr "छवि"
 
-#: rust/snapedit/src/panels.rs:384
+#: rust/snapedit/src/panels.rs:400
 #, c-format
 msgid "Grupo (%zu)"
 msgstr "समूह (%zu)"
 
-#: rust/snapedit/src/panels.rs:385
+#: rust/snapedit/src/panels.rs:401
 msgid "Link: "
 msgstr "लिंक: "
 
-#: rust/snapedit/src/panels.rs:407 rust/snapedit/src/app/mod.rs:449
+#: rust/snapedit/src/panels.rs:423 rust/snapedit/src/app/mod.rs:457
 msgid "Camadas"
 msgstr "लेयर"
 
-#: rust/snapedit/src/panels.rs:409
+#: rust/snapedit/src/panels.rs:425
 msgid "Nenhuma imagem aberta."
 msgstr "कोई छवि खुली नहीं है।"
 
-#: rust/snapedit/src/panels.rs:414
+#: rust/snapedit/src/panels.rs:430
 msgid "Os objetos desenhados (setas, textos, formas…) aparecem aqui, do mais à frente ao mais atrás."
 msgstr "बनाए गए ऑब्जेक्ट (तीर, पाठ, आकृतियाँ…) यहाँ सबसे आगे वाले से सबसे पीछे वाले तक दिखते हैं।"
 
-#: rust/snapedit/src/panels.rs:422
+#: rust/snapedit/src/panels.rs:438
 msgid "Mostrar ou ocultar"
 msgstr "दिखाएँ या छिपाएँ"
 
-#: rust/snapedit/src/panels.rs:427
+#: rust/snapedit/src/panels.rs:443
 msgid "Bloquear ou desbloquear"
 msgstr "लॉक या अनलॉक करें"
 
-#: rust/snapedit/src/panels.rs:448 rust/snapedit/src/props.rs:1814
+#: rust/snapedit/src/panels.rs:464 rust/snapedit/src/props.rs:1814
 msgid "Enviar para trás"
 msgstr "पीछे भेजें"
 
-#: rust/snapedit/src/panels.rs:451 rust/snapedit/src/props.rs:1813
+#: rust/snapedit/src/panels.rs:467 rust/snapedit/src/props.rs:1813
 msgid "Trazer para a frente"
 msgstr "आगे लाएँ"
 
-#: rust/snapedit/src/panels.rs:457
+#: rust/snapedit/src/panels.rs:473
 msgid "Fundo (imagem)"
 msgstr "पृष्ठभूमि (छवि)"
 
-#: rust/snapedit/src/panels.rs:62 rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:204
+#: rust/snapedit/src/panels.rs:62 rust/snapnab/src/window.rs:44
 msgid "Arquivo"
 msgstr "फ़ाइल"
 
@@ -1804,7 +1804,7 @@ msgstr "क्लिपबोर्ड से नई छवि"
 msgid "Abrir arquivo (Ctrl+O)"
 msgstr "फ़ाइल खोलें (Ctrl+O)"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:694
+#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:744
 msgid "Salvar"
 msgstr "सहेजें"
 
@@ -1812,15 +1812,15 @@ msgstr "सहेजें"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "लाइब्रेरी में सहेजें (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
 msgid "Salvar como"
 msgstr "इस रूप में सहेजें"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259
 msgid "Salvar como arquivo (Ctrl+Shift+S)"
 msgstr "फ़ाइल के रूप में सहेजें (Ctrl+Shift+S)"
 
-#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/snapnab/src/window.rs:706
+#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/snapnab/src/window.rs:729
 msgid "Duplicar"
 msgstr "प्रति बनाएँ"
 
@@ -1860,7 +1860,7 @@ msgstr "सब मिलाएँ"
 msgid "Mesclar todos os objetos na imagem"
 msgstr "सभी ऑब्जेक्ट छवि में मिलाएँ"
 
-#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:627 rust/snapnab/src/dialogs.rs:678
+#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:629 rust/snapnab/src/dialogs.rs:678
 msgid "Girar"
 msgstr "घुमाएँ"
 
@@ -1876,7 +1876,7 @@ msgstr "स्वतः ट्रिम"
 msgid "Cortar as bordas de cor uniforme"
 msgstr "एक जैसे रंग वाले किनारे काटें"
 
-#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:881
 msgid "Alinhar à esquerda"
 msgstr "बाएँ संरेखित करें"
 
@@ -1884,7 +1884,7 @@ msgstr "बाएँ संरेखित करें"
 msgid "Alinhar os objetos à esquerda"
 msgstr "ऑब्जेक्ट बाएँ संरेखित करें"
 
-#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:881
 msgid "Alinhar ao centro"
 msgstr "केंद्र में संरेखित करें"
 
@@ -1892,7 +1892,7 @@ msgstr "केंद्र में संरेखित करें"
 msgid "Alinhar os objetos ao centro"
 msgstr "ऑब्जेक्ट केंद्र में संरेखित करें"
 
-#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:881
 msgid "Alinhar à direita"
 msgstr "दाएँ संरेखित करें"
 
@@ -1900,7 +1900,7 @@ msgstr "दाएँ संरेखित करें"
 msgid "Alinhar os objetos à direita"
 msgstr "ऑब्जेक्ट दाएँ संरेखित करें"
 
-#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:882
 msgid "Alinhar em cima"
 msgstr "ऊपर संरेखित करें"
 
@@ -1908,7 +1908,7 @@ msgstr "ऊपर संरेखित करें"
 msgid "Alinhar os objetos em cima"
 msgstr "ऑब्जेक्ट ऊपर संरेखित करें"
 
-#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:882
 msgid "Alinhar no meio"
 msgstr "बीच में संरेखित करें"
 
@@ -1916,7 +1916,7 @@ msgstr "बीच में संरेखित करें"
 msgid "Alinhar os objetos no meio"
 msgstr "ऑब्जेक्ट बीच में संरेखित करें"
 
-#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:882
 msgid "Alinhar embaixo"
 msgstr "नीचे संरेखित करें"
 
@@ -1924,7 +1924,7 @@ msgstr "नीचे संरेखित करें"
 msgid "Alinhar os objetos embaixo"
 msgstr "ऑब्जेक्ट नीचे संरेखित करें"
 
-#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:849
+#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:886
 msgid "Distribuir na horizontal"
 msgstr "क्षैतिज वितरित करें"
 
@@ -1932,7 +1932,7 @@ msgstr "क्षैतिज वितरित करें"
 msgid "Espaçar 3 ou mais objetos igualmente na horizontal"
 msgstr "3 या अधिक ऑब्जेक्ट क्षैतिज रूप से बराबर दूरी पर रखें"
 
-#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:850
+#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:887
 msgid "Distribuir na vertical"
 msgstr "लंबवत वितरित करें"
 
@@ -1956,7 +1956,7 @@ msgstr "रूलर"
 msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
 msgstr "रूलर, गाइड और निर्देशांक दिखाएँ (Ctrl+Shift+R)"
 
-#: rust/snapedit/src/panels.rs:243 rust/snapnab/src/window.rs:596
+#: rust/snapedit/src/panels.rs:243 rust/snapnab/src/window.rs:619
 msgid "Capturar"
 msgstr "कैप्चर"
 
@@ -1964,7 +1964,7 @@ msgstr "कैप्चर"
 msgid "Nova captura de imagem (pede ao Snapnab)"
 msgstr "नया छवि कैप्चर (Snapnab से माँगता है)"
 
-#: rust/snapedit/src/panels.rs:244 rust/snapnab/src/window.rs:596
+#: rust/snapedit/src/panels.rs:244 rust/snapnab/src/window.rs:619
 msgid "Gravar"
 msgstr "रिकॉर्ड करें"
 
@@ -1972,51 +1972,51 @@ msgstr "रिकॉर्ड करें"
 msgid "Nova gravação de vídeo"
 msgstr "नई वीडियो रिकॉर्डिंग"
 
-#: rust/snapedit/src/panels.rs:287
+#: rust/snapedit/src/panels.rs:258
 msgid "Compartilhar"
 msgstr "साझा करें"
 
-#: rust/snapedit/src/panels.rs:287
+#: rust/snapedit/src/panels.rs:258
 msgid "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"
 msgstr "साझा करें: फ़ाइल, क्लिपबोर्ड, ईमेल, प्रिंटर, प्रोग्राम"
 
-#: rust/snapedit/src/panels.rs:289 rust/snapedit/src/app/windows_aux.rs:452 rust/snapui/src/qr.rs:48
+#: rust/snapedit/src/panels.rs:260 rust/snapedit/src/app/windows_aux.rs:488 rust/snapui/src/qr.rs:48
 msgid "Copiar tudo"
 msgstr "सब कॉपी करें"
 
-#: rust/snapedit/src/panels.rs:289
+#: rust/snapedit/src/panels.rs:260
 msgid "Copiar a imagem inteira (Ctrl+Shift+C)"
 msgstr "पूरी छवि कॉपी करें (Ctrl+Shift+C)"
 
-#: rust/snapedit/src/panels.rs:363 rust/snapedit/src/props.rs:1103
+#: rust/snapedit/src/panels.rs:379 rust/snapedit/src/props.rs:1103
 msgid "Retângulo"
 msgstr "आयत"
 
-#: rust/snapedit/src/panels.rs:363
+#: rust/snapedit/src/panels.rs:379
 msgid "Retângulo arredondado"
 msgstr "गोल कोनों वाला आयत"
 
-#: rust/snapedit/src/panels.rs:363 rust/snapedit/src/props.rs:1103
+#: rust/snapedit/src/panels.rs:379 rust/snapedit/src/props.rs:1103
 msgid "Elipse"
 msgstr "दीर्घवृत्त"
 
-#: rust/snapedit/src/panels.rs:363
+#: rust/snapedit/src/panels.rs:379
 msgid "Triângulo"
 msgstr "त्रिभुज"
 
-#: rust/snapedit/src/panels.rs:363
+#: rust/snapedit/src/panels.rs:379
 msgid "Losango"
 msgstr "समचतुर्भुज"
 
-#: rust/snapedit/src/panels.rs:363
+#: rust/snapedit/src/panels.rs:379
 msgid "Paralelogramo"
 msgstr "समांतर चतुर्भुज"
 
-#: rust/snapedit/src/panels.rs:363
+#: rust/snapedit/src/panels.rs:379
 msgid "Hexágono"
 msgstr "षट्भुज"
 
-#: rust/snapedit/src/panels.rs:363
+#: rust/snapedit/src/panels.rs:379
 msgid "Estrela"
 msgstr "तारा"
 
@@ -2069,7 +2069,7 @@ msgstr "मेरी थीम"
 msgid "Tema do Snapnab (*.snaptheme)"
 msgstr "Snapnab थीम (*.snaptheme)"
 
-#: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:88
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:91
 msgid "Todos os arquivos"
 msgstr "सभी फ़ाइलें"
 
@@ -2089,7 +2089,7 @@ msgstr "थीम संपादित करें…"
 msgid " (cópia)"
 msgstr " (प्रति)"
 
-#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:365
+#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:303
 msgid "Exportar…"
 msgstr "निर्यात करें…"
 
@@ -2158,7 +2158,7 @@ msgstr "यह मुहर उपयोग करें"
 msgid "Propriedades da ferramenta"
 msgstr "टूल के गुण"
 
-#: rust/snapedit/src/props.rs:860 rust/snapnab/src/window.rs:247 rust/snapnab/src/window.rs:748
+#: rust/snapedit/src/props.rs:860 rust/snapnab/src/window.rs:772
 msgid "Ajuda"
 msgstr "सहायता"
 
@@ -2380,11 +2380,11 @@ msgstr "चयन हटाएँ"
 msgid "Levantar a seleção (peça solta)"
 msgstr "चयन उठाएँ (अलग टुकड़ा)"
 
-#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:167
+#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:170
 msgid "Selecione uma área com a ferramenta Seleção para levantá-la."
 msgstr "इसे उठाने के लिए चयन टूल से एक क्षेत्र चुनें।"
 
-#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:169
+#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:172
 msgid "Peça solta: ajuste o resto da imagem (cortar, recortar faixa…), posicione a peça e tecle Enter para soltá-la."
 msgstr "अलग टुकड़ा: बाकी छवि समायोजित करें (क्रॉप, पट्टी हटाएँ…), टुकड़ा रखें और छोड़ने के लिए Enter दबाएँ।"
 
@@ -2412,7 +2412,7 @@ msgstr "रंग लेने के लिए छवि पर क्लिक
 msgid "Soltar a peça na imagem"
 msgstr "टुकड़े को छवि में छोड़ें"
 
-#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:174
+#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:177
 msgid "Peça solta na imagem."
 msgstr "टुकड़ा छवि में छोड़ा गया।"
 
@@ -2516,7 +2516,7 @@ msgstr "चयन (px)"
 msgid "Posição e tamanho (px)"
 msgstr "स्थिति और आकार (px)"
 
-#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:652
+#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:654
 msgid "Manter proporção"
 msgstr "अनुपात बनाए रखें"
 
@@ -2572,7 +2572,7 @@ msgstr "कोण रैखिक ग्रेडिएंट पर लाग�
 msgid "Gradiente"
 msgstr "ग्रेडिएंट"
 
-#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:240 rust/snapedit/src/app/commands.rs:575 rust/snapedit/src/app/commands.rs:908
+#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:243 rust/snapedit/src/app/commands.rs:577 rust/snapedit/src/app/commands.rs:951
 msgid "Nome"
 msgstr "नाम"
 
@@ -3969,11 +3969,11 @@ msgstr "सूटकेस"
 msgid "local pino"
 msgstr "स्थान पिन"
 
-#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:316
+#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:352
 msgid "Antes"
 msgstr "पहले"
 
-#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:317
+#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:353
 msgid "Depois"
 msgstr "बाद में"
 
@@ -4093,89 +4093,89 @@ msgstr "मूल"
 msgid "Industrial"
 msgstr "औद्योगिक"
 
-#: rust/snapedit/src/tray.rs:278 rust/snapedit/src/app/mod.rs:403
-msgid "Capturas recentes"
-msgstr "हाल के कैप्चर"
-
-#: rust/snapedit/src/tray.rs:279
-msgid "Biblioteca…"
-msgstr "लाइब्रेरी…"
-
-#: rust/snapedit/src/tray.rs:285
-msgid "Biblioteca"
-msgstr "लाइब्रेरी"
-
-#: rust/snapedit/src/tray.rs:288
-msgid "Pesquisar"
-msgstr "खोजें"
-
-#: rust/snapedit/src/tray.rs:293
-msgid "Voltar à imagem"
-msgstr "छवि पर लौटें"
-
-#: rust/snapedit/src/tray.rs:359
+#: rust/snapedit/src/tray.rs:300
 msgid "Mostrar na pasta"
 msgstr "फ़ोल्डर में दिखाएँ"
 
-#: rust/snapedit/src/tray.rs:365
+#: rust/snapedit/src/tray.rs:303
 #, c-format
 msgid "Exportar %zu itens…"
 msgstr "%zu आइटम निर्यात करें…"
 
-#: rust/snapedit/src/tray.rs:371 rust/snapedit/src/app/commands.rs:776 rust/snapnab/src/quick.rs:297
+#: rust/snapedit/src/tray.rs:306 rust/snapedit/src/app/commands.rs:778 rust/snapnab/src/quick.rs:297
 msgid "Copiar como…"
 msgstr "इस रूप में कॉपी करें…"
 
-#: rust/snapedit/src/tray.rs:375 rust/snapedit/src/app/commands.rs:781 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:44
+#: rust/snapedit/src/tray.rs:308 rust/snapedit/src/app/commands.rs:783 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:44
 msgid "Fixar na tela"
 msgstr "स्क्रीन पर पिन करें"
 
-#: rust/snapedit/src/tray.rs:379 rust/snapedit/src/app/commands.rs:782
+#: rust/snapedit/src/tray.rs:310 rust/snapedit/src/app/commands.rs:784
 msgid "Enviar (upload)"
 msgstr "अपलोड करें"
 
-#: rust/snapedit/src/tray.rs:384
+#: rust/snapedit/src/tray.rs:313
 #, c-format
 msgid "Combinar %zu imagens…"
 msgstr "%zu छवियाँ मिलाएँ…"
 
-#: rust/snapedit/src/tray.rs:388
+#: rust/snapedit/src/tray.rs:316
 msgid "Comparar as duas…"
 msgstr "दोनों की तुलना करें…"
 
-#: rust/snapedit/src/tray.rs:392
+#: rust/snapedit/src/tray.rs:318
 #, c-format
 msgid "Processar %zu em lote…"
 msgstr "%zu को बैच में प्रोसेस करें…"
 
-#: rust/snapedit/src/tray.rs:392
+#: rust/snapedit/src/tray.rs:318
 msgid "Processamento em lote…"
 msgstr "बैच प्रोसेसिंग…"
 
-#: rust/snapedit/src/tray.rs:398
+#: rust/snapedit/src/tray.rs:321
 msgid "Selecionar tudo\tCtrl+A"
 msgstr "सब चुनें\tCtrl+A"
 
-#: rust/snapedit/src/tray.rs:402
+#: rust/snapedit/src/tray.rs:323
 msgid "Renomear…\tF2"
 msgstr "नाम बदलें…\tF2"
 
-#: rust/snapedit/src/tray.rs:407
+#: rust/snapedit/src/tray.rs:326
 msgid "Remover da bandeja"
 msgstr "ट्रे से हटाएँ"
 
-#: rust/snapedit/src/tray.rs:407
+#: rust/snapedit/src/tray.rs:326
 msgid "Remover da bandeja (continua na biblioteca)"
 msgstr "ट्रे से हटाएँ (लाइब्रेरी में बना रहेगा)"
 
-#: rust/snapedit/src/tray.rs:415
+#: rust/snapedit/src/tray.rs:330
 #, c-format
 msgid "Excluir %zu itens (Lixeira)\tDel"
 msgstr "%zu आइटम हटाएँ (रीसायकल बिन)\tDel"
 
-#: rust/snapedit/src/tray.rs:417
+#: rust/snapedit/src/tray.rs:330
 msgid "Excluir (Lixeira)\tDel"
 msgstr "हटाएँ (रीसायकल बिन)\tDel"
+
+#: rust/snapedit/src/tray.rs:369 rust/snapedit/src/app/mod.rs:412
+msgid "Capturas recentes"
+msgstr "हाल के कैप्चर"
+
+#: rust/snapedit/src/tray.rs:370
+msgid "Biblioteca…"
+msgstr "लाइब्रेरी…"
+
+#: rust/snapedit/src/tray.rs:376
+msgid "Biblioteca"
+msgstr "लाइब्रेरी"
+
+#: rust/snapedit/src/tray.rs:379
+msgid "Pesquisar"
+msgstr "खोजें"
+
+#: rust/snapedit/src/tray.rs:384
+msgid "Voltar à imagem"
+msgstr "छवि पर लौटें"
 
 #: rust/snapedit/src/app/clipboard.rs:108
 msgid "Objetos bloqueados não são recortados."
@@ -4201,111 +4201,111 @@ msgstr "चिपकाया गया।"
 msgid "Colado"
 msgstr "चिपकाया गया"
 
-#: rust/snapedit/src/app/commands.rs:80
+#: rust/snapedit/src/app/commands.rs:83
 msgid "Imagem inteira copiada para a área de transferência."
 msgstr "पूरी छवि क्लिपबोर्ड पर कॉपी की गई।"
 
-#: rust/snapedit/src/app/commands.rs:88
+#: rust/snapedit/src/app/commands.rs:91
 msgid "Imagens e capturas"
 msgstr "छवियाँ और कैप्चर"
 
-#: rust/snapedit/src/app/commands.rs:134 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:465
+#: rust/snapedit/src/app/commands.rs:137 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
 msgid "Copiado."
 msgstr "कॉपी किया गया।"
 
-#: rust/snapedit/src/app/commands.rs:150
+#: rust/snapedit/src/app/commands.rs:153
 msgid "Selecione um objeto para bloquear ou desbloquear."
 msgstr "लॉक या अनलॉक करने के लिए कोई ऑब्जेक्ट चुनें।"
 
-#: rust/snapedit/src/app/commands.rs:157
+#: rust/snapedit/src/app/commands.rs:160
 msgid "Objeto bloqueado: não pode ser movido, redimensionado nem excluído."
 msgstr "ऑब्जेक्ट लॉक: इसे न खिसकाया जा सकता है, न आकार बदला जा सकता है, न हटाया जा सकता है।"
 
-#: rust/snapedit/src/app/commands.rs:159
+#: rust/snapedit/src/app/commands.rs:162
 msgid "Objeto desbloqueado."
 msgstr "ऑब्जेक्ट अनलॉक किया गया।"
 
-#: rust/snapedit/src/app/commands.rs:189
+#: rust/snapedit/src/app/commands.rs:192
 msgid "Réguas ligadas: arraste de uma régua para criar uma guia; arraste a guia de volta para removê-la."
 msgstr "रूलर चालू: गाइड बनाने के लिए रूलर से खींचें; हटाने के लिए गाइड को वापस खींचें।"
 
-#: rust/snapedit/src/app/commands.rs:191
+#: rust/snapedit/src/app/commands.rs:194
 msgid "Réguas desligadas."
 msgstr "रूलर बंद।"
 
-#: rust/snapedit/src/app/commands.rs:209
+#: rust/snapedit/src/app/commands.rs:212
 msgid "A seleção e o corte encaixam nas bordas da imagem (Alt desliga na hora)."
 msgstr "चयन और क्रॉप छवि के किनारों से चिपकते हैं (Alt तुरंत बंद करता है)।"
 
-#: rust/snapedit/src/app/commands.rs:211
+#: rust/snapedit/src/app/commands.rs:214
 msgid "Encaixe nas bordas desligado."
 msgstr "किनारों से चिपकना बंद।"
 
-#: rust/snapedit/src/app/commands.rs:218
+#: rust/snapedit/src/app/commands.rs:221
 msgid "Caneta: desenhe uma linha, seta, retângulo, elipse ou triângulo e segure parado para virar a forma."
 msgstr "पेन: रेखा, तीर, आयत, दीर्घवृत्त या त्रिभुज बनाएँ और स्थिर रोकें ताकि वह आकृति बन जाए।"
 
-#: rust/snapedit/src/app/commands.rs:220
+#: rust/snapedit/src/app/commands.rs:223
 msgid "Desenhar e segurar desligado."
 msgstr "बनाएँ और रोकें बंद।"
 
-#: rust/snapedit/src/app/commands.rs:227
+#: rust/snapedit/src/app/commands.rs:230
 msgid "Texto colado sem formatação (Ctrl+Shift+V mantém a formatação)."
 msgstr "पाठ बिना फ़ॉर्मेटिंग के चिपकता है (Ctrl+Shift+V फ़ॉर्मेटिंग रखता है)।"
 
-#: rust/snapedit/src/app/commands.rs:229
+#: rust/snapedit/src/app/commands.rs:232
 msgid "Texto colado com a formatação de origem (Ctrl+Shift+V cola sem formatação)."
 msgstr "पाठ मूल फ़ॉर्मेटिंग के साथ चिपकता है (Ctrl+Shift+V बिना फ़ॉर्मेटिंग चिपकाता है)।"
 
-#: rust/snapedit/src/app/commands.rs:241
+#: rust/snapedit/src/app/commands.rs:244
 msgid "Renomear objeto"
 msgstr "ऑब्जेक्ट का नाम बदलें"
 
-#: rust/snapedit/src/app/commands.rs:310
+#: rust/snapedit/src/app/commands.rs:313
 msgid "Selecione dois ou mais objetos (Ctrl+clique ou arraste um retângulo com o Mover) para agrupar."
 msgstr "समूह बनाने के लिए दो या अधिक ऑब्जेक्ट चुनें (Ctrl+क्लिक करें या खिसकाएँ टूल से आयत खींचें)।"
 
-#: rust/snapedit/src/app/commands.rs:314
+#: rust/snapedit/src/app/commands.rs:317
 msgid "Objetos agrupados. Imagem › Desagrupar (Ctrl+Shift+U) separa."
 msgstr "ऑब्जेक्ट का समूह बना। छवि › समूह तोड़ें (Ctrl+Shift+U) उन्हें अलग करता है।"
 
-#: rust/snapedit/src/app/commands.rs:319
+#: rust/snapedit/src/app/commands.rs:322
 msgid "Grupo desfeito."
 msgstr "समूह तोड़ा गया।"
 
-#: rust/snapedit/src/app/commands.rs:333
+#: rust/snapedit/src/app/commands.rs:336
 msgid "Faça a captura: ela será adicionada abaixo desta imagem."
 msgstr "कैप्चर लें: यह इस छवि के नीचे जोड़ा जाएगा।"
 
-#: rust/snapedit/src/app/commands.rs:377
+#: rust/snapedit/src/app/commands.rs:380
 msgid "Encaixe no canvas ligado (Alt ao arrastar desliga na hora)."
 msgstr "कैनवास पर स्नैप चालू (खींचते समय Alt इसे कुछ देर के लिए बंद करता है)।"
 
-#: rust/snapedit/src/app/commands.rs:379
+#: rust/snapedit/src/app/commands.rs:382
 msgid "Encaixe no canvas desligado."
 msgstr "कैनवास पर स्नैप बंद।"
 
-#: rust/snapedit/src/app/commands.rs:390
+#: rust/snapedit/src/app/commands.rs:393
 msgid "Etiquetas"
 msgstr "टैग"
 
-#: rust/snapedit/src/app/commands.rs:391
+#: rust/snapedit/src/app/commands.rs:394
 msgid "Separe as etiquetas por vírgula. Elas ficam gravadas na captura."
 msgstr "टैग को अल्पविराम से अलग करें। वे कैप्चर में सहेजे जाते हैं।"
 
-#: rust/snapedit/src/app/commands.rs:393
+#: rust/snapedit/src/app/commands.rs:396
 msgid "Etiquetar imagem"
 msgstr "छवि टैग करें"
 
-#: rust/snapedit/src/app/commands.rs:405
+#: rust/snapedit/src/app/commands.rs:408
 msgid "Etiquetas removidas."
 msgstr "टैग हटाए गए।"
 
-#: rust/snapedit/src/app/commands.rs:405
+#: rust/snapedit/src/app/commands.rs:408
 msgid "Etiquetas: "
 msgstr "टैग: "
 
-#: rust/snapedit/src/app/commands.rs:434
+#: rust/snapedit/src/app/commands.rs:438
 msgid ""
 "Edição de capturas com objetos vetoriais, efeitos, Smart Move,\n"
 "OCR, exportação PDF e edição de vídeo (cortes e GIF)."
@@ -4313,189 +4313,189 @@ msgstr ""
 "वेक्टर ऑब्जेक्ट, प्रभाव, Smart Move,\n"
 "OCR, PDF निर्यात और वीडियो संपादन (कटौती और GIF) के साथ कैप्चर संपादन।"
 
-#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:960
+#: rust/snapedit/src/app/commands.rs:439 rust/snapnab/src/main.rs:961
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "GNU General Public License संस्करण 3 के अंतर्गत मुक्त सॉफ़्टवेयर।"
 
-#: rust/snapedit/src/app/commands.rs:436 rust/snapnab/src/dialogs.rs:432
-msgid "Biblioteca: "
-msgstr "लाइब्रेरी: "
-
-#: rust/snapedit/src/app/commands.rs:439
+#: rust/snapedit/src/app/commands.rs:441
 msgid "Sobre"
 msgstr "के बारे में"
 
-#: rust/snapedit/src/app/commands.rs:528
+#: rust/snapedit/src/app/commands.rs:530
 msgid "Spotlight: sem seleção, o foco é o meio da imagem. Use a ferramenta Seleção para escolher a área."
 msgstr "स्पॉटलाइट: चयन न होने पर फ़ोकस छवि के बीच में होता है। क्षेत्र चुनने के लिए चयन टूल का उपयोग करें।"
 
-#: rust/snapedit/src/app/commands.rs:552
+#: rust/snapedit/src/app/commands.rs:554
 msgid "Efeito aplicado: "
 msgstr "प्रभाव लागू किया गया: "
 
-#: rust/snapedit/src/app/commands.rs:552
+#: rust/snapedit/src/app/commands.rs:554
 msgid " (Ctrl+Z desfaz)"
 msgstr " (Ctrl+Z पूर्ववत करता है)"
 
-#: rust/snapedit/src/app/commands.rs:575
+#: rust/snapedit/src/app/commands.rs:577
 #, c-format
 msgid "Meu efeito %zu"
 msgstr "मेरा प्रभाव %zu"
 
-#: rust/snapedit/src/app/commands.rs:576
+#: rust/snapedit/src/app/commands.rs:578
 msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
 msgstr "सेटिंग्स पैनल के प्रभावों से आती हैं (बदलने के लिए हर एक को खोलें):"
 
-#: rust/snapedit/src/app/commands.rs:578 rust/snapnab/src/window.rs:88
+#: rust/snapedit/src/app/commands.rs:580 rust/snapnab/src/window.rs:88
 msgid "Bordas especiais"
 msgstr "विशेष किनारे"
 
-#: rust/snapedit/src/app/commands.rs:582
+#: rust/snapedit/src/app/commands.rs:584
 msgid "Adicionar aos efeitos rápidos"
 msgstr "त्वरित प्रभावों में जोड़ें"
 
-#: rust/snapedit/src/app/commands.rs:591
+#: rust/snapedit/src/app/commands.rs:593
 msgid "Efeito rápido adicionado: "
 msgstr "त्वरित प्रभाव जोड़ा गया: "
 
-#: rust/snapedit/src/app/commands.rs:614
+#: rust/snapedit/src/app/commands.rs:616
 msgid "Faça uma seleção (ferramenta Seleção) ou um recorte primeiro."
 msgstr "पहले चयन करें (चयन टूल) या कटौती करें।"
 
-#: rust/snapedit/src/app/commands.rs:622
+#: rust/snapedit/src/app/commands.rs:624
 msgid "Ângulo (graus, horário)"
 msgstr "कोण (डिग्री, दक्षिणावर्त)"
 
-#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:355 rust/snapedit/src/app/extras.rs:539
+#: rust/snapedit/src/app/commands.rs:625 rust/snapedit/src/app/docs.rs:355 rust/snapedit/src/app/extras.rs:539
 msgid "Cor de fundo"
 msgstr "पृष्ठभूमि का रंग"
 
-#: rust/snapedit/src/app/commands.rs:624 rust/snapedit/src/app/extras.rs:538
+#: rust/snapedit/src/app/commands.rs:626 rust/snapedit/src/app/extras.rs:538
 msgid "Fundo transparente"
 msgstr "पारदर्शी पृष्ठभूमि"
 
-#: rust/snapedit/src/app/commands.rs:625
+#: rust/snapedit/src/app/commands.rs:627
 msgid "Os objetos serão mesclados à imagem."
 msgstr "ऑब्जेक्ट छवि में मिला दिए जाएँगे।"
 
-#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:353 rust/snapedit/src/app/video.rs:456
+#: rust/snapedit/src/app/commands.rs:651 rust/snapedit/src/app/commands.rs:698 rust/snapedit/src/app/docs.rs:353 rust/snapedit/src/app/video.rs:456
 msgid "Largura (px)"
 msgstr "चौड़ाई (px)"
 
-#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
+#: rust/snapedit/src/app/commands.rs:652 rust/snapedit/src/app/commands.rs:699 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "ऊँचाई (px)"
 
-#: rust/snapedit/src/app/commands.rs:651
+#: rust/snapedit/src/app/commands.rs:653
 msgid "ou escala (%)"
 msgstr "या पैमाना (%)"
 
-#: rust/snapedit/src/app/commands.rs:654 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/app/commands.rs:656 rust/snapnab/src/window.rs:87
 msgid "Redimensionar imagem"
 msgstr "छवि का आकार बदलें"
 
-#: rust/snapedit/src/app/commands.rs:698
+#: rust/snapedit/src/app/commands.rs:700
 msgid "Âncora"
 msgstr "एंकर"
 
-#: rust/snapedit/src/app/commands.rs:699
+#: rust/snapedit/src/app/commands.rs:701
 msgid "Cor do canvas"
 msgstr "कैनवास का रंग"
 
-#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/commands.rs:702 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "पारदर्शी"
 
-#: rust/snapedit/src/app/commands.rs:702
+#: rust/snapedit/src/app/commands.rs:704
 msgid "Tamanho do canvas"
 msgstr "कैनवास का आकार"
 
-#: rust/snapedit/src/app/commands.rs:739
+#: rust/snapedit/src/app/commands.rs:741
 msgid "Nada a cortar: as bordas não são uniformes."
 msgstr "काटने को कुछ नहीं: किनारे एक जैसे नहीं हैं।"
 
-#: rust/snapedit/src/app/commands.rs:774
+#: rust/snapedit/src/app/commands.rs:776
 msgid "Arquivo…"
 msgstr "फ़ाइल…"
 
-#: rust/snapedit/src/app/commands.rs:777
+#: rust/snapedit/src/app/commands.rs:779
 msgid "E-mail…"
 msgstr "ईमेल…"
 
-#: rust/snapedit/src/app/commands.rs:778
+#: rust/snapedit/src/app/commands.rs:780
 msgid "Impressora…"
 msgstr "प्रिंटर…"
 
-#: rust/snapedit/src/app/commands.rs:779
+#: rust/snapedit/src/app/commands.rs:781
 msgid "Programa externo…"
 msgstr "बाहरी प्रोग्राम…"
 
-#: rust/snapedit/src/app/commands.rs:783
+#: rust/snapedit/src/app/commands.rs:785
 msgid "Enviar para"
 msgstr "यहाँ भेजें"
 
 #: rust/snapedit/src/app/commands.rs:801
+msgid "Ajustar à janela\tCtrl+0"
+msgstr "विंडो में फ़िट करें\tCtrl+0"
+
+#: rust/snapedit/src/app/commands.rs:828
 msgid "Personalizar a barra…"
 msgstr "बार अनुकूलित करें…"
 
-#: rust/snapedit/src/app/commands.rs:802
+#: rust/snapedit/src/app/commands.rs:829
 msgid "Voltar ao padrão (automática)"
 msgstr "डिफ़ॉल्ट पर लौटें (स्वचालित)"
 
-#: rust/snapedit/src/app/commands.rs:820
+#: rust/snapedit/src/app/commands.rs:857
 msgid "Abrir o link"
 msgstr "लिंक खोलें"
 
-#: rust/snapedit/src/app/commands.rs:824 rust/snapedit/src/app/commands.rs:867
+#: rust/snapedit/src/app/commands.rs:861 rust/snapedit/src/app/commands.rs:904
 msgid "Soltar a peça na imagem\tEnter"
 msgstr "टुकड़े को छवि में छोड़ें\tEnter"
 
-#: rust/snapedit/src/app/commands.rs:833
+#: rust/snapedit/src/app/commands.rs:870
 msgid "Desblo&quear\tCtrl+Shift+K"
 msgstr "अनलॉक करें(&U)\tCtrl+Shift+K"
 
-#: rust/snapedit/src/app/commands.rs:833
+#: rust/snapedit/src/app/commands.rs:870
 msgid "&Bloquear\tCtrl+L"
 msgstr "लॉक करें(&L)\tCtrl+L"
 
-#: rust/snapedit/src/app/commands.rs:835
+#: rust/snapedit/src/app/commands.rs:872
 msgid "Re&nomear…"
 msgstr "नाम बदलें(&N)…"
 
-#: rust/snapedit/src/app/commands.rs:909
+#: rust/snapedit/src/app/commands.rs:952
 msgid "Renomear captura"
 msgstr "कैप्चर का नाम बदलें"
 
-#: rust/snapedit/src/app/commands.rs:1017
+#: rust/snapedit/src/app/commands.rs:1060
 #, c-format
 msgid "%zu itens"
 msgstr "%zu आइटम"
 
-#: rust/snapedit/src/app/commands.rs:693
+#: rust/snapedit/src/app/commands.rs:695
 msgid "Superior esquerda"
 msgstr "ऊपर बाएँ"
 
-#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:690
 msgid "Superior"
 msgstr "ऊपर"
 
-#: rust/snapedit/src/app/commands.rs:693
+#: rust/snapedit/src/app/commands.rs:695
 msgid "Superior direita"
 msgstr "ऊपर दाएँ"
 
-#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:690
 msgid "Centro"
 msgstr "बीच में"
 
-#: rust/snapedit/src/app/commands.rs:693
+#: rust/snapedit/src/app/commands.rs:695
 msgid "Inferior esquerda"
 msgstr "नीचे बाएँ"
 
-#: rust/snapedit/src/app/commands.rs:694 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:691
+#: rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:691
 msgid "Inferior"
 msgstr "नीचे"
 
-#: rust/snapedit/src/app/commands.rs:694
+#: rust/snapedit/src/app/commands.rs:696
 msgid "Inferior direita"
 msgstr "नीचे दाएँ"
 
@@ -4543,7 +4543,7 @@ msgstr "यहाँ सहेजा गया: "
 msgid "A área de transferência não contém imagem."
 msgstr "क्लिपबोर्ड में कोई छवि नहीं है।"
 
-#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:227
+#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:222
 msgid "Da área de transferência"
 msgstr "क्लिपबोर्ड से"
 
@@ -4632,7 +4632,7 @@ msgstr "(नीचे की सेटिंग)"
 msgid "Predefinição"
 msgstr "पूर्वनिर्धारित"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:721 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771 rust/snapnab/src/dialogs.rs:683
 msgid "Fundo"
 msgstr "पृष्ठभूमि"
 
@@ -4940,7 +4940,7 @@ msgstr ""
 "\n"
 "अभी सेट करें?"
 
-#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:192 rust/snapedit/src/app/windows_aux.rs:218 rust/snapedit/src/app/windows_aux.rs:396
+#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:228 rust/snapedit/src/app/windows_aux.rs:254 rust/snapedit/src/app/windows_aux.rs:432
 msgid "Assistente de IA"
 msgstr "AI सहायक"
 
@@ -5115,7 +5115,7 @@ msgstr "ठोस रंग"
 msgid "Degradê"
 msgstr "ग्रेडिएंट"
 
-#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:629
+#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:679
 msgid "Lado a lado"
 msgstr "अगल-बगल"
 
@@ -5139,20 +5139,20 @@ msgstr "अंत (नीचे/दाएँ)"
 msgid "Largura/altura máxima"
 msgstr "अधिकतम चौड़ाई/ऊँचाई"
 
-#: rust/snapedit/src/app/mod.rs:209
+#: rust/snapedit/src/app/mod.rs:217
 msgid " — Snapnab Editor"
 msgstr " — Snapnab Editor"
 
-#: rust/snapedit/src/app/mod.rs:223
+#: rust/snapedit/src/app/mod.rs:231
 msgid "Vídeo: "
 msgstr "वीडियो: "
 
-#: rust/snapedit/src/app/mod.rs:225
+#: rust/snapedit/src/app/mod.rs:233
 #, c-format
 msgid "%d × %d px"
 msgstr "%d × %d px"
 
-#: rust/snapedit/src/app/mod.rs:227
+#: rust/snapedit/src/app/mod.rs:235
 msgid ""
 "\n"
 "Captura: "
@@ -5160,7 +5160,7 @@ msgstr ""
 "\n"
 "कैप्चर: "
 
-#: rust/snapedit/src/app/mod.rs:230
+#: rust/snapedit/src/app/mod.rs:238
 msgid ""
 "\n"
 "Aplicativo: "
@@ -5168,7 +5168,7 @@ msgstr ""
 "\n"
 "ऐप्लिकेशन: "
 
-#: rust/snapedit/src/app/mod.rs:233
+#: rust/snapedit/src/app/mod.rs:241
 msgid ""
 "\n"
 "Janela: "
@@ -5176,7 +5176,7 @@ msgstr ""
 "\n"
 "विंडो: "
 
-#: rust/snapedit/src/app/mod.rs:235
+#: rust/snapedit/src/app/mod.rs:243
 #, c-format
 msgid ""
 "\n"
@@ -5185,7 +5185,7 @@ msgstr ""
 "\n"
 "ऑब्जेक्ट: %zu"
 
-#: rust/snapedit/src/app/mod.rs:237
+#: rust/snapedit/src/app/mod.rs:245
 msgid ""
 "\n"
 "Etiquetas: "
@@ -5193,43 +5193,39 @@ msgstr ""
 "\n"
 "टैग: "
 
-#: rust/snapedit/src/app/mod.rs:252
+#: rust/snapedit/src/app/mod.rs:260
 #, c-format
 msgid "%d × %d px  •  %zu objeto(s)  •  %zu passo(s) para desfazer"
 msgstr "%d × %d px  •  %zu ऑब्जेक्ट  •  पूर्ववत करने के लिए %zu चरण"
 
-#: rust/snapedit/src/app/mod.rs:380
+#: rust/snapedit/src/app/mod.rs:388
 msgid "Ferramenta: "
 msgstr "टूल: "
 
-#: rust/snapedit/src/app/mod.rs:412
+#: rust/snapedit/src/app/mod.rs:421
 #, c-format
 msgid "Zoom %d%%"
 msgstr "ज़ूम %d%%"
 
-#: rust/snapedit/src/app/mod.rs:529
-msgid "Ajustar à janela\tCtrl+0"
-msgstr "विंडो में फ़िट करें\tCtrl+0"
-
-#: rust/snapedit/src/app/mod.rs:649
+#: rust/snapedit/src/app/mod.rs:643
 #, c-format
 msgid "%d objetos selecionados  •  Ctrl+Shift+G agrupa  •  Organizar › Alinhar alinha entre si"
 msgstr "%d ऑब्जेक्ट चुने गए  •  Ctrl+Shift+G समूह बनाता है  •  व्यवस्थित करें › संरेखित करें उन्हें आपस में संरेखित करता है"
 
-#: rust/snapedit/src/app/mod.rs:662
+#: rust/snapedit/src/app/mod.rs:656
 msgid "Cor capturada: "
 msgstr "लिया गया रंग: "
 
-#: rust/snapedit/src/app/mod.rs:662
+#: rust/snapedit/src/app/mod.rs:656
 msgid " (aplicada às ferramentas de desenho)"
 msgstr " (ड्रॉइंग टूल पर लागू)"
 
-#: rust/snapedit/src/app/mod.rs:719
+#: rust/snapedit/src/app/mod.rs:713
 #, c-format
 msgid "Excluir o efeito rápido \"%s\"?"
 msgstr "त्वरित प्रभाव \"%s\" हटाएँ?"
 
-#: rust/snapedit/src/app/mod.rs:905
+#: rust/snapedit/src/app/mod.rs:899
 msgid ""
 "SnapnabEditor.exe [opções] [arquivo…]\n"
 "\n"
@@ -5243,11 +5239,11 @@ msgstr ""
 "/NewFromClipboard   क्लिपबोर्ड से छवि बनाता है\n"
 "/restartwait        पिछले इंस्टेंस के बंद होने की प्रतीक्षा करता है"
 
-#: rust/snapedit/src/app/mod.rs:449
+#: rust/snapedit/src/app/mod.rs:457
 msgid "Propriedades"
 msgstr "गुण"
 
-#: rust/snapedit/src/app/mod.rs:449 rust/snapedit/src/app/windows_aux.rs:523
+#: rust/snapedit/src/app/mod.rs:457 rust/snapedit/src/app/windows_aux.rs:559
 msgid "Efeitos"
 msgstr "प्रभाव"
 
@@ -5348,7 +5344,7 @@ msgstr "एनिमेटेड GIF बनाएँ"
 msgid "Salvar GIF"
 msgstr "GIF सहेजें"
 
-#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:690
+#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:740
 msgid "GIF animado (*.gif)|*.gif|"
 msgstr "एनिमेटेड GIF (*.gif)|*.gif|"
 
@@ -5408,255 +5404,271 @@ msgstr "MP4 सहेजें…"
 msgid "Abrir no player"
 msgstr "प्लेयर में खोलें"
 
-#: rust/snapedit/src/app/windows_aux.rs:99
+#: rust/snapedit/src/app/windows_aux.rs:135
 msgid "Compatível com OpenAI"
 msgstr "OpenAI-संगत"
 
-#: rust/snapedit/src/app/windows_aux.rs:100
+#: rust/snapedit/src/app/windows_aux.rs:136
 msgid "Modelo local (Ollama)"
 msgstr "लोकल मॉडल (Ollama)"
 
-#: rust/snapedit/src/app/windows_aux.rs:172
+#: rust/snapedit/src/app/windows_aux.rs:208
 #, c-format
 msgid "A imagem e a pergunta serão enviadas para %s (%s). Nada é enviado até você perguntar."
 msgstr "छवि और प्रश्न %s (%s) को भेजे जाएँगे। आपके पूछने तक कुछ नहीं भेजा जाता।"
 
-#: rust/snapedit/src/app/windows_aux.rs:180
+#: rust/snapedit/src/app/windows_aux.rs:216
 msgid "(guardada — deixe assim para manter)"
 msgstr "(सहेजी गई — रखने के लिए ऐसे ही छोड़ें)"
 
-#: rust/snapedit/src/app/windows_aux.rs:183
+#: rust/snapedit/src/app/windows_aux.rs:219
 msgid "Ativar o assistente de IA"
 msgstr "AI सहायक चालू करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:184
+#: rust/snapedit/src/app/windows_aux.rs:220
 msgid "Ao perguntar, a imagem é enviada ao provedor escolhido. Use a sua própria chave (cobrança na sua conta)."
 msgstr "पूछने पर छवि चुने गए प्रदाता को भेजी जाती है। अपनी कुंजी इस्तेमाल करें (शुल्क आपके खाते से)।"
 
-#: rust/snapedit/src/app/windows_aux.rs:185
+#: rust/snapedit/src/app/windows_aux.rs:221
 msgid "Provedor"
 msgstr "प्रदाता"
 
-#: rust/snapedit/src/app/windows_aux.rs:186
+#: rust/snapedit/src/app/windows_aux.rs:222
 msgid "Modelo"
 msgstr "मॉडल"
 
-#: rust/snapedit/src/app/windows_aux.rs:187
+#: rust/snapedit/src/app/windows_aux.rs:223
 msgid "Endereço da API"
 msgstr "API पता"
 
-#: rust/snapedit/src/app/windows_aux.rs:188
+#: rust/snapedit/src/app/windows_aux.rs:224
 msgid "Chave da API"
 msgstr "API कुंजी"
 
-#: rust/snapedit/src/app/windows_aux.rs:189
+#: rust/snapedit/src/app/windows_aux.rs:225
 msgid "A chave fica no Gerenciador de Credenciais do Windows, nunca em arquivos. Modelo local: Ollama em http://localhost:11434/v1 (sem chave)."
 msgstr "कुंजी Windows क्रेडेंशियल मैनेजर में रहती है, फ़ाइलों में कभी नहीं। लोकल मॉडल: Ollama, http://localhost:11434/v1 पर (बिना कुंजी)।"
 
-#: rust/snapedit/src/app/windows_aux.rs:208
+#: rust/snapedit/src/app/windows_aux.rs:244
 msgid "Informe o endereço da API."
 msgstr "API पता दर्ज करें।"
 
-#: rust/snapedit/src/app/windows_aux.rs:210
+#: rust/snapedit/src/app/windows_aux.rs:246
 msgid "Informe o modelo."
 msgstr "मॉडल दर्ज करें।"
 
-#: rust/snapedit/src/app/windows_aux.rs:342
+#: rust/snapedit/src/app/windows_aux.rs:378
 msgid "Atalhos do Snapnab Editor"
 msgstr "Snapnab Editor के शॉर्टकट"
 
-#: rust/snapedit/src/app/windows_aux.rs:353 rust/snapedit/src/app/windows_aux.rs:477
+#: rust/snapedit/src/app/windows_aux.rs:389 rust/snapedit/src/app/windows_aux.rs:513
 msgid "Ampliar parte da imagem"
 msgstr "छवि का कोई हिस्सा बड़ा करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:368
+#: rust/snapedit/src/app/windows_aux.rs:404
 msgid "Personalizar a barra de ferramentas"
 msgstr "टूलबार अनुकूलित करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:377
+#: rust/snapedit/src/app/windows_aux.rs:413
 msgid "Verificador de contraste (WCAG)"
 msgstr "कंट्रास्ट जाँचकर्ता (WCAG)"
 
-#: rust/snapedit/src/app/windows_aux.rs:386
+#: rust/snapedit/src/app/windows_aux.rs:422
 msgid "Comparar imagens"
 msgstr "छवियों की तुलना करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:451 rust/snapedit/src/app/windows_aux.rs:641 rust/snapedit/src/app/windows_aux.rs:758 rust/snapedit/src/app/windows_aux.rs:826
+#: rust/snapedit/src/app/windows_aux.rs:487 rust/snapedit/src/app/windows_aux.rs:691 rust/snapedit/src/app/windows_aux.rs:808 rust/snapedit/src/app/windows_aux.rs:876
 msgid "Fechar"
 msgstr "बंद करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:479
+#: rust/snapedit/src/app/windows_aux.rs:515
 msgid "Amplie partes da imagem para destacar os detalhes importantes. Arraste para criar a lupa; com a lente separada, a alça amarela escolhe a área ampliada."
 msgstr "ज़रूरी विवरण उभारने के लिए छवि के हिस्से बड़े करें। आवर्धक बनाने के लिए खींचें; अलग लेंस के साथ, पीला हैंडल बड़ा किया जाने वाला क्षेत्र चुनता है।"
 
-#: rust/snapedit/src/app/windows_aux.rs:482
+#: rust/snapedit/src/app/windows_aux.rs:518
 msgid "Entendi!"
 msgstr "समझ गया!"
 
-#: rust/snapedit/src/app/windows_aux.rs:496
+#: rust/snapedit/src/app/windows_aux.rs:532
 msgid "Personalização cancelada."
 msgstr "अनुकूलन रद्द किया गया।"
 
-#: rust/snapedit/src/app/windows_aux.rs:508
+#: rust/snapedit/src/app/windows_aux.rs:544
 msgid "Barra de ferramentas personalizada."
 msgstr "अनुकूलित टूलबार।"
 
-#: rust/snapedit/src/app/windows_aux.rs:508
+#: rust/snapedit/src/app/windows_aux.rs:544
 msgid "Barra de ferramentas automática."
 msgstr "स्वचालित टूलबार।"
 
-#: rust/snapedit/src/app/windows_aux.rs:515
+#: rust/snapedit/src/app/windows_aux.rs:551
 msgid "— espaço —"
 msgstr "— रिक्त स्थान —"
 
-#: rust/snapedit/src/app/windows_aux.rs:520
+#: rust/snapedit/src/app/windows_aux.rs:556
 msgid "Ferramentas de desenho"
 msgstr "ड्रॉइंग टूल"
 
-#: rust/snapedit/src/app/windows_aux.rs:521
+#: rust/snapedit/src/app/windows_aux.rs:557
 msgid "Itens de menu"
 msgstr "मेनू आइटम"
 
-#: rust/snapedit/src/app/windows_aux.rs:522
+#: rust/snapedit/src/app/windows_aux.rs:558
 msgid "Destinos de compartilhamento"
 msgstr "साझा करने के गंतव्य"
 
-#: rust/snapedit/src/app/windows_aux.rs:524
+#: rust/snapedit/src/app/windows_aux.rs:560
 msgid "Diversos"
 msgstr "विविध"
 
-#: rust/snapedit/src/app/windows_aux.rs:532
+#: rust/snapedit/src/app/windows_aux.rs:568
 msgid "Ferramentas na barra automática:"
 msgstr "स्वचालित बार में टूल:"
 
-#: rust/snapedit/src/app/windows_aux.rs:536
+#: rust/snapedit/src/app/windows_aux.rs:572
 msgid "Restaurar o padrão"
 msgstr "डिफ़ॉल्ट पुनर्स्थापित करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:550
+#: rust/snapedit/src/app/windows_aux.rs:587
 msgid "Na barra"
 msgstr "बार में"
 
-#: rust/snapedit/src/app/windows_aux.rs:578
+#: rust/snapedit/src/app/windows_aux.rs:600
+msgid "Remover da barra"
+msgstr "बार से हटाएँ"
+
+#: rust/snapedit/src/app/windows_aux.rs:603
+msgid "Mover para baixo"
+msgstr "नीचे ले जाएँ"
+
+#: rust/snapedit/src/app/windows_aux.rs:606
+msgid "Mover para cima"
+msgstr "ऊपर ले जाएँ"
+
+#: rust/snapedit/src/app/windows_aux.rs:624
 msgid "Clique num item para acrescentá-lo ao fim da barra."
 msgstr "किसी आइटम को बार के अंत में जोड़ने के लिए उस पर क्लिक करें।"
 
-#: rust/snapedit/src/app/windows_aux.rs:629
+#: rust/snapedit/src/app/windows_aux.rs:635
+msgid "Já está na barra"
+msgstr "पहले से बार में है"
+
+#: rust/snapedit/src/app/windows_aux.rs:679
 msgid "Sobreposição"
 msgstr "ओवरले"
 
-#: rust/snapedit/src/app/windows_aux.rs:629
+#: rust/snapedit/src/app/windows_aux.rs:679
 msgid "Deslizar (antes | depois)"
 msgstr "स्वाइप (पहले | बाद)"
 
-#: rust/snapedit/src/app/windows_aux.rs:629
+#: rust/snapedit/src/app/windows_aux.rs:679
 msgid "Diferença"
 msgstr "अंतर"
 
-#: rust/snapedit/src/app/windows_aux.rs:636
+#: rust/snapedit/src/app/windows_aux.rs:686
 msgid "Transparência de B"
 msgstr "B की पारदर्शिता"
 
-#: rust/snapedit/src/app/windows_aux.rs:636
+#: rust/snapedit/src/app/windows_aux.rs:686
 msgid "Divisória"
 msgstr "विभाजक"
 
-#: rust/snapedit/src/app/windows_aux.rs:642
+#: rust/snapedit/src/app/windows_aux.rs:692
 msgid "Exportar imagem…"
 msgstr "छवि निर्यात करें…"
 
-#: rust/snapedit/src/app/windows_aux.rs:643
+#: rust/snapedit/src/app/windows_aux.rs:693
 msgid "Exportar GIF…"
 msgstr "GIF निर्यात करें…"
 
-#: rust/snapedit/src/app/windows_aux.rs:644
+#: rust/snapedit/src/app/windows_aux.rs:694
 msgid "A ⇄ B"
 msgstr "A ⇄ B"
 
-#: rust/snapedit/src/app/windows_aux.rs:654
+#: rust/snapedit/src/app/windows_aux.rs:704
 #, c-format
 msgid "A: %s (%d × %d)   B: %s (%d × %d)"
 msgstr "A: %s (%d × %d)   B: %s (%d × %d)"
 
-#: rust/snapedit/src/app/windows_aux.rs:659
+#: rust/snapedit/src/app/windows_aux.rs:709
 #, c-format
 msgid "   •   %d pixels diferentes (%.2f%%)"
 msgstr "   •   %d अलग पिक्सेल (%.2f%%)"
 
-#: rust/snapedit/src/app/windows_aux.rs:690 rust/snapedit/src/app/windows_aux.rs:692
+#: rust/snapedit/src/app/windows_aux.rs:740 rust/snapedit/src/app/windows_aux.rs:742
 msgid "Antes-depois"
 msgstr "पहले-बाद"
 
-#: rust/snapedit/src/app/windows_aux.rs:698
+#: rust/snapedit/src/app/windows_aux.rs:748
 msgid "Exportado."
 msgstr "निर्यात किया गया।"
 
-#: rust/snapedit/src/app/windows_aux.rs:699
+#: rust/snapedit/src/app/windows_aux.rs:749
 msgid "Não foi possível salvar o arquivo."
 msgstr "फ़ाइल सहेजी नहीं जा सकी।"
 
-#: rust/snapedit/src/app/windows_aux.rs:721
+#: rust/snapedit/src/app/windows_aux.rs:771
 msgid "Texto (primeiro plano)"
 msgstr "टेक्स्ट (अग्रभूमि)"
 
-#: rust/snapedit/src/app/windows_aux.rs:733
+#: rust/snapedit/src/app/windows_aux.rs:783
 msgid "Escolher cor…"
 msgstr "रंग चुनें…"
 
-#: rust/snapedit/src/app/windows_aux.rs:736
+#: rust/snapedit/src/app/windows_aux.rs:786
 msgid "Copiar HEX"
 msgstr "HEX कॉपी करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:747
+#: rust/snapedit/src/app/windows_aux.rs:797
 msgid "Texto grande Aa"
 msgstr "बड़ा टेक्स्ट Aa"
 
-#: rust/snapedit/src/app/windows_aux.rs:748
+#: rust/snapedit/src/app/windows_aux.rs:798
 msgid "Texto normal — o rato roeu a roupa do rei"
 msgstr "सामान्य टेक्स्ट — तेज़ भूरी लोमड़ी आलसी कुत्ते के ऊपर कूदती है"
 
-#: rust/snapedit/src/app/windows_aux.rs:754
+#: rust/snapedit/src/app/windows_aux.rs:804
 msgid "Inverter as cores"
 msgstr "रंग अदला-बदली करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:791
+#: rust/snapedit/src/app/windows_aux.rs:841
 msgid "Configure a chave do provedor primeiro."
 msgstr "पहले प्रदाता की कुंजी सेट करें।"
 
-#: rust/snapedit/src/app/windows_aux.rs:796
+#: rust/snapedit/src/app/windows_aux.rs:846
 msgid "Perguntando…"
 msgstr "पूछ रहे हैं…"
 
-#: rust/snapedit/src/app/windows_aux.rs:804
+#: rust/snapedit/src/app/windows_aux.rs:854
 #, c-format
 msgid "Resposta de %s (%s)."
 msgstr "%s (%s) का उत्तर।"
 
-#: rust/snapedit/src/app/windows_aux.rs:819 rust/snapnab/src/quick.rs:53
+#: rust/snapedit/src/app/windows_aux.rs:869 rust/snapnab/src/quick.rs:53
 msgid "Copiar"
 msgstr "कॉपी करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:821
+#: rust/snapedit/src/app/windows_aux.rs:871
 msgid "Resposta copiada."
 msgstr "उत्तर कॉपी हुआ।"
 
-#: rust/snapedit/src/app/windows_aux.rs:823
+#: rust/snapedit/src/app/windows_aux.rs:873
 msgid "Adicionar como texto"
 msgstr "टेक्स्ट के रूप में जोड़ें"
 
-#: rust/snapedit/src/app/windows_aux.rs:824
+#: rust/snapedit/src/app/windows_aux.rs:874
 msgid "Configurações…"
 msgstr "सेटिंग्स…"
 
-#: rust/snapedit/src/app/windows_aux.rs:843
+#: rust/snapedit/src/app/windows_aux.rs:893
 msgid "Faça uma pergunta sobre a imagem…"
 msgstr "छवि के बारे में प्रश्न पूछें…"
 
-#: rust/snapedit/src/app/windows_aux.rs:845
+#: rust/snapedit/src/app/windows_aux.rs:895
 msgid "Perguntar"
 msgstr "पूछें"
 
-#: rust/snapedit/src/app/windows_aux.rs:81
+#: rust/snapedit/src/app/windows_aux.rs:117
 msgid ""
 "Ferramentas (com a área de pintura em foco):\n"
 "  V Mover   A Seta   L Linha   R Forma   P Caneta   H Marcador\n"
@@ -5688,23 +5700,23 @@ msgstr ""
 "छवि:     Ctrl+Shift+F/B एक स्तर आगे/पीछे • Ctrl+T ऑब्जेक्ट मिलाएँ • Ctrl+Shift+T सब मिलाएँ • Ctrl+; स्नैप\n"
 "वीडियो:  Space चलाएँ/रोकें • ←/→ फ़्रेम • I/O शुरुआत/अंत चिह्नित करते हैं\n"
 
-#: rust/snapedit/src/app/windows_aux.rs:239
+#: rust/snapedit/src/app/windows_aux.rs:275
 msgid "Explicar"
 msgstr "समझाएँ"
 
-#: rust/snapedit/src/app/windows_aux.rs:240
+#: rust/snapedit/src/app/windows_aux.rs:276
 msgid "Descrever"
 msgstr "वर्णन करें"
 
-#: rust/snapedit/src/app/windows_aux.rs:241
+#: rust/snapedit/src/app/windows_aux.rs:277
 msgid "Extrair os passos"
 msgstr "चरण निकालें"
 
-#: rust/snapedit/src/app/windows_aux.rs:242
+#: rust/snapedit/src/app/windows_aux.rs:278
 msgid "Extrair o texto"
 msgstr "टेक्स्ट निकालें"
 
-#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
+#: rust/snapedit/src/app/windows_aux.rs:577 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "ठीक है"
 
@@ -5793,7 +5805,7 @@ msgstr "प्रीसेट का नाम"
 msgid "Preset %zu"
 msgstr "प्रीसेट %zu"
 
-#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:745
+#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:769
 msgid "Novo preset com as configurações atuais"
 msgstr "वर्तमान सेटिंग्स से नया प्रीसेट"
 
@@ -5902,11 +5914,11 @@ msgstr "स्वचालित (Windows की भाषा)"
 msgid "Atalhos globais"
 msgstr "वैश्विक शॉर्टकट"
 
-#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:223
+#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:218
 msgid "Capturar imagem"
 msgstr "छवि कैप्चर करें"
 
-#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:224
+#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:219
 msgid "Gravar vídeo"
 msgstr "वीडियो रिकॉर्ड करें"
 
@@ -5918,7 +5930,7 @@ msgstr "वीडियो रोकें/जारी रखें"
 msgid "Parar vídeo"
 msgstr "वीडियो बंद करें"
 
-#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:230
+#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:225
 msgid "Conta-gotas de tela"
 msgstr "स्क्रीन रंग चयनकर्ता"
 
@@ -5926,11 +5938,11 @@ msgstr "स्क्रीन रंग चयनकर्ता"
 msgid "Capturar e fixar na tela"
 msgstr "कैप्चर करें और स्क्रीन पर पिन करें"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:234
+#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:213
 msgid "Fixar da área de transferência"
 msgstr "क्लिपबोर्ड से पिन करें"
 
-#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:239
+#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:229
 msgid "Foco de tela (apresentações)"
 msgstr "स्क्रीन फ़ोकस (प्रस्तुतियाँ)"
 
@@ -6090,6 +6102,10 @@ msgstr "हल्का"
 msgid "Escuro"
 msgstr "गहरा"
 
+#: rust/snapnab/src/dialogs.rs:432
+msgid "Biblioteca: "
+msgstr "लाइब्रेरी: "
+
 #: rust/snapnab/src/dialogs.rs:442
 msgid "Dois atalhos iguais: "
 msgstr "दो एक जैसे शॉर्टकट: "
@@ -6150,7 +6166,7 @@ msgstr "ऊपर (Y)"
 msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
 msgstr "स्थिर स्थिति के बिना, कैप्चर के समय आप आयत को उसकी जगह पर खींचते हैं।"
 
-#: rust/snapnab/src/dialogs.rs:557 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:326
+#: rust/snapnab/src/dialogs.rs:557 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:349
 msgid "Região fixa"
 msgstr "स्थिर क्षेत्र"
 
@@ -6523,7 +6539,7 @@ msgstr "अंतराल (सेकंड)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "अवधि (मिनट, 0 = रोकने तक)"
 
-#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:794 rust/snapnab/src/window.rs:799
+#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:818 rust/snapnab/src/window.rs:823
 msgid "Capturar o cursor"
 msgstr "कर्सर कैप्चर करें"
 
@@ -6595,7 +6611,7 @@ msgstr "प्रीसेट \"%s\" का शॉर्टकट पहले �
 msgid "Abrir a janela de captura"
 msgstr "कैप्चर विंडो खोलें"
 
-#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:205
+#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:194
 msgid "Abrir o Editor"
 msgstr "एडिटर खोलें"
 
@@ -6607,7 +6623,7 @@ msgstr "बाहर निकलें"
 msgid "Ler código QR"
 msgstr "QR कोड पढ़ें"
 
-#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:244
+#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:234
 msgid "Mostrar o One Click"
 msgstr "One Click दिखाएँ"
 
@@ -6620,7 +6636,7 @@ msgstr "पिन की गई छवियाँ (%zu)"
 msgid "Imagens fixadas"
 msgstr "पिन की गई छवियाँ"
 
-#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:240
+#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:230
 msgid "Gravar só o áudio"
 msgstr "केवल ऑडियो रिकॉर्ड करें"
 
@@ -6629,7 +6645,7 @@ msgstr "केवल ऑडियो रिकॉर्ड करें"
 msgid "Parar a captura por intervalo (%d)"
 msgstr "अंतराल कैप्चर रोकें (%d)"
 
-#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:238
+#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:228
 msgid "Captura por intervalo…"
 msgstr "अंतराल कैप्चर…"
 
@@ -6637,7 +6653,7 @@ msgstr "अंतराल कैप्चर…"
 msgid "Abrir o Editor depois da captura"
 msgstr "कैप्चर के बाद एडिटर खोलें"
 
-#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:218
+#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:207
 msgid "Opções…"
 msgstr "विकल्प…"
 
@@ -6666,11 +6682,11 @@ msgstr "मॉनिटर %d मौजूद नहीं है (कुल %zu
 msgid "Não foi possível fixar: "
 msgstr "पिन नहीं किया जा सका: "
 
-#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:235
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:214
 msgid "Fixar um arquivo…"
 msgstr "फ़ाइल पिन करें…"
 
-#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:233
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:212
 msgid "Capturar e fixar"
 msgstr "कैप्चर करें और पिन करें"
 
@@ -6682,7 +6698,7 @@ msgstr "सभी दिखाएँ"
 msgid "Ocultar todas"
 msgstr "सभी छिपाएँ"
 
-#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
+#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:215
 msgid "Fechar todas"
 msgstr "सभी बंद करें"
 
@@ -6698,36 +6714,28 @@ msgstr "अंतिम बंद की गई फिर खोलें"
 msgid "Histórico"
 msgstr "इतिहास"
 
-#: rust/snapnab/src/main.rs:959
+#: rust/snapnab/src/main.rs:960
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — स्क्रीन कैप्चर और वीडियो रिकॉर्डिंग"
 
-#: rust/snapnab/src/main.rs:961
-msgid ""
-"Processo de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicando-se por memória\n"
-"compartilhada (canal IPC) e WM_COPYDATA. Capturas ficam na biblioteca:\n"
-msgstr ""
-"कैप्चर प्रक्रिया (Snapnab.exe) + एडिटर (SnapnabEditor.exe), साझा मेमोरी\n"
-"(IPC चैनल) और WM_COPYDATA के ज़रिए संवाद करते हैं। कैप्चर लाइब्रेरी में रखे जाते हैं:\n"
-
-#: rust/snapnab/src/main.rs:966 rust/snapnab/src/window.rs:251
+#: rust/snapnab/src/main.rs:964 rust/snapnab/src/window.rs:241
 msgid "Sobre o Snapnab"
 msgstr "Snapnab के बारे में"
 
-#: rust/snapnab/src/main.rs:1001 rust/snapnab/src/main.rs:1069 rust/snapnab/src/main.rs:1149
+#: rust/snapnab/src/main.rs:1003 rust/snapnab/src/main.rs:1071 rust/snapnab/src/main.rs:1151
 msgid "Snapnab — clique para capturar"
 msgstr "Snapnab — कैप्चर करने के लिए क्लिक करें"
 
-#: rust/snapnab/src/main.rs:1021
+#: rust/snapnab/src/main.rs:1023
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — रिकॉर्डिंग वापस मिली"
 
-#: rust/snapnab/src/main.rs:1022
+#: rust/snapnab/src/main.rs:1024
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu बाधित रिकॉर्डिंग लाइब्रेरी में वापस मिलीं।"
 
-#: rust/snapnab/src/main.rs:1147
+#: rust/snapnab/src/main.rs:1149
 #, c-format
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — अंतराल कैप्चर: %d छवि(याँ)"
@@ -6848,7 +6856,7 @@ msgstr "सफ़ेद"
 msgid "Copiado para a área de transferência."
 msgstr "क्लिपबोर्ड पर कॉपी हुआ।"
 
-#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:259
+#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:282
 msgid "Vídeo"
 msgstr "वीडियो"
 
@@ -6951,7 +6959,7 @@ msgstr ""
 msgid "Upload concluído — link copiado"
 msgstr "अपलोड पूरा — लिंक कॉपी हुआ"
 
-#: rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:393 rust/snapnab/src/window.rs:403
+#: rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:416 rust/snapnab/src/window.rs:426
 msgid "Nenhum"
 msgstr "कोई नहीं"
 
@@ -6967,125 +6975,189 @@ msgstr "पाठ (OCR)"
 msgid "Upload (copiar o link)"
 msgstr "अपलोड (लिंक कॉपी करें)"
 
-#: rust/snapnab/src/window.rs:243
-msgid "Exibir"
-msgstr "दृश्य"
+#: rust/snapnab/src/window.rs:195
+msgid "Abrir a pasta da biblioteca"
+msgstr "लाइब्रेरी फ़ोल्डर खोलें"
 
-#: rust/snapnab/src/window.rs:324
+#: rust/snapnab/src/window.rs:196
+msgid "Abrir a pasta de logs"
+msgstr "लॉग फ़ोल्डर खोलें"
+
+#: rust/snapnab/src/window.rs:198
+msgid "Importar presets…"
+msgstr "प्रीसेट आयात करें…"
+
+#: rust/snapnab/src/window.rs:199
+msgid "Exportar presets…"
+msgstr "प्रीसेट निर्यात करें…"
+
+#: rust/snapnab/src/window.rs:201
+msgid "Exportar todas as configurações…"
+msgstr "सभी सेटिंग्स निर्यात करें…"
+
+#: rust/snapnab/src/window.rs:202
+msgid "Importar todas as configurações…"
+msgstr "सभी सेटिंग्स आयात करें…"
+
+#: rust/snapnab/src/window.rs:203
+msgid "Abrir a pasta de backups"
+msgstr "बैकअप फ़ोल्डर खोलें"
+
+#: rust/snapnab/src/window.rs:205
+msgid "Configurar o upload…"
+msgstr "अपलोड सेट करें…"
+
+#: rust/snapnab/src/window.rs:206
+msgid "Limpar a biblioteca agora"
+msgstr "लाइब्रेरी अभी साफ़ करें"
+
+#: rust/snapnab/src/window.rs:209
+msgid "Sair do Snapnab"
+msgstr "Snapnab से बाहर निकलें"
+
+#: rust/snapnab/src/window.rs:220
+msgid "Repetir a última captura"
+msgstr "पिछला कैप्चर दोहराएँ"
+
+#: rust/snapnab/src/window.rs:223
+msgid "De um arquivo gráfico…"
+msgstr "छवि फ़ाइल से…"
+
+#: rust/snapnab/src/window.rs:231
+msgid "Abrir a pasta dos áudios"
+msgstr "ऑडियो फ़ोल्डर खोलें"
+
+#: rust/snapnab/src/window.rs:235
+msgid "Lista de presets"
+msgstr "प्रीसेट सूची"
+
+#: rust/snapnab/src/window.rs:238
+msgid "Manual do Snapnab"
+msgstr "Snapnab मैनुअल"
+
+#: rust/snapnab/src/window.rs:239
+msgid "Como usar os presets"
+msgstr "प्रीसेट कैसे उपयोग करें"
+
+#: rust/snapnab/src/window.rs:243
+msgid "&Captura"
+msgstr "कैप्चर(&C)"
+
+#: rust/snapnab/src/window.rs:347
 msgid "Seleção:"
 msgstr "चयन:"
 
-#: rust/snapnab/src/window.rs:342 rust/snapnab/src/window.rs:657
+#: rust/snapnab/src/window.rs:365 rust/snapnab/src/window.rs:680
 msgid "Configurações"
 msgstr "सेटिंग्स"
 
-#: rust/snapnab/src/window.rs:347
+#: rust/snapnab/src/window.rs:370
 msgid "Selecionar a região na captura"
 msgstr "कैप्चर के समय क्षेत्र चुनें"
 
-#: rust/snapnab/src/window.rs:349
+#: rust/snapnab/src/window.rs:372
 msgid "Região fixa…"
 msgstr "स्थिर क्षेत्र…"
 
-#: rust/snapnab/src/window.rs:358
+#: rust/snapnab/src/window.rs:381
 msgid "Cada janela como um objeto separado"
 msgstr "हर विंडो एक अलग ऑब्जेक्ट के रूप में"
 
-#: rust/snapnab/src/window.rs:361
+#: rust/snapnab/src/window.rs:384
 msgid "Guardar os links da página (clicáveis, também no PDF)"
 msgstr "पेज के लिंक रखें (क्लिक करने योग्य, PDF में भी)"
 
-#: rust/snapnab/src/window.rs:387
+#: rust/snapnab/src/window.rs:410
 msgid "Efeitos:"
 msgstr "प्रभाव:"
 
-#: rust/snapnab/src/window.rs:408
+#: rust/snapnab/src/window.rs:431
 msgid "Adicionar outro efeito"
 msgstr "दूसरा प्रभाव जोड़ें"
 
-#: rust/snapnab/src/window.rs:409
+#: rust/snapnab/src/window.rs:432
 msgid "Remover este efeito"
 msgstr "यह प्रभाव हटाएँ"
 
-#: rust/snapnab/src/window.rs:450
+#: rust/snapnab/src/window.rs:473
 msgid "Compartilhar:"
 msgstr "साझा करें:"
 
-#: rust/snapnab/src/window.rs:473
+#: rust/snapnab/src/window.rs:496
 msgid "Qualidade:"
 msgstr "गुणवत्ता:"
 
-#: rust/snapnab/src/window.rs:474
+#: rust/snapnab/src/window.rs:497
 msgid "Muito baixa"
 msgstr "बहुत कम"
 
-#: rust/snapnab/src/window.rs:505
+#: rust/snapnab/src/window.rs:528
 msgid "Webcam:"
 msgstr "वेबकैम:"
 
-#: rust/snapnab/src/window.rs:506
+#: rust/snapnab/src/window.rs:529
 msgid "Ligada"
 msgstr "चालू"
 
-#: rust/snapnab/src/window.rs:506 rust/snapnab/src/window.rs:517
+#: rust/snapnab/src/window.rs:529 rust/snapnab/src/window.rs:540
 msgid "Desligada"
 msgstr "बंद"
 
-#: rust/snapnab/src/window.rs:519
+#: rust/snapnab/src/window.rs:542
 msgid "Nenhuma webcam encontrada"
 msgstr "कोई वेबकैम नहीं मिला"
 
-#: rust/snapnab/src/window.rs:533
+#: rust/snapnab/src/window.rs:556
 msgid "Remover o fundo (chroma key)…"
 msgstr "पृष्ठभूमि हटाएँ (क्रोमा की)…"
 
-#: rust/snapnab/src/window.rs:568
+#: rust/snapnab/src/window.rs:591
 #, c-format
 msgid "%d s"
 msgstr "%d से."
 
-#: rust/snapnab/src/window.rs:572
+#: rust/snapnab/src/window.rs:595
 msgid "Atraso"
 msgstr "विलंब"
 
-#: rust/snapnab/src/window.rs:580
+#: rust/snapnab/src/window.rs:603
 msgid "1 segundo"
 msgstr "1 सेकंड"
 
-#: rust/snapnab/src/window.rs:581
+#: rust/snapnab/src/window.rs:604
 #, c-format
 msgid "%d segundos"
 msgstr "%d सेकंड"
 
-#: rust/snapnab/src/window.rs:620
+#: rust/snapnab/src/window.rs:643
 msgid "Gravar vídeo  ("
 msgstr "वीडियो रिकॉर्ड करें  ("
 
-#: rust/snapnab/src/window.rs:620
+#: rust/snapnab/src/window.rs:643
 msgid "Capturar imagem  ("
 msgstr "छवि कैप्चर करें  ("
 
-#: rust/snapnab/src/window.rs:630
+#: rust/snapnab/src/window.rs:653
 msgid "Adicionar atalho"
 msgstr "शॉर्टकट जोड़ें"
 
-#: rust/snapnab/src/window.rs:702
+#: rust/snapnab/src/window.rs:725
 msgid "Capturar com este preset"
 msgstr "इस प्रीसेट से कैप्चर करें"
 
-#: rust/snapnab/src/window.rs:704
+#: rust/snapnab/src/window.rs:727
 msgid "Renomear…"
 msgstr "नाम बदलें…"
 
-#: rust/snapnab/src/window.rs:705
+#: rust/snapnab/src/window.rs:728
 msgid "Atalho…"
 msgstr "शॉर्टकट…"
 
-#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:160
+#: rust/snapnab/src/window.rs:770 rust/snapnab/tests/window.rs:160
 msgid "Novo preset…"
 msgstr "नया प्रीसेट…"
 
-#: rust/snapnab/src/window.rs:758
+#: rust/snapnab/src/window.rs:782
 msgid "Abrir Editor"
 msgstr "एडिटर खोलें"
 
@@ -7109,23 +7181,19 @@ msgstr "छवि रिज़ॉल्यूशन"
 msgid "Embelezar (fundo, margem e sombra)"
 msgstr "सुंदर बनाएँ (पृष्ठभूमि, मार्जिन और छाया)"
 
-#: rust/snapnab/src/window.rs:241
-msgid "Abrir a pasta dos áudios"
-msgstr "ऑडियो फ़ोल्डर खोलें"
-
-#: rust/snapnab/src/window.rs:792
+#: rust/snapnab/src/window.rs:816
 msgid "Visualizar no Editor"
 msgstr "एडिटर में पूर्वावलोकन"
 
-#: rust/snapnab/src/window.rs:795
+#: rust/snapnab/src/window.rs:819
 msgid "Gravar microfone"
 msgstr "माइक्रोफ़ोन रिकॉर्ड करें"
 
-#: rust/snapnab/src/window.rs:796
+#: rust/snapnab/src/window.rs:820
 msgid "Gravar áudio do sistema"
 msgstr "सिस्टम ऑडियो रिकॉर्ड करें"
 
-#: rust/snapnab/src/window.rs:798
+#: rust/snapnab/src/window.rs:822
 msgid "Copiar para a área de transferência"
 msgstr "क्लिपबोर्ड पर कॉपी करें"
 
@@ -7420,3 +7488,4 @@ msgstr "ब्राउज़र में साइन-इन पूरा क�
 #: rust/snapui/src/upload_ui.rs:210
 msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "खुले पेज पर Snapnab को अधिकृत करें। ब्राउज़र लौटने पर यह विंडो अपने आप बंद हो जाएगी।"
+

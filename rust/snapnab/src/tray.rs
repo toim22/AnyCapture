@@ -1,6 +1,6 @@
 //! The notification-area icon (Shell_NotifyIcon, comp_1 §2): a click captures, a double click opens the capture
-//! window, the right button opens the menu. The menu is a native Win32 popup menu: Windows draws it with the system
-//! look, and its WM_COMMAND reaches the capture window like the C++ app's did.
+//! window, the right button opens the menu. The menu is a native Win32 popup menu drawn by snapui (the theme's look), and
+//! its WM_COMMAND reaches the capture window like the C++ app's did.
 
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicIsize, Ordering};
@@ -14,14 +14,11 @@ use windows::Win32::UI::Shell::{
     NOTIFYICON_VERSION_4, NOTIFYICONDATAW, Shell_NotifyIconW,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CreateIconIndirect, CreatePopupMenu, DestroyIcon, DestroyMenu, GetCursorPos, GetSystemMetrics, HICON, HMENU, ICONINFO, MF_CHECKED,
-    MF_GRAYED, MF_POPUP, MF_SEPARATOR, MF_STRING, PostMessageW, SetForegroundWindow, SetMenuDefaultItem, TPM_RETURNCMD, TPM_RIGHTBUTTON,
-    SM_CXICON, TrackPopupMenu, WM_APP, WM_NULL,
+    CreateIconIndirect, DestroyIcon, GetCursorPos, GetSystemMetrics, HICON, ICONINFO, PostMessageW, SM_CXICON, SetMenuDefaultItem, WM_APP,
+    WM_NULL,
 };
-use windows::core::PCWSTR;
 
 use snapcore::image::Image;
-use snapcore::wide::to_wide;
 
 /// The tray icon's callback message (WM_SNAP_TRAY of the C++ app).
 pub const WM_SNAP_TRAY: u32 = WM_APP + 0x41;
@@ -274,8 +271,9 @@ fn set_balloon(lib: String, icon: isize) {
     *b = (lib, icon);
 }
 
-/// A native popup menu under construction.
-pub struct Menu(HMENU);
+/// A popup menu under construction: snapui's owner-drawn native menu (the theme's colors and font), with the
+/// borrowed texts the capture app builds its menus from.
+pub struct Menu(snapui::menu::Menu);
 
 pub enum Item<'a> {
     Cmd(u32, &'a str),
@@ -288,57 +286,35 @@ pub enum Item<'a> {
 
 impl Menu {
     pub fn new(items: Vec<Item>) -> Menu {
-        let m = unsafe { CreatePopupMenu() }.unwrap_or_default();
-        for it in items {
-            unsafe {
-                let _ = match it {
-                    Item::Cmd(id, t) => AppendMenuW(m, MF_STRING, id as usize, PCWSTR(to_wide(t).as_ptr())),
-                    Item::Checked(id, t, on) => AppendMenuW(m, MF_STRING | if on { MF_CHECKED } else { Default::default() },
-                                                            id as usize, PCWSTR(to_wide(t).as_ptr())),
-                    Item::Sub(t, sub) => {
-                        let h = sub.0;
-                        std::mem::forget(sub); // owned by the parent menu from now on
-                        AppendMenuW(m, MF_POPUP, h.0 as usize, PCWSTR(to_wide(t).as_ptr()))
-                    }
-                    Item::Disabled(t) => AppendMenuW(m, MF_STRING | MF_GRAYED, 0, PCWSTR(to_wide(t).as_ptr())),
-                    Item::Separator => AppendMenuW(m, MF_SEPARATOR, 0, PCWSTR::null()),
-                };
-            }
-        }
-        Menu(m)
+        use snapui::menu::Item as I;
+        let items = items
+            .into_iter()
+            .map(|it| match it {
+                Item::Cmd(id, t) => I::Cmd(id, t.to_owned()),
+                Item::Checked(id, t, on) => I::Checked(id, t.to_owned(), on),
+                Item::Sub(t, sub) => I::Sub(t.to_owned(), sub.0),
+                Item::Disabled(t) => I::Cmd2(0, t.to_owned(), false),
+                Item::Separator => I::Separator,
+            })
+            .collect();
+        Menu(snapui::menu::Menu::popup(items))
     }
 
     /// Shows the menu at the cursor; the chosen item arrives as WM_COMMAND at `owner`.
     pub fn track(&self, owner: isize, default_item: Option<u32>) {
         unsafe {
             if let Some(d) = default_item {
-                let _ = SetMenuDefaultItem(self.0, d, 0);
+                let _ = SetMenuDefaultItem(self.0.0, d, 0);
             }
             let mut p = POINT::default();
             let _ = GetCursorPos(&mut p);
-            let owner = HWND(owner as _);
-            let _ = SetForegroundWindow(owner);
-            let _ = TrackPopupMenu(self.0, TPM_RIGHTBUTTON, p.x, p.y, None, owner, None);
-            let _ = PostMessageW(Some(owner), WM_NULL, Default::default(), Default::default());
+            self.0.track_at(owner, p.x, p.y, false);
+            let _ = PostMessageW(Some(HWND(owner as _)), WM_NULL, Default::default(), Default::default());
         }
     }
-}
 
-impl Menu {
     /// Shows the menu at a screen point and returns the chosen item (0: none).
     pub fn choose(&self, owner: isize, x: i32, y: i32) -> u32 {
-        unsafe {
-            let owner = HWND(owner as _);
-            let _ = SetForegroundWindow(owner);
-            TrackPopupMenu(self.0, TPM_RETURNCMD | TPM_RIGHTBUTTON, x, y, None, owner, None).0 as u32
-        }
-    }
-}
-
-impl Drop for Menu {
-    fn drop(&mut self) {
-        unsafe {
-            let _ = DestroyMenu(self.0);
-        }
+        self.0.choose(owner, x, y)
     }
 }

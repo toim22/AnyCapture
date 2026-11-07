@@ -17,7 +17,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **A Windows 11 look.** The capture window and the Editor use Windows 11's controls and gray surfaces with the
   Windows accent color: switches instead of check boxes, tabs with an accent bar, a round capture button, preset rows
   with their hotkey and a settings gear. Drop-down lists can still open past the window's edges, and the icons of the
-  tabs, toolbar, menus and layers are the same as before.
+  tabs, toolbar, menus and layers are the same as before. The menus sit in the title bar again, as in the earlier
+  versions, and are drawn in the same theme with rounded corners and an icon next to the items that have one; the
+  Editor's *More*, zoom and Recent captures menus look the same. The interface font is now Inter, built into the
+  programs. *Customize toolbar* shows the items as icons, by group.
 - A damaged or hostile `.snap`, image or upload response is now parsed by memory-safe code.
 - QR codes and barcodes are read by rxing, a Rust port of ZXing, instead of ZXing-C++; several codes in one picture
   are listed top to bottom.
@@ -40,6 +43,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   sends no key press for it, and the Snipping Tool or a Snapnab capture could take it first (#6).
 - With *Only copy to the clipboard*, the notification after a capture shows a miniature of it, and a click on the
   notification opens the capture in the Editor (#7).
+- The Editor's drawing tools are centered on the toolbar, and *Recent captures* is no longer cut off at the bottom when
+  the window is maximized.
+- *Help › About* no longer shows the path of the library folder.
 
 ## [0.4.1] — 2026-11-03
 

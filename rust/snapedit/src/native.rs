@@ -11,11 +11,7 @@ use windows::Win32::UI::Controls::Dialogs::{
     OFN_FILEMUSTEXIST, OFN_OVERWRITEPROMPT, OFN_PATHMUSTEXIST, OPENFILENAMEW,
 };
 use windows::Win32::UI::Shell::{FOS_FORCEFILESYSTEM, FOS_PICKFOLDERS, FileOpenDialog, IFileOpenDialog, SIGDN_FILESYSPATH};
-use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CheckMenuItem, CreateMenu, CreatePopupMenu, DestroyMenu, EnableMenuItem, GetCursorPos, HMENU, MB_ICONINFORMATION,
-    MESSAGEBOX_STYLE, MF_BYCOMMAND, MF_CHECKED, MF_ENABLED, MF_GRAYED, MF_POPUP, MF_SEPARATOR, MF_STRING, MF_UNCHECKED, MessageBoxW,
-    PostMessageW, SetForegroundWindow, TPM_RETURNCMD, TPM_RIGHTBUTTON, TrackPopupMenu, WM_COMMAND,
-};
+use windows::Win32::UI::WindowsAndMessaging::{GetCursorPos, MB_ICONINFORMATION, MESSAGEBOX_STYLE, MessageBoxW, PostMessageW, WM_COMMAND};
 use windows::core::PCWSTR;
 
 pub fn wide(s: &str) -> Vec<u16> {
@@ -55,149 +51,67 @@ pub fn cursor_pos() -> (i32, i32) {
 }
 
 // ---------------------------------------------------------------- menus
-pub enum Item {
-    Cmd(u32, String),
-    /// a command and whether it is enabled
-    Cmd2(u32, String, bool),
-    Checked(u32, String, bool),
-    Sub(String, Menu),
-    Separator,
-}
+// The menus are snapui's (owner-drawn native menus, in the theme, with icons): this keeps the Editor's names for them.
+pub use snapui::menu::{Item, Menu, MenuStates};
 
-/// A native menu under construction (popup, or the window's menu bar).
-pub struct Menu(pub HMENU);
-
-// SAFETY: a menu handle is a plain USER handle; it is built on one thread and handed to the window's thread.
-unsafe impl Send for Menu {}
-
-/// The menu items that show an icon, as in the C++ (SetItemIcon): Pin, Upload, Combine, Compare, the effects, the
-/// alignment, Lock and the tools of the Tools menu.
-fn menu_icon(id: u32) -> Option<snapcore::icons::Icon> {
+/// The icon of each menu command (menu.rs): the File, Edit, Image, Tools and View commands that have a picture,
+/// the effects, the alignment, and the tools of Image › Tools and the toolbar's "More".
+pub fn menu_icon(id: u32) -> Option<snapcore::icons::Icon> {
     use crate::ids::*;
-    const WITH_ICON: [u32; 31] = [
-        M_PIN, M_UPLOAD, M_COMBINE, M_COMPARE, M_BEAUTIFY, M_FX_BORDER, M_FX_EDGE, M_FX_CAPTION, M_FX_PERSPECTIVE, M_FX_PAGECURL,
-        M_FX_SHADOW, M_FX_FILTER, M_FX_ADJUST, M_FX_REPLACE, M_FX_SPOTLIGHT, M_FX_WATERMARK, M_ALIGN_LEFT, M_ALIGN_CENTER,
-        M_ALIGN_RIGHT, M_ALIGN_TOP, M_ALIGN_MIDDLE, M_ALIGN_BOTTOM, M_DIST_H, M_DIST_V, M_LOCK, M_UNLOCK, M_READ_QR, M_DATESTAMP,
-        M_CONTRAST, M_ASSISTANT, M_SPLIT,
-    ];
-    if WITH_ICON.contains(&id) { crate::panels::command_icon(id) } else { None }
+    use snapcore::icons::Icon;
+    if (M_MORE_TOOL_BASE..M_MORE_TOOL_BASE + crate::canvas::TOOL_COUNT as u32).contains(&id) {
+        let i = (id - M_MORE_TOOL_BASE) as usize;
+        return crate::menu::TOOLS.iter().find(|(t, _)| t.index() == i).map(|(t, _)| crate::panels::tool_icon(*t));
+    }
+    if (M_CURSOR_BASE..M_CURSOR_BASE + 16).contains(&id) {
+        return Some(Icon::Cursor);
+    }
+    Some(match id {
+        M_NEW_CAPTURE => Icon::Capture,
+        M_NEW_VIDEO => Icon::VideoFill,
+        M_NEW_CLIPBOARD => Icon::NewClipboard,
+        M_NEW_IMAGE => Icon::NewDoc,
+        M_OPEN => Icon::Folder,
+        M_SAVE => Icon::Save,
+        M_SAVEAS => Icon::SaveAs,
+        M_DUPLICATE => Icon::Duplicate,
+        M_DELETE => Icon::Trash,
+        M_PRINT => Icon::Print,
+        M_EMAIL => Icon::Mail,
+        M_OPEN_PROGRAM => Icon::Program,
+        M_LIBRARY => Icon::Library,
+        M_UNDO => Icon::Undo,
+        M_REDO => Icon::Redo,
+        M_COPY | M_COPYALL => Icon::Copy,
+        M_PASTE | M_PASTE_INPLACE => Icon::Clipboard,
+        M_DELETE_SEL => Icon::DeleteObject,
+        M_SELECTALL => Icon::Selection,
+        M_CROP_SEL => Icon::Crop,
+        M_OCR => Icon::Ocr,
+        M_GROUP | M_UNGROUP => Icon::Group,
+        M_FLATTEN_SEL | M_FLATTEN => Icon::Layers,
+        M_TRIM => Icon::AutoTrim,
+        M_ROT_CW | M_ROT_CCW | M_ROT_180 | M_ROT_FREE => Icon::Rotate,
+        M_ZOOM_IN | M_ZOOM_OUT | M_ZOOM_100 | M_ZOOM_FIT => Icon::Magnify,
+        M_RULERS => Icon::Ruler,
+        M_SHOW_EFFECTS => Icon::Effects,
+        M_SHOW_LAYERS => Icon::Layers,
+        M_SHOW_LIBRARY => Icon::Library,
+        M_SHOW_TRAY => Icon::Image,
+        M_TB_CUSTOMIZE => Icon::Sliders,
+        M_TB_RESET => Icon::Restart,
+        M_REDACT => Icon::Blur,
+        M_REMOVE_BG => Icon::Sparkle,
+        M_ADD_CAPTURE => Icon::Capture,
+        M_AI_SETTINGS | M_UPLOAD_SETTINGS => Icon::Gear,
+        M_OPEN_LINK => Icon::Link,
+        _ => return crate::panels::command_icon(id),
+    })
 }
 
-/// A 32 bpp bitmap (premultiplied alpha) of the icon at the menus' size (MenuIcon).
-fn menu_bitmap(icon: snapcore::icons::Icon) -> Option<windows::Win32::Graphics::Gdi::HBITMAP> {
-    use windows::Win32::UI::HiDpi::GetDpiForSystem;
-    let px = (16 * unsafe { GetDpiForSystem() } as i32 + 48) / 96;
-    let mut img = snapcore::icons::render(icon, px, 0xFF34_3840);
-    for p in img.px.iter_mut() {
-        let a = *p >> 24;
-        let ch = |sh: u32| ((*p >> sh & 255) * a / 255) << sh;
-        *p = a << 24 | ch(16) | ch(8) | ch(0);
-    }
-    snapcore::screen::to_hbitmap(&img)
-}
-
-fn set_item_icon(m: HMENU, id: u32) {
-    use windows::Win32::UI::WindowsAndMessaging::{MENUITEMINFOW, MIIM_BITMAP, SetMenuItemInfoW};
-    let Some(hb) = menu_icon(id).and_then(menu_bitmap) else { return };
-    let mi = MENUITEMINFOW { cbSize: size_of::<MENUITEMINFOW>() as u32, fMask: MIIM_BITMAP, hbmpItem: hb, ..Default::default() };
-    unsafe {
-        let _ = SetMenuItemInfoW(m, id, false, &mi);
-    }
-}
-
-impl Menu {
-    fn fill(m: HMENU, items: Vec<Item>) {
-        for it in items {
-            let id = match &it {
-                Item::Cmd(id, _) | Item::Cmd2(id, _, _) | Item::Checked(id, _, _) => *id,
-                _ => 0,
-            };
-            unsafe {
-                let _ = match it {
-                    Item::Cmd(id, t) => AppendMenuW(m, MF_STRING, id as usize, PCWSTR(wide(&t).as_ptr())),
-                    Item::Cmd2(id, t, on) => {
-                        AppendMenuW(m, MF_STRING | if on { MF_ENABLED } else { MF_GRAYED }, id as usize, PCWSTR(wide(&t).as_ptr()))
-                    }
-                    Item::Checked(id, t, on) => {
-                        AppendMenuW(m, MF_STRING | if on { MF_CHECKED } else { MF_UNCHECKED }, id as usize, PCWSTR(wide(&t).as_ptr()))
-                    }
-                    Item::Sub(t, sub) => {
-                        let h = sub.0;
-                        std::mem::forget(sub); // owned by the parent from now on
-                        AppendMenuW(m, MF_POPUP, h.0 as usize, PCWSTR(wide(&t).as_ptr()))
-                    }
-                    Item::Separator => AppendMenuW(m, MF_SEPARATOR, 0, PCWSTR::null()),
-                };
-            }
-            if id != 0 {
-                set_item_icon(m, id);
-            }
-        }
-    }
-
-    pub fn popup(items: Vec<Item>) -> Menu {
-        let m = unsafe { CreatePopupMenu() }.unwrap_or_default();
-        Self::fill(m, items);
-        Menu(m)
-    }
-
-    pub fn bar(items: Vec<Item>) -> Menu {
-        let m = unsafe { CreateMenu() }.unwrap_or_default();
-        Self::fill(m, items);
-        Menu(m)
-    }
-
-    /// Shows the popup at a screen point and returns the chosen command (0: none).
-    pub fn choose(&self, owner: isize, x: i32, y: i32) -> u32 {
-        unsafe {
-            let _ = SetForegroundWindow(hwnd(owner));
-            TrackPopupMenu(self.0, TPM_RETURNCMD | TPM_RIGHTBUTTON, x, y, None, hwnd(owner), None).0 as u32
-        }
-    }
-
-    /// The handle stays alive (a menu bar set on a window is destroyed with it).
-    pub fn into_raw(self) -> HMENU {
-        let h = self.0;
-        std::mem::forget(self);
-        h
-    }
-}
-
-impl Drop for Menu {
-    fn drop(&mut self) {
-        unsafe {
-            let _ = DestroyMenu(self.0);
-        }
-    }
-}
-
-/// Enabled and checked states of the menu commands, kept by the app after each frame and applied when a menu opens
-/// (WM_INITMENUPOPUP comes inside the window procedure, where the app itself cannot be reached).
-#[derive(Clone, Default)]
-pub struct MenuStates {
-    pub enabled: Vec<(u32, bool)>,
-    pub checked: Vec<(u32, bool)>,
-}
-
-static STATES: Mutex<Option<MenuStates>> = Mutex::new(None);
-
+/// The Editor's menu states, applied by snapui when a menu opens.
 pub fn set_menu_states(s: MenuStates) {
-    *STATES.lock().unwrap() = Some(s);
-}
-
-/// WM_INITMENUPOPUP: applies the states to the menu that opens (commands not in it are ignored).
-pub fn apply_menu_states(menu: isize) {
-    let g = STATES.lock().unwrap();
-    let Some(s) = g.as_ref() else { return };
-    let m = HMENU(menu as _);
-    unsafe {
-        for &(id, on) in &s.enabled {
-            let _ = EnableMenuItem(m, id, MF_BYCOMMAND | if on { MF_ENABLED } else { MF_GRAYED });
-        }
-        for &(id, on) in &s.checked {
-            let _ = CheckMenuItem(m, id, (MF_BYCOMMAND | if on { MF_CHECKED } else { MF_UNCHECKED }).0);
-        }
-    }
+    snapui::menu::set_states(s);
 }
 
 // ---------------------------------------------------------------- file dialogs

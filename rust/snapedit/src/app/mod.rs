@@ -35,7 +35,7 @@ use snapui::host::{App, Caught, Ctl, RawMsg, WinKey, WindowSpec};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::System::DataExchange::COPYDATASTRUCT;
 use windows::Win32::UI::Shell::{DragAcceptFiles, DragFinish, DragQueryFileW, HDROP};
-use windows::Win32::UI::WindowsAndMessaging::{WM_COMMAND, WM_COPYDATA, WM_DROPFILES, WM_INITMENUPOPUP};
+use windows::Win32::UI::WindowsAndMessaging::{WM_COMMAND, WM_COPYDATA, WM_DROPFILES};
 
 pub const VERSION: &str = snapedit_app::VERSION;
 
@@ -59,10 +59,6 @@ fn intercept(hwnd: isize, msg: u32, wp: usize, lp: isize) -> Caught {
             None => Caught::Handled(0),
         },
         WM_COMMAND => Caught::Queue(raw(None), 0),
-        WM_INITMENUPOPUP => {
-            native::apply_menu_states(wp as isize);
-            Caught::Pass
-        }
         WM_DROPFILES => {
             // the names are read here: the HDROP lives only during the call
             let d = HDROP(wp as _);
@@ -116,7 +112,10 @@ pub struct Editor {
     watch_stop: Arc<AtomicBool>,
     last_title: String,
     fx_key: u64,
-    zoom_menu: bool,
+    /// where the zoom menu opens: the footer button's top-left corner, in client pixels
+    pub zoom_at: Option<(i32, i32)>,
+    /// where "More" opens its menu: the button's bottom-left corner, in client pixels
+    pub more_at: Option<(i32, i32)>,
 }
 
 impl Editor {
@@ -171,7 +170,8 @@ impl Editor {
             watch_stop: Arc::new(AtomicBool::new(false)),
             last_title: String::new(),
             fx_key: 1,
-            zoom_menu: false,
+            zoom_at: None,
+            more_at: None,
         };
         e.load_toolbar_config();
         e
@@ -202,6 +202,14 @@ impl Editor {
 
     pub fn schedule_effect_previews(&mut self) {
         self.fx_preview_at = Some(Instant::now() + Duration::from_millis(350));
+    }
+
+    /// The document's name on the title bar, after the menus.
+    fn caption_title(&self) -> String {
+        match self.cv.doc() {
+            Some(d) => format!("{}{}", if d.modified { "• " } else { "" }, d.title),
+            None => String::new(),
+        }
     }
 
     pub fn update_title(&mut self, ctl: &Ctl) {
@@ -386,6 +394,7 @@ impl Editor {
     // ---------------------------------------------------------------- the frame
     fn main_ui(&mut self, ctl: &mut Ctl, ui: &mut egui::Ui) {
         let ctx = ui.ctx().clone();
+        snapui::caption::bar(ui, self.hwnd, &self.caption_title());
         self.timers(ctl, &ctx);
         self.keys(ctl, &ctx);
         let video = self.is_video();
@@ -412,7 +421,9 @@ impl Editor {
                         let r = ui.button(format!("{} ▾", tr("Zoom %d%%").replace("%d", &z.to_string()).replace("%%", "%")));
                         panels::tag(ui, &r, "SnapnabStatus.Zoom");
                         if r.clicked() {
-                            self.zoom_menu = !self.zoom_menu;
+                            let ppp = ui.ctx().pixels_per_point();
+                            self.zoom_at = Some(((r.rect.left() * ppp).round() as i32, (r.rect.top() * ppp).round() as i32));
+                            foot_cmd = Some(commands::ZOOM_MENU);
                         }
                         let size = format!("{} × {} px  ▾", d.w(), d.h());
                         let r = ui.button(size);
@@ -425,13 +436,10 @@ impl Editor {
                 });
             });
         });
-        if self.zoom_menu {
-            self.zoom_popup(&ctx);
-        }
         // recent captures
         let mut tray_acts = Vec::new();
         if self.show_tray {
-            egui::Panel::bottom("SnapnabTray").exact_size(128.0).resizable(false).show(ui, |ui| {
+            egui::Panel::bottom("SnapnabTray").exact_size(snapedit_app::tray::TRAY_HEIGHT).resizable(false).show(ui, |ui| {
                 tray_acts = self.tray.ui(ui);
             });
         }
@@ -478,8 +486,11 @@ impl Editor {
             });
         }
         // what the panels asked for
-        if let Some(c) = foot_cmd {
-            self.command(ctl, c);
+        match foot_cmd {
+            // a popup menu opens outside the frame drawing
+            Some(commands::ZOOM_MENU) => native::post_command(self.hwnd, commands::ZOOM_MENU),
+            Some(c) => self.command(ctl, c),
+            None => {}
         }
         for a in bar {
             match a {
@@ -493,7 +504,11 @@ impl Editor {
                     EntryKind::Effect => self.open_effect(e.id),
                     _ => self.command(ctl, e.id),
                 },
-                BarAction::More(_) => native::post_command(self.hwnd, commands::MORE_TOOLS),
+                BarAction::More(p) => {
+                    let ppp = ctx.pixels_per_point();
+                    self.more_at = Some(((p.x * ppp).round() as i32, (p.y * ppp).round() as i32 + 2));
+                    native::post_command(self.hwnd, commands::MORE_TOOLS)
+                }
                 BarAction::Hint(h) => self.status = h,
             }
         }
@@ -513,27 +528,6 @@ impl Editor {
         self.update_title(ctl);
         TEXT_FOCUS.store(ctx.egui_wants_keyboard_input(), Ordering::Relaxed);
         self.publish_menu_states();
-    }
-
-    fn zoom_popup(&mut self, ctx: &egui::Context) {
-        let mut close = false;
-        egui::Window::new("zoom").title_bar(false).resizable(false).anchor(egui::Align2::RIGHT_BOTTOM, [-8.0, -30.0]).show(ctx, |ui| {
-            for z in [25, 50, 75, 100, 150, 200, 300, 400, 800] {
-                let on = (self.cv.zoom * 100.0).round() as i32 == z;
-                if ui.selectable_label(on, format!("{z}%")).clicked() {
-                    self.cv.zoom_to(z as f64 / 100.0, None);
-                    close = true;
-                }
-            }
-            ui.separator();
-            if ui.button(tr("Ajustar à janela\tCtrl+0").replace('\t', "   ")).clicked() {
-                self.cv.fit_to_window();
-                close = true;
-            }
-        });
-        if close || ctx.input(|i| i.key_pressed(egui::Key::Escape)) {
-            self.zoom_menu = false;
-        }
     }
 
     /// The timers of the C++ frame: the effect previews after a pause, the library reload after a burst of changes,
@@ -1007,6 +1001,7 @@ impl App for Editor {
             visible: true,
             intercept: Some(intercept),
             clear_color: [0.95, 0.95, 0.96, 1.0],
+            caption: true,
             ..Default::default()
         };
         let Some(k) = ctl.create(&spec) else {
@@ -1023,9 +1018,9 @@ impl App for Editor {
                 w.set_maximized(true);
             }
         }
+        snapui::menu::set_icons(native::menu_icon);
+        snapui::caption::set_menus(self.hwnd, menu::build_menu());
         unsafe {
-            let m = menu::build_menu().into_raw();
-            let _ = windows::Win32::UI::WindowsAndMessaging::SetMenu(HWND(self.hwnd as _), Some(m));
             DragAcceptFiles(HWND(self.hwnd as _), true);
         }
         self.waker = Some(ctl.waker());

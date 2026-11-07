@@ -135,6 +135,16 @@ impl Tokens {
     }
 }
 
+impl Tokens {
+    /// The hover fill of a flat button on the window background (the title bar's buttons and menus).
+    pub fn hover_strong(&self) -> Color32 {
+        if self.dark { Color32::from_white_alpha(18) } else { Color32::from_black_alpha(12) }
+    }
+    pub fn pressed_strong(&self) -> Color32 {
+        if self.dark { Color32::from_white_alpha(11) } else { Color32::from_black_alpha(8) }
+    }
+}
+
 /// The theme of this process, read once.
 pub fn current() -> Theme {
     static T: std::sync::OnceLock<Theme> = std::sync::OnceLock::new();
@@ -249,8 +259,8 @@ fn read_reg(key: &str, value: &str) -> Option<Vec<u8>> {
     Some(buf)
 }
 
-/// Makes the parts Windows draws follow the theme: the title bar (its color and dark mode) and a native menu bar,
-/// which Windows always paints light. The menu bar is painted through the undocumented messages Windows sends to a
+/// Makes the parts Windows draws follow the theme: the title bar (its color and dark mode), the popup menus (drawn by
+/// `menu.rs`) and a native menu bar, which Windows always paints light. The menu bar is painted through the undocumented messages Windows sends to a
 /// window to draw it (WM_UAHDRAWMENU and WM_UAHDRAWMENUITEM), as other Win32 programs with a dark mode do.
 pub fn style_window(hwnd: isize) {
     use windows::Win32::Foundation::{COLORREF, HWND};
@@ -268,6 +278,7 @@ pub fn style_window(hwnd: isize) {
         let _ = DwmSetWindowAttribute(h, DWMWA_TEXT_COLOR, &txt as *const COLORREF as _, 4);
         let _ = SetWindowSubclass(h, Some(menu_bar_proc), 2, 0);
     }
+    crate::menu::follow_theme();
 }
 
 unsafe extern "system" fn menu_bar_proc(hwnd: windows::Win32::Foundation::HWND, msg: u32,
@@ -282,6 +293,10 @@ unsafe extern "system" fn menu_bar_proc(hwnd: windows::Win32::Foundation::HWND, 
     const WM_UAHDRAWMENUITEM: u32 = 0x0092;
     let t = tokens();
     let cref = |c: Color32| windows::Win32::Foundation::COLORREF(c.r() as u32 | (c.g() as u32) << 8 | (c.b() as u32) << 16);
+    // the owner-drawn menus this window opens
+    if let Some(r) = crate::menu::handle(hwnd.0 as isize, msg, wp.0, lp.0) {
+        return r;
+    }
     unsafe {
         match msg {
             WM_UAHDRAWMENU => {

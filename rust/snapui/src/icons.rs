@@ -45,10 +45,15 @@ pub fn draw(p: &Painter, icon: Icon, r: Rect, c: Color32) {
 
 /// A button with the icon above its label, as in the Editor's toolbar: `on` marks the active tool, `primary` fills it
 /// with `primary_fill` (the red Capture button).
+/// The width a [`tile`] with this label takes.
+pub fn tile_width(ui: &Ui, label: &str) -> f32 {
+    let galley = ui.painter().layout_no_wrap(label.to_owned(), egui::FontId::proportional(11.5), Color32::WHITE);
+    (galley.size().x + 14.0).max(52.0)
+}
+
 pub fn tile(ui: &mut Ui, icon: Icon, label: &str, on: bool, primary: Option<Color32>) -> Response {
     let font = egui::FontId::proportional(11.5);
-    let galley = ui.painter().layout_no_wrap(label.to_owned(), font.clone(), Color32::WHITE);
-    let w = (galley.size().x + 14.0).max(52.0);
+    let w = tile_width(ui, label);
     let (rect, r) = ui.allocate_exact_size(vec2(w, 52.0), Sense::click());
     if ui.is_rect_visible(rect) {
         let v = ui.visuals();

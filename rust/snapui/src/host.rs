@@ -72,6 +72,9 @@ pub struct WindowSpec {
     pub owner: Option<isize>,
     /// a popup: rounded corners and Windows' drop shadow, though it has no frame
     pub popup: bool,
+    /// Snapnab's own title bar (caption.rs: the icon and the menus on the title strip); the app draws it with
+    /// `caption::bar` at the top of each frame
+    pub caption: bool,
 }
 
 impl Default for WindowSpec {
@@ -91,6 +94,7 @@ impl Default for WindowSpec {
             clear_color: [0.0, 0.0, 0.0, 1.0],
             owner: None,
             popup: false,
+            caption: false,
         }
     }
 }
@@ -248,6 +252,9 @@ impl Ctl<'_> {
             sub
         });
         crate::theme::style_window(hwnd);
+        if spec.caption {
+            crate::caption::install(hwnd, spec.resizable);
+        }
         early(hwnd);
         if self.gpu.is_none() {
             *self.gpu = Some(new_gpu()?);

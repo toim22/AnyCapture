@@ -74,6 +74,42 @@ pub struct Aux {
     assistant: Option<Assistant>,
 }
 
+/// The icon of a toolbar entry (a spacer has the plain rectangle, as in the C++ catalog).
+fn entry_icon_of(e: &Entry) -> snapcore::icons::Icon {
+    if e.kind == EntryKind::Spacer { snapcore::icons::Icon::Rect } else { panels::entry_icon(e) }
+}
+
+/// An item of the Customize catalog: its icon over its name (CustomizeProc's cells). An item already on the bar is
+/// drawn in the accent color.
+fn catalog_tile(ui: &mut egui::Ui, icon: snapcore::icons::Icon, label: &str, present: bool) -> egui::Response {
+    let t = snapui::theme::tokens();
+    let (rect, r) = ui.allocate_exact_size(egui::vec2(92.0, 64.0), egui::Sense::click());
+    let fg = if present { t.accent } else { t.text };
+    if r.hovered() && !present {
+        ui.painter().rect_filled(rect, 6.0, t.hover_strong());
+    }
+    snapui::icons::draw(ui.painter(), icon, egui::Rect::from_center_size(egui::pos2(rect.center().x, rect.top() + 20.0), egui::vec2(24.0, 24.0)), fg);
+    let font = egui::FontId::proportional(11.5);
+    let mut job = egui::text::LayoutJob::simple_singleline(label.to_owned(), font, fg);
+    job.wrap = egui::text::TextWrapping::truncate_at_width(rect.width() - 6.0);
+    job.halign = egui::Align::Center;
+    let g = ui.painter().layout_job(job);
+    ui.painter().galley(egui::pos2(rect.center().x, rect.bottom() - 22.0), g, fg);
+    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, !present, label));
+    r
+}
+
+/// A small flat icon button (move up or down, remove).
+fn small_icon(ui: &mut egui::Ui, icon: snapcore::icons::Icon, enabled: bool) -> egui::Response {
+    let c = if enabled { ui.visuals().text_color() } else { ui.visuals().weak_text_color() };
+    ui.add_enabled(enabled, egui::Button::image(snapui::icons::image(ui.ctx(), icon, 14.0, c)).frame(false))
+}
+
+/// A small flat text button (move up or down).
+fn small_text(ui: &mut egui::Ui, text: &str, enabled: bool) -> egui::Response {
+    ui.add_enabled(enabled, egui::Button::new(RichText::new(text).size(14.0)).frame(false))
+}
+
 fn spec(class: &'static str, title: String, size: (f32, f32)) -> WindowSpec {
     WindowSpec { class, title, size, clear_color: [0.96, 0.96, 0.97, 1.0], ..Default::default() }
 }
@@ -546,26 +582,35 @@ impl Editor {
             ui.add_space(6.0);
         });
         let Some(c) = self.aux.customize.as_mut() else { return };
-        egui::Panel::right("bar").exact_size(300.0).resizable(false).show(ui, |ui| {
-            ui.heading(tr("Na barra"));
-            egui::ScrollArea::vertical().id_salt("bar-list").show(ui, |ui| {
+        egui::Panel::right("bar").exact_size(280.0).resizable(false).show(ui, |ui| {
+            ui.add_space(8.0);
+            ui.label(RichText::new(tr("Na barra")).strong());
+            ui.add_space(4.0);
+            egui::ScrollArea::vertical().id_salt("bar-list").auto_shrink([false, false]).show(ui, |ui| {
                 let mut act = None;
+                let last = c.list.len().saturating_sub(1);
                 for (i, e) in c.list.iter().enumerate() {
                     ui.horizontal(|ui| {
-                        if ui.small_button("↑").clicked() && i > 0 {
-                            act = Some((i, 0));
-                        }
-                        if ui.small_button("↓").clicked() {
-                            act = Some((i, 1));
-                        }
-                        if ui.small_button("✕").clicked() {
-                            act = Some((i, 2));
-                        }
-                        ui.label(name_of(e));
+                        ui.spacing_mut().item_spacing.x = 2.0;
+                        let fg = ui.visuals().text_color();
+                        ui.add(snapui::icons::image(ui.ctx(), entry_icon_of(e), 18.0, fg));
+                        ui.add_space(6.0);
+                        ui.add(egui::Label::new(name_of(e)).truncate());
+                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                            if small_icon(ui, snapcore::icons::Icon::Cancel, true).on_hover_text(tr("Remover da barra")).clicked() {
+                                act = Some((i, 2));
+                            }
+                            if small_text(ui, "↓", i < last).on_hover_text(tr("Mover para baixo")).clicked() {
+                                act = Some((i, 1));
+                            }
+                            if small_text(ui, "↑", i > 0).on_hover_text(tr("Mover para cima")).clicked() {
+                                act = Some((i, 0));
+                            }
+                        });
                     });
                 }
                 match act {
-                    Some((i, 0)) => c.list.swap(i, i - 1),
+                    Some((i, 0)) if i > 0 => c.list.swap(i, i - 1),
                     Some((i, 1)) if i + 1 < c.list.len() => c.list.swap(i, i + 1),
                     Some((i, 2)) => {
                         c.list.remove(i);
@@ -575,15 +620,20 @@ impl Editor {
             });
         });
         egui::CentralPanel::default().show(ui, |ui| {
+            ui.add_space(8.0);
             ui.label(tr("Clique num item para acrescentá-lo ao fim da barra."));
-            egui::ScrollArea::vertical().id_salt("catalog").show(ui, |ui| {
+            egui::ScrollArea::vertical().id_salt("catalog").auto_shrink([false, false]).show(ui, |ui| {
                 for (title, items) in &catalog {
-                    ui.add_space(4.0);
+                    ui.add_space(10.0);
                     ui.label(RichText::new(title).strong());
+                    ui.separator();
                     ui.horizontal_wrapped(|ui| {
+                        ui.spacing_mut().item_spacing = egui::vec2(4.0, 4.0);
                         for e in items {
                             let present = e.kind != EntryKind::Spacer && c.list.contains(e);
-                            if ui.add_enabled(!present, egui::Button::new(name_of(e))).clicked() {
+                            let r = catalog_tile(ui, entry_icon_of(e), &name_of(e), present);
+                            let r = if present { r.on_hover_text(tr("Já está na barra")) } else { r };
+                            if r.clicked() && !present {
                                 c.list.push(*e);
                             }
                         }

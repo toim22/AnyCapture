@@ -32,7 +32,14 @@ pub enum TrayAction {
     ShowLibrary(bool),
     /// dragging items to another program (TrayDragDrop): the paths and the item whose thumbnail follows the cursor
     DragOut(Vec<String>, String),
+    /// the right button on an item (a video or not): the context menu, see [`LibraryTray::context_menu`]
+    Menu(bool),
 }
+
+/// A thumbnail cell of the tray (the picture and its name below).
+pub const TRAY_CELL: egui::Vec2 = vec2(150.0, 112.0);
+/// The tray's height: its title row, one row of cells and the scroll bar.
+pub const TRAY_HEIGHT: f32 = 8.0 + 26.0 + TRAY_CELL.y + 14.0;
 
 pub struct LibraryTray {
     pub mode: Mode,
@@ -264,6 +271,90 @@ impl LibraryTray {
         t
     }
 
+    /// The context menu of the selected items (a native menu at the cursor, owned by `owner`): what the chosen command
+    /// asks for. Select all and Remove from the tray are done here.
+    pub fn context_menu(&mut self, owner: isize, video: bool) -> Vec<TrayAction> {
+        use crate::native::{Item, Menu};
+        use snapcore::icons::Icon;
+        const OPEN: u32 = 1;
+        const FOLDER: u32 = 2;
+        const EXPORT: u32 = 3;
+        const COPY_AS: u32 = 4;
+        const PIN: u32 = 5;
+        const UPLOAD: u32 = 6;
+        const COMBINE: u32 = 7;
+        const COMPARE: u32 = 8;
+        const BATCH: u32 = 9;
+        const ALL: u32 = 10;
+        const RENAME: u32 = 11;
+        const REMOVE: u32 = 12;
+        const DELETE: u32 = 13;
+        let s = self.selected_paths();
+        if s.is_empty() {
+            return Vec::new();
+        }
+        let n = s.len().to_string();
+        let mut m = Vec::new();
+        if s.len() == 1 {
+            m.push(Item::Icon(OPEN, tr("Abrir"), Icon::Image));
+            m.push(Item::Icon(FOLDER, tr("Mostrar na pasta"), Icon::Folder));
+            m.push(Item::Separator);
+        }
+        let exp = if s.len() > 1 { tr("Exportar %zu itens…").replace("%zu", &n) } else { tr("Exportar…") };
+        m.push(Item::Icon(EXPORT, exp, Icon::SaveAs));
+        if s.len() == 1 {
+            m.push(Item::Icon(COPY_AS, tr("Copiar como…"), Icon::Copy));
+            if !video {
+                m.push(Item::Icon(PIN, tr("Fixar na tela"), Icon::Pin));
+            }
+            m.push(Item::Icon(UPLOAD, tr("Enviar (upload)"), Icon::Upload));
+        }
+        if s.len() >= 2 {
+            m.push(Item::Icon(COMBINE, tr("Combinar %zu imagens…").replace("%zu", &n), Icon::Combine));
+        }
+        if s.len() == 2 {
+            m.push(Item::Icon(COMPARE, tr("Comparar as duas…"), Icon::Compare));
+        }
+        let batch = if s.len() > 1 { tr("Processar %zu em lote…").replace("%zu", &n) } else { tr("Processamento em lote…") };
+        m.push(Item::Icon(BATCH, batch, Icon::Sliders));
+        m.push(Item::Separator);
+        m.push(Item::Icon(ALL, tr("Selecionar tudo\tCtrl+A"), Icon::Selection));
+        if s.len() == 1 {
+            m.push(Item::Cmd(RENAME, tr("Renomear…\tF2")));
+        }
+        if self.mode == Mode::Tray {
+            let t = if s.len() > 1 { tr("Remover da bandeja") } else { tr("Remover da bandeja (continua na biblioteca)") };
+            m.push(Item::Icon(REMOVE, t, Icon::Cancel));
+        }
+        m.push(Item::Separator);
+        let del = if s.len() > 1 { tr("Excluir %zu itens (Lixeira)\tDel").replace("%zu", &n) } else { tr("Excluir (Lixeira)\tDel") };
+        m.push(Item::Icon(DELETE, del, Icon::Trash));
+        let (x, y) = crate::native::cursor_pos();
+        let first = s[0].clone();
+        match Menu::popup(m).choose(owner, x, y) {
+            OPEN => vec![TrayAction::Open(first)],
+            FOLDER => vec![TrayAction::ShowInFolder(first)],
+            EXPORT => vec![TrayAction::Export(s)],
+            COPY_AS => vec![TrayAction::CopyAs(first)],
+            PIN => vec![TrayAction::Pin(first)],
+            UPLOAD => vec![TrayAction::Upload(first)],
+            COMBINE => vec![TrayAction::Combine(s)],
+            COMPARE => vec![TrayAction::Compare(s)],
+            BATCH => vec![TrayAction::Batch(s)],
+            ALL => {
+                self.select_all();
+                Vec::new()
+            }
+            RENAME => vec![TrayAction::Rename(first)],
+            REMOVE => {
+                self.remove_from_tray(&s);
+                Vec::new()
+            }
+            DELETE => vec![TrayAction::Delete(s)],
+            _ => Vec::new(),
+        }
+    }
+
     /// Draws the tray (one row) or the library (a grid); returns what the user did.
     pub fn ui(&mut self, ui: &mut egui::Ui) -> Vec<TrayAction> {
         let mut acts = Vec::new();
@@ -298,7 +389,9 @@ impl LibraryTray {
             }
         });
         let items = self.items.clone();
-        let cell = vec2(170.0, 140.0);
+        // the tray is one row under the picture; the library a grid of larger cells
+        let cell = if tray { TRAY_CELL } else { vec2(170.0, 140.0) };
+        let tk = snapui::theme::tokens();
         let mut body = |ui: &mut egui::Ui| {
             for (i, it) in items.iter().enumerate() {
                 let path = p(it);
@@ -307,10 +400,10 @@ impl LibraryTray {
                 let t = self.thumb(&ctx, it);
                 let (r, resp) = ui.allocate_exact_size(cell, Sense::click_and_drag());
                 crate::panels::tag(ui, &resp, &format!("{name}.{i}"));
-                let fill = if sel { Color32::from_rgb(204, 228, 255) } else if resp.hovered() { Color32::from_gray(235) } else { Color32::TRANSPARENT };
+                let fill = if sel { tk.selection } else if resp.hovered() { tk.hover_strong() } else { Color32::TRANSPARENT };
                 ui.painter().rect_filled(r, 6.0, fill);
                 if cur {
-                    ui.painter().rect_stroke(r.shrink(1.0), 6.0, egui::Stroke::new(2.0, Color32::from_rgb(30, 120, 230)), egui::StrokeKind::Inside);
+                    ui.painter().rect_stroke(r.shrink(1.0), 6.0, egui::Stroke::new(2.0, tk.accent), egui::StrokeKind::Inside);
                 }
                 let img_r = egui::Rect::from_min_size(r.min + vec2(5.0, 5.0), vec2(cell.x - 10.0, cell.y - 32.0));
                 if let Some(t) = t {
@@ -324,7 +417,7 @@ impl LibraryTray {
                 }
                 let label = Self::label(it);
                 ui.painter().text(egui::pos2(r.center().x, r.bottom() - 14.0), egui::Align2::CENTER_CENTER, label, egui::FontId::proportional(12.0),
-                                  Color32::from_gray(50));
+                                  tk.text_dim);
                 if resp.clicked() {
                     let ctrl = ui.input(|i| i.modifiers.ctrl);
                     if ctrl {
@@ -348,79 +441,9 @@ impl LibraryTray {
                 if resp.secondary_clicked() && !sel {
                     self.selection = vec![path.clone()];
                 }
-                let s = self.selected_paths();
-                let video = it.video;
-                resp.context_menu(|ui| {
-                    if s.len() == 1 {
-                        if ui.button(tr("Abrir")).clicked() {
-                            acts.push(TrayAction::Open(s[0].clone()));
-                            ui.close();
-                        }
-                        if ui.button(tr("Mostrar na pasta")).clicked() {
-                            acts.push(TrayAction::ShowInFolder(s[0].clone()));
-                            ui.close();
-                        }
-                        ui.separator();
-                    }
-                    let exp = if s.len() > 1 { tr("Exportar %zu itens…").replace("%zu", &s.len().to_string()) } else { tr("Exportar…") };
-                    if ui.button(exp).clicked() {
-                        acts.push(TrayAction::Export(s.clone()));
-                        ui.close();
-                    }
-                    if s.len() == 1 {
-                        if ui.button(tr("Copiar como…")).clicked() {
-                            acts.push(TrayAction::CopyAs(s[0].clone()));
-                            ui.close();
-                        }
-                        if !video && ui.button(tr("Fixar na tela")).clicked() {
-                            acts.push(TrayAction::Pin(s[0].clone()));
-                            ui.close();
-                        }
-                        if ui.button(tr("Enviar (upload)")).clicked() {
-                            acts.push(TrayAction::Upload(s[0].clone()));
-                            ui.close();
-                        }
-                    }
-                    if s.len() >= 2 && ui.button(tr("Combinar %zu imagens…").replace("%zu", &s.len().to_string())).clicked() {
-                        acts.push(TrayAction::Combine(s.clone()));
-                        ui.close();
-                    }
-                    if s.len() == 2 && ui.button(tr("Comparar as duas…")).clicked() {
-                        acts.push(TrayAction::Compare(s.clone()));
-                        ui.close();
-                    }
-                    let batch = if s.len() > 1 { tr("Processar %zu em lote…").replace("%zu", &s.len().to_string()) } else { tr("Processamento em lote…") };
-                    if ui.button(batch).clicked() {
-                        acts.push(TrayAction::Batch(s.clone()));
-                        ui.close();
-                    }
-                    ui.separator();
-                    if ui.button(tr("Selecionar tudo\tCtrl+A").replace('\t', "   ")).clicked() {
-                        self.select_all();
-                        ui.close();
-                    }
-                    if s.len() == 1 && ui.button(tr("Renomear…\tF2").replace('\t', "   ")).clicked() {
-                        acts.push(TrayAction::Rename(s[0].clone()));
-                        ui.close();
-                    }
-                    if tray {
-                        let t = if s.len() > 1 { tr("Remover da bandeja") } else { tr("Remover da bandeja (continua na biblioteca)") };
-                        if ui.button(t).clicked() {
-                            self.remove_from_tray(&s);
-                            ui.close();
-                        }
-                    }
-                    ui.separator();
-                    let del = if s.len() > 1 {
-                        tr("Excluir %zu itens (Lixeira)\tDel").replace("%zu", &s.len().to_string())
-                    } else {
-                        tr("Excluir (Lixeira)\tDel")
-                    };
-                    if ui.button(del.replace('\t', "   ")).clicked() {
-                        acts.push(TrayAction::Delete(s.clone()));
-                        ui.close();
-                    }
-                });
+                if resp.secondary_clicked() {
+                    acts.push(TrayAction::Menu(it.video));
+                }
             }
         };
         if tray {

@@ -19,6 +19,8 @@ use super::{Editor, set_reg_dw};
 /// Internal commands (posted to the window so their popup menus open outside the frame drawing).
 pub const MORE_TOOLS: u32 = 0xF001;
 pub const CONTEXT_MENU: u32 = 0xF002;
+/// the footer's zoom button: the zoom levels
+pub const ZOOM_MENU: u32 = 0xF005;
 const SHARE_MENU: u32 = 0xF003;
 
 fn yes(v: bool) -> u32 {
@@ -53,6 +55,7 @@ impl Editor {
         }
         match id {
             MORE_TOOLS => self.more_tools_menu(ctl),
+            ZOOM_MENU => self.zoom_menu(),
             CONTEXT_MENU => self.context_menu(ctl),
             SHARE_MENU => self.share_menu(ctl),
             super::extras::COPY_AS_MENU => self.copy_as_menu(),
@@ -428,13 +431,12 @@ impl Editor {
             M_SHORTCUTS => self.show_shortcuts(ctl),
             M_MANUAL => self.show_manual(),
             M_ABOUT => {
+                // no paths or other details of this computer: the box may end up in a screenshot
                 let text = format!(
-                    "Snapnab Editor {}\nCopyright © 2025–2026 Snapnab\n\n{}\n\n{}\n\n{}{}",
+                    "Snapnab Editor {}\nCopyright © 2026 Antonio Rezende\n\n{}\n\n{}",
                     super::VERSION,
                     tr("Edição de capturas com objetos vetoriais, efeitos, Smart Move,\nOCR, exportação PDF e edição de vídeo (cortes e GIF)."),
-                    tr("Software livre sob a GNU General Public License versão 3."),
-                    tr("Biblioteca: "),
-                    snapedit_app::files::library_dir()
+                    tr("Software livre sob a GNU General Public License versão 3.")
                 );
                 self.inform(text, tr("Sobre"));
             }
@@ -789,6 +791,31 @@ impl Editor {
         }
     }
 
+    /// The footer's zoom button: the zoom levels and Fit to window, above the button.
+    fn zoom_menu(&mut self) {
+        const FIT: u32 = 1000;
+        let now = (self.cv.zoom * 100.0).round() as i32;
+        let levels = [25, 50, 75, 100, 150, 200, 300, 400, 800];
+        let mut items: Vec<Item> = levels.iter().map(|&z| Item::Checked(z as u32, format!("{z}%"), z == now)).collect();
+        items.push(Item::Separator);
+        items.push(Item::Icon(FIT, tr("Ajustar à janela\tCtrl+0"), snapcore::icons::Icon::Magnify));
+        let (x, y) = match self.zoom_at.take() {
+            Some((x, y)) => {
+                let mut p = windows::Win32::Foundation::POINT { x, y };
+                unsafe {
+                    let _ = windows::Win32::Graphics::Gdi::ClientToScreen(windows::Win32::Foundation::HWND(self.hwnd as _), &mut p);
+                }
+                (p.x, p.y)
+            }
+            None => native::cursor_pos(),
+        };
+        match Menu::popup(items).choose(self.hwnd, x, y) {
+            0 => {}
+            FIT => self.cv.fit_to_window(),
+            z => self.cv.zoom_to(z as f64 / 100.0, None),
+        }
+    }
+
     /// "More" on the toolbar: the tools that are not on it, and the customization.
     fn more_tools_menu(&mut self, ctl: &mut Ctl) {
         let vis = self.center_entries();
@@ -800,7 +827,17 @@ impl Editor {
         items.push(Item::Separator);
         items.push(Item::Cmd(M_TB_CUSTOMIZE, tr("Personalizar a barra…")));
         items.push(Item::Cmd2(M_TB_RESET, tr("Voltar ao padrão (automática)"), self.tb_custom));
-        let (x, y) = native::cursor_pos();
+        // below the button, like a drop-down; at the cursor when it came from elsewhere (automation)
+        let (x, y) = match self.more_at.take() {
+            Some((x, y)) => {
+                let mut p = windows::Win32::Foundation::POINT { x, y };
+                unsafe {
+                    let _ = windows::Win32::Graphics::Gdi::ClientToScreen(windows::Win32::Foundation::HWND(self.hwnd as _), &mut p);
+                }
+                (p.x, p.y)
+            }
+            None => native::cursor_pos(),
+        };
         let c = Menu::popup(items).choose(self.hwnd, x, y);
         if c != 0 {
             self.command(ctl, c);
@@ -886,6 +923,12 @@ impl Editor {
     pub fn tray_action(&mut self, ctl: &mut Ctl, a: snapedit_app::tray::TrayAction) {
         use snapedit_app::tray::TrayAction as T;
         match a {
+            T::Menu(video) => {
+                let acts = if self.library_open { self.library.context_menu(self.hwnd, video) } else { self.tray.context_menu(self.hwnd, video) };
+                for a in acts {
+                    self.tray_action(ctl, a);
+                }
+            }
             T::Open(p) => {
                 self.open_path(ctl, &p);
             }

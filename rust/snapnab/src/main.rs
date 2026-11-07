@@ -956,11 +956,9 @@ pub(crate) fn shell_open(path: &str) {
 }
 
 fn about() {
-    let text = format!("Snapnab {VERSION}{}\nCopyright © 2026 Antonio Rezende\n{}\n\n{}{}", tr(" — captura de tela e gravação de vídeo"),
-                       tr("Software livre sob a GNU General Public License versão 3."),
-                       tr("Processo de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicando-se por memória\n\
-                           compartilhada (canal IPC) e WM_COPYDATA. Capturas ficam na biblioteca:\n"),
-                       String::from_utf16_lossy(&snapcore::library::library_dir()));
+    // no paths or other details of this computer: the box may end up in a screenshot
+    let text = format!("Snapnab {VERSION}{}\nCopyright © 2026 Antonio Rezende\n\n{}", tr(" — captura de tela e gravação de vídeo"),
+                       tr("Software livre sob a GNU General Public License versão 3."));
     std::thread::spawn(move || unsafe {
         let t = snapcore::wide::to_wide(text);
         let title = snapcore::wide::to_wide(tr("Sobre o Snapnab"));
@@ -982,6 +980,7 @@ impl App for CaptureApp {
             resizable: false,
             intercept: Some(intercept),
             clear_color: [0.97, 0.97, 0.98, 1.0],
+            caption: true,
             ..Default::default()
         };
         // the hotkeys work from the moment the window exists, before its GPU setup
@@ -997,6 +996,9 @@ impl App for CaptureApp {
         };
         self.main = Some(k);
         self.hwnd = ctl.hwnd(k);
+        self.view.hwnd = self.hwnd;
+        snapui::menu::set_icons(window::menu_icon);
+        snapui::caption::set_menus(self.hwnd, window::menus());
         center_on_primary(self.hwnd);
         tray::add(self.hwnd, &tr("Snapnab — clique para capturar"));
         unsafe {

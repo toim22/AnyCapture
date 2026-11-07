@@ -12,6 +12,8 @@ pub mod droplist;
 pub mod form;
 pub mod host;
 pub mod icons;
+pub mod menu;
+pub mod caption;
 pub mod qr;
 pub mod theme;
 pub mod widgets;
@@ -19,8 +21,8 @@ pub mod upload_ui;
 
 static FIXED_LOOK: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
-/// For the snapshot tests: the same look on every machine (the light theme, Windows' default blue accent, Segoe UI
-/// without Windows 11's variable font, which Windows Server and Windows 10 lack). Call it before the first frame.
+/// For the snapshot tests: the same look on every machine (the light theme, Windows' default blue accent). Call it
+/// before the first frame.
 pub fn fixed_look_for_tests() {
     FIXED_LOOK.store(true, std::sync::atomic::Ordering::Relaxed);
 }
@@ -29,8 +31,19 @@ pub fn fixed_look() -> bool {
     FIXED_LOOK.load(std::sync::atomic::Ordering::Relaxed)
 }
 
-/// Windows' own fonts, so every language Snapnab ships has its letters: Segoe UI (Latin, Greek, Cyrillic, Arabic,
-/// Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and Segoe UI Emoji.
+/// The interface font: Inter (SIL Open Font License, rust/resources/fonts), drawn for screens and the same on every
+/// machine. Windows' own fonts follow it for the letters Inter lacks, so every language Snapnab ships has its
+/// letters: Segoe UI (Arabic, Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and
+/// Segoe UI Emoji.
+pub const INTER: &[u8] = include_bytes!("../../resources/fonts/Inter-Regular.ttf");
+pub const INTER_MEDIUM: &[u8] = include_bytes!("../../resources/fonts/Inter-Medium.ttf");
+pub const INTER_SEMIBOLD: &[u8] = include_bytes!("../../resources/fonts/Inter-SemiBold.ttf");
+
+/// The egui family of the semibold face (headings, the wordmark).
+pub fn semibold() -> FontFamily {
+    FontFamily::Name("semibold".into())
+}
+
 pub fn install_fonts(ctx: &egui::Context) {
     static DEFS: OnceLock<FontDefinitions> = OnceLock::new();
     ctx.set_fonts(DEFS.get_or_init(load_fonts).clone());
@@ -39,33 +52,52 @@ pub fn install_fonts(ctx: &egui::Context) {
 /// The font files are read once per process; every window's Context shares them.
 fn load_fonts() -> FontDefinitions {
     let mut defs = FontDefinitions::default();
-    let dir = std::env::var("WINDIR").unwrap_or_else(|_| r"C:\Windows".into()) + r"\Fonts\";
-    let mut names = Vec::new();
-    // Windows 11's own UI font (a variable font); Segoe UI stays as its fallback (Windows 10 has no Segoe UI Variable)
-    for (name, file, index) in [
-        ("Segoe UI Variable", if fixed_look() { "" } else { "SegUIVar.ttf" }, 0),
-        ("Segoe UI", "segoeui.ttf", 0),
-        ("Nirmala UI", "Nirmala.ttc", 0),
-        ("Segoe UI Symbol", "seguisym.ttf", 0),
-        ("Segoe UI Emoji", "seguiemj.ttf", 0),
-        ("Consolas", "consola.ttf", 0),
-    ] {
-        if file.is_empty() {
-            continue;
-        }
-        let Ok(bytes) = std::fs::read(dir.clone() + file) else { continue };
-        let mut data = FontData::from_owned(bytes);
-        data.index = index;
-        defs.font_data.insert(name.to_owned(), Arc::new(data));
-        names.push(name.to_owned());
+    for (name, bytes) in [("Inter", INTER), ("Inter Medium", INTER_MEDIUM), ("Inter SemiBold", INTER_SEMIBOLD)] {
+        defs.font_data.insert(name.to_owned(), Arc::new(FontData::from_static(bytes)));
     }
-    // Consolas first for monospace, Segoe UI first for the rest; the other fonts are fallbacks for missing letters
-    let (mono, text): (Vec<_>, Vec<_>) = names.into_iter().partition(|n| n == "Consolas");
+    let dir = std::env::var("WINDIR").unwrap_or_else(|_| r"C:\Windows".into()) + r"\Fonts\";
+    let mut fallbacks = Vec::new();
+    let mut mono = Vec::new();
+    for (name, file) in [
+        ("Segoe UI", "segoeui.ttf"),
+        ("Nirmala UI", "Nirmala.ttc"),
+        ("Segoe UI Symbol", "seguisym.ttf"),
+        ("Segoe UI Emoji", "seguiemj.ttf"),
+        ("Consolas", "consola.ttf"),
+    ] {
+        let Ok(bytes) = std::fs::read(dir.clone() + file) else { continue };
+        defs.font_data.insert(name.to_owned(), Arc::new(FontData::from_owned(bytes)));
+        if name == "Consolas" { mono.push(name.to_owned()) } else { fallbacks.push(name.to_owned()) }
+    }
+    let body = std::iter::once(BODY_FACE.to_owned()).chain(fallbacks.iter().cloned());
     let prop = defs.families.entry(FontFamily::Proportional).or_default();
-    prop.splice(0..0, text.iter().cloned());
+    prop.splice(0..0, body.clone());
     let monospace = defs.families.entry(FontFamily::Monospace).or_default();
-    monospace.splice(0..0, mono.into_iter().chain(text));
+    monospace.splice(0..0, mono.into_iter().chain(body));
+    defs.families.insert(semibold(), std::iter::once("Inter SemiBold".to_owned()).chain(fallbacks).collect());
     defs
+}
+
+/// The face of the body text: Inter Medium reads better than Regular on screens without hinting (egui draws text
+/// with grayscale antialiasing, like most GPU interfaces).
+const BODY_FACE: &str = "Inter Medium";
+
+/// The same font for the parts Windows draws (the owner-drawn menus): registered for this process only.
+pub fn install_gdi_fonts() {
+    static DONE: OnceLock<()> = OnceLock::new();
+    DONE.get_or_init(|| {
+        for bytes in [INTER, INTER_MEDIUM, INTER_SEMIBOLD] {
+            let mut n = 0u32;
+            unsafe {
+                windows::Win32::Graphics::Gdi::AddFontMemResourceEx(bytes.as_ptr() as _, bytes.len() as u32, None, &mut n);
+            }
+        }
+    });
+}
+
+/// The GDI face name of the menus' font.
+pub fn gdi_face() -> &'static str {
+    "Inter"
 }
 
 /// Sample lines in the scripts that need shaping: Arabic and Urdu (right to left, joined letters) and Hindi and
