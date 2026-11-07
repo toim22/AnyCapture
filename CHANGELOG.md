@@ -14,6 +14,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   went one part at a time behind the unchanged end-to-end suite, and the parts that compute something (effects,
   Beautify, the Editor's drawings, the `.snap` and clipboard XML, WebP, PDF, OCR, the network layer, presets) are
   checked against what the C++ code gave for the same input.
+- **A Windows 11 look.** The capture window and the Editor use Windows 11's controls and gray surfaces with the
+  Windows accent color: switches instead of check boxes, tabs with an accent bar, a round capture button, preset rows
+  with their hotkey and a settings gear. Drop-down lists can still open past the window's edges, and the icons of the
+  tabs, toolbar, menus and layers are the same as before.
 - A damaged or hostile `.snap`, image or upload response is now parsed by memory-safe code.
 - QR codes and barcodes are read by rxing, a Rust port of ZXing, instead of ZXing-C++; several codes in one picture
   are listed top to bottom.
@@ -23,6 +27,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   redistributable.
 
 ### Added
+- **Light and dark theme:** *Options › Appearance* follows Windows or picks light or dark; the title bar and the
+  Editor's menu bar follow it too. It applies when Snapnab reopens.
 - `SnapnabTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
   and for debugging.
 
