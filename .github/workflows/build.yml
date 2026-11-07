@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Inno Setup 6
         shell: pwsh
@@ -50,14 +50,14 @@ jobs:
           } | Tee-Object dist\SHA256SUMS.txt
 
       - name: Upload program folder
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Snapnab-program
           path: dist/Snapnab/
           if-no-files-found: error
 
       - name: Upload packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Snapnab-packages
           path: |
@@ -67,7 +67,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload symbols
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Snapnab-symbols
           path: dist/symbols/
