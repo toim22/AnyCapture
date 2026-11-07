@@ -1,0 +1,13 @@
+[package]
+name = "snapui"
+version = "0.1.0"
+description = "Snapnab's user interface in egui (the capture app and the Editor), on top of snapcore"
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+egui = "0.37"
+
+[dev-dependencies]
+egui_kittest = { version = "0.37", features = ["wgpu", "snapshot"] }

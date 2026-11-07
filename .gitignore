@@ -23,3 +23,7 @@ desktop.ini
 
 # Local research notes
 docs/pesquisa/
+# egui_kittest's images of a failed snapshot comparison
+rust/**/snapshots/*.new.png
+rust/**/snapshots/*.diff.png
+rust/**/snapshots/*.old.png
