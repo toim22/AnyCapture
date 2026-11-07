@@ -6,6 +6,7 @@
 
 mod engine;
 mod hotkeys;
+mod rawwin;
 mod tray;
 
 use std::ffi::OsStr;
@@ -88,6 +89,8 @@ struct CaptureApp {
     hk: Option<hotkeys::Manager>,
     /// the last capture started, for Repeat (IDM_REPEAT)
     last: Option<Preset>,
+    /// the recording keys are registered (only while the video HUD is up)
+    video_keys: bool,
 }
 
 /// The engine's view of the app (disjoint fields: the engine itself stays borrowable).
@@ -160,13 +163,61 @@ impl CaptureApp {
                              &tr("O atalho do preset \"%s\" já está em uso por outra ação.").replace("%s", &i18n::tr_str(&p.name)));
             }
         }
+        if self.video_keys {
+            self.set_video_keys(true);
+        }
+    }
+
+    /// SetVideoHotkeys: start/pause/resume, stop and zoom, registered only while the HUD is up (they would steal
+    /// Shift+F9…F11 from every program otherwise).
+    fn set_video_keys(&mut self, on: bool) {
+        use hotkeys::*;
+        let Some(hk) = self.hk.as_mut() else { return };
+        let shift = windows::Win32::UI::Input::KeyboardAndMouse::MOD_SHIFT.0;
+        for (id, name, vk) in [(HK_VIDEO_PAUSE, "VideoStartPauseResumeKey", 0x78), (HK_VIDEO_STOP, "VideoStopKey", 0x79),
+                               (HK_VIDEO_ZOOM, "VideoZoomKey", 0x7A)] {
+            let (m, v) = if on { unpack(reg::get_dword(OsStr::new(name), pack(shift, vk), None)) } else { (0, 0) };
+            hk.set(id, m, v);
+        }
+        self.video_keys = on;
+    }
+
+    /// After the engine ran: the recording keys follow the HUD, and volumes changed in its panel go to the preset
+    /// (onPresetVolumes: the preset with the same name and kind).
+    fn after_engine(&mut self) {
+        let active = self.engine.video_active();
+        if active != self.video_keys {
+            self.set_video_keys(active);
+        }
+        if let Some(v) = self.engine.take_volumes() {
+            if let Some(p) = self.store.presets.iter_mut().find(|p| p.name == v.name && p.kind == v.kind) {
+                (p.mic_volume, p.sys_volume, p.auto_gain) = (v.mic_volume, v.sys_volume, v.auto_gain);
+                self.store.save();
+            }
+        }
     }
 
     fn on_hotkey(&mut self, ctl: &mut Ctl, id: i32) {
         use hotkeys::*;
         match id {
             HK_IMAGE => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Image)),
-            HK_VIDEO => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Video)),
+            HK_VIDEO => {
+                if self.engine.recording() {
+                    let env = env!(self);
+                    self.engine.video_stop(ctl, &env);
+                } else {
+                    self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Video));
+                }
+            }
+            HK_VIDEO_PAUSE => {
+                let env = env!(self);
+                self.engine.video_start_pause_resume(ctl, &env);
+            }
+            HK_VIDEO_STOP => {
+                let env = env!(self);
+                self.engine.video_stop(ctl, &env);
+            }
+            HK_VIDEO_ZOOM => self.engine.video_toggle_zoom(),
             i if i >= HK_PRESET_BASE && ((i - HK_PRESET_BASE) as usize) < self.store.presets.len() => {
                 let p = self.store.presets[(i - HK_PRESET_BASE) as usize].clone();
                 self.start_capture(ctl, &p);
@@ -231,6 +282,10 @@ impl CaptureApp {
     }
 
     fn exit(&mut self, ctl: &mut Ctl) {
+        let env = env!(self);
+        if !self.engine.confirm_exit(ctl, &env, self.hwnd) {
+            return;
+        }
         unsafe {
             let _ = RemoveClipboardFormatListener(HWND(self.hwnd as _));
         }
@@ -471,6 +526,17 @@ impl App for CaptureApp {
         }
         let waker = ctl.waker();
         self.ipc = Notify::start(Channel::Capture, move |m| waker.send(Ev::Ipc(m)));
+        // recordings a crash or a power cut interrupted (C14): remuxed into the library
+        let rec = snapcore::recorder::recover_interrupted();
+        if !rec.is_empty() {
+            let name = std::path::Path::new(&rec[0]).file_name().map(|f| f.to_string_lossy().into_owned()).unwrap_or_default();
+            self.notify(&tr("Snapnab — gravação recuperada"),
+                        &(tr("%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca.
+").replace("%zu", &rec.len().to_string()) + &name));
+            if let Some(i) = &self.ipc {
+                i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
+            }
+        }
         self.command_line(ctl, &instance::command_line(), true);
     }
 
@@ -480,6 +546,7 @@ impl App for CaptureApp {
         } else if self.engine.owns(win) {
             let env = env!(self);
             self.engine.ui(ctl, &env, win, ui);
+            self.after_engine();
         }
     }
 
@@ -507,6 +574,7 @@ impl App for CaptureApp {
             x if x == TASKBAR_CREATED.load(Ordering::Relaxed) => tray::add(self.hwnd, &tr("Snapnab — clique para capturar")),
             _ => {}
         }
+        self.after_engine();
     }
 
     fn close_requested(&mut self, ctl: &mut Ctl, win: WinKey) {
@@ -518,6 +586,7 @@ impl App for CaptureApp {
         } else if self.engine.owns(win) {
             let env = env!(self);
             self.engine.close_requested(ctl, &env, win);
+            self.after_engine();
         } else {
             ctl.close(win);
         }
@@ -536,6 +605,7 @@ impl App for CaptureApp {
         if let Ok(ev) = ev.downcast::<EngineEv>() {
             let env = env!(self);
             self.engine.event(ctl, &env, *ev);
+            self.after_engine();
         }
     }
 }
@@ -587,6 +657,7 @@ fn main() {
         last_clip_seq: 0,
         hk: None,
         last: None,
+        video_keys: false,
     };
     if let Err(e) = snapui::host::run(app, |_| {}) {
         log::write(&format!("Event loop: {e}"));

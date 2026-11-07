@@ -23,10 +23,13 @@ use windows::core::w;
 
 pub const HK_IMAGE: i32 = 1;
 pub const HK_VIDEO: i32 = 2;
+pub const HK_VIDEO_PAUSE: i32 = 4;
+pub const HK_VIDEO_STOP: i32 = 5;
 pub const HK_COLOR: i32 = 6;
 pub const HK_CAPTURE_PIN: i32 = 7;
 pub const HK_PIN_CLIP: i32 = 8;
 pub const HK_FOCUS: i32 = 9;
+pub const HK_VIDEO_ZOOM: i32 = 10;
 pub const HK_PRESET_BASE: i32 = 100;
 
 const MODS: u32 = MOD_ALT.0 | MOD_CONTROL.0 | MOD_SHIFT.0 | MOD_WIN.0;

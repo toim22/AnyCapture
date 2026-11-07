@@ -2,6 +2,7 @@
 //! capture window's drawing and the selection over the frozen screen.
 
 pub mod cmdline;
+pub mod hud;
 pub mod select;
 pub mod window;
 

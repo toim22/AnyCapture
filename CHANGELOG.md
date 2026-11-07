@@ -22,7 +22,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   Editor and reads and writes the same presets file. It now captures images too: the selection of a region, window
   or object, fixed size, freehand and several areas, full screen, monitor, clipboard and file, with the capture effects
   and the library, clipboard, file and program outputs, started by the tray, the window, the command line or the
-  hotkeys. Video, scrolling and panoramic captures are still missing; it is not shipped.
+  hotkeys. It records video too: the HUD over the area with pause, restart, cancel, the snapshot, the microphone,
+  system audio and volume controls, the countdown, the cursor and click overlays and the recording hotkeys, and audio
+  only recordings. Scrolling and panoramic captures and the webcam are still missing; it is not shipped.
 
 ## [0.4.1] — 2026-11-03
 

@@ -9,6 +9,7 @@ use std::sync::{Arc, OnceLock};
 use egui::{FontData, FontDefinitions, FontFamily};
 
 pub mod host;
+pub mod icons;
 
 /// Windows' own fonts, so every language Snapnab ships has its letters: Segoe UI (Latin, Greek, Cyrillic, Arabic,
 /// Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and Segoe UI Emoji.

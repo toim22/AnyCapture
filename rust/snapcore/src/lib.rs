@@ -54,6 +54,7 @@ pub mod ocr;
 pub mod paths;
 pub mod pdf;
 pub mod presets;
+pub mod recorder;
 pub mod reg;
 pub mod render;
 pub mod screen;

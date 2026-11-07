@@ -42,6 +42,8 @@ use windows::core::{PCWSTR, w};
 
 use crate::{VERSION, tray};
 
+mod video;
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum State {
     Idle,
@@ -51,7 +53,7 @@ pub enum State {
     Capturing,
     HaveInput,
     Outputting,
-    #[allow(dead_code)] // a paused recording, with the video steps
+    /// a paused recording
     Suspended,
 }
 
@@ -59,6 +61,10 @@ pub enum State {
 pub enum EngineEv {
     /// the capture window had time to disappear: the screen can be frozen
     BeginInput,
+    /// the recorder's disk and error notes, from its threads
+    RecorderNote(snapcore::recorder::Note),
+    /// the answer to the restart question (its own thread)
+    Restart { yes: bool, dont_ask: bool, was_recording: bool },
 }
 
 /// What the engine needs of the capture app.
@@ -171,6 +177,7 @@ pub struct Engine {
     overlay: Option<OverlayWin>,
     delay: Option<DelayWin>,
     texts: Vec<TextWin>,
+    video: video::Video,
 }
 
 impl Engine {
@@ -185,6 +192,7 @@ impl Engine {
             overlay: None,
             delay: None,
             texts: Vec::new(),
+            video: video::Video::default(),
         }
     }
 
@@ -205,6 +213,7 @@ impl Engine {
     fn ui_alive(&self, ctl: &Ctl) -> bool {
         self.overlay.as_ref().is_some_and(|o| ctl.exists(o.key))
             || self.delay.as_ref().is_some_and(|d| ctl.exists(d.key))
+            || self.video_active()
             || self.since.elapsed() < Duration::from_secs(15)
     }
 
@@ -263,6 +272,8 @@ impl Engine {
                     self.begin_input(ctl, env);
                 }
             }
+            EngineEv::RecorderNote(n) => self.on_recorder_note(ctl, env, n),
+            EngineEv::Restart { yes, dont_ask, was_recording } => self.restart_answer(yes, dont_ask, was_recording),
         }
     }
 
@@ -357,11 +368,31 @@ impl Engine {
         self.cursor = None;
         let p = self.preset.clone();
         let video = p.kind == CaptureKind::Video;
-        if video {
-            self.not_here_yet("video recording");
-            return;
-        }
         self.vs = screen::virtual_screen();
+        if video {
+            let (cx, cy) = screen::cursor_pos();
+            let fixed = p.selection == Selection::FixedRegion || (p.selection == Selection::Region && p.region_fixed);
+            let direct = if p.audio_only {
+                // audio only (C32): no area, the HUD on the monitor of the cursor
+                Some(screen::monitor_rect(cx, cy, false))
+            } else if fixed && p.region_use_pos {
+                Some(Rect::new(p.region_x, p.region_y, p.region_x + p.fixed_w, p.region_y + p.fixed_h).intersect(&self.vs))
+            } else if p.selection == Selection::FullScreen {
+                Some(self.vs)
+            } else if p.selection == Selection::Monitor {
+                Some(screen::monitor_rect(cx, cy, false))
+            } else {
+                None
+            };
+            if let Some(r) = direct {
+                if r.width() < 2 || r.height() < 2 {
+                    self.input_canceled();
+                    return;
+                }
+                self.start_video_hud(ctl, env, r);
+                return;
+            }
+        }
         let mut info = CaptureInfo { mode: wtext(&p.selection.name()), ..Default::default() };
         let fixed_region = p.selection == Selection::FixedRegion || (p.selection == Selection::Region && p.region_fixed);
         if fixed_region && p.region_use_pos {
@@ -560,6 +591,17 @@ impl Engine {
     fn input_selected(&mut self, ctl: &mut Ctl, env: &Env, s: Selected) {
         self.set_state(State::InputSelected);
         let p = self.preset.clone();
+        if p.kind == CaptureKind::Video {
+            self.frozen = Image::default();
+            let r = if s.window != 0 && p.selection == Selection::Window { screen::window_frame_rect(s.window) } else { s.rect };
+            let r = r.intersect(&self.vs);
+            if r.width() < 2 || r.height() < 2 {
+                self.input_canceled();
+                return;
+            }
+            self.start_video_hud(ctl, env, r);
+            return;
+        }
         // regions recalled with Tab in the crosshair (C18)
         if matches!(p.selection, Selection::Region | Selection::Window | Selection::Object) {
             select::remember_region(s.rect);
@@ -788,6 +830,7 @@ impl Engine {
         self.overlay.as_ref().is_some_and(|o| o.key == k)
             || self.delay.as_ref().is_some_and(|d| d.key == k)
             || self.texts.iter().any(|t| t.key == k)
+            || self.video_owns(k)
     }
 
     pub fn ui(&mut self, ctl: &mut Ctl, env: &Env, k: WinKey, ui: &mut egui::Ui) {
@@ -797,6 +840,8 @@ impl Engine {
             }
         } else if self.delay.as_ref().is_some_and(|d| d.key == k) {
             self.delay_ui(ctl, ui);
+        } else if self.video_owns(k) {
+            self.video_ui(ctl, env, k, ui);
         } else if let Some(i) = self.texts.iter().position(|t| t.key == k) {
             let mut close = false;
             egui::Panel::bottom("buttons").show(ui, |ui| {
@@ -826,6 +871,8 @@ impl Engine {
             self.delay = None;
             ctl.close(k);
             go(ctl);
+        } else if self.video_owns(k) {
+            self.video_close_requested(ctl, k);
         } else {
             self.texts.retain(|t| t.key != k);
             ctl.close(k);

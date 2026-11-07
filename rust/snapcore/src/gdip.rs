@@ -92,6 +92,19 @@ impl<'b> Graphics<'b> {
         Graphics { raw, owned: true, _target: PhantomData }
     }
 
+    /// Graphics(hdc): drawing on a device context (a DIB section selected into a memory DC).
+    pub fn from_hdc(hdc: isize) -> Graphics<'static> {
+        startup();
+        let mut raw = std::ptr::null_mut();
+        unsafe { GdipCreateFromHDC(windows::Win32::Graphics::Gdi::HDC(hdc as _), &mut raw) };
+        Graphics { raw, owned: true, _target: PhantomData }
+    }
+
+    /// Clear(color)
+    pub fn clear(&self, argb: u32) {
+        unsafe { GdipGraphicsClear(self.raw, argb) };
+    }
+
     /// The Graphics a caller made (C++ `Graphics::nativeGraphics`): used, never deleted.
     ///
     /// # Safety
