@@ -14,7 +14,7 @@ use windows::Win32::UI::Shell::{
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CreateIconIndirect, CreatePopupMenu, DestroyMenu, GetCursorPos, HICON, HMENU, ICONINFO, MF_CHECKED,
-    MF_POPUP, MF_SEPARATOR, MF_STRING, PostMessageW, SetForegroundWindow, SetMenuDefaultItem, TPM_RIGHTBUTTON,
+    MF_GRAYED, MF_POPUP, MF_SEPARATOR, MF_STRING, PostMessageW, SetForegroundWindow, SetMenuDefaultItem, TPM_RETURNCMD, TPM_RIGHTBUTTON,
     TrackPopupMenu, WM_APP, WM_NULL,
 };
 use windows::core::PCWSTR;
@@ -162,6 +162,8 @@ pub enum Item<'a> {
     #[allow(dead_code)] // the checked items (One Click, focus) come with their features
     Checked(u32, &'a str, bool),
     Sub(&'a str, Menu),
+    /// grayed out
+    Disabled(&'a str),
     Separator,
 }
 
@@ -179,6 +181,7 @@ impl Menu {
                         std::mem::forget(sub); // owned by the parent menu from now on
                         AppendMenuW(m, MF_POPUP, h.0 as usize, PCWSTR(to_wide(t).as_ptr()))
                     }
+                    Item::Disabled(t) => AppendMenuW(m, MF_STRING | MF_GRAYED, 0, PCWSTR(to_wide(t).as_ptr())),
                     Item::Separator => AppendMenuW(m, MF_SEPARATOR, 0, PCWSTR::null()),
                 };
             }
@@ -198,6 +201,17 @@ impl Menu {
             let _ = SetForegroundWindow(owner);
             let _ = TrackPopupMenu(self.0, TPM_RIGHTBUTTON, p.x, p.y, None, owner, None);
             let _ = PostMessageW(Some(owner), WM_NULL, Default::default(), Default::default());
+        }
+    }
+}
+
+impl Menu {
+    /// Shows the menu at a screen point and returns the chosen item (0: none).
+    pub fn choose(&self, owner: isize, x: i32, y: i32) -> u32 {
+        unsafe {
+            let owner = HWND(owner as _);
+            let _ = SetForegroundWindow(owner);
+            TrackPopupMenu(self.0, TPM_RETURNCMD | TPM_RIGHTBUTTON, x, y, None, owner, None).0 as u32
         }
     }
 }

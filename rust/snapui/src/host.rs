@@ -17,7 +17,7 @@ use std::time::{Duration, Instant};
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::UI::Shell::{DefSubclassProc, RemoveWindowSubclass, SetWindowSubclass};
 use winit::application::ApplicationHandler;
-use winit::dpi::{LogicalSize, PhysicalPosition};
+use winit::dpi::{LogicalSize, PhysicalPosition, PhysicalSize};
 use winit::event::{StartCause, WindowEvent};
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop, EventLoopProxy};
 use winit::platform::windows::WindowAttributesExtWindows;
@@ -55,8 +55,10 @@ pub struct WindowSpec {
     /// the Win32 window class
     pub class: &'static str,
     pub title: String,
-    /// inner size in points (pixels at 100 %)
+    /// inner size in points (pixels at 100 %), or in physical pixels with `physical_size`
     pub size: (f32, f32),
+    /// `size` is in physical pixels (a window that must cover an exact screen area)
+    pub physical_size: bool,
     /// outer top-left corner in physical pixels; None = where Windows puts it
     pub position: Option<(i32, i32)>,
     pub visible: bool,
@@ -74,6 +76,7 @@ impl Default for WindowSpec {
             class: "SnapnabWindow",
             title: "Snapnab".into(),
             size: (640.0, 400.0),
+            physical_size: false,
             position: None,
             visible: true,
             decorations: true,
@@ -191,15 +194,25 @@ unsafe extern "system" fn subclass_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LP
 impl Ctl<'_> {
     /// Creates a window (hidden first, so the accessibility tree is ready before it shows).
     pub fn create(&mut self, spec: &WindowSpec) -> Option<WinKey> {
+        self.create_with(spec, |_| {})
+    }
+
+    /// `create`, with `early` called with the window handle as soon as the window exists, before the GPU work that
+    /// takes a few hundred milliseconds (the capture app registers its global hotkeys there).
+    pub fn create_with(&mut self, spec: &WindowSpec, early: impl FnOnce(isize)) -> Option<WinKey> {
         let mut attrs: WindowAttributes = Window::default_attributes()
             .with_title(spec.title.clone())
-            .with_inner_size(LogicalSize::new(spec.size.0, spec.size.1))
             .with_visible(false)
             .with_decorations(spec.decorations)
             .with_resizable(spec.resizable)
             .with_class_name(spec.class)
             .with_skip_taskbar(spec.skip_taskbar)
             .with_drag_and_drop(false);
+        attrs = if spec.physical_size {
+            attrs.with_inner_size(PhysicalSize::new(spec.size.0 as u32, spec.size.1 as u32))
+        } else {
+            attrs.with_inner_size(LogicalSize::new(spec.size.0, spec.size.1))
+        };
         if spec.topmost {
             attrs = attrs.with_window_level(WindowLevel::AlwaysOnTop);
         }
@@ -218,6 +231,7 @@ impl Ctl<'_> {
             }
             sub
         });
+        early(hwnd);
         if self.gpu.is_none() {
             *self.gpu = Some(new_gpu()?);
         }

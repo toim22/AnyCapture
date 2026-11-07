@@ -25,6 +25,22 @@ pub enum OcrError {
     Message(String),
 }
 
+impl OcrError {
+    /// The message shown to the user (OcrErrorText in Ocr.cpp).
+    pub fn message(&self) -> String {
+        match self {
+            OcrError::Empty => crate::i18n::tr_str("Imagem vazia."),
+            OcrError::NoLanguage => {
+                crate::i18n::tr_str("Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma).")
+            }
+            OcrError::Failed => crate::i18n::tr_str("Falha desconhecida no OCR."),
+            OcrError::FacesUnsupported => crate::i18n::tr_str("A detecção de rostos não está disponível neste Windows."),
+            OcrError::FacesFailed => crate::i18n::tr_str("Falha na detecção de rostos."),
+            OcrError::Message(m) => m.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Word {
     pub text: Vec<u16>,

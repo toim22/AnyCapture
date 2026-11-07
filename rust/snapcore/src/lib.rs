@@ -27,10 +27,12 @@
 //! - `serial`: the editor's objects as XML, in the .snap and on the clipboard
 //! - `presets`: the capture presets (Presets1.xml)
 //! - `ipc`, `instance`: the channel between the two programs, one instance per program, forwarded command lines
+//! - `screen`, `clip`, `sounds`: screen copies, the cursor and the windows; the clipboard; the capture sounds
 
 pub mod ai;
 pub mod barcode;
 pub mod beautify;
+pub mod clip;
 pub mod codec;
 pub mod color;
 pub mod container;
@@ -54,8 +56,10 @@ pub mod pdf;
 pub mod presets;
 pub mod reg;
 pub mod render;
+pub mod screen;
 pub mod serial;
 pub mod snap;
+pub mod sounds;
 pub mod stamps;
 pub mod upload;
 pub mod wide;

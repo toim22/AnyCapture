@@ -881,6 +881,14 @@ pub struct CaptureEffects {
     pub beautify_opt: BeautifyOptions,
 }
 
+impl CaptureEffects {
+    /// Any effect on (CaptureEffects::Any).
+    pub fn any(&self) -> bool {
+        self.border || self.filter || self.shadow || self.caption || self.replace_color || self.scale || self.edge
+            || self.trim || self.adjust || self.rotate || self.watermark || self.resolution || self.beautify
+    }
+}
+
 impl Default for CaptureEffects {
     /// The defaults of Effects.h.
     fn default() -> Self {

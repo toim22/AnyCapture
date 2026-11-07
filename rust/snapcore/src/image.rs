@@ -70,6 +70,39 @@ impl Rect {
     pub const fn new(left: i32, top: i32, right: i32, bottom: i32) -> Rect {
         Rect { left, top, right, bottom }
     }
+    pub fn width(&self) -> i32 {
+        self.right - self.left
+    }
+    pub fn height(&self) -> i32 {
+        self.bottom - self.top
+    }
+    /// IsRectEmpty
+    pub fn is_empty(&self) -> bool {
+        self.right <= self.left || self.bottom <= self.top
+    }
+    /// IntersectRect: the common part, or an empty (all zero) rectangle
+    pub fn intersect(&self, o: &Rect) -> Rect {
+        let r = Rect::new(self.left.max(o.left), self.top.max(o.top), self.right.min(o.right), self.bottom.min(o.bottom));
+        if r.is_empty() { Rect::default() } else { r }
+    }
+    /// UnionRect (an empty side is ignored)
+    pub fn union(&self, o: &Rect) -> Rect {
+        if self.is_empty() {
+            return *o;
+        }
+        if o.is_empty() {
+            return *self;
+        }
+        Rect::new(self.left.min(o.left), self.top.min(o.top), self.right.max(o.right), self.bottom.max(o.bottom))
+    }
+    /// OffsetRect
+    pub fn offset(&self, dx: i32, dy: i32) -> Rect {
+        Rect::new(self.left + dx, self.top + dy, self.right + dx, self.bottom + dy)
+    }
+    /// PtInRect (right and bottom outside)
+    pub fn contains(&self, x: i32, y: i32) -> bool {
+        x >= self.left && x < self.right && y >= self.top && y < self.bottom
+    }
 }
 
 pub fn argb(a: i32, r: i32, g: i32, b: i32) -> u32 {
@@ -147,6 +180,13 @@ impl Image {
                 let d = self.at_mut(tx, ty);
                 *d = if blend { blend_over(*d, s) } else { s };
             }
+        }
+    }
+
+    /// MakeOpaque
+    pub fn make_opaque(&mut self) {
+        for p in &mut self.px {
+            *p |= 0xFF00_0000;
         }
     }
 

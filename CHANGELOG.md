@@ -19,7 +19,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   clicking on them run in Rust too, reading and writing the same files.
 - Work in progress on the `rust-rewrite` branch: a new capture app (`Snapnab.exe`) in Rust with an egui interface
   drawn on the GPU. It already starts in the tray, keeps one instance, takes the forwarded command line, talks to the
-  Editor and reads and writes the same presets file; it does not capture yet and is not shipped.
+  Editor and reads and writes the same presets file. It now captures images too: the selection of a region, window
+  or object, fixed size, freehand and several areas, full screen, monitor, clipboard and file, with the capture effects
+  and the library, clipboard, file and program outputs, started by the tray, the window, the command line or the
+  hotkeys. Video, scrolling and panoramic captures are still missing; it is not shipped.
 
 ## [0.4.1] — 2026-11-03
 

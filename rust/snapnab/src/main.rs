@@ -4,6 +4,8 @@
 
 #![windows_subsystem = "windows"]
 
+mod engine;
+mod hotkeys;
 mod tray;
 
 use std::ffi::OsStr;
@@ -12,6 +14,7 @@ use std::sync::atomic::{AtomicU32, Ordering};
 use snapcore::ipc::{self, Channel, Notify};
 use snapcore::presets::{CaptureKind, Preset, PresetStore, Selection};
 use snapcore::{i18n, instance, log, reg};
+use engine::{Engine, EngineEv, Env};
 use snapnab_app::window::{self, Action};
 use snapnab_app::{cmdline, tr};
 use snapui::host::{App, Caught, Ctl, RawMsg, WinKey, WindowSpec};
@@ -80,6 +83,18 @@ struct CaptureApp {
     hwnd: isize,
     ipc: Option<Notify>,
     tray_ignore_up: bool,
+    engine: Engine,
+    last_clip_seq: u32,
+    hk: Option<hotkeys::Manager>,
+    /// the last capture started, for Repeat (IDM_REPEAT)
+    last: Option<Preset>,
+}
+
+/// The engine's view of the app (disjoint fields: the engine itself stays borrowable).
+macro_rules! env {
+    ($s:ident) => {
+        Env { hwnd: $s.hwnd, main: $s.main, ipc: $s.ipc.as_ref() }
+    };
 }
 
 /// The second-instance and IPC events, from other threads.
@@ -109,9 +124,91 @@ impl CaptureApp {
         tray::notify(self.hwnd, title, text);
     }
 
-    fn start_capture(&mut self, p: &Preset) {
-        // the capture engine moves over in the next steps of phase 5
-        log::write(&format!("Capture requested: {} ({:?}, {:?}) — not in the Rust app yet", p.name, p.kind, p.selection));
+    fn start_capture(&mut self, ctl: &mut Ctl, p: &Preset) {
+        if !self.engine.busy() {
+            self.last = Some(p.clone());
+        }
+        let env = env!(self);
+        self.engine.activate(ctl, &env, p);
+    }
+
+    /// RegisterHotkeys: the image and video keys (Print Screen and Shift+Print Screen by default), the tools that
+    /// have one set in Options, and each preset's own key.
+    fn register_hotkeys(&mut self) {
+        use hotkeys::*;
+        let Some(hk) = self.hk.as_mut() else { return };
+        hk.clear();
+        let get = |name: &str, def: u32| unpack(reg::get_dword(OsStr::new(name), def, None));
+        let (m, v) = get("ImageHotkey", pack(0, 0x2C));
+        hk.set(HK_IMAGE, m, v);
+        let (m, v) = get("VideoHotkey", pack(windows::Win32::UI::Input::KeyboardAndMouse::MOD_SHIFT.0, 0x2C));
+        hk.set(HK_VIDEO, m, v);
+        // tools without a default key (a global key steals the combination from every program): set in Options
+        for (id, name) in [(HK_COLOR, "ColorPickerHotkey"), (HK_CAPTURE_PIN, "CapturePinHotkey"),
+                           (HK_PIN_CLIP, "PinClipboardHotkey"), (HK_FOCUS, "FocusHotkey")] {
+            let (m, v) = get(name, 0);
+            if v != 0 {
+                hk.set(id, m, v);
+            }
+        }
+        for (i, p) in self.store.presets.iter().enumerate() {
+            if p.hotkey_vk == 0 {
+                continue;
+            }
+            if hk.set(HK_PRESET_BASE + i as i32, p.hotkey_mods, p.hotkey_vk) == Result::InternalConflict {
+                tray::notify(self.hwnd, &tr("Conflito de atalho"),
+                             &tr("O atalho do preset \"%s\" já está em uso por outra ação.").replace("%s", &i18n::tr_str(&p.name)));
+            }
+        }
+    }
+
+    fn on_hotkey(&mut self, ctl: &mut Ctl, id: i32) {
+        use hotkeys::*;
+        match id {
+            HK_IMAGE => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Image)),
+            HK_VIDEO => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Video)),
+            i if i >= HK_PRESET_BASE && ((i - HK_PRESET_BASE) as usize) < self.store.presets.len() => {
+                let p = self.store.presets[(i - HK_PRESET_BASE) as usize].clone();
+                self.start_capture(ctl, &p);
+            }
+            _ => log::write(&format!("Hotkey {id}: not in the Rust app yet")),
+        }
+    }
+
+    /// The clipboard monitor (A13): an image copied by another program (only the Snipping Tool by default) opens in
+    /// the Editor as a new image.
+    fn on_clipboard_update(&mut self) {
+        use windows::Win32::System::DataExchange::{GetClipboardOwner, GetClipboardSequenceNumber};
+        let mode = reg::get_dword(OsStr::new("ClipboardMonitor"), 1, None);
+        let seq = unsafe { GetClipboardSequenceNumber() };
+        if mode == 0 || seq == self.last_clip_seq || self.engine.busy() {
+            return;
+        }
+        self.last_clip_seq = seq;
+        if !snapcore::clip::has_image() {
+            return;
+        }
+        let owner = unsafe { GetClipboardOwner() }.map(|h| h.0 as isize).unwrap_or(0);
+        if owner != 0 && snapcore::screen::window_pid(owner) == std::process::id() {
+            return;
+        }
+        let proc = if owner != 0 { snapcore::screen::window_process_name(owner).to_lowercase() } else { String::new() };
+        if proc == "snapnabeditor.exe" {
+            return;
+        }
+        let snip = matches!(proc.as_str(), "snippingtool.exe" | "screenclippinghost.exe" | "screensketch.exe");
+        if mode == 1 && !snip {
+            return;
+        }
+        log::write(&format!("Clipboard: image detected from '{proc}'"));
+        // the Editor creates the new image from the clipboard (IPC 0x1E, ed_comp_14 §3.4)
+        if ipc::mutex_exists(&snapcore::wide::to_wide(ipc::EDITOR_MUTEX)) {
+            if let Some(i) = &self.ipc {
+                i.send_int(Channel::Editor, ipc::code::NEW_IMAGE_FROM_CLIPBOARD, 0, false);
+            }
+        } else {
+            instance::launch_sibling("SnapnabEditor.exe", "/NewFromClipboard", false);
+        }
     }
 
     fn open_editor(&self) {
@@ -137,6 +234,7 @@ impl CaptureApp {
         unsafe {
             let _ = RemoveClipboardFormatListener(HWND(self.hwnd as _));
         }
+        self.hk = None; // unregisters the keys and removes the hook
         tray::remove(self.hwnd);
         if let Some(i) = &self.ipc {
             i.send_int(Channel::Editor, ipc::code::CLOSE_EDITOR_IF_HIDDEN, 0, false);
@@ -149,17 +247,26 @@ impl CaptureApp {
         let n = self.store.presets.len() as u32;
         if (id::PRESET_BASE..id::PRESET_BASE + n).contains(&cmd) {
             let p = self.store.presets[(cmd - id::PRESET_BASE) as usize].clone();
-            self.start_capture(&p);
+            self.start_capture(ctl, &p);
             return;
         }
         match cmd {
             id::SHOW => self.show(ctl),
             id::EXIT => self.exit(ctl),
             id::OPEN_EDITOR | id::IDC_OPEN_EDITOR => self.open_editor(),
-            id::CAPTURE_IMAGE => self.start_capture(&self.store.first_of_kind(CaptureKind::Image)),
-            id::CAPTURE_VIDEO => self.start_capture(&self.store.first_of_kind(CaptureKind::Video)),
-            id::IDC_CAPTURE => self.start_capture(&self.current()),
-            id::CAPTURE_CLIPBOARD => self.capture_clipboard(),
+            id::CAPTURE_IMAGE => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Image)),
+            id::CAPTURE_VIDEO => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Video)),
+            id::IDC_CAPTURE => self.start_capture(ctl, &self.current()),
+            id::CAPTURE_CLIPBOARD => {
+                let mut p = self.store.first_of_kind(CaptureKind::Image);
+                p.selection = Selection::Clipboard;
+                p.delay_seconds = 0;
+                self.start_capture(ctl, &p);
+            }
+            id::REPEAT => {
+                let p = self.last.clone().unwrap_or_else(|| self.current());
+                self.start_capture(ctl, &p);
+            }
             id::LIBRARY_FOLDER => shell_open(&String::from_utf16_lossy(&snapcore::library::library_dir())),
             id::LOGS => shell_open(&snapcore::paths::logs_dir().to_string_lossy()),
             id::ABOUT => about(),
@@ -167,11 +274,12 @@ impl CaptureApp {
         }
     }
 
-    fn capture_clipboard(&mut self) {
+    /// /clipboard: the current preset's outputs for the image on the clipboard.
+    fn capture_clipboard(&mut self, ctl: &mut Ctl) {
         let mut p = self.current();
         p.kind = CaptureKind::Image;
         p.selection = Selection::Clipboard;
-        self.start_capture(&p);
+        self.start_capture(ctl, &p);
     }
 
     fn tray_menu(&self) {
@@ -205,7 +313,7 @@ impl CaptureApp {
                 self.tray_ignore_up = true;
                 self.show(ctl);
             }
-            NIN_KEYSELECT => self.start_capture(&self.current()),
+            NIN_KEYSELECT => self.start_capture(ctl, &self.current()),
             WM_RBUTTONUP | WM_CONTEXTMENU => {
                 unsafe {
                     let _ = KillTimer(Some(h), TRAY_CLICK_TIMER);
@@ -243,21 +351,21 @@ impl CaptureApp {
                     handled = true;
                 }
                 Cmd::CaptureImage => {
-                    self.start_capture(&self.store.first_of_kind(CaptureKind::Image));
+                    self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Image));
                     handled = true;
                 }
                 Cmd::CaptureVideo => {
-                    self.start_capture(&self.store.first_of_kind(CaptureKind::Video));
+                    self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Video));
                     handled = true;
                 }
                 Cmd::Clipboard => {
-                    self.capture_clipboard();
+                    self.capture_clipboard(ctl);
                     handled = true;
                 }
                 Cmd::Preset(name) => {
                     let found = self.store.presets.iter().find(|p| p.name.to_lowercase() == name.to_lowercase()).cloned();
                     if let Some(p) = found {
-                        self.start_capture(&p);
+                        self.start_capture(ctl, &p);
                         handled = true;
                     }
                 }
@@ -277,14 +385,17 @@ impl CaptureApp {
         }
     }
 
-    fn on_ipc(&mut self, m: ipc::Message) {
+    fn on_ipc(&mut self, ctl: &mut Ctl, m: ipc::Message) {
         match m.code {
             ipc::code::EDITOR_START_CAPTURE => {
                 let k = if m.ivalue == 1 { CaptureKind::Video } else { CaptureKind::Image };
-                self.start_capture(&self.store.first_of_kind(k));
+                self.start_capture(ctl, &self.store.first_of_kind(k));
             }
             ipc::code::EDITOR_CLOSED => log::write("Editor closed"),
-            ipc::code::RELOAD_CONFIG => self.store = PresetStore::load(),
+            ipc::code::RELOAD_CONFIG => {
+                self.store = PresetStore::load();
+                self.register_hotkeys();
+            }
             _ => {}
         }
     }
@@ -295,8 +406,9 @@ impl CaptureApp {
             match a {
                 Action::Changed => {
                     self.store.save();
+                    self.register_hotkeys();
                 }
-                Action::Capture => self.start_capture(&self.current()),
+                Action::Capture => self.start_capture(ctl, &self.current()),
                 Action::OpenEditor => self.open_editor(),
                 Action::LibraryFolder => self.command(ctl, id::LIBRARY_FOLDER),
                 Action::Logs => self.command(ctl, id::LOGS),
@@ -338,7 +450,13 @@ impl App for CaptureApp {
             clear_color: [0.97, 0.97, 0.98, 1.0],
             ..Default::default()
         };
-        let Some(k) = ctl.create(&spec) else {
+        // the hotkeys work from the moment the window exists, before its GPU setup
+        let early = |h: isize| {
+            self.hwnd = h;
+            self.hk = Some(hotkeys::Manager::new(h));
+            self.register_hotkeys();
+        };
+        let Some(k) = ctl.create_with(&spec, early) else {
             log::write("Capture window: could not be created");
             ctl.exit();
             return;
@@ -349,6 +467,7 @@ impl App for CaptureApp {
         tray::add(self.hwnd, &tr("Snapnab — clique para capturar"));
         unsafe {
             let _ = AddClipboardFormatListener(HWND(self.hwnd as _));
+            self.last_clip_seq = windows::Win32::System::DataExchange::GetClipboardSequenceNumber();
         }
         let waker = ctl.waker();
         self.ipc = Notify::start(Channel::Capture, move |m| waker.send(Ev::Ipc(m)));
@@ -358,10 +477,17 @@ impl App for CaptureApp {
     fn ui(&mut self, ctl: &mut Ctl, win: WinKey, ui: &mut egui::Ui) {
         if Some(win) == self.main {
             self.main_ui(ctl, ui);
+        } else if self.engine.owns(win) {
+            let env = env!(self);
+            self.engine.ui(ctl, &env, win, ui);
         }
     }
 
     fn message(&mut self, ctl: &mut Ctl, m: RawMsg) {
+        let env = env!(self);
+        if self.engine.message(ctl, &env, &m) {
+            return;
+        }
         match m.msg {
             WM_COPYDATA => {
                 if let Some(t) = m.text {
@@ -374,9 +500,10 @@ impl App for CaptureApp {
                 unsafe {
                     let _ = KillTimer(Some(HWND(self.hwnd as _)), TRAY_CLICK_TIMER);
                 }
-                self.start_capture(&self.current());
+                self.start_capture(ctl, &self.current());
             }
-            WM_HOTKEY | WM_CLIPBOARDUPDATE => {}
+            WM_CLIPBOARDUPDATE => self.on_clipboard_update(),
+            WM_HOTKEY => self.on_hotkey(ctl, m.wparam as i32),
             x if x == TASKBAR_CREATED.load(Ordering::Relaxed) => tray::add(self.hwnd, &tr("Snapnab — clique para capturar")),
             _ => {}
         }
@@ -388,16 +515,27 @@ impl App for CaptureApp {
             if let Some(w) = ctl.window(win) {
                 w.set_visible(false);
             }
+        } else if self.engine.owns(win) {
+            let env = env!(self);
+            self.engine.close_requested(ctl, &env, win);
         } else {
             ctl.close(win);
         }
     }
 
-    fn event(&mut self, _ctl: &mut Ctl, ev: Box<dyn std::any::Any + Send>) {
-        if let Ok(ev) = ev.downcast::<Ev>() {
-            match *ev {
-                Ev::Ipc(m) => self.on_ipc(m),
+    fn event(&mut self, ctl: &mut Ctl, ev: Box<dyn std::any::Any + Send>) {
+        let ev = match ev.downcast::<Ev>() {
+            Ok(ev) => {
+                match *ev {
+                    Ev::Ipc(m) => self.on_ipc(ctl, m),
+                }
+                return;
             }
+            Err(ev) => ev,
+        };
+        if let Ok(ev) = ev.downcast::<EngineEv>() {
+            let env = env!(self);
+            self.engine.event(ctl, &env, *ev);
         }
     }
 }
@@ -438,7 +576,18 @@ fn main() {
     // a windowed program has no console: a panic goes to the log before the process ends
     std::panic::set_hook(Box::new(|info| log::write(&format!("PANIC: {info}"))));
     i18n::init();
-    let app = CaptureApp { store: PresetStore::load(), main: None, hwnd: 0, ipc: None, tray_ignore_up: false };
+    snapcore::gdip::startup();
+    let app = CaptureApp {
+        store: PresetStore::load(),
+        main: None,
+        hwnd: 0,
+        ipc: None,
+        tray_ignore_up: false,
+        engine: Engine::new(),
+        last_clip_seq: 0,
+        hk: None,
+        last: None,
+    };
     if let Err(e) = snapui::host::run(app, |_| {}) {
         log::write(&format!("Event loop: {e}"));
     }
