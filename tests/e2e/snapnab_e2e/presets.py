@@ -23,7 +23,7 @@ def _attrs(d):
 def preset(name, selection="FullScreen", kind="Image", *, editor=True, clipboard=False, save_to=None, file_type="png",
            prefix="E2E", program=None, grab_text=False, delay=0, cursor=False, fixed=(640, 480), region_fixed=False,
            region_pos=None, window_objects=False, links=False, effects=None, mic=False, sys_audio=False, fps=15,
-           quality=1, hw=False, builtin=""):
+           quality=1, hw=False, builtin="", office=-1, upload=False):
     cap = dict(DisplayName=name, CaptureMode=kind, SelectionMode=SEL[selection], RegionWidth=fixed[0],
                RegionHeight=fixed[1], CaptureCursor=int(cursor), DelayDuration=delay,
                WindowsAsObjects=int(window_objects), CaptureLinks=int(links), PreviewInEditor=int(editor),
@@ -43,6 +43,8 @@ def preset(name, selection="FullScreen", kind="Image", *, editor=True, clipboard
             f"      <ShareSettingsFile {_attrs(file)}/>\n"
             f"      <ShareSettingsProgram {_attrs(prog)}/>\n"
             f"      <ShareSettingsGrabText Enabled=\"{int(grab_text)}\"/>\n"
+            f"      <ShareSettingsOffice Target=\"{office}\"/>\n"
+            f"      <ShareSettingsUpload Enabled=\"{int(upload)}\"/>\n"
             f"      <CaptureEffects {_attrs(fx)}/>\n"
             f"      <Video {_attrs(video)}/>\n"
             f"    </CaptureSettings>\n")

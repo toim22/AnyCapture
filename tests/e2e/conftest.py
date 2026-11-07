@@ -41,6 +41,12 @@ def user_state():
         pytest.exit("Close Snapnab and the Snapnab Editor before running the tests (the tests close and reopen them "
                     "as they go).", returncode=3)
     ARTIFACTS.mkdir(exist_ok=True)
+    stale = sorted(ARTIFACTS.glob("backup-*"))
+    if stale:
+        # a run that was killed before its restore: the data folder now holds test data, and a new backup would
+        # save that instead of the user's own state
+        pytest.exit(f"A backup that was never restored is in {stale[0]}: put it back first (see its README.txt), then "
+                    f"delete or move the folder.", returncode=5)
     st = UserState()
     st.backup()
     clip = None

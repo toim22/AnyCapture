@@ -829,10 +829,12 @@ impl Engine {
             let t = if info.window_title.is_empty() { text(&info.mode) } else { text(&info.window_title) };
             crate::pins::pin(img.clone(), &t, self.origin.take());
         }
-        for (on, what) in [(p.office >= 0, "Office"), (p.upload, "upload")] {
-            if on {
-                log::write(&format!("Output: {what} is not in the Rust app yet"));
-            }
+        if p.office >= 0 {
+            crate::share::office(img.clone(), p.office);
+        }
+        if p.upload {
+            let title = if info.window_title.is_empty() { String::new() } else { text(&info.window_title) };
+            crate::share::upload(env.hwnd, img.clone(), lib.clone().unwrap_or_default(), title);
         }
         let mut saved = String::new();
         if p.save_to_file {

@@ -135,8 +135,13 @@ impl Default for Settings {
     }
 }
 
+/// %LOCALAPPDATA%\Snapnab\Uploaders.xml; SNAPNAB_UPLOADERS_FILE points the end-to-end tests at their own copy, so a
+/// test never reads or writes the user's destinations.
 fn settings_file() -> std::path::PathBuf {
-    crate::paths::app_data_dir().join("Uploaders.xml")
+    match std::env::var_os("SNAPNAB_UPLOADERS_FILE") {
+        Some(f) if !f.is_empty() => std::path::PathBuf::from(f),
+        _ => crate::paths::app_data_dir().join("Uploaders.xml"),
+    }
 }
 
 impl Settings {
@@ -928,6 +933,26 @@ pub fn upload_file(s: &Settings, path: &[u16], remote_name: &str) -> Outcome {
         }
     };
     crate::log::write(&format!("Upload: {}", if r.ok { &r.url } else { &r.error }));
+    r
+}
+
+/// UploadImageAsync's work (run it on a thread): the image as a PNG in %TEMP%\Snapnab (metadata stripped unless
+/// StripMetadataOnUpload is 0), sent with the saved settings, the file deleted after.
+pub fn upload_image(img: &crate::image::Image, name: &str, version: &str) -> Outcome {
+    use std::os::windows::ffi::OsStrExt;
+    let dir = std::env::temp_dir().join("Snapnab");
+    let _ = std::fs::create_dir_all(&dir);
+    let name: String = if name.is_empty() { format!("Snapnab_{}", String::from_utf16_lossy(&library::time_stamp(false))) } else { name.to_owned() };
+    let name: String = name.chars().map(|c| if "\\/:*?\"<>|".contains(c) { '_' } else { c }).collect();
+    let path = dir.join(format!("{name}.png"));
+    let mut o = crate::codec::SaveOptions::from_settings();
+    o.strip_metadata = crate::reg::get_dword(OsStr::new("StripMetadataOnUpload"), 1, None) != 0; // C29
+    if !crate::codec::save_file(&path, img, crate::codec::Format::Png, &o, version) {
+        return Outcome::fail(tr!("Não foi possível preparar a imagem."));
+    }
+    let w: Vec<u16> = path.as_os_str().encode_wide().collect();
+    let r = upload_file(&Settings::load(), &w, "");
+    let _ = std::fs::remove_file(&path);
     r
 }
 

@@ -14,6 +14,7 @@ mod oneclick;
 mod pins;
 mod qr;
 mod quick;
+mod share;
 mod rawwin;
 mod tray;
 

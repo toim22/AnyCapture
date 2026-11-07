@@ -51,6 +51,7 @@ pub mod library;
 pub mod log;
 pub mod net;
 pub mod ocr;
+pub mod office;
 pub mod paths;
 pub mod pdf;
 pub mod presets;
