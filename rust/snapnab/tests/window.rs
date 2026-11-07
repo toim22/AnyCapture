@@ -44,8 +44,17 @@ fn count(h: &Harness<'static, State>, prefix: &str) -> usize {
     h.query_all_by(|n| n.author_id().is_some_and(|a| a.starts_with(prefix) && a[prefix.len()..].parse::<u32>().is_ok())).count()
 }
 
+/// One GPU at a time: kittest makes its wgpu device on the first snapshot, and two tests doing that at once on the
+/// CI's software adapter (WARP on Windows Server) sometimes crash the test process (access violation). Taken first in
+/// each snapshot test, so it is released after the harness and its device are dropped.
+fn one_gpu_at_a_time() -> std::sync::MutexGuard<'static, ()> {
+    static GPU: std::sync::Mutex<()> = std::sync::Mutex::new(());
+    GPU.lock().unwrap_or_else(|e| e.into_inner())
+}
+
 #[test]
 fn looks_like_the_snapshot() {
+    let _gpu = one_gpu_at_a_time();
     let mut h = harness();
     h.run();
     h.snapshot("capture_window");
@@ -53,6 +62,7 @@ fn looks_like_the_snapshot() {
 
 #[test]
 fn the_preset_list_looks_like_the_snapshot() {
+    let _gpu = one_gpu_at_a_time();
     let mut h = harness_with(View { presets_open: true, ..Default::default() });
     h.run();
     h.snapshot("capture_window_presets");
