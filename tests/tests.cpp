@@ -13,6 +13,7 @@
 #include "../src/capture/Recorder.h"
 #include "../src/capture/Panoramic.h"
 #include "../src/capture/Webcam.h"
+#include "../src/capture/Presets.h"
 #include "../src/editor/Video.h"
 #include "../src/editor/Document.h"
 #include "../src/editor/QuickStyles.h"
@@ -1044,8 +1045,81 @@ static std::vector<std::string> DocFingerprints() {
     return L;
 }
 
+// The capture presets as the C++ capture app writes and reads them (tests/data/presets-cpp.txt): the Rust capture app
+// (rust/snapcore/src/presets.rs) must write the same Presets1.xml ("SnapnabTests presetgolden" prints them).
+static std::vector<std::string> PresetFingerprints() {
+    std::vector<std::string> L;
+    auto put = [&](const std::string& label, const XmlNode& n) {
+        L.push_back("== " + label);
+        std::string s = XmlSerialize(n, false);
+        size_t a = 0;
+        for (size_t b; (b = s.find('\n', a)) != std::string::npos; a = b + 1) L.push_back(s.substr(a, b - a));
+        if (a < s.size()) L.push_back(s.substr(a));
+    };
+    put("default", Preset().ToXml());
+    Preset p;
+    p.name = L"Região ç → 中文 😀 \"<&>\"";
+    p.kind = CaptureKind::Video; p.selection = Selection::Monitor; p.fixedW = 1280; p.fixedH = 720;
+    p.regionFixed = true; p.regionUsePos = true; p.regionX = -50; p.regionY = 30;
+    p.captureCursor = true; p.delaySeconds = 5; p.windowObjects = true; p.captureLinks = false;
+    p.previewInEditor = false; p.copyToClipboard = true; p.saveToFile = true; p.fileFormat = FileFormat::WEBP;
+    p.filePrefix = L"Shot"; p.folder = L"C:\\Caps\\ü"; p.openInProgram = true; p.programPath = L"C:\\Tools\\x.exe";
+    p.grabText = true; p.pinToScreen = true; p.readQr = true; p.office = 2; p.upload = true;
+    auto& f = p.effects;
+    f.border = true; f.borderWidth = 9; f.borderColor = RGB(1, 2, 3); f.filter = true; f.filterKind = 2;
+    f.shadow = true; f.shadowOffset = 11; f.shadowBlur = 12; f.shadowOpacity = 77;
+    f.caption = true; f.captionText = L"{date} ✓"; f.captionTop = true;
+    f.replaceColor = true; f.replaceFrom = RGB(10, 20, 30); f.replaceTo = RGB(200, 100, 0); f.replaceTolerance = 33;
+    f.scale = true; f.scalePercent = 150; f.edge = true; f.edgeStyle = 3; f.edgeSize = 20; f.edgeSides = 9;
+    f.trim = true; f.trimTolerance = 4; f.adjust = true; f.brightness = -20; f.contrast = 15; f.hue = -90; f.saturation = 40;
+    f.rotate = true; f.rotateKind = 4; f.watermark = true; f.watermarkText = L"© Me"; f.watermarkOpacity = 60; f.watermarkTiled = false;
+    f.resolution = true; f.dpi = 600; f.beautify = true;
+    f.beautifyOpt.background = 3; f.beautifyOpt.color1 = RGB(5, 6, 7); f.beautifyOpt.imagePath = L"C:\\bg.png";
+    f.beautifyOpt.padding = 100; f.beautifyOpt.aspect = 2; f.beautifyOpt.autoBalance = false;
+    p.microphone = false; p.systemAudio = false; p.micVolume = 150; p.sysVolume = 20; p.autoGain = false; p.fps = 60; p.quality = 3;
+    p.downscale1080 = false; p.hardwareEncode = false; p.audioOnly = true; p.audioFormat = 1; p.webcam = true;
+    p.webcamDevice = L"usb#vid&pid"; p.webcamName = L"Cam"; p.webcamShape = 3; p.chromaKey = true; p.chromaColor = RGB(0, 255, 0);
+    p.chromaTolerance = 70; p.builtin = L"grabtext"; p.hotkeyMods = MOD_CONTROL | MOD_SHIFT; p.hotkeyVk = 'P';
+    put("custom", p.ToXml());
+    put("custom read", Preset::FromXml(p.ToXml()).ToXml());
+    const char* reads[] = {
+        "<CaptureSettings DisplayName=\"Old\" SelectionMode=\"4\" RegionWidth=\"300\"/>",
+        "<CaptureSettings SelectionMode=\"99\" CaptureMode=\"Video\"><CaptureEffects Grayscale=\"1\" Scale=\"150\" ShadowOffset=\"-5\" "
+        "EdgeSides=\"31\" Dpi=\"5\"/></CaptureSettings>",
+        "<CaptureSettings SelectionMode=\"-3\" DelayDuration=\" 12x\" HotKey=\"abc\"><ShareSettingsFile Enabled=\"1\" OutputFileType=\"99\"/>"
+        "<ShareSettingsOffice Target=\"7\"/><Video FrameRate=\"1000\" Quality=\"-1\" MicrophoneVolume=\"999\" WebcamShape=\"9\" "
+        "AudioFormat=\"5\"/></CaptureSettings>",
+        "<CaptureSettings><CaptureEffects Beautify=\"1\"><Beautify Background=\"9\" Angle=\"400\" Padding=\"-5\" Color1=\"#ZZ\" "
+        "Color2=\"#00FF00\"/></CaptureEffects></CaptureSettings>",
+        "<CaptureSettings/>",
+        "<CaptureSettings><CaptureEffects Scale=\"100\" BorderColor=\"#123456\" Filter=\"0\" Grayscale=\"1\"/>"
+        "<ShareSettingsProgram Enabled=\"1\"/><ShareSettingsFile Prefix=\"\" FolderName=\"D:\\x\"/></CaptureSettings>",
+        "<CaptureSettings SelectionMode=\"13\" CaptureMode=\"image\"><Video EnableMicrophone=\"0\"/></CaptureSettings>",
+        "<CaptureSettings DisplayName=\"x\" RegionWidth=\"0x10\" RegionHeight=\"-0\" CaptureCursor=\"2\" PreviewInEditor=\"\"/>",
+    };
+    for (size_t i = 0; i < std::size(reads); i++) {
+        XmlNode n;
+        bool ok = XmlParse(reads[i], n);
+        put(FormatA("read %zu %d", i, ok), Preset::FromXml(n).ToXml());
+    }
+    PresetStore s;
+    s.presets = { Preset(), p };
+    s.selected = 1;
+    std::wstring file = Tmp(L"presetgolden.xml");
+    bool saved = s.Export(file);
+    XmlNode root;
+    bool loaded = XmlLoadFile(file, root);
+    DeleteFileW(file.c_str());
+    put(FormatA("file %d %d", saved, loaded), root);
+    return L;
+}
+
 int wmain(int argc, wchar_t** argv) {
     SetConsoleOutputCP(CP_UTF8);
+    if (argc > 1 && std::wstring(argv[1]) == L"presetgolden") {   // the capture presets' XML in this build
+        for (auto& l : PresetFingerprints()) printf("%s\n", l.c_str());
+        return 0;
+    }
     if (argc > 2 && std::wstring(argv[1]) == L"dump") {      // debugging: prints the XML of a .snap
         std::vector<SnapFrame> fr;
         if (!LoadSnapFile(argv[2], fr)) { printf("failed to open\n"); return 1; }

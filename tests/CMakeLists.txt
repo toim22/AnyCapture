@@ -10,6 +10,7 @@ add_executable(SnapnabTests
     ${SRC}/capture/Recorder.cpp
     ${SRC}/capture/Panoramic.cpp
     ${SRC}/capture/Webcam.cpp
+    ${SRC}/capture/Presets.cpp
     ${SRC}/editor/Video.cpp
     ${SRC}/editor/Document.cpp
     ${SRC}/editor/Render.cpp

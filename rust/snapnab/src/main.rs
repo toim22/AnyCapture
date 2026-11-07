@@ -1,0 +1,447 @@
+//! Snapnab.exe, the capture app, in Rust (the C++ src/capture/main.cpp moving over, docs/ARCHITECTURE.md): the window
+//! with the presets, the tray icon, the hotkeys, the command line, and the channel to the Editor. One instance runs;
+//! a second start hands its command line to it (WM_COPYDATA) and ends.
+
+#![windows_subsystem = "windows"]
+
+mod tray;
+
+use std::ffi::OsStr;
+use std::sync::atomic::{AtomicU32, Ordering};
+
+use snapcore::ipc::{self, Channel, Notify};
+use snapcore::presets::{CaptureKind, Preset, PresetStore, Selection};
+use snapcore::{i18n, instance, log, reg};
+use snapnab_app::window::{self, Action};
+use snapnab_app::{cmdline, tr};
+use snapui::host::{App, Caught, Ctl, RawMsg, WinKey, WindowSpec};
+use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
+use windows::Win32::System::Com::{COINIT_APARTMENTTHREADED, CoInitializeEx};
+use windows::Win32::System::DataExchange::{AddClipboardFormatListener, COPYDATASTRUCT, RemoveClipboardFormatListener};
+use windows::Win32::System::Threading::{GetCurrentProcess, TerminateProcess};
+use windows::Win32::UI::Input::KeyboardAndMouse::GetDoubleClickTime;
+use windows::Win32::UI::Shell::ShellExecuteW;
+use windows::Win32::UI::WindowsAndMessaging::{
+    ASFW_ANY, AllowSetForegroundWindow, FindWindowW, IsIconic, KillTimer, MB_ICONINFORMATION,
+    MessageBoxW, RegisterWindowMessageW, SW_RESTORE, SW_SHOWNORMAL, SetForegroundWindow, SetTimer, ShowWindow,
+    WM_CLIPBOARDUPDATE, WM_COMMAND, WM_CONTEXTMENU, WM_COPYDATA, WM_HOTKEY, WM_LBUTTONDBLCLK, WM_LBUTTONUP,
+    WM_RBUTTONUP, WM_TIMER,
+};
+use windows::core::{PCWSTR, w};
+
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+/// Command IDs, numbered as in the C++ app (the e2e suite posts them as WM_COMMAND).
+#[allow(dead_code)]
+mod id {
+    pub const EXIT: u32 = 1000;
+    pub const OPEN_EDITOR: u32 = 1001;
+    pub const CAPTURE_IMAGE: u32 = 1002;
+    pub const CAPTURE_VIDEO: u32 = 1003;
+    pub const CAPTURE_CLIPBOARD: u32 = 1004;
+    pub const CAPTURE_FILE: u32 = 1005;
+    pub const REPEAT: u32 = 1006;
+    pub const OPTIONS: u32 = 1007;
+    pub const PRESET_IMPORT: u32 = 1008;
+    pub const PRESET_EXPORT: u32 = 1009;
+    pub const ABOUT: u32 = 1010;
+    pub const LIBRARY_FOLDER: u32 = 1011;
+    pub const LOGS: u32 = 1012;
+    pub const SHOW: u32 = 1013;
+    pub const PRESET_BASE: u32 = 2000;
+    // control IDs of the C++ window that are also commands
+    pub const IDC_CAPTURE: u32 = 119;
+    pub const IDC_OPEN_EDITOR: u32 = 122;
+}
+
+const TRAY_CLICK_TIMER: usize = 0x5E1;
+/// NIN_SELECT | NINF_KEY: Enter or Space on the tray icon.
+const NIN_KEYSELECT: u32 = 0x401;
+static TASKBAR_CREATED: AtomicU32 = AtomicU32::new(0);
+
+/// Runs in the window procedure of the capture window: the messages the app answers itself.
+fn intercept(hwnd: isize, msg: u32, wp: usize, lp: isize) -> Caught {
+    let raw = |text| RawMsg { hwnd, msg, wparam: wp, lparam: lp, text };
+    match msg {
+        WM_COPYDATA => match unsafe { instance::parse_copy_data(lp as *const COPYDATASTRUCT) } {
+            Some(t) => Caught::Queue(raw(Some(t)), 1),
+            None => Caught::Handled(0),
+        },
+        WM_COMMAND | WM_HOTKEY | tray::WM_SNAP_TRAY | WM_CLIPBOARDUPDATE => Caught::Queue(raw(None), 0),
+        WM_TIMER if wp == TRAY_CLICK_TIMER => Caught::Queue(raw(None), 0),
+        m if m != 0 && m == TASKBAR_CREATED.load(Ordering::Relaxed) => Caught::Queue(raw(None), 0),
+        _ => Caught::Pass,
+    }
+}
+
+struct CaptureApp {
+    store: PresetStore,
+    main: Option<WinKey>,
+    hwnd: isize,
+    ipc: Option<Notify>,
+    tray_ignore_up: bool,
+}
+
+/// The second-instance and IPC events, from other threads.
+enum Ev {
+    Ipc(ipc::Message),
+}
+
+impl CaptureApp {
+    fn current(&self) -> Preset {
+        self.store.presets.get(self.store.selected as usize).cloned().unwrap_or_default()
+    }
+
+    fn show(&self, ctl: &Ctl) {
+        let Some(w) = self.main.and_then(|k| ctl.window(k)) else { return };
+        w.set_visible(true);
+        unsafe {
+            let h = HWND(self.hwnd as _);
+            if IsIconic(h).as_bool() {
+                let _ = ShowWindow(h, SW_RESTORE);
+            }
+            let _ = SetForegroundWindow(h);
+        }
+        w.focus_window();
+    }
+
+    fn notify(&self, title: &str, text: &str) {
+        tray::notify(self.hwnd, title, text);
+    }
+
+    fn start_capture(&mut self, p: &Preset) {
+        // the capture engine moves over in the next steps of phase 5
+        log::write(&format!("Capture requested: {} ({:?}, {:?}) — not in the Rust app yet", p.name, p.kind, p.selection));
+    }
+
+    fn open_editor(&self) {
+        let ed = unsafe { FindWindowW(w!("SnapnabEditor"), PCWSTR::null()) }.ok().filter(|h| !h.0.is_null());
+        match ed {
+            Some(h) => unsafe {
+                let _ = AllowSetForegroundWindow(ASFW_ANY);
+                if let Some(i) = &self.ipc {
+                    i.send_int(Channel::Editor, ipc::code::SHOW_EDITOR, 1, false);
+                }
+                if IsIconic(h).as_bool() {
+                    let _ = ShowWindow(h, SW_RESTORE);
+                }
+                let _ = SetForegroundWindow(h);
+            },
+            None => {
+                instance::launch_sibling("SnapnabEditor.exe", "", false);
+            }
+        }
+    }
+
+    fn exit(&mut self, ctl: &mut Ctl) {
+        unsafe {
+            let _ = RemoveClipboardFormatListener(HWND(self.hwnd as _));
+        }
+        tray::remove(self.hwnd);
+        if let Some(i) = &self.ipc {
+            i.send_int(Channel::Editor, ipc::code::CLOSE_EDITOR_IF_HIDDEN, 0, false);
+        }
+        self.ipc = None;
+        ctl.exit();
+    }
+
+    fn command(&mut self, ctl: &mut Ctl, cmd: u32) {
+        let n = self.store.presets.len() as u32;
+        if (id::PRESET_BASE..id::PRESET_BASE + n).contains(&cmd) {
+            let p = self.store.presets[(cmd - id::PRESET_BASE) as usize].clone();
+            self.start_capture(&p);
+            return;
+        }
+        match cmd {
+            id::SHOW => self.show(ctl),
+            id::EXIT => self.exit(ctl),
+            id::OPEN_EDITOR | id::IDC_OPEN_EDITOR => self.open_editor(),
+            id::CAPTURE_IMAGE => self.start_capture(&self.store.first_of_kind(CaptureKind::Image)),
+            id::CAPTURE_VIDEO => self.start_capture(&self.store.first_of_kind(CaptureKind::Video)),
+            id::IDC_CAPTURE => self.start_capture(&self.current()),
+            id::CAPTURE_CLIPBOARD => self.capture_clipboard(),
+            id::LIBRARY_FOLDER => shell_open(&String::from_utf16_lossy(&snapcore::library::library_dir())),
+            id::LOGS => shell_open(&snapcore::paths::logs_dir().to_string_lossy()),
+            id::ABOUT => about(),
+            _ => log::write(&format!("Command {cmd}: not in the Rust app yet")),
+        }
+    }
+
+    fn capture_clipboard(&mut self) {
+        let mut p = self.current();
+        p.kind = CaptureKind::Image;
+        p.selection = Selection::Clipboard;
+        self.start_capture(&p);
+    }
+
+    fn tray_menu(&self) {
+        use tray::Item::*;
+        let presets: Vec<_> = self.store.presets.iter().enumerate()
+            .map(|(i, p)| (id::PRESET_BASE + i as u32, i18n::tr_str(&p.name))).collect();
+        let sub = tray::Menu::new(presets.iter().map(|(i, n)| Cmd(*i, n)).collect());
+        let (img, vid, show, ed, quit, pre) = (tr("Capturar imagem"), tr("Gravar vídeo"), tr("Abrir a janela de captura"),
+                                               tr("Abrir o Editor"), tr("Sair"), tr("Presets"));
+        let m = tray::Menu::new(vec![Cmd(id::CAPTURE_IMAGE, &img), Cmd(id::CAPTURE_VIDEO, &vid), Sub(&pre, sub), Separator,
+                                     Cmd(id::SHOW, &show), Cmd(id::OPEN_EDITOR, &ed), Separator, Cmd(id::EXIT, &quit)]);
+        m.track(self.hwnd, Some(id::SHOW));
+    }
+
+    fn tray_event(&mut self, ctl: &mut Ctl, lp: isize) {
+        let ev = (lp & 0xFFFF) as u32;
+        let h = HWND(self.hwnd as _);
+        match ev {
+            // a click captures, a double click opens the window: the single click waits for the double-click time
+            WM_LBUTTONUP => {
+                if self.tray_ignore_up {
+                    self.tray_ignore_up = false;
+                } else {
+                    unsafe { SetTimer(Some(h), TRAY_CLICK_TIMER, GetDoubleClickTime(), None) };
+                }
+            }
+            WM_LBUTTONDBLCLK => {
+                unsafe {
+                    let _ = KillTimer(Some(h), TRAY_CLICK_TIMER);
+                }
+                self.tray_ignore_up = true;
+                self.show(ctl);
+            }
+            NIN_KEYSELECT => self.start_capture(&self.current()),
+            WM_RBUTTONUP | WM_CONTEXTMENU => {
+                unsafe {
+                    let _ = KillTimer(Some(h), TRAY_CLICK_TIMER);
+                }
+                self.tray_menu();
+            }
+            _ => {}
+        }
+    }
+
+    /// ProcessCommandLine: the switches of this start or of a later one (forwarded); without any, the window shows.
+    fn command_line(&mut self, ctl: &mut Ctl, line: &str, startup: bool) {
+        use cmdline::Cmd;
+        let args = instance::split_command_line(line);
+        if let Some(first) = args.first() {
+            log::write(&format!("Command line: {} argument(s), first {first}", args.len()));
+        }
+        let (mut hide, mut handled) = (false, false);
+        for c in cmdline::parse(&args) {
+            match c {
+                Cmd::Hide => hide = true,
+                Cmd::Exit => {
+                    unsafe {
+                        let _ = windows::Win32::UI::WindowsAndMessaging::PostMessageW(
+                            Some(HWND(self.hwnd as _)), WM_COMMAND, WPARAM(id::EXIT as usize), LPARAM(0));
+                    }
+                    handled = true;
+                }
+                Cmd::Help => {
+                    std::thread::spawn(|| unsafe {
+                        let text = snapcore::wide::to_wide(tr(cmdline::HELP));
+                        let title = snapcore::wide::to_wide(tr("Snapnab — linha de comando"));
+                        MessageBoxW(None, PCWSTR(text.as_ptr()), PCWSTR(title.as_ptr()), MB_ICONINFORMATION);
+                    });
+                    handled = true;
+                }
+                Cmd::CaptureImage => {
+                    self.start_capture(&self.store.first_of_kind(CaptureKind::Image));
+                    handled = true;
+                }
+                Cmd::CaptureVideo => {
+                    self.start_capture(&self.store.first_of_kind(CaptureKind::Video));
+                    handled = true;
+                }
+                Cmd::Clipboard => {
+                    self.capture_clipboard();
+                    handled = true;
+                }
+                Cmd::Preset(name) => {
+                    let found = self.store.presets.iter().find(|p| p.name.to_lowercase() == name.to_lowercase()).cloned();
+                    if let Some(p) = found {
+                        self.start_capture(&p);
+                        handled = true;
+                    }
+                }
+                Cmd::Region(None) => {
+                    self.notify("Snapnab", &tr("/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."));
+                    handled = true;
+                }
+                Cmd::Delay(_) | Cmd::Output(_) => {}
+                other => {
+                    log::write(&format!("Command line: {other:?} is not in the Rust app yet"));
+                    handled = true;
+                }
+            }
+        }
+        if !handled && (!startup || (!hide && reg::get_dword(OsStr::new("ShowCaptureWindow"), 1, None) != 0)) {
+            self.show(ctl);
+        }
+    }
+
+    fn on_ipc(&mut self, m: ipc::Message) {
+        match m.code {
+            ipc::code::EDITOR_START_CAPTURE => {
+                let k = if m.ivalue == 1 { CaptureKind::Video } else { CaptureKind::Image };
+                self.start_capture(&self.store.first_of_kind(k));
+            }
+            ipc::code::EDITOR_CLOSED => log::write("Editor closed"),
+            ipc::code::RELOAD_CONFIG => self.store = PresetStore::load(),
+            _ => {}
+        }
+    }
+
+    /// The capture window (drawn by `window::draw`) and what its clicks ask for.
+    fn main_ui(&mut self, ctl: &mut Ctl, ui: &mut egui::Ui) {
+        for a in window::draw(&mut self.store, ui) {
+            match a {
+                Action::Changed => {
+                    self.store.save();
+                }
+                Action::Capture => self.start_capture(&self.current()),
+                Action::OpenEditor => self.open_editor(),
+                Action::LibraryFolder => self.command(ctl, id::LIBRARY_FOLDER),
+                Action::Logs => self.command(ctl, id::LOGS),
+                Action::About => about(),
+                Action::Exit => self.exit(ctl),
+            }
+        }
+    }
+}
+
+fn shell_open(path: &str) {
+    let p = snapcore::wide::to_wide(path);
+    unsafe {
+        ShellExecuteW(None, w!("open"), PCWSTR(p.as_ptr()), PCWSTR::null(), PCWSTR::null(), SW_SHOWNORMAL);
+    }
+}
+
+fn about() {
+    let text = format!("Snapnab {VERSION}{}\n\n{}\n{}", tr(" — captura de tela e gravação de vídeo"),
+                       tr("Software livre sob a GNU General Public License versão 3."),
+                       String::from_utf16_lossy(&snapcore::library::library_dir()));
+    std::thread::spawn(move || unsafe {
+        let t = snapcore::wide::to_wide(text);
+        let title = snapcore::wide::to_wide(tr("Sobre o Snapnab"));
+        MessageBoxW(None, PCWSTR(t.as_ptr()), PCWSTR(title.as_ptr()), MB_ICONINFORMATION);
+    });
+}
+
+impl App for CaptureApp {
+    fn start(&mut self, ctl: &mut Ctl) {
+        TASKBAR_CREATED.store(unsafe { RegisterWindowMessageW(w!("TaskbarCreated")) }, Ordering::Relaxed);
+        let spec = WindowSpec {
+            class: ipc::CAPTURE_WND_CLASS,
+            title: "Snapnab".into(),
+            size: (640.0, 330.0),
+            visible: false,
+            resizable: false,
+            intercept: Some(intercept),
+            clear_color: [0.97, 0.97, 0.98, 1.0],
+            ..Default::default()
+        };
+        let Some(k) = ctl.create(&spec) else {
+            log::write("Capture window: could not be created");
+            ctl.exit();
+            return;
+        };
+        self.main = Some(k);
+        self.hwnd = ctl.hwnd(k);
+        center_on_primary(self.hwnd);
+        tray::add(self.hwnd, &tr("Snapnab — clique para capturar"));
+        unsafe {
+            let _ = AddClipboardFormatListener(HWND(self.hwnd as _));
+        }
+        let waker = ctl.waker();
+        self.ipc = Notify::start(Channel::Capture, move |m| waker.send(Ev::Ipc(m)));
+        self.command_line(ctl, &instance::command_line(), true);
+    }
+
+    fn ui(&mut self, ctl: &mut Ctl, win: WinKey, ui: &mut egui::Ui) {
+        if Some(win) == self.main {
+            self.main_ui(ctl, ui);
+        }
+    }
+
+    fn message(&mut self, ctl: &mut Ctl, m: RawMsg) {
+        match m.msg {
+            WM_COPYDATA => {
+                if let Some(t) = m.text {
+                    self.command_line(ctl, &t, false);
+                }
+            }
+            WM_COMMAND => self.command(ctl, (m.wparam & 0xFFFF) as u32),
+            tray::WM_SNAP_TRAY => self.tray_event(ctl, m.lparam),
+            WM_TIMER => {
+                unsafe {
+                    let _ = KillTimer(Some(HWND(self.hwnd as _)), TRAY_CLICK_TIMER);
+                }
+                self.start_capture(&self.current());
+            }
+            WM_HOTKEY | WM_CLIPBOARDUPDATE => {}
+            x if x == TASKBAR_CREATED.load(Ordering::Relaxed) => tray::add(self.hwnd, &tr("Snapnab — clique para capturar")),
+            _ => {}
+        }
+    }
+
+    fn close_requested(&mut self, ctl: &mut Ctl, win: WinKey) {
+        if Some(win) == self.main {
+            // the capture window hides; the app stays in the tray
+            if let Some(w) = ctl.window(win) {
+                w.set_visible(false);
+            }
+        } else {
+            ctl.close(win);
+        }
+    }
+
+    fn event(&mut self, _ctl: &mut Ctl, ev: Box<dyn std::any::Any + Send>) {
+        if let Ok(ev) = ev.downcast::<Ev>() {
+            match *ev {
+                Ev::Ipc(m) => self.on_ipc(m),
+            }
+        }
+    }
+}
+
+/// The capture window starts in the middle of the primary screen's work area, a third of the way down.
+fn center_on_primary(hwnd: isize) {
+    use windows::Win32::Foundation::{POINT, RECT};
+    use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MONITOR_DEFAULTTOPRIMARY, MONITORINFO, MonitorFromPoint};
+    use windows::Win32::UI::WindowsAndMessaging::{GetWindowRect, SWP_NOACTIVATE, SWP_NOSIZE, SWP_NOZORDER, SetWindowPos};
+    unsafe {
+        let h = HWND(hwnd as _);
+        let mut wr = RECT::default();
+        let _ = GetWindowRect(h, &mut wr);
+        let mon = MonitorFromPoint(POINT { x: 0, y: 0 }, MONITOR_DEFAULTTOPRIMARY);
+        let mut mi = MONITORINFO { cbSize: std::mem::size_of::<MONITORINFO>() as u32, ..Default::default() };
+        let _ = GetMonitorInfoW(mon, &mut mi);
+        let wa = mi.rcWork;
+        let (ww, wh) = (wr.right - wr.left, wr.bottom - wr.top);
+        let _ = SetWindowPos(h, None, wa.left + (wa.right - wa.left - ww) / 2, wa.top + (wa.bottom - wa.top - wh) / 3, 0, 0,
+                             SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+}
+
+fn main() {
+    instance::wait_for_previous_instance(ipc::CAPTURE_WND_CLASS);
+    let Some(mutex) = instance::claim_or_forward(ipc::CAPTURE_MUTEX, ipc::CAPTURE_WND_CLASS) else {
+        // forwarded: ends right away, without the DLL unload notifications (third-party overlays injected into
+        // every process crashed in them when the process ended this early)
+        unsafe {
+            let _ = TerminateProcess(GetCurrentProcess(), 0);
+        }
+        return;
+    };
+    unsafe {
+        let _ = CoInitializeEx(None, COINIT_APARTMENTTHREADED);
+    }
+    log::init("Snapnab", VERSION);
+    // a windowed program has no console: a panic goes to the log before the process ends
+    std::panic::set_hook(Box::new(|info| log::write(&format!("PANIC: {info}"))));
+    i18n::init();
+    let app = CaptureApp { store: PresetStore::load(), main: None, hwnd: 0, ipc: None, tray_ignore_up: false };
+    if let Err(e) = snapui::host::run(app, |_| {}) {
+        log::write(&format!("Event loop: {e}"));
+    }
+    log::write("Snapnab exited");
+    drop(mutex);
+}

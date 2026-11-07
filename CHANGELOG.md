@@ -17,6 +17,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - The Editor's objects (arrows, shapes, texts, callouts, steps, stamps, magnifiers, hide areas, shadows) are drawn by
   Rust code, pixel for pixel as before; their saving and opening in the .snap, copy and paste between images and
   clicking on them run in Rust too, reading and writing the same files.
+- Work in progress on the `rust-rewrite` branch: a new capture app (`Snapnab.exe`) in Rust with an egui interface
+  drawn on the GPU. It already starts in the tray, keeps one instance, takes the forwarded command line, talks to the
+  Editor and reads and writes the same presets file; it does not capture yet and is not shipped.
 
 ## [0.4.1] — 2026-11-03
 

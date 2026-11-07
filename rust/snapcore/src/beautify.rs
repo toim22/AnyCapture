@@ -32,6 +32,26 @@ pub struct BeautifyOptions {
     pub auto_balance: bool,
 }
 
+impl Default for BeautifyOptions {
+    /// The defaults of Beautify.h.
+    fn default() -> Self {
+        BeautifyOptions {
+            background: 1,
+            color1: crate::color::rgb(102, 126, 234),
+            color2: crate::color::rgb(118, 75, 162),
+            angle: 135,
+            image_path: Vec::new(),
+            padding: 64,
+            radius: 12,
+            shadow: 45,
+            shadow_size: 24,
+            align: 4,
+            aspect: 0,
+            auto_balance: true,
+        }
+    }
+}
+
 /// The desktop wallpaper file (SPI_GETDESKWALLPAPER, or the copy Windows keeps), or empty.
 pub fn wallpaper_path() -> Vec<u16> {
     const MAX_PATH: usize = 260;

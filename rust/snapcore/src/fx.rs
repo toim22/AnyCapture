@@ -881,6 +881,54 @@ pub struct CaptureEffects {
     pub beautify_opt: BeautifyOptions,
 }
 
+impl Default for CaptureEffects {
+    /// The defaults of Effects.h.
+    fn default() -> Self {
+        let rgb = crate::color::rgb;
+        CaptureEffects {
+            border: false,
+            border_width: 4,
+            border_color: rgb(40, 40, 40),
+            filter: false,
+            filter_kind: 0,
+            shadow: false,
+            shadow_offset: 6,
+            shadow_blur: 6,
+            shadow_opacity: 50,
+            caption: false,
+            caption_text: "{date} {time} — {computer}".encode_utf16().collect(),
+            caption_top: false,
+            replace_color: false,
+            replace_from: rgb(255, 255, 255),
+            replace_to: rgb(255, 255, 0),
+            replace_tolerance: 10,
+            scale: false,
+            scale_percent: 100,
+            edge: false,
+            edge_style: 0,
+            edge_size: 14,
+            edge_sides: 6,
+            trim: false,
+            trim_tolerance: 8,
+            adjust: false,
+            brightness: 0,
+            contrast: 0,
+            hue: 0,
+            saturation: 0,
+            rotate: false,
+            rotate_kind: 0,
+            watermark: false,
+            watermark_text: "Snapnab".encode_utf16().collect(),
+            watermark_opacity: 35,
+            watermark_tiled: true,
+            resolution: false,
+            dpi: 300,
+            beautify: false,
+            beautify_opt: BeautifyOptions::default(),
+        }
+    }
+}
+
 /// Geometry first, then color, text and finish (border, edge effects and shadow last), Beautify at the end.
 pub fn apply_capture_effects(s: &Image, e: &CaptureEffects) -> Image {
     let mut img = if e.trim { auto_trim(s, e.trim_tolerance) } else { s.clone() };

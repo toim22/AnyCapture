@@ -1,14 +1,24 @@
 //! Snapnab's user interface in egui (immediate mode: the UI is a function called every frame, which reads the state
-//! and draws the widgets, instead of a tree of window objects kept in sync). This first piece checks the text the
-//! interface needs: the Windows fonts, right-to-left scripts and the Indic ones.
+//! and draws the widgets, instead of a tree of window objects kept in sync).
+//!
+//! - `host`: the windows (winit), drawn by egui on the GPU (wgpu), with their Win32 classes and messages
+//! - the fonts and the text check of the scripts Snapnab ships
 
-use std::sync::Arc;
+use std::sync::{Arc, OnceLock};
 
 use egui::{FontData, FontDefinitions, FontFamily};
+
+pub mod host;
 
 /// Windows' own fonts, so every language Snapnab ships has its letters: Segoe UI (Latin, Greek, Cyrillic, Arabic,
 /// Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and Segoe UI Emoji.
 pub fn install_fonts(ctx: &egui::Context) {
+    static DEFS: OnceLock<FontDefinitions> = OnceLock::new();
+    ctx.set_fonts(DEFS.get_or_init(load_fonts).clone());
+}
+
+/// The font files are read once per process; every window's Context shares them.
+fn load_fonts() -> FontDefinitions {
     let mut defs = FontDefinitions::default();
     let dir = std::env::var("WINDIR").unwrap_or_else(|_| r"C:\Windows".into()) + r"\Fonts\";
     let mut names = Vec::new();
@@ -31,7 +41,7 @@ pub fn install_fonts(ctx: &egui::Context) {
     prop.splice(0..0, text.iter().cloned());
     let monospace = defs.families.entry(FontFamily::Monospace).or_default();
     monospace.splice(0..0, mono.into_iter().chain(text));
-    ctx.set_fonts(defs);
+    defs
 }
 
 /// Sample lines in the scripts that need shaping: Arabic and Urdu (right to left, joined letters) and Hindi and

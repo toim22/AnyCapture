@@ -25,6 +25,8 @@
 //! - `ai`: the AI assistant's request
 //! - `doc`, `render`, `stamps`: the editor's objects, their painters and the stamp images (emoji, labels, cursors)
 //! - `serial`: the editor's objects as XML, in the .snap and on the clipboard
+//! - `presets`: the capture presets (Presets1.xml)
+//! - `ipc`, `instance`: the channel between the two programs, one instance per program, forwarded command lines
 
 pub mod ai;
 pub mod barcode;
@@ -41,12 +43,15 @@ pub mod gif;
 pub mod hdr;
 pub mod i18n;
 pub mod image;
+pub mod instance;
+pub mod ipc;
 pub mod library;
 pub mod log;
 pub mod net;
 pub mod ocr;
 pub mod paths;
 pub mod pdf;
+pub mod presets;
 pub mod reg;
 pub mod render;
 pub mod serial;
