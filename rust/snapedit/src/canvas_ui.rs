@@ -9,7 +9,7 @@ use egui::{Color32, CursorIcon, Pos2, Rect, Sense, Shape, Stroke, StrokeKind, Te
 use snapcore::doc::{DrawObj, ObjType, RectF};
 use snapcore::image::{Image, ca, cb, cg, cr};
 
-use crate::canvas::{Canvas, Cursor, Drag, Mods, P, obj_extent};
+use crate::canvas::{Canvas, Cursor, Drag, Mods, P, Tool, obj_extent};
 use crate::tr;
 
 const BLUE: Color32 = Color32::from_rgb(30, 120, 230);
@@ -96,6 +96,8 @@ pub struct CanvasView {
     pub ppp: f32,
     /// the in-place text box takes the focus on its first frame
     text_focus: bool,
+    /// the Pen or Eraser drawn as the cursor (#4): center and radius in points
+    brush: Option<(Pos2, f32)>,
 }
 
 fn to_c32(c: (u8, u8, u8)) -> Color32 {
@@ -162,6 +164,7 @@ impl Default for CanvasView {
             rect: Rect::NOTHING,
             ppp: 1.0,
             text_focus: false,
+            brush: None,
         }
     }
 }
@@ -288,10 +291,19 @@ impl CanvasView {
                 _ => {}
             }
         }
+        self.brush = None;
         if resp.hovered() || self.pressed {
             if let Some(pos) = ui.input(|i| i.pointer.hover_pos()) {
-                let icon = cursor_icon(c.cursor_for_point(self.phys(pos)));
-                ui.ctx().set_cursor_icon(icon);
+                let cur = c.cursor_for_point(self.phys(pos));
+                // the Pen and the Eraser show their tip, at its width and the zoom, instead of the cross (#4)
+                let brush = matches!(c.tool, Tool::Pen | Tool::Eraser) && cur == Cursor::Cross;
+                let r = c.styles[c.tool.index()].width.max(0.5) / 2.0 * c.zoom as f32 / self.ppp;
+                if brush && r * self.ppp >= 2.0 {
+                    self.brush = Some((pos, r));
+                    ui.ctx().set_cursor_icon(CursorIcon::None);
+                } else {
+                    ui.ctx().set_cursor_icon(cursor_icon(cur));
+                }
             }
         }
     }
@@ -346,6 +358,11 @@ impl CanvasView {
         }
         self.overlays(&ctx, p, c, ir);
         self.rulers(p, c);
+        if let Some((at, r)) = self.brush {
+            // dark outside and light inside: visible on any picture
+            p.circle_stroke(at, r + 0.5, Stroke::new(1.0, Color32::from_black_alpha(170)));
+            p.circle_stroke(at, (r - 0.5).max(0.5), Stroke::new(1.0, Color32::from_white_alpha(220)));
+        }
     }
 
     fn checker(&mut self, ctx: &egui::Context, p: &egui::Painter, r: Rect) {

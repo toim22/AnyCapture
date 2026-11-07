@@ -597,6 +597,15 @@ impl CaptureApp {
                 self.show(ctl);
             }
             NIN_KEYSELECT => self.start_capture(ctl, &self.current()),
+            // a click on the notification of a capture opens it in the Editor (#7)
+            tray::NIN_BALLOONUSERCLICK => {
+                if let Some(path) = tray::take_balloon_capture().filter(|p| std::path::Path::new(p).exists()) {
+                    if let Some(i) = &self.ipc {
+                        i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
+                    }
+                    engine::deliver_to_editor(&env!(self), &path);
+                }
+            }
             WM_RBUTTONUP | WM_CONTEXTMENU => {
                 unsafe {
                     let _ = KillTimer(Some(h), TRAY_CLICK_TIMER);

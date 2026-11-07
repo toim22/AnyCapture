@@ -99,7 +99,7 @@ msgstr "La detección de rostros no está disponible en este Windows."
 msgid "Falha na detecção de rostos."
 msgstr "Error en la detección de rostros."
 
-#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:851
+#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:860
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s no está instalado en este equipo (o es la versión de Microsoft Store, sin automatización)."
@@ -174,7 +174,7 @@ msgstr "Archivo gráfico"
 msgid "Novo preset"
 msgstr "Nuevo ajuste"
 
-#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:251 rust/snapedit/src/app/docs.rs:478
+#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:254 rust/snapedit/src/app/docs.rs:484
 msgid "Captura"
 msgstr "Captura"
 
@@ -498,7 +498,7 @@ msgstr "No se encontró ninguna cámara web."
 msgid "Selecione 3 ou mais objetos para distribuir."
 msgstr "Seleccione 3 o más objetos para distribuir."
 
-#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:563 rust/snapedit/src/app/extras.rs:614
+#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:569 rust/snapedit/src/app/extras.rs:614
 msgid "OCR indisponível: "
 msgstr "OCR no disponible: "
 
@@ -638,19 +638,19 @@ msgstr "triángulo"
 msgid "Clique nos cantos do polígono; clique no primeiro ponto, dê um duplo clique ou tecle Enter para fechar (Esc cancela)."
 msgstr "Haga clic en las esquinas del polígono; haga clic en el primer punto, doble clic o pulse Enter para cerrarlo (Esc cancela)."
 
-#: rust/snapedit/src/canvas_ui.rs:305
+#: rust/snapedit/src/canvas_ui.rs:317
 msgid "Nenhuma captura aberta — use “Capturar” ou abra um arquivo (Ctrl+O)."
 msgstr "No hay ninguna captura abierta — usa “Capturar” o abre un archivo (Ctrl+O)."
 
-#: rust/snapedit/src/canvas_ui.rs:391
+#: rust/snapedit/src/canvas_ui.rs:408
 msgid "Prévia — Aplicar ou Cancelar no painel"
 msgstr "Vista previa — Aplicar o Cancelar en el panel"
 
-#: rust/snapedit/src/canvas_ui.rs:418
+#: rust/snapedit/src/canvas_ui.rs:435
 msgid "(duplo clique abre)"
 msgstr "(doble clic para abrir)"
 
-#: rust/snapedit/src/canvas_ui.rs:513
+#: rust/snapedit/src/canvas_ui.rs:530
 #, c-format
 msgid "%d × %d  — Enter aplica, Esc cancela"
 msgstr "%d × %d  — Intro aplica, Esc cancela"
@@ -1748,7 +1748,7 @@ msgstr "Guardar como archivo (PNG, JPG, PDF…)"
 msgid "Enviar por e-mail"
 msgstr "Enviar por correo"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:526
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/snapnab/src/dialogs.rs:526
 msgid "Programa"
 msgstr "Programa"
 
@@ -1784,7 +1784,7 @@ msgstr "Rehacer"
 msgid "Refazer (Ctrl+Y)"
 msgstr "Rehacer (Ctrl+Y)"
 
-#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:358 rust/snapedit/src/app/docs.rs:363
 msgid "Nova imagem"
 msgstr "Nueva imagen"
 
@@ -1812,7 +1812,7 @@ msgstr "Guardar"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "Guardar en la biblioteca (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
 msgid "Salvar como"
 msgstr "Guardar como"
 
@@ -2085,7 +2085,7 @@ msgstr "Editar una copia del tema…"
 msgid "Editar o tema…"
 msgstr "Editar el tema…"
 
-#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/snapnab/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (copia)"
 
@@ -4313,7 +4313,7 @@ msgstr ""
 "Edición de capturas con objetos vectoriales, efectos, Smart Move,\n"
 "OCR, exportación a PDF y edición de vídeo (cortes y GIF)."
 
-#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:951
+#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:960
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "Software libre bajo la Licencia Pública General GNU versión 3."
 
@@ -4366,7 +4366,7 @@ msgstr "Haz primero una selección (herramienta Selección) o un recorte."
 msgid "Ângulo (graus, horário)"
 msgstr "Ángulo (grados, sentido horario)"
 
-#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:349 rust/snapedit/src/app/extras.rs:539
+#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:355 rust/snapedit/src/app/extras.rs:539
 msgid "Cor de fundo"
 msgstr "Color de fondo"
 
@@ -4378,11 +4378,11 @@ msgstr "Fondo transparente"
 msgid "Os objetos serão mesclados à imagem."
 msgstr "Los objetos se combinarán con la imagen."
 
-#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:347 rust/snapedit/src/app/video.rs:456
+#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:353 rust/snapedit/src/app/video.rs:456
 msgid "Largura (px)"
 msgstr "Ancho (px)"
 
-#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:553
+#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "Alto (px)"
 
@@ -4402,7 +4402,7 @@ msgstr "Anclaje"
 msgid "Cor do canvas"
 msgstr "Color del lienzo"
 
-#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "Transparente"
 
@@ -4515,108 +4515,108 @@ msgstr "Archivo importado"
 msgid "Salvo na biblioteca: "
 msgstr "Guardado en la biblioteca: "
 
-#: rust/snapedit/src/app/docs.rs:266
+#: rust/snapedit/src/app/docs.rs:269
 msgid "Qualidade JPEG (1–100)"
 msgstr "Calidad JPEG (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:273
+#: rust/snapedit/src/app/docs.rs:276
 msgid "Sem perdas (ideal para capturas de tela)"
 msgstr "Sin pérdida (ideal para capturas de pantalla)"
 
-#: rust/snapedit/src/app/docs.rs:274
+#: rust/snapedit/src/app/docs.rs:277
 msgid "Qualidade com perdas (1–100)"
 msgstr "Calidad con pérdida (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:286
+#: rust/snapedit/src/app/docs.rs:289
 msgid "Qualidade AVIF (1–100)"
 msgstr "Calidad AVIF (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:316 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
+#: rust/snapedit/src/app/docs.rs:319 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
 msgid "Não foi possível salvar:\n"
 msgstr "No se pudo guardar:\n"
 
-#: rust/snapedit/src/app/docs.rs:319
+#: rust/snapedit/src/app/docs.rs:322
 msgid "Salvo em "
 msgstr "Guardado en "
 
-#: rust/snapedit/src/app/docs.rs:336 rust/snapnab/src/engine.rs:479
+#: rust/snapedit/src/app/docs.rs:342 rust/snapnab/src/engine.rs:479
 msgid "A área de transferência não contém imagem."
 msgstr "El portapapeles no contiene una imagen."
 
-#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:227
+#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:227
 msgid "Da área de transferência"
 msgstr "Desde el portapapeles"
 
-#: rust/snapedit/src/app/docs.rs:340
+#: rust/snapedit/src/app/docs.rs:346
 msgid "Imagem nova criada a partir da área de transferência."
 msgstr "Imagen nueva creada desde el portapapeles."
 
-#: rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/app/docs.rs:363
 msgid "Imagem nova"
 msgstr "Imagen nueva"
 
-#: rust/snapedit/src/app/docs.rs:401
+#: rust/snapedit/src/app/docs.rs:407
 msgid "Enviar para a Lixeira?\n"
 msgstr "¿Enviar a la Papelera?\n"
 
-#: rust/snapedit/src/app/docs.rs:403
+#: rust/snapedit/src/app/docs.rs:409
 #, c-format
 msgid "Enviar %zu itens da biblioteca para a Lixeira?"
 msgstr "¿Enviar %zu elementos de la biblioteca a la Papelera?"
 
-#: rust/snapedit/src/app/docs.rs:425
+#: rust/snapedit/src/app/docs.rs:431
 msgid "Item enviado para a Lixeira."
 msgstr "Elemento enviado a la Papelera."
 
-#: rust/snapedit/src/app/docs.rs:427
+#: rust/snapedit/src/app/docs.rs:433
 #, c-format
 msgid "%zu itens enviados para a Lixeira."
 msgstr "%zu elementos enviados a la Papelera."
 
-#: rust/snapedit/src/app/docs.rs:465
+#: rust/snapedit/src/app/docs.rs:471
 msgid "Formato das imagens"
 msgstr "Formato de las imágenes"
 
-#: rust/snapedit/src/app/docs.rs:466
+#: rust/snapedit/src/app/docs.rs:472
 msgid "Vídeos são copiados em MP4."
 msgstr "Los vídeos se copian en MP4."
 
-#: rust/snapedit/src/app/docs.rs:468
+#: rust/snapedit/src/app/docs.rs:474
 #, c-format
 msgid "Exportar %zu item(ns)"
 msgstr "Exportar %zu elemento(s)"
 
-#: rust/snapedit/src/app/docs.rs:471
+#: rust/snapedit/src/app/docs.rs:477
 msgid "Exportar para a pasta"
 msgstr "Exportar a la carpeta"
 
-#: rust/snapedit/src/app/docs.rs:500
+#: rust/snapedit/src/app/docs.rs:506
 #, c-format
 msgid "%d item(ns) exportado(s) para %s"
 msgstr "%d elemento(s) exportado(s) a %s"
 
-#: rust/snapedit/src/app/docs.rs:501
+#: rust/snapedit/src/app/docs.rs:507
 #, c-format
 msgid " — %d falha(s)"
 msgstr " — %d error(es)"
 
-#: rust/snapedit/src/app/docs.rs:520
+#: rust/snapedit/src/app/docs.rs:526
 msgid "Abrir em programa externo"
 msgstr "Abrir en un programa externo"
 
-#: rust/snapedit/src/app/docs.rs:541
+#: rust/snapedit/src/app/docs.rs:547
 msgid "Captura: "
 msgstr "Captura: "
 
-#: rust/snapedit/src/app/docs.rs:555
+#: rust/snapedit/src/app/docs.rs:561
 msgid "Reconhecendo o texto…"
 msgstr "Reconociendo el texto…"
 
-#: rust/snapedit/src/app/docs.rs:560
+#: rust/snapedit/src/app/docs.rs:566
 msgid "(nenhum texto reconhecido)"
 msgstr "(no se reconoció texto)"
 
-#: rust/snapedit/src/app/docs.rs:561
+#: rust/snapedit/src/app/docs.rs:567
 msgid "Grab Text — texto reconhecido"
 msgstr "Capturar texto — texto reconocido"
 
@@ -4706,7 +4706,7 @@ msgstr "No se pudo abrir la impresión: no hay ninguna impresora instalada o el 
 msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
 msgstr "La impresora no aceptó el documento (compruebe que esté encendida y que el servicio de impresión de Windows esté en ejecución)."
 
-#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:910
+#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:919
 msgid "O manual não foi encontrado:\n"
 msgstr "No se encontró el manual:\n"
 
@@ -5704,7 +5704,7 @@ msgstr "Extraer los pasos"
 msgid "Extrair o texto"
 msgstr "Extraer el texto"
 
-#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:427
+#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "Aceptar"
 
@@ -5926,7 +5926,7 @@ msgstr "Cuentagotas de pantalla"
 msgid "Capturar e fixar na tela"
 msgstr "Capturar y fijar en la pantalla"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:234
+#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:234
 msgid "Fixar da área de transferência"
 msgstr "Fijar desde el portapapeles"
 
@@ -6419,7 +6419,11 @@ msgstr "guardada en "
 msgid "Captura adicionada à biblioteca"
 msgstr "Captura añadida a la biblioteca"
 
-#: rust/snapnab/src/engine.rs:1104
+#: rust/snapnab/src/engine.rs:922
+msgid "Clique para abrir no Editor."
+msgstr "Haz clic para abrirla en el Editor."
+
+#: rust/snapnab/src/engine.rs:1109
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr "Imágenes y documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento de Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos los archivos (*.*)|*.*|"
 
@@ -6641,64 +6645,64 @@ msgstr "Opciones…"
 msgid "Ocultar o One Click"
 msgstr "Ocultar One Click"
 
-#: rust/snapnab/src/main.rs:641
+#: rust/snapnab/src/main.rs:650
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — línea de comandos"
 
-#: rust/snapnab/src/main.rs:671
+#: rust/snapnab/src/main.rs:680
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region espera x,y,ancho,alto (p. ej.: /region 100,100,800,600)."
 
-#: rust/snapnab/src/main.rs:683
+#: rust/snapnab/src/main.rs:692
 msgid "Nenhuma janela com esse título: "
 msgstr "Ninguna ventana con ese título: "
 
-#: rust/snapnab/src/main.rs:695
+#: rust/snapnab/src/main.rs:704
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "El monitor %d no existe (hay %zu)."
 
-#: rust/snapnab/src/main.rs:715
+#: rust/snapnab/src/main.rs:724
 msgid "Não foi possível fixar: "
 msgstr "No se pudo fijar: "
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:235
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:235
 msgid "Fixar um arquivo…"
 msgstr "Fijar un archivo…"
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:233
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:233
 msgid "Capturar e fixar"
 msgstr "Capturar y fijar"
 
-#: rust/snapnab/src/main.rs:863
+#: rust/snapnab/src/main.rs:872
 msgid "Mostrar todas"
 msgstr "Mostrar todas"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Ocultar todas"
 msgstr "Ocultar todas"
 
-#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
+#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
 msgid "Fechar todas"
 msgstr "Cerrar todas"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Desligar \"atravessar cliques\""
 msgstr "Desactivar \"clics a través\""
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Reabrir a última fechada"
 msgstr "Reabrir la última cerrada"
 
-#: rust/snapnab/src/main.rs:865
+#: rust/snapnab/src/main.rs:874
 msgid "Histórico"
 msgstr "Historial"
 
-#: rust/snapnab/src/main.rs:950
+#: rust/snapnab/src/main.rs:959
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — captura de pantalla y grabación de vídeo"
 
-#: rust/snapnab/src/main.rs:952
+#: rust/snapnab/src/main.rs:961
 msgid ""
 "Processo de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicando-se por memória\n"
 "compartilhada (canal IPC) e WM_COPYDATA. Capturas ficam na biblioteca:\n"
@@ -6706,24 +6710,24 @@ msgstr ""
 "Proceso de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicándose mediante memoria\n"
 "compartida (canal IPC) y WM_COPYDATA. Las capturas se guardan en la biblioteca:\n"
 
-#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:251
+#: rust/snapnab/src/main.rs:966 rust/snapnab/src/window.rs:251
 msgid "Sobre o Snapnab"
 msgstr "Acerca de Snapnab"
 
-#: rust/snapnab/src/main.rs:992 rust/snapnab/src/main.rs:1060 rust/snapnab/src/main.rs:1140
+#: rust/snapnab/src/main.rs:1001 rust/snapnab/src/main.rs:1069 rust/snapnab/src/main.rs:1149
 msgid "Snapnab — clique para capturar"
 msgstr "Snapnab — clic para capturar"
 
-#: rust/snapnab/src/main.rs:1012
+#: rust/snapnab/src/main.rs:1021
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — grabación recuperada"
 
-#: rust/snapnab/src/main.rs:1013
+#: rust/snapnab/src/main.rs:1022
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu grabación(es) interrumpida(s) recuperada(s) en la biblioteca."
 
-#: rust/snapnab/src/main.rs:1138
+#: rust/snapnab/src/main.rs:1147
 #, c-format
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — captura por intervalo: %d imagen(es)"
@@ -7077,7 +7081,7 @@ msgstr "Cambiar nombre…"
 msgid "Atalho…"
 msgstr "Atajo…"
 
-#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:150
+#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:160
 msgid "Novo preset…"
 msgstr "Nuevo ajuste…"
 
@@ -7416,4 +7420,3 @@ msgstr "Complete el inicio de sesión en el navegador"
 #: rust/snapui/src/upload_ui.rs:210
 msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "Autorice a Snapnab en la página que se abrió. Esta ventana se cerrará sola cuando el navegador vuelva."
-

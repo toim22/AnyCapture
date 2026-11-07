@@ -23,11 +23,15 @@ use windows::Win32::UI::Controls::{
     UDS_NOTHOUSANDS, UDS_SETBUDDYINT, UPDOWN_CLASSW,
 };
 use windows::Win32::UI::HiDpi::{AdjustWindowRectExForDpi, GetDpiForSystem, GetDpiForWindow};
-use windows::Win32::UI::Input::KeyboardAndMouse::{EnableWindow, MOD_ALT, MOD_CONTROL, MOD_SHIFT, SetFocus, VK_ESCAPE};
+use windows::Win32::UI::Input::KeyboardAndMouse::{
+    EnableWindow, GetAsyncKeyState, GetFocus, MOD_ALT, MOD_CONTROL, MOD_SHIFT, SetFocus, VK_CONTROL, VK_ESCAPE, VK_MENU, VK_SHIFT,
+    VK_SNAPSHOT,
+};
 use windows::Win32::UI::WindowsAndMessaging::{
-    BS_DEFPUSHBUTTON, CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, ES_AUTOHSCROLL, ES_NUMBER, GetDlgItem,
-    GetMessageW, GetWindowRect, GetWindowTextW, HMENU, IDC_ARROW, IsChild, IsDialogMessageW, LoadCursorW, MB_ICONWARNING, MSG,
-    MessageBoxW, RegisterClassW, SW_SHOW, SendMessageW, SetForegroundWindow, SetWindowTextW, ShowWindow, TranslateMessage,
+    BS_DEFPUSHBUTTON, CallNextHookEx, CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, ES_AUTOHSCROLL, ES_NUMBER, GetDlgItem,
+    GetForegroundWindow, GetMessageW, GetWindowRect, GetWindowTextW, HC_ACTION, HMENU, IDC_ARROW, IsChild, IsDialogMessageW, LoadCursorW, MB_ICONWARNING, MSG,
+    KBDLLHOOKSTRUCT, MessageBoxW, RegisterClassW, SW_SHOW, SendMessageW, SetForegroundWindow, SetWindowTextW, SetWindowsHookExW,
+    ShowWindow, TranslateMessage, UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
     WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_KEYDOWN, WM_SETFONT, WNDCLASSW, WS_BORDER, WS_CAPTION, WS_CHILD, WS_CLIPCHILDREN,
     WS_EX_CLIENTEDGE, WS_EX_DLGMODALFRAME, WS_EX_TOPMOST, WS_POPUP, WS_SYSMENU, WS_TABSTOP, WS_VISIBLE,
 };
@@ -115,6 +119,34 @@ thread_local! {
     /// the color fields of the form running on this thread: (control id, COLORREF)
     static COLORS: RefCell<Vec<(i32, u32)>> = const { RefCell::new(Vec::new()) };
     static CUSTOM: RefCell<[COLORREF; 16]> = RefCell::new([COLORREF(0xFFFFFF); 16]);
+    /// the form running on this thread and its hotkey fields, for the Print Screen hook
+    static HOTKEY_FIELDS: RefCell<(isize, Vec<isize>)> = const { RefCell::new((0, Vec::new())) };
+}
+
+/// Print Screen in a hotkey field (#6): Windows sends no key-down for it, so the hotkey control never sees it, and the
+/// key may belong to the Snipping Tool or to a Snapnab capture. While a hotkey field of this thread's form has the
+/// focus, this low-level hook (installed after those, so it comes first) puts the key in the field and keeps it.
+unsafe extern "system" fn print_screen_proc(code: i32, w: WPARAM, l: LPARAM) -> LRESULT {
+    let msg = w.0 as u32;
+    if code == HC_ACTION as i32 && matches!(msg, WM_KEYDOWN | WM_SYSKEYDOWN | WM_KEYUP | WM_SYSKEYUP) {
+        let k = unsafe { &*(l.0 as *const KBDLLHOOKSTRUCT) };
+        let focus = unsafe { GetFocus() }.0 as isize;
+        let ours = HOTKEY_FIELDS.with(|f| {
+            let f = f.borrow();
+            f.0 != 0 && unsafe { GetForegroundWindow() }.0 as isize == f.0 && f.1.contains(&focus)
+        });
+        if ours && k.vkCode == VK_SNAPSHOT.0 as u32 {
+            if matches!(msg, WM_KEYDOWN | WM_SYSKEYDOWN) {
+                let down = |vk: u16| unsafe { GetAsyncKeyState(vk as i32) } as u16 & 0x8000 != 0;
+                let mods = (if down(VK_SHIFT.0) { MOD_SHIFT.0 } else { 0 }) | (if down(VK_CONTROL.0) { MOD_CONTROL.0 } else { 0 })
+                    | (if down(VK_MENU.0) { MOD_ALT.0 } else { 0 });
+                let v = VK_SNAPSHOT.0 as u32 | mod_to_hkf(mods) << 8;
+                unsafe { SendMessageW(HWND(focus as _), HKM_SETHOTKEY, Some(WPARAM(v as usize)), None) };
+            }
+            return LRESULT(1);
+        }
+    }
+    unsafe { CallNextHookEx(None, code, w, l) }
 }
 
 fn color_text(c: u32) -> String {
@@ -255,6 +287,7 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
         RegisterClassW(&wc);
     });
     DONE.with(|d| d.set(None));
+    HOTKEY_FIELDS.with(|f| *f.borrow_mut() = (0, Vec::new()));
     COLORS.with(|c| {
         *c.borrow_mut() = fields
             .iter()
@@ -414,6 +447,7 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
                     label(l);
                     let c = child(Default::default(), HOTKEY_CLASSW, "", WS_TABSTOP.0 | WS_BORDER.0, cx, yy, cw, ctl_h, id, font);
                     SendMessageW(c, HKM_SETHOTKEY, Some(WPARAM(((*vk & 0xFF) | (mod_to_hkf(*mods) << 8)) as usize)), None);
+                    HOTKEY_FIELDS.with(|f| f.borrow_mut().1.push(c.0 as isize));
                     Some(c)
                 }
             };
@@ -431,6 +465,12 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
         if let Some(o) = owner_h {
             let _ = EnableWindow(o, false);
         }
+        HOTKEY_FIELDS.with(|f| f.borrow_mut().0 = h.0 as isize);
+        let hook = if HOTKEY_FIELDS.with(|f| f.borrow().1.is_empty()) {
+            None
+        } else {
+            SetWindowsHookExW(WH_KEYBOARD_LL, Some(print_screen_proc), None, 0).ok()
+        };
         let _ = ShowWindow(h, SW_SHOW);
         let _ = SetForegroundWindow(h);
         let _ = SetFocus(Some(first.unwrap_or(ok)));
@@ -463,6 +503,10 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
             let _ = EnableWindow(o, true);
             let _ = SetForegroundWindow(o);
         }
+        if let Some(k) = hook {
+            let _ = UnhookWindowsHookEx(k);
+        }
+        HOTKEY_FIELDS.with(|f| *f.borrow_mut() = (0, Vec::new()));
         let _ = DestroyWindow(h);
         let _ = DeleteObject(font.into());
         let _ = DeleteObject(bold.into());

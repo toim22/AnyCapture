@@ -2,6 +2,7 @@
 //! window, the right button opens the menu. The menu is a native Win32 popup menu: Windows draws it with the system
 //! look, and its WM_COMMAND reaches the capture window like the C++ app's did.
 
+use std::sync::Mutex;
 use std::sync::atomic::{AtomicIsize, Ordering};
 
 use windows::Win32::Foundation::{HWND, POINT};
@@ -9,16 +10,17 @@ use windows::Win32::Graphics::Gdi::{
     BI_RGB, BITMAPINFO, BITMAPINFOHEADER, CreateBitmap, CreateDIBSection, DIB_RGB_COLORS, DeleteObject, HBITMAP,
 };
 use windows::Win32::UI::Shell::{
-    NIF_ICON, NIF_INFO, NIF_MESSAGE, NIF_TIP, NIIF_INFO, NIIF_NOSOUND, NIM_ADD, NIM_DELETE, NIM_MODIFY, NIM_SETVERSION,
+    NIF_ICON, NIF_INFO, NIF_MESSAGE, NIF_TIP, NIIF_INFO, NIIF_LARGE_ICON, NIIF_NOSOUND, NIIF_USER, NIM_ADD, NIM_DELETE, NIM_MODIFY, NIM_SETVERSION,
     NOTIFYICON_VERSION_4, NOTIFYICONDATAW, Shell_NotifyIconW,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CreateIconIndirect, CreatePopupMenu, DestroyMenu, GetCursorPos, HICON, HMENU, ICONINFO, MF_CHECKED,
+    AppendMenuW, CreateIconIndirect, CreatePopupMenu, DestroyIcon, DestroyMenu, GetCursorPos, GetSystemMetrics, HICON, HMENU, ICONINFO, MF_CHECKED,
     MF_GRAYED, MF_POPUP, MF_SEPARATOR, MF_STRING, PostMessageW, SetForegroundWindow, SetMenuDefaultItem, TPM_RETURNCMD, TPM_RIGHTBUTTON,
-    TrackPopupMenu, WM_APP, WM_NULL,
+    SM_CXICON, TrackPopupMenu, WM_APP, WM_NULL,
 };
 use windows::core::PCWSTR;
 
+use snapcore::image::Image;
 use snapcore::wide::to_wide;
 
 /// The tray icon's callback message (WM_SNAP_TRAY of the C++ app).
@@ -26,6 +28,12 @@ pub const WM_SNAP_TRAY: u32 = WM_APP + 0x41;
 
 static ICON_SMALL: AtomicIsize = AtomicIsize::new(0);
 static ICON_BUSY: AtomicIsize = AtomicIsize::new(0);
+
+/// NIN_BALLOONUSERCLICK: the user clicked the notification.
+pub const NIN_BALLOONUSERCLICK: u32 = 0x405;
+
+/// The capture the last notification shows (its library file), for a click on it (#7); the icon shown in it.
+static BALLOON: Mutex<(String, isize)> = Mutex::new((String::new(), 0));
 
 /// The app icon drawn at run time (Icons.cpp MakeAppIcon): a blue rounded square with a white capture frame.
 pub fn app_icon(size: i32) -> HICON {
@@ -61,6 +69,11 @@ pub fn app_icon(size: i32) -> HICON {
             px[(y * size + x) as usize] = a << 24 | ch(r) << 16 | ch(g) << 8 | ch(b);
         }
     }
+    icon_from_pixels(&px, size)
+}
+
+/// An icon of `size`×`size` ARGB pixels (straight alpha).
+fn icon_from_pixels(px: &[u32], size: i32) -> HICON {
     unsafe {
         let bi = BITMAPINFO {
             bmiHeader: BITMAPINFOHEADER {
@@ -213,6 +226,7 @@ pub fn set_status(hwnd: isize, busy: bool, tip: &str) {
 
 /// A balloon notification from the tray icon.
 pub fn notify(hwnd: isize, title: &str, text: &str) {
+    set_balloon(String::new(), 0);
     let mut n = nid(hwnd);
     n.uFlags = NIF_INFO;
     copy(&mut n.szInfoTitle, title);
@@ -221,6 +235,43 @@ pub fn notify(hwnd: isize, title: &str, text: &str) {
     unsafe {
         let _ = Shell_NotifyIconW(NIM_MODIFY, &n);
     }
+}
+
+/// The notification after a capture that only went to the clipboard (#7): a miniature of the capture in it, and a click
+/// on it opens `lib` in the Editor (`take_balloon_capture`).
+pub fn notify_capture(hwnd: isize, title: &str, text: &str, img: &Image, lib: &str) {
+    let size = unsafe { GetSystemMetrics(SM_CXICON) }.max(32);
+    let thumb = snapcore::gdip::make_thumbnail(img, size, size);
+    let mut sq = Image::sized(size, size, 0);
+    sq.blit(&thumb, (size - thumb.w as i32) / 2, (size - thumb.h as i32) / 2, false);
+    let icon = if thumb.is_empty() { HICON::default() } else { icon_from_pixels(&sq.px, size) };
+    set_balloon(lib.to_owned(), icon.0 as isize);
+    let mut n = nid(hwnd);
+    n.uFlags = NIF_INFO;
+    copy(&mut n.szInfoTitle, title);
+    copy(&mut n.szInfo, text);
+    n.dwInfoFlags = NIIF_NOSOUND | if icon.is_invalid() { NIIF_INFO } else { NIIF_USER | NIIF_LARGE_ICON };
+    n.hBalloonIcon = icon;
+    unsafe {
+        let _ = Shell_NotifyIconW(NIM_MODIFY, &n);
+    }
+}
+
+/// The capture of the notification just clicked (once), if it showed one.
+pub fn take_balloon_capture() -> Option<String> {
+    let mut b = BALLOON.lock().unwrap_or_else(|e| e.into_inner());
+    Some(std::mem::take(&mut b.0)).filter(|p| !p.is_empty())
+}
+
+fn set_balloon(lib: String, icon: isize) {
+    let mut b = BALLOON.lock().unwrap_or_else(|e| e.into_inner());
+    if b.1 != 0 {
+        // the shell copied the previous icon when it showed it
+        unsafe {
+            let _ = DestroyIcon(HICON(b.1 as _));
+        }
+    }
+    *b = (lib, icon);
 }
 
 /// A native popup menu under construction.

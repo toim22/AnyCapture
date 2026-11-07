@@ -910,13 +910,18 @@ impl Engine {
         match lib {
             Some(lib) if p.preview_in_editor && editor && !p.output_clipboard_only => deliver_to_editor(env, &lib),
             _ if other || overlay => {}
-            _ => {
+            lib => {
                 let mut t = tr("Captura adicionada à biblioteca");
                 for d in &done {
                     t += "; ";
                     t += d;
                 }
-                env.notify("Snapnab", &(t + "."));
+                t += ".";
+                match lib {
+                    // a miniature of the capture in the notification; a click on it opens the Editor (#7)
+                    Some(l) => tray::notify_capture(env.hwnd, "Snapnab", &(t + "\n" + &tr("Clique para abrir no Editor.")), img, &l),
+                    None => env.notify("Snapnab", &t),
+                }
             }
         }
     }

@@ -99,7 +99,7 @@ msgstr "इस Windows पर चेहरा पहचान उपलब्ध
 msgid "Falha na detecção de rostos."
 msgstr "चेहरा पहचान विफल रही।"
 
-#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:851
+#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:860
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s इस कंप्यूटर पर इंस्टॉल नहीं है (या यह Microsoft Store संस्करण है, बिना ऑटोमेशन के)।"
@@ -174,7 +174,7 @@ msgstr "ग्राफ़िक फ़ाइल"
 msgid "Novo preset"
 msgstr "नया प्रीसेट"
 
-#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:251 rust/snapedit/src/app/docs.rs:478
+#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:254 rust/snapedit/src/app/docs.rs:484
 msgid "Captura"
 msgstr "कैप्चर"
 
@@ -498,7 +498,7 @@ msgstr "कोई वेबकैम नहीं मिला।"
 msgid "Selecione 3 ou mais objetos para distribuir."
 msgstr "वितरित करने के लिए 3 या अधिक ऑब्जेक्ट चुनें।"
 
-#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:563 rust/snapedit/src/app/extras.rs:614
+#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:569 rust/snapedit/src/app/extras.rs:614
 msgid "OCR indisponível: "
 msgstr "OCR उपलब्ध नहीं: "
 
@@ -638,19 +638,19 @@ msgstr "त्रिभुज"
 msgid "Clique nos cantos do polígono; clique no primeiro ponto, dê um duplo clique ou tecle Enter para fechar (Esc cancela)."
 msgstr "बहुभुज के कोनों पर क्लिक करें; बंद करने के लिए पहले बिंदु पर क्लिक करें, डबल क्लिक करें या Enter दबाएँ (Esc रद्द करता है)।"
 
-#: rust/snapedit/src/canvas_ui.rs:305
+#: rust/snapedit/src/canvas_ui.rs:317
 msgid "Nenhuma captura aberta — use “Capturar” ou abra um arquivo (Ctrl+O)."
 msgstr "कोई कैप्चर खुला नहीं है — “कैप्चर” का उपयोग करें या कोई फ़ाइल खोलें (Ctrl+O)।"
 
-#: rust/snapedit/src/canvas_ui.rs:391
+#: rust/snapedit/src/canvas_ui.rs:408
 msgid "Prévia — Aplicar ou Cancelar no painel"
 msgstr "पूर्वावलोकन — पैनल में लागू करें या रद्द करें"
 
-#: rust/snapedit/src/canvas_ui.rs:418
+#: rust/snapedit/src/canvas_ui.rs:435
 msgid "(duplo clique abre)"
 msgstr "(डबल क्लिक से खुलता है)"
 
-#: rust/snapedit/src/canvas_ui.rs:513
+#: rust/snapedit/src/canvas_ui.rs:530
 #, c-format
 msgid "%d × %d  — Enter aplica, Esc cancela"
 msgstr "%d × %d  — Enter लागू करता है, Esc रद्द करता है"
@@ -1748,7 +1748,7 @@ msgstr "फ़ाइल के रूप में सहेजें (PNG, JPG,
 msgid "Enviar por e-mail"
 msgstr "ईमेल से भेजें"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:526
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/snapnab/src/dialogs.rs:526
 msgid "Programa"
 msgstr "प्रोग्राम"
 
@@ -1784,7 +1784,7 @@ msgstr "फिर से करें"
 msgid "Refazer (Ctrl+Y)"
 msgstr "फिर से करें (Ctrl+Y)"
 
-#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:358 rust/snapedit/src/app/docs.rs:363
 msgid "Nova imagem"
 msgstr "नई छवि"
 
@@ -1812,7 +1812,7 @@ msgstr "सहेजें"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "लाइब्रेरी में सहेजें (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
 msgid "Salvar como"
 msgstr "इस रूप में सहेजें"
 
@@ -2085,7 +2085,7 @@ msgstr "थीम की प्रति संपादित करें…"
 msgid "Editar o tema…"
 msgstr "थीम संपादित करें…"
 
-#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/snapnab/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (प्रति)"
 
@@ -4313,7 +4313,7 @@ msgstr ""
 "वेक्टर ऑब्जेक्ट, प्रभाव, Smart Move,\n"
 "OCR, PDF निर्यात और वीडियो संपादन (कटौती और GIF) के साथ कैप्चर संपादन।"
 
-#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:951
+#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:960
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "GNU General Public License संस्करण 3 के अंतर्गत मुक्त सॉफ़्टवेयर।"
 
@@ -4366,7 +4366,7 @@ msgstr "पहले चयन करें (चयन टूल) या कट�
 msgid "Ângulo (graus, horário)"
 msgstr "कोण (डिग्री, दक्षिणावर्त)"
 
-#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:349 rust/snapedit/src/app/extras.rs:539
+#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:355 rust/snapedit/src/app/extras.rs:539
 msgid "Cor de fundo"
 msgstr "पृष्ठभूमि का रंग"
 
@@ -4378,11 +4378,11 @@ msgstr "पारदर्शी पृष्ठभूमि"
 msgid "Os objetos serão mesclados à imagem."
 msgstr "ऑब्जेक्ट छवि में मिला दिए जाएँगे।"
 
-#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:347 rust/snapedit/src/app/video.rs:456
+#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:353 rust/snapedit/src/app/video.rs:456
 msgid "Largura (px)"
 msgstr "चौड़ाई (px)"
 
-#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:553
+#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "ऊँचाई (px)"
 
@@ -4402,7 +4402,7 @@ msgstr "एंकर"
 msgid "Cor do canvas"
 msgstr "कैनवास का रंग"
 
-#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "पारदर्शी"
 
@@ -4515,108 +4515,108 @@ msgstr "आयात की गई फ़ाइल"
 msgid "Salvo na biblioteca: "
 msgstr "लाइब्रेरी में सहेजा गया: "
 
-#: rust/snapedit/src/app/docs.rs:266
+#: rust/snapedit/src/app/docs.rs:269
 msgid "Qualidade JPEG (1–100)"
 msgstr "JPEG गुणवत्ता (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:273
+#: rust/snapedit/src/app/docs.rs:276
 msgid "Sem perdas (ideal para capturas de tela)"
 msgstr "लॉसलेस (स्क्रीनशॉट के लिए सर्वोत्तम)"
 
-#: rust/snapedit/src/app/docs.rs:274
+#: rust/snapedit/src/app/docs.rs:277
 msgid "Qualidade com perdas (1–100)"
 msgstr "लॉसी गुणवत्ता (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:286
+#: rust/snapedit/src/app/docs.rs:289
 msgid "Qualidade AVIF (1–100)"
 msgstr "AVIF गुणवत्ता (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:316 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
+#: rust/snapedit/src/app/docs.rs:319 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
 msgid "Não foi possível salvar:\n"
 msgstr "सहेजा नहीं जा सका:\n"
 
-#: rust/snapedit/src/app/docs.rs:319
+#: rust/snapedit/src/app/docs.rs:322
 msgid "Salvo em "
 msgstr "यहाँ सहेजा गया: "
 
-#: rust/snapedit/src/app/docs.rs:336 rust/snapnab/src/engine.rs:479
+#: rust/snapedit/src/app/docs.rs:342 rust/snapnab/src/engine.rs:479
 msgid "A área de transferência não contém imagem."
 msgstr "क्लिपबोर्ड में कोई छवि नहीं है।"
 
-#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:227
+#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:227
 msgid "Da área de transferência"
 msgstr "क्लिपबोर्ड से"
 
-#: rust/snapedit/src/app/docs.rs:340
+#: rust/snapedit/src/app/docs.rs:346
 msgid "Imagem nova criada a partir da área de transferência."
 msgstr "क्लिपबोर्ड से नई छवि बनाई गई।"
 
-#: rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/app/docs.rs:363
 msgid "Imagem nova"
 msgstr "नई छवि"
 
-#: rust/snapedit/src/app/docs.rs:401
+#: rust/snapedit/src/app/docs.rs:407
 msgid "Enviar para a Lixeira?\n"
 msgstr "रीसायकल बिन में भेजें?\n"
 
-#: rust/snapedit/src/app/docs.rs:403
+#: rust/snapedit/src/app/docs.rs:409
 #, c-format
 msgid "Enviar %zu itens da biblioteca para a Lixeira?"
 msgstr "लाइब्रेरी के %zu आइटम रीसायकल बिन में भेजें?"
 
-#: rust/snapedit/src/app/docs.rs:425
+#: rust/snapedit/src/app/docs.rs:431
 msgid "Item enviado para a Lixeira."
 msgstr "आइटम रीसायकल बिन में भेजा गया।"
 
-#: rust/snapedit/src/app/docs.rs:427
+#: rust/snapedit/src/app/docs.rs:433
 #, c-format
 msgid "%zu itens enviados para a Lixeira."
 msgstr "%zu आइटम रीसायकल बिन में भेजे गए।"
 
-#: rust/snapedit/src/app/docs.rs:465
+#: rust/snapedit/src/app/docs.rs:471
 msgid "Formato das imagens"
 msgstr "छवियों का फ़ॉर्मेट"
 
-#: rust/snapedit/src/app/docs.rs:466
+#: rust/snapedit/src/app/docs.rs:472
 msgid "Vídeos são copiados em MP4."
 msgstr "वीडियो MP4 में कॉपी किए जाते हैं।"
 
-#: rust/snapedit/src/app/docs.rs:468
+#: rust/snapedit/src/app/docs.rs:474
 #, c-format
 msgid "Exportar %zu item(ns)"
 msgstr "%zu आइटम निर्यात करें"
 
-#: rust/snapedit/src/app/docs.rs:471
+#: rust/snapedit/src/app/docs.rs:477
 msgid "Exportar para a pasta"
 msgstr "फ़ोल्डर में निर्यात करें"
 
-#: rust/snapedit/src/app/docs.rs:500
+#: rust/snapedit/src/app/docs.rs:506
 #, c-format
 msgid "%d item(ns) exportado(s) para %s"
 msgstr "%d आइटम %s में निर्यात किए गए"
 
-#: rust/snapedit/src/app/docs.rs:501
+#: rust/snapedit/src/app/docs.rs:507
 #, c-format
 msgid " — %d falha(s)"
 msgstr " — %d विफल"
 
-#: rust/snapedit/src/app/docs.rs:520
+#: rust/snapedit/src/app/docs.rs:526
 msgid "Abrir em programa externo"
 msgstr "बाहरी प्रोग्राम में खोलें"
 
-#: rust/snapedit/src/app/docs.rs:541
+#: rust/snapedit/src/app/docs.rs:547
 msgid "Captura: "
 msgstr "कैप्चर: "
 
-#: rust/snapedit/src/app/docs.rs:555
+#: rust/snapedit/src/app/docs.rs:561
 msgid "Reconhecendo o texto…"
 msgstr "टेक्स्ट पहचाना जा रहा है…"
 
-#: rust/snapedit/src/app/docs.rs:560
+#: rust/snapedit/src/app/docs.rs:566
 msgid "(nenhum texto reconhecido)"
 msgstr "(कोई पाठ नहीं पहचाना गया)"
 
-#: rust/snapedit/src/app/docs.rs:561
+#: rust/snapedit/src/app/docs.rs:567
 msgid "Grab Text — texto reconhecido"
 msgstr "पाठ निकालें — पहचाना गया पाठ"
 
@@ -4706,7 +4706,7 @@ msgstr "प्रिंट नहीं खुल सका: कोई प्र
 msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
 msgstr "प्रिंटर ने दस्तावेज़ स्वीकार नहीं किया (जाँचें कि वह चालू है और Windows प्रिंट सेवा चल रही है)।"
 
-#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:910
+#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:919
 msgid "O manual não foi encontrado:\n"
 msgstr "मैनुअल नहीं मिला:\n"
 
@@ -5704,7 +5704,7 @@ msgstr "चरण निकालें"
 msgid "Extrair o texto"
 msgstr "टेक्स्ट निकालें"
 
-#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:427
+#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "ठीक है"
 
@@ -5926,7 +5926,7 @@ msgstr "स्क्रीन रंग चयनकर्ता"
 msgid "Capturar e fixar na tela"
 msgstr "कैप्चर करें और स्क्रीन पर पिन करें"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:234
+#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:234
 msgid "Fixar da área de transferência"
 msgstr "क्लिपबोर्ड से पिन करें"
 
@@ -6419,7 +6419,11 @@ msgstr "यहाँ सहेजी गई: "
 msgid "Captura adicionada à biblioteca"
 msgstr "कैप्चर लाइब्रेरी में जोड़ा गया"
 
-#: rust/snapnab/src/engine.rs:1104
+#: rust/snapnab/src/engine.rs:922
+msgid "Clique para abrir no Editor."
+msgstr "एडिटर में खोलने के लिए क्लिक करें।"
+
+#: rust/snapnab/src/engine.rs:1109
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr "छवियाँ और दस्तावेज़|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Snapnab दस्तावेज़ (*.snap)|*.snap|MP4 वीडियो (*.mp4)|*.mp4|सभी फ़ाइलें (*.*)|*.*|"
 
@@ -6641,64 +6645,64 @@ msgstr "विकल्प…"
 msgid "Ocultar o One Click"
 msgstr "One Click छिपाएँ"
 
-#: rust/snapnab/src/main.rs:641
+#: rust/snapnab/src/main.rs:650
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — कमांड लाइन"
 
-#: rust/snapnab/src/main.rs:671
+#: rust/snapnab/src/main.rs:680
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region को x,y,चौड़ाई,ऊँचाई चाहिए (उदा.: /region 100,100,800,600)।"
 
-#: rust/snapnab/src/main.rs:683
+#: rust/snapnab/src/main.rs:692
 msgid "Nenhuma janela com esse título: "
 msgstr "इस शीर्षक की कोई विंडो नहीं: "
 
-#: rust/snapnab/src/main.rs:695
+#: rust/snapnab/src/main.rs:704
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "मॉनिटर %d मौजूद नहीं है (कुल %zu हैं)।"
 
-#: rust/snapnab/src/main.rs:715
+#: rust/snapnab/src/main.rs:724
 msgid "Não foi possível fixar: "
 msgstr "पिन नहीं किया जा सका: "
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:235
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:235
 msgid "Fixar um arquivo…"
 msgstr "फ़ाइल पिन करें…"
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:233
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:233
 msgid "Capturar e fixar"
 msgstr "कैप्चर करें और पिन करें"
 
-#: rust/snapnab/src/main.rs:863
+#: rust/snapnab/src/main.rs:872
 msgid "Mostrar todas"
 msgstr "सभी दिखाएँ"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Ocultar todas"
 msgstr "सभी छिपाएँ"
 
-#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
+#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
 msgid "Fechar todas"
 msgstr "सभी बंद करें"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Desligar \"atravessar cliques\""
 msgstr "\"क्लिक आर-पार\" बंद करें"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Reabrir a última fechada"
 msgstr "अंतिम बंद की गई फिर खोलें"
 
-#: rust/snapnab/src/main.rs:865
+#: rust/snapnab/src/main.rs:874
 msgid "Histórico"
 msgstr "इतिहास"
 
-#: rust/snapnab/src/main.rs:950
+#: rust/snapnab/src/main.rs:959
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — स्क्रीन कैप्चर और वीडियो रिकॉर्डिंग"
 
-#: rust/snapnab/src/main.rs:952
+#: rust/snapnab/src/main.rs:961
 msgid ""
 "Processo de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicando-se por memória\n"
 "compartilhada (canal IPC) e WM_COPYDATA. Capturas ficam na biblioteca:\n"
@@ -6706,24 +6710,24 @@ msgstr ""
 "कैप्चर प्रक्रिया (Snapnab.exe) + एडिटर (SnapnabEditor.exe), साझा मेमोरी\n"
 "(IPC चैनल) और WM_COPYDATA के ज़रिए संवाद करते हैं। कैप्चर लाइब्रेरी में रखे जाते हैं:\n"
 
-#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:251
+#: rust/snapnab/src/main.rs:966 rust/snapnab/src/window.rs:251
 msgid "Sobre o Snapnab"
 msgstr "Snapnab के बारे में"
 
-#: rust/snapnab/src/main.rs:992 rust/snapnab/src/main.rs:1060 rust/snapnab/src/main.rs:1140
+#: rust/snapnab/src/main.rs:1001 rust/snapnab/src/main.rs:1069 rust/snapnab/src/main.rs:1149
 msgid "Snapnab — clique para capturar"
 msgstr "Snapnab — कैप्चर करने के लिए क्लिक करें"
 
-#: rust/snapnab/src/main.rs:1012
+#: rust/snapnab/src/main.rs:1021
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — रिकॉर्डिंग वापस मिली"
 
-#: rust/snapnab/src/main.rs:1013
+#: rust/snapnab/src/main.rs:1022
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu बाधित रिकॉर्डिंग लाइब्रेरी में वापस मिलीं।"
 
-#: rust/snapnab/src/main.rs:1138
+#: rust/snapnab/src/main.rs:1147
 #, c-format
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — अंतराल कैप्चर: %d छवि(याँ)"
@@ -7077,7 +7081,7 @@ msgstr "नाम बदलें…"
 msgid "Atalho…"
 msgstr "शॉर्टकट…"
 
-#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:150
+#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:160
 msgid "Novo preset…"
 msgstr "नया प्रीसेट…"
 
@@ -7416,4 +7420,3 @@ msgstr "ब्राउज़र में साइन-इन पूरा क�
 #: rust/snapui/src/upload_ui.rs:210
 msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "खुले पेज पर Snapnab को अधिकृत करें। ब्राउज़र लौटने पर यह विंडो अपने आप बंद हो जाएगी।"
-

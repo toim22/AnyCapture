@@ -248,7 +248,10 @@ impl Editor {
         if e.len() > 1 && e.len() <= 5 {
             base.truncate(base.len() - e.len());
         }
-        let initial = format!("{}\\{}", files::default_save_dir(), if base.is_empty() { tr("Captura") } else { base });
+        // the folder of the last Save as (#5), while it still exists; else the capture folder
+        let last = reg_str("SaveAsFolder", "");
+        let dir = if !last.is_empty() && std::path::Path::new(&last).is_dir() { last } else { files::default_save_dir() };
+        let initial = format!("{}\\{}", dir.trim_end_matches('\\'), if base.is_empty() { tr("Captura") } else { base });
         let fi = reg_dw("SaveAsFilter", 1);
         self.modal(
             move |owner| {
@@ -317,6 +320,9 @@ impl Editor {
             return;
         }
         self.status = tr("Salvo em ") + path;
+        if let Some(dir) = std::path::Path::new(path).parent().filter(|d| !d.as_os_str().is_empty()) {
+            set_reg_str("SaveAsFolder", &dir.to_string_lossy());
+        }
         // a library capture without a name takes the name used in "Save as"
         let p = self.cv.docs[c].path.clone();
         if in_library(&p) && files::capture_name(&p).is_empty() {

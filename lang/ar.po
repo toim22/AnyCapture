@@ -99,7 +99,7 @@ msgstr "اكتشاف الوجوه غير متاح في نظام Windows هذا."
 msgid "Falha na detecção de rostos."
 msgstr "فشل اكتشاف الوجوه."
 
-#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:851
+#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:860
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s غير مثبت على هذا الحاسوب (أو أنه إصدار Microsoft Store بلا أتمتة)."
@@ -174,7 +174,7 @@ msgstr "ملف رسومي"
 msgid "Novo preset"
 msgstr "إعداد مسبق جديد"
 
-#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:251 rust/snapedit/src/app/docs.rs:478
+#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:976 rust/snapedit/src/app/docs.rs:254 rust/snapedit/src/app/docs.rs:484
 msgid "Captura"
 msgstr "التقاط"
 
@@ -498,7 +498,7 @@ msgstr "لم يتم العثور على كاميرا ويب."
 msgid "Selecione 3 ou mais objetos para distribuir."
 msgstr "حدّد 3 عناصر أو أكثر لتوزيعها."
 
-#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:563 rust/snapedit/src/app/extras.rs:614
+#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:569 rust/snapedit/src/app/extras.rs:614
 msgid "OCR indisponível: "
 msgstr "OCR غير متاح: "
 
@@ -638,19 +638,19 @@ msgstr "مثلث"
 msgid "Clique nos cantos do polígono; clique no primeiro ponto, dê um duplo clique ou tecle Enter para fechar (Esc cancela)."
 msgstr "انقر على زوايا المضلع؛ انقر على النقطة الأولى أو انقر نقرًا مزدوجًا أو اضغط Enter لإغلاقه (Esc للإلغاء)."
 
-#: rust/snapedit/src/canvas_ui.rs:305
+#: rust/snapedit/src/canvas_ui.rs:317
 msgid "Nenhuma captura aberta — use “Capturar” ou abra um arquivo (Ctrl+O)."
 msgstr "لا توجد لقطة مفتوحة — استخدم “التقاط” أو افتح ملفًا (Ctrl+O)."
 
-#: rust/snapedit/src/canvas_ui.rs:391
+#: rust/snapedit/src/canvas_ui.rs:408
 msgid "Prévia — Aplicar ou Cancelar no painel"
 msgstr "معاينة — تطبيق أو إلغاء في اللوحة"
 
-#: rust/snapedit/src/canvas_ui.rs:418
+#: rust/snapedit/src/canvas_ui.rs:435
 msgid "(duplo clique abre)"
 msgstr "(انقر نقرًا مزدوجًا للفتح)"
 
-#: rust/snapedit/src/canvas_ui.rs:513
+#: rust/snapedit/src/canvas_ui.rs:530
 #, c-format
 msgid "%d × %d  — Enter aplica, Esc cancela"
 msgstr "%d × %d  — Enter للتطبيق، Esc للإلغاء"
@@ -1748,7 +1748,7 @@ msgstr "حفظ كملف (PNG، JPG، PDF…)"
 msgid "Enviar por e-mail"
 msgstr "إرسال بالبريد"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:526
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/snapnab/src/dialogs.rs:526
 msgid "Programa"
 msgstr "البرنامج"
 
@@ -1784,7 +1784,7 @@ msgstr "إعادة"
 msgid "Refazer (Ctrl+Y)"
 msgstr "إعادة (Ctrl+Y)"
 
-#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:358 rust/snapedit/src/app/docs.rs:363
 msgid "Nova imagem"
 msgstr "صورة جديدة"
 
@@ -1812,7 +1812,7 @@ msgstr "حفظ"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "حفظ في المكتبة (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
 msgid "Salvar como"
 msgstr "حفظ باسم"
 
@@ -2085,7 +2085,7 @@ msgstr "تحرير نسخة من النسق…"
 msgid "Editar o tema…"
 msgstr "تحرير النسق…"
 
-#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/snapnab/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (نسخة)"
 
@@ -4313,7 +4313,7 @@ msgstr ""
 "تحرير اللقطات بعناصر متجهة وتأثيرات وSmart Move\n"
 "وOCR وتصدير PDF وتحرير الفيديو (القص وGIF)."
 
-#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:951
+#: rust/snapedit/src/app/commands.rs:435 rust/snapnab/src/main.rs:960
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "برنامج حر بموجب رخصة جنو العمومية العامة، الإصدار 3."
 
@@ -4366,7 +4366,7 @@ msgstr "أنشئ تحديدًا (أداة التحديد) أو قصًّا أول
 msgid "Ângulo (graus, horário)"
 msgstr "الزاوية (درجات، باتجاه عقارب الساعة)"
 
-#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:349 rust/snapedit/src/app/extras.rs:539
+#: rust/snapedit/src/app/commands.rs:623 rust/snapedit/src/app/docs.rs:355 rust/snapedit/src/app/extras.rs:539
 msgid "Cor de fundo"
 msgstr "لون الخلفية"
 
@@ -4378,11 +4378,11 @@ msgstr "خلفية شفافة"
 msgid "Os objetos serão mesclados à imagem."
 msgstr "سيتم دمج العناصر في الصورة."
 
-#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:347 rust/snapedit/src/app/video.rs:456
+#: rust/snapedit/src/app/commands.rs:649 rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/docs.rs:353 rust/snapedit/src/app/video.rs:456
 msgid "Largura (px)"
 msgstr "العرض (بكسل)"
 
-#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:553
+#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "الارتفاع (بكسل)"
 
@@ -4402,7 +4402,7 @@ msgstr "نقطة الارتكاز"
 msgid "Cor do canvas"
 msgstr "لون اللوحة"
 
-#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "شفاف"
 
@@ -4515,108 +4515,108 @@ msgstr "ملف مستورد"
 msgid "Salvo na biblioteca: "
 msgstr "تم الحفظ في المكتبة: "
 
-#: rust/snapedit/src/app/docs.rs:266
+#: rust/snapedit/src/app/docs.rs:269
 msgid "Qualidade JPEG (1–100)"
 msgstr "جودة JPEG (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:273
+#: rust/snapedit/src/app/docs.rs:276
 msgid "Sem perdas (ideal para capturas de tela)"
 msgstr "بلا فقد (الأفضل للقطات الشاشة)"
 
-#: rust/snapedit/src/app/docs.rs:274
+#: rust/snapedit/src/app/docs.rs:277
 msgid "Qualidade com perdas (1–100)"
 msgstr "جودة مع فقد (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:286
+#: rust/snapedit/src/app/docs.rs:289
 msgid "Qualidade AVIF (1–100)"
 msgstr "جودة AVIF (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:316 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
+#: rust/snapedit/src/app/docs.rs:319 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
 msgid "Não foi possível salvar:\n"
 msgstr "تعذّر الحفظ:\n"
 
-#: rust/snapedit/src/app/docs.rs:319
+#: rust/snapedit/src/app/docs.rs:322
 msgid "Salvo em "
 msgstr "تم الحفظ في "
 
-#: rust/snapedit/src/app/docs.rs:336 rust/snapnab/src/engine.rs:479
+#: rust/snapedit/src/app/docs.rs:342 rust/snapnab/src/engine.rs:479
 msgid "A área de transferência não contém imagem."
 msgstr "لا تحتوي الحافظة على صورة."
 
-#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:227
+#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:227
 msgid "Da área de transferência"
 msgstr "من الحافظة"
 
-#: rust/snapedit/src/app/docs.rs:340
+#: rust/snapedit/src/app/docs.rs:346
 msgid "Imagem nova criada a partir da área de transferência."
 msgstr "تم إنشاء صورة جديدة من الحافظة."
 
-#: rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/app/docs.rs:363
 msgid "Imagem nova"
 msgstr "صورة جديدة"
 
-#: rust/snapedit/src/app/docs.rs:401
+#: rust/snapedit/src/app/docs.rs:407
 msgid "Enviar para a Lixeira?\n"
 msgstr "هل تريد النقل إلى سلة المحذوفات؟\n"
 
-#: rust/snapedit/src/app/docs.rs:403
+#: rust/snapedit/src/app/docs.rs:409
 #, c-format
 msgid "Enviar %zu itens da biblioteca para a Lixeira?"
 msgstr "هل تريد نقل %zu عنصر من المكتبة إلى سلة المحذوفات؟"
 
-#: rust/snapedit/src/app/docs.rs:425
+#: rust/snapedit/src/app/docs.rs:431
 msgid "Item enviado para a Lixeira."
 msgstr "تم نقل العنصر إلى سلة المحذوفات."
 
-#: rust/snapedit/src/app/docs.rs:427
+#: rust/snapedit/src/app/docs.rs:433
 #, c-format
 msgid "%zu itens enviados para a Lixeira."
 msgstr "تم نقل %zu عنصر إلى سلة المحذوفات."
 
-#: rust/snapedit/src/app/docs.rs:465
+#: rust/snapedit/src/app/docs.rs:471
 msgid "Formato das imagens"
 msgstr "تنسيق الصور"
 
-#: rust/snapedit/src/app/docs.rs:466
+#: rust/snapedit/src/app/docs.rs:472
 msgid "Vídeos são copiados em MP4."
 msgstr "تُنسخ مقاطع الفيديو بتنسيق MP4."
 
-#: rust/snapedit/src/app/docs.rs:468
+#: rust/snapedit/src/app/docs.rs:474
 #, c-format
 msgid "Exportar %zu item(ns)"
 msgstr "تصدير %zu عنصر"
 
-#: rust/snapedit/src/app/docs.rs:471
+#: rust/snapedit/src/app/docs.rs:477
 msgid "Exportar para a pasta"
 msgstr "التصدير إلى مجلد"
 
-#: rust/snapedit/src/app/docs.rs:500
+#: rust/snapedit/src/app/docs.rs:506
 #, c-format
 msgid "%d item(ns) exportado(s) para %s"
 msgstr "تم تصدير %d عنصر إلى %s"
 
-#: rust/snapedit/src/app/docs.rs:501
+#: rust/snapedit/src/app/docs.rs:507
 #, c-format
 msgid " — %d falha(s)"
 msgstr " — %d فشل"
 
-#: rust/snapedit/src/app/docs.rs:520
+#: rust/snapedit/src/app/docs.rs:526
 msgid "Abrir em programa externo"
 msgstr "فتح في برنامج خارجي"
 
-#: rust/snapedit/src/app/docs.rs:541
+#: rust/snapedit/src/app/docs.rs:547
 msgid "Captura: "
 msgstr "اللقطة: "
 
-#: rust/snapedit/src/app/docs.rs:555
+#: rust/snapedit/src/app/docs.rs:561
 msgid "Reconhecendo o texto…"
 msgstr "جارٍ التعرّف على النص…"
 
-#: rust/snapedit/src/app/docs.rs:560
+#: rust/snapedit/src/app/docs.rs:566
 msgid "(nenhum texto reconhecido)"
 msgstr "(لم يتم التعرّف على نص)"
 
-#: rust/snapedit/src/app/docs.rs:561
+#: rust/snapedit/src/app/docs.rs:567
 msgid "Grab Text — texto reconhecido"
 msgstr "استخراج النص — النص المتعرَّف عليه"
 
@@ -4706,7 +4706,7 @@ msgstr "تعذّر فتح الطباعة: لا توجد طابعة مثبتة أ
 msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
 msgstr "لم تقبل الطابعة المستند (تحقق من أنها قيد التشغيل وأن خدمة الطباعة في Windows تعمل)."
 
-#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:910
+#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:919
 msgid "O manual não foi encontrado:\n"
 msgstr "لم يتم العثور على الدليل:\n"
 
@@ -5704,7 +5704,7 @@ msgstr "استخراج الخطوات"
 msgid "Extrair o texto"
 msgstr "استخراج النص"
 
-#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:427
+#: rust/snapedit/src/app/windows_aux.rs:541 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "موافق"
 
@@ -5926,7 +5926,7 @@ msgstr "منتقي ألوان الشاشة"
 msgid "Capturar e fixar na tela"
 msgstr "الالتقاط والتثبيت على الشاشة"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:234
+#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:234
 msgid "Fixar da área de transferência"
 msgstr "التثبيت من الحافظة"
 
@@ -6419,7 +6419,11 @@ msgstr "تم حفظها في "
 msgid "Captura adicionada à biblioteca"
 msgstr "تمت إضافة اللقطة إلى المكتبة"
 
-#: rust/snapnab/src/engine.rs:1104
+#: rust/snapnab/src/engine.rs:922
+msgid "Clique para abrir no Editor."
+msgstr "انقر لفتحها في المحرر."
+
+#: rust/snapnab/src/engine.rs:1109
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr "الصور والمستندات|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|مستند Snapnab (*.snap)|*.snap|فيديو MP4 (*.mp4)|*.mp4|كل الملفات (*.*)|*.*|"
 
@@ -6641,64 +6645,64 @@ msgstr "خيارات…"
 msgid "Ocultar o One Click"
 msgstr "إخفاء One Click"
 
-#: rust/snapnab/src/main.rs:641
+#: rust/snapnab/src/main.rs:650
 msgid "Snapnab — linha de comando"
 msgstr "Snapnab — سطر الأوامر"
 
-#: rust/snapnab/src/main.rs:671
+#: rust/snapnab/src/main.rs:680
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "يتوقع /region القيم x,y,العرض,الارتفاع (مثال: /region 100,100,800,600)."
 
-#: rust/snapnab/src/main.rs:683
+#: rust/snapnab/src/main.rs:692
 msgid "Nenhuma janela com esse título: "
 msgstr "لا توجد نافذة بهذا العنوان: "
 
-#: rust/snapnab/src/main.rs:695
+#: rust/snapnab/src/main.rs:704
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "الشاشة %d غير موجودة (يوجد %zu)."
 
-#: rust/snapnab/src/main.rs:715
+#: rust/snapnab/src/main.rs:724
 msgid "Não foi possível fixar: "
 msgstr "تعذر التثبيت: "
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:235
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:235
 msgid "Fixar um arquivo…"
 msgstr "تثبيت ملف…"
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:233
+#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:233
 msgid "Capturar e fixar"
 msgstr "الالتقاط والتثبيت"
 
-#: rust/snapnab/src/main.rs:863
+#: rust/snapnab/src/main.rs:872
 msgid "Mostrar todas"
 msgstr "إظهار الكل"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Ocultar todas"
 msgstr "إخفاء الكل"
 
-#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
+#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
 msgid "Fechar todas"
 msgstr "إغلاق الكل"
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Desligar \"atravessar cliques\""
 msgstr "إيقاف \"تمرير النقرات\""
 
-#: rust/snapnab/src/main.rs:864
+#: rust/snapnab/src/main.rs:873
 msgid "Reabrir a última fechada"
 msgstr "إعادة فتح آخر صورة مغلقة"
 
-#: rust/snapnab/src/main.rs:865
+#: rust/snapnab/src/main.rs:874
 msgid "Histórico"
 msgstr "السجل"
 
-#: rust/snapnab/src/main.rs:950
+#: rust/snapnab/src/main.rs:959
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — التقاط الشاشة وتسجيل الفيديو"
 
-#: rust/snapnab/src/main.rs:952
+#: rust/snapnab/src/main.rs:961
 msgid ""
 "Processo de captura (Snapnab.exe) + Editor (SnapnabEditor.exe), comunicando-se por memória\n"
 "compartilhada (canal IPC) e WM_COPYDATA. Capturas ficam na biblioteca:\n"
@@ -6706,24 +6710,24 @@ msgstr ""
 "عملية الالتقاط (Snapnab.exe) + المحرّر (SnapnabEditor.exe)، يتواصلان عبر ذاكرة\n"
 "مشتركة (قناة IPC) وWM_COPYDATA. تُحفظ اللقطات في المكتبة:\n"
 
-#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:251
+#: rust/snapnab/src/main.rs:966 rust/snapnab/src/window.rs:251
 msgid "Sobre o Snapnab"
 msgstr "حول Snapnab"
 
-#: rust/snapnab/src/main.rs:992 rust/snapnab/src/main.rs:1060 rust/snapnab/src/main.rs:1140
+#: rust/snapnab/src/main.rs:1001 rust/snapnab/src/main.rs:1069 rust/snapnab/src/main.rs:1149
 msgid "Snapnab — clique para capturar"
 msgstr "Snapnab — انقر للالتقاط"
 
-#: rust/snapnab/src/main.rs:1012
+#: rust/snapnab/src/main.rs:1021
 msgid "Snapnab — gravação recuperada"
 msgstr "Snapnab — تم استعادة التسجيل"
 
-#: rust/snapnab/src/main.rs:1013
+#: rust/snapnab/src/main.rs:1022
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "تمت استعادة %zu تسجيل منقطع في المكتبة."
 
-#: rust/snapnab/src/main.rs:1138
+#: rust/snapnab/src/main.rs:1147
 #, c-format
 msgid "Snapnab — captura por intervalo: %d imagem(ns)"
 msgstr "Snapnab — الالتقاط على فترات: %d صورة"
@@ -7077,7 +7081,7 @@ msgstr "إعادة تسمية…"
 msgid "Atalho…"
 msgstr "اختصار…"
 
-#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:150
+#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:160
 msgid "Novo preset…"
 msgstr "إعداد مسبق جديد…"
 
@@ -7416,4 +7420,3 @@ msgstr "أكمل تسجيل الدخول في المتصفح"
 #: rust/snapui/src/upload_ui.rs:210
 msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "امنح Snapnab الإذن في الصفحة التي فُتحت. تُغلق هذه النافذة تلقائيًا عند عودة المتصفح."
-
