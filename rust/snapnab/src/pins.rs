@@ -58,6 +58,14 @@ pub enum UiEv {
     Capture,
     /// One Click: the gear's menu at a screen point
     OneClickMenu(i32, i32),
+    /// the screen color picker's color (COLORREF)
+    ColorPicked(u32),
+    /// the interval capture's settings, chosen in its form
+    IntervalChosen(crate::interval::Settings),
+    /// the interval capture's region (and window) chosen with the crosshair
+    IntervalArea(snapcore::image::Rect, isize),
+    /// the interval capture runs (and how many images so far)
+    IntervalStatus(bool, i32),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -128,20 +136,19 @@ struct PinWnd {
 thread_local! {
     static PINS: RefCell<Vec<isize>> = const { RefCell::new(Vec::new()) };
     static HIDDEN: Cell<bool> = const { Cell::new(false) };
-    static SINK: RefCell<Option<Waker>> = const { RefCell::new(None) };
 }
 
-/// The app's event loop, where the pins send their `PinEv`.
+/// The app's event loop, shared by every thread (the forms and the dialogs run on their own threads).
+static SINK: std::sync::Mutex<Option<Waker>> = std::sync::Mutex::new(None);
+
 pub fn init(w: Waker) {
-    SINK.with(|s| *s.borrow_mut() = Some(w));
+    *SINK.lock().unwrap_or_else(|e| e.into_inner()) = Some(w);
 }
 
 pub(crate) fn send(ev: UiEv) {
-    SINK.with(|s| {
-        if let Some(w) = s.borrow().as_ref() {
-            w.send(ev);
-        }
-    });
+    if let Some(w) = SINK.lock().unwrap_or_else(|e| e.into_inner()).as_ref() {
+        w.send(ev);
+    }
 }
 
 fn h(x: isize) -> HWND {

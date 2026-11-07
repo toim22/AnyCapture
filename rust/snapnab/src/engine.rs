@@ -124,7 +124,7 @@ fn dword(name: &str, def: u32) -> u32 {
 }
 
 /// Options › After capture › When done (AfterCaptureMode): 0 the Editor, 1 the overlay, 2 both, 3 only the clipboard.
-fn after_capture_mode() -> u32 {
+pub(crate) fn after_capture_mode() -> u32 {
     dword("AfterCaptureMode", 0).min(3)
 }
 
@@ -170,6 +170,8 @@ fn child_at(top: isize, x: i32, y: i32) -> Option<(isize, Rect)> {
 }
 
 pub struct Engine {
+    /// the selection only picks an area for the interval capture (nothing is captured)
+    pick_only: bool,
     /// where the last capture was on the screen (a pinned capture opens there)
     origin: Option<(i32, i32)>,
     state: State,
@@ -191,6 +193,7 @@ pub struct Engine {
 impl Engine {
     pub fn new() -> Engine {
         Engine {
+            pick_only: false,
             origin: None,
             state: State::Idle,
             since: Instant::now(),
@@ -218,6 +221,9 @@ impl Engine {
         log::write(&format!("CaptureEngine: {:?} → {:?}", self.state, s));
         self.state = s;
         self.since = Instant::now();
+        if s == State::Idle {
+            crate::desk::clean_end(); // desktop icons and notifications back as they were
+        }
     }
 
     /// Something of the capture still on the screen, or a capture being processed (outputs, effects).
@@ -230,6 +236,20 @@ impl Engine {
     }
 
     /// The entry point (hotkey, button, tray, command line, the Editor).
+    /// The interval capture's region or window, chosen with the crosshair; the answer is `UiEv::IntervalArea`.
+    pub fn pick_area(&mut self, ctl: &mut Ctl, env: &Env, window: bool) -> bool {
+        let mut p = Preset::default();
+        p.kind = CaptureKind::Image;
+        p.selection = if window { Selection::Window } else { Selection::Region };
+        p.name = "interval".into();
+        self.pick_only = true;
+        let ok = self.activate(ctl, env, &p);
+        if !ok {
+            self.pick_only = false;
+        }
+        ok
+    }
+
     pub fn activate(&mut self, ctl: &mut Ctl, env: &Env, preset: &Preset) -> bool {
         if self.state != State::Idle {
             if self.ui_alive(ctl) {
@@ -248,6 +268,10 @@ impl Engine {
         log::write(&format!("CaptureEngine: preset \"{}\"{}", self.preset.name,
                             if self.preset.effects.any() { " with effects" } else { "" }));
         self.set_state(State::Activated);
+        // the screen-based selections: the desktop icons hidden before the screen is frozen (C16)
+        if !self.pick_only && !matches!(self.preset.selection, Selection::Clipboard | Selection::File) {
+            crate::desk::clean_begin(self.preset.kind == CaptureKind::Video);
+        }
         if let Some(w) = env.main.and_then(|k| ctl.window(k))
             && w.is_visible() == Some(true)
         {
@@ -366,6 +390,7 @@ impl Engine {
     }
 
     fn input_canceled(&mut self) {
+        self.pick_only = false;
         self.frozen = Image::default();
         self.cursor = None;
         self.set_state(State::Idle);
@@ -484,6 +509,9 @@ impl Engine {
                 shown.blit(c, pos.0 - self.vs.left, pos.1 - self.vs.top, true);
             }
         }
+        if !video {
+            crate::desk::clean_end(); // the frozen copy is taken: the icons can come back
+        }
         let mode = match p.selection {
             Selection::Window => Mode::Window,
             Selection::Object => Mode::Object,
@@ -596,6 +624,13 @@ impl Engine {
 
     fn input_selected(&mut self, ctl: &mut Ctl, env: &Env, s: Selected) {
         self.set_state(State::InputSelected);
+        if self.pick_only {
+            self.pick_only = false;
+            self.frozen = Image::default();
+            self.set_state(State::Idle);
+            crate::pins::send(crate::pins::UiEv::IntervalArea(s.rect, if self.preset.selection == Selection::Window { s.window } else { 0 }));
+            return;
+        }
         let p = self.preset.clone();
         if p.kind == CaptureKind::Video {
             self.frozen = Image::default();

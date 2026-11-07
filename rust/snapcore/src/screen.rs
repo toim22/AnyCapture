@@ -371,6 +371,42 @@ pub fn top_windows() -> Vec<TopWindow> {
     v
 }
 
+/// FindWindowByTitle (the command line's /window): the first visible window of another program whose title contains
+/// `text` (case-insensitive); owned windows count only with a title bar (dialogs).
+pub fn find_window_by_title(text: &str) -> Option<isize> {
+    struct Ctx {
+        t: String,
+        found: isize,
+    }
+    unsafe extern "system" fn each(h: HWND, lp: LPARAM) -> BOOL {
+        let c = unsafe { &mut *(lp.0 as *mut Ctx) };
+        let k = h.0 as isize;
+        unsafe {
+            use windows::Win32::UI::WindowsAndMessaging::{GW_OWNER, GWL_STYLE, GetWindow, WS_CAPTION};
+            let owned = GetWindow(h, GW_OWNER).map(|o| !o.0.is_null()).unwrap_or(false);
+            if !IsWindowVisible(h).as_bool() || IsIconic(h).as_bool()
+               || (owned && GetWindowLongW(h, GWL_STYLE) as u32 & WS_CAPTION.0 == 0)
+            {
+                return true.into();
+            }
+        }
+        if window_pid(k) == std::process::id() {
+            return true.into();
+        }
+        let t = window_title(k).to_lowercase();
+        if !t.is_empty() && t.contains(&c.t) {
+            c.found = k;
+            return false.into();
+        }
+        true.into()
+    }
+    let mut c = Ctx { t: text.to_lowercase(), found: 0 };
+    unsafe {
+        let _ = EnumWindows(Some(each), LPARAM(&mut c as *mut _ as isize));
+    }
+    (c.found != 0).then_some(c.found)
+}
+
 /// The innermost visible control at a screen point inside a top-level window (ChildWindowFromPointEx, level by
 /// level), or None when the point is on the window itself.
 pub fn child_at(top: isize, x: i32, y: i32) -> Option<isize> {

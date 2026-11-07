@@ -5,9 +5,11 @@
 #![windows_subsystem = "windows"]
 
 mod camwin;
+mod desk;
 mod engine;
 mod form;
 mod hotkeys;
+mod interval;
 mod oneclick;
 mod pins;
 mod qr;
@@ -59,6 +61,20 @@ mod id {
     pub const LOGS: u32 = 1012;
     pub const SHOW: u32 = 1013;
     pub const ONECLICK: u32 = 1014;
+    pub const SHOW_PRESETS: u32 = 1015;
+    pub const PRESET_FROM_CURRENT: u32 = 1016;
+    pub const PRESET_NEW: u32 = 1017;
+    pub const PRESET_HELP: u32 = 1018;
+    pub const PRESET_RUN: u32 = 1019;
+    pub const PRESET_RENAME: u32 = 1020;
+    pub const PRESET_DUP: u32 = 1021;
+    pub const PRESET_HOTKEY: u32 = 1022;
+    pub const PRESET_DEL: u32 = 1023;
+    pub const SETTINGS_EXPORT: u32 = 1024;
+    pub const SETTINGS_IMPORT: u32 = 1025;
+    pub const SETTINGS_BACKUPS: u32 = 1026;
+    pub const MANUAL: u32 = 1027;
+    pub const COLOR_PICKER: u32 = 1028;
     pub const PIN_CLIPBOARD: u32 = 1029;
     pub const PIN_FILE: u32 = 1030;
     pub const PINS_SHOW: u32 = 1031;
@@ -66,8 +82,15 @@ mod id {
     pub const PINS_CLOSE: u32 = 1033;
     pub const PINS_REOPEN: u32 = 1034;
     pub const PINS_CLICKTHROUGH: u32 = 1035;
+    pub const INTERVAL: u32 = 1036;
+    pub const FOCUS: u32 = 1037;
     pub const QR_REGION: u32 = 1038;
+    pub const UPLOAD_SETTINGS: u32 = 1039;
     pub const CAPTURE_PIN: u32 = 1040;
+    pub const CLEANUP_NOW: u32 = 1041;
+    pub const RECORD_AUDIO: u32 = 1042;
+    pub const AUDIO_FOLDER: u32 = 1043;
+    pub const AFTER_EDITOR: u32 = 1044;
     pub const PIN_HISTORY_BASE: u32 = 1500;
     pub const PRESET_BASE: u32 = 2000;
     // control IDs of the C++ window that are also commands
@@ -76,6 +99,8 @@ mod id {
 }
 
 const TRAY_CLICK_TIMER: usize = 0x5E1;
+/// the automatic library cleanup (C41): soon after the start, then every 6 h
+const CLEANUP_TIMER: usize = 9;
 /// NIN_SELECT | NINF_KEY: Enter or Space on the tray icon.
 const NIN_KEYSELECT: u32 = 0x401;
 static TASKBAR_CREATED: AtomicU32 = AtomicU32::new(0);
@@ -89,7 +114,7 @@ fn intercept(hwnd: isize, msg: u32, wp: usize, lp: isize) -> Caught {
             None => Caught::Handled(0),
         },
         WM_COMMAND | WM_HOTKEY | tray::WM_SNAP_TRAY | WM_CLIPBOARDUPDATE => Caught::Queue(raw(None), 0),
-        WM_TIMER if wp == TRAY_CLICK_TIMER => Caught::Queue(raw(None), 0),
+        WM_TIMER if wp == TRAY_CLICK_TIMER || wp == CLEANUP_TIMER => Caught::Queue(raw(None), 0),
         m if m != 0 && m == TASKBAR_CREATED.load(Ordering::Relaxed) => Caught::Queue(raw(None), 0),
         _ => Caught::Pass,
     }
@@ -108,6 +133,10 @@ struct CaptureApp {
     last: Option<Preset>,
     /// the recording keys are registered (only while the video HUD is up)
     video_keys: bool,
+    /// the app's event loop, for the worker threads
+    waker: Option<snapui::host::Waker>,
+    /// the interval capture waiting for its region or window
+    pending_interval: Option<interval::Settings>,
 }
 
 /// The engine's view of the app (disjoint fields: the engine itself stays borrowable).
@@ -167,6 +196,34 @@ impl CaptureApp {
         p.read_qr = t == cmdline::Tool::Qr;
         p.upload = t == cmdline::Tool::Upload;
         p
+    }
+
+    fn library_changed(&self) {
+        if let Some(i) = &self.ipc {
+            i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
+        }
+    }
+
+    /// Library › Clean up now: asks, then removes the captures older than CleanupDays with the Options' rules.
+    fn cleanup_now(&self) {
+        let days = reg::get_dword(OsStr::new("CleanupDays"), 30, None);
+        let q = tr("Remover agora as capturas com mais de %u dias (com as regras das Opções)?").replace("%u", &days.to_string());
+        let hwnd = self.hwnd;
+        let waker = self.waker.clone();
+        std::thread::spawn(move || {
+            use windows::Win32::UI::WindowsAndMessaging::{IDYES, MB_ICONQUESTION, MB_YESNO};
+            let (t, c) = (snapcore::wide::to_wide(&q), snapcore::wide::to_wide("Snapnab"));
+            if unsafe { MessageBoxW(Some(HWND(hwnd as _)), PCWSTR(t.as_ptr()), PCWSTR(c.as_ptr()), MB_YESNO | MB_ICONQUESTION) } != IDYES {
+                return;
+            }
+            let g = |n: &str, d: u32| reg::get_dword(OsStr::new(n), d, None);
+            let n = snapcore::library::cleanup(&snapcore::library::library_dir(), g("CleanupDays", 30) as i32, g("CleanupKeepNamed", 1) != 0,
+                                               g("CleanupKeepTagged", 1) != 0, g("CleanupRecycle", 1) != 0);
+            if let Some(w) = waker {
+                w.send(pins::UiEv::LibraryChanged);
+                w.send(pins::UiEv::Notify("Snapnab".into(), tr("%d captura(s) removida(s) da biblioteca.").replace("%d", &n.to_string())));
+            }
+        });
     }
 
     /// PinFromFile: the Open dialog, then the pin.
@@ -261,6 +318,8 @@ impl CaptureApp {
                 self.engine.video_stop(ctl, &env);
             }
             HK_VIDEO_ZOOM => self.engine.video_toggle_zoom(),
+            HK_COLOR => desk::run_color_picker(),
+            HK_FOCUS => desk::focus_toggle(),
             HK_CAPTURE_PIN => self.start_capture(ctl, &self.tool_preset(cmdline::Tool::Pin)),
             HK_PIN_CLIP => {
                 pins::pin_clipboard();
@@ -373,6 +432,35 @@ impl CaptureApp {
             id::LOGS => shell_open(&snapcore::paths::logs_dir().to_string_lossy()),
             id::ABOUT => about(),
             id::ONECLICK => set_one_click(!oneclick::enabled()),
+            id::COLOR_PICKER => desk::run_color_picker(),
+            id::FOCUS => desk::focus_toggle(),
+            id::INTERVAL => {
+                if interval::running() {
+                    interval::stop();
+                } else {
+                    interval::setup(self.hwnd);
+                }
+            }
+            id::RECORD_AUDIO => {
+                // audio only (C32): the first video preset's audio settings, no video
+                let mut p = self.store.first_of_kind(CaptureKind::Video);
+                (p.audio_only, p.delay_seconds, p.webcam) = (true, 0, false);
+                self.start_capture(ctl, &p);
+            }
+            id::AUDIO_FOLDER => {
+                let d = String::from_utf16_lossy(&snapcore::library::audio_dir());
+                let _ = std::fs::create_dir_all(&d);
+                shell_open(&d);
+            }
+            id::AFTER_EDITOR => toggle_after_capture_editor(),
+            id::CLEANUP_NOW => self.cleanup_now(),
+            id::MANUAL => open_manual("capture-window"),
+            id::CAPTURE_FILE => {
+                let mut p = self.store.first_of_kind(CaptureKind::Image);
+                p.selection = Selection::File;
+                p.delay_seconds = 0;
+                self.start_capture(ctl, &p);
+            }
             id::QR_REGION => self.start_capture(ctl, &self.tool_preset(cmdline::Tool::Qr)),
             id::CAPTURE_PIN => self.start_capture(ctl, &self.tool_preset(cmdline::Tool::Pin)),
             id::PIN_CLIPBOARD => {
@@ -412,10 +500,21 @@ impl CaptureApp {
         let one = tr("Mostrar o One Click");
         let n = pins::count();
         let pins_t = if n > 0 { tr("Imagens fixadas (%zu)").replace("%zu", &n.to_string()) } else { tr("Imagens fixadas") };
-        let m = tray::Menu::new(vec![Cmd(id::CAPTURE_IMAGE, &img), Cmd(id::CAPTURE_VIDEO, &vid), Sub(&pre, sub), Separator,
-                                     Cmd(id::QR_REGION, &qr), Sub(&pins_t, pins_submenu()), Separator,
+        let t = [tr("Gravar só o áudio"), tr("Conta-gotas de tela"),
+                 if interval::running() {
+                     tr("Parar a captura por intervalo (%d)").replace("%d", &interval::count().to_string())
+                 } else {
+                     tr("Captura por intervalo…")
+                 },
+                 tr("Foco de tela (apresentações)"), tr("Abrir o Editor depois da captura"), tr("Opções…")];
+        let after = engine::after_capture_mode() != 3;
+        let m = tray::Menu::new(vec![Cmd(id::CAPTURE_IMAGE, &img), Cmd(id::CAPTURE_VIDEO, &vid), Cmd(id::RECORD_AUDIO, &t[0]),
+                                     Sub(&pre, sub), Separator,
+                                     Cmd(id::COLOR_PICKER, &t[1]), Cmd(id::QR_REGION, &qr), Sub(&pins_t, pins_submenu()),
+                                     Cmd(id::INTERVAL, &t[2]), Checked(id::FOCUS, &t[3], desk::focus_active()), Separator,
                                      Cmd(id::SHOW, &show), Checked(id::ONECLICK, &one, oneclick::enabled()),
-                                     Cmd(id::OPEN_EDITOR, &ed), Separator, Cmd(id::EXIT, &quit)]);
+                                     Cmd(id::OPEN_EDITOR, &ed), Checked(id::AFTER_EDITOR, &t[4], after), Cmd(id::OPTIONS, &t[5]),
+                                     Separator, Cmd(id::EXIT, &quit)]);
         m.track(self.hwnd, Some(id::SHOW));
     }
 
@@ -475,6 +574,16 @@ impl CaptureApp {
             log::write(&format!("Command line: {} argument(s), first {first}", args.len()));
         }
         let (mut hide, mut handled) = (false, false);
+        // automation (C44): an area, a tool and an output combine into one capture
+        let mut req = self.store.first_of_kind(CaptureKind::Image);
+        req.kind = CaptureKind::Image;
+        let (mut do_capture, mut tool_chosen) = (false, false);
+        let mut output = String::new();
+        let area = |req: &mut Preset, r: snapcore::image::Rect| {
+            req.selection = Selection::Region;
+            (req.region_fixed, req.region_use_pos) = (true, true);
+            (req.region_x, req.region_y, req.fixed_w, req.fixed_h) = (r.left, r.top, r.width(), r.height());
+        };
         for c in cmdline::parse(&args) {
             match c {
                 Cmd::Hide => hide = true,
@@ -512,9 +621,53 @@ impl CaptureApp {
                         handled = true;
                     }
                 }
-                Cmd::Region(None) => {
-                    self.notify("Snapnab", &tr("/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."));
+                Cmd::Region(r) => {
+                    match r {
+                        Some((x, y, w, h)) => {
+                            area(&mut req, snapcore::image::Rect::new(x, y, x + w, y + h));
+                            do_capture = true;
+                        }
+                        None => self.notify("Snapnab", &tr("/region espera x,y,largura,altura (ex.: /region 100,100,800,600).")),
+                    }
                     handled = true;
+                }
+                Cmd::Window(t) => {
+                    match (!t.is_empty()).then(|| snapcore::screen::find_window_by_title(&t)).flatten() {
+                        Some(w) => {
+                            area(&mut req, snapcore::screen::window_frame_rect(w));
+                            do_capture = true;
+                        }
+                        None => {
+                            log::write(&format!("Command line: no window titled '{t}'"));
+                            self.notify("Snapnab", &(tr("Nenhuma janela com esse título: ") + &t));
+                        }
+                    }
+                    handled = true;
+                }
+                Cmd::Monitor(n) => {
+                    let mons = snapcore::screen::monitors();
+                    if n >= 1 && n as usize <= mons.len() {
+                        area(&mut req, mons[n as usize - 1]);
+                        do_capture = true;
+                    } else {
+                        self.notify("Snapnab",
+                                    &tr("Monitor %d não existe (há %zu).").replacen("%d", &n.to_string(), 1).replacen("%zu", &mons.len().to_string(), 1));
+                    }
+                    handled = true;
+                }
+                Cmd::FullScreen => {
+                    req.selection = Selection::FullScreen;
+                    (do_capture, handled) = (true, true);
+                }
+                Cmd::Delay(d) => req.delay_seconds = d,
+                Cmd::Tool(t) => {
+                    // SetShare: one share at a time
+                    (req.save_to_file, req.open_in_program, req.office) = (false, false, -1);
+                    req.grab_text = t == cmdline::Tool::Text;
+                    req.pin_to_screen = t == cmdline::Tool::Pin;
+                    req.read_qr = t == cmdline::Tool::Qr;
+                    req.upload = t == cmdline::Tool::Upload;
+                    (tool_chosen, do_capture, handled) = (true, true, true);
                 }
                 Cmd::PinFile(f) => {
                     if !pins::pin_file(&f) {
@@ -526,16 +679,41 @@ impl CaptureApp {
                     pins::pin_clipboard();
                     handled = true;
                 }
-                Cmd::Tool(t) => {
-                    self.start_capture(ctl, &self.tool_preset(t));
+                Cmd::ColorPicker => {
+                    desk::run_color_picker();
                     handled = true;
                 }
-                Cmd::Delay(_) | Cmd::Output(_) => {}
-                other => {
-                    log::write(&format!("Command line: {other:?} is not in the Rust app yet"));
+                Cmd::Focus => {
+                    desk::focus_toggle();
                     handled = true;
                 }
+                Cmd::Interval { stop } => {
+                    if stop {
+                        interval::stop();
+                    } else {
+                        interval::start_saved();
+                    }
+                    handled = true;
+                }
+                Cmd::Output(o) => output = o,
             }
+        }
+        if do_capture {
+            match output.to_lowercase().as_str() {
+                "clipboard" => (req.output_clipboard_only, req.preview_in_editor) = (true, false),
+                "editor" => req.preview_in_editor = true,
+                "none" => req.preview_in_editor = false,
+                "" => {
+                    if tool_chosen {
+                        req.preview_in_editor = false;
+                    }
+                }
+                _ => (req.output_path, req.preview_in_editor) = (output.clone(), false),
+            }
+            if tool_chosen || !output.is_empty() {
+                req.save_to_file = false;
+            }
+            self.start_capture(ctl, &req);
         }
         if !handled && (!startup || (!hide && reg::get_dword(OsStr::new("ShowCaptureWindow"), 1, None) != 0)) {
             self.show(ctl);
@@ -613,6 +791,50 @@ fn pins_submenu() -> tray::Menu {
     tray::Menu::new(items)
 }
 
+/// The tray's "Open the Editor after capturing" (issue #3): off = Options › When done › Only copy to the clipboard;
+/// on again = the mode chosen before.
+fn toggle_after_capture_editor() {
+    let mode = engine::after_capture_mode();
+    let new = if mode == 3 {
+        reg::get_dword(OsStr::new("AfterCaptureModeOn"), 0, None).min(2)
+    } else {
+        reg::set_dword(OsStr::new("AfterCaptureModeOn"), mode, None);
+        3
+    };
+    reg::set_dword(OsStr::new("AfterCaptureMode"), new, None);
+}
+
+/// OpenManual: help\Snapnab-Manual.html, at `topic` in the default browser (opening the .html through its
+/// association would drop the #fragment).
+fn open_manual(topic: &str) {
+    let path = snapcore::paths::exe_dir().join("help").join("Snapnab-Manual.html");
+    if !path.exists() {
+        engine::message_box(tr("O manual não foi encontrado:\n") + &path.to_string_lossy(), "Snapnab".into());
+        return;
+    }
+    let url = format!("file:///{}#{topic}", path.to_string_lossy().replace('\\', "/").replace(' ', "%20"));
+    let browser = {
+        use windows::Win32::UI::Shell::{ASSOCF_IS_PROTOCOL, ASSOCSTR_EXECUTABLE, AssocQueryStringW};
+        let mut buf = vec![0u16; 520];
+        let mut n = buf.len() as u32;
+        let ok = unsafe {
+            AssocQueryStringW(ASSOCF_IS_PROTOCOL, ASSOCSTR_EXECUTABLE, w!("http"), w!("open"), Some(windows::core::PWSTR(buf.as_mut_ptr())),
+                              &mut n)
+        }
+        .is_ok();
+        ok.then(|| String::from_utf16_lossy(&buf[..buf.iter().position(|&c| c == 0).unwrap_or(0)]))
+    };
+    if let Some(b) = browser.filter(|b| !b.is_empty()) {
+        let (bw, arg) = (snapcore::wide::to_wide(&b), snapcore::wide::to_wide(format!("\"{url}\"")));
+        let r = unsafe { ShellExecuteW(None, PCWSTR::null(), PCWSTR(bw.as_ptr()), PCWSTR(arg.as_ptr()), PCWSTR::null(), SW_SHOWNORMAL) };
+        if r.0 as isize > 32 {
+            log::write(&format!("Manual: opened #{topic} in {b}"));
+            return;
+        }
+    }
+    shell_open(&path.to_string_lossy());
+}
+
 /// SetOneClick: the panel and its setting.
 fn set_one_click(on: bool) {
     reg::set_dword(OsStr::new("OneClickEnabled"), on as u32, None);
@@ -670,6 +892,11 @@ impl App for CaptureApp {
             self.last_clip_seq = windows::Win32::System::DataExchange::GetClipboardSequenceNumber();
         }
         pins::init(ctl.waker());
+        self.waker = Some(ctl.waker());
+        desk::restore_after_crash(); // desktop icons / notifications left hidden by a crash (C16)
+        unsafe {
+            SetTimer(Some(HWND(self.hwnd as _)), CLEANUP_TIMER, 30_000, None); // the first library cleanup half a minute after the start
+        }
         if reg::get_dword(OsStr::new("OneClickEnabled"), 0, None) != 0 {
             oneclick::show(true);
         }
@@ -712,6 +939,14 @@ impl App for CaptureApp {
             }
             WM_COMMAND => self.command(ctl, (m.wparam & 0xFFFF) as u32),
             tray::WM_SNAP_TRAY => self.tray_event(ctl, m.lparam),
+            WM_TIMER if m.wparam == CLEANUP_TIMER => {
+                unsafe {
+                    SetTimer(Some(HWND(self.hwnd as _)), CLEANUP_TIMER, 6 * 3600 * 1000, None);
+                }
+                if snapcore::library::cleanup_now() > 0 {
+                    self.library_changed();
+                }
+            }
             WM_TIMER => {
                 unsafe {
                     let _ = KillTimer(Some(HWND(self.hwnd as _)), TRAY_CLICK_TIMER);
@@ -768,6 +1003,38 @@ impl App for CaptureApp {
                         }
                     }
                     pins::UiEv::Capture => self.start_capture(ctl, &self.current()),
+                    pins::UiEv::ColorPicked(c) => {
+                        snapcore::color::add_recent(c);
+                        // copied right away; the menu offers the other formats
+                        snapcore::clip::copy_text(self.hwnd, &snapcore::color::to_text(c, snapcore::color::default_format()));
+                        let (x, y) = snapcore::screen::cursor_pos();
+                        desk::color_formats_menu(self.hwnd, c, (x, y));
+                    }
+                    pins::UiEv::IntervalChosen(s) => {
+                        if s.area == 2 || s.area == 3 {
+                            // the region or window is chosen with the crosshair; the capture starts when it is chosen
+                            self.pending_interval = Some(s.clone());
+                            let env = env!(self);
+                            if !self.engine.pick_area(ctl, &env, s.area == 3) {
+                                self.pending_interval = None;
+                            }
+                        } else {
+                            interval::begin(s, snapcore::image::Rect::default(), 0);
+                        }
+                    }
+                    pins::UiEv::IntervalArea(r, w) => {
+                        if let Some(s) = self.pending_interval.take() {
+                            interval::begin(s, r, w);
+                        }
+                    }
+                    pins::UiEv::IntervalStatus(on, n) => {
+                        let tip = if on {
+                            tr("Snapnab — captura por intervalo: %d imagem(ns)").replace("%d", &n.to_string())
+                        } else {
+                            tr("Snapnab — clique para capturar")
+                        };
+                        tray::set_status(self.hwnd, on, &tip);
+                    }
                     pins::UiEv::OneClickMenu(x, y) => {
                         self.one_click_menu(x, y);
                         oneclick::menu_closed();
@@ -833,6 +1100,8 @@ fn main() {
         hk: None,
         last: None,
         video_keys: false,
+        pending_interval: None,
+        waker: None,
     };
     if let Err(e) = snapui::host::run(app, |_| {}) {
         log::write(&format!("Event loop: {e}"));

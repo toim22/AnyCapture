@@ -1,6 +1,6 @@
 //! The small modal forms built in code (Ui.cpp, RunForm), with the same window class and control IDs (field i is
-//! control 1000 + i, OK is 1 and Cancel 2), which the e2e suite fills by ID. Only the field kinds the Rust app asks
-//! for so far are here. A form runs its own message loop: call it from its own thread.
+//! control 1000 + i, OK is 1 and Cancel 2), which the e2e suite fills by ID. Labels, texts, numbers, lists and
+//! check boxes. A form runs its own message loop: call it from its own thread.
 
 use std::cell::Cell;
 use std::sync::Once;
@@ -30,7 +30,18 @@ pub enum Field {
     Label(String),
     Text { label: String, text: String },
     Int { label: String, value: i32, min: i32, max: i32 },
+    /// a drop-down list; `value` is the chosen index
+    Combo { label: String, items: Vec<String>, value: i32 },
+    Check { label: String, value: bool },
 }
+
+const CB_ADDSTRING: u32 = 0x0143;
+const CB_GETCURSEL: u32 = 0x0147;
+const CB_SETCURSEL: u32 = 0x014E;
+const CBS_DROPDOWNLIST: u32 = 3;
+const BM_GETCHECK: u32 = 0x00F0;
+const BM_SETCHECK: u32 = 0x00F1;
+const BS_AUTOCHECKBOX: u32 = 3;
 
 const ID_FIELD: i32 = 1000;
 // static control styles (SS_LEFT, SS_CENTERIMAGE)
@@ -155,6 +166,24 @@ pub fn run(owner: isize, title: &str, fields: &mut [Field]) -> bool {
                     SendMessageW(ud, UDM_SETPOS32, None, Some(LPARAM(*value as isize)));
                     first.get_or_insert(e);
                 }
+                Field::Combo { label, items, value } => {
+                    child(Default::default(), w!("STATIC"), label, SS_LEFT | SS_CENTERIMAGE, pad, yy, label_w - scale(8, dpi),
+                          ctl_h, 0);
+                    let c = child(Default::default(), w!("COMBOBOX"), "", WS_TABSTOP.0 | CBS_DROPDOWNLIST | 0x0020_0000 /* WS_VSCROLL */,
+                                  cx, yy, width - pad - cx, ctl_h + scale(200, dpi), id);
+                    for it in items {
+                        let t = to_wide(it);
+                        SendMessageW(c, CB_ADDSTRING, None, Some(LPARAM(t.as_ptr() as isize)));
+                    }
+                    SendMessageW(c, CB_SETCURSEL, Some(WPARAM(*value as usize)), None);
+                    first.get_or_insert(c);
+                }
+                Field::Check { label, value } => {
+                    let c = child(Default::default(), w!("BUTTON"), label, WS_TABSTOP.0 | BS_AUTOCHECKBOX, cx, yy, width - pad - cx,
+                                  ctl_h, id);
+                    SendMessageW(c, BM_SETCHECK, Some(WPARAM(*value as usize)), None);
+                    first.get_or_insert(c);
+                }
             }
             yy += row_h * sp;
         }
@@ -194,6 +223,8 @@ pub fn run(owner: isize, title: &str, fields: &mut [Field]) -> bool {
                         *value = s.parse::<i32>().unwrap_or(*value).clamp(*min, *max);
                     }
                     Field::Text { text, .. } => *text = got,
+                    Field::Combo { value, .. } => *value = SendMessageW(e, CB_GETCURSEL, None, None).0.max(0) as i32,
+                    Field::Check { value, .. } => *value = SendMessageW(e, BM_GETCHECK, None, None).0 == 1,
                     Field::Label(_) => {}
                 }
             }

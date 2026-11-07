@@ -25,6 +25,7 @@ use snapcore::wide::to_wide;
 pub const WM_SNAP_TRAY: u32 = WM_APP + 0x41;
 
 static ICON_SMALL: AtomicIsize = AtomicIsize::new(0);
+static ICON_BUSY: AtomicIsize = AtomicIsize::new(0);
 
 /// The app icon drawn at run time (Icons.cpp MakeAppIcon): a blue rounded square with a white capture frame.
 pub fn app_icon(size: i32) -> HICON {
@@ -142,6 +143,74 @@ pub fn remove(hwnd: isize) {
     }
 }
 
+/// MakeBusyIcon: the app icon with a red dot (the interval capture runs).
+fn busy_icon(size: i32) -> HICON {
+    let base = app_icon(size);
+    let mut px = vec![0u32; (size * size) as usize];
+    unsafe {
+        use windows::Win32::Graphics::Gdi::{CreateCompatibleDC, DeleteDC, SelectObject};
+        use windows::Win32::UI::WindowsAndMessaging::{DI_NORMAL, DestroyIcon, DrawIconEx};
+        let bi = BITMAPINFO {
+            bmiHeader: BITMAPINFOHEADER {
+                biSize: std::mem::size_of::<BITMAPINFOHEADER>() as u32,
+                biWidth: size,
+                biHeight: -size,
+                biPlanes: 1,
+                biBitCount: 32,
+                biCompression: BI_RGB.0,
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let mut bits = std::ptr::null_mut();
+        let Ok(color) = CreateDIBSection(None, &bi, DIB_RGB_COLORS, &mut bits, None, 0) else { return base };
+        let dc = CreateCompatibleDC(None);
+        let o = SelectObject(dc, color.into());
+        let _ = DrawIconEx(dc, 0, 0, base, size, size, 0, None, DI_NORMAL);
+        SelectObject(dc, o);
+        let _ = DeleteDC(dc);
+        std::ptr::copy_nonoverlapping(bits as *const u32, px.as_mut_ptr(), px.len());
+        let r = (size * 3 / 8) as f32;
+        for y in 0..size {
+            for x in 0..size {
+                let (dx, dy) = (x as f32 + 0.5 - (size as f32 - r), y as f32 + 0.5 - (size as f32 - r));
+                if dx * dx + dy * dy <= r * r {
+                    px[(y * size + x) as usize] = 0xFFE5_3935;
+                }
+            }
+        }
+        std::ptr::copy_nonoverlapping(px.as_ptr(), bits as *mut u32, px.len());
+        let mask: HBITMAP = CreateBitmap(size, size, 1, 1, None);
+        let info = ICONINFO { fIcon: true.into(), xHotspot: 0, yHotspot: 0, hbmMask: mask, hbmColor: color };
+        let icon = CreateIconIndirect(&info).unwrap_or_default();
+        let _ = DeleteObject(color.into());
+        let _ = DeleteObject(mask.into());
+        let _ = DestroyIcon(base);
+        icon
+    }
+}
+
+/// UpdateTrayStatus: the red dot and the count while the interval capture runs.
+pub fn set_status(hwnd: isize, busy: bool, tip: &str) {
+    let icon = if busy {
+        let mut b = ICON_BUSY.load(Ordering::Relaxed);
+        if b == 0 {
+            b = busy_icon(16).0 as isize;
+            ICON_BUSY.store(b, Ordering::Relaxed);
+        }
+        b
+    } else {
+        ICON_SMALL.load(Ordering::Relaxed)
+    };
+    let mut n = nid(hwnd);
+    n.uFlags = NIF_ICON | NIF_TIP;
+    n.hIcon = HICON(icon as _);
+    copy(&mut n.szTip, tip);
+    unsafe {
+        let _ = Shell_NotifyIconW(NIM_MODIFY, &n);
+    }
+}
+
 /// A balloon notification from the tray icon.
 pub fn notify(hwnd: isize, title: &str, text: &str) {
     let mut n = nid(hwnd);
@@ -159,7 +228,6 @@ pub struct Menu(HMENU);
 
 pub enum Item<'a> {
     Cmd(u32, &'a str),
-    #[allow(dead_code)] // the checked items (One Click, focus) come with their features
     Checked(u32, &'a str, bool),
     Sub(&'a str, Menu),
     /// grayed out
