@@ -27,6 +27,26 @@ fn data_dir() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("..").join("..").join("tests").join("data")
 }
 
+/// `SNAPNAB_GOLDEN_PIXELS=loose` (set by the CI) compares the lines without their 16-digit hashes, and the PDF lines
+/// without their byte size. Drawing and PNG encoding go through Windows (GDI+, WIC), and another Windows version, such
+/// as the CI's Windows Server, gives a few different edge pixels; the rest of each line (sizes, bounds, XML, texts)
+/// must still match. Without the variable every line must match exactly, as on the machine the references come from.
+fn loose_pixels() -> bool {
+    std::env::var("SNAPNAB_GOLDEN_PIXELS").is_ok_and(|v| v.eq_ignore_ascii_case("loose"))
+}
+
+fn mask_pixels(line: &str) -> String {
+    let mut out = Vec::new();
+    for (i, word) in line.split(' ').enumerate() {
+        let core = word.trim_start_matches('[').trim_end_matches(']');
+        let hash = core.len() == 16 && core.bytes().all(|b| b.is_ascii_hexdigit());
+        // "pdf <name> ok=1 <size> <hash> err=": the size follows ok=
+        let pdf_size = line.starts_with("pdf ") && i > 0 && line.split(' ').nth(i - 1).is_some_and(|p| p.starts_with("ok="));
+        out.push(if hash { word.replace(core, "<hash>") } else if pdf_size { "<size>".into() } else { word.to_string() });
+    }
+    out.join(" ")
+}
+
 fn compare(file: &str, lines: &[String]) {
     let path = data_dir().join(file);
     let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
@@ -38,12 +58,22 @@ fn compare(file: &str, lines: &[String]) {
     let out = Path::new(env!("CARGO_MANIFEST_DIR")).join("..").join("target").join("golden");
     let _ = std::fs::create_dir_all(&out);
     let _ = std::fs::write(out.join(file), lines.join("\n") + "\n");
-    let mut diffs = Vec::new();
+    let loose = loose_pixels();
+    let (mut diffs, mut masked) = (Vec::new(), 0);
     for i in 0..want.len().max(got.len()) {
         let (w, g) = (want.get(i).copied().unwrap_or("<none>"), got.get(i).copied().unwrap_or("<none>"));
-        if w != g {
+        if w == g {
+            continue;
+        }
+        if loose && mask_pixels(w) == mask_pixels(g) {
+            masked += 1;
+        } else {
             diffs.push(format!("line {}:\n  want {w}\n  got  {g}", i + 1));
         }
+    }
+    if diffs.is_empty() {
+        eprintln!("{file}: {masked} line(s) differ only in pixel hashes (SNAPNAB_GOLDEN_PIXELS=loose)");
+        return;
     }
     panic!("{file}: {} line(s) differ (this build's lines are in target/golden/{file})\n{}", diffs.len(),
            diffs.iter().take(12).cloned().collect::<Vec<_>>().join("\n"));

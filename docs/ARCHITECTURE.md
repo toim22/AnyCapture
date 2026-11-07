@@ -285,6 +285,9 @@ and the custom uploader syntax against `net-cpp.txt`; the Editor's painters agai
 type and style variation, with the bounds, text and label boxes, outlines and stamp images they measured); the
 objects' XML, older and hand-written files, the clipboard text, a `.snap` saved and opened and hit-testing on a grid
 against `doc-cpp.txt`; the presets against `presets-cpp.txt`. The GIF writer writes the same bytes as the C++ one.
+The references come from a Windows 11 machine. Drawing and PNG encoding go through Windows (GDI+, WIC), and the CI's
+Windows Server gives a few different edge pixels, so the CI sets `SNAPNAB_GOLDEN_PIXELS=loose`: the lines are compared
+without their pixel hashes (and the PDF lines without their size), and everything else in them must still match.
 
 The end-to-end suite (`tests/e2e`, see its README) drives the real programs through UI Automation and the mouse:
 lifecycle and IPC, every capture input and effect, video, the capture window, the Editor's tools, commands, files and

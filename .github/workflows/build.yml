@@ -26,8 +26,12 @@ jobs:
             Where-Object { Test-Path $_ } | Select-Object -First 1
           if (-not $iscc) { choco install innosetup -y --no-progress }
 
+      # The golden references come from a Windows 11 machine; Windows Server draws a few edge pixels differently, so
+      # here the golden checks compare everything but the pixel hashes (rust/snapedit/tests/golden.rs).
       - name: Rust tests (rust/)
         shell: cmd
+        env:
+          SNAPNAB_GOLDEN_PIXELS: loose
         run: cargo test --locked --release --workspace --manifest-path rust/Cargo.toml
 
       - name: Build and package
