@@ -5,6 +5,7 @@
 #![windows_subsystem = "windows"]
 
 mod engine;
+mod form;
 mod hotkeys;
 mod rawwin;
 mod tray;

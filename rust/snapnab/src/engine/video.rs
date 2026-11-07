@@ -60,7 +60,7 @@ fn no_activate(_hwnd: isize, msg: u32, _wp: usize, _lp: isize) -> Caught {
 }
 
 /// Topmost tool window that is not activated, has rounded corners and stays out of captures.
-fn float_window(hwnd: isize, x: i32, y: i32, w: i32, h: i32, radius: i32) {
+pub(super) fn float_window(hwnd: isize, x: i32, y: i32, w: i32, h: i32, radius: i32) {
     let h_ = HWND(hwnd as _);
     unsafe {
         let ex = GetWindowLongW(h_, GWL_EXSTYLE) as u32 | WS_EX_NOACTIVATE.0 | WS_EX_TOOLWINDOW.0;

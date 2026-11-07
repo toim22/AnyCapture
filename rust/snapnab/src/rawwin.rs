@@ -57,6 +57,14 @@ fn register() {
             ..Default::default()
         };
         RegisterClassW(&border);
+        let pano = WNDCLASSW {
+            lpfnWndProc: Some(border_proc),
+            hInstance: hi,
+            hbrBackground: CreateSolidBrush(COLORREF(232 | 120 << 8 | 30 << 16)),
+            lpszClassName: w!("SnapnabPanoBorder"),
+            ..Default::default()
+        };
+        RegisterClassW(&pano);
         let count = WNDCLASSW { lpfnWndProc: Some(count_proc), hInstance: hi, lpszClassName: w!("SnapnabCountdown"), ..Default::default() };
         RegisterClassW(&count);
     });
@@ -73,14 +81,23 @@ pub fn destroy(hwnd: &mut isize) {
 
 /// The red frame around the recorded area (outside it, so it is not in the video).
 pub fn border(area: Rect) -> isize {
+    frame(area, w!("SnapnabRecorderBorder"), 230)
+}
+
+/// The orange frame around the panoramic region.
+pub fn pano_border(area: Rect) -> isize {
+    frame(area, w!("SnapnabPanoBorder"), 235)
+}
+
+fn frame(area: Rect, class: PCWSTR, alpha: u8) -> isize {
     register();
     let t = 3;
     let o = Rect::new(area.left - t, area.top - t, area.right + t, area.bottom + t);
     unsafe {
         let Ok(b) = CreateWindowExW(WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE,
-                                    w!("SnapnabRecorderBorder"), w!(""), WS_POPUP, o.left, o.top, o.width(), o.height(), None, None,
+                                    class, w!(""), WS_POPUP, o.left, o.top, o.width(), o.height(), None, None,
                                     None, None) else { return 0 };
-        let _ = SetLayeredWindowAttributes(b, COLORREF(0), 230, LWA_ALPHA);
+        let _ = SetLayeredWindowAttributes(b, COLORREF(0), alpha, LWA_ALPHA);
         let outer = CreateRectRgn(0, 0, o.width(), o.height());
         let inner = CreateRectRgn(t, t, o.width() - t, o.height() - t);
         CombineRgn(Some(outer), Some(outer), Some(inner), RGN_DIFF);

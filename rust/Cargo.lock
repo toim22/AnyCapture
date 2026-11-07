@@ -3152,6 +3152,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "snapex"
+version = "0.1.0"
+dependencies = [
+ "windows",
+]
+
+[[package]]
 name = "snapnab"
 version = "0.4.1"
 dependencies = [

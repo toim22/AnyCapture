@@ -42,6 +42,7 @@ use windows::core::{PCWSTR, w};
 
 use crate::{VERSION, tray};
 
+mod scroll;
 mod video;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -65,6 +66,8 @@ pub enum EngineEv {
     RecorderNote(snapcore::recorder::Note),
     /// the answer to the restart question (its own thread)
     Restart { yes: bool, dont_ask: bool, was_recording: bool },
+    /// the scrolling or extended window capture finished on its thread (empty: canceled)
+    Grabbed(Image, CaptureInfo),
 }
 
 /// What the engine needs of the capture app.
@@ -178,6 +181,9 @@ pub struct Engine {
     delay: Option<DelayWin>,
     texts: Vec<TextWin>,
     video: video::Video,
+    /// a scrolling or extended window capture runs on its thread
+    grabbing: bool,
+    pano: Option<scroll::Pano>,
 }
 
 impl Engine {
@@ -193,6 +199,8 @@ impl Engine {
             delay: None,
             texts: Vec::new(),
             video: video::Video::default(),
+            grabbing: false,
+            pano: None,
         }
     }
 
@@ -214,6 +222,7 @@ impl Engine {
         self.overlay.as_ref().is_some_and(|o| ctl.exists(o.key))
             || self.delay.as_ref().is_some_and(|d| ctl.exists(d.key))
             || self.video_active()
+            || self.scroll_alive()
             || self.since.elapsed() < Duration::from_secs(15)
     }
 
@@ -274,6 +283,7 @@ impl Engine {
             }
             EngineEv::RecorderNote(n) => self.on_recorder_note(ctl, env, n),
             EngineEv::Restart { yes, dont_ask, was_recording } => self.restart_answer(yes, dont_ask, was_recording),
+            EngineEv::Grabbed(img, info) => self.grabbed(ctl, env, img, info),
         }
     }
 
@@ -356,11 +366,6 @@ impl Engine {
         self.frozen = Image::default();
         self.cursor = None;
         self.set_state(State::Idle);
-    }
-
-    fn not_here_yet(&mut self, what: &str) {
-        log::write(&format!("CaptureEngine: {what} is not in the Rust app yet"));
-        self.input_canceled();
     }
 
     fn begin_input(&mut self, ctl: &mut Ctl, env: &Env) {
@@ -463,10 +468,6 @@ impl Engine {
                 env.notify("Snapnab", &tr("Nenhum menu aberto encontrado; selecione a região."));
                 // falls back to the region selection
             }
-            Selection::Scrolling | Selection::ExtendedWindow | Selection::Panoramic => {
-                self.not_here_yet(&format!("{:?}", p.selection));
-                return;
-            }
             _ => {}
         }
 
@@ -486,6 +487,8 @@ impl Engine {
             Selection::FixedRegion => Mode::Fixed,
             Selection::Freehand => Mode::Freehand,
             Selection::MultiArea => Mode::MultiArea,
+            // scrolling and extended window pick a window; panoramic is a plain region, scrolled after the selection
+            Selection::Scrolling | Selection::ExtendedWindow => Mode::PickWindow,
             _ if fixed_region => Mode::Fixed,
             _ => Mode::Region,
         };
@@ -612,6 +615,14 @@ impl Engine {
             info.application = wtext(&screen::window_process_name(s.window));
         }
         self.set_state(State::Capturing);
+        match p.selection {
+            Selection::Panoramic => return self.start_pano(ctl, s.rect, info),
+            Selection::Scrolling | Selection::ExtendedWindow => {
+                self.frozen = Image::default();
+                return self.grab_on_thread(ctl, info, p.selection == Selection::ExtendedWindow, s.window, s.child);
+            }
+            _ => {}
+        }
         let local = s.rect.offset(-self.vs.left, -self.vs.top);
         let frozen = std::mem::take(&mut self.frozen);
         let img = match p.selection {
@@ -831,6 +842,7 @@ impl Engine {
             || self.delay.as_ref().is_some_and(|d| d.key == k)
             || self.texts.iter().any(|t| t.key == k)
             || self.video_owns(k)
+            || self.pano_owns(k)
     }
 
     pub fn ui(&mut self, ctl: &mut Ctl, env: &Env, k: WinKey, ui: &mut egui::Ui) {
@@ -842,6 +854,8 @@ impl Engine {
             self.delay_ui(ctl, ui);
         } else if self.video_owns(k) {
             self.video_ui(ctl, env, k, ui);
+        } else if self.pano_owns(k) {
+            self.pano_ui(ctl, env, ui);
         } else if let Some(i) = self.texts.iter().position(|t| t.key == k) {
             let mut close = false;
             egui::Panel::bottom("buttons").show(ui, |ui| {
@@ -873,6 +887,8 @@ impl Engine {
             go(ctl);
         } else if self.video_owns(k) {
             self.video_close_requested(ctl, k);
+        } else if self.pano_owns(k) {
+            self.pano_close_requested(ctl, env);
         } else {
             self.texts.retain(|t| t.key != k);
             ctl.close(k);
@@ -886,7 +902,7 @@ impl Engine {
             self.overlay_done(ctl, env, Outcome::Canceled);
             return true;
         }
-        false
+        self.pano_message(ctl, env, m)
     }
 }
 

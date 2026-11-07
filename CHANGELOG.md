@@ -24,7 +24,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   and the library, clipboard, file and program outputs, started by the tray, the window, the command line or the
   hotkeys. It records video too: the HUD over the area with pause, restart, cancel, the snapshot, the microphone,
   system audio and volume controls, the countdown, the cursor and click overlays and the recording hotkeys, and audio
-  only recordings. Scrolling and panoramic captures and the webcam are still missing; it is not shipped.
+  only recordings. The scrolling window, extended window and panoramic captures work too, with SnapEx64.dll
+  rewritten in Rust. The webcam, pins and the Options and Presets dialogs are still missing; it is not shipped.
 
 ## [0.4.1] — 2026-11-03
 
