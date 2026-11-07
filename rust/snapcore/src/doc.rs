@@ -1,7 +1,7 @@
 //! The editor's objects (Document.h / Document.cpp): the drawing objects and their style, with the geometry the
 //! painters and the editor ask for (rectangle, bounds, effective shape, step labels, arrowhead length).
 
-use windows::Win32::Graphics::GdiPlus::{PointF, RectF};
+pub use windows::Win32::Graphics::GdiPlus::{PointF, RectF};
 
 use crate::gdip::{pt, rect};
 use crate::render;

@@ -1,7 +1,7 @@
 # Snapnab's Rust workspace (the C++ to Rust migration, docs/ARCHITECTURE.md). Every crate shares this lockfile, the
 # target folder and the release profile; CMake builds them through Corrosion (src/CMakeLists.txt).
 [workspace]
-members = ["snapcore", "snapex", "snapnab", "snapui"]
+members = ["snapcore", "snapedit", "snapex", "snapnab", "snapui"]
 resolver = "3"
 
 [workspace.package]

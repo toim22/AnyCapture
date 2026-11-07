@@ -3152,6 +3152,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "snapedit"
+version = "0.4.1"
+dependencies = [
+ "egui",
+ "egui_kittest",
+ "snapcore",
+ "snapui",
+ "windows",
+ "winit",
+]
+
+[[package]]
 name = "snapex"
 version = "0.1.0"
 dependencies = [
