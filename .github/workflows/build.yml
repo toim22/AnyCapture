@@ -19,12 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install Inno Setup 6
+      # the installer's Windows 11 style needs Inno Setup 6.7 or later, and the runner's own copy may be older (its
+      # executables carry no version number to check): installs or upgrades it to the current one
+      - name: Install Inno Setup 6.7+
         shell: pwsh
-        run: |
-          $iscc = @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", "$env:ProgramFiles\Inno Setup 6\ISCC.exe") |
-            Where-Object { Test-Path $_ } | Select-Object -First 1
-          if (-not $iscc) { choco install innosetup -y --no-progress }
+        run: choco upgrade innosetup -y --no-progress
 
       # The golden references come from a Windows 11 machine; Windows Server draws a few edge pixels differently, so
       # here the golden checks compare everything but the pixel hashes (rust/snapedit/tests/golden.rs).

@@ -1,6 +1,6 @@
-﻿; Snapnab installer (Inno Setup 6.5 or later) — packages dist\Snapnab\ produced by build.bat.
+﻿; Snapnab installer (Inno Setup 6.7 or later) — packages dist\Snapnab\ produced by build.bat.
 ; build.bat compiles it automatically when it finds Inno Setup, passing the version from rust\Cargo.toml:
-;   ISCC.exe /DAppVersion=0.4.1 packaging\installer\Snapnab.iss   →   dist\Snapnab-0.4.1-setup.exe
+;   ISCC.exe /DAppVersion=0.5.0 packaging\installer\Snapnab.iss   →   dist\Snapnab-0.5.0-setup.exe
 ;
 ; Installs for the current user only (no administrator prompt, in %LOCALAPPDATA%\Programs\Snapnab) or, if the user
 ; chooses, for all users (in Program Files). Captures, presets and settings live in the user profile
@@ -8,7 +8,7 @@
 
 #define AppName      "Snapnab"
 #ifndef AppVersion
-  #define AppVersion "0.4.1"
+  #define AppVersion "0.5.0"
 #endif
 #define AppPublisher "Antonio Rezende"
 #define AppURL       "https://github.com/toim22/Snapnab"
@@ -39,10 +39,14 @@ UninstallDisplayName={#AppName}
 LicenseFile=..\..\LICENSE
 Compression=lzma2/max
 SolidCompression=yes
-; modern wizard that follows the Windows light/dark theme, with the Snapnab icon
-WizardStyle=modern dynamic
-WizardImageFile=WizardLarge.png
-WizardSmallImageFile=WizardSmall.png
+; the modern wizard in Windows 11's style, light or dark as Windows is, with the Welcome page and the Snapnab pictures
+; (one file per display scale, drawn by wizard_images.py)
+WizardStyle=modern dynamic windows11 hidebevels
+DisableWelcomePage=no
+WizardImageFile=WizardLarge-100.png,WizardLarge-125.png,WizardLarge-150.png,WizardLarge-175.png,WizardLarge-200.png,WizardLarge-250.png
+WizardImageFileDynamicDark=WizardLarge-dark-100.png,WizardLarge-dark-125.png,WizardLarge-dark-150.png,WizardLarge-dark-175.png,WizardLarge-dark-200.png,WizardLarge-dark-250.png
+WizardSmallImageFile=WizardSmall-100.png,WizardSmall-125.png,WizardSmall-150.png,WizardSmall-175.png,WizardSmall-200.png,WizardSmall-250.png
+WizardSmallImageFileDynamicDark=WizardSmall-100.png,WizardSmall-125.png,WizardSmall-150.png,WizardSmall-175.png,WizardSmall-200.png,WizardSmall-250.png
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0.19041
@@ -50,6 +54,10 @@ MinVersion=10.0.19041
 ; a protected folder (such as Program Files) in per-user mode, [Code] offers to restart as administrator
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=commandline dialog
+; an update installs where the previous version is (the AppId is the same since the first version, so every earlier
+; version is replaced in place), for all users or only this one as before, without asking again
+UsePreviousPrivileges=yes
+UsePreviousAppDir=yes
 ; the installer/uninstaller closes Snapnab if it is running (and reopens it after updating)
 AppMutex=Snapnab-Capture-{{41F1BF9C-5A4E-4B6F-9C33-1D2E3F405A61},Snapnab-Editor-{{800F2EB3-7C1D-4E2A-A3B4-C5D6E7F80912}
 CloseApplications=yes
@@ -101,6 +109,10 @@ german.DirNotWritable=In den ausgewählten Ordner kann nicht geschrieben werden:
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "startup"; Description: "{cm:AutoStartProgram,{#AppName}}"; GroupDescription: "{cm:AutoStartProgramGroupDescription}"
+
+[InstallDelete]
+; files of earlier versions that this one no longer ships
+Type: files; Name: "{app}\LEIA-ME.txt"
 
 [Files]
 Source: "{#SrcDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
@@ -204,6 +216,31 @@ begin
   end
   else if ErrorCode <> 1223 then  // 1223: the user declined UAC; stay on this page
     MsgBox(SysErrorMessage(ErrorCode), mbError, MB_OK);
+end;
+
+// An earlier version installed in the other mode would stay next to this one. Installing for all users, a copy that
+// was installed only for this user is removed first (its uninstaller, silently, before the files are copied). A copy
+// for all users can only be removed by an administrator, so a per-user install leaves it.
+const
+  UninstallKey = 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{C59F0FFC-FF4A-4107-8483-9934772DA4EB}_is1';
+
+procedure RemoveOtherInstall(Root: Integer);
+var
+  Cmd: String;
+  Code: Integer;
+begin
+  if not RegQueryStringValue(Root, UninstallKey, 'UninstallString', Cmd) then
+    Exit;
+  Cmd := RemoveQuotes(Cmd);
+  Log('Removing the per-user install of an earlier version: ' + Cmd);
+  if not Exec(Cmd, '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART', '', SW_HIDE, ewWaitUntilTerminated, Code) then
+    Log('Could not run it: ' + SysErrorMessage(Code));
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if (CurStep = ssInstall) and IsAdminInstallMode then
+    RemoveOtherInstall(HKCU);
 end;
 
 // closes this instance without asking "Exit Setup?" once the elevated one has opened

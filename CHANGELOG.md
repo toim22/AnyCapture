@@ -3,7 +3,7 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.5.0] — not released yet
 
 ### Changed
 - **Snapnab is now written in Rust.** Both programs, `Snapnab.exe` (capture) and `SnapnabEditor.exe` (Editor), and
@@ -31,6 +31,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   Editor's menu bar follow it too. It applies when Snapnab reopens.
 - `SnapnabTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
   and for debugging.
+
+### Fixed
+- The Pen and the Eraser show their tip as the mouse pointer, a circle as wide as the chosen width at the current zoom,
+  instead of a cross (#4).
+- *Save as* in the Editor (Ctrl+Shift+S) opens in the folder used the last time, instead of the capture folder (#5).
+- Print Screen can be typed into a hotkey box (Options and preset hotkeys), alone or with Shift, Ctrl or Alt. Windows
+  sends no key press for it, and the Snipping Tool or a Snapnab capture could take it first (#6).
+- With *Only copy to the clipboard*, the notification after a capture shows a miniature of it, and a click on the
+  notification opens the capture in the Editor (#7).
 
 ## [0.4.1] — 2026-11-03
 

@@ -6,7 +6,7 @@
 - [Rust](https://rustup.rs) (stable, `x86_64-pc-windows-msvc`, the rustup default on Windows)
 - The Visual Studio 2022+ C++ build tools (the *Desktop development with C++* workload or the *Build Tools for Visual
   Studio*): the MSVC linker, `rc.exe` and the Windows SDK. Cargo finds them by itself.
-- To build the installer: [Inno Setup 6.5+](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
+- To build the installer: [Inno Setup 6.7+](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
   Without it, `build.bat` produces only the folder and the zip.
 
 Almost everything uses Windows APIs (Win32, GDI+, WIC, Media Foundation, WASAPI, Windows.Media.Ocr, WinHTTP, Direct3D
@@ -58,7 +58,7 @@ finds `ISCC.exe` (in `%LOCALAPPDATA%\Programs`, `Program Files` or on the `PATH`
 `rust\Cargo.toml`. To compile it by hand after `build.bat`:
 
 ```bat
-ISCC.exe /DAppVersion=0.4.1 packaging\installer\Snapnab.iss
+ISCC.exe /DAppVersion=0.5.0 packaging\installer\Snapnab.iss
 ```
 
 What the installer does:
