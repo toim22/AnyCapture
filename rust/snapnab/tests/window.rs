@@ -18,9 +18,11 @@ struct State {
 fn harness_with(view: View) -> Harness<'static, State> {
     let state = State { store: PresetStore { presets: default_presets(), selected: 0 }, view, actions: Vec::new() };
     let h = snapnab_app::window::height(&state.store, &state.view);
+    snapui::fixed_look_for_tests();
     Harness::builder().with_size(egui::vec2(snapnab_app::window::WIDTH, h)).build_ui_state(
         |ui, s: &mut State| {
             snapui::install_fonts(ui.ctx());
+            snapui::theme::apply(ui.ctx());
             let a = draw(&mut s.store, &mut s.view, &|m, v| format!("{m}+{v}"), ui);
             s.actions.extend(a);
         },

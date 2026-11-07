@@ -565,6 +565,7 @@ impl Engine {
             skip_taskbar: true,
             intercept: Some(select_intercept),
             clear_color: [0.0, 0.0, 0.0, 1.0],
+            ..Default::default()
         };
         let Some(k) = ctl.create(&spec) else {
             log::write("Selection: the window could not be created");

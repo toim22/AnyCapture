@@ -8,11 +8,26 @@ use std::sync::{Arc, OnceLock};
 
 use egui::{FontData, FontDefinitions, FontFamily};
 
+pub mod droplist;
 pub mod form;
 pub mod host;
 pub mod icons;
 pub mod qr;
+pub mod theme;
+pub mod widgets;
 pub mod upload_ui;
+
+static FIXED_LOOK: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// For the snapshot tests: the same look on every machine (the light theme, Windows' default blue accent, Segoe UI
+/// without Windows 11's variable font, which Windows Server and Windows 10 lack). Call it before the first frame.
+pub fn fixed_look_for_tests() {
+    FIXED_LOOK.store(true, std::sync::atomic::Ordering::Relaxed);
+}
+
+pub fn fixed_look() -> bool {
+    FIXED_LOOK.load(std::sync::atomic::Ordering::Relaxed)
+}
 
 /// Windows' own fonts, so every language Snapnab ships has its letters: Segoe UI (Latin, Greek, Cyrillic, Arabic,
 /// Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and Segoe UI Emoji.
@@ -26,13 +41,18 @@ fn load_fonts() -> FontDefinitions {
     let mut defs = FontDefinitions::default();
     let dir = std::env::var("WINDIR").unwrap_or_else(|_| r"C:\Windows".into()) + r"\Fonts\";
     let mut names = Vec::new();
+    // Windows 11's own UI font (a variable font); Segoe UI stays as its fallback (Windows 10 has no Segoe UI Variable)
     for (name, file, index) in [
+        ("Segoe UI Variable", if fixed_look() { "" } else { "SegUIVar.ttf" }, 0),
         ("Segoe UI", "segoeui.ttf", 0),
         ("Nirmala UI", "Nirmala.ttc", 0),
         ("Segoe UI Symbol", "seguisym.ttf", 0),
         ("Segoe UI Emoji", "seguiemj.ttf", 0),
         ("Consolas", "consola.ttf", 0),
     ] {
+        if file.is_empty() {
+            continue;
+        }
         let Ok(bytes) = std::fs::read(dir.clone() + file) else { continue };
         let mut data = FontData::from_owned(bytes);
         data.index = index;

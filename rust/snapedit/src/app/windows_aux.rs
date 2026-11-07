@@ -628,11 +628,7 @@ impl Editor {
             ui.horizontal(|ui| {
                 let views = [tr("Sobreposição"), tr("Deslizar (antes | depois)"), tr("Diferença"), tr("Lado a lado")];
                 let before = c.view;
-                egui::ComboBox::from_id_salt("view").selected_text(views[c.view].clone()).show_ui(ui, |ui| {
-                    for (i, v) in views.iter().enumerate() {
-                        ui.selectable_value(&mut c.view, i, v);
-                    }
-                });
+                snapui::widgets::combo_index(ui, "view", &mut c.view, &views, 220.0);
                 if c.view != before {
                     c.amount = if c.view == 2 { 6 } else { 50 };
                 }

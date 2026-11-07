@@ -68,6 +68,10 @@ pub struct WindowSpec {
     pub skip_taskbar: bool,
     pub intercept: Option<Intercept>,
     pub clear_color: [f32; 4],
+    /// the window that owns this one (it stays above it and goes away with it)
+    pub owner: Option<isize>,
+    /// a popup: rounded corners and Windows' drop shadow, though it has no frame
+    pub popup: bool,
 }
 
 impl Default for WindowSpec {
@@ -85,6 +89,8 @@ impl Default for WindowSpec {
             skip_taskbar: false,
             intercept: None,
             clear_color: [0.0, 0.0, 0.0, 1.0],
+            owner: None,
+            popup: false,
         }
     }
 }
@@ -146,6 +152,8 @@ struct Win {
     clear: [f32; 4],
     repaint_at: Option<Instant>,
     subclass: Option<Box<Sub>>,
+    /// a drop-down list window (drawn by the host, not the app)
+    drop: Option<Box<crate::droplist::DropState>>,
 }
 
 struct Sub {
@@ -221,6 +229,12 @@ impl Ctl<'_> {
         if let Some((x, y)) = spec.position {
             attrs = attrs.with_position(PhysicalPosition::new(x, y));
         }
+        if let Some(o) = spec.owner {
+            attrs = attrs.with_owner_window(o);
+        }
+        if spec.popup {
+            attrs = attrs.with_undecorated_shadow(true).with_corner_preference(winit::platform::windows::CornerPreference::Round);
+        }
         let window = Arc::new(self.el.create_window(attrs).ok()?);
         let key = window.id();
         // the subclass goes in first: another program may already be sending to the window (a second instance
@@ -233,6 +247,7 @@ impl Ctl<'_> {
             }
             sub
         });
+        crate::theme::style_window(hwnd);
         early(hwnd);
         if self.gpu.is_none() {
             *self.gpu = Some(new_gpu()?);
@@ -251,6 +266,8 @@ impl Ctl<'_> {
 
         let ctx = egui::Context::default();
         crate::install_fonts(&ctx);
+        crate::theme::apply(&ctx);
+        crate::droplist::mark_hosted(&ctx);
         let proxy = self.proxy.clone();
         ctx.set_request_repaint_callback(move |info| {
             let _ = proxy.send_event(HostEvent::Repaint { win: key, delay: info.delay });
@@ -270,6 +287,7 @@ impl Ctl<'_> {
             clear: spec.clear_color,
             repaint_at: Some(Instant::now()),
             subclass,
+            drop: None,
         });
         if spec.visible {
             window.set_visible(true);
@@ -370,7 +388,17 @@ impl<A: App> Host<A> {
         let input = w.state.take_egui_input(&w.window);
         let ctx = w.ctx.clone();
         let cur = Some((key, w.window.clone(), w.hwnd));
-        let out = ctx.run_ui(input, |ui| self.app.ui(ctl!(self, el, cur.clone()), key, ui));
+        let out = match w.drop.as_deref_mut() {
+            Some(d) => ctx.run_ui(input, |ui| crate::droplist::ui(ui, d)),
+            None => ctx.run_ui(input, |ui| self.app.ui(ctl!(self, el, cur.clone()), key, ui)),
+        };
+        if let Some(d) = &w.drop
+            && let Some(picked) = d.result
+        {
+            crate::droplist::finish(&d.owner_ctx, d.req.popup_id, picked);
+            unsubclass(&w);
+            return;
+        }
         // the app may have closed this window during its own frame
         if let Some(i) = self.closed.iter().position(|&k| k == key) {
             self.closed.swap_remove(i);
@@ -386,7 +414,86 @@ impl<A: App> Host<A> {
         if let Some(vo) = out.viewport_output.get(&egui::ViewportId::ROOT) {
             schedule(&mut w, vo.repaint_delay);
         }
+        let request = if w.drop.is_none() { crate::droplist::take_request(&ctx) } else { None };
+        let owner_hwnd = w.hwnd;
         self.wins.insert(key, w);
+        if let Some(req) = request {
+            self.show_list(el, owner_hwnd, &ctx, req);
+        }
+    }
+
+    /// Closes a drop-down list without a pick.
+    fn close_list(&mut self, key: WinKey) {
+        if let Some(w) = self.wins.remove(&key) {
+            if let Some(d) = &w.drop {
+                crate::droplist::finish(&d.owner_ctx, d.req.popup_id, None);
+            }
+            unsubclass(&w);
+        }
+    }
+
+    /// Opens a drop-down list below its box in the owner window (above it when the screen ends first).
+    fn show_list(&mut self, el: &ActiveEventLoop, owner: isize, owner_ctx: &egui::Context, req: crate::droplist::Request) {
+        use windows::Win32::Foundation::POINT;
+        use windows::Win32::Graphics::Gdi::{ClientToScreen, GetMonitorInfoW, MONITOR_DEFAULTTONEAREST, MONITORINFO, MonitorFromPoint};
+        // one list at a time
+        let open: Vec<WinKey> = self.wins.iter().filter(|(_, w)| w.drop.is_some()).map(|(k, _)| *k).collect();
+        for k in open {
+            self.close_list(k);
+        }
+        let ppp = owner_ctx.pixels_per_point();
+        let size = req.size(owner_ctx);
+        let (w, full_h) = ((size.x * ppp).round() as i32, (size.y * ppp).round() as i32);
+        let a = req.anchor;
+        let left = if req.align_end { a.right() - size.x } else { a.left() };
+        let mut below = POINT { x: (left * ppp).round() as i32, y: ((a.bottom() + 4.0) * ppp).round() as i32 };
+        let mut above = POINT { x: 0, y: ((a.top() - 4.0) * ppp).round() as i32 };
+        let (x, y, h);
+        unsafe {
+            let _ = ClientToScreen(HWND(owner as _), &mut below);
+            let _ = ClientToScreen(HWND(owner as _), &mut above);
+            let mut mi = MONITORINFO { cbSize: size_of::<MONITORINFO>() as u32, ..Default::default() };
+            let _ = GetMonitorInfoW(MonitorFromPoint(below, MONITOR_DEFAULTTONEAREST), &mut mi);
+            let wa = mi.rcWork;
+            x = below.x.clamp(wa.left, (wa.right - w).max(wa.left));
+            let (room_below, room_above) = (wa.bottom - below.y, above.y - wa.top);
+            if full_h > room_below && room_above > room_below {
+                h = full_h.min(room_above);
+                y = above.y - h;
+            } else {
+                h = full_h.min(room_below);
+                y = below.y;
+            }
+        }
+        let [r, g, b, _] = crate::theme::tokens().card.to_normalized_gamma_f32();
+        let spec = WindowSpec {
+            class: "SnapnabDropList",
+            title: String::new(),
+            size: (w as f32, h as f32),
+            physical_size: true,
+            position: Some((x, y)),
+            decorations: false,
+            resizable: false,
+            skip_taskbar: true,
+            owner: Some(owner),
+            popup: true,
+            clear_color: [r, g, b, 1.0],
+            ..Default::default()
+        };
+        let Some(key) = ctl!(self, el).create(&spec) else {
+            crate::droplist::finish(owner_ctx, req.popup_id, None);
+            return;
+        };
+        if let Some(win) = self.wins.get_mut(&key) {
+            win.drop = Some(Box::new(crate::droplist::DropState {
+                owner_ctx: owner_ctx.clone(),
+                hot: req.items.iter().position(|i| i.selected),
+                req,
+                had_focus: false,
+                result: None,
+            }));
+            win.window.focus_window();
+        }
     }
 }
 
@@ -481,8 +588,22 @@ impl<A: App> ApplicationHandler<HostEvent> for Host<A> {
                 self.frame(el, id);
                 return;
             }
+            WindowEvent::CloseRequested if w.drop.is_some() => {
+                self.close_list(id);
+                return;
+            }
             WindowEvent::CloseRequested => {
                 self.app.close_requested(ctl!(self, el), id);
+                return;
+            }
+            // a list closes when it loses the focus: a click anywhere else
+            WindowEvent::Focused(true) if w.drop.is_some() => {
+                if let Some(d) = w.drop.as_deref_mut() {
+                    d.had_focus = true;
+                }
+            }
+            WindowEvent::Focused(false) if w.drop.as_deref().is_some_and(|d| d.had_focus) => {
+                self.close_list(id);
                 return;
             }
             WindowEvent::Resized(size) => {

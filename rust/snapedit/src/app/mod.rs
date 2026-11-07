@@ -393,7 +393,7 @@ impl Editor {
         let center = self.center_entries();
         let fx_names: HashMap<u32, String> = self.fx.effects.iter().map(|e| (e.cmd, e.name.clone())).collect();
         let mut bar = Vec::new();
-        egui::Panel::top("SnapnabToolbar").exact_size(46.0).resizable(false).show(ui, |ui| {
+        egui::Panel::top("SnapnabToolbar").exact_size(60.0).resizable(false).show(ui, |ui| {
             bar = panels::toolbar(ui, &center, self.tb_active, &|c| fx_names.get(&c).cloned());
         });
         // footer: status, coordinates, image size and zoom

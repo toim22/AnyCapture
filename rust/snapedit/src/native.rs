@@ -70,9 +70,48 @@ pub struct Menu(pub HMENU);
 // SAFETY: a menu handle is a plain USER handle; it is built on one thread and handed to the window's thread.
 unsafe impl Send for Menu {}
 
+/// The menu items that show an icon, as in the C++ (SetItemIcon): Pin, Upload, Combine, Compare, the effects, the
+/// alignment, Lock and the tools of the Tools menu.
+fn menu_icon(id: u32) -> Option<snapcore::icons::Icon> {
+    use crate::ids::*;
+    const WITH_ICON: [u32; 31] = [
+        M_PIN, M_UPLOAD, M_COMBINE, M_COMPARE, M_BEAUTIFY, M_FX_BORDER, M_FX_EDGE, M_FX_CAPTION, M_FX_PERSPECTIVE, M_FX_PAGECURL,
+        M_FX_SHADOW, M_FX_FILTER, M_FX_ADJUST, M_FX_REPLACE, M_FX_SPOTLIGHT, M_FX_WATERMARK, M_ALIGN_LEFT, M_ALIGN_CENTER,
+        M_ALIGN_RIGHT, M_ALIGN_TOP, M_ALIGN_MIDDLE, M_ALIGN_BOTTOM, M_DIST_H, M_DIST_V, M_LOCK, M_UNLOCK, M_READ_QR, M_DATESTAMP,
+        M_CONTRAST, M_ASSISTANT, M_SPLIT,
+    ];
+    if WITH_ICON.contains(&id) { crate::panels::command_icon(id) } else { None }
+}
+
+/// A 32 bpp bitmap (premultiplied alpha) of the icon at the menus' size (MenuIcon).
+fn menu_bitmap(icon: snapcore::icons::Icon) -> Option<windows::Win32::Graphics::Gdi::HBITMAP> {
+    use windows::Win32::UI::HiDpi::GetDpiForSystem;
+    let px = (16 * unsafe { GetDpiForSystem() } as i32 + 48) / 96;
+    let mut img = snapcore::icons::render(icon, px, 0xFF34_3840);
+    for p in img.px.iter_mut() {
+        let a = *p >> 24;
+        let ch = |sh: u32| ((*p >> sh & 255) * a / 255) << sh;
+        *p = a << 24 | ch(16) | ch(8) | ch(0);
+    }
+    snapcore::screen::to_hbitmap(&img)
+}
+
+fn set_item_icon(m: HMENU, id: u32) {
+    use windows::Win32::UI::WindowsAndMessaging::{MENUITEMINFOW, MIIM_BITMAP, SetMenuItemInfoW};
+    let Some(hb) = menu_icon(id).and_then(menu_bitmap) else { return };
+    let mi = MENUITEMINFOW { cbSize: size_of::<MENUITEMINFOW>() as u32, fMask: MIIM_BITMAP, hbmpItem: hb, ..Default::default() };
+    unsafe {
+        let _ = SetMenuItemInfoW(m, id, false, &mi);
+    }
+}
+
 impl Menu {
     fn fill(m: HMENU, items: Vec<Item>) {
         for it in items {
+            let id = match &it {
+                Item::Cmd(id, _) | Item::Cmd2(id, _, _) | Item::Checked(id, _, _) => *id,
+                _ => 0,
+            };
             unsafe {
                 let _ = match it {
                     Item::Cmd(id, t) => AppendMenuW(m, MF_STRING, id as usize, PCWSTR(wide(&t).as_ptr())),
@@ -89,6 +128,9 @@ impl Menu {
                     }
                     Item::Separator => AppendMenuW(m, MF_SEPARATOR, 0, PCWSTR::null()),
                 };
+            }
+            if id != 0 {
+                set_item_icon(m, id);
             }
         }
     }

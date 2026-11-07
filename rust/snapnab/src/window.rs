@@ -4,7 +4,10 @@
 //! does it. Each control carries the C++ control's name as its UI Automation id (AutomationId "IDC_SELECTION"…), so
 //! the end-to-end tests find them as they found the Win32 controls.
 
-use egui::{Color32, RichText};
+use snapui::icons::{self, Icon};
+use snapui::droplist::ListItem;
+use snapui::widgets;
+use egui::Color32;
 use snapcore::fx::CaptureEffects;
 use snapcore::i18n;
 use snapcore::presets::{CaptureKind, Preset, PresetStore, Selection};
@@ -127,8 +130,10 @@ pub struct View {
     pub cams: Vec<(String, String)>,
     /// the effect the "Effects" box shows (target of "Remove this effect")
     pub fx_current: Option<usize>,
-    /// the effects list shows only the effects that are off ("Add another effect")
+    /// open the list of the effects that are off ("Add another effect")
     pub fx_add_mode: bool,
+    /// open the webcam menu (the frame after the click, once the cameras are listed)
+    pub webcam_menu: bool,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -176,7 +181,7 @@ pub fn height(store: &PresetStore, view: &View) -> f32 {
     if view.presets_open { base + 8.0 + 30.0 * store.presets.len().clamp(2, 8) as f32 } else { base }
 }
 
-pub const WIDTH: f32 = 760.0;
+pub const WIDTH: f32 = 800.0;
 
 fn menu_item(ui: &mut egui::Ui, out: &mut Vec<Action>, text: &str, cmd: u32) {
     if ui.button(tr(text)).clicked() {
@@ -248,19 +253,42 @@ fn menu_bar(ui: &mut egui::Ui, view: &View, out: &mut Vec<Action>) {
     });
 }
 
-/// The Image / Video tabs (vertical, as in the Windows 11 navigation).
+/// The Image / Video tabs (vertical, as in the Windows 11 navigation: the active one has an accent bar on its left).
 fn tabs(ui: &mut egui::Ui, p: &mut Preset, out: &mut Vec<Action>) {
-    for (k, name, cid, icon) in [(CaptureKind::Image, tr("Imagem"), "IDC_TAB_IMAGE", "📷"), (CaptureKind::Video, tr("Vídeo"), "IDC_TAB_VIDEO", "🎬")] {
+    for (k, name, cid, icon) in [(CaptureKind::Image, tr("Imagem"), "IDC_TAB_IMAGE", Icon::CameraFill),
+                                 (CaptureKind::Video, tr("Vídeo"), "IDC_TAB_VIDEO", Icon::VideoFill)] {
         let on = p.kind == k;
-        let b = egui::Button::selectable(on, RichText::new(format!("{icon}\n{name}")).size(13.0)).min_size(egui::vec2(62.0, 62.0));
-        let r = ui.add(b);
+        let r = nav_tab(ui, icon, &name, on);
         tag(ui, &r, cid);
         if r.clicked() && !on {
             set_kind(p, k);
             out.push(Action::Changed);
         }
-        ui.add_space(4.0);
+        ui.add_space(2.0);
     }
+}
+
+fn nav_tab(ui: &mut egui::Ui, icon: Icon, label: &str, on: bool) -> egui::Response {
+    let t = snapui::theme::tokens();
+    let (rect, r) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 60.0), egui::Sense::click());
+    r.widget_info(|| egui::WidgetInfo::selected(egui::Role::Tab, true, on, label));
+    let p = ui.painter();
+    if r.hovered() || r.is_pointer_button_down_on() {
+        p.rect_filled(rect.shrink2(egui::vec2(4.0, 0.0)), egui::CornerRadius::same(t.radius_lg / 2 + 2),
+                      if r.is_pointer_button_down_on() { t.pressed } else { t.hover });
+    }
+    if on {
+        let bar = egui::Rect::from_center_size(egui::pos2(rect.left() + 5.5, rect.center().y), egui::vec2(3.0, 22.0));
+        p.rect_filled(bar, egui::CornerRadius::same(2), t.accent);
+    }
+    let fg = if on { t.text } else { t.text_dim };
+    icons::draw(p, icon, egui::Rect::from_center_size(egui::pos2(rect.center().x, rect.top() + 21.0), egui::vec2(22.0, 22.0)), fg);
+    // the active label in semibold: drawn twice, a fraction of a pixel apart (egui has no bold face of its own)
+    let at = egui::pos2(rect.center().x, rect.bottom() - 13.0);
+    for dx in if on { &[0.0, 0.45][..] } else { &[0.0][..] } {
+        p.text(at + egui::vec2(*dx, 0.0), egui::Align2::CENTER_CENTER, label, egui::FontId::proportional(12.5), fg);
+    }
+    r
 }
 
 /// The tab changes the preset's kind; a selection the new kind lacks becomes Region.
@@ -269,12 +297,6 @@ pub fn set_kind(p: &mut Preset, k: CaptureKind) {
     if !Selection::for_kind(k).contains(&p.selection) {
         p.selection = Selection::Region;
     }
-}
-
-fn gear(ui: &mut egui::Ui, name: &str) -> egui::Response {
-    let r = ui.add(egui::Button::new("⚙").frame(false)).on_hover_text(tr("Configurações"));
-    tag(ui, &r, name);
-    r
 }
 
 /// The region gear: Region (chosen during the capture or fixed) and, for images, each window as an object and the
@@ -286,60 +308,77 @@ fn selection_has_gear(p: &Preset) -> bool {
                                      | Selection::MultiArea))
 }
 
+/// Width of the combo boxes (the switch column takes the room left before the capture button).
+const BOX_W: f32 = 196.0;
+
+/// What a row of a gear menu does.
+#[derive(Clone, Copy)]
+enum GearItem {
+    RegionAtCapture,
+    RegionFixed,
+    WindowObjects,
+    Links,
+}
+
 fn selection_row(ui: &mut egui::Ui, p: &mut Preset, out: &mut Vec<Action>) {
     let label = ui.label(tr("Seleção:"));
-    ui.horizontal(|ui| {
-        let list = Selection::for_kind(p.kind);
-        let shown = if p.selection == Selection::Region && p.region_fixed { tr("Região fixa") } else { p.selection.name() };
-        let mut changed = false;
-        let r = egui::ComboBox::from_id_salt("IDC_SELECTION")
-            .width(150.0)
-            .selected_text(&shown)
-            .show_ui(ui, |ui| {
-                for (i, &s) in list.iter().enumerate() {
-                    let r = ui.selectable_value(&mut p.selection, s, s.name());
-                    tag(ui, &r, &format!("IDC_SELECTION.{i}"));
-                    changed |= r.changed();
+    let list = Selection::for_kind(p.kind);
+    let shown = if p.selection == Selection::Region && p.region_fixed { tr("Região fixa") } else { p.selection.name() };
+    let has_gear = selection_has_gear(p);
+    let rows = || list.iter().enumerate().map(|(i, &s)| ListItem::new(s.name()).selected(s == p.selection).aid(format!("IDC_SELECTION.{i}"))).collect();
+    let c = widgets::combo(ui, "IDC_SELECTION", &shown, BOX_W, Some(has_gear), rows, false);
+    let r = c.response.labelled_by(label.id);
+    tag_value(ui, &r, "IDC_SELECTION", &shown);
+    if let Some(i) = c.picked
+        && let Some(&s) = list.get(i)
+        && s != p.selection
+    {
+        p.selection = s;
+        out.push(Action::Changed);
+    }
+    if let Some(g) = c.gear {
+        tag(ui, &g, "IDC_SELECTION.gear");
+        if has_gear {
+            let g = g.on_hover_text(tr("Configurações"));
+            // the menu's rows and what each does
+            let mut acts: Vec<Option<GearItem>> = Vec::new();
+            let mut items: Vec<ListItem> = Vec::new();
+            if p.selection == Selection::Region {
+                items.push(ListItem::new(tr("Selecionar a região na captura")).selected(!p.region_fixed));
+                acts.push(Some(GearItem::RegionAtCapture));
+                items.push(ListItem::new(tr("Região fixa…")).selected(p.region_fixed));
+                acts.push(Some(GearItem::RegionFixed));
+            }
+            if p.kind == CaptureKind::Image {
+                if !items.is_empty() {
+                    items.push(ListItem::separator());
+                    acts.push(None);
                 }
-            })
-            .response
-            .labelled_by(label.id);
-        tag_value(ui, &r, "IDC_SELECTION", &shown);
-        if changed {
-            out.push(Action::Changed);
+                if matches!(p.selection, Selection::FullScreen | Selection::Monitor) {
+                    items.push(ListItem::new(tr("Cada janela como um objeto separado")).check(p.window_objects));
+                    acts.push(Some(GearItem::WindowObjects));
+                }
+                items.push(ListItem::new(tr("Guardar os links da página (clicáveis, também no PDF)")).check(p.capture_links));
+                acts.push(Some(GearItem::Links));
+            }
+            match widgets::menu_list(ui, &g, || items, false).and_then(|i| acts.get(i).copied().flatten()) {
+                Some(GearItem::RegionAtCapture) => {
+                    p.region_fixed = false;
+                    out.push(Action::Changed);
+                }
+                Some(GearItem::RegionFixed) => out.push(Action::FixedRegion),
+                Some(GearItem::WindowObjects) => {
+                    p.window_objects = !p.window_objects;
+                    out.push(Action::Changed);
+                }
+                Some(GearItem::Links) => {
+                    p.capture_links = !p.capture_links;
+                    out.push(Action::Changed);
+                }
+                None => {}
+            }
         }
-        if selection_has_gear(p) {
-            let g = gear(ui, "IDC_SELECTION.gear");
-            egui::Popup::menu(&g).show(|ui| {
-                if p.selection == Selection::Region {
-                    if ui.radio(!p.region_fixed, tr("Selecionar a região na captura")).clicked() {
-                        p.region_fixed = false;
-                        out.push(Action::Changed);
-                        ui.close();
-                    }
-                    if ui.radio(p.region_fixed, tr("Região fixa…")).clicked() {
-                        out.push(Action::FixedRegion);
-                        ui.close();
-                    }
-                }
-                if p.kind == CaptureKind::Image {
-                    if p.selection == Selection::Region {
-                        ui.separator();
-                    }
-                    if matches!(p.selection, Selection::FullScreen | Selection::Monitor)
-                        && ui.checkbox(&mut p.window_objects, tr("Cada janela como um objeto separado")).clicked()
-                    {
-                        out.push(Action::Changed);
-                        ui.close();
-                    }
-                    if ui.checkbox(&mut p.capture_links, tr("Guardar os links da página (clicáveis, também no PDF)")).clicked() {
-                        out.push(Action::Changed);
-                        ui.close();
-                    }
-                }
-            });
-        }
-    });
+    }
     ui.end_row();
 }
 
@@ -358,173 +397,168 @@ fn effects_row(ui: &mut egui::Ui, p: &mut Preset, view: &mut View, out: &mut Vec
             if others > 0 { format!("{t}  +{others}") } else { t }
         }
     };
-    let add_mode = view.fx_add_mode;
-    let r = egui::ComboBox::from_id_salt("IDC_EFFECTS")
-        .width(150.0)
-        .selected_text(&shown)
-        .show_ui(ui, |ui| {
-            if add_mode {
-                for k in 0..FX_NAMES.len() {
-                    if !*fx_on(e, k) && ui.button(tr(FX_NAMES[k])).clicked() {
-                        out.push(Action::EditFx(k));
-                        ui.close();
-                    }
-                }
-                return;
-            }
-            if ui.button(tr("Nenhum")).clicked() {
-                for k in 0..FX_NAMES.len() {
-                    *fx_on(e, k) = false;
-                }
-                view.fx_current = None;
-                out.push(Action::Changed);
-                ui.close();
-            }
-            for k in 0..FX_NAMES.len() {
-                let on = *fx_on(e, k);
-                let r = ui.add(egui::Button::selectable(false, tr(FX_NAMES[k])).right_text(if on { "✔" } else { "" }));
-                tag(ui, &r, &format!("IDC_EFFECTS.{k}"));
-                if r.clicked() {
-                    out.push(Action::EditFx(k));
-                    ui.close();
-                }
-            }
-            ui.separator();
-            if ui.button(tr("Adicionar outro efeito")).clicked() {
-                view.fx_add_mode = true;
-                ui.close();
-            }
-            if ui.button(tr("Remover este efeito")).clicked() {
-                if let Some(k) = view.fx_current.take() {
-                    *fx_on(e, k) = false;
-                    out.push(Action::Changed);
-                }
-                ui.close();
-            }
-        })
-        .response
-        .labelled_by(label.id);
-    tag_value(ui, &r, "IDC_EFFECTS", &shown);
-    // "Add another effect" reopens the list with only the effects that are off
-    let popup = egui::Popup::default_response_id(&r);
-    if view.fx_add_mode && !egui::Popup::is_id_open(ui.ctx(), popup) {
-        if add_mode {
-            view.fx_add_mode = false;
-        } else {
-            egui::Popup::open_id(ui.ctx(), popup);
+    // the list: None, the effects (checked when on), then "Add another effect" and "Remove this effect"
+    let n = FX_NAMES.len();
+    let rows = || {
+        let mut v = vec![ListItem::new(tr("Nenhum"))];
+        for k in 0..n {
+            v.push(ListItem::new(tr(FX_NAMES[k])).check(*fx_on(e, k)).aid(format!("IDC_EFFECTS.{k}")));
         }
+        v.push(ListItem::separator());
+        v.push(ListItem::new(tr("Adicionar outro efeito")));
+        v.push(ListItem::new(tr("Remover este efeito")).enabled(view.fx_current.is_some()));
+        v
+    };
+    let c = widgets::combo(ui, "IDC_EFFECTS", &shown, BOX_W, None, rows, false);
+    let r = c.response.labelled_by(label.id);
+    tag_value(ui, &r, "IDC_EFFECTS", &shown);
+    match c.picked {
+        Some(0) => {
+            for k in 0..n {
+                *fx_on(e, k) = false;
+            }
+            view.fx_current = None;
+            out.push(Action::Changed);
+        }
+        Some(i) if i <= n => out.push(Action::EditFx(i - 1)),
+        Some(i) if i == n + 2 => view.fx_add_mode = true,
+        Some(i) if i == n + 3 => {
+            if let Some(k) = view.fx_current.take() {
+                *fx_on(e, k) = false;
+                out.push(Action::Changed);
+            }
+        }
+        _ => {}
+    }
+    // "Add another effect": a second list under the box, with only the effects that are off
+    let off: Vec<usize> = (0..n).filter(|&k| !*fx_on(e, k)).collect();
+    let add_id = r.id.with("add");
+    if std::mem::take(&mut view.fx_add_mode) {
+        let items = off.iter().map(|&k| ListItem::new(tr(FX_NAMES[k]))).collect();
+        snapui::droplist::open(ui.ctx(), snapui::droplist::Request { popup_id: add_id, anchor: r.rect, min_width: BOX_W, items,
+                                                                      align_end: false });
+    }
+    if let Some(i) = snapui::droplist::take_pick(ui.ctx(), add_id)
+        && let Some(&k) = off.get(i)
+    {
+        out.push(Action::EditFx(k));
     }
     ui.end_row();
 }
 
 fn share_row(ui: &mut egui::Ui, p: &mut Preset, out: &mut Vec<Action>) {
     let label = ui.label(tr("Compartilhar:"));
-    ui.horizontal(|ui| {
-        let cur = share_of(p);
-        let names = Share::names();
-        let r = egui::ComboBox::from_id_salt("IDC_SHARE")
-            .width(150.0)
-            .selected_text(&names[cur as usize])
-            .show_ui(ui, |ui| {
-                for (i, n) in names.iter().enumerate() {
-                    let r = ui.selectable_label(i == cur as usize, n);
-                    tag(ui, &r, &format!("IDC_SHARE.{i}"));
-                    if r.clicked() {
-                        let s = Share::from_i32(i as i32);
-                        set_share(p, s);
-                        out.push(Action::Changed);
-                        out.push(Action::ShareChosen(s));
-                    }
-                }
-            })
-            .response
-            .labelled_by(label.id);
-        tag_value(ui, &r, "IDC_SHARE", &names[cur as usize]);
-        if share_of(p).has_gear() && gear(ui, "IDC_SHARE.gear").clicked() {
+    let cur = share_of(p);
+    let names = Share::names();
+    let rows = || names.iter().enumerate().map(|(i, n)| ListItem::new(n.clone()).selected(i == cur as usize).aid(format!("IDC_SHARE.{i}"))).collect();
+    let c = widgets::combo(ui, "IDC_SHARE", &names[cur as usize], BOX_W, Some(cur.has_gear()), rows, false);
+    let r = c.response.labelled_by(label.id);
+    tag_value(ui, &r, "IDC_SHARE", &names[cur as usize]);
+    if let Some(i) = c.picked {
+        let s = Share::from_i32(i as i32);
+        set_share(p, s);
+        out.push(Action::Changed);
+        out.push(Action::ShareChosen(s));
+    }
+    if let Some(g) = &c.gear {
+        tag(ui, g, "IDC_SHARE.gear");
+        if share_of(p).has_gear() && g.clicked() {
             out.push(Action::ShareGear);
         }
-    });
+    }
     ui.end_row();
 }
 
 fn quality_row(ui: &mut egui::Ui, p: &mut Preset, out: &mut Vec<Action>) {
     let label = ui.label(tr("Qualidade:"));
-    ui.horizontal(|ui| {
-        let names = [tr("Muito baixa"), tr("Baixa"), tr("Média"), tr("Alta")];
-        let q = p.quality.clamp(0, 3) as usize;
-        let mut changed = false;
-        let r = egui::ComboBox::from_id_salt("IDC_QUALITY")
-            .width(150.0)
-            .selected_text(&names[q])
-            .show_ui(ui, |ui| {
-                for (i, n) in names.iter().enumerate() {
-                    let r = ui.selectable_value(&mut p.quality, i as i32, n);
-                    tag(ui, &r, &format!("IDC_QUALITY.{i}"));
-                    changed |= r.changed();
-                }
-            })
-            .response
-            .labelled_by(label.id);
-        tag_value(ui, &r, "IDC_QUALITY", &names[q]);
-        if changed {
-            out.push(Action::Changed);
-        }
-        if gear(ui, "IDC_QUALITY.gear").clicked() {
+    let names = [tr("Muito baixa"), tr("Baixa"), tr("Média"), tr("Alta")];
+    let q = p.quality.clamp(0, 3) as usize;
+    let rows = || names.iter().enumerate().map(|(i, n)| ListItem::new(n.clone()).selected(i == q).aid(format!("IDC_QUALITY.{i}"))).collect();
+    let c = widgets::combo(ui, "IDC_QUALITY", &names[q], BOX_W, Some(true), rows, false);
+    let r = c.response.labelled_by(label.id);
+    tag_value(ui, &r, "IDC_QUALITY", &names[q]);
+    if let Some(i) = c.picked
+        && i != q
+    {
+        p.quality = i as i32;
+        out.push(Action::Changed);
+    }
+    if let Some(g) = &c.gear {
+        tag(ui, g, "IDC_QUALITY.gear");
+        if g.clicked() {
             out.push(Action::VideoOptions);
         }
-    });
+    }
     ui.end_row();
 }
 
-fn webcam_row(ui: &mut egui::Ui, p: &mut Preset, view: &View, out: &mut Vec<Action>) {
+/// What a row of the webcam menu does.
+#[derive(Clone, Copy)]
+enum CamItem {
+    Off,
+    Camera(usize),
+    Shape(i32),
+    ChromaKey,
+}
+
+fn webcam_row(ui: &mut egui::Ui, p: &mut Preset, view: &mut View, out: &mut Vec<Action>) {
     ui.label(tr("Webcam:"));
     let text = if p.webcam { tr("Ligada") } else { tr("Desligada") };
-    let r = ui.add(egui::Button::new(format!("{text} ›")).frame(false));
+    let r = widgets::link_row(ui, "", &text, BOX_W);
     tag(ui, &r, "IDC_WEBCAM");
-    if r.clicked() {
+    let menu_id = r.id.with("menu");
+    if r.clicked() && !snapui::droplist::just_closed(ui.ctx(), menu_id) {
+        // the cameras are listed after this frame; the menu opens on the next one
         out.push(Action::ListCameras);
+        view.webcam_menu = true;
+        ui.ctx().request_repaint();
     }
-    egui::Popup::menu(&r).show(|ui| {
-        if ui.radio(!p.webcam, tr("Desligada")).clicked() {
+    let mut acts: Vec<Option<CamItem>> = vec![Some(CamItem::Off), None];
+    let mut items = vec![ListItem::new(tr("Desligada")).selected(!p.webcam), ListItem::separator()];
+    if view.cams.is_empty() {
+        items.push(ListItem::new(tr("Nenhuma webcam encontrada")).enabled(false));
+        acts.push(None);
+    }
+    for (i, (name, link)) in view.cams.iter().enumerate() {
+        let on = p.webcam && (p.webcam_device == *link || (p.webcam_device.is_empty() && i == 0));
+        items.push(ListItem::new(name.clone()).selected(on));
+        acts.push(Some(CamItem::Camera(i)));
+    }
+    items.push(ListItem::separator());
+    acts.push(None);
+    for (s, n) in snapcore::webcam::SHAPE_NAMES.iter().enumerate() {
+        items.push(ListItem::new(format!("{}: {}", tr("Formato"), tr(n))).selected(p.webcam_shape == s as i32).enabled(!p.chroma_key));
+        acts.push(Some(CamItem::Shape(s as i32)));
+    }
+    items.push(ListItem::new(tr("Remover o fundo (chroma key)…")).check(p.chroma_key));
+    acts.push(Some(CamItem::ChromaKey));
+    if std::mem::take(&mut view.webcam_menu) && !r.clicked() {
+        snapui::droplist::open(ui.ctx(), snapui::droplist::Request { popup_id: menu_id, anchor: r.rect, min_width: 0.0, items,
+                                                                      align_end: true });
+    }
+    match snapui::droplist::take_pick(ui.ctx(), menu_id).and_then(|i| acts.get(i).copied().flatten()) {
+        Some(CamItem::Off) => {
             p.webcam = false;
             out.push(Action::Changed);
-            ui.close();
         }
-        ui.separator();
-        if view.cams.is_empty() {
-            ui.add_enabled(false, egui::Button::new(tr("Nenhuma webcam encontrada")));
-        }
-        for (i, (name, link)) in view.cams.iter().enumerate() {
-            let on = p.webcam && (p.webcam_device == *link || (p.webcam_device.is_empty() && i == 0));
-            if ui.radio(on, name).clicked() {
+        Some(CamItem::Camera(i)) => {
+            if let Some((name, link)) = view.cams.get(i) {
                 (p.webcam, p.webcam_device, p.webcam_name) = (true, link.clone(), name.clone());
                 out.push(Action::Changed);
-                ui.close();
             }
         }
-        ui.separator();
-        ui.add_enabled_ui(!p.chroma_key, |ui| {
-            ui.menu_button(tr("Formato"), |ui| {
-                for (s, n) in snapcore::webcam::SHAPE_NAMES.iter().enumerate() {
-                    if ui.radio(p.webcam_shape == s as i32, tr(n)).clicked() {
-                        p.webcam_shape = s as i32;
-                        out.push(Action::Changed);
-                        ui.close();
-                    }
-                }
-            });
-        });
-        let mut ck = p.chroma_key;
-        if ui.checkbox(&mut ck, tr("Remover o fundo (chroma key)…")).clicked() {
-            out.push(Action::ChromaKey);
-            ui.close();
+        Some(CamItem::Shape(s)) => {
+            p.webcam_shape = s;
+            out.push(Action::Changed);
         }
-    });
+        Some(CamItem::ChromaKey) => out.push(Action::ChromaKey),
+        None => {}
+    }
     ui.end_row();
 }
 
 fn switch(ui: &mut egui::Ui, v: &mut bool, text: &str, name: &str) -> bool {
-    let r = ui.checkbox(v, tr(text));
+    let r = widgets::toggle(ui, v, &tr(text), ui.available_width());
     tag(ui, &r, name);
     r.changed()
 }
@@ -535,40 +569,56 @@ pub fn delay_text(s: i32) -> String {
 }
 
 fn delay_row(ui: &mut egui::Ui, p: &mut Preset, out: &mut Vec<Action>) {
-    ui.horizontal(|ui| {
-        ui.label(tr("Atraso"));
-        let r = ui.add(egui::Button::new(format!("{} ›", delay_text(p.delay_seconds))).frame(false));
-        tag_value(ui, &r, "IDC_DELAY", &delay_text(p.delay_seconds));
-        egui::Popup::menu(&r).show(|ui| {
-            for s in [0, 1, 2, 3, 5, 10, 15, 30, 60] {
+    let r = widgets::link_row(ui, &tr("Atraso"), &delay_text(p.delay_seconds), ui.available_width());
+    tag_value(ui, &r, "IDC_DELAY", &delay_text(p.delay_seconds));
+    const DELAYS: [i32; 9] = [0, 1, 2, 3, 5, 10, 15, 30, 60];
+    let rows = || {
+        DELAYS.iter()
+            .map(|&s| {
                 let t = match s {
                     0 => tr("Desligado"),
                     1 => tr("1 segundo"),
                     _ => tr("%d segundos").replace("%d", &s.to_string()),
                 };
-                let r = ui.radio(p.delay_seconds == s, t);
-                tag(ui, &r, &format!("IDC_DELAY.{s}"));
-                if r.clicked() {
-                    p.delay_seconds = s;
-                    out.push(Action::Changed);
-                    ui.close();
-                }
-            }
-        });
-    });
+                ListItem::new(t).selected(p.delay_seconds == s).aid(format!("IDC_DELAY.{s}"))
+            })
+            .collect()
+    };
+    if let Some(i) = widgets::menu_list(ui, &r, rows, true) {
+        p.delay_seconds = DELAYS[i];
+        out.push(Action::Changed);
+    }
 }
 
-/// The round capture button (red for video); the tooltip says the hotkey.
+/// The round capture button (CAPTURE_RED, as the Editor's Capture); "Record" for video. The tooltip says the hotkey.
 fn capture_button(ui: &mut egui::Ui, p: &Preset, view: &View, out: &mut Vec<Action>) {
     let video = p.kind == CaptureKind::Video;
-    let fill = if video { Color32::from_rgb(214, 40, 60) } else { Color32::from_rgb(30, 120, 230) };
-    let icon = if video { "⏺" } else { "📷" };
-    let b = egui::Button::new(RichText::new(format!("{icon}\n{}", tr("Capturar"))).size(14.0).color(Color32::WHITE))
-        .fill(fill)
-        .min_size(egui::vec2(84.0, 84.0))
-        .corner_radius(42.0);
+    let text = if video { tr("Gravar") } else { tr("Capturar") };
+    let d = 88.0;
+    let (rect, r) = ui.allocate_exact_size(egui::vec2(d + 8.0, d + 8.0), egui::Sense::click());
+    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, &text));
+    let c = rect.center();
+    let p_ = ui.painter();
+    let base = Color32::from_rgb(214, 40, 60);
+    let fill = if r.is_pointer_button_down_on() {
+        base.lerp_to_gamma(Color32::BLACK, 0.16)
+    } else if r.hovered() {
+        base.lerp_to_gamma(Color32::WHITE, 0.10)
+    } else {
+        base
+    };
+    for i in (1..=3).rev() {
+        let k = i as f32;
+        p_.circle_filled(c + egui::vec2(0.0, 1.5 + k * 0.4), d / 2.0 + k - 1.0, Color32::from_black_alpha((16 * (4 - i)) as u8));
+    }
+    p_.circle_filled(c, d / 2.0, fill);
+    if r.has_focus() {
+        p_.circle_stroke(c, d / 2.0 + 3.0, egui::Stroke::new(1.5, snapui::theme::tokens().text));
+    }
+    p_.text(c, egui::Align2::CENTER_CENTER, &text, egui::FontId::proportional(15.0), Color32::WHITE);
+    p_.text(c + egui::vec2(0.4, 0.0), egui::Align2::CENTER_CENTER, &text, egui::FontId::proportional(15.0), Color32::WHITE);
     let tip = if video { tr("Gravar vídeo  (") + &view.video_hotkey + ")" } else { tr("Capturar imagem  (") + &view.image_hotkey + ")" };
-    let r = ui.add(b).on_hover_text(tip);
+    let r = r.on_hover_text(tip);
     tag(ui, &r, "IDC_CAPTURE");
     if r.clicked() {
         out.push(Action::Capture);
@@ -583,53 +633,89 @@ fn hotkey_label(p: &Preset, text: &dyn Fn(u32, u32) -> String) -> String {
 /// The preset list: the kind's icon, the name, the hotkey (or "Add hotkey") and the gear; a click selects, a double
 /// click captures.
 fn preset_list(ui: &mut egui::Ui, store: &mut PresetStore, hk_text: &dyn Fn(u32, u32) -> String, out: &mut Vec<Action>) {
-    let list = egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+    let t = snapui::theme::tokens();
+    egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+        ui.spacing_mut().item_spacing.y = 0.0;
         for i in 0..store.presets.len() {
             let sel = i as i32 == store.selected;
             let p = &store.presets[i];
-            let icon = if p.kind == CaptureKind::Video { "🎬" } else { "📷" };
+            let icon = if p.kind == CaptureKind::Video { Icon::VideoFill } else { Icon::CameraFill };
             let name = i18n::tr_str(&p.name);
             let hk = hotkey_label(p, hk_text);
-            ui.horizontal(|ui| {
-                ui.set_min_height(26.0);
-                let w = ui.available_width() - 150.0;
-                let row = ui.add_sized([w.max(80.0), 26.0], egui::Button::selectable(sel, format!("{icon}  {name}")));
-                tag(ui, &row, &format!("IDC_PRESETS.{i}"));
-                if row.clicked() && !sel {
+            let has_hk = p.hotkey_vk != 0;
+            // one row: the kind's icon and the name on the left, the hotkey and the gear on the right
+            let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 30.0), egui::Sense::hover());
+            let gear_rect = egui::Rect::from_min_max(egui::pos2(rect.right() - 34.0, rect.top()), rect.max);
+            let hk_rect = egui::Rect::from_min_max(egui::pos2(gear_rect.left() - 140.0, rect.top()), egui::pos2(gear_rect.left(), rect.bottom()));
+            let row_rect = egui::Rect::from_min_max(rect.min, egui::pos2(hk_rect.left(), rect.bottom()));
+            let id = ui.scope_id().with(("preset", i));
+            let row = ui.interact(row_rect, id, egui::Sense::click());
+            row.widget_info(|| egui::WidgetInfo::selected(egui::Role::ListBoxOption, true, sel, &name));
+            let h = ui.interact(hk_rect, id.with("hotkey"), egui::Sense::click());
+            h.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, &hk));
+            let g = ui.interact(gear_rect, id.with("gear"), egui::Sense::click());
+            g.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, tr("Configurações")));
+            let painter = ui.painter();
+            let any_hover = row.hovered() || h.hovered() || g.hovered();
+            let fill_rect = rect.shrink2(egui::vec2(6.0, 1.0));
+            if sel || any_hover {
+                painter.rect_filled(fill_rect, egui::CornerRadius::same(t.radius), if any_hover && !sel { t.hover } else { t.pressed });
+            }
+            if sel {
+                let bar = egui::Rect::from_center_size(egui::pos2(fill_rect.left() + 1.5, rect.center().y), egui::vec2(3.0, 16.0));
+                painter.rect_filled(bar, egui::CornerRadius::same(2), t.accent);
+            }
+            let x = fill_rect.left() + 12.0;
+            icons::draw(painter, icon, egui::Rect::from_min_size(egui::pos2(x, rect.center().y - 8.0), egui::vec2(16.0, 16.0)), t.text_dim);
+            let font = egui::FontId::proportional(t.body);
+            painter.with_clip_rect(row_rect).text(egui::pos2(x + 26.0, rect.center().y), egui::Align2::LEFT_CENTER, &name, font.clone(), t.text);
+            let hk_color = if h.hovered() { t.accent } else if has_hk { t.text_dim } else { t.text_off };
+            painter.text(egui::pos2(hk_rect.right() - 6.0, rect.center().y), egui::Align2::RIGHT_CENTER, &hk, egui::FontId::proportional(t.body - 1.0), hk_color);
+            if g.hovered() {
+                painter.rect_filled(gear_rect.shrink2(egui::vec2(4.0, 3.0)), egui::CornerRadius::same(t.radius), t.pressed);
+            }
+            icons::draw(painter, Icon::Gear, egui::Rect::from_center_size(gear_rect.center() - egui::vec2(3.0, 0.0), egui::vec2(16.0, 16.0)), t.text_dim);
+            tag(ui, &row, &format!("IDC_PRESETS.{i}"));
+            tag(ui, &h, &format!("IDC_PRESETS.{i}.hotkey"));
+            tag(ui, &g, &format!("IDC_PRESETS.{i}.gear"));
+            if row.clicked() && !sel {
+                store.selected = i as i32;
+                out.push(Action::Changed);
+            }
+            if row.double_clicked() {
+                store.selected = i as i32;
+                out.push(Action::Capture);
+            }
+            if h.clicked() {
+                if !sel {
                     store.selected = i as i32;
                     out.push(Action::Changed);
                 }
-                if row.double_clicked() {
-                    store.selected = i as i32;
-                    out.push(Action::Capture);
-                }
-                let h = ui.add_sized([110.0, 26.0], egui::Button::new(RichText::new(hk).weak()).frame(false));
-                tag(ui, &h, &format!("IDC_PRESETS.{i}.hotkey"));
-                if h.clicked() {
-                    if !sel {
-                        store.selected = i as i32;
-                        out.push(Action::Changed);
-                    }
-                    out.push(Action::PresetHotkey(i));
-                }
-                let g = gear(ui, &format!("IDC_PRESETS.{i}.gear"));
-                if g.clicked() && !sel {
-                    store.selected = i as i32;
-                    out.push(Action::Changed);
-                }
-                egui::Popup::menu(&g).show(|ui| {
-                    menu_item(ui, out, "Capturar com este preset", id::PRESET_RUN);
-                    ui.separator();
-                    menu_item(ui, out, "Renomear…", id::PRESET_RENAME);
-                    menu_item(ui, out, "Atalho…", id::PRESET_HOTKEY);
-                    menu_item(ui, out, "Duplicar", id::PRESET_DUP);
-                    ui.separator();
-                    menu_item(ui, out, "Excluir", id::PRESET_DEL);
-                });
-            });
+                out.push(Action::PresetHotkey(i));
+            }
+            if g.clicked() && !sel {
+                store.selected = i as i32;
+                out.push(Action::Changed);
+            }
+            let rows = || {
+                vec![
+                    ListItem::new(tr("Capturar com este preset")),
+                    ListItem::separator(),
+                    ListItem::new(tr("Renomear…")),
+                    ListItem::new(tr("Atalho…")),
+                    ListItem::new(tr("Duplicar")),
+                    ListItem::separator(),
+                    ListItem::new(tr("Excluir")),
+                ]
+            };
+            const CMDS: [u32; 7] = [id::PRESET_RUN, 0, id::PRESET_RENAME, id::PRESET_HOTKEY, id::PRESET_DUP, 0, id::PRESET_DEL];
+            if let Some(k) = widgets::menu_list(ui, &g, rows, true)
+                && CMDS[k] != 0
+            {
+                out.push(Action::Command(CMDS[k]));
+            }
         }
     });
-    let _ = list;
 }
 
 /// Draws the window; `hk_text` writes a hotkey ("Ctrl+Alt+F12").
@@ -646,22 +732,30 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
     }
     egui::Panel::bottom("bar").exact_size(40.0).resizable(false).show(ui, |ui| {
         ui.horizontal_centered(|ui| {
-            let r = ui.add(egui::Button::selectable(view.presets_open, format!("⚙ {}", tr("Presets"))));
+            let r = widgets::flat_button(ui, Some(Icon::Gear), &tr("Presets"), true, false);
             tag(ui, &r, "IDC_PRESETS_LABEL");
             if r.clicked() {
                 out.push(Action::Command(id::SHOW_PRESETS));
                 out.push(Action::PresetsToggled);
             }
-            let add = ui.add(egui::Button::new(RichText::new("+").size(16.0)).frame(false)).on_hover_text(tr("Novo preset"));
+            let add = widgets::flat_button(ui, None, "+", true, true).on_hover_text(tr("Novo preset"));
             tag(ui, &add, "IDC_PRESET_ADD");
-            egui::Popup::menu(&add).show(|ui| {
-                menu_item(ui, &mut out, "Novo preset com as configurações atuais", id::PRESET_FROM_CURRENT);
-                menu_item(ui, &mut out, "Novo preset…", id::PRESET_NEW);
-                ui.separator();
-                menu_item(ui, &mut out, "Ajuda", id::PRESET_HELP);
-            });
+            let rows = || {
+                vec![
+                    ListItem::new(tr("Novo preset com as configurações atuais")),
+                    ListItem::new(tr("Novo preset…")),
+                    ListItem::separator(),
+                    ListItem::new(tr("Ajuda")),
+                ]
+            };
+            const ADD: [u32; 4] = [id::PRESET_FROM_CURRENT, id::PRESET_NEW, 0, id::PRESET_HELP];
+            if let Some(k) = widgets::menu_list(ui, &add, rows, false)
+                && ADD[k] != 0
+            {
+                out.push(Action::Command(ADD[k]));
+            }
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                let r = ui.button(format!("✏ {}", tr("Abrir Editor")));
+                let r = widgets::flat_button(ui, Some(Icon::Editor), &tr("Abrir Editor"), false, false);
                 tag(ui, &r, "IDC_OPEN_EDITOR");
                 if r.clicked() {
                     out.push(Action::Command(id::OPEN_EDITOR));
@@ -680,7 +774,7 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
         let video = p.kind == CaptureKind::Video;
         ui.add_space(10.0);
         ui.horizontal_top(|ui| {
-            egui::Grid::new("fields").num_columns(2).spacing([10.0, 10.0]).min_row_height(26.0).show(ui, |ui| {
+            egui::Grid::new("fields").num_columns(2).spacing([12.0, 10.0]).min_row_height(widgets::ROW_H).show(ui, |ui| {
                 selection_row(ui, p, &mut out);
                 if video {
                     quality_row(ui, p, &mut out);
@@ -690,9 +784,11 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
                     share_row(ui, p, &mut out);
                 }
             });
-            ui.add_space(18.0);
+            ui.add_space(16.0);
             ui.vertical(|ui| {
-                ui.spacing_mut().item_spacing.y = 8.0;
+                ui.set_width((ui.available_width() - 102.0).max(180.0));
+                ui.spacing_mut().item_spacing.y = 6.0;
+                ui.add_space(2.0);
                 let mut changed = switch(ui, &mut p.preview_in_editor, "Visualizar no Editor", "IDC_PREVIEW");
                 if video {
                     changed |= switch(ui, &mut p.capture_cursor, "Capturar o cursor", "IDC_CURSOR");
@@ -708,7 +804,7 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
                 }
             });
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
-                ui.add_space(8.0);
+                ui.add_space(2.0);
                 capture_button(ui, p, view, &mut out);
             });
         });

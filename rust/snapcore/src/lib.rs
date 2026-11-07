@@ -44,6 +44,7 @@ pub mod fx;
 pub mod gdip;
 pub mod gif;
 pub mod hdr;
+pub mod icons;
 pub mod i18n;
 pub mod image;
 pub mod instance;

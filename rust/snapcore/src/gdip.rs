@@ -390,6 +390,12 @@ impl Graphics<'_> {
     pub fn draw_ellipse(&self, pen: &Pen, x: f32, y: f32, w: f32, h: f32) {
         unsafe { GdipDrawEllipse(self.raw, pen.0, x, y, w, h) };
     }
+    pub fn scale(&self, sx: f32, sy: f32) {
+        unsafe { GdipScaleWorldTransform(self.raw, sx, sy, MatrixOrderPrepend) };
+    }
+    pub fn fill_pie(&self, brush: &Brush, r: RectF, start: f32, sweep: f32) {
+        unsafe { GdipFillPie(self.raw, brush.0, r.X, r.Y, r.Width, r.Height, start, sweep) };
+    }
     pub fn draw_arc(&self, pen: &Pen, r: RectF, start: f32, sweep: f32) {
         unsafe { GdipDrawArc(self.raw, pen.0, r.X, r.Y, r.Width, r.Height, start, sweep) };
     }

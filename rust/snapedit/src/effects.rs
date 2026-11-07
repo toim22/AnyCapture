@@ -597,9 +597,8 @@ impl EffectsPanel {
                 Param::Choice { label, items, values, value } => {
                     let cur = values.iter().position(|v| v == value).unwrap_or(0);
                     let mut sel = cur;
-                    let r = egui::ComboBox::from_label(label.as_str())
-                        .selected_text(items.get(cur).cloned().unwrap_or_default())
-                        .show_index(ui, &mut sel, items.len(), |k| items[k].clone());
+                    ui.label(label.as_str());
+                    let r = snapui::widgets::combo_index(ui, ("fx-choice", i), &mut sel, items, ui.available_width().min(260.0));
                     crate::panels::tag(ui, &r, &format!("SnapnabEffects.Param.{i}"));
                     if sel != cur {
                         *value = values[sel];
@@ -607,7 +606,7 @@ impl EffectsPanel {
                     }
                 }
                 Param::Toggle { label, on } => {
-                    let r = ui.checkbox(on, label.as_str());
+                    let r = snapui::widgets::toggle(ui, on, label.as_str(), ui.available_width().min(320.0));
                     crate::panels::tag(ui, &r, &format!("SnapnabEffects.Param.{i}"));
                     changed |= r.changed();
                 }

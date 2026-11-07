@@ -496,10 +496,7 @@ impl PropsPanel {
             crate::panels::tag(ui, &r, "SnapnabProps.StampSearch");
             let names: Vec<String> = self.stamp_cats.iter().map(|c| c.name.clone()).collect();
             let mut sel = self.stamp_cat.min(names.len().saturating_sub(1));
-            let r = egui::ComboBox::from_id_salt("stamp-cat")
-                .width(ui.available_width())
-                .selected_text(names.get(sel).cloned().unwrap_or_default())
-                .show_index(ui, &mut sel, names.len(), |i| names[i].clone());
+            let r = snapui::widgets::combo_index(ui, "stamp-cat", &mut sel, &names, ui.available_width());
             crate::panels::tag(ui, &r, "SnapnabProps.StampCategory");
             if sel != self.stamp_cat {
                 self.stamp_cat = sel;
@@ -552,10 +549,7 @@ impl PropsPanel {
             names.push(tr("Novo tema…"));
             names.push(tr("Importar…"));
             let mut sel = qs.current;
-            let r = egui::ComboBox::from_id_salt("theme")
-                .width(ui.available_width() - 34.0)
-                .selected_text(names.get(qs.current).cloned().unwrap_or_default())
-                .show_index(ui, &mut sel, names.len(), |i| names[i].clone());
+            let r = snapui::widgets::combo_index(ui, "theme", &mut sel, &names, ui.available_width() - 40.0);
             crate::panels::tag(ui, &r, "SnapnabProps.Theme");
             if sel != qs.current {
                 if sel < n {
@@ -1022,9 +1016,7 @@ impl PropsPanel {
                     ui.label(tr("Tipo"));
                     let items = ["1, 2, 3…".to_owned(), "A, B, C…".to_owned(), "a, b, c…".to_owned(), tr("I, II, III…"), tr("i, ii, iii…")];
                     let mut sel = st.step_type.clamp(0, 4) as usize;
-                    let r = egui::ComboBox::from_id_salt("step-type")
-                        .selected_text(items[sel].clone())
-                        .show_index(ui, &mut sel, items.len(), |i| items[i].clone());
+                    let r = snapui::widgets::combo_index(ui, "step-type", &mut sel, &items, (ui.available_width() - 40.0).max(90.0));
                     crate::panels::tag(ui, &r, "SnapnabProps.StepType");
                     if sel as i32 != st.step_type {
                         let mut s = Self::cur(cv);
@@ -1070,9 +1062,7 @@ impl PropsPanel {
                     ui.label(tr("Tipo"));
                     let items = [tr("Desfoque"), tr("Pixelado")];
                     let mut sel = st.hide_kind.clamp(0, 1) as usize;
-                    let r = egui::ComboBox::from_id_salt("hide-kind")
-                        .selected_text(items[sel].clone())
-                        .show_index(ui, &mut sel, 2, |i| items[i].clone());
+                    let r = snapui::widgets::combo_index(ui, "hide-kind", &mut sel, &items, ui.available_width().max(90.0));
                     crate::panels::tag(ui, &r, "SnapnabProps.HideKind");
                     if sel as i32 != st.hide_kind {
                         let mut s = Self::cur(cv);
@@ -1091,7 +1081,7 @@ impl PropsPanel {
             Tool::Select => {
                 if nsel <= 1 {
                     let mut on = cv.smart_move;
-                    let r = ui.add(egui::Checkbox::new(&mut on, tr("Smart Move")));
+                    let r = snapui::widgets::toggle(ui, &mut on, &tr("Smart Move"), ui.available_width());
                     crate::panels::tag(ui, &r, "SnapnabProps.SmartMove");
                     if r.changed() {
                         self.set_value(cv, C::SmartMove, on as i32, true, acts);
@@ -1169,10 +1159,7 @@ impl PropsPanel {
                 _ => &mut cv.cut_dir,
             };
             let mut sel = (*v).clamp(0, items.len() as i32 - 1) as usize;
-            let r = egui::ComboBox::from_id_salt(id)
-                .width(ui.available_width())
-                .selected_text(items[sel].clone())
-                .show_index(ui, &mut sel, items.len(), |i| items[i].clone());
+            let r = snapui::widgets::combo_index(ui, id, &mut sel, items, ui.available_width());
             crate::panels::tag(ui, &r, &format!("SnapnabProps.{id}"));
             if sel as i32 != *v {
                 *v = sel as i32;
@@ -1203,7 +1190,8 @@ impl PropsPanel {
 
     fn check(&mut self, ui: &mut egui::Ui, cv: &mut Canvas, id: C, label: &str, enabled: bool, acts: &mut Vec<PropAction>) {
         let mut on = self.value(cv, id) != 0;
-        let r = ui.add_enabled(enabled, egui::Checkbox::new(&mut on, label));
+        let w = ui.available_width();
+        let r = ui.add_enabled_ui(enabled, |ui| snapui::widgets::toggle(ui, &mut on, label, w)).inner;
         crate::panels::tag(ui, &r, &format!("SnapnabProps.{id:?}"));
         if r.changed() {
             self.set_value(cv, id, on as i32, true, acts);
@@ -1213,7 +1201,11 @@ impl PropsPanel {
     /// Hand-drawn look with a "vary the stroke" button beside it (C35).
     fn sketch(&mut self, ui: &mut egui::Ui, cv: &mut Canvas, label: &str, acts: &mut Vec<PropAction>) {
         ui.horizontal(|ui| {
-            self.check(ui, cv, C::Sketch, label, true, acts);
+            ui.set_max_width(ui.available_width());
+            ui.scope(|ui| {
+                ui.set_max_width(ui.available_width() - 40.0);
+                self.check(ui, cv, C::Sketch, label, true, acts);
+            });
             let on = Self::cur(cv).sketch;
             let r = ui.add_enabled(on, egui::Button::new("✨")).on_hover_text(tr("Variar o traço"));
             crate::panels::tag(ui, &r, "SnapnabProps.SketchSeed");
@@ -1230,17 +1222,10 @@ impl PropsPanel {
             ui.add_sized([92.0, 20.0], egui::Label::new(label).truncate());
             let s = Self::cur(cv);
             let list = fonts();
-            let r = egui::ComboBox::from_id_salt("font").width((ui.available_width() - 4.0).max(80.0)).selected_text(&s.font).show_ui(ui, |ui| {
-                let mut chosen = None;
-                for f in list {
-                    if ui.selectable_label(f.eq_ignore_ascii_case(&s.font), f).clicked() {
-                        chosen = Some(f.clone());
-                    }
-                }
-                chosen
-            });
+            let rows = || list.iter().map(|f| snapui::droplist::ListItem::new(f.clone()).selected(f.eq_ignore_ascii_case(&s.font))).collect();
+            let r = snapui::widgets::combo(ui, "font", &s.font, (ui.available_width() - 4.0).max(80.0), None, rows, false);
             crate::panels::tag(ui, &r.response, "SnapnabProps.Font");
-            if let Some(Some(f)) = r.inner {
+            if let Some(f) = r.picked.and_then(|i| list.get(i)).cloned() {
                 let mut s = s;
                 s.font = f;
                 Self::set_style(cv, s, true, acts);
@@ -1502,8 +1487,8 @@ impl PropsPanel {
         ui.vertical(|ui| {
             let mut ns: Option<Style> = None;
             let r = ui.menu_button(RichText::new(tr("Sombra ▾")).size(11.0), |ui| {
-                let mut on = s.shadow;
-                if ui.checkbox(&mut on, tr("Mostrar sombra")).clicked() {
+                let on = !s.shadow;
+                if snapui::widgets::list_item_ex(ui, false, s.shadow, &tr("Mostrar sombra")).clicked() {
                     ns = Some(Style { shadow: on, ..s.clone() });
                     ui.close();
                 }

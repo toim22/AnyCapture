@@ -55,11 +55,11 @@ msgstr "Format gambar tidak didukung."
 msgid "Falha ao codificar WebP."
 msgstr "Gagal mengodekan WebP."
 
-#: rust/snapcore/src/doc.rs:587 rust/snapedit/src/props.rs:1765
+#: rust/snapcore/src/doc.rs:587 rust/snapedit/src/props.rs:1750
 msgid "L"
 msgstr "L"
 
-#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:73 rust/snapedit/src/tray.rs:355 rust/snapedit/src/app/commands.rs:88
+#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:355 rust/snapedit/src/app/commands.rs:88
 msgid "Abrir"
 msgstr "Buka"
 
@@ -67,7 +67,7 @@ msgstr "Buka"
 msgid "Audio"
 msgstr "Audio"
 
-#: rust/snapcore/src/library.rs:559 rust/snapcore/src/library.rs:563 rust/snapcore/src/presets.rs:56 rust/snapedit/tests/golden.rs:1341
+#: rust/snapcore/src/library.rs:559 rust/snapcore/src/library.rs:563 rust/snapcore/src/presets.rs:56 rust/snapedit/tests/golden.rs:1371
 msgid "Região"
 msgstr "Area"
 
@@ -79,7 +79,7 @@ msgstr "abc"
 msgid "ab"
 msgstr "ab"
 
-#: rust/snapcore/src/ocr.rs:32 rust/snapedit/tests/golden.rs:563
+#: rust/snapcore/src/ocr.rs:32 rust/snapedit/tests/golden.rs:593
 msgid "Imagem vazia."
 msgstr "Gambar kosong."
 
@@ -162,7 +162,7 @@ msgstr "Jendela diperluas"
 msgid "Menu"
 msgstr "Menu"
 
-#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:775
+#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:775
 msgid "Área de transferência"
 msgstr "Papan klip"
 
@@ -170,7 +170,7 @@ msgstr "Papan klip"
 msgid "Arquivo gráfico"
 msgstr "File grafis"
 
-#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:655
+#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:741
 msgid "Novo preset"
 msgstr "Preset baru"
 
@@ -248,7 +248,7 @@ msgstr "Gagal merekam bingkai video."
 msgid "ok"
 msgstr "ok"
 
-#: rust/snapcore/src/recorder.rs:1645 rust/snapedit/src/props.rs:1765 rust/snapedit/src/styles.rs:788 rust/snapedit/src/styles.rs:795
+#: rust/snapcore/src/recorder.rs:1645 rust/snapedit/src/props.rs:1750 rust/snapedit/src/styles.rs:788 rust/snapedit/src/styles.rs:795
 msgid "A"
 msgstr "T"
 
@@ -264,7 +264,7 @@ msgstr "Berkas pengaturan tidak valid."
 msgid "Não foi possível gravar "
 msgstr "Tidak dapat menulis "
 
-#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:534 rust/snapnab/src/window.rs:545
+#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:568 rust/snapnab/src/window.rs:579
 msgid "Desligado"
 msgstr "Mati"
 
@@ -530,23 +530,23 @@ msgstr "Ketik untuk menulis teks di pangkal panah."
 msgid "Mover"
 msgstr "Pindah"
 
-#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:210
+#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:365
 msgid "Seta"
 msgstr "Panah"
 
-#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:211
+#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:366
 msgid "Linha"
 msgstr "Garis"
 
-#: rust/snapedit/src/canvas.rs:71 rust/snapedit/src/props.rs:1623
+#: rust/snapedit/src/canvas.rs:71 rust/snapedit/src/props.rs:1608
 msgid "Forma"
 msgstr "Bentuk"
 
-#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:212
+#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:367
 msgid "Caneta"
 msgstr "Pena"
 
-#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:213
+#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:368
 msgid "Marcador"
 msgstr "Penanda"
 
@@ -554,7 +554,7 @@ msgstr "Penanda"
 msgid "Texto"
 msgstr "Teks"
 
-#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:215
+#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:370
 msgid "Balão"
 msgstr "Balon"
 
@@ -562,7 +562,7 @@ msgstr "Balon"
 msgid "Passos"
 msgstr "Langkah"
 
-#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:221 rust/snapedit/src/stamps.rs:234
+#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:376 rust/snapedit/src/stamps.rs:234
 msgid "Carimbo"
 msgstr "Stempel"
 
@@ -570,11 +570,11 @@ msgstr "Stempel"
 msgid "Ocultar"
 msgstr "Sembunyikan"
 
-#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:226
+#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:381
 msgid "Destaque"
 msgstr "Sorotan"
 
-#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:227
+#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:382
 msgid "Lupa"
 msgstr "Kaca pembesar"
 
@@ -598,7 +598,7 @@ msgstr "Pilihan"
 msgid "Recortar faixa"
 msgstr "Potong jalur"
 
-#: rust/snapedit/src/canvas.rs:86 rust/snapedit/src/props.rs:1001
+#: rust/snapedit/src/canvas.rs:86 rust/snapedit/src/props.rs:995
 msgid "Conta-gotas"
 msgstr "Pipet"
 
@@ -606,7 +606,7 @@ msgstr "Pipet"
 msgid "Favoritos"
 msgstr "Favorit"
 
-#: rust/snapedit/src/canvas.rs:88 rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/canvas.rs:88 rust/snapedit/src/props.rs:1103
 msgid "Varinha mágica"
 msgstr "Tongkat ajaib"
 
@@ -638,19 +638,19 @@ msgstr "segitiga"
 msgid "Clique nos cantos do polígono; clique no primeiro ponto, dê um duplo clique ou tecle Enter para fechar (Esc cancela)."
 msgstr "Klik sudut-sudut poligon; klik titik pertama, klik ganda, atau tekan Enter untuk menutupnya (Esc membatalkan)."
 
-#: rust/snapedit/src/canvas_ui.rs:292
+#: rust/snapedit/src/canvas_ui.rs:305
 msgid "Nenhuma captura aberta — use “Capturar” ou abra um arquivo (Ctrl+O)."
 msgstr "Tidak ada tangkapan yang terbuka — gunakan “Ambil” atau buka file (Ctrl+O)."
 
-#: rust/snapedit/src/canvas_ui.rs:378
+#: rust/snapedit/src/canvas_ui.rs:391
 msgid "Prévia — Aplicar ou Cancelar no painel"
 msgstr "Pratinjau — Terapkan atau Batal di panel"
 
-#: rust/snapedit/src/canvas_ui.rs:405
+#: rust/snapedit/src/canvas_ui.rs:418
 msgid "(duplo clique abre)"
 msgstr "(klik ganda untuk membuka)"
 
-#: rust/snapedit/src/canvas_ui.rs:500
+#: rust/snapedit/src/canvas_ui.rs:513
 #, c-format
 msgid "%d × %d  — Enter aplica, Esc cancela"
 msgstr "%d × %d  — Enter menerapkan, Esc membatalkan"
@@ -686,7 +686,7 @@ msgstr "Tautan dengan token"
 msgid "Chave de API"
 msgstr "Kunci API"
 
-#: rust/snapedit/src/edtools.rs:220 rust/snapedit/src/edtools.rs:726 rust/snapedit/src/panels.rs:62
+#: rust/snapedit/src/edtools.rs:220 rust/snapedit/src/edtools.rs:726 rust/snapedit/src/panels.rs:63
 msgid "E-mail"
 msgstr "Email"
 
@@ -718,7 +718,7 @@ msgstr "Efek"
 msgid "Efeitos rápidos"
 msgstr "Efek cepat"
 
-#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:624 rust/snapnab/src/window.rs:627
+#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/snapnab/src/window.rs:708
 msgid "Excluir"
 msgstr "Hapus"
 
@@ -726,15 +726,15 @@ msgstr "Hapus"
 msgid "+ Adicionar aos efeitos rápidos"
 msgstr "+ Tambahkan ke efek cepat"
 
-#: rust/snapedit/src/effects.rs:639
+#: rust/snapedit/src/effects.rs:638
 msgid "Aplicar"
 msgstr "Terapkan"
 
-#: rust/snapedit/src/effects.rs:644 rust/snapedit/src/app/windows_aux.rs:538 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
+#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:538 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
 msgid "Cancelar"
 msgstr "Batal"
 
-#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:577 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:577 rust/snapnab/src/window.rs:87
 msgid "Borda"
 msgstr "Bingkai"
 
@@ -746,11 +746,11 @@ msgstr "Garis luar padat di sekitar gambar, dengan lebar dan warna pilihan Anda.
 msgid "Bordas e sombras"
 msgstr "Bingkai dan bayangan"
 
-#: rust/snapedit/src/effects.rs:97 rust/snapedit/src/props.rs:904 rust/snapedit/src/props.rs:927 rust/snapedit/src/props.rs:1051
+#: rust/snapedit/src/effects.rs:97 rust/snapedit/src/props.rs:898 rust/snapedit/src/props.rs:921 rust/snapedit/src/props.rs:1043
 msgid "Largura"
 msgstr "Lebar"
 
-#: rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:900 rust/snapedit/src/props.rs:923 rust/snapedit/src/props.rs:932
+#: rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:894 rust/snapedit/src/props.rs:917 rust/snapedit/src/props.rs:926
 msgid "Cor"
 msgstr "Warna"
 
@@ -766,11 +766,11 @@ msgstr "Bayangan lembut di belakang gambar yang memisahkan tangkapan dari latar.
 msgid "Deslocamento"
 msgstr "Pergeseran"
 
-#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:224
+#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:379
 msgid "Desfoque"
 msgstr "Buram"
 
-#: rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:905 rust/snapedit/src/props.rs:928
+#: rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:899 rust/snapedit/src/props.rs:922
 msgid "Opacidade"
 msgstr "Opasitas"
 
@@ -810,7 +810,7 @@ msgstr "Ukuran"
 msgid "Pequena"
 msgstr "Kecil"
 
-#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:453
+#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
 msgid "Média"
 msgstr "Sedang"
 
@@ -822,19 +822,19 @@ msgstr "Besar"
 msgid "Canto"
 msgstr "Sudut"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
 msgid "Superior esquerdo"
 msgstr "Kiri atas"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
 msgid "Superior direito"
 msgstr "Kanan atas"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:689
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:691
 msgid "Inferior direito"
 msgstr "Kanan bawah"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
 msgid "Inferior esquerdo"
 msgstr "Kiri bawah"
 
@@ -846,51 +846,51 @@ msgstr "Tepi"
 msgid "Rasgada, onda, serrilhada, tubarão, esmaecida ou chanfrada."
 msgstr "Robek, gelombang, gigi gergaji, gigi hiu, memudar, atau miring."
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1262 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/snapnab/src/dialogs.rs:670
 msgid "Estilo"
 msgstr "Gaya"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Rasgada"
 msgstr "Robek"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/snapnab/src/dialogs.rs:670
 msgid "Onda"
 msgstr "Gelombang"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Dente de serra"
 msgstr "Gigi gergaji"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Dente de tubarão"
 msgstr "Gigi hiu"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/snapnab/src/dialogs.rs:670
 msgid "Esmaecer"
 msgstr "Memudar"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Chanfrada"
 msgstr "Miring"
 
-#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:669 rust/snapnab/src/dialogs.rs:663
+#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:671 rust/snapnab/src/dialogs.rs:665
 msgid "Em cima"
 msgstr "Atas"
 
-#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:672
 msgid "Direita"
 msgstr "Kanan"
 
-#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:670 rust/snapnab/src/dialogs.rs:663
+#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:672 rust/snapnab/src/dialogs.rs:665
 msgid "Embaixo"
 msgstr "Bawah"
 
-#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:671
+#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:673
 msgid "Esquerda"
 msgstr "Kiri"
 
-#: rust/snapedit/src/effects.rs:123 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:123 rust/snapnab/src/window.rs:87
 msgid "Filtros"
 msgstr "Filter"
 
@@ -902,23 +902,23 @@ msgstr "Abu-abu, sepia, balik, H&P, timbul, mosaik, pertajam, buram."
 msgid "Cores"
 msgstr "Warna"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Filtro"
 msgstr "Filter"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Tons de cinza"
 msgstr "Skala abu-abu"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Sépia"
 msgstr "Sepia"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Inverter cores"
 msgstr "Balik warna"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Preto e branco"
 msgstr "Hitam putih"
 
@@ -934,15 +934,15 @@ msgstr "Mosaik"
 msgid "Nitidez"
 msgstr "Pertajam"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapedit/src/props.rs:1083 rust/snapedit/src/props.rs:1088
+#: rust/snapedit/src/effects.rs:126 rust/snapedit/src/props.rs:1073 rust/snapedit/src/props.rs:1078
 msgid "Intensidade"
 msgstr "Intensitas"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:453
+#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
 msgid "Baixa"
 msgstr "Rendah"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:453
+#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
 msgid "Alta"
 msgstr "Tinggi"
 
@@ -954,11 +954,11 @@ msgstr "Penyesuaian warna"
 msgid "Brilho, contraste, gama, matiz e saturação."
 msgstr "Kecerahan, kontras, gamma, rona, dan saturasi."
 
-#: rust/snapedit/src/effects.rs:129 rust/snapnab/src/dialogs.rs:674
+#: rust/snapedit/src/effects.rs:129 rust/snapnab/src/dialogs.rs:676
 msgid "Brilho"
 msgstr "Kecerahan"
 
-#: rust/snapedit/src/effects.rs:130 rust/snapnab/src/dialogs.rs:674
+#: rust/snapedit/src/effects.rs:130 rust/snapnab/src/dialogs.rs:676
 msgid "Contraste"
 msgstr "Kontras"
 
@@ -970,11 +970,11 @@ msgstr "Gamma"
 msgid "Matiz"
 msgstr "Rona"
 
-#: rust/snapedit/src/effects.rs:135 rust/snapnab/src/dialogs.rs:675
+#: rust/snapedit/src/effects.rs:135 rust/snapnab/src/dialogs.rs:677
 msgid "Saturação"
 msgstr "Saturasi"
 
-#: rust/snapedit/src/effects.rs:137 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:137 rust/snapnab/src/window.rs:87
 msgid "Substituição de cor"
 msgstr "Penggantian warna"
 
@@ -986,7 +986,7 @@ msgstr "Mengganti satu warna dengan warna lain (atau transparan)."
 msgid "Cor atual"
 msgstr "Warna saat ini"
 
-#: rust/snapedit/src/effects.rs:139 rust/snapnab/src/dialogs.rs:664
+#: rust/snapedit/src/effects.rs:139 rust/snapnab/src/dialogs.rs:666
 msgid "Nova cor"
 msgstr "Warna baru"
 
@@ -994,7 +994,7 @@ msgstr "Warna baru"
 msgid "Tornar transparente"
 msgstr "Jadikan transparan"
 
-#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1010 rust/snapedit/src/props.rs:1114 rust/snapedit/src/app/windows_aux.rs:640
+#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004 rust/snapedit/src/props.rs:1104 rust/snapedit/src/app/windows_aux.rs:636
 msgid "Tolerância"
 msgstr "Toleransi"
 
@@ -1018,7 +1018,7 @@ msgstr "Perbesar"
 msgid "Sombra na área em foco"
 msgstr "Bayangan di area fokus"
 
-#: rust/snapedit/src/effects.rs:149 rust/snapnab/src/window.rs:85
+#: rust/snapedit/src/effects.rs:149 rust/snapnab/src/window.rs:88
 msgid "Marca d'água"
 msgstr "Tanda air"
 
@@ -1030,7 +1030,7 @@ msgstr "Teks tembus pandang di atas gambar, sekali atau berulang."
 msgid "Repetir em mosaico"
 msgstr "Ulangi berpetak"
 
-#: rust/snapedit/src/effects.rs:155 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:155 rust/snapnab/src/window.rs:87
 msgid "Informações da captura"
 msgstr "Info tangkapan"
 
@@ -1038,11 +1038,11 @@ msgstr "Info tangkapan"
 msgid "Faixa de texto em cima ou embaixo; aceita {date} e {time}."
 msgstr "Pita teks di atas atau bawah; menerima {date} dan {time}."
 
-#: rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:663
+#: rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:665
 msgid "Posição"
 msgstr "Posisi"
 
-#: rust/snapedit/src/effects.rs:159 rust/snapedit/src/props.rs:1016
+#: rust/snapedit/src/effects.rs:159 rust/snapedit/src/props.rs:1010
 msgid "Cor do texto"
 msgstr "Warna teks"
 
@@ -1666,357 +1666,357 @@ msgstr "Atur asisten AI…"
 msgid "Configurar o &upload…"
 msgstr "Atur &unggahan…"
 
-#: rust/snapedit/src/panels.rs:111
+#: rust/snapedit/src/panels.rs:210
 msgid "Efeito: "
 msgstr "Efek: "
 
-#: rust/snapedit/src/panels.rs:111
+#: rust/snapedit/src/panels.rs:210
 msgid " — abre os ajustes no painel de efeitos"
 msgstr " — membuka pengaturan di panel efek"
 
-#: rust/snapedit/src/panels.rs:175
-msgid "Mais ▾"
-msgstr "Lainnya ▾"
+#: rust/snapedit/src/panels.rs:308
+msgid "Mais"
+msgstr "Lainnya"
 
-#: rust/snapedit/src/panels.rs:216
+#: rust/snapedit/src/panels.rs:371
 #, c-format
 msgid "Passo %s"
 msgstr "Langkah %s"
 
-#: rust/snapedit/src/panels.rs:225 rust/snapedit/src/props.rs:1071
+#: rust/snapedit/src/panels.rs:380 rust/snapedit/src/props.rs:1063
 msgid "Pixelado"
 msgstr "Piksel"
 
-#: rust/snapedit/src/panels.rs:228
+#: rust/snapedit/src/panels.rs:383
 msgid "Peça solta"
 msgstr "Potongan mengambang"
 
-#: rust/snapedit/src/panels.rs:228 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/panels.rs:383 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Imagem"
 msgstr "Gambar"
 
-#: rust/snapedit/src/panels.rs:229
+#: rust/snapedit/src/panels.rs:384
 #, c-format
 msgid "Grupo (%zu)"
 msgstr "Grup (%zu)"
 
-#: rust/snapedit/src/panels.rs:230
+#: rust/snapedit/src/panels.rs:385
 msgid "Link: "
 msgstr "Tautan: "
 
-#: rust/snapedit/src/panels.rs:252 rust/snapedit/src/app/mod.rs:449
+#: rust/snapedit/src/panels.rs:407 rust/snapedit/src/app/mod.rs:449
 msgid "Camadas"
 msgstr "Lapisan"
 
-#: rust/snapedit/src/panels.rs:254
+#: rust/snapedit/src/panels.rs:409
 msgid "Nenhuma imagem aberta."
 msgstr "Tidak ada gambar yang terbuka."
 
-#: rust/snapedit/src/panels.rs:259
+#: rust/snapedit/src/panels.rs:414
 msgid "Os objetos desenhados (setas, textos, formas…) aparecem aqui, do mais à frente ao mais atrás."
 msgstr "Objek yang digambar (panah, teks, bentuk…) muncul di sini, dari yang paling depan hingga paling belakang."
 
-#: rust/snapedit/src/panels.rs:267
+#: rust/snapedit/src/panels.rs:422
 msgid "Mostrar ou ocultar"
 msgstr "Tampilkan atau sembunyikan"
 
-#: rust/snapedit/src/panels.rs:272
+#: rust/snapedit/src/panels.rs:427
 msgid "Bloquear ou desbloquear"
 msgstr "Kunci atau buka kunci"
 
-#: rust/snapedit/src/panels.rs:292 rust/snapedit/src/props.rs:1829
+#: rust/snapedit/src/panels.rs:448 rust/snapedit/src/props.rs:1814
 msgid "Enviar para trás"
 msgstr "Kirim ke belakang"
 
-#: rust/snapedit/src/panels.rs:295 rust/snapedit/src/props.rs:1828
+#: rust/snapedit/src/panels.rs:451 rust/snapedit/src/props.rs:1813
 msgid "Trazer para a frente"
 msgstr "Bawa ke depan"
 
-#: rust/snapedit/src/panels.rs:301
+#: rust/snapedit/src/panels.rs:457
 msgid "Fundo (imagem)"
 msgstr "Latar (gambar)"
 
-#: rust/snapedit/src/panels.rs:61 rust/snapnab/src/window.rs:41 rust/snapnab/src/window.rs:199
+#: rust/snapedit/src/panels.rs:62 rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:204
 msgid "Arquivo"
 msgstr "File"
 
-#: rust/snapedit/src/panels.rs:61
+#: rust/snapedit/src/panels.rs:62
 msgid "Salvar como arquivo (PNG, JPG, PDF…)"
 msgstr "Simpan sebagai file (PNG, JPG, PDF…)"
 
-#: rust/snapedit/src/panels.rs:62
+#: rust/snapedit/src/panels.rs:63
 msgid "Enviar por e-mail"
 msgstr "Kirim lewat email"
 
-#: rust/snapedit/src/panels.rs:63 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:524
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:526
 msgid "Programa"
 msgstr "Program"
 
-#: rust/snapedit/src/panels.rs:63 rust/snapnab/src/dialogs.rs:525
+#: rust/snapedit/src/panels.rs:64 rust/snapnab/src/dialogs.rs:527
 msgid "Abrir em um programa externo"
 msgstr "Buka di program eksternal"
 
-#: rust/snapedit/src/panels.rs:64
+#: rust/snapedit/src/panels.rs:65
 msgid "Copiar a imagem inteira"
 msgstr "Salin seluruh gambar"
 
-#: rust/snapedit/src/panels.rs:65
+#: rust/snapedit/src/panels.rs:66
 msgid "Impressora"
 msgstr "Printer"
 
-#: rust/snapedit/src/panels.rs:65
+#: rust/snapedit/src/panels.rs:66
 msgid "Imprimir a imagem"
 msgstr "Cetak gambar"
 
-#: rust/snapedit/src/panels.rs:69
+#: rust/snapedit/src/panels.rs:70
 msgid "Desfazer"
 msgstr "Urungkan"
 
-#: rust/snapedit/src/panels.rs:69
+#: rust/snapedit/src/panels.rs:70
 msgid "Desfazer (Ctrl+Z)"
 msgstr "Urungkan (Ctrl+Z)"
 
-#: rust/snapedit/src/panels.rs:70
+#: rust/snapedit/src/panels.rs:71
 msgid "Refazer"
 msgstr "Ulangi"
 
-#: rust/snapedit/src/panels.rs:70
+#: rust/snapedit/src/panels.rs:71
 msgid "Refazer (Ctrl+Y)"
 msgstr "Ulangi (Ctrl+Y)"
 
-#: rust/snapedit/src/panels.rs:71 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
 msgid "Nova imagem"
 msgstr "Gambar baru"
 
-#: rust/snapedit/src/panels.rs:71
+#: rust/snapedit/src/panels.rs:72
 msgid "Nova imagem em branco"
 msgstr "Gambar kosong baru"
 
-#: rust/snapedit/src/panels.rs:72
+#: rust/snapedit/src/panels.rs:73
 msgid "Da área de transf."
 msgstr "Dari papan klip"
 
-#: rust/snapedit/src/panels.rs:72
+#: rust/snapedit/src/panels.rs:73
 msgid "Nova imagem da área de transferência"
 msgstr "Gambar baru dari papan klip"
 
-#: rust/snapedit/src/panels.rs:73
+#: rust/snapedit/src/panels.rs:74
 msgid "Abrir arquivo (Ctrl+O)"
 msgstr "Buka file (Ctrl+O)"
 
-#: rust/snapedit/src/panels.rs:74 rust/snapedit/src/app/windows_aux.rs:698
+#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:694
 msgid "Salvar"
 msgstr "Simpan"
 
-#: rust/snapedit/src/panels.rs:74
+#: rust/snapedit/src/panels.rs:75
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "Simpan ke pustaka (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/panels.rs:183 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
 msgid "Salvar como"
 msgstr "Simpan sebagai"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/panels.rs:183
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288
 msgid "Salvar como arquivo (Ctrl+Shift+S)"
 msgstr "Simpan sebagai file (Ctrl+Shift+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/props.rs:597 rust/snapnab/src/window.rs:625
+#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/snapnab/src/window.rs:706
 msgid "Duplicar"
 msgstr "Gandakan"
 
-#: rust/snapedit/src/panels.rs:76
+#: rust/snapedit/src/panels.rs:77
 msgid "Duplicar a imagem"
 msgstr "Gandakan gambar"
 
-#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:1838
+#: rust/snapedit/src/panels.rs:78 rust/snapedit/src/props.rs:1823
 msgid "Excluir objeto"
 msgstr "Hapus objek"
 
-#: rust/snapedit/src/panels.rs:77
+#: rust/snapedit/src/panels.rs:78
 msgid "Excluir o objeto selecionado (Del)"
 msgstr "Hapus objek yang dipilih (Del)"
 
-#: rust/snapedit/src/panels.rs:78
+#: rust/snapedit/src/panels.rs:79
 msgid "Grab Text"
 msgstr "Ambil Teks"
 
-#: rust/snapedit/src/panels.rs:78
+#: rust/snapedit/src/panels.rs:79
 msgid "Reconhecer o texto da imagem (Ctrl+Shift+T)"
 msgstr "Kenali teks pada gambar (Ctrl+Shift+T)"
 
-#: rust/snapedit/src/panels.rs:79
+#: rust/snapedit/src/panels.rs:80
 msgid "Excluir imagem"
 msgstr "Hapus gambar"
 
-#: rust/snapedit/src/panels.rs:79
+#: rust/snapedit/src/panels.rs:80
 msgid "Enviar a imagem para a Lixeira"
 msgstr "Kirim gambar ke Tempat Sampah"
 
-#: rust/snapedit/src/panels.rs:80
+#: rust/snapedit/src/panels.rs:81
 msgid "Mesclar tudo"
 msgstr "Gabungkan semua"
 
-#: rust/snapedit/src/panels.rs:80
+#: rust/snapedit/src/panels.rs:81
 msgid "Mesclar todos os objetos na imagem"
 msgstr "Gabungkan semua objek ke gambar"
 
-#: rust/snapedit/src/panels.rs:81 rust/snapedit/src/app/commands.rs:627 rust/snapnab/src/dialogs.rs:676
+#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:627 rust/snapnab/src/dialogs.rs:678
 msgid "Girar"
 msgstr "Putar"
 
-#: rust/snapedit/src/panels.rs:81
+#: rust/snapedit/src/panels.rs:82
 msgid "Girar 90° no sentido horário (Ctrl+R)"
 msgstr "Putar 90° searah jarum jam (Ctrl+R)"
 
-#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/props.rs:1109
+#: rust/snapedit/src/panels.rs:83 rust/snapedit/src/props.rs:1099
 msgid "Corte automático"
 msgstr "Pangkas otomatis"
 
-#: rust/snapedit/src/panels.rs:82
+#: rust/snapedit/src/panels.rs:83
 msgid "Cortar as bordas de cor uniforme"
 msgstr "Pangkas tepi berwarna seragam"
 
-#: rust/snapedit/src/panels.rs:83 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:844
 msgid "Alinhar à esquerda"
 msgstr "Rata kiri"
 
-#: rust/snapedit/src/panels.rs:83
+#: rust/snapedit/src/panels.rs:84
 msgid "Alinhar os objetos à esquerda"
 msgstr "Ratakan objek ke kiri"
 
-#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:844
 msgid "Alinhar ao centro"
 msgstr "Rata tengah"
 
-#: rust/snapedit/src/panels.rs:84
+#: rust/snapedit/src/panels.rs:85
 msgid "Alinhar os objetos ao centro"
 msgstr "Ratakan objek ke tengah"
 
-#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:844
 msgid "Alinhar à direita"
 msgstr "Rata kanan"
 
-#: rust/snapedit/src/panels.rs:85
+#: rust/snapedit/src/panels.rs:86
 msgid "Alinhar os objetos à direita"
 msgstr "Ratakan objek ke kanan"
 
-#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:845
 msgid "Alinhar em cima"
 msgstr "Rata atas"
 
-#: rust/snapedit/src/panels.rs:86
+#: rust/snapedit/src/panels.rs:87
 msgid "Alinhar os objetos em cima"
 msgstr "Ratakan objek ke atas"
 
-#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:845
 msgid "Alinhar no meio"
 msgstr "Rata tengah vertikal"
 
-#: rust/snapedit/src/panels.rs:87
+#: rust/snapedit/src/panels.rs:88
 msgid "Alinhar os objetos no meio"
 msgstr "Ratakan objek ke tengah secara vertikal"
 
-#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:845
 msgid "Alinhar embaixo"
 msgstr "Rata bawah"
 
-#: rust/snapedit/src/panels.rs:88
+#: rust/snapedit/src/panels.rs:89
 msgid "Alinhar os objetos embaixo"
 msgstr "Ratakan objek ke bawah"
 
-#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:849
+#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:849
 msgid "Distribuir na horizontal"
 msgstr "Distribusikan horizontal"
 
-#: rust/snapedit/src/panels.rs:89
+#: rust/snapedit/src/panels.rs:90
 msgid "Espaçar 3 ou mais objetos igualmente na horizontal"
 msgstr "Beri jarak sama secara horizontal pada 3 objek atau lebih"
 
-#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:850
+#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:850
 msgid "Distribuir na vertical"
 msgstr "Distribusikan vertikal"
 
-#: rust/snapedit/src/panels.rs:90
+#: rust/snapedit/src/panels.rs:91
 msgid "Espaçar 3 ou mais objetos igualmente na vertical"
 msgstr "Beri jarak sama secara vertikal pada 3 objek atau lebih"
 
-#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/props.rs:1831
+#: rust/snapedit/src/panels.rs:92 rust/snapedit/src/props.rs:1816
 msgid "Bloquear"
 msgstr "Kunci"
 
-#: rust/snapedit/src/panels.rs:91
+#: rust/snapedit/src/panels.rs:92
 msgid "Bloquear o objeto selecionado (Ctrl+L)"
 msgstr "Kunci objek yang dipilih (Ctrl+L)"
 
-#: rust/snapedit/src/panels.rs:94
+#: rust/snapedit/src/panels.rs:95
 msgid "Réguas"
 msgstr "Penggaris"
 
-#: rust/snapedit/src/panels.rs:94
+#: rust/snapedit/src/panels.rs:95
 msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
 msgstr "Tampilkan penggaris, panduan, dan koordinat (Ctrl+Shift+R)"
 
-#: rust/snapedit/src/panels.rs:143 rust/snapnab/src/window.rs:566
+#: rust/snapedit/src/panels.rs:243 rust/snapnab/src/window.rs:596
 msgid "Capturar"
 msgstr "Ambil"
 
-#: rust/snapedit/src/panels.rs:143
+#: rust/snapedit/src/panels.rs:243
 msgid "Nova captura de imagem (pede ao Snapnab)"
 msgstr "Tangkapan gambar baru (meminta ke Snapnab)"
 
-#: rust/snapedit/src/panels.rs:144
+#: rust/snapedit/src/panels.rs:244 rust/snapnab/src/window.rs:596
 msgid "Gravar"
 msgstr "Rekam"
 
-#: rust/snapedit/src/panels.rs:144
+#: rust/snapedit/src/panels.rs:244
 msgid "Nova gravação de vídeo"
 msgstr "Rekaman video baru"
 
-#: rust/snapedit/src/panels.rs:182
+#: rust/snapedit/src/panels.rs:287
 msgid "Compartilhar"
 msgstr "Bagikan"
 
-#: rust/snapedit/src/panels.rs:182
+#: rust/snapedit/src/panels.rs:287
 msgid "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"
 msgstr "Bagikan: file, papan klip, email, printer, program"
 
-#: rust/snapedit/src/panels.rs:184 rust/snapedit/src/app/windows_aux.rs:452 rust/snapui/src/qr.rs:48
+#: rust/snapedit/src/panels.rs:289 rust/snapedit/src/app/windows_aux.rs:452 rust/snapui/src/qr.rs:48
 msgid "Copiar tudo"
 msgstr "Salin semua"
 
-#: rust/snapedit/src/panels.rs:184
+#: rust/snapedit/src/panels.rs:289
 msgid "Copiar a imagem inteira (Ctrl+Shift+C)"
 msgstr "Salin seluruh gambar (Ctrl+Shift+C)"
 
-#: rust/snapedit/src/panels.rs:208 rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/panels.rs:363 rust/snapedit/src/props.rs:1103
 msgid "Retângulo"
 msgstr "Persegi panjang"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Retângulo arredondado"
 msgstr "Persegi panjang membulat"
 
-#: rust/snapedit/src/panels.rs:208 rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/panels.rs:363 rust/snapedit/src/props.rs:1103
 msgid "Elipse"
 msgstr "Elips"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Triângulo"
 msgstr "Segitiga"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Losango"
 msgstr "Belah ketupat"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Paralelogramo"
 msgstr "Jajar genjang"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Hexágono"
 msgstr "Segi enam"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Estrela"
 msgstr "Bintang"
 
@@ -2040,556 +2040,556 @@ msgstr "Tambahkan gaya saat ini ke gaya cepat"
 msgid "Pesquisar carimbos"
 msgstr "Cari stempel"
 
-#: rust/snapedit/src/props.rs:520
+#: rust/snapedit/src/props.rs:517
 msgid "Organizar carimbos…"
 msgstr "Atur stempel…"
 
-#: rust/snapedit/src/props.rs:525 rust/snapedit/src/props.rs:553
+#: rust/snapedit/src/props.rs:522 rust/snapedit/src/props.rs:550
 msgid "Importar…"
 msgstr "Impor…"
 
-#: rust/snapedit/src/props.rs:535
+#: rust/snapedit/src/props.rs:532
 #, c-format
 msgid "%d carimbo(s) importado(s) para Meus carimbos."
 msgstr "%d stempel diimpor ke Stempel saya."
 
-#: rust/snapedit/src/props.rs:549
+#: rust/snapedit/src/props.rs:546
 msgid "Tema:"
 msgstr "Tema:"
 
-#: rust/snapedit/src/props.rs:552
+#: rust/snapedit/src/props.rs:549
 msgid "Novo tema…"
 msgstr "Tema baru…"
 
-#: rust/snapedit/src/props.rs:568
+#: rust/snapedit/src/props.rs:562
 msgid "Meu tema"
 msgstr "Tema saya"
 
-#: rust/snapedit/src/props.rs:573 rust/snapedit/src/props.rs:607
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/props.rs:601
 msgid "Tema do Snapnab (*.snaptheme)"
 msgstr "Tema Snapnab (*.snaptheme)"
 
-#: rust/snapedit/src/props.rs:573 rust/snapedit/src/app/commands.rs:88
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:88
 msgid "Todos os arquivos"
 msgstr "Semua file"
 
-#: rust/snapedit/src/props.rs:574
+#: rust/snapedit/src/props.rs:568
 msgid "Importar tema"
 msgstr "Impor tema"
 
-#: rust/snapedit/src/props.rs:591
+#: rust/snapedit/src/props.rs:585
 msgid "Editar uma cópia do tema…"
 msgstr "Edit salinan tema…"
 
-#: rust/snapedit/src/props.rs:591
+#: rust/snapedit/src/props.rs:585
 msgid "Editar o tema…"
 msgstr "Edit tema…"
 
-#: rust/snapedit/src/props.rs:593 rust/snapedit/src/props.rs:599 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (salinan)"
 
-#: rust/snapedit/src/props.rs:603 rust/snapedit/src/tray.rs:365
+#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:365
 msgid "Exportar…"
 msgstr "Ekspor…"
 
-#: rust/snapedit/src/props.rs:608
+#: rust/snapedit/src/props.rs:602
 msgid "Exportar tema"
 msgstr "Ekspor tema"
 
-#: rust/snapedit/src/props.rs:614
+#: rust/snapedit/src/props.rs:608
 msgid "Não foi possível exportar o tema."
 msgstr "Tidak dapat mengekspor tema."
 
-#: rust/snapedit/src/props.rs:628
+#: rust/snapedit/src/props.rs:622
 #, c-format
 msgid "Excluir o tema \"%s\"?"
 msgstr "Hapus tema \"%s\"?"
 
-#: rust/snapedit/src/props.rs:657
+#: rust/snapedit/src/props.rs:651
 msgid "Clique na estrela de um estilo rápido para adicioná-lo aos favoritos."
 msgstr "Klik bintang pada gaya cepat untuk menambahkannya ke favorit."
 
-#: rust/snapedit/src/props.rs:683
+#: rust/snapedit/src/props.rs:677
 msgid "Aplicar este estilo"
 msgstr "Terapkan gaya ini"
 
-#: rust/snapedit/src/props.rs:693
+#: rust/snapedit/src/props.rs:687
 msgid "Remover dos favoritos"
 msgstr "Hapus dari favorit"
 
-#: rust/snapedit/src/props.rs:693
+#: rust/snapedit/src/props.rs:687
 msgid "Adicionar aos favoritos"
 msgstr "Tambah ke favorit"
 
-#: rust/snapedit/src/props.rs:698
+#: rust/snapedit/src/props.rs:692
 msgid "Excluir este estilo rápido"
 msgstr "Hapus gaya cepat ini"
 
-#: rust/snapedit/src/props.rs:770
+#: rust/snapedit/src/props.rs:764
 msgid "Nenhum carimbo nesta categoria. Use “Importar…” para acrescentar imagens."
 msgstr "Tidak ada stempel di kategori ini. Gunakan “Impor…” untuk menambahkan gambar."
 
-#: rust/snapedit/src/props.rs:772
+#: rust/snapedit/src/props.rs:766
 msgid "Nenhum carimbo encontrado."
 msgstr "Stempel tidak ditemukan."
 
-#: rust/snapedit/src/props.rs:806
+#: rust/snapedit/src/props.rs:800
 msgid "Desafixar"
 msgstr "Lepas sematan"
 
-#: rust/snapedit/src/props.rs:806
+#: rust/snapedit/src/props.rs:800
 msgid "Fixar no topo"
 msgstr "Sematkan di atas"
 
-#: rust/snapedit/src/props.rs:813
+#: rust/snapedit/src/props.rs:807
 msgid "Carimbo desafixado."
 msgstr "Sematan stempel dilepas."
 
-#: rust/snapedit/src/props.rs:815
+#: rust/snapedit/src/props.rs:809
 msgid "Carimbo fixado: aparece primeiro na categoria e em “Fixados”."
 msgstr "Stempel disematkan: muncul pertama di kategorinya dan di “Disematkan”."
 
-#: rust/snapedit/src/props.rs:819
+#: rust/snapedit/src/props.rs:813
 msgid "Usar este carimbo"
 msgstr "Gunakan stempel ini"
 
-#: rust/snapedit/src/props.rs:864
+#: rust/snapedit/src/props.rs:858
 msgid "Propriedades da ferramenta"
 msgstr "Properti alat"
 
-#: rust/snapedit/src/props.rs:866 rust/snapnab/src/window.rs:242 rust/snapnab/src/window.rs:661
+#: rust/snapedit/src/props.rs:860 rust/snapnab/src/window.rs:247 rust/snapnab/src/window.rs:748
 msgid "Ajuda"
 msgstr "Bantuan"
 
-#: rust/snapedit/src/props.rs:888
+#: rust/snapedit/src/props.rs:882
 #, c-format
 msgid "%d objetos selecionados. As mudanças de estilo valem para os do mesmo tipo do último clicado."
 msgstr "%d objek dipilih. Perubahan gaya berlaku untuk objek yang sejenis dengan yang terakhir diklik."
 
-#: rust/snapedit/src/props.rs:891
+#: rust/snapedit/src/props.rs:885
 #, c-format
 msgid "Grupo com %zu objetos: arraste para mover, use as alças para redimensionar."
 msgstr "Kelompok berisi %zu objek: seret untuk memindahkan, gunakan pegangan untuk mengubah ukuran."
 
-#: rust/snapedit/src/props.rs:906
+#: rust/snapedit/src/props.rs:900
 msgid "Tamanho inicial"
 msgstr "Ukuran awal"
 
-#: rust/snapedit/src/props.rs:907
+#: rust/snapedit/src/props.rs:901
 msgid "Tamanho final"
 msgstr "Ukuran akhir"
 
-#: rust/snapedit/src/props.rs:908
+#: rust/snapedit/src/props.rs:902
 msgid "Curva de Bézier"
 msgstr "Kurva Bézier"
 
-#: rust/snapedit/src/props.rs:909 rust/snapedit/src/props.rs:993
+#: rust/snapedit/src/props.rs:903 rust/snapedit/src/props.rs:987
 msgid "Desenhado à mão"
 msgstr "Gambar tangan"
 
-#: rust/snapedit/src/props.rs:910
+#: rust/snapedit/src/props.rs:904
 msgid "Texto ao longo da linha"
 msgstr "Teks di sepanjang garis"
 
-#: rust/snapedit/src/props.rs:912
+#: rust/snapedit/src/props.rs:906
 msgid "Fonte do texto"
 msgstr "Font teks"
 
-#: rust/snapedit/src/props.rs:913
+#: rust/snapedit/src/props.rs:907
 msgid "Tamanho do texto"
 msgstr "Ukuran teks"
 
-#: rust/snapedit/src/props.rs:915
+#: rust/snapedit/src/props.rs:909
 msgid "Depois de desenhar, digite o texto: ele acompanha a linha ou a curva; duplo clique edita."
 msgstr "Setelah menggambar, ketik teks: teks mengikuti garis atau kurva; klik ganda untuk mengedit."
 
-#: rust/snapedit/src/props.rs:917
+#: rust/snapedit/src/props.rs:911
 msgid "Depois de desenhar a seta, digite para escrever um texto na ponta inicial; duplo clique edita."
 msgstr "Setelah menggambar panah, ketik untuk menulis teks di pangkalnya; klik ganda untuk mengeditnya."
 
-#: rust/snapedit/src/props.rs:936
+#: rust/snapedit/src/props.rs:930
 msgid "Encaixar nas linhas de texto"
 msgstr "Pas ke baris teks"
 
-#: rust/snapedit/src/props.rs:937 rust/snapedit/src/props.rs:1084 rust/snapedit/src/props.rs:1089
+#: rust/snapedit/src/props.rs:931 rust/snapedit/src/props.rs:1074 rust/snapedit/src/props.rs:1079
 msgid "Somente o texto (palavras na área)"
 msgstr "Hanya teks (kata di area)"
 
-#: rust/snapedit/src/props.rs:941 rust/snapedit/src/props.rs:955 rust/snapedit/src/props.rs:986 rust/snapedit/src/props.rs:1007
+#: rust/snapedit/src/props.rs:935 rust/snapedit/src/props.rs:949 rust/snapedit/src/props.rs:980 rust/snapedit/src/props.rs:1001
 msgid "Preenchimento"
 msgstr "Isian"
 
-#: rust/snapedit/src/props.rs:942 rust/snapedit/src/props.rs:956 rust/snapedit/src/props.rs:987 rust/snapedit/src/props.rs:1045
+#: rust/snapedit/src/props.rs:936 rust/snapedit/src/props.rs:950 rust/snapedit/src/props.rs:981 rust/snapedit/src/props.rs:1037
 msgid "Contorno"
 msgstr "Garis luar"
 
-#: rust/snapedit/src/props.rs:945 rust/snapedit/src/props.rs:961
+#: rust/snapedit/src/props.rs:939 rust/snapedit/src/props.rs:955
 msgid "Fonte"
 msgstr "Font"
 
-#: rust/snapedit/src/props.rs:946 rust/snapedit/src/props.rs:964
+#: rust/snapedit/src/props.rs:940 rust/snapedit/src/props.rs:958
 msgid "Tamanho da fonte"
 msgstr "Ukuran font"
 
-#: rust/snapedit/src/props.rs:947 rust/snapedit/src/props.rs:965 rust/snapedit/src/props.rs:991 rust/snapedit/src/props.rs:1062
+#: rust/snapedit/src/props.rs:941 rust/snapedit/src/props.rs:959 rust/snapedit/src/props.rs:985 rust/snapedit/src/props.rs:1054
 msgid "Espessura"
 msgstr "Ketebalan"
 
-#: rust/snapedit/src/props.rs:948 rust/snapedit/src/props.rs:981
+#: rust/snapedit/src/props.rs:942 rust/snapedit/src/props.rs:975
 msgid "Texto vertical"
 msgstr "Teks vertikal"
 
-#: rust/snapedit/src/props.rs:949
+#: rust/snapedit/src/props.rs:943
 msgid "Letra à mão"
 msgstr "Tulisan tangan"
 
-#: rust/snapedit/src/props.rs:968
+#: rust/snapedit/src/props.rs:962
 msgid "Estilo da seta"
 msgstr "Gaya panah"
 
-#: rust/snapedit/src/props.rs:973
+#: rust/snapedit/src/props.rs:967
 msgid "Cor da seta"
 msgstr "Warna panah"
 
-#: rust/snapedit/src/props.rs:977
+#: rust/snapedit/src/props.rs:971
 msgid "Tamanho da seta"
 msgstr "Ukuran panah"
 
-#: rust/snapedit/src/props.rs:978
+#: rust/snapedit/src/props.rs:972
 msgid "Desfocar o fundo (vidro fosco)"
 msgstr "Buramkan latar (kaca buram)"
 
-#: rust/snapedit/src/props.rs:980
+#: rust/snapedit/src/props.rs:974
 msgid "Opacidade do preenchimento"
 msgstr "Opasitas isian"
 
-#: rust/snapedit/src/props.rs:1005
+#: rust/snapedit/src/props.rs:999
 msgid "Conta-gotas: clique na imagem para pegar a cor de preenchimento."
 msgstr "Pipet: klik gambar untuk mengambil warna isian."
 
-#: rust/snapedit/src/props.rs:1011
+#: rust/snapedit/src/props.rs:1005
 msgid "Mesma cor em toda a imagem"
 msgstr "Warna sama di seluruh gambar"
 
-#: rust/snapedit/src/props.rs:1022 rust/snapedit/src/props.rs:1070 rust/snapedit/src/props.rs:1904
+#: rust/snapedit/src/props.rs:1016 rust/snapedit/src/props.rs:1062 rust/snapedit/src/props.rs:1889
 msgid "Tipo"
 msgstr "Jenis"
 
-#: rust/snapedit/src/props.rs:1023
+#: rust/snapedit/src/props.rs:1017
 msgid "I, II, III…"
 msgstr "I, II, III…"
 
-#: rust/snapedit/src/props.rs:1023
+#: rust/snapedit/src/props.rs:1017
 msgid "i, ii, iii…"
 msgstr "i, ii, iii…"
 
-#: rust/snapedit/src/props.rs:1034
+#: rust/snapedit/src/props.rs:1026
 msgid "Reiniciar a sequência"
 msgstr "Mulai ulang urutan"
 
-#: rust/snapedit/src/props.rs:1040
+#: rust/snapedit/src/props.rs:1032
 msgid "A sequência de passos recomeça em 1."
 msgstr "Urutan langkah dimulai lagi dari 1."
 
-#: rust/snapedit/src/props.rs:1048
+#: rust/snapedit/src/props.rs:1040
 msgid "Espessura do contorno"
 msgstr "Ketebalan garis luar"
 
-#: rust/snapedit/src/props.rs:1053
+#: rust/snapedit/src/props.rs:1045
 msgid "Suavizar as bordas"
 msgstr "Haluskan tepi"
 
-#: rust/snapedit/src/props.rs:1061
+#: rust/snapedit/src/props.rs:1053
 msgid "Ampliação (%)"
 msgstr "Pembesaran (%)"
 
-#: rust/snapedit/src/props.rs:1063
+#: rust/snapedit/src/props.rs:1055
 msgid "Lente separada da área ampliada"
 msgstr "Lensa terpisah dari area yang diperbesar"
 
-#: rust/snapedit/src/props.rs:1064
+#: rust/snapedit/src/props.rs:1056
 msgid "Lupa realista (aro e reflexo)"
 msgstr "Kaca pembesar realistis (bingkai dan pantulan)"
 
-#: rust/snapedit/src/props.rs:1065
+#: rust/snapedit/src/props.rs:1057
 msgid "Com cabo"
 msgstr "Dengan gagang"
 
-#: rust/snapedit/src/props.rs:1094
+#: rust/snapedit/src/props.rs:1084
 msgid "Smart Move"
 msgstr "Smart Move"
 
-#: rust/snapedit/src/props.rs:1100
+#: rust/snapedit/src/props.rs:1090
 msgid "Arraste uma área da imagem e depois arraste-a para outro lugar; o fundo é preenchido."
 msgstr "Seret area gambar, lalu pindahkan ke tempat lain; latarnya diisi."
 
-#: rust/snapedit/src/props.rs:1102
+#: rust/snapedit/src/props.rs:1092
 msgid "Clique num objeto para selecionar. Ctrl+clique ou arraste um retângulo para selecionar vários."
 msgstr "Klik objek untuk memilihnya. Ctrl+klik atau seret persegi panjang untuk memilih beberapa."
 
-#: rust/snapedit/src/props.rs:1107 rust/snapedit/src/props.rs:131
+#: rust/snapedit/src/props.rs:1097 rust/snapedit/src/props.rs:131
 msgid "Arraste a área a manter; Enter ou duplo clique aplica."
 msgstr "Seret area yang ingin dipertahankan; Enter atau klik dua kali menerapkan."
 
-#: rust/snapedit/src/props.rs:1108
+#: rust/snapedit/src/props.rs:1098
 msgid "Aplicar recorte"
 msgstr "Terapkan potongan"
 
-#: rust/snapedit/src/props.rs:1112
+#: rust/snapedit/src/props.rs:1102
 msgid "Modo"
 msgstr "Mode"
 
-#: rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/props.rs:1103
 msgid "Laço (mão livre)"
 msgstr "Laso (bebas)"
 
-#: rust/snapedit/src/props.rs:1115
+#: rust/snapedit/src/props.rs:1105
 msgid "Seleção global (mesma cor)"
 msgstr "Pilihan global (warna sama)"
 
-#: rust/snapedit/src/props.rs:1116
+#: rust/snapedit/src/props.rs:1106
 msgid "Ao mover, preencher"
 msgstr "Isi saat memindahkan"
 
-#: rust/snapedit/src/props.rs:1117
+#: rust/snapedit/src/props.rs:1107
 msgid "Transparência"
 msgstr "Transparansi"
 
-#: rust/snapedit/src/props.rs:1117
+#: rust/snapedit/src/props.rs:1107
 msgid "Cor do canvas (branco)"
 msgstr "Warna kanvas (putih)"
 
-#: rust/snapedit/src/props.rs:1117
+#: rust/snapedit/src/props.rs:1107
 msgid "Preenchimento inteligente"
 msgstr "Isian cerdas"
 
-#: rust/snapedit/src/props.rs:1118
+#: rust/snapedit/src/props.rs:1108
 msgid "Cortar para a seleção"
 msgstr "Potong ke pilihan"
 
-#: rust/snapedit/src/props.rs:1119
+#: rust/snapedit/src/props.rs:1109
 msgid "Copiar seleção"
 msgstr "Salin pilihan"
 
-#: rust/snapedit/src/props.rs:1120
+#: rust/snapedit/src/props.rs:1110
 msgid "Excluir seleção"
 msgstr "Hapus pilihan"
 
-#: rust/snapedit/src/props.rs:1121
+#: rust/snapedit/src/props.rs:1111
 msgid "Levantar a seleção (peça solta)"
 msgstr "Angkat pilihan (potongan mengambang)"
 
-#: rust/snapedit/src/props.rs:1125 rust/snapedit/src/app/commands.rs:167
+#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:167
 msgid "Selecione uma área com a ferramenta Seleção para levantá-la."
 msgstr "Pilih area dengan alat Pilihan untuk mengangkatnya."
 
-#: rust/snapedit/src/props.rs:1127 rust/snapedit/src/app/commands.rs:169
+#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:169
 msgid "Peça solta: ajuste o resto da imagem (cortar, recortar faixa…), posicione a peça e tecle Enter para soltá-la."
 msgstr "Potongan mengambang: atur sisa gambar (potong, buang pita…), letakkan potongan, lalu tekan Enter untuk melepasnya."
 
-#: rust/snapedit/src/props.rs:1135
+#: rust/snapedit/src/props.rs:1125
 msgid "Direção"
 msgstr "Arah"
 
-#: rust/snapedit/src/props.rs:1135
+#: rust/snapedit/src/props.rs:1125
 msgid "Horizontal (remove linhas)"
 msgstr "Horizontal (menghapus baris)"
 
-#: rust/snapedit/src/props.rs:1135
+#: rust/snapedit/src/props.rs:1125
 msgid "Vertical (remove colunas)"
 msgstr "Vertikal (menghapus kolom)"
 
-#: rust/snapedit/src/props.rs:1136
+#: rust/snapedit/src/props.rs:1126
 msgid "Arraste sobre a faixa a remover; as partes da imagem são unidas."
 msgstr "Seret di atas jalur yang akan dihapus; bagian-bagian gambar digabung."
 
-#: rust/snapedit/src/props.rs:1140
+#: rust/snapedit/src/props.rs:1130
 msgid "Clique na imagem para pegar a cor; ela vai para as ferramentas de desenho."
 msgstr "Klik gambar untuk mengambil warna; warnanya dipakai alat menggambar."
 
-#: rust/snapedit/src/props.rs:1155
+#: rust/snapedit/src/props.rs:1145
 msgid "Soltar a peça na imagem"
 msgstr "Letakkan potongan ke gambar"
 
-#: rust/snapedit/src/props.rs:1158 rust/snapedit/src/app/commands.rs:174
+#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:174
 msgid "Peça solta na imagem."
 msgstr "Potongan diletakkan ke gambar."
 
-#: rust/snapedit/src/props.rs:1218
+#: rust/snapedit/src/props.rs:1210
 msgid "Variar o traço"
 msgstr "Variasikan goresan"
 
-#: rust/snapedit/src/props.rs:1252
+#: rust/snapedit/src/props.rs:1237
 msgid "Avançado"
 msgstr "Lanjutan"
 
-#: rust/snapedit/src/props.rs:1273 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/snapnab/src/dialogs.rs:687
+#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/snapnab/src/dialogs.rs:689
 msgid "Alinhamento"
 msgstr "Perataan"
 
-#: rust/snapedit/src/props.rs:1293
+#: rust/snapedit/src/props.rs:1278
 msgid "Margem interna"
 msgstr "Margin dalam"
 
-#: rust/snapedit/src/props.rs:1294
+#: rust/snapedit/src/props.rs:1279
 msgid "Espaçamento entre linhas (%)"
 msgstr "Spasi baris (%)"
 
-#: rust/snapedit/src/props.rs:1296
+#: rust/snapedit/src/props.rs:1281
 msgid "Sombreado (degradê)"
 msgstr "Berbayang (gradien)"
 
-#: rust/snapedit/src/props.rs:1398
+#: rust/snapedit/src/props.rs:1383
 msgid "Cores do tema"
 msgstr "Warna tema"
 
-#: rust/snapedit/src/props.rs:1399
+#: rust/snapedit/src/props.rs:1384
 msgid "Cores padrão"
 msgstr "Warna standar"
 
-#: rust/snapedit/src/props.rs:1402
+#: rust/snapedit/src/props.rs:1387
 msgid "Recentes"
 msgstr "Terbaru"
 
-#: rust/snapedit/src/props.rs:1406
+#: rust/snapedit/src/props.rs:1391
 msgid "Gradientes"
 msgstr "Gradien"
 
-#: rust/snapedit/src/props.rs:1428
+#: rust/snapedit/src/props.rs:1413
 msgid "Sem cor"
 msgstr "Tanpa warna"
 
-#: rust/snapedit/src/props.rs:1431
+#: rust/snapedit/src/props.rs:1416
 msgid "Mais cores…"
 msgstr "Warna lainnya…"
 
-#: rust/snapedit/src/props.rs:1451
+#: rust/snapedit/src/props.rs:1436
 msgid "Editar gradiente…"
 msgstr "Edit gradien…"
 
-#: rust/snapedit/src/props.rs:1504
+#: rust/snapedit/src/props.rs:1489
 msgid "Sombra ▾"
 msgstr "Bayangan ▾"
 
-#: rust/snapedit/src/props.rs:1506
+#: rust/snapedit/src/props.rs:1491
 msgid "Mostrar sombra"
 msgstr "Tampilkan bayangan"
 
-#: rust/snapedit/src/props.rs:1510
+#: rust/snapedit/src/props.rs:1495
 msgid "Cor da sombra…"
 msgstr "Warna bayangan…"
 
-#: rust/snapedit/src/props.rs:1541
+#: rust/snapedit/src/props.rs:1526
 msgid "Distância"
 msgstr "Jarak"
 
-#: rust/snapedit/src/props.rs:1647
+#: rust/snapedit/src/props.rs:1632
 msgid "Polígono: clique nos cantos; clique no primeiro ponto ou dê um duplo clique para fechar."
 msgstr "Poligon: klik sudut-sudutnya; klik titik pertama atau klik ganda untuk menutupnya."
 
-#: rust/snapedit/src/props.rs:1649
+#: rust/snapedit/src/props.rs:1634
 msgid "Mão livre: arraste contornando a área."
 msgstr "Bebas: seret mengelilingi area."
 
-#: rust/snapedit/src/props.rs:1662 rust/snapedit/src/props.rs:1722
+#: rust/snapedit/src/props.rs:1647 rust/snapedit/src/props.rs:1707
 msgid "Tracejado"
 msgstr "Garis putus-putus"
 
-#: rust/snapedit/src/props.rs:1689
+#: rust/snapedit/src/props.rs:1674
 msgid "Ponta inicial"
 msgstr "Ujung awal"
 
-#: rust/snapedit/src/props.rs:1689
+#: rust/snapedit/src/props.rs:1674
 msgid "Ponta final"
 msgstr "Ujung akhir"
 
-#: rust/snapedit/src/props.rs:1760
+#: rust/snapedit/src/props.rs:1745
 msgid "Área de corte (px)"
 msgstr "Area potong (px)"
 
-#: rust/snapedit/src/props.rs:1760
+#: rust/snapedit/src/props.rs:1745
 msgid "Seleção (px)"
 msgstr "Pilihan (px)"
 
-#: rust/snapedit/src/props.rs:1760
+#: rust/snapedit/src/props.rs:1745
 msgid "Posição e tamanho (px)"
 msgstr "Posisi dan ukuran (px)"
 
-#: rust/snapedit/src/props.rs:1785 rust/snapedit/src/app/commands.rs:652
+#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:652
 msgid "Manter proporção"
 msgstr "Pertahankan proporsi"
 
-#: rust/snapedit/src/props.rs:1823
+#: rust/snapedit/src/props.rs:1808
 msgid "Agrupar"
 msgstr "Kelompokkan"
 
-#: rust/snapedit/src/props.rs:1826
+#: rust/snapedit/src/props.rs:1811
 msgid "Desagrupar"
 msgstr "Pisahkan kelompok"
 
-#: rust/snapedit/src/props.rs:1831
+#: rust/snapedit/src/props.rs:1816
 msgid "Desbloquear"
 msgstr "Buka kunci"
 
-#: rust/snapedit/src/props.rs:1904
+#: rust/snapedit/src/props.rs:1889
 msgid "Linear"
 msgstr "Linear"
 
-#: rust/snapedit/src/props.rs:1904
+#: rust/snapedit/src/props.rs:1889
 msgid "Radial (do centro)"
 msgstr "Radial (dari tengah)"
 
-#: rust/snapedit/src/props.rs:1905
+#: rust/snapedit/src/props.rs:1890
 msgid "Ângulo (graus)"
 msgstr "Sudut (derajat)"
 
-#: rust/snapedit/src/props.rs:1906
+#: rust/snapedit/src/props.rs:1891
 msgid "Cor inicial"
 msgstr "Warna awal"
 
-#: rust/snapedit/src/props.rs:1907
+#: rust/snapedit/src/props.rs:1892
 msgid "Cor final"
 msgstr "Warna akhir"
 
-#: rust/snapedit/src/props.rs:1908
+#: rust/snapedit/src/props.rs:1893
 msgid "Cor intermediária"
 msgstr "Warna tengah"
 
-#: rust/snapedit/src/props.rs:1910 rust/snapedit/src/props.rs:1913
+#: rust/snapedit/src/props.rs:1895 rust/snapedit/src/props.rs:1898
 msgid "Posição (%)"
 msgstr "Posisi (%)"
 
-#: rust/snapedit/src/props.rs:1911
+#: rust/snapedit/src/props.rs:1896
 msgid "Segunda cor intermediária"
 msgstr "Warna tengah kedua"
 
-#: rust/snapedit/src/props.rs:1914
+#: rust/snapedit/src/props.rs:1899
 msgid "O ângulo vale para o gradiente linear: 0° da esquerda para a direita, 90° de cima para baixo."
 msgstr "Sudut berlaku untuk gradien linear: 0° dari kiri ke kanan, 90° dari atas ke bawah."
 
-#: rust/snapedit/src/props.rs:1916
+#: rust/snapedit/src/props.rs:1901
 msgid "Gradiente"
 msgstr "Gradien"
 
-#: rust/snapedit/src/props.rs:1937 rust/snapedit/src/app/commands.rs:240 rust/snapedit/src/app/commands.rs:575 rust/snapedit/src/app/commands.rs:908
+#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:240 rust/snapedit/src/app/commands.rs:575 rust/snapedit/src/app/commands.rs:908
 msgid "Nome"
 msgstr "Nama"
 
-#: rust/snapedit/src/props.rs:1939
+#: rust/snapedit/src/props.rs:1924
 #, c-format
 msgid "Cor %d"
 msgstr "Warna %d"
 
-#: rust/snapedit/src/props.rs:1941
+#: rust/snapedit/src/props.rs:1926
 msgid "Os estilos rápidos de todas as ferramentas são gerados com estas cores."
 msgstr "Gaya cepat semua alat dibuat dengan warna-warna ini."
 
-#: rust/snapedit/src/props.rs:1942
+#: rust/snapedit/src/props.rs:1927
 msgid "Novo tema"
 msgstr "Tema baru"
 
-#: rust/snapedit/src/props.rs:1942
+#: rust/snapedit/src/props.rs:1927
 msgid "Editar tema"
 msgstr "Edit tema"
 
@@ -4126,7 +4126,7 @@ msgstr "Ekspor %zu item…"
 msgid "Copiar como…"
 msgstr "Salin sebagai…"
 
-#: rust/snapedit/src/tray.rs:375 rust/snapedit/src/app/commands.rs:781 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:41
+#: rust/snapedit/src/tray.rs:375 rust/snapedit/src/app/commands.rs:781 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:44
 msgid "Fixar na tela"
 msgstr "Sematkan di layar"
 
@@ -4317,7 +4317,7 @@ msgstr ""
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "Perangkat lunak bebas di bawah GNU General Public License versi 3."
 
-#: rust/snapedit/src/app/commands.rs:436 rust/snapnab/src/dialogs.rs:430
+#: rust/snapedit/src/app/commands.rs:436 rust/snapnab/src/dialogs.rs:432
 msgid "Biblioteca: "
 msgstr "Pustaka: "
 
@@ -4346,7 +4346,7 @@ msgstr "Efek saya %zu"
 msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
 msgstr "Pengaturan diambil dari efek di panel (buka masing-masing untuk mengubahnya):"
 
-#: rust/snapedit/src/app/commands.rs:578 rust/snapnab/src/window.rs:85
+#: rust/snapedit/src/app/commands.rs:578 rust/snapnab/src/window.rs:88
 msgid "Bordas especiais"
 msgstr "Tepi khusus"
 
@@ -4382,7 +4382,7 @@ msgstr "Objek akan digabung ke gambar."
 msgid "Largura (px)"
 msgstr "Lebar (px)"
 
-#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:551
+#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "Tinggi (px)"
 
@@ -4390,7 +4390,7 @@ msgstr "Tinggi (px)"
 msgid "ou escala (%)"
 msgstr "atau skala (%)"
 
-#: rust/snapedit/src/app/commands.rs:654 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/app/commands.rs:654 rust/snapnab/src/window.rs:87
 msgid "Redimensionar imagem"
 msgstr "Ubah ukuran gambar"
 
@@ -4402,7 +4402,7 @@ msgstr "Jangkar"
 msgid "Cor do canvas"
 msgstr "Warna kanvas"
 
-#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "Transparan"
 
@@ -4475,7 +4475,7 @@ msgstr "%zu item"
 msgid "Superior esquerda"
 msgstr "Kiri atas"
 
-#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:690
 msgid "Superior"
 msgstr "Atas"
 
@@ -4483,7 +4483,7 @@ msgstr "Atas"
 msgid "Superior direita"
 msgstr "Kanan atas"
 
-#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:690
 msgid "Centro"
 msgstr "Tengah"
 
@@ -4491,7 +4491,7 @@ msgstr "Tengah"
 msgid "Inferior esquerda"
 msgstr "Kiri bawah"
 
-#: rust/snapedit/src/app/commands.rs:694 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:689
+#: rust/snapedit/src/app/commands.rs:694 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:691
 msgid "Inferior"
 msgstr "Bawah"
 
@@ -4543,7 +4543,7 @@ msgstr "Disimpan di "
 msgid "A área de transferência não contém imagem."
 msgstr "Papan klip tidak berisi gambar."
 
-#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:222
+#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:227
 msgid "Da área de transferência"
 msgstr "Dari papan klip"
 
@@ -4632,43 +4632,43 @@ msgstr "(pengaturan di bawah)"
 msgid "Predefinição"
 msgstr "Prasetel"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:725 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:721 rust/snapnab/src/dialogs.rs:683
 msgid "Fundo"
 msgstr "Latar"
 
-#: rust/snapedit/src/app/extras.rs:113 rust/snapnab/src/dialogs.rs:682
+#: rust/snapedit/src/app/extras.rs:113 rust/snapnab/src/dialogs.rs:684
 msgid "Cor 1"
 msgstr "Warna 1"
 
-#: rust/snapedit/src/app/extras.rs:114 rust/snapnab/src/dialogs.rs:682
+#: rust/snapedit/src/app/extras.rs:114 rust/snapnab/src/dialogs.rs:684
 msgid "Cor 2 (degradê)"
 msgstr "Warna 2 (gradien)"
 
-#: rust/snapedit/src/app/extras.rs:115 rust/snapnab/src/dialogs.rs:682
+#: rust/snapedit/src/app/extras.rs:115 rust/snapnab/src/dialogs.rs:684
 msgid "Ângulo do degradê"
 msgstr "Sudut gradien"
 
-#: rust/snapedit/src/app/extras.rs:116 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:116 rust/snapnab/src/dialogs.rs:685
 msgid "Imagem de fundo"
 msgstr "Gambar latar"
 
-#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/snapnab/src/dialogs.rs:685
 msgid "Margem (px)"
 msgstr "Margin (px)"
 
-#: rust/snapedit/src/app/extras.rs:118 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:118 rust/snapnab/src/dialogs.rs:686
 msgid "Cantos arredondados (px)"
 msgstr "Sudut membulat (px)"
 
-#: rust/snapedit/src/app/extras.rs:119 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:119 rust/snapnab/src/dialogs.rs:686
 msgid "Sombra (%)"
 msgstr "Bayangan (%)"
 
-#: rust/snapedit/src/app/extras.rs:120 rust/snapnab/src/dialogs.rs:685
+#: rust/snapedit/src/app/extras.rs:120 rust/snapnab/src/dialogs.rs:687
 msgid "Tamanho da sombra (px)"
 msgstr "Ukuran bayangan (px)"
 
-#: rust/snapedit/src/app/extras.rs:122 rust/snapnab/src/dialogs.rs:686
+#: rust/snapedit/src/app/extras.rs:122 rust/snapnab/src/dialogs.rs:688
 msgid "Proporção"
 msgstr "Rasio aspek"
 
@@ -4676,7 +4676,7 @@ msgstr "Rasio aspek"
 msgid "Livre"
 msgstr "Bebas"
 
-#: rust/snapedit/src/app/extras.rs:132 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/extras.rs:132 rust/snapnab/src/dialogs.rs:692
 msgid "Equilibrar as margens (corta bordas lisas da captura)"
 msgstr "Seimbangkan margin (memangkas tepi polos tangkapan)"
 
@@ -4684,7 +4684,7 @@ msgstr "Seimbangkan margin (memangkas tepi polos tangkapan)"
 msgid "Salvar como predefinição (nome)"
 msgstr "Simpan sebagai prasetel (nama)"
 
-#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/snapnab/src/dialogs.rs:692
+#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/snapnab/src/dialogs.rs:694
 msgid "Embelezar"
 msgstr "Percantik"
 
@@ -4884,7 +4884,7 @@ msgstr "Ukuran tiap bagian (px)"
 msgid "Número de partes"
 msgstr "Jumlah bagian"
 
-#: rust/snapedit/src/app/extras.rs:757 rust/snapnab/src/dialogs.rs:669
+#: rust/snapedit/src/app/extras.rs:757 rust/snapnab/src/dialogs.rs:671
 msgid "Tamanho (px)"
 msgstr "Ukuran (px)"
 
@@ -4910,7 +4910,7 @@ msgstr "Gambar terbagi"
 msgid "Imagem dividida em %zu partes (imagens novas na bandeja)."
 msgstr "Gambar dibagi menjadi %zu bagian (gambar baru di baki)."
 
-#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/snapnab/src/dialogs.rs:499 rust/snapnab/src/interval.rs:107
+#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:107
 msgid "Formato"
 msgstr "Format"
 
@@ -5099,7 +5099,7 @@ msgstr "Mint"
 msgid "Grafite"
 msgstr "Grafit"
 
-#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Papel de parede"
 msgstr "Wallpaper"
 
@@ -5107,11 +5107,11 @@ msgstr "Wallpaper"
 msgid "Branco simples"
 msgstr "Putih polos"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Cor sólida"
 msgstr "Warna solid"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Degradê"
 msgstr "Gradien"
 
@@ -5320,7 +5320,7 @@ msgstr "Rentang: pilihan yang ditandai."
 msgid "Intervalo: o vídeo inteiro (marque início/fim para limitar)."
 msgstr "Rentang: seluruh video (tandai awal/akhir untuk membatasi)."
 
-#: rust/snapedit/src/app/video.rs:455 rust/snapnab/src/dialogs.rs:578
+#: rust/snapedit/src/app/video.rs:455 rust/snapnab/src/dialogs.rs:580
 msgid "Quadros por segundo"
 msgstr "Bingkai per detik"
 
@@ -5348,7 +5348,7 @@ msgstr "Buat GIF animasi"
 msgid "Salvar GIF"
 msgstr "Simpan GIF"
 
-#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:694
+#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:690
 msgid "GIF animado (*.gif)|*.gif|"
 msgstr "GIF animasi (*.gif)|*.gif|"
 
@@ -5481,7 +5481,7 @@ msgstr "Pemeriksa kontras (WCAG)"
 msgid "Comparar imagens"
 msgstr "Bandingkan gambar"
 
-#: rust/snapedit/src/app/windows_aux.rs:451 rust/snapedit/src/app/windows_aux.rs:645 rust/snapedit/src/app/windows_aux.rs:762 rust/snapedit/src/app/windows_aux.rs:830
+#: rust/snapedit/src/app/windows_aux.rs:451 rust/snapedit/src/app/windows_aux.rs:641 rust/snapedit/src/app/windows_aux.rs:758 rust/snapedit/src/app/windows_aux.rs:826
 msgid "Fechar"
 msgstr "Tutup"
 
@@ -5553,106 +5553,106 @@ msgstr "Geser (sebelum | sesudah)"
 msgid "Diferença"
 msgstr "Perbedaan"
 
-#: rust/snapedit/src/app/windows_aux.rs:640
+#: rust/snapedit/src/app/windows_aux.rs:636
 msgid "Transparência de B"
 msgstr "Transparansi B"
 
-#: rust/snapedit/src/app/windows_aux.rs:640
+#: rust/snapedit/src/app/windows_aux.rs:636
 msgid "Divisória"
 msgstr "Pembatas"
 
-#: rust/snapedit/src/app/windows_aux.rs:646
+#: rust/snapedit/src/app/windows_aux.rs:642
 msgid "Exportar imagem…"
 msgstr "Ekspor gambar…"
 
-#: rust/snapedit/src/app/windows_aux.rs:647
+#: rust/snapedit/src/app/windows_aux.rs:643
 msgid "Exportar GIF…"
 msgstr "Ekspor GIF…"
 
-#: rust/snapedit/src/app/windows_aux.rs:648
+#: rust/snapedit/src/app/windows_aux.rs:644
 msgid "A ⇄ B"
 msgstr "A ⇄ B"
 
-#: rust/snapedit/src/app/windows_aux.rs:658
+#: rust/snapedit/src/app/windows_aux.rs:654
 #, c-format
 msgid "A: %s (%d × %d)   B: %s (%d × %d)"
 msgstr "A: %s (%d × %d)   B: %s (%d × %d)"
 
-#: rust/snapedit/src/app/windows_aux.rs:663
+#: rust/snapedit/src/app/windows_aux.rs:659
 #, c-format
 msgid "   •   %d pixels diferentes (%.2f%%)"
 msgstr "   •   %d piksel berbeda (%.2f%%)"
 
-#: rust/snapedit/src/app/windows_aux.rs:694 rust/snapedit/src/app/windows_aux.rs:696
+#: rust/snapedit/src/app/windows_aux.rs:690 rust/snapedit/src/app/windows_aux.rs:692
 msgid "Antes-depois"
 msgstr "Sebelum-sesudah"
 
-#: rust/snapedit/src/app/windows_aux.rs:702
+#: rust/snapedit/src/app/windows_aux.rs:698
 msgid "Exportado."
 msgstr "Diekspor."
 
-#: rust/snapedit/src/app/windows_aux.rs:703
+#: rust/snapedit/src/app/windows_aux.rs:699
 msgid "Não foi possível salvar o arquivo."
 msgstr "Tidak dapat menyimpan file."
 
-#: rust/snapedit/src/app/windows_aux.rs:725
+#: rust/snapedit/src/app/windows_aux.rs:721
 msgid "Texto (primeiro plano)"
 msgstr "Teks (latar depan)"
 
-#: rust/snapedit/src/app/windows_aux.rs:737
+#: rust/snapedit/src/app/windows_aux.rs:733
 msgid "Escolher cor…"
 msgstr "Pilih warna…"
 
-#: rust/snapedit/src/app/windows_aux.rs:740
+#: rust/snapedit/src/app/windows_aux.rs:736
 msgid "Copiar HEX"
 msgstr "Salin HEX"
 
-#: rust/snapedit/src/app/windows_aux.rs:751
+#: rust/snapedit/src/app/windows_aux.rs:747
 msgid "Texto grande Aa"
 msgstr "Teks besar Aa"
 
-#: rust/snapedit/src/app/windows_aux.rs:752
+#: rust/snapedit/src/app/windows_aux.rs:748
 msgid "Texto normal — o rato roeu a roupa do rei"
 msgstr "Teks normal — rubah cokelat cepat melompati anjing malas"
 
-#: rust/snapedit/src/app/windows_aux.rs:758
+#: rust/snapedit/src/app/windows_aux.rs:754
 msgid "Inverter as cores"
 msgstr "Tukar warna"
 
-#: rust/snapedit/src/app/windows_aux.rs:795
+#: rust/snapedit/src/app/windows_aux.rs:791
 msgid "Configure a chave do provedor primeiro."
 msgstr "Atur kunci penyedia terlebih dahulu."
 
-#: rust/snapedit/src/app/windows_aux.rs:800
+#: rust/snapedit/src/app/windows_aux.rs:796
 msgid "Perguntando…"
 msgstr "Bertanya…"
 
-#: rust/snapedit/src/app/windows_aux.rs:808
+#: rust/snapedit/src/app/windows_aux.rs:804
 #, c-format
 msgid "Resposta de %s (%s)."
 msgstr "Jawaban dari %s (%s)."
 
-#: rust/snapedit/src/app/windows_aux.rs:823 rust/snapnab/src/quick.rs:53
+#: rust/snapedit/src/app/windows_aux.rs:819 rust/snapnab/src/quick.rs:53
 msgid "Copiar"
 msgstr "Salin"
 
-#: rust/snapedit/src/app/windows_aux.rs:825
+#: rust/snapedit/src/app/windows_aux.rs:821
 msgid "Resposta copiada."
 msgstr "Jawaban disalin."
 
-#: rust/snapedit/src/app/windows_aux.rs:827
+#: rust/snapedit/src/app/windows_aux.rs:823
 msgid "Adicionar como texto"
 msgstr "Tambahkan sebagai teks"
 
-#: rust/snapedit/src/app/windows_aux.rs:828
+#: rust/snapedit/src/app/windows_aux.rs:824
 msgid "Configurações…"
 msgstr "Pengaturan…"
 
-#: rust/snapedit/src/app/windows_aux.rs:847
+#: rust/snapedit/src/app/windows_aux.rs:843
 msgid "Faça uma pergunta sobre a imagem…"
 msgstr "Ajukan pertanyaan tentang gambar…"
 
-#: rust/snapedit/src/app/windows_aux.rs:849
+#: rust/snapedit/src/app/windows_aux.rs:845
 msgid "Perguntar"
 msgstr "Tanya"
 
@@ -5708,15 +5708,15 @@ msgstr "Ekstrak teks"
 msgid "OK"
 msgstr "OK"
 
-#: rust/snapedit/tests/golden.rs:564
+#: rust/snapedit/tests/golden.rs:594
 msgid "Não foi possível criar o arquivo."
 msgstr "Tidak dapat membuat file."
 
-#: rust/snapedit/tests/golden.rs:565
+#: rust/snapedit/tests/golden.rs:595
 msgid "Falha ao gravar o arquivo."
 msgstr "Gagal menulis file."
 
-#: rust/snapedit/tests/golden.rs:566
+#: rust/snapedit/tests/golden.rs:596
 msgid "Falha ao codificar a imagem."
 msgstr "Gagal mengodekan gambar."
 
@@ -5793,7 +5793,7 @@ msgstr "Nama preset"
 msgid "Preset %zu"
 msgstr "Preset %zu"
 
-#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:658
+#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:745
 msgid "Novo preset com as configurações atuais"
 msgstr "Preset baru dari pengaturan saat ini"
 
@@ -5902,11 +5902,11 @@ msgstr "Otomatis (bahasa Windows)"
 msgid "Atalhos globais"
 msgstr "Pintasan global"
 
-#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:218
+#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:223
 msgid "Capturar imagem"
 msgstr "Ambil gambar"
 
-#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:219
+#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:224
 msgid "Gravar vídeo"
 msgstr "Rekam video"
 
@@ -5918,7 +5918,7 @@ msgstr "Jeda/lanjutkan video"
 msgid "Parar vídeo"
 msgstr "Hentikan video"
 
-#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:225
+#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:230
 msgid "Conta-gotas de tela"
 msgstr "Pengambil warna layar"
 
@@ -5926,11 +5926,11 @@ msgstr "Pengambil warna layar"
 msgid "Capturar e fixar na tela"
 msgstr "Tangkap dan sematkan di layar"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:229
+#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:234
 msgid "Fixar da área de transferência"
 msgstr "Sematkan dari papan klip"
 
-#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:234
+#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:239
 msgid "Foco de tela (apresentações)"
 msgstr "Fokus layar (presentasi)"
 
@@ -6074,259 +6074,275 @@ msgstr "Kursor yang ditangkap sebagai objek di Editor"
 msgid "Dividir imagens longas em páginas (impressão e PDF)"
 msgstr "Bagi gambar panjang ke beberapa halaman (cetak dan PDF)"
 
-#: rust/snapnab/src/dialogs.rs:440
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Aparência (vale ao reabrir)"
+msgstr "Tampilan (berlaku setelah dibuka ulang)"
+
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Seguir o Windows"
+msgstr "Ikuti Windows"
+
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Claro"
+msgstr "Terang"
+
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Escuro"
+msgstr "Gelap"
+
+#: rust/snapnab/src/dialogs.rs:442
 msgid "Dois atalhos iguais: "
 msgstr "Dua pintasan sama: "
 
-#: rust/snapnab/src/dialogs.rs:446
+#: rust/snapnab/src/dialogs.rs:448
 msgid "Opções do Snapnab"
 msgstr "Opsi Snapnab"
 
-#: rust/snapnab/src/dialogs.rs:473
+#: rust/snapnab/src/dialogs.rs:475
 msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
 msgstr "Pilih file WAV untuk suara tangkapan (jalur lengkap)."
 
-#: rust/snapnab/src/dialogs.rs:483
+#: rust/snapnab/src/dialogs.rs:485
 msgid "O novo idioma vale depois que o Snapnab e o Editor reiniciarem. Reiniciar agora?"
 msgstr "Bahasa baru berlaku setelah Snapnab dan Editor dimulai ulang. Mulai ulang sekarang?"
 
-#: rust/snapnab/src/dialogs.rs:499 rust/snapnab/src/interval.rs:108
+#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:108
 msgid "Prefixo do nome"
 msgstr "Awalan nama"
 
-#: rust/snapnab/src/dialogs.rs:499 rust/snapnab/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
+#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
 msgid "Pasta"
 msgstr "Folder"
 
-#: rust/snapnab/src/dialogs.rs:500
+#: rust/snapnab/src/dialogs.rs:502
 msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
 msgstr "Nama otomatis: <Awalan><Nomor>, mis.: Tangkapan001.png"
 
-#: rust/snapnab/src/dialogs.rs:503 rust/snapnab/src/interval.rs:131
+#: rust/snapnab/src/dialogs.rs:505 rust/snapnab/src/interval.rs:131
 msgid "O prefixo contém caracteres inválidos."
 msgstr "Awalan berisi karakter yang tidak valid."
 
-#: rust/snapnab/src/dialogs.rs:505
+#: rust/snapnab/src/dialogs.rs:507
 msgid "Salvar em arquivo"
 msgstr "Simpan ke file"
 
-#: rust/snapnab/src/dialogs.rs:524
+#: rust/snapnab/src/dialogs.rs:526
 msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
 msgstr "Tangkapan dibuka di program ini (mis.: mspaint.exe)."
 
-#: rust/snapnab/src/dialogs.rs:539
+#: rust/snapnab/src/dialogs.rs:541
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "Setiap tangkapan di slide baru (mati: di slide saat ini)"
 
-#: rust/snapnab/src/dialogs.rs:552
+#: rust/snapnab/src/dialogs.rs:554
 msgid "Capturar sempre na mesma posição"
 msgstr "Selalu ambil di posisi yang sama"
 
-#: rust/snapnab/src/dialogs.rs:553
+#: rust/snapnab/src/dialogs.rs:555
 msgid "Esquerda (X)"
 msgstr "Kiri (X)"
 
-#: rust/snapnab/src/dialogs.rs:553
+#: rust/snapnab/src/dialogs.rs:555
 msgid "Topo (Y)"
 msgstr "Atas (Y)"
 
-#: rust/snapnab/src/dialogs.rs:554
+#: rust/snapnab/src/dialogs.rs:556
 msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
 msgstr "Tanpa posisi tetap, Anda menyeret persegi panjang ke tempatnya saat mengambil."
 
-#: rust/snapnab/src/dialogs.rs:555 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:293
+#: rust/snapnab/src/dialogs.rs:557 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:326
 msgid "Região fixa"
 msgstr "Area tetap"
 
-#: rust/snapnab/src/dialogs.rs:579
+#: rust/snapnab/src/dialogs.rs:581
 msgid "Reduzir para 1080p"
 msgstr "Perkecil ke 1080p"
 
-#: rust/snapnab/src/dialogs.rs:580
+#: rust/snapnab/src/dialogs.rs:582
 msgid "Codificação por hardware"
 msgstr "Pengodean perangkat keras"
 
-#: rust/snapnab/src/dialogs.rs:581
+#: rust/snapnab/src/dialogs.rs:583
 msgid "Áudio"
 msgstr "Audio"
 
-#: rust/snapnab/src/dialogs.rs:582
+#: rust/snapnab/src/dialogs.rs:584
 msgid "Volume do microfone (%)"
 msgstr "Volume mikrofon (%)"
 
-#: rust/snapnab/src/dialogs.rs:583
+#: rust/snapnab/src/dialogs.rs:585
 msgid "Volume do áudio do sistema (%)"
 msgstr "Volume audio sistem (%)"
 
-#: rust/snapnab/src/dialogs.rs:584 rust/snapnab/src/hud.rs:361
+#: rust/snapnab/src/dialogs.rs:586 rust/snapnab/src/hud.rs:361
 msgid "Ganho automático do microfone"
 msgstr "Penguatan mikrofon otomatis"
 
-#: rust/snapnab/src/dialogs.rs:585
+#: rust/snapnab/src/dialogs.rs:587
 msgid "Também ajustáveis no painel da gravação."
 msgstr "Juga dapat diatur di panel perekaman."
 
-#: rust/snapnab/src/dialogs.rs:586
+#: rust/snapnab/src/dialogs.rs:588
 msgid "Gravar somente o áudio (sem vídeo)"
 msgstr "Rekam audio saja (tanpa video)"
 
-#: rust/snapnab/src/dialogs.rs:587
+#: rust/snapnab/src/dialogs.rs:589
 msgid "Formato do áudio"
 msgstr "Format audio"
 
-#: rust/snapnab/src/dialogs.rs:588
+#: rust/snapnab/src/dialogs.rs:590
 msgid "Na gravação (todos os presets)"
 msgstr "Saat merekam (semua preset)"
 
-#: rust/snapnab/src/dialogs.rs:589 rust/snapnab/src/engine/video.rs:360
+#: rust/snapnab/src/dialogs.rs:591 rust/snapnab/src/engine/video.rs:360
 msgid "Destacar o cursor"
 msgstr "Sorot kursor"
 
-#: rust/snapnab/src/dialogs.rs:590
+#: rust/snapnab/src/dialogs.rs:592
 msgid "Cor do destaque"
 msgstr "Warna sorotan"
 
-#: rust/snapnab/src/dialogs.rs:591
+#: rust/snapnab/src/dialogs.rs:593
 msgid "Tamanho do destaque (px)"
 msgstr "Ukuran sorotan (px)"
 
-#: rust/snapnab/src/dialogs.rs:592 rust/snapnab/src/engine/video.rs:360
+#: rust/snapnab/src/dialogs.rs:594 rust/snapnab/src/engine/video.rs:360
 msgid "Mostrar os cliques"
 msgstr "Tampilkan klik"
 
-#: rust/snapnab/src/dialogs.rs:593
+#: rust/snapnab/src/dialogs.rs:595
 msgid "Cor do clique esquerdo"
 msgstr "Warna klik kiri"
 
-#: rust/snapnab/src/dialogs.rs:594
+#: rust/snapnab/src/dialogs.rs:596
 msgid "Cor do clique direito"
 msgstr "Warna klik kanan"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Teclas na tela"
 msgstr "Tombol di layar"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Não mostrar"
 msgstr "Jangan tampilkan"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "Hanya pintasan (Ctrl, Alt, Win, F1…)"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Todas (inclusive o que for digitado)"
 msgstr "Semua (termasuk yang diketik)"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/snapnab/src/dialogs.rs:599
 msgid "Ampliar ao clicar (zoom automático)"
 msgstr "Perbesar saat klik (zoom otomatis)"
 
-#: rust/snapnab/src/dialogs.rs:598
+#: rust/snapnab/src/dialogs.rs:600
 msgid "Ampliação do zoom (%)"
 msgstr "Tingkat zoom (%)"
 
-#: rust/snapnab/src/dialogs.rs:599
+#: rust/snapnab/src/dialogs.rs:601
 msgid "Atalho do zoom durante a gravação"
 msgstr "Pintasan zoom saat merekam"
 
-#: rust/snapnab/src/dialogs.rs:600
+#: rust/snapnab/src/dialogs.rs:602
 msgid "Proteger contra travamentos (recupera a gravação)"
 msgstr "Lindungi dari crash (memulihkan rekaman)"
 
-#: rust/snapnab/src/dialogs.rs:601
+#: rust/snapnab/src/dialogs.rs:603
 msgid "Confirmar antes de recomeçar a gravação"
 msgstr "Konfirmasi sebelum memulai ulang rekaman"
 
-#: rust/snapnab/src/dialogs.rs:603
+#: rust/snapnab/src/dialogs.rs:605
 msgid "Opções de vídeo"
 msgstr "Opsi video"
 
-#: rust/snapnab/src/dialogs.rs:631
+#: rust/snapnab/src/dialogs.rs:633
 msgid "Remover o fundo da webcam"
 msgstr "Hapus latar webcam"
 
-#: rust/snapnab/src/dialogs.rs:631
+#: rust/snapnab/src/dialogs.rs:633
 msgid "Cor do fundo"
 msgstr "Warna latar"
 
-#: rust/snapnab/src/dialogs.rs:632
+#: rust/snapnab/src/dialogs.rs:634
 msgid "Tolerância (0–100)"
 msgstr "Toleransi (0–100)"
 
-#: rust/snapnab/src/dialogs.rs:633
+#: rust/snapnab/src/dialogs.rs:635
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "Gunakan latar polos yang terang (layar hijau paling ideal)."
 
-#: rust/snapnab/src/dialogs.rs:634
+#: rust/snapnab/src/dialogs.rs:636
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "Tanpa latar, webcam tampil tanpa bingkai."
 
-#: rust/snapnab/src/dialogs.rs:635
+#: rust/snapnab/src/dialogs.rs:637
 msgid "Remover o fundo (chroma key)"
 msgstr "Hapus latar (chroma key)"
 
-#: rust/snapnab/src/dialogs.rs:660
+#: rust/snapnab/src/dialogs.rs:662
 msgid "Deslocamento (px)"
 msgstr "Pergeseran (px)"
 
-#: rust/snapnab/src/dialogs.rs:660
+#: rust/snapnab/src/dialogs.rs:662
 msgid "Desfoque (px)"
 msgstr "Buram (px)"
 
-#: rust/snapnab/src/dialogs.rs:661 rust/snapnab/src/dialogs.rs:678
+#: rust/snapnab/src/dialogs.rs:663 rust/snapnab/src/dialogs.rs:680
 msgid "Opacidade (%)"
 msgstr "Opasitas (%)"
 
-#: rust/snapnab/src/dialogs.rs:662
+#: rust/snapnab/src/dialogs.rs:664
 msgid "Campos: {date} {time} {computer} {user}"
 msgstr "Kolom: {date} {time} {computer} {user}"
 
-#: rust/snapnab/src/dialogs.rs:665
+#: rust/snapnab/src/dialogs.rs:667
 msgid "Escala (%)"
 msgstr "Skala (%)"
 
-#: rust/snapnab/src/dialogs.rs:673
+#: rust/snapnab/src/dialogs.rs:675
 msgid "Remove as faixas de cor uniforme em volta da captura."
 msgstr "Menghapus pita warna seragam di sekitar tangkapan."
 
-#: rust/snapnab/src/dialogs.rs:675
+#: rust/snapnab/src/dialogs.rs:677
 msgid "Matiz (graus)"
 msgstr "Rona (derajat)"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "90° à direita"
 msgstr "90° ke kanan"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "90° à esquerda"
 msgstr "90° ke kiri"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "Espelhar na horizontal"
 msgstr "Balik horizontal"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "Espelhar na vertical"
 msgstr "Balik vertikal"
 
-#: rust/snapnab/src/dialogs.rs:679
+#: rust/snapnab/src/dialogs.rs:681
 msgid "Repetir por toda a imagem"
 msgstr "Ulangi di seluruh gambar"
 
-#: rust/snapnab/src/dialogs.rs:680
+#: rust/snapnab/src/dialogs.rs:682
 msgid "Resolução (DPI)"
 msgstr "Resolusi (DPI)"
 
-#: rust/snapnab/src/dialogs.rs:680
+#: rust/snapnab/src/dialogs.rs:682
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "Ditulis ke file yang disimpan (PNG, JPEG, TIFF, BMP)."
 
-#: rust/snapnab/src/dialogs.rs:686
+#: rust/snapnab/src/dialogs.rs:688
 msgid "Original"
 msgstr "Asli"
 
-#: rust/snapnab/src/dialogs.rs:664
+#: rust/snapnab/src/dialogs.rs:666
 msgid "Cor a substituir"
 msgstr "Warna yang diganti"
 
@@ -6359,19 +6375,19 @@ msgstr "Tidak ada menu terbuka; pilih areanya."
 msgid "Snapnab — seleção"
 msgstr "Snapnab — pilihan"
 
-#: rust/snapnab/src/engine.rs:615
+#: rust/snapnab/src/engine.rs:616
 msgid "vídeo"
 msgstr "video"
 
-#: rust/snapnab/src/engine.rs:620
+#: rust/snapnab/src/engine.rs:621
 msgid "A biblioteca está vazia"
 msgstr "Pustaka kosong"
 
-#: rust/snapnab/src/engine.rs:773
+#: rust/snapnab/src/engine.rs:774
 msgid "Cursor do mouse"
 msgstr "Kursor mouse"
 
-#: rust/snapnab/src/engine.rs:805
+#: rust/snapnab/src/engine.rs:806
 msgid ""
 "Não foi possível reconhecer o texto.\n"
 "\n"
@@ -6379,35 +6395,35 @@ msgstr ""
 "Tidak dapat mengenali teks.\n"
 "\n"
 
-#: rust/snapnab/src/engine.rs:806 rust/snapnab/src/engine.rs:810
+#: rust/snapnab/src/engine.rs:807 rust/snapnab/src/engine.rs:811
 msgid "Snapnab — Capturar texto"
 msgstr "Snapnab — Ambil Teks"
 
-#: rust/snapnab/src/engine.rs:810
+#: rust/snapnab/src/engine.rs:811
 msgid "Nenhum texto encontrado na captura."
 msgstr "Tidak ada teks di tangkapan."
 
-#: rust/snapnab/src/engine.rs:814
+#: rust/snapnab/src/engine.rs:815
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "Ambil Teks — disalin ke papan klip"
 
-#: rust/snapnab/src/engine.rs:845
+#: rust/snapnab/src/engine.rs:846
 msgid "copiada para a área de transferência"
 msgstr "disalin ke papan klip"
 
-#: rust/snapnab/src/engine.rs:853 rust/snapnab/src/engine.rs:880
+#: rust/snapnab/src/engine.rs:854 rust/snapnab/src/engine.rs:881
 msgid "salva em "
 msgstr "disimpan di "
 
-#: rust/snapnab/src/engine.rs:913
+#: rust/snapnab/src/engine.rs:914
 msgid "Captura adicionada à biblioteca"
 msgstr "Tangkapan ditambahkan ke pustaka"
 
-#: rust/snapnab/src/engine.rs:1103
+#: rust/snapnab/src/engine.rs:1104
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr "Gambar dan dokumen|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Dokumen Snapnab (*.snap)|*.snap|Video MP4 (*.mp4)|*.mp4|Semua file (*.*)|*.*|"
 
-#: rust/snapnab/src/hotkeys.rs:57 rust/snapnab/src/hotkeys.rs:261 rust/snapnab/tests/window.rs:32
+#: rust/snapnab/src/hotkeys.rs:57 rust/snapnab/src/hotkeys.rs:261 rust/snapnab/tests/window.rs:34
 msgid "Print Screen"
 msgstr "Print Screen"
 
@@ -6503,7 +6519,7 @@ msgstr "Interval (detik)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "Durasi (menit, 0 = sampai dihentikan)"
 
-#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:698 rust/snapnab/src/window.rs:703
+#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:794 rust/snapnab/src/window.rs:799
 msgid "Capturar o cursor"
 msgstr "Ambil kursor"
 
@@ -6575,7 +6591,7 @@ msgstr "Pintasan preset \"%s\" sudah dipakai tindakan lain."
 msgid "Abrir a janela de captura"
 msgstr "Buka jendela tangkapan"
 
-#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:200
+#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:205
 msgid "Abrir o Editor"
 msgstr "Buka Editor"
 
@@ -6583,11 +6599,11 @@ msgstr "Buka Editor"
 msgid "Sair"
 msgstr "Keluar"
 
-#: rust/snapnab/src/main.rs:540 rust/snapnab/src/pins.rs:647 rust/snapnab/src/quick.rs:298 rust/snapnab/src/window.rs:41
+#: rust/snapnab/src/main.rs:540 rust/snapnab/src/pins.rs:613 rust/snapnab/src/quick.rs:298 rust/snapnab/src/window.rs:44
 msgid "Ler código QR"
 msgstr "Baca kode QR"
 
-#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:239
+#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:244
 msgid "Mostrar o One Click"
 msgstr "Tampilkan One Click"
 
@@ -6600,7 +6616,7 @@ msgstr "Gambar disematkan (%zu)"
 msgid "Imagens fixadas"
 msgstr "Gambar disematkan"
 
-#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:235
+#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:240
 msgid "Gravar só o áudio"
 msgstr "Rekam audio saja"
 
@@ -6609,7 +6625,7 @@ msgstr "Rekam audio saja"
 msgid "Parar a captura por intervalo (%d)"
 msgstr "Hentikan tangkapan berinterval (%d)"
 
-#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:233
+#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:238
 msgid "Captura por intervalo…"
 msgstr "Tangkapan berinterval…"
 
@@ -6617,7 +6633,7 @@ msgstr "Tangkapan berinterval…"
 msgid "Abrir o Editor depois da captura"
 msgstr "Buka Editor setelah menangkap"
 
-#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:213
+#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:218
 msgid "Opções…"
 msgstr "Opsi…"
 
@@ -6646,11 +6662,11 @@ msgstr "Monitor %d tidak ada (ada %zu)."
 msgid "Não foi possível fixar: "
 msgstr "Tidak dapat menyematkan: "
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:230
+#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:235
 msgid "Fixar um arquivo…"
 msgstr "Sematkan file…"
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:228
+#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:233
 msgid "Capturar e fixar"
 msgstr "Tangkap dan sematkan"
 
@@ -6662,7 +6678,7 @@ msgstr "Tampilkan semua"
 msgid "Ocultar todas"
 msgstr "Sembunyikan semua"
 
-#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:231
+#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
 msgid "Fechar todas"
 msgstr "Tutup semua"
 
@@ -6690,7 +6706,7 @@ msgstr ""
 "Proses tangkapan (Snapnab.exe) + Editor (SnapnabEditor.exe), berkomunikasi melalui memori\n"
 "bersama (kanal IPC) dan WM_COPYDATA. Tangkapan disimpan di pustaka:\n"
 
-#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:246
+#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:251
 msgid "Sobre o Snapnab"
 msgstr "Tentang Snapnab"
 
@@ -6728,99 +6744,99 @@ msgstr "Disematkan"
 msgid "Salvar a imagem fixada"
 msgstr "Simpan gambar yang disematkan"
 
-#: rust/snapnab/src/pins.rs:438 rust/snapnab/src/pins.rs:1012 rust/snapnab/src/pins.rs:1240
+#: rust/snapnab/src/pins.rs:438 rust/snapnab/src/pins.rs:978 rust/snapnab/src/pins.rs:1206
 msgid "Imagem fixada"
 msgstr "Gambar disematkan"
 
-#: rust/snapnab/src/pins.rs:644
+#: rust/snapnab/src/pins.rs:610
 msgid "Copiar\tCtrl+C"
 msgstr "Salin\tCtrl+C"
 
-#: rust/snapnab/src/pins.rs:644
+#: rust/snapnab/src/pins.rs:610
 msgid "Salvar como…\tCtrl+S"
 msgstr "Simpan sebagai…\tCtrl+S"
 
-#: rust/snapnab/src/pins.rs:644
+#: rust/snapnab/src/pins.rs:610
 msgid "Abrir no Editor"
 msgstr "Buka di Editor"
 
-#: rust/snapnab/src/pins.rs:645
+#: rust/snapnab/src/pins.rs:611
 msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
 msgstr "Anotasi (pena, penyorot, panah, persegi panjang, teks)"
 
-#: rust/snapnab/src/pins.rs:645
+#: rust/snapnab/src/pins.rs:611
 msgid "Desfazer a anotação\tCtrl+Z"
 msgstr "Batalkan anotasi\tCtrl+Z"
 
-#: rust/snapnab/src/pins.rs:646
+#: rust/snapnab/src/pins.rs:612
 msgid "Zoom"
 msgstr "Zoom"
 
-#: rust/snapnab/src/pins.rs:646
+#: rust/snapnab/src/pins.rs:612
 msgid "Travar a posição"
 msgstr "Kunci posisi"
 
-#: rust/snapnab/src/pins.rs:647
+#: rust/snapnab/src/pins.rs:613
 msgid "Atravessar cliques (desligue pelo menu da bandeja)"
 msgstr "Klik tembus (matikan dari menu baki)"
 
-#: rust/snapnab/src/pins.rs:647
+#: rust/snapnab/src/pins.rs:613
 msgid "Sempre visível"
 msgstr "Selalu di atas"
 
-#: rust/snapnab/src/pins.rs:648
+#: rust/snapnab/src/pins.rs:614
 msgid "Copiar a cor neste ponto\tAlt+clique"
 msgstr "Salin warna di titik ini\tAlt+klik"
 
-#: rust/snapnab/src/pins.rs:648
+#: rust/snapnab/src/pins.rs:614
 msgid "Arrastar para outro programa: Ctrl+arrastar"
 msgstr "Seret ke program lain: Ctrl+seret"
 
-#: rust/snapnab/src/pins.rs:648
+#: rust/snapnab/src/pins.rs:614
 msgid "Fechar\tEsc"
 msgstr "Tutup\tEsc"
 
-#: rust/snapnab/src/pins.rs:649
+#: rust/snapnab/src/pins.rs:615
 msgid "Fechar todas as imagens fixadas"
 msgstr "Tutup semua gambar yang disematkan"
 
-#: rust/snapnab/src/pins.rs:727
+#: rust/snapnab/src/pins.rs:693
 msgid "Texto na imagem fixada"
 msgstr "Teks pada gambar yang disematkan"
 
-#: rust/snapnab/src/pins.rs:1178
+#: rust/snapnab/src/pins.rs:1144
 msgid "A área de transferência não tem imagem nem texto para fixar."
 msgstr "Papan klip tidak berisi gambar atau teks untuk disematkan."
 
-#: rust/snapnab/src/pins.rs:1246
+#: rust/snapnab/src/pins.rs:1212
 msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Vermelho"
 msgstr "Merah"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Amarelo"
 msgstr "Kuning"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Verde"
 msgstr "Hijau"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Azul"
 msgstr "Biru"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Roxo"
 msgstr "Ungu"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Preto"
 msgstr "Hitam"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Branco"
 msgstr "Putih"
 
@@ -6828,7 +6844,7 @@ msgstr "Putih"
 msgid "Copiado para a área de transferência."
 msgstr "Disalin ke papan klip."
 
-#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:253
+#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:259
 msgid "Vídeo"
 msgstr "Video"
 
@@ -6931,181 +6947,181 @@ msgstr ""
 msgid "Upload concluído — link copiado"
 msgstr "Unggahan selesai — tautan disalin"
 
-#: rust/snapnab/src/window.rs:41 rust/snapnab/src/window.rs:354 rust/snapnab/src/window.rs:375
+#: rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:393 rust/snapnab/src/window.rs:403
 msgid "Nenhum"
 msgstr "Tidak ada"
 
-#: rust/snapnab/src/window.rs:41
+#: rust/snapnab/src/window.rs:44
 msgid "Programa externo"
 msgstr "Program eksternal"
 
-#: rust/snapnab/src/window.rs:41
+#: rust/snapnab/src/window.rs:44
 msgid "Texto (OCR)"
 msgstr "Teks (OCR)"
 
-#: rust/snapnab/src/window.rs:42
+#: rust/snapnab/src/window.rs:45
 msgid "Upload (copiar o link)"
 msgstr "Unggah (salin tautan)"
 
-#: rust/snapnab/src/window.rs:238
+#: rust/snapnab/src/window.rs:243
 msgid "Exibir"
 msgstr "Tampilan"
 
-#: rust/snapnab/src/window.rs:275
-msgid "Configurações"
-msgstr "Pengaturan"
-
-#: rust/snapnab/src/window.rs:290
+#: rust/snapnab/src/window.rs:324
 msgid "Seleção:"
 msgstr "Pilihan:"
 
-#: rust/snapnab/src/window.rs:315
+#: rust/snapnab/src/window.rs:342 rust/snapnab/src/window.rs:657
+msgid "Configurações"
+msgstr "Pengaturan"
+
+#: rust/snapnab/src/window.rs:347
 msgid "Selecionar a região na captura"
 msgstr "Pilih area saat mengambil"
 
-#: rust/snapnab/src/window.rs:320
+#: rust/snapnab/src/window.rs:349
 msgid "Região fixa…"
 msgstr "Area tetap…"
 
-#: rust/snapnab/src/window.rs:330
+#: rust/snapnab/src/window.rs:358
 msgid "Cada janela como um objeto separado"
 msgstr "Setiap jendela sebagai objek terpisah"
 
-#: rust/snapnab/src/window.rs:335
+#: rust/snapnab/src/window.rs:361
 msgid "Guardar os links da página (clicáveis, também no PDF)"
 msgstr "Simpan tautan halaman (dapat diklik, juga di PDF)"
 
-#: rust/snapnab/src/window.rs:348
+#: rust/snapnab/src/window.rs:387
 msgid "Efeitos:"
 msgstr "Efek:"
 
-#: rust/snapnab/src/window.rs:393
+#: rust/snapnab/src/window.rs:408
 msgid "Adicionar outro efeito"
 msgstr "Tambah efek lain"
 
-#: rust/snapnab/src/window.rs:397
+#: rust/snapnab/src/window.rs:409
 msgid "Remover este efeito"
 msgstr "Hapus efek ini"
 
-#: rust/snapnab/src/window.rs:421
+#: rust/snapnab/src/window.rs:450
 msgid "Compartilhar:"
 msgstr "Bagikan:"
 
-#: rust/snapnab/src/window.rs:451
+#: rust/snapnab/src/window.rs:473
 msgid "Qualidade:"
 msgstr "Kualitas:"
 
-#: rust/snapnab/src/window.rs:453
+#: rust/snapnab/src/window.rs:474
 msgid "Muito baixa"
 msgstr "Sangat rendah"
 
-#: rust/snapnab/src/window.rs:480
+#: rust/snapnab/src/window.rs:505
 msgid "Webcam:"
 msgstr "Webcam:"
 
-#: rust/snapnab/src/window.rs:481
+#: rust/snapnab/src/window.rs:506
 msgid "Ligada"
 msgstr "Aktif"
 
-#: rust/snapnab/src/window.rs:481 rust/snapnab/src/window.rs:488
+#: rust/snapnab/src/window.rs:506 rust/snapnab/src/window.rs:517
 msgid "Desligada"
 msgstr "Mati"
 
-#: rust/snapnab/src/window.rs:495
+#: rust/snapnab/src/window.rs:519
 msgid "Nenhuma webcam encontrada"
 msgstr "Tidak ada webcam"
 
-#: rust/snapnab/src/window.rs:518
+#: rust/snapnab/src/window.rs:533
 msgid "Remover o fundo (chroma key)…"
 msgstr "Hapus latar (chroma key)…"
 
-#: rust/snapnab/src/window.rs:534
+#: rust/snapnab/src/window.rs:568
 #, c-format
 msgid "%d s"
 msgstr "%d dtk"
 
-#: rust/snapnab/src/window.rs:539
+#: rust/snapnab/src/window.rs:572
 msgid "Atraso"
 msgstr "Tunda"
 
-#: rust/snapnab/src/window.rs:546
+#: rust/snapnab/src/window.rs:580
 msgid "1 segundo"
 msgstr "1 detik"
 
-#: rust/snapnab/src/window.rs:547
+#: rust/snapnab/src/window.rs:581
 #, c-format
 msgid "%d segundos"
 msgstr "%d detik"
 
-#: rust/snapnab/src/window.rs:570
+#: rust/snapnab/src/window.rs:620
 msgid "Gravar vídeo  ("
 msgstr "Rekam video  ("
 
-#: rust/snapnab/src/window.rs:570
+#: rust/snapnab/src/window.rs:620
 msgid "Capturar imagem  ("
 msgstr "Ambil gambar  ("
 
-#: rust/snapnab/src/window.rs:580
+#: rust/snapnab/src/window.rs:630
 msgid "Adicionar atalho"
 msgstr "Tambah pintasan"
 
-#: rust/snapnab/src/window.rs:664
-msgid "Abrir Editor"
-msgstr "Buka Editor"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Cortar bordas"
-msgstr "Pangkas tepi"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Ajuste de cor"
-msgstr "Penyesuaian warna"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Girar imagem"
-msgstr "Putar gambar"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Resolução da imagem"
-msgstr "Resolusi gambar"
-
-#: rust/snapnab/src/window.rs:86
-msgid "Embelezar (fundo, margem e sombra)"
-msgstr "Percantik (latar, margin, dan bayangan)"
-
-#: rust/snapnab/src/window.rs:236
-msgid "Abrir a pasta dos áudios"
-msgstr "Buka folder audio"
-
-#: rust/snapnab/src/window.rs:621
+#: rust/snapnab/src/window.rs:702
 msgid "Capturar com este preset"
 msgstr "Ambil dengan preset ini"
 
-#: rust/snapnab/src/window.rs:623
+#: rust/snapnab/src/window.rs:704
 msgid "Renomear…"
 msgstr "Ganti nama…"
 
-#: rust/snapnab/src/window.rs:624
+#: rust/snapnab/src/window.rs:705
 msgid "Atalho…"
 msgstr "Pintasan…"
 
-#: rust/snapnab/src/window.rs:659 rust/snapnab/tests/window.rs:148
+#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:150
 msgid "Novo preset…"
 msgstr "Preset baru…"
 
-#: rust/snapnab/src/window.rs:696
+#: rust/snapnab/src/window.rs:758
+msgid "Abrir Editor"
+msgstr "Buka Editor"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Cortar bordas"
+msgstr "Pangkas tepi"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Ajuste de cor"
+msgstr "Penyesuaian warna"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Girar imagem"
+msgstr "Putar gambar"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Resolução da imagem"
+msgstr "Resolusi gambar"
+
+#: rust/snapnab/src/window.rs:89
+msgid "Embelezar (fundo, margem e sombra)"
+msgstr "Percantik (latar, margin, dan bayangan)"
+
+#: rust/snapnab/src/window.rs:241
+msgid "Abrir a pasta dos áudios"
+msgstr "Buka folder audio"
+
+#: rust/snapnab/src/window.rs:792
 msgid "Visualizar no Editor"
 msgstr "Pratinjau di Editor"
 
-#: rust/snapnab/src/window.rs:699
+#: rust/snapnab/src/window.rs:795
 msgid "Gravar microfone"
 msgstr "Rekam mikrofon"
 
-#: rust/snapnab/src/window.rs:700
+#: rust/snapnab/src/window.rs:796
 msgid "Gravar áudio do sistema"
 msgstr "Rekam audio sistem"
 
-#: rust/snapnab/src/window.rs:702
+#: rust/snapnab/src/window.rs:798
 msgid "Copiar para a área de transferência"
 msgstr "Salin ke papan klip"
 
@@ -7401,182 +7417,3 @@ msgstr "Selesaikan masuk di peramban"
 msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "Izinkan Snapnab di halaman yang terbuka. Jendela ini tertutup sendiri saat peramban kembali."
 
-#~ msgid "Abrir o &Editor"
-#~ msgstr "Buka &Editor"
-
-#~ msgid "Abrir a pasta de &logs"
-#~ msgstr "Buka folder &log"
-
-#~ msgid "&Importar presets…"
-#~ msgstr "&Impor preset…"
-
-#~ msgid "E&xportar presets…"
-#~ msgstr "E&kspor preset…"
-
-#~ msgid "Exportar &todas as configurações…"
-#~ msgstr "Ekspor &semua pengaturan…"
-
-#~ msgid "Importar t&odas as configurações…"
-#~ msgstr "Impor se&mua pengaturan…"
-
-#~ msgid "Abrir a pasta de &backups"
-#~ msgstr "Buka folder &cadangan"
-
-#~ msgid "&Limpar a biblioteca agora"
-#~ msgstr "&Bersihkan pustaka sekarang"
-
-#~ msgid "&Opções…"
-#~ msgstr "&Opsi…"
-
-#~ msgid "&Sair do Snapnab"
-#~ msgstr "&Keluar dari Snapnab"
-
-#~ msgid "Capturar &imagem"
-#~ msgstr "Ambil &gambar"
-
-#~ msgid "Gravar &vídeo"
-#~ msgstr "Rekam &video"
-
-#~ msgid "&Repetir a última captura"
-#~ msgstr "&Ulangi tangkapan terakhir"
-
-#~ msgid "Da área de &transferência"
-#~ msgstr "Dari &papan klip"
-
-#~ msgid "De um &arquivo gráfico…"
-#~ msgstr "Dari &file grafis…"
-
-#~ msgid "&Conta-gotas de tela"
-#~ msgstr "Pengambil &warna layar"
-
-#~ msgid "Ler código &QR"
-#~ msgstr "Baca kode &QR"
-
-#~ msgid "&Fixar na tela"
-#~ msgstr "&Sematkan di layar"
-
-#~ msgid "Captura por &intervalo…"
-#~ msgstr "Tangkapan ber&interval…"
-
-#~ msgid "F&oco de tela (apresentações)"
-#~ msgstr "F&okus layar (presentasi)"
-
-#~ msgid "Gravar só o á&udio"
-#~ msgstr "Rekam a&udio saja"
-
-#~ msgid "Mostrar o &One Click"
-#~ msgstr "Tampilkan &One Click"
-
-#~ msgid "Lista de &presets"
-#~ msgstr "Daftar &preset"
-
-#~ msgid "Como usar os &presets"
-#~ msgstr "Cara memakai p&reset"
-
-#~ msgid "&Sobre o Snapnab"
-#~ msgstr "&Tentang Snapnab"
-
-#~ msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Documento Snapnab (*.snap)|*.snap|"
-#~ msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Dokumen Snapnab (*.snap)|*.snap|"
-
-#~ msgid "clique para mudar"
-#~ msgstr "klik untuk mengubah"
-
-#~ msgid "Conta-gotas na tela…"
-#~ msgstr "Pengambil warna layar…"
-
-#~ msgid "Objeto oculto: clique no olho para mostrá-lo."
-#~ msgstr "Objek tersembunyi: klik ikon mata untuk menampilkannya."
-
-#~ msgid "Mais"
-#~ msgstr "Lainnya"
-
-#~ msgid "  •  arraste para mudar de lugar"
-#~ msgstr "  •  seret untuk memindahkan"
-
-#~ msgid "Mais ferramentas e personalização da barra"
-#~ msgstr "Alat lainnya dan kustomisasi bilah"
-
-#~ msgid "Arraste suas ferramentas, efeitos e comandos favoritos para a barra…"
-#~ msgstr "Seret alat, efek, dan perintah favorit Anda ke bilah…"
-
-#~ msgid "Espaçador"
-#~ msgstr "Pemisah"
-
-#~ msgid "Número de ferramentas na barra automática:"
-#~ msgstr "Jumlah alat di bilah otomatis:"
-
-#~ msgid "Restaurar padrões"
-#~ msgstr "Pulihkan default"
-
-#~ msgid "Concluído"
-#~ msgstr "Selesai"
-
-#~ msgid "Arraste um item desta janela para a barra de ferramentas para acrescentá-lo; a barra mostra onde ele vai entrar.\n\nNa barra, arraste um item para mudar de lugar, ou para fora da barra para removê-lo.\n“Restaurar padrões” volta à barra automática: Mover, Seleção, Texto, Marcador, Forma, as usadas por último e Lupa. O número de ferramentas dela é escolhido embaixo (de 6 a 16)."
-#~ msgstr "Seret item dari jendela ini ke bilah alat untuk menambahkannya; bilah menunjukkan tempatnya.\n\nDi bilah, seret item untuk memindahkannya, atau keluar dari bilah untuk menghapusnya.\n“Pulihkan default” kembali ke bilah otomatis: Pindah, Pilihan, Teks, Penanda, Bentuk, yang terakhir dipakai, dan Kaca pembesar. Jumlah alatnya dipilih di bawah (6 sampai 16)."
-
-#~ msgid "Adicionar"
-#~ msgstr "Tambah"
-
-#~ msgid "Excluir este efeito rápido"
-#~ msgstr "Hapus efek cepat ini"
-
-#~ msgid "Pesquisar por nome"
-#~ msgstr "Cari menurut nama"
-
-#~ msgid "Aparece na bandeja e na biblioteca. Vazio mostra a data."
-#~ msgstr "Tampil di baki dan pustaka. Kosong menampilkan tanggal."
-
-#~ msgid "Biblioteca  •  %zu capturas"
-#~ msgstr "Pustaka  •  %zu tangkapan"
-
-#~ msgid "  •  %d selecionadas"
-#~ msgstr "  •  %d dipilih"
-
-#~ msgid "Exportar (%d)…"
-#~ msgstr "Ekspor (%d)…"
-
-#~ msgid "Excluir (%d)"
-#~ msgstr "Hapus (%d)"
-
-#~ msgid "Limpar seleção"
-#~ msgstr "Hapus pilihan"
-
-#~ msgid "Voltar ao editor"
-#~ msgstr "Kembali ke editor"
-
-#~ msgid "Nenhuma captura recente. Capture com o Snapnab (Print Screen) ou solte arquivos aqui."
-#~ msgstr "Belum ada tangkapan terbaru. Ambil dengan Snapnab (Print Screen) atau letakkan file di sini."
-
-#~ msgid "Nenhuma captura com esse nome."
-#~ msgstr "Tidak ada tangkapan dengan nama itu."
-
-#~ msgid "A biblioteca está vazia."
-#~ msgstr "Pustaka kosong."
-
-#~ msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
-#~ msgstr "Video  •  %lld:%02lld  •  %d × %d"
-
-#~ msgid "Ponta"
-#~ msgstr "Ujung"
-
-#~ msgid "Tema do Snapnab (*.snaptheme)|*.snaptheme|"
-#~ msgstr "Tema Snapnab (*.snaptheme)|*.snaptheme|"
-
-#~ msgid "Tema do Snapnab (*.snaptheme)|*.snaptheme|Todos os arquivos|*.*|"
-#~ msgstr "Tema Snapnab (*.snaptheme)|*.snaptheme|Semua file|*.*|"
-
-#~ msgid "Zoom %d%%  ▾"
-#~ msgstr "Zoom %d%%  ▾"
-
-#~ msgid "%d × %d px  ▾"
-#~ msgstr "%d × %d px  ▾"
-
-#~ msgid "Barra de ferramentas personalizada. Mais › Voltar ao padrão desfaz."
-#~ msgstr "Bilah alat kustom. Lainnya › Kembali ke default membatalkannya."
-
-#~ msgid "Editar"
-#~ msgstr "Edit"
-
-#~ msgid "Ferramentas"
-#~ msgstr "Alat"

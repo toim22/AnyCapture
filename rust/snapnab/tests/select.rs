@@ -45,6 +45,7 @@ fn harness(mode: Mode, ppp: f32, cursor: (i32, i32), history: Vec<Rect>) -> Harn
         child_at: None,
     };
     let state = State { o: Overlay::new(setup), out: None };
+    snapui::fixed_look_for_tests();
     Harness::builder()
         .with_size(vec2(VS.width() as f32 / ppp, VS.height() as f32 / ppp))
         .with_pixels_per_point(ppp)

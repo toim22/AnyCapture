@@ -102,6 +102,19 @@ fn to_c32(c: (u8, u8, u8)) -> Color32 {
     Color32::from_rgb(c.0, c.1, c.2)
 }
 
+/// The Editor's default background around the picture (Options can change it).
+const DEFAULT_BACKGROUND: u32 = 0x00E4E0DE;
+
+/// The background around the picture: the theme's own while the user kept the default.
+fn canvas_background(bg: u32) -> Color32 {
+    if bg == DEFAULT_BACKGROUND { snapui::theme::tokens().canvas } else { colorref(bg) }
+}
+
+/// The shadow under the picture ("paper").
+fn paper_shadow() -> Color32 {
+    if snapui::theme::tokens().dark { Color32::from_black_alpha(110) } else { Color32::from_black_alpha(36) }
+}
+
 fn colorref(c: u32) -> Color32 {
     Color32::from_rgb((c & 255) as u8, (c >> 8 & 255) as u8, (c >> 16 & 255) as u8)
 }
@@ -285,7 +298,7 @@ impl CanvasView {
 
     fn paint(&mut self, ui: &egui::Ui, p: &egui::Painter, c: &mut Canvas) {
         let ctx = ui.ctx().clone();
-        p.rect_filled(self.rect, 0.0, colorref(c.background));
+        p.rect_filled(self.rect, 0.0, canvas_background(c.background));
         if c.doc().is_none_or(|d| d.is_video) {
             if c.doc().is_none() {
                 p.text(self.rect.center(), egui::Align2::CENTER_CENTER,
@@ -310,7 +323,7 @@ impl CanvasView {
         let (dw, dh) = c.doc().map_or((0, 0), |d| (d.w(), d.h()));
         let ir = Rect::from_min_size(self.pt(o), vec2(dw as f32 * zoom, dh as f32 * zoom) * s);
         // "paper" shadow
-        p.rect_filled(ir.translate(vec2(3.0, 3.0) * s), 0.0, Color32::from_rgb(180, 182, 186));
+        p.rect_filled(ir.translate(vec2(3.0, 3.0) * s), 0.0, paper_shadow());
         if self.has_alpha {
             self.checker(&ctx, p, ir);
         }
@@ -368,7 +381,7 @@ impl CanvasView {
         if alpha {
             self.checker(ctx, p, ir);
         } else {
-            p.rect_filled(ir.translate(vec2(3.0, 3.0) * s), 0.0, Color32::from_rgb(180, 182, 186));
+            p.rect_filled(ir.translate(vec2(3.0, 3.0) * s), 0.0, paper_shadow());
         }
         if let Some(x) = &self.fx {
             x.0.paint(p, ir.min, z * s);

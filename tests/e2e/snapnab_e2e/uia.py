@@ -3,9 +3,13 @@
 egui draws its widgets itself (there are no child windows); AccessKit publishes them to UI Automation, each with its
 AutomationId set to the name of the C++ control it replaces ("IDC_SELECTION"), and the items of a list or drop-down
 with "<name>.<index>" ("IDC_SELECTION.2"). The tests click them with the real mouse, as a user would.
+A drop-down list is a window of its own (class SnapnabDropList, owned by the window it drops from), so its items
+are looked for there too.
 """
 import re
 
+import win32con
+import win32gui
 from pywinauto import Desktop
 
 from . import win
@@ -15,11 +19,32 @@ def window(hwnd):
     return Desktop(backend="uia").window(handle=hwnd)
 
 
+def lists(hwnd):
+    """The drop-down lists open now that this window owns."""
+    found = []
+
+    def each(h, _):
+        if (win32gui.IsWindowVisible(h) and win32gui.GetClassName(h) == "SnapnabDropList"
+                and win32gui.GetWindow(h, win32con.GW_OWNER) == hwnd):
+            found.append(h)
+        return True
+    win32gui.EnumWindows(each, None)
+    return found
+
+
 def _all(hwnd):
-    try:
-        return window(hwnd).descendants()
-    except Exception:
-        return []
+    """The window's elements and its open lists' (UI Automation may already show an owned list under its owner)."""
+    out, seen = [], set()
+    for h in [hwnd] + lists(hwnd):
+        try:
+            for e in window(h).descendants():
+                key = tuple(e.element_info.runtime_id or ()) or id(e)
+                if key not in seen:
+                    seen.add(key)
+                    out.append(e)
+        except Exception:
+            pass
+    return out
 
 
 def _aid(e):
@@ -63,7 +88,8 @@ def _stable_rect(hwnd, aid, timeout):
 
 
 def click(hwnd, aid, timeout=10):
-    win.foreground(hwnd)
+    if not lists(hwnd):          # bringing the window forward would close its open list
+        win.foreground(hwnd)
     l, t, r, b = _stable_rect(hwnd, aid, timeout)
     win.click((l + r) // 2, (t + b) // 2)
 

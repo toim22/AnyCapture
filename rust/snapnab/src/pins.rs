@@ -520,58 +520,24 @@ impl PinWnd {
 }
 
 /// Simple white glyphs for the pin's buttons, in the square (x, y, s).
+/// The pins' and the overlay's buttons draw the program's vector icons (Icons.cpp), as the C++ did.
 pub(crate) fn draw_glyph(g: &Graphics, glyph: Glyph, x: f32, y: f32, s: f32, c: u32) {
-    let p = Pen::new(c, (s / 9.0).max(1.6));
-    let at = |fx: f32, fy: f32| gdip::pt(x + fx * s, y + fy * s);
-    match glyph {
-        Glyph::Cancel => {
-            g.line(&p, at(0.15, 0.15), at(0.85, 0.85));
-            g.line(&p, at(0.85, 0.15), at(0.15, 0.85));
-        }
-        Glyph::Pen => {
-            g.line(&p, at(0.2, 0.8), at(0.8, 0.2));
-            g.line(&p, at(0.12, 0.88), at(0.2, 0.8));
-        }
-        Glyph::Highlighter => g.line(&Pen::new(0xC0FF_FFFF, s / 3.5), at(0.2, 0.75), at(0.8, 0.25)),
-        Glyph::Arrow => {
-            g.line(&p, at(0.15, 0.85), at(0.85, 0.15));
-            g.fill_polygon(&Brush::solid(c), &[at(0.9, 0.1), at(0.45, 0.2), at(0.8, 0.55)]);
-        }
-        Glyph::Rect => g.draw_rect(&p, gdip::rect(x + 0.12 * s, y + 0.22 * s, 0.76 * s, 0.56 * s)),
-        Glyph::Text => {
-            let f = StringFormat::new();
-            f.align(StringAlignmentCenter);
-            f.line_align(StringAlignmentCenter);
-            let t: Vec<u16> = "T".encode_utf16().collect();
-            g.draw_string(&t, &Font::new("Segoe UI", s * 0.95, FontStyleBold), gdip::rect(x, y, s, s), &f, &Brush::solid(c));
-        }
-        Glyph::Undo => {
-            g.draw_arc(&p, gdip::rect(x + 0.2 * s, y + 0.25 * s, 0.65 * s, 0.6 * s), 180.0, 220.0);
-            g.fill_polygon(&Brush::solid(c), &[at(0.05, 0.5), at(0.35, 0.5), at(0.2, 0.25)]);
-        }
-        Glyph::Check => g.draw_lines(&p, &[at(0.15, 0.5), at(0.4, 0.75), at(0.85, 0.25)]),
-        Glyph::Copy => {
-            g.draw_rect(&p, gdip::rect(x + 0.1 * s, y + 0.1 * s, 0.55 * s, 0.6 * s));
-            g.draw_rect(&p, gdip::rect(x + 0.35 * s, y + 0.3 * s, 0.55 * s, 0.6 * s));
-        }
-        Glyph::Save => {
-            g.draw_rect(&p, gdip::rect(x + 0.1 * s, y + 0.1 * s, 0.8 * s, 0.8 * s));
-            g.draw_rect(&p, gdip::rect(x + 0.3 * s, y + 0.1 * s, 0.4 * s, 0.25 * s));
-            g.draw_rect(&p, gdip::rect(x + 0.25 * s, y + 0.55 * s, 0.5 * s, 0.35 * s));
-        }
-        Glyph::Pin => {
-            g.fill_ellipse(&Brush::solid(c), x + 0.3 * s, y + 0.05 * s, 0.4 * s, 0.4 * s);
-            g.line(&p, at(0.5, 0.45), at(0.5, 0.95));
-            g.line(&p, at(0.25, 0.45), at(0.75, 0.45));
-        }
-        Glyph::Trash => {
-            g.line(&p, at(0.1, 0.22), at(0.9, 0.22));
-            g.line(&p, at(0.38, 0.08), at(0.62, 0.08));
-            g.draw_lines(&p, &[at(0.2, 0.22), at(0.27, 0.92), at(0.73, 0.92), at(0.8, 0.22)]);
-            g.line(&p, at(0.42, 0.38), at(0.42, 0.78));
-            g.line(&p, at(0.58, 0.38), at(0.58, 0.78));
-        }
-    }
+    use snapcore::icons::Icon;
+    let icon = match glyph {
+        Glyph::Cancel => Icon::Cancel,
+        Glyph::Copy => Icon::Copy,
+        Glyph::Save => Icon::Save,
+        Glyph::Pin => Icon::Pin,
+        Glyph::Trash => Icon::Trash,
+        Glyph::Pen => Icon::Pen,
+        Glyph::Highlighter => Icon::Highlighter,
+        Glyph::Arrow => Icon::Arrow,
+        Glyph::Rect => Icon::Rect,
+        Glyph::Text => Icon::Text,
+        Glyph::Undo => Icon::Undo,
+        Glyph::Check => Icon::Check,
+    };
+    snapcore::icons::draw(g, icon, x, y, s, s, c);
 }
 
 fn lp_point(lp: LPARAM) -> POINT {

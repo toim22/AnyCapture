@@ -55,11 +55,11 @@ msgstr "Неподдерживаемый формат изображения."
 msgid "Falha ao codificar WebP."
 msgstr "Не удалось закодировать WebP."
 
-#: rust/snapcore/src/doc.rs:587 rust/snapedit/src/props.rs:1765
+#: rust/snapcore/src/doc.rs:587 rust/snapedit/src/props.rs:1750
 msgid "L"
 msgstr "Ш"
 
-#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:73 rust/snapedit/src/tray.rs:355 rust/snapedit/src/app/commands.rs:88
+#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:355 rust/snapedit/src/app/commands.rs:88
 msgid "Abrir"
 msgstr "Открыть"
 
@@ -67,7 +67,7 @@ msgstr "Открыть"
 msgid "Audio"
 msgstr "Audio"
 
-#: rust/snapcore/src/library.rs:559 rust/snapcore/src/library.rs:563 rust/snapcore/src/presets.rs:56 rust/snapedit/tests/golden.rs:1341
+#: rust/snapcore/src/library.rs:559 rust/snapcore/src/library.rs:563 rust/snapcore/src/presets.rs:56 rust/snapedit/tests/golden.rs:1371
 msgid "Região"
 msgstr "Область"
 
@@ -79,7 +79,7 @@ msgstr "abc"
 msgid "ab"
 msgstr "ab"
 
-#: rust/snapcore/src/ocr.rs:32 rust/snapedit/tests/golden.rs:563
+#: rust/snapcore/src/ocr.rs:32 rust/snapedit/tests/golden.rs:593
 msgid "Imagem vazia."
 msgstr "Пустое изображение."
 
@@ -162,7 +162,7 @@ msgstr "Расширенное окно"
 msgid "Menu"
 msgstr "Меню"
 
-#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:775
+#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:775
 msgid "Área de transferência"
 msgstr "Буфер обмена"
 
@@ -170,7 +170,7 @@ msgstr "Буфер обмена"
 msgid "Arquivo gráfico"
 msgstr "Графический файл"
 
-#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:655
+#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:741
 msgid "Novo preset"
 msgstr "Новый шаблон"
 
@@ -248,7 +248,7 @@ msgstr "Ошибка записи видеокадра."
 msgid "ok"
 msgstr "ок"
 
-#: rust/snapcore/src/recorder.rs:1645 rust/snapedit/src/props.rs:1765 rust/snapedit/src/styles.rs:788 rust/snapedit/src/styles.rs:795
+#: rust/snapcore/src/recorder.rs:1645 rust/snapedit/src/props.rs:1750 rust/snapedit/src/styles.rs:788 rust/snapedit/src/styles.rs:795
 msgid "A"
 msgstr "В"
 
@@ -264,7 +264,7 @@ msgstr "Недопустимый файл настроек."
 msgid "Não foi possível gravar "
 msgstr "Не удалось записать "
 
-#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:534 rust/snapnab/src/window.rs:545
+#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:568 rust/snapnab/src/window.rs:579
 msgid "Desligado"
 msgstr "Выкл."
 
@@ -530,23 +530,23 @@ msgstr "Начните печатать, чтобы добавить текст 
 msgid "Mover"
 msgstr "Перемещение"
 
-#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:210
+#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:365
 msgid "Seta"
 msgstr "Стрелка"
 
-#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:211
+#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:366
 msgid "Linha"
 msgstr "Линия"
 
-#: rust/snapedit/src/canvas.rs:71 rust/snapedit/src/props.rs:1623
+#: rust/snapedit/src/canvas.rs:71 rust/snapedit/src/props.rs:1608
 msgid "Forma"
 msgstr "Фигура"
 
-#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:212
+#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:367
 msgid "Caneta"
 msgstr "Перо"
 
-#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:213
+#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:368
 msgid "Marcador"
 msgstr "Маркер"
 
@@ -554,7 +554,7 @@ msgstr "Маркер"
 msgid "Texto"
 msgstr "Текст"
 
-#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:215
+#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:370
 msgid "Balão"
 msgstr "Выноска"
 
@@ -562,7 +562,7 @@ msgstr "Выноска"
 msgid "Passos"
 msgstr "Шаги"
 
-#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:221 rust/snapedit/src/stamps.rs:234
+#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:376 rust/snapedit/src/stamps.rs:234
 msgid "Carimbo"
 msgstr "Штамп"
 
@@ -570,11 +570,11 @@ msgstr "Штамп"
 msgid "Ocultar"
 msgstr "Скрытие"
 
-#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:226
+#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:381
 msgid "Destaque"
 msgstr "Прожектор"
 
-#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:227
+#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:382
 msgid "Lupa"
 msgstr "Лупа"
 
@@ -598,7 +598,7 @@ msgstr "Выделение"
 msgid "Recortar faixa"
 msgstr "Вырезать полосу"
 
-#: rust/snapedit/src/canvas.rs:86 rust/snapedit/src/props.rs:1001
+#: rust/snapedit/src/canvas.rs:86 rust/snapedit/src/props.rs:995
 msgid "Conta-gotas"
 msgstr "Пипетка"
 
@@ -606,7 +606,7 @@ msgstr "Пипетка"
 msgid "Favoritos"
 msgstr "Избранное"
 
-#: rust/snapedit/src/canvas.rs:88 rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/canvas.rs:88 rust/snapedit/src/props.rs:1103
 msgid "Varinha mágica"
 msgstr "Волшебная палочка"
 
@@ -638,19 +638,19 @@ msgstr "треугольник"
 msgid "Clique nos cantos do polígono; clique no primeiro ponto, dê um duplo clique ou tecle Enter para fechar (Esc cancela)."
 msgstr "Щёлкайте по углам многоугольника; щёлкните первую точку, дважды щёлкните или нажмите Enter, чтобы замкнуть (Esc — отмена)."
 
-#: rust/snapedit/src/canvas_ui.rs:292
+#: rust/snapedit/src/canvas_ui.rs:305
 msgid "Nenhuma captura aberta — use “Capturar” ou abra um arquivo (Ctrl+O)."
 msgstr "Нет открытых снимков — нажмите «Снять» или откройте файл (Ctrl+O)."
 
-#: rust/snapedit/src/canvas_ui.rs:378
+#: rust/snapedit/src/canvas_ui.rs:391
 msgid "Prévia — Aplicar ou Cancelar no painel"
 msgstr "Предпросмотр — Применить или Отмена на панели"
 
-#: rust/snapedit/src/canvas_ui.rs:405
+#: rust/snapedit/src/canvas_ui.rs:418
 msgid "(duplo clique abre)"
 msgstr "(двойной щелчок открывает)"
 
-#: rust/snapedit/src/canvas_ui.rs:500
+#: rust/snapedit/src/canvas_ui.rs:513
 #, c-format
 msgid "%d × %d  — Enter aplica, Esc cancela"
 msgstr "%d × %d  — Enter применяет, Esc отменяет"
@@ -686,7 +686,7 @@ msgstr "Ссылка с токеном"
 msgid "Chave de API"
 msgstr "Ключ API"
 
-#: rust/snapedit/src/edtools.rs:220 rust/snapedit/src/edtools.rs:726 rust/snapedit/src/panels.rs:62
+#: rust/snapedit/src/edtools.rs:220 rust/snapedit/src/edtools.rs:726 rust/snapedit/src/panels.rs:63
 msgid "E-mail"
 msgstr "Почта"
 
@@ -718,7 +718,7 @@ msgstr "Эффект"
 msgid "Efeitos rápidos"
 msgstr "Быстрые эффекты"
 
-#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:624 rust/snapnab/src/window.rs:627
+#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/snapnab/src/window.rs:708
 msgid "Excluir"
 msgstr "Удалить"
 
@@ -726,15 +726,15 @@ msgstr "Удалить"
 msgid "+ Adicionar aos efeitos rápidos"
 msgstr "+ Добавить в быстрые эффекты"
 
-#: rust/snapedit/src/effects.rs:639
+#: rust/snapedit/src/effects.rs:638
 msgid "Aplicar"
 msgstr "Применить"
 
-#: rust/snapedit/src/effects.rs:644 rust/snapedit/src/app/windows_aux.rs:538 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
+#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:538 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
 msgid "Cancelar"
 msgstr "Отмена"
 
-#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:577 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:577 rust/snapnab/src/window.rs:87
 msgid "Borda"
 msgstr "Рамка"
 
@@ -746,11 +746,11 @@ msgstr "Сплошной контур вокруг изображения выб
 msgid "Bordas e sombras"
 msgstr "Рамки и тени"
 
-#: rust/snapedit/src/effects.rs:97 rust/snapedit/src/props.rs:904 rust/snapedit/src/props.rs:927 rust/snapedit/src/props.rs:1051
+#: rust/snapedit/src/effects.rs:97 rust/snapedit/src/props.rs:898 rust/snapedit/src/props.rs:921 rust/snapedit/src/props.rs:1043
 msgid "Largura"
 msgstr "Ширина"
 
-#: rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:900 rust/snapedit/src/props.rs:923 rust/snapedit/src/props.rs:932
+#: rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:894 rust/snapedit/src/props.rs:917 rust/snapedit/src/props.rs:926
 msgid "Cor"
 msgstr "Цвет"
 
@@ -766,11 +766,11 @@ msgstr "Мягкая тень за изображением, отделяюща�
 msgid "Deslocamento"
 msgstr "Смещение"
 
-#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:224
+#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:379
 msgid "Desfoque"
 msgstr "Размытие"
 
-#: rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:905 rust/snapedit/src/props.rs:928
+#: rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:899 rust/snapedit/src/props.rs:922
 msgid "Opacidade"
 msgstr "Непрозрачность"
 
@@ -810,7 +810,7 @@ msgstr "Размер"
 msgid "Pequena"
 msgstr "Маленький"
 
-#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:453
+#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
 msgid "Média"
 msgstr "Среднее"
 
@@ -822,19 +822,19 @@ msgstr "Большой"
 msgid "Canto"
 msgstr "Угол"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
 msgid "Superior esquerdo"
 msgstr "Вверху слева"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
 msgid "Superior direito"
 msgstr "Вверху справа"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:689
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:691
 msgid "Inferior direito"
 msgstr "Внизу справа"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
 msgid "Inferior esquerdo"
 msgstr "Внизу слева"
 
@@ -846,51 +846,51 @@ msgstr "Края"
 msgid "Rasgada, onda, serrilhada, tubarão, esmaecida ou chanfrada."
 msgstr "Рваный, волна, пила, акульи зубы, растворение или скос."
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1262 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/snapnab/src/dialogs.rs:670
 msgid "Estilo"
 msgstr "Стиль"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Rasgada"
 msgstr "Рваный"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/snapnab/src/dialogs.rs:670
 msgid "Onda"
 msgstr "Волна"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Dente de serra"
 msgstr "Пила"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Dente de tubarão"
 msgstr "Акульи зубы"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/snapnab/src/dialogs.rs:670
 msgid "Esmaecer"
 msgstr "Растворение"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:668
+#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
 msgid "Chanfrada"
 msgstr "Скос"
 
-#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:669 rust/snapnab/src/dialogs.rs:663
+#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:671 rust/snapnab/src/dialogs.rs:665
 msgid "Em cima"
 msgstr "Сверху"
 
-#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:672
 msgid "Direita"
 msgstr "Справа"
 
-#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:670 rust/snapnab/src/dialogs.rs:663
+#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:672 rust/snapnab/src/dialogs.rs:665
 msgid "Embaixo"
 msgstr "Снизу"
 
-#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:671
+#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:673
 msgid "Esquerda"
 msgstr "Слева"
 
-#: rust/snapedit/src/effects.rs:123 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:123 rust/snapnab/src/window.rs:87
 msgid "Filtros"
 msgstr "Фильтры"
 
@@ -902,23 +902,23 @@ msgstr "Серый, сепия, инверсия, Ч/Б, рельеф, моза�
 msgid "Cores"
 msgstr "Цвета"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Filtro"
 msgstr "Фильтр"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Tons de cinza"
 msgstr "Оттенки серого"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Sépia"
 msgstr "Сепия"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Inverter cores"
 msgstr "Инвертировать цвета"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:659
+#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
 msgid "Preto e branco"
 msgstr "Чёрно-белое"
 
@@ -934,15 +934,15 @@ msgstr "Мозаика"
 msgid "Nitidez"
 msgstr "Резкость"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapedit/src/props.rs:1083 rust/snapedit/src/props.rs:1088
+#: rust/snapedit/src/effects.rs:126 rust/snapedit/src/props.rs:1073 rust/snapedit/src/props.rs:1078
 msgid "Intensidade"
 msgstr "Интенсивность"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:453
+#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
 msgid "Baixa"
 msgstr "Низкое"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:453
+#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:474
 msgid "Alta"
 msgstr "Высокое"
 
@@ -954,11 +954,11 @@ msgstr "Коррекция цветов"
 msgid "Brilho, contraste, gama, matiz e saturação."
 msgstr "Яркость, контраст, гамма, оттенок и насыщенность."
 
-#: rust/snapedit/src/effects.rs:129 rust/snapnab/src/dialogs.rs:674
+#: rust/snapedit/src/effects.rs:129 rust/snapnab/src/dialogs.rs:676
 msgid "Brilho"
 msgstr "Яркость"
 
-#: rust/snapedit/src/effects.rs:130 rust/snapnab/src/dialogs.rs:674
+#: rust/snapedit/src/effects.rs:130 rust/snapnab/src/dialogs.rs:676
 msgid "Contraste"
 msgstr "Контраст"
 
@@ -970,11 +970,11 @@ msgstr "Гамма"
 msgid "Matiz"
 msgstr "Оттенок"
 
-#: rust/snapedit/src/effects.rs:135 rust/snapnab/src/dialogs.rs:675
+#: rust/snapedit/src/effects.rs:135 rust/snapnab/src/dialogs.rs:677
 msgid "Saturação"
 msgstr "Насыщенность"
 
-#: rust/snapedit/src/effects.rs:137 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:137 rust/snapnab/src/window.rs:87
 msgid "Substituição de cor"
 msgstr "Замена цвета"
 
@@ -986,7 +986,7 @@ msgstr "Заменяет один цвет другим (или прозрачн
 msgid "Cor atual"
 msgstr "Текущий цвет"
 
-#: rust/snapedit/src/effects.rs:139 rust/snapnab/src/dialogs.rs:664
+#: rust/snapedit/src/effects.rs:139 rust/snapnab/src/dialogs.rs:666
 msgid "Nova cor"
 msgstr "Новый цвет"
 
@@ -994,7 +994,7 @@ msgstr "Новый цвет"
 msgid "Tornar transparente"
 msgstr "Сделать прозрачным"
 
-#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1010 rust/snapedit/src/props.rs:1114 rust/snapedit/src/app/windows_aux.rs:640
+#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004 rust/snapedit/src/props.rs:1104 rust/snapedit/src/app/windows_aux.rs:636
 msgid "Tolerância"
 msgstr "Допуск"
 
@@ -1018,7 +1018,7 @@ msgstr "Увеличение"
 msgid "Sombra na área em foco"
 msgstr "Тень в выделенной области"
 
-#: rust/snapedit/src/effects.rs:149 rust/snapnab/src/window.rs:85
+#: rust/snapedit/src/effects.rs:149 rust/snapnab/src/window.rs:88
 msgid "Marca d'água"
 msgstr "Водяной знак"
 
@@ -1030,7 +1030,7 @@ msgstr "Полупрозрачный текст поверх изображен�
 msgid "Repetir em mosaico"
 msgstr "Мозаикой"
 
-#: rust/snapedit/src/effects.rs:155 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/effects.rs:155 rust/snapnab/src/window.rs:87
 msgid "Informações da captura"
 msgstr "Сведения о снимке"
 
@@ -1038,11 +1038,11 @@ msgstr "Сведения о снимке"
 msgid "Faixa de texto em cima ou embaixo; aceita {date} e {time}."
 msgstr "Текстовая полоса сверху или снизу; поддерживает {date} и {time}."
 
-#: rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:663
+#: rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:665
 msgid "Posição"
 msgstr "Положение"
 
-#: rust/snapedit/src/effects.rs:159 rust/snapedit/src/props.rs:1016
+#: rust/snapedit/src/effects.rs:159 rust/snapedit/src/props.rs:1010
 msgid "Cor do texto"
 msgstr "Цвет текста"
 
@@ -1666,357 +1666,357 @@ msgstr "Настроить ИИ-помощника…"
 msgid "Configurar o &upload…"
 msgstr "Настроить &загрузку…"
 
-#: rust/snapedit/src/panels.rs:111
+#: rust/snapedit/src/panels.rs:210
 msgid "Efeito: "
 msgstr "Эффект: "
 
-#: rust/snapedit/src/panels.rs:111
+#: rust/snapedit/src/panels.rs:210
 msgid " — abre os ajustes no painel de efeitos"
 msgstr " — открывает настройки на панели эффектов"
 
-#: rust/snapedit/src/panels.rs:175
-msgid "Mais ▾"
-msgstr "Ещё ▾"
+#: rust/snapedit/src/panels.rs:308
+msgid "Mais"
+msgstr "Ещё"
 
-#: rust/snapedit/src/panels.rs:216
+#: rust/snapedit/src/panels.rs:371
 #, c-format
 msgid "Passo %s"
 msgstr "Шаг %s"
 
-#: rust/snapedit/src/panels.rs:225 rust/snapedit/src/props.rs:1071
+#: rust/snapedit/src/panels.rs:380 rust/snapedit/src/props.rs:1063
 msgid "Pixelado"
 msgstr "Пикселизация"
 
-#: rust/snapedit/src/panels.rs:228
+#: rust/snapedit/src/panels.rs:383
 msgid "Peça solta"
 msgstr "Плавающий фрагмент"
 
-#: rust/snapedit/src/panels.rs:228 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/panels.rs:383 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Imagem"
 msgstr "Изображение"
 
-#: rust/snapedit/src/panels.rs:229
+#: rust/snapedit/src/panels.rs:384
 #, c-format
 msgid "Grupo (%zu)"
 msgstr "Группа (%zu)"
 
-#: rust/snapedit/src/panels.rs:230
+#: rust/snapedit/src/panels.rs:385
 msgid "Link: "
 msgstr "Ссылка: "
 
-#: rust/snapedit/src/panels.rs:252 rust/snapedit/src/app/mod.rs:449
+#: rust/snapedit/src/panels.rs:407 rust/snapedit/src/app/mod.rs:449
 msgid "Camadas"
 msgstr "Слои"
 
-#: rust/snapedit/src/panels.rs:254
+#: rust/snapedit/src/panels.rs:409
 msgid "Nenhuma imagem aberta."
 msgstr "Изображение не открыто."
 
-#: rust/snapedit/src/panels.rs:259
+#: rust/snapedit/src/panels.rs:414
 msgid "Os objetos desenhados (setas, textos, formas…) aparecem aqui, do mais à frente ao mais atrás."
 msgstr "Нарисованные объекты (стрелки, тексты, фигуры…) показываются здесь — от переднего к заднему."
 
-#: rust/snapedit/src/panels.rs:267
+#: rust/snapedit/src/panels.rs:422
 msgid "Mostrar ou ocultar"
 msgstr "Показать или скрыть"
 
-#: rust/snapedit/src/panels.rs:272
+#: rust/snapedit/src/panels.rs:427
 msgid "Bloquear ou desbloquear"
 msgstr "Заблокировать или разблокировать"
 
-#: rust/snapedit/src/panels.rs:292 rust/snapedit/src/props.rs:1829
+#: rust/snapedit/src/panels.rs:448 rust/snapedit/src/props.rs:1814
 msgid "Enviar para trás"
 msgstr "Переместить назад"
 
-#: rust/snapedit/src/panels.rs:295 rust/snapedit/src/props.rs:1828
+#: rust/snapedit/src/panels.rs:451 rust/snapedit/src/props.rs:1813
 msgid "Trazer para a frente"
 msgstr "Переместить вперёд"
 
-#: rust/snapedit/src/panels.rs:301
+#: rust/snapedit/src/panels.rs:457
 msgid "Fundo (imagem)"
 msgstr "Фон (изображение)"
 
-#: rust/snapedit/src/panels.rs:61 rust/snapnab/src/window.rs:41 rust/snapnab/src/window.rs:199
+#: rust/snapedit/src/panels.rs:62 rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:204
 msgid "Arquivo"
 msgstr "Файл"
 
-#: rust/snapedit/src/panels.rs:61
+#: rust/snapedit/src/panels.rs:62
 msgid "Salvar como arquivo (PNG, JPG, PDF…)"
 msgstr "Сохранить в файл (PNG, JPG, PDF…)"
 
-#: rust/snapedit/src/panels.rs:62
+#: rust/snapedit/src/panels.rs:63
 msgid "Enviar por e-mail"
 msgstr "Отправить по почте"
 
-#: rust/snapedit/src/panels.rs:63 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:524
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:519 rust/snapnab/src/dialogs.rs:526
 msgid "Programa"
 msgstr "Программа"
 
-#: rust/snapedit/src/panels.rs:63 rust/snapnab/src/dialogs.rs:525
+#: rust/snapedit/src/panels.rs:64 rust/snapnab/src/dialogs.rs:527
 msgid "Abrir em um programa externo"
 msgstr "Открыть во внешней программе"
 
-#: rust/snapedit/src/panels.rs:64
+#: rust/snapedit/src/panels.rs:65
 msgid "Copiar a imagem inteira"
 msgstr "Копировать всё изображение"
 
-#: rust/snapedit/src/panels.rs:65
+#: rust/snapedit/src/panels.rs:66
 msgid "Impressora"
 msgstr "Принтер"
 
-#: rust/snapedit/src/panels.rs:65
+#: rust/snapedit/src/panels.rs:66
 msgid "Imprimir a imagem"
 msgstr "Напечатать изображение"
 
-#: rust/snapedit/src/panels.rs:69
+#: rust/snapedit/src/panels.rs:70
 msgid "Desfazer"
 msgstr "Отменить"
 
-#: rust/snapedit/src/panels.rs:69
+#: rust/snapedit/src/panels.rs:70
 msgid "Desfazer (Ctrl+Z)"
 msgstr "Отменить (Ctrl+Z)"
 
-#: rust/snapedit/src/panels.rs:70
+#: rust/snapedit/src/panels.rs:71
 msgid "Refazer"
 msgstr "Повторить"
 
-#: rust/snapedit/src/panels.rs:70
+#: rust/snapedit/src/panels.rs:71
 msgid "Refazer (Ctrl+Y)"
 msgstr "Повторить (Ctrl+Y)"
 
-#: rust/snapedit/src/panels.rs:71 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:352 rust/snapedit/src/app/docs.rs:357
 msgid "Nova imagem"
 msgstr "Новое изображение"
 
-#: rust/snapedit/src/panels.rs:71
+#: rust/snapedit/src/panels.rs:72
 msgid "Nova imagem em branco"
 msgstr "Новое пустое изображение"
 
-#: rust/snapedit/src/panels.rs:72
+#: rust/snapedit/src/panels.rs:73
 msgid "Da área de transf."
 msgstr "Из буфера"
 
-#: rust/snapedit/src/panels.rs:72
+#: rust/snapedit/src/panels.rs:73
 msgid "Nova imagem da área de transferência"
 msgstr "Новое изображение из буфера обмена"
 
-#: rust/snapedit/src/panels.rs:73
+#: rust/snapedit/src/panels.rs:74
 msgid "Abrir arquivo (Ctrl+O)"
 msgstr "Открыть файл (Ctrl+O)"
 
-#: rust/snapedit/src/panels.rs:74 rust/snapedit/src/app/windows_aux.rs:698
+#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:694
 msgid "Salvar"
 msgstr "Сохранить"
 
-#: rust/snapedit/src/panels.rs:74
+#: rust/snapedit/src/panels.rs:75
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "Сохранить в библиотеку (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/panels.rs:183 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288 rust/snapedit/src/app/docs.rs:256 rust/snapnab/src/quick.rs:247
 msgid "Salvar como"
 msgstr "Сохранить как"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/panels.rs:183
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:288
 msgid "Salvar como arquivo (Ctrl+Shift+S)"
 msgstr "Сохранить в файл (Ctrl+Shift+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/props.rs:597 rust/snapnab/src/window.rs:625
+#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/snapnab/src/window.rs:706
 msgid "Duplicar"
 msgstr "Дублировать"
 
-#: rust/snapedit/src/panels.rs:76
+#: rust/snapedit/src/panels.rs:77
 msgid "Duplicar a imagem"
 msgstr "Дублировать изображение"
 
-#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:1838
+#: rust/snapedit/src/panels.rs:78 rust/snapedit/src/props.rs:1823
 msgid "Excluir objeto"
 msgstr "Удалить объект"
 
-#: rust/snapedit/src/panels.rs:77
+#: rust/snapedit/src/panels.rs:78
 msgid "Excluir o objeto selecionado (Del)"
 msgstr "Удалить выбранный объект (Del)"
 
-#: rust/snapedit/src/panels.rs:78
+#: rust/snapedit/src/panels.rs:79
 msgid "Grab Text"
 msgstr "Захват текста"
 
-#: rust/snapedit/src/panels.rs:78
+#: rust/snapedit/src/panels.rs:79
 msgid "Reconhecer o texto da imagem (Ctrl+Shift+T)"
 msgstr "Распознать текст на изображении (Ctrl+Shift+T)"
 
-#: rust/snapedit/src/panels.rs:79
+#: rust/snapedit/src/panels.rs:80
 msgid "Excluir imagem"
 msgstr "Удалить изображение"
 
-#: rust/snapedit/src/panels.rs:79
+#: rust/snapedit/src/panels.rs:80
 msgid "Enviar a imagem para a Lixeira"
 msgstr "Отправить изображение в корзину"
 
-#: rust/snapedit/src/panels.rs:80
+#: rust/snapedit/src/panels.rs:81
 msgid "Mesclar tudo"
 msgstr "Объединить всё"
 
-#: rust/snapedit/src/panels.rs:80
+#: rust/snapedit/src/panels.rs:81
 msgid "Mesclar todos os objetos na imagem"
 msgstr "Объединить все объекты с изображением"
 
-#: rust/snapedit/src/panels.rs:81 rust/snapedit/src/app/commands.rs:627 rust/snapnab/src/dialogs.rs:676
+#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:627 rust/snapnab/src/dialogs.rs:678
 msgid "Girar"
 msgstr "Повернуть"
 
-#: rust/snapedit/src/panels.rs:81
+#: rust/snapedit/src/panels.rs:82
 msgid "Girar 90° no sentido horário (Ctrl+R)"
 msgstr "Повернуть на 90° по часовой стрелке (Ctrl+R)"
 
-#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/props.rs:1109
+#: rust/snapedit/src/panels.rs:83 rust/snapedit/src/props.rs:1099
 msgid "Corte automático"
 msgstr "Автообрезка"
 
-#: rust/snapedit/src/panels.rs:82
+#: rust/snapedit/src/panels.rs:83
 msgid "Cortar as bordas de cor uniforme"
 msgstr "Обрезать края однородного цвета"
 
-#: rust/snapedit/src/panels.rs:83 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:844
 msgid "Alinhar à esquerda"
 msgstr "Выровнять по левому краю"
 
-#: rust/snapedit/src/panels.rs:83
+#: rust/snapedit/src/panels.rs:84
 msgid "Alinhar os objetos à esquerda"
 msgstr "Выровнять объекты по левому краю"
 
-#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:844
 msgid "Alinhar ao centro"
 msgstr "Выровнять по центру"
 
-#: rust/snapedit/src/panels.rs:84
+#: rust/snapedit/src/panels.rs:85
 msgid "Alinhar os objetos ao centro"
 msgstr "Выровнять объекты по центру"
 
-#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:844
+#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:844
 msgid "Alinhar à direita"
 msgstr "Выровнять по правому краю"
 
-#: rust/snapedit/src/panels.rs:85
+#: rust/snapedit/src/panels.rs:86
 msgid "Alinhar os objetos à direita"
 msgstr "Выровнять объекты по правому краю"
 
-#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:845
 msgid "Alinhar em cima"
 msgstr "Выровнять по верхнему краю"
 
-#: rust/snapedit/src/panels.rs:86
+#: rust/snapedit/src/panels.rs:87
 msgid "Alinhar os objetos em cima"
 msgstr "Выровнять объекты по верхнему краю"
 
-#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:845
 msgid "Alinhar no meio"
 msgstr "Выровнять по середине"
 
-#: rust/snapedit/src/panels.rs:87
+#: rust/snapedit/src/panels.rs:88
 msgid "Alinhar os objetos no meio"
 msgstr "Выровнять объекты по середине"
 
-#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:845
+#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:845
 msgid "Alinhar embaixo"
 msgstr "Выровнять по нижнему краю"
 
-#: rust/snapedit/src/panels.rs:88
+#: rust/snapedit/src/panels.rs:89
 msgid "Alinhar os objetos embaixo"
 msgstr "Выровнять объекты по нижнему краю"
 
-#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:849
+#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:849
 msgid "Distribuir na horizontal"
 msgstr "Распределить по горизонтали"
 
-#: rust/snapedit/src/panels.rs:89
+#: rust/snapedit/src/panels.rs:90
 msgid "Espaçar 3 ou mais objetos igualmente na horizontal"
 msgstr "Равномерно расставить 3 и более объектов по горизонтали"
 
-#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:850
+#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:850
 msgid "Distribuir na vertical"
 msgstr "Распределить по вертикали"
 
-#: rust/snapedit/src/panels.rs:90
+#: rust/snapedit/src/panels.rs:91
 msgid "Espaçar 3 ou mais objetos igualmente na vertical"
 msgstr "Равномерно расставить 3 и более объектов по вертикали"
 
-#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/props.rs:1831
+#: rust/snapedit/src/panels.rs:92 rust/snapedit/src/props.rs:1816
 msgid "Bloquear"
 msgstr "Заблокировать"
 
-#: rust/snapedit/src/panels.rs:91
+#: rust/snapedit/src/panels.rs:92
 msgid "Bloquear o objeto selecionado (Ctrl+L)"
 msgstr "Заблокировать выбранный объект (Ctrl+L)"
 
-#: rust/snapedit/src/panels.rs:94
+#: rust/snapedit/src/panels.rs:95
 msgid "Réguas"
 msgstr "Линейки"
 
-#: rust/snapedit/src/panels.rs:94
+#: rust/snapedit/src/panels.rs:95
 msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
 msgstr "Показать линейки, направляющие и координаты (Ctrl+Shift+R)"
 
-#: rust/snapedit/src/panels.rs:143 rust/snapnab/src/window.rs:566
+#: rust/snapedit/src/panels.rs:243 rust/snapnab/src/window.rs:596
 msgid "Capturar"
 msgstr "Снять"
 
-#: rust/snapedit/src/panels.rs:143
+#: rust/snapedit/src/panels.rs:243
 msgid "Nova captura de imagem (pede ao Snapnab)"
 msgstr "Новый снимок изображения (запрос к Snapnab)"
 
-#: rust/snapedit/src/panels.rs:144
+#: rust/snapedit/src/panels.rs:244 rust/snapnab/src/window.rs:596
 msgid "Gravar"
 msgstr "Записать"
 
-#: rust/snapedit/src/panels.rs:144
+#: rust/snapedit/src/panels.rs:244
 msgid "Nova gravação de vídeo"
 msgstr "Новая запись видео"
 
-#: rust/snapedit/src/panels.rs:182
+#: rust/snapedit/src/panels.rs:287
 msgid "Compartilhar"
 msgstr "Отправить"
 
-#: rust/snapedit/src/panels.rs:182
+#: rust/snapedit/src/panels.rs:287
 msgid "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"
 msgstr "Отправить: файл, буфер обмена, почта, принтер, программа"
 
-#: rust/snapedit/src/panels.rs:184 rust/snapedit/src/app/windows_aux.rs:452 rust/snapui/src/qr.rs:48
+#: rust/snapedit/src/panels.rs:289 rust/snapedit/src/app/windows_aux.rs:452 rust/snapui/src/qr.rs:48
 msgid "Copiar tudo"
 msgstr "Копировать всё"
 
-#: rust/snapedit/src/panels.rs:184
+#: rust/snapedit/src/panels.rs:289
 msgid "Copiar a imagem inteira (Ctrl+Shift+C)"
 msgstr "Копировать всё изображение (Ctrl+Shift+C)"
 
-#: rust/snapedit/src/panels.rs:208 rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/panels.rs:363 rust/snapedit/src/props.rs:1103
 msgid "Retângulo"
 msgstr "Прямоугольник"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Retângulo arredondado"
 msgstr "Скруглённый прямоугольник"
 
-#: rust/snapedit/src/panels.rs:208 rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/panels.rs:363 rust/snapedit/src/props.rs:1103
 msgid "Elipse"
 msgstr "Эллипс"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Triângulo"
 msgstr "Треугольник"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Losango"
 msgstr "Ромб"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Paralelogramo"
 msgstr "Параллелограмм"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Hexágono"
 msgstr "Шестиугольник"
 
-#: rust/snapedit/src/panels.rs:208
+#: rust/snapedit/src/panels.rs:363
 msgid "Estrela"
 msgstr "Звезда"
 
@@ -2040,556 +2040,556 @@ msgstr "Добавить текущий стиль в быстрые стили"
 msgid "Pesquisar carimbos"
 msgstr "Поиск штампов"
 
-#: rust/snapedit/src/props.rs:520
+#: rust/snapedit/src/props.rs:517
 msgid "Organizar carimbos…"
 msgstr "Упорядочить штампы…"
 
-#: rust/snapedit/src/props.rs:525 rust/snapedit/src/props.rs:553
+#: rust/snapedit/src/props.rs:522 rust/snapedit/src/props.rs:550
 msgid "Importar…"
 msgstr "Импорт…"
 
-#: rust/snapedit/src/props.rs:535
+#: rust/snapedit/src/props.rs:532
 #, c-format
 msgid "%d carimbo(s) importado(s) para Meus carimbos."
 msgstr "Импортировано штампов в «Мои штампы»: %d."
 
-#: rust/snapedit/src/props.rs:549
+#: rust/snapedit/src/props.rs:546
 msgid "Tema:"
 msgstr "Тема:"
 
-#: rust/snapedit/src/props.rs:552
+#: rust/snapedit/src/props.rs:549
 msgid "Novo tema…"
 msgstr "Новая тема…"
 
-#: rust/snapedit/src/props.rs:568
+#: rust/snapedit/src/props.rs:562
 msgid "Meu tema"
 msgstr "Моя тема"
 
-#: rust/snapedit/src/props.rs:573 rust/snapedit/src/props.rs:607
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/props.rs:601
 msgid "Tema do Snapnab (*.snaptheme)"
 msgstr "Тема Snapnab (*.snaptheme)"
 
-#: rust/snapedit/src/props.rs:573 rust/snapedit/src/app/commands.rs:88
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:88
 msgid "Todos os arquivos"
 msgstr "Все файлы"
 
-#: rust/snapedit/src/props.rs:574
+#: rust/snapedit/src/props.rs:568
 msgid "Importar tema"
 msgstr "Импорт темы"
 
-#: rust/snapedit/src/props.rs:591
+#: rust/snapedit/src/props.rs:585
 msgid "Editar uma cópia do tema…"
 msgstr "Изменить копию темы…"
 
-#: rust/snapedit/src/props.rs:591
+#: rust/snapedit/src/props.rs:585
 msgid "Editar o tema…"
 msgstr "Изменить тему…"
 
-#: rust/snapedit/src/props.rs:593 rust/snapedit/src/props.rs:599 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:378 rust/snapnab/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (копия)"
 
-#: rust/snapedit/src/props.rs:603 rust/snapedit/src/tray.rs:365
+#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:365
 msgid "Exportar…"
 msgstr "Экспорт…"
 
-#: rust/snapedit/src/props.rs:608
+#: rust/snapedit/src/props.rs:602
 msgid "Exportar tema"
 msgstr "Экспорт темы"
 
-#: rust/snapedit/src/props.rs:614
+#: rust/snapedit/src/props.rs:608
 msgid "Não foi possível exportar o tema."
 msgstr "Не удалось экспортировать тему."
 
-#: rust/snapedit/src/props.rs:628
+#: rust/snapedit/src/props.rs:622
 #, c-format
 msgid "Excluir o tema \"%s\"?"
 msgstr "Удалить тему \"%s\"?"
 
-#: rust/snapedit/src/props.rs:657
+#: rust/snapedit/src/props.rs:651
 msgid "Clique na estrela de um estilo rápido para adicioná-lo aos favoritos."
 msgstr "Щёлкните звёздочку быстрого стиля, чтобы добавить его в избранное."
 
-#: rust/snapedit/src/props.rs:683
+#: rust/snapedit/src/props.rs:677
 msgid "Aplicar este estilo"
 msgstr "Применить этот стиль"
 
-#: rust/snapedit/src/props.rs:693
+#: rust/snapedit/src/props.rs:687
 msgid "Remover dos favoritos"
 msgstr "Убрать из избранного"
 
-#: rust/snapedit/src/props.rs:693
+#: rust/snapedit/src/props.rs:687
 msgid "Adicionar aos favoritos"
 msgstr "Добавить в избранное"
 
-#: rust/snapedit/src/props.rs:698
+#: rust/snapedit/src/props.rs:692
 msgid "Excluir este estilo rápido"
 msgstr "Удалить этот быстрый стиль"
 
-#: rust/snapedit/src/props.rs:770
+#: rust/snapedit/src/props.rs:764
 msgid "Nenhum carimbo nesta categoria. Use “Importar…” para acrescentar imagens."
 msgstr "В этой категории нет штампов. Нажмите «Импорт…», чтобы добавить изображения."
 
-#: rust/snapedit/src/props.rs:772
+#: rust/snapedit/src/props.rs:766
 msgid "Nenhum carimbo encontrado."
 msgstr "Штампы не найдены."
 
-#: rust/snapedit/src/props.rs:806
+#: rust/snapedit/src/props.rs:800
 msgid "Desafixar"
 msgstr "Открепить"
 
-#: rust/snapedit/src/props.rs:806
+#: rust/snapedit/src/props.rs:800
 msgid "Fixar no topo"
 msgstr "Закрепить вверху"
 
-#: rust/snapedit/src/props.rs:813
+#: rust/snapedit/src/props.rs:807
 msgid "Carimbo desafixado."
 msgstr "Штамп откреплён."
 
-#: rust/snapedit/src/props.rs:815
+#: rust/snapedit/src/props.rs:809
 msgid "Carimbo fixado: aparece primeiro na categoria e em “Fixados”."
 msgstr "Штамп закреплён: он первый в своей категории и в разделе «Закреплённые»."
 
-#: rust/snapedit/src/props.rs:819
+#: rust/snapedit/src/props.rs:813
 msgid "Usar este carimbo"
 msgstr "Использовать этот штамп"
 
-#: rust/snapedit/src/props.rs:864
+#: rust/snapedit/src/props.rs:858
 msgid "Propriedades da ferramenta"
 msgstr "Свойства инструмента"
 
-#: rust/snapedit/src/props.rs:866 rust/snapnab/src/window.rs:242 rust/snapnab/src/window.rs:661
+#: rust/snapedit/src/props.rs:860 rust/snapnab/src/window.rs:247 rust/snapnab/src/window.rs:748
 msgid "Ajuda"
 msgstr "Справка"
 
-#: rust/snapedit/src/props.rs:888
+#: rust/snapedit/src/props.rs:882
 #, c-format
 msgid "%d objetos selecionados. As mudanças de estilo valem para os do mesmo tipo do último clicado."
 msgstr "Выделено объектов: %d. Изменения стиля применяются к объектам того же типа, что и последний щёлкнутый."
 
-#: rust/snapedit/src/props.rs:891
+#: rust/snapedit/src/props.rs:885
 #, c-format
 msgid "Grupo com %zu objetos: arraste para mover, use as alças para redimensionar."
 msgstr "Группа из %zu объектов: перетаскивайте для перемещения, маркерами меняйте размер."
 
-#: rust/snapedit/src/props.rs:906
+#: rust/snapedit/src/props.rs:900
 msgid "Tamanho inicial"
 msgstr "Начальный размер"
 
-#: rust/snapedit/src/props.rs:907
+#: rust/snapedit/src/props.rs:901
 msgid "Tamanho final"
 msgstr "Конечный размер"
 
-#: rust/snapedit/src/props.rs:908
+#: rust/snapedit/src/props.rs:902
 msgid "Curva de Bézier"
 msgstr "Кривая Безье"
 
-#: rust/snapedit/src/props.rs:909 rust/snapedit/src/props.rs:993
+#: rust/snapedit/src/props.rs:903 rust/snapedit/src/props.rs:987
 msgid "Desenhado à mão"
 msgstr "Нарисовано от руки"
 
-#: rust/snapedit/src/props.rs:910
+#: rust/snapedit/src/props.rs:904
 msgid "Texto ao longo da linha"
 msgstr "Текст вдоль линии"
 
-#: rust/snapedit/src/props.rs:912
+#: rust/snapedit/src/props.rs:906
 msgid "Fonte do texto"
 msgstr "Шрифт текста"
 
-#: rust/snapedit/src/props.rs:913
+#: rust/snapedit/src/props.rs:907
 msgid "Tamanho do texto"
 msgstr "Размер текста"
 
-#: rust/snapedit/src/props.rs:915
+#: rust/snapedit/src/props.rs:909
 msgid "Depois de desenhar, digite o texto: ele acompanha a linha ou a curva; duplo clique edita."
 msgstr "После рисования введите текст: он пойдёт вдоль линии или кривой; двойной щелчок — правка."
 
-#: rust/snapedit/src/props.rs:917
+#: rust/snapedit/src/props.rs:911
 msgid "Depois de desenhar a seta, digite para escrever um texto na ponta inicial; duplo clique edita."
 msgstr "После рисования стрелки начните печатать, чтобы добавить текст у начала; двойной щелчок — правка."
 
-#: rust/snapedit/src/props.rs:936
+#: rust/snapedit/src/props.rs:930
 msgid "Encaixar nas linhas de texto"
 msgstr "Привязывать к строкам текста"
 
-#: rust/snapedit/src/props.rs:937 rust/snapedit/src/props.rs:1084 rust/snapedit/src/props.rs:1089
+#: rust/snapedit/src/props.rs:931 rust/snapedit/src/props.rs:1074 rust/snapedit/src/props.rs:1079
 msgid "Somente o texto (palavras na área)"
 msgstr "Только текст (слова в области)"
 
-#: rust/snapedit/src/props.rs:941 rust/snapedit/src/props.rs:955 rust/snapedit/src/props.rs:986 rust/snapedit/src/props.rs:1007
+#: rust/snapedit/src/props.rs:935 rust/snapedit/src/props.rs:949 rust/snapedit/src/props.rs:980 rust/snapedit/src/props.rs:1001
 msgid "Preenchimento"
 msgstr "Заливка"
 
-#: rust/snapedit/src/props.rs:942 rust/snapedit/src/props.rs:956 rust/snapedit/src/props.rs:987 rust/snapedit/src/props.rs:1045
+#: rust/snapedit/src/props.rs:936 rust/snapedit/src/props.rs:950 rust/snapedit/src/props.rs:981 rust/snapedit/src/props.rs:1037
 msgid "Contorno"
 msgstr "Контур"
 
-#: rust/snapedit/src/props.rs:945 rust/snapedit/src/props.rs:961
+#: rust/snapedit/src/props.rs:939 rust/snapedit/src/props.rs:955
 msgid "Fonte"
 msgstr "Шрифт"
 
-#: rust/snapedit/src/props.rs:946 rust/snapedit/src/props.rs:964
+#: rust/snapedit/src/props.rs:940 rust/snapedit/src/props.rs:958
 msgid "Tamanho da fonte"
 msgstr "Размер шрифта"
 
-#: rust/snapedit/src/props.rs:947 rust/snapedit/src/props.rs:965 rust/snapedit/src/props.rs:991 rust/snapedit/src/props.rs:1062
+#: rust/snapedit/src/props.rs:941 rust/snapedit/src/props.rs:959 rust/snapedit/src/props.rs:985 rust/snapedit/src/props.rs:1054
 msgid "Espessura"
 msgstr "Толщина"
 
-#: rust/snapedit/src/props.rs:948 rust/snapedit/src/props.rs:981
+#: rust/snapedit/src/props.rs:942 rust/snapedit/src/props.rs:975
 msgid "Texto vertical"
 msgstr "Вертикальный текст"
 
-#: rust/snapedit/src/props.rs:949
+#: rust/snapedit/src/props.rs:943
 msgid "Letra à mão"
 msgstr "Рукописный шрифт"
 
-#: rust/snapedit/src/props.rs:968
+#: rust/snapedit/src/props.rs:962
 msgid "Estilo da seta"
 msgstr "Стиль стрелки"
 
-#: rust/snapedit/src/props.rs:973
+#: rust/snapedit/src/props.rs:967
 msgid "Cor da seta"
 msgstr "Цвет стрелки"
 
-#: rust/snapedit/src/props.rs:977
+#: rust/snapedit/src/props.rs:971
 msgid "Tamanho da seta"
 msgstr "Размер стрелки"
 
-#: rust/snapedit/src/props.rs:978
+#: rust/snapedit/src/props.rs:972
 msgid "Desfocar o fundo (vidro fosco)"
 msgstr "Размыть фон (матовое стекло)"
 
-#: rust/snapedit/src/props.rs:980
+#: rust/snapedit/src/props.rs:974
 msgid "Opacidade do preenchimento"
 msgstr "Непрозрачность заливки"
 
-#: rust/snapedit/src/props.rs:1005
+#: rust/snapedit/src/props.rs:999
 msgid "Conta-gotas: clique na imagem para pegar a cor de preenchimento."
 msgstr "Пипетка: щёлкните изображение, чтобы взять цвет заливки."
 
-#: rust/snapedit/src/props.rs:1011
+#: rust/snapedit/src/props.rs:1005
 msgid "Mesma cor em toda a imagem"
 msgstr "Один цвет по всему изображению"
 
-#: rust/snapedit/src/props.rs:1022 rust/snapedit/src/props.rs:1070 rust/snapedit/src/props.rs:1904
+#: rust/snapedit/src/props.rs:1016 rust/snapedit/src/props.rs:1062 rust/snapedit/src/props.rs:1889
 msgid "Tipo"
 msgstr "Тип"
 
-#: rust/snapedit/src/props.rs:1023
+#: rust/snapedit/src/props.rs:1017
 msgid "I, II, III…"
 msgstr "I, II, III…"
 
-#: rust/snapedit/src/props.rs:1023
+#: rust/snapedit/src/props.rs:1017
 msgid "i, ii, iii…"
 msgstr "i, ii, iii…"
 
-#: rust/snapedit/src/props.rs:1034
+#: rust/snapedit/src/props.rs:1026
 msgid "Reiniciar a sequência"
 msgstr "Начать нумерацию заново"
 
-#: rust/snapedit/src/props.rs:1040
+#: rust/snapedit/src/props.rs:1032
 msgid "A sequência de passos recomeça em 1."
 msgstr "Нумерация шагов начнётся снова с 1."
 
-#: rust/snapedit/src/props.rs:1048
+#: rust/snapedit/src/props.rs:1040
 msgid "Espessura do contorno"
 msgstr "Толщина контура"
 
-#: rust/snapedit/src/props.rs:1053
+#: rust/snapedit/src/props.rs:1045
 msgid "Suavizar as bordas"
 msgstr "Сглаживать края"
 
-#: rust/snapedit/src/props.rs:1061
+#: rust/snapedit/src/props.rs:1053
 msgid "Ampliação (%)"
 msgstr "Увеличение (%)"
 
-#: rust/snapedit/src/props.rs:1063
+#: rust/snapedit/src/props.rs:1055
 msgid "Lente separada da área ampliada"
 msgstr "Линза отдельно от увеличиваемой области"
 
-#: rust/snapedit/src/props.rs:1064
+#: rust/snapedit/src/props.rs:1056
 msgid "Lupa realista (aro e reflexo)"
 msgstr "Реалистичная лупа (оправа и блик)"
 
-#: rust/snapedit/src/props.rs:1065
+#: rust/snapedit/src/props.rs:1057
 msgid "Com cabo"
 msgstr "С ручкой"
 
-#: rust/snapedit/src/props.rs:1094
+#: rust/snapedit/src/props.rs:1084
 msgid "Smart Move"
 msgstr "Smart Move"
 
-#: rust/snapedit/src/props.rs:1100
+#: rust/snapedit/src/props.rs:1090
 msgid "Arraste uma área da imagem e depois arraste-a para outro lugar; o fundo é preenchido."
 msgstr "Выделите область изображения, а затем перетащите её в другое место; фон будет заполнен."
 
-#: rust/snapedit/src/props.rs:1102
+#: rust/snapedit/src/props.rs:1092
 msgid "Clique num objeto para selecionar. Ctrl+clique ou arraste um retângulo para selecionar vários."
 msgstr "Щёлкните объект, чтобы выделить его. Ctrl+щелчок или рамка выделяют несколько."
 
-#: rust/snapedit/src/props.rs:1107 rust/snapedit/src/props.rs:131
+#: rust/snapedit/src/props.rs:1097 rust/snapedit/src/props.rs:131
 msgid "Arraste a área a manter; Enter ou duplo clique aplica."
 msgstr "Выделите область, которую нужно оставить; Enter или двойной щелчок применяет."
 
-#: rust/snapedit/src/props.rs:1108
+#: rust/snapedit/src/props.rs:1098
 msgid "Aplicar recorte"
 msgstr "Применить вырезание"
 
-#: rust/snapedit/src/props.rs:1112
+#: rust/snapedit/src/props.rs:1102
 msgid "Modo"
 msgstr "Режим"
 
-#: rust/snapedit/src/props.rs:1113
+#: rust/snapedit/src/props.rs:1103
 msgid "Laço (mão livre)"
 msgstr "Лассо (от руки)"
 
-#: rust/snapedit/src/props.rs:1115
+#: rust/snapedit/src/props.rs:1105
 msgid "Seleção global (mesma cor)"
 msgstr "Глобальное выделение (тот же цвет)"
 
-#: rust/snapedit/src/props.rs:1116
+#: rust/snapedit/src/props.rs:1106
 msgid "Ao mover, preencher"
 msgstr "Заполнять при перемещении"
 
-#: rust/snapedit/src/props.rs:1117
+#: rust/snapedit/src/props.rs:1107
 msgid "Transparência"
 msgstr "Прозрачность"
 
-#: rust/snapedit/src/props.rs:1117
+#: rust/snapedit/src/props.rs:1107
 msgid "Cor do canvas (branco)"
 msgstr "Цвет холста (белый)"
 
-#: rust/snapedit/src/props.rs:1117
+#: rust/snapedit/src/props.rs:1107
 msgid "Preenchimento inteligente"
 msgstr "Умная заливка"
 
-#: rust/snapedit/src/props.rs:1118
+#: rust/snapedit/src/props.rs:1108
 msgid "Cortar para a seleção"
 msgstr "Обрезать по выделению"
 
-#: rust/snapedit/src/props.rs:1119
+#: rust/snapedit/src/props.rs:1109
 msgid "Copiar seleção"
 msgstr "Копировать выделение"
 
-#: rust/snapedit/src/props.rs:1120
+#: rust/snapedit/src/props.rs:1110
 msgid "Excluir seleção"
 msgstr "Удалить выделение"
 
-#: rust/snapedit/src/props.rs:1121
+#: rust/snapedit/src/props.rs:1111
 msgid "Levantar a seleção (peça solta)"
 msgstr "Поднять выделение (плавающий фрагмент)"
 
-#: rust/snapedit/src/props.rs:1125 rust/snapedit/src/app/commands.rs:167
+#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:167
 msgid "Selecione uma área com a ferramenta Seleção para levantá-la."
 msgstr "Выделите область инструментом «Выделение», чтобы поднять её."
 
-#: rust/snapedit/src/props.rs:1127 rust/snapedit/src/app/commands.rs:169
+#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:169
 msgid "Peça solta: ajuste o resto da imagem (cortar, recortar faixa…), posicione a peça e tecle Enter para soltá-la."
 msgstr "Плавающий фрагмент: измените остальное изображение (обрезка, вырезание полосы…), поставьте фрагмент на место и нажмите Enter."
 
-#: rust/snapedit/src/props.rs:1135
+#: rust/snapedit/src/props.rs:1125
 msgid "Direção"
 msgstr "Направление"
 
-#: rust/snapedit/src/props.rs:1135
+#: rust/snapedit/src/props.rs:1125
 msgid "Horizontal (remove linhas)"
 msgstr "По горизонтали (удаляет строки)"
 
-#: rust/snapedit/src/props.rs:1135
+#: rust/snapedit/src/props.rs:1125
 msgid "Vertical (remove colunas)"
 msgstr "По вертикали (удаляет столбцы)"
 
-#: rust/snapedit/src/props.rs:1136
+#: rust/snapedit/src/props.rs:1126
 msgid "Arraste sobre a faixa a remover; as partes da imagem são unidas."
 msgstr "Проведите по полосе, которую нужно удалить; части изображения соединятся."
 
-#: rust/snapedit/src/props.rs:1140
+#: rust/snapedit/src/props.rs:1130
 msgid "Clique na imagem para pegar a cor; ela vai para as ferramentas de desenho."
 msgstr "Щёлкните изображение, чтобы взять цвет; он перейдёт к инструментам рисования."
 
-#: rust/snapedit/src/props.rs:1155
+#: rust/snapedit/src/props.rs:1145
 msgid "Soltar a peça na imagem"
 msgstr "Вернуть фрагмент в изображение"
 
-#: rust/snapedit/src/props.rs:1158 rust/snapedit/src/app/commands.rs:174
+#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:174
 msgid "Peça solta na imagem."
 msgstr "Фрагмент возвращён в изображение."
 
-#: rust/snapedit/src/props.rs:1218
+#: rust/snapedit/src/props.rs:1210
 msgid "Variar o traço"
 msgstr "Изменить штрих"
 
-#: rust/snapedit/src/props.rs:1252
+#: rust/snapedit/src/props.rs:1237
 msgid "Avançado"
 msgstr "Дополнительно"
 
-#: rust/snapedit/src/props.rs:1273 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/snapnab/src/dialogs.rs:687
+#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/snapnab/src/dialogs.rs:689
 msgid "Alinhamento"
 msgstr "Выравнивание"
 
-#: rust/snapedit/src/props.rs:1293
+#: rust/snapedit/src/props.rs:1278
 msgid "Margem interna"
 msgstr "Внутренний отступ"
 
-#: rust/snapedit/src/props.rs:1294
+#: rust/snapedit/src/props.rs:1279
 msgid "Espaçamento entre linhas (%)"
 msgstr "Межстрочный интервал (%)"
 
-#: rust/snapedit/src/props.rs:1296
+#: rust/snapedit/src/props.rs:1281
 msgid "Sombreado (degradê)"
 msgstr "Затенение (градиент)"
 
-#: rust/snapedit/src/props.rs:1398
+#: rust/snapedit/src/props.rs:1383
 msgid "Cores do tema"
 msgstr "Цвета темы"
 
-#: rust/snapedit/src/props.rs:1399
+#: rust/snapedit/src/props.rs:1384
 msgid "Cores padrão"
 msgstr "Стандартные цвета"
 
-#: rust/snapedit/src/props.rs:1402
+#: rust/snapedit/src/props.rs:1387
 msgid "Recentes"
 msgstr "Недавние"
 
-#: rust/snapedit/src/props.rs:1406
+#: rust/snapedit/src/props.rs:1391
 msgid "Gradientes"
 msgstr "Градиенты"
 
-#: rust/snapedit/src/props.rs:1428
+#: rust/snapedit/src/props.rs:1413
 msgid "Sem cor"
 msgstr "Без цвета"
 
-#: rust/snapedit/src/props.rs:1431
+#: rust/snapedit/src/props.rs:1416
 msgid "Mais cores…"
 msgstr "Другие цвета…"
 
-#: rust/snapedit/src/props.rs:1451
+#: rust/snapedit/src/props.rs:1436
 msgid "Editar gradiente…"
 msgstr "Изменить градиент…"
 
-#: rust/snapedit/src/props.rs:1504
+#: rust/snapedit/src/props.rs:1489
 msgid "Sombra ▾"
 msgstr "Тень ▾"
 
-#: rust/snapedit/src/props.rs:1506
+#: rust/snapedit/src/props.rs:1491
 msgid "Mostrar sombra"
 msgstr "Показывать тень"
 
-#: rust/snapedit/src/props.rs:1510
+#: rust/snapedit/src/props.rs:1495
 msgid "Cor da sombra…"
 msgstr "Цвет тени…"
 
-#: rust/snapedit/src/props.rs:1541
+#: rust/snapedit/src/props.rs:1526
 msgid "Distância"
 msgstr "Расстояние"
 
-#: rust/snapedit/src/props.rs:1647
+#: rust/snapedit/src/props.rs:1632
 msgid "Polígono: clique nos cantos; clique no primeiro ponto ou dê um duplo clique para fechar."
 msgstr "Многоугольник: щёлкайте по углам; щёлкните первую точку или дважды щёлкните, чтобы замкнуть."
 
-#: rust/snapedit/src/props.rs:1649
+#: rust/snapedit/src/props.rs:1634
 msgid "Mão livre: arraste contornando a área."
 msgstr "От руки: обведите область, удерживая кнопку."
 
-#: rust/snapedit/src/props.rs:1662 rust/snapedit/src/props.rs:1722
+#: rust/snapedit/src/props.rs:1647 rust/snapedit/src/props.rs:1707
 msgid "Tracejado"
 msgstr "Штрихи"
 
-#: rust/snapedit/src/props.rs:1689
+#: rust/snapedit/src/props.rs:1674
 msgid "Ponta inicial"
 msgstr "Начало линии"
 
-#: rust/snapedit/src/props.rs:1689
+#: rust/snapedit/src/props.rs:1674
 msgid "Ponta final"
 msgstr "Конец линии"
 
-#: rust/snapedit/src/props.rs:1760
+#: rust/snapedit/src/props.rs:1745
 msgid "Área de corte (px)"
 msgstr "Область обрезки (px)"
 
-#: rust/snapedit/src/props.rs:1760
+#: rust/snapedit/src/props.rs:1745
 msgid "Seleção (px)"
 msgstr "Выделение (px)"
 
-#: rust/snapedit/src/props.rs:1760
+#: rust/snapedit/src/props.rs:1745
 msgid "Posição e tamanho (px)"
 msgstr "Положение и размер (px)"
 
-#: rust/snapedit/src/props.rs:1785 rust/snapedit/src/app/commands.rs:652
+#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:652
 msgid "Manter proporção"
 msgstr "Сохранять пропорции"
 
-#: rust/snapedit/src/props.rs:1823
+#: rust/snapedit/src/props.rs:1808
 msgid "Agrupar"
 msgstr "Сгруппировать"
 
-#: rust/snapedit/src/props.rs:1826
+#: rust/snapedit/src/props.rs:1811
 msgid "Desagrupar"
 msgstr "Разгруппировать"
 
-#: rust/snapedit/src/props.rs:1831
+#: rust/snapedit/src/props.rs:1816
 msgid "Desbloquear"
 msgstr "Разблокировать"
 
-#: rust/snapedit/src/props.rs:1904
+#: rust/snapedit/src/props.rs:1889
 msgid "Linear"
 msgstr "Линейный"
 
-#: rust/snapedit/src/props.rs:1904
+#: rust/snapedit/src/props.rs:1889
 msgid "Radial (do centro)"
 msgstr "Радиальный (от центра)"
 
-#: rust/snapedit/src/props.rs:1905
+#: rust/snapedit/src/props.rs:1890
 msgid "Ângulo (graus)"
 msgstr "Угол (градусы)"
 
-#: rust/snapedit/src/props.rs:1906
+#: rust/snapedit/src/props.rs:1891
 msgid "Cor inicial"
 msgstr "Начальный цвет"
 
-#: rust/snapedit/src/props.rs:1907
+#: rust/snapedit/src/props.rs:1892
 msgid "Cor final"
 msgstr "Конечный цвет"
 
-#: rust/snapedit/src/props.rs:1908
+#: rust/snapedit/src/props.rs:1893
 msgid "Cor intermediária"
 msgstr "Промежуточный цвет"
 
-#: rust/snapedit/src/props.rs:1910 rust/snapedit/src/props.rs:1913
+#: rust/snapedit/src/props.rs:1895 rust/snapedit/src/props.rs:1898
 msgid "Posição (%)"
 msgstr "Позиция (%)"
 
-#: rust/snapedit/src/props.rs:1911
+#: rust/snapedit/src/props.rs:1896
 msgid "Segunda cor intermediária"
 msgstr "Второй промежуточный цвет"
 
-#: rust/snapedit/src/props.rs:1914
+#: rust/snapedit/src/props.rs:1899
 msgid "O ângulo vale para o gradiente linear: 0° da esquerda para a direita, 90° de cima para baixo."
 msgstr "Угол действует для линейного градиента: 0° — слева направо, 90° — сверху вниз."
 
-#: rust/snapedit/src/props.rs:1916
+#: rust/snapedit/src/props.rs:1901
 msgid "Gradiente"
 msgstr "Градиент"
 
-#: rust/snapedit/src/props.rs:1937 rust/snapedit/src/app/commands.rs:240 rust/snapedit/src/app/commands.rs:575 rust/snapedit/src/app/commands.rs:908
+#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:240 rust/snapedit/src/app/commands.rs:575 rust/snapedit/src/app/commands.rs:908
 msgid "Nome"
 msgstr "Имя"
 
-#: rust/snapedit/src/props.rs:1939
+#: rust/snapedit/src/props.rs:1924
 #, c-format
 msgid "Cor %d"
 msgstr "Цвет %d"
 
-#: rust/snapedit/src/props.rs:1941
+#: rust/snapedit/src/props.rs:1926
 msgid "Os estilos rápidos de todas as ferramentas são gerados com estas cores."
 msgstr "Быстрые стили всех инструментов создаются из этих цветов."
 
-#: rust/snapedit/src/props.rs:1942
+#: rust/snapedit/src/props.rs:1927
 msgid "Novo tema"
 msgstr "Новая тема"
 
-#: rust/snapedit/src/props.rs:1942
+#: rust/snapedit/src/props.rs:1927
 msgid "Editar tema"
 msgstr "Изменить тему"
 
@@ -4126,7 +4126,7 @@ msgstr "Экспортировать элементы (%zu)…"
 msgid "Copiar como…"
 msgstr "Копировать как…"
 
-#: rust/snapedit/src/tray.rs:375 rust/snapedit/src/app/commands.rs:781 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:41
+#: rust/snapedit/src/tray.rs:375 rust/snapedit/src/app/commands.rs:781 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:44
 msgid "Fixar na tela"
 msgstr "Закрепить на экране"
 
@@ -4317,7 +4317,7 @@ msgstr ""
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "Свободное ПО по лицензии GNU General Public License версии 3."
 
-#: rust/snapedit/src/app/commands.rs:436 rust/snapnab/src/dialogs.rs:430
+#: rust/snapedit/src/app/commands.rs:436 rust/snapnab/src/dialogs.rs:432
 msgid "Biblioteca: "
 msgstr "Библиотека: "
 
@@ -4346,7 +4346,7 @@ msgstr "Мой эффект %zu"
 msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
 msgstr "Настройки берутся из эффектов на панели (откройте каждый, чтобы изменить):"
 
-#: rust/snapedit/src/app/commands.rs:578 rust/snapnab/src/window.rs:85
+#: rust/snapedit/src/app/commands.rs:578 rust/snapnab/src/window.rs:88
 msgid "Bordas especiais"
 msgstr "Особые края"
 
@@ -4382,7 +4382,7 @@ msgstr "Объекты будут объединены с изображение
 msgid "Largura (px)"
 msgstr "Ширина (пкс)"
 
-#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:551
+#: rust/snapedit/src/app/commands.rs:650 rust/snapedit/src/app/commands.rs:697 rust/snapedit/src/app/docs.rs:348 rust/snapnab/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "Высота (пкс)"
 
@@ -4390,7 +4390,7 @@ msgstr "Высота (пкс)"
 msgid "ou escala (%)"
 msgstr "или масштаб (%)"
 
-#: rust/snapedit/src/app/commands.rs:654 rust/snapnab/src/window.rs:84
+#: rust/snapedit/src/app/commands.rs:654 rust/snapnab/src/window.rs:87
 msgid "Redimensionar imagem"
 msgstr "Изменить размер изображения"
 
@@ -4402,7 +4402,7 @@ msgstr "Привязка"
 msgid "Cor do canvas"
 msgstr "Цвет холста"
 
-#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/commands.rs:700 rust/snapedit/src/app/docs.rs:350 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "Прозрачный"
 
@@ -4475,7 +4475,7 @@ msgstr "Элементов: %zu"
 msgid "Superior esquerda"
 msgstr "Вверху слева"
 
-#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:690
 msgid "Superior"
 msgstr "Вверху"
 
@@ -4483,7 +4483,7 @@ msgstr "Вверху"
 msgid "Superior direita"
 msgstr "Вверху справа"
 
-#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/app/commands.rs:693 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:690
 msgid "Centro"
 msgstr "По центру"
 
@@ -4491,7 +4491,7 @@ msgstr "По центру"
 msgid "Inferior esquerda"
 msgstr "Внизу слева"
 
-#: rust/snapedit/src/app/commands.rs:694 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:689
+#: rust/snapedit/src/app/commands.rs:694 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:691
 msgid "Inferior"
 msgstr "Внизу"
 
@@ -4543,7 +4543,7 @@ msgstr "Сохранено в "
 msgid "A área de transferência não contém imagem."
 msgstr "В буфере обмена нет изображения."
 
-#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:222
+#: rust/snapedit/src/app/docs.rs:339 rust/snapnab/src/window.rs:227
 msgid "Da área de transferência"
 msgstr "Из буфера обмена"
 
@@ -4632,43 +4632,43 @@ msgstr "(настройки ниже)"
 msgid "Predefinição"
 msgstr "Готовый вариант"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:725 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:721 rust/snapnab/src/dialogs.rs:683
 msgid "Fundo"
 msgstr "Фон"
 
-#: rust/snapedit/src/app/extras.rs:113 rust/snapnab/src/dialogs.rs:682
+#: rust/snapedit/src/app/extras.rs:113 rust/snapnab/src/dialogs.rs:684
 msgid "Cor 1"
 msgstr "Цвет 1"
 
-#: rust/snapedit/src/app/extras.rs:114 rust/snapnab/src/dialogs.rs:682
+#: rust/snapedit/src/app/extras.rs:114 rust/snapnab/src/dialogs.rs:684
 msgid "Cor 2 (degradê)"
 msgstr "Цвет 2 (градиент)"
 
-#: rust/snapedit/src/app/extras.rs:115 rust/snapnab/src/dialogs.rs:682
+#: rust/snapedit/src/app/extras.rs:115 rust/snapnab/src/dialogs.rs:684
 msgid "Ângulo do degradê"
 msgstr "Угол градиента"
 
-#: rust/snapedit/src/app/extras.rs:116 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:116 rust/snapnab/src/dialogs.rs:685
 msgid "Imagem de fundo"
 msgstr "Фоновое изображение"
 
-#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/snapnab/src/dialogs.rs:685
 msgid "Margem (px)"
 msgstr "Поля (px)"
 
-#: rust/snapedit/src/app/extras.rs:118 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:118 rust/snapnab/src/dialogs.rs:686
 msgid "Cantos arredondados (px)"
 msgstr "Скругление углов (px)"
 
-#: rust/snapedit/src/app/extras.rs:119 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:119 rust/snapnab/src/dialogs.rs:686
 msgid "Sombra (%)"
 msgstr "Тень (%)"
 
-#: rust/snapedit/src/app/extras.rs:120 rust/snapnab/src/dialogs.rs:685
+#: rust/snapedit/src/app/extras.rs:120 rust/snapnab/src/dialogs.rs:687
 msgid "Tamanho da sombra (px)"
 msgstr "Размер тени (px)"
 
-#: rust/snapedit/src/app/extras.rs:122 rust/snapnab/src/dialogs.rs:686
+#: rust/snapedit/src/app/extras.rs:122 rust/snapnab/src/dialogs.rs:688
 msgid "Proporção"
 msgstr "Пропорции"
 
@@ -4676,7 +4676,7 @@ msgstr "Пропорции"
 msgid "Livre"
 msgstr "Свободно"
 
-#: rust/snapedit/src/app/extras.rs:132 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/extras.rs:132 rust/snapnab/src/dialogs.rs:692
 msgid "Equilibrar as margens (corta bordas lisas da captura)"
 msgstr "Выровнять поля (обрезает однотонные края снимка)"
 
@@ -4684,7 +4684,7 @@ msgstr "Выровнять поля (обрезает однотонные кр�
 msgid "Salvar como predefinição (nome)"
 msgstr "Сохранить как готовый вариант (имя)"
 
-#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/snapnab/src/dialogs.rs:692
+#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/snapnab/src/dialogs.rs:694
 msgid "Embelezar"
 msgstr "Украсить"
 
@@ -4884,7 +4884,7 @@ msgstr "Размер каждой части (px)"
 msgid "Número de partes"
 msgstr "Число частей"
 
-#: rust/snapedit/src/app/extras.rs:757 rust/snapnab/src/dialogs.rs:669
+#: rust/snapedit/src/app/extras.rs:757 rust/snapnab/src/dialogs.rs:671
 msgid "Tamanho (px)"
 msgstr "Размер (пкс)"
 
@@ -4910,7 +4910,7 @@ msgstr "Разделённое изображение"
 msgid "Imagem dividida em %zu partes (imagens novas na bandeja)."
 msgstr "Изображение разделено на части (%zu) — новые изображения в ленте."
 
-#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/snapnab/src/dialogs.rs:499 rust/snapnab/src/interval.rs:107
+#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:107
 msgid "Formato"
 msgstr "Формат"
 
@@ -5099,7 +5099,7 @@ msgstr "Мята"
 msgid "Grafite"
 msgstr "Графит"
 
-#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Papel de parede"
 msgstr "Обои"
 
@@ -5107,11 +5107,11 @@ msgstr "Обои"
 msgid "Branco simples"
 msgstr "Просто белый"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Cor sólida"
 msgstr "Сплошной цвет"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:681
+#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
 msgid "Degradê"
 msgstr "Градиент"
 
@@ -5320,7 +5320,7 @@ msgstr "Диапазон: отмеченное выделение."
 msgid "Intervalo: o vídeo inteiro (marque início/fim para limitar)."
 msgstr "Диапазон: всё видео (отметьте начало/конец, чтобы ограничить)."
 
-#: rust/snapedit/src/app/video.rs:455 rust/snapnab/src/dialogs.rs:578
+#: rust/snapedit/src/app/video.rs:455 rust/snapnab/src/dialogs.rs:580
 msgid "Quadros por segundo"
 msgstr "Кадров в секунду"
 
@@ -5348,7 +5348,7 @@ msgstr "Создать анимированный GIF"
 msgid "Salvar GIF"
 msgstr "Сохранить GIF"
 
-#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:694
+#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:690
 msgid "GIF animado (*.gif)|*.gif|"
 msgstr "Анимированный GIF (*.gif)|*.gif|"
 
@@ -5481,7 +5481,7 @@ msgstr "Проверка контраста (WCAG)"
 msgid "Comparar imagens"
 msgstr "Сравнение изображений"
 
-#: rust/snapedit/src/app/windows_aux.rs:451 rust/snapedit/src/app/windows_aux.rs:645 rust/snapedit/src/app/windows_aux.rs:762 rust/snapedit/src/app/windows_aux.rs:830
+#: rust/snapedit/src/app/windows_aux.rs:451 rust/snapedit/src/app/windows_aux.rs:641 rust/snapedit/src/app/windows_aux.rs:758 rust/snapedit/src/app/windows_aux.rs:826
 msgid "Fechar"
 msgstr "Закрыть"
 
@@ -5553,106 +5553,106 @@ msgstr "Шторка (до | после)"
 msgid "Diferença"
 msgstr "Разница"
 
-#: rust/snapedit/src/app/windows_aux.rs:640
+#: rust/snapedit/src/app/windows_aux.rs:636
 msgid "Transparência de B"
 msgstr "Прозрачность B"
 
-#: rust/snapedit/src/app/windows_aux.rs:640
+#: rust/snapedit/src/app/windows_aux.rs:636
 msgid "Divisória"
 msgstr "Разделитель"
 
-#: rust/snapedit/src/app/windows_aux.rs:646
+#: rust/snapedit/src/app/windows_aux.rs:642
 msgid "Exportar imagem…"
 msgstr "Экспорт изображения…"
 
-#: rust/snapedit/src/app/windows_aux.rs:647
+#: rust/snapedit/src/app/windows_aux.rs:643
 msgid "Exportar GIF…"
 msgstr "Экспорт GIF…"
 
-#: rust/snapedit/src/app/windows_aux.rs:648
+#: rust/snapedit/src/app/windows_aux.rs:644
 msgid "A ⇄ B"
 msgstr "A ⇄ B"
 
-#: rust/snapedit/src/app/windows_aux.rs:658
+#: rust/snapedit/src/app/windows_aux.rs:654
 #, c-format
 msgid "A: %s (%d × %d)   B: %s (%d × %d)"
 msgstr "A: %s (%d × %d)   B: %s (%d × %d)"
 
-#: rust/snapedit/src/app/windows_aux.rs:663
+#: rust/snapedit/src/app/windows_aux.rs:659
 #, c-format
 msgid "   •   %d pixels diferentes (%.2f%%)"
 msgstr "   •   различающихся пикселей: %d (%.2f%%)"
 
-#: rust/snapedit/src/app/windows_aux.rs:694 rust/snapedit/src/app/windows_aux.rs:696
+#: rust/snapedit/src/app/windows_aux.rs:690 rust/snapedit/src/app/windows_aux.rs:692
 msgid "Antes-depois"
 msgstr "До-после"
 
-#: rust/snapedit/src/app/windows_aux.rs:702
+#: rust/snapedit/src/app/windows_aux.rs:698
 msgid "Exportado."
 msgstr "Экспортировано."
 
-#: rust/snapedit/src/app/windows_aux.rs:703
+#: rust/snapedit/src/app/windows_aux.rs:699
 msgid "Não foi possível salvar o arquivo."
 msgstr "Не удалось сохранить файл."
 
-#: rust/snapedit/src/app/windows_aux.rs:725
+#: rust/snapedit/src/app/windows_aux.rs:721
 msgid "Texto (primeiro plano)"
 msgstr "Текст (передний план)"
 
-#: rust/snapedit/src/app/windows_aux.rs:737
+#: rust/snapedit/src/app/windows_aux.rs:733
 msgid "Escolher cor…"
 msgstr "Выбрать цвет…"
 
-#: rust/snapedit/src/app/windows_aux.rs:740
+#: rust/snapedit/src/app/windows_aux.rs:736
 msgid "Copiar HEX"
 msgstr "Копировать HEX"
 
-#: rust/snapedit/src/app/windows_aux.rs:751
+#: rust/snapedit/src/app/windows_aux.rs:747
 msgid "Texto grande Aa"
 msgstr "Крупный текст Аа"
 
-#: rust/snapedit/src/app/windows_aux.rs:752
+#: rust/snapedit/src/app/windows_aux.rs:748
 msgid "Texto normal — o rato roeu a roupa do rei"
 msgstr "Обычный текст — съешь же ещё этих мягких французских булок"
 
-#: rust/snapedit/src/app/windows_aux.rs:758
+#: rust/snapedit/src/app/windows_aux.rs:754
 msgid "Inverter as cores"
 msgstr "Поменять цвета местами"
 
-#: rust/snapedit/src/app/windows_aux.rs:795
+#: rust/snapedit/src/app/windows_aux.rs:791
 msgid "Configure a chave do provedor primeiro."
 msgstr "Сначала укажите ключ провайдера."
 
-#: rust/snapedit/src/app/windows_aux.rs:800
+#: rust/snapedit/src/app/windows_aux.rs:796
 msgid "Perguntando…"
 msgstr "Отправка вопроса…"
 
-#: rust/snapedit/src/app/windows_aux.rs:808
+#: rust/snapedit/src/app/windows_aux.rs:804
 #, c-format
 msgid "Resposta de %s (%s)."
 msgstr "Ответ от %s (%s)."
 
-#: rust/snapedit/src/app/windows_aux.rs:823 rust/snapnab/src/quick.rs:53
+#: rust/snapedit/src/app/windows_aux.rs:819 rust/snapnab/src/quick.rs:53
 msgid "Copiar"
 msgstr "Копировать"
 
-#: rust/snapedit/src/app/windows_aux.rs:825
+#: rust/snapedit/src/app/windows_aux.rs:821
 msgid "Resposta copiada."
 msgstr "Ответ скопирован."
 
-#: rust/snapedit/src/app/windows_aux.rs:827
+#: rust/snapedit/src/app/windows_aux.rs:823
 msgid "Adicionar como texto"
 msgstr "Добавить как текст"
 
-#: rust/snapedit/src/app/windows_aux.rs:828
+#: rust/snapedit/src/app/windows_aux.rs:824
 msgid "Configurações…"
 msgstr "Настройки…"
 
-#: rust/snapedit/src/app/windows_aux.rs:847
+#: rust/snapedit/src/app/windows_aux.rs:843
 msgid "Faça uma pergunta sobre a imagem…"
 msgstr "Задайте вопрос об изображении…"
 
-#: rust/snapedit/src/app/windows_aux.rs:849
+#: rust/snapedit/src/app/windows_aux.rs:845
 msgid "Perguntar"
 msgstr "Спросить"
 
@@ -5708,15 +5708,15 @@ msgstr "Извлечь текст"
 msgid "OK"
 msgstr "ОК"
 
-#: rust/snapedit/tests/golden.rs:564
+#: rust/snapedit/tests/golden.rs:594
 msgid "Não foi possível criar o arquivo."
 msgstr "Не удалось создать файл."
 
-#: rust/snapedit/tests/golden.rs:565
+#: rust/snapedit/tests/golden.rs:595
 msgid "Falha ao gravar o arquivo."
 msgstr "Ошибка записи файла."
 
-#: rust/snapedit/tests/golden.rs:566
+#: rust/snapedit/tests/golden.rs:596
 msgid "Falha ao codificar a imagem."
 msgstr "Ошибка кодирования изображения."
 
@@ -5793,7 +5793,7 @@ msgstr "Имя шаблона"
 msgid "Preset %zu"
 msgstr "Шаблон %zu"
 
-#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:658
+#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:745
 msgid "Novo preset com as configurações atuais"
 msgstr "Новый шаблон из текущих настроек"
 
@@ -5902,11 +5902,11 @@ msgstr "Автоматически (язык Windows)"
 msgid "Atalhos globais"
 msgstr "Глобальные сочетания клавиш"
 
-#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:218
+#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:223
 msgid "Capturar imagem"
 msgstr "Снимок изображения"
 
-#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:219
+#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:224
 msgid "Gravar vídeo"
 msgstr "Запись видео"
 
@@ -5918,7 +5918,7 @@ msgstr "Пауза/продолжение видео"
 msgid "Parar vídeo"
 msgstr "Остановить видео"
 
-#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:225
+#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:230
 msgid "Conta-gotas de tela"
 msgstr "Экранная пипетка"
 
@@ -5926,11 +5926,11 @@ msgstr "Экранная пипетка"
 msgid "Capturar e fixar na tela"
 msgstr "Снять и закрепить на экране"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:229
+#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:234
 msgid "Fixar da área de transferência"
 msgstr "Закрепить из буфера обмена"
 
-#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:234
+#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:239
 msgid "Foco de tela (apresentações)"
 msgstr "Фокус экрана (презентации)"
 
@@ -6074,259 +6074,275 @@ msgstr "Захваченный указатель — объектом в ред
 msgid "Dividir imagens longas em páginas (impressão e PDF)"
 msgstr "Делить длинные изображения на страницы (печать и PDF)"
 
-#: rust/snapnab/src/dialogs.rs:440
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Aparência (vale ao reabrir)"
+msgstr "Оформление (после повторного открытия)"
+
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Seguir o Windows"
+msgstr "Как в Windows"
+
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Claro"
+msgstr "Светлое"
+
+#: rust/snapnab/src/dialogs.rs:430
+msgid "Escuro"
+msgstr "Тёмное"
+
+#: rust/snapnab/src/dialogs.rs:442
 msgid "Dois atalhos iguais: "
 msgstr "Два одинаковых сочетания: "
 
-#: rust/snapnab/src/dialogs.rs:446
+#: rust/snapnab/src/dialogs.rs:448
 msgid "Opções do Snapnab"
 msgstr "Параметры Snapnab"
 
-#: rust/snapnab/src/dialogs.rs:473
+#: rust/snapnab/src/dialogs.rs:475
 msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
 msgstr "Выберите WAV-файл звука снимка (полный путь)."
 
-#: rust/snapnab/src/dialogs.rs:483
+#: rust/snapnab/src/dialogs.rs:485
 msgid "O novo idioma vale depois que o Snapnab e o Editor reiniciarem. Reiniciar agora?"
 msgstr "Новый язык применится после перезапуска Snapnab и Редактора. Перезапустить сейчас?"
 
-#: rust/snapnab/src/dialogs.rs:499 rust/snapnab/src/interval.rs:108
+#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:108
 msgid "Prefixo do nome"
 msgstr "Префикс имени"
 
-#: rust/snapnab/src/dialogs.rs:499 rust/snapnab/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
+#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
 msgid "Pasta"
 msgstr "Папка"
 
-#: rust/snapnab/src/dialogs.rs:500
+#: rust/snapnab/src/dialogs.rs:502
 msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
 msgstr "Автоматическое имя: <Префикс><Номер>, напр.: Снимок001.png"
 
-#: rust/snapnab/src/dialogs.rs:503 rust/snapnab/src/interval.rs:131
+#: rust/snapnab/src/dialogs.rs:505 rust/snapnab/src/interval.rs:131
 msgid "O prefixo contém caracteres inválidos."
 msgstr "Префикс содержит недопустимые символы."
 
-#: rust/snapnab/src/dialogs.rs:505
+#: rust/snapnab/src/dialogs.rs:507
 msgid "Salvar em arquivo"
 msgstr "Сохранить в файл"
 
-#: rust/snapnab/src/dialogs.rs:524
+#: rust/snapnab/src/dialogs.rs:526
 msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
 msgstr "Снимок открывается в этой программе (напр.: mspaint.exe)."
 
-#: rust/snapnab/src/dialogs.rs:539
+#: rust/snapnab/src/dialogs.rs:541
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "Каждый снимок на новом слайде (выкл.: на текущем)"
 
-#: rust/snapnab/src/dialogs.rs:552
+#: rust/snapnab/src/dialogs.rs:554
 msgid "Capturar sempre na mesma posição"
 msgstr "Всегда снимать в одном и том же месте"
 
-#: rust/snapnab/src/dialogs.rs:553
+#: rust/snapnab/src/dialogs.rs:555
 msgid "Esquerda (X)"
 msgstr "Слева (X)"
 
-#: rust/snapnab/src/dialogs.rs:553
+#: rust/snapnab/src/dialogs.rs:555
 msgid "Topo (Y)"
 msgstr "Сверху (Y)"
 
-#: rust/snapnab/src/dialogs.rs:554
+#: rust/snapnab/src/dialogs.rs:556
 msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
 msgstr "Без фиксированного положения вы перетаскиваете прямоугольник на место во время снимка."
 
-#: rust/snapnab/src/dialogs.rs:555 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:293
+#: rust/snapnab/src/dialogs.rs:557 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:326
 msgid "Região fixa"
 msgstr "Фиксированная область"
 
-#: rust/snapnab/src/dialogs.rs:579
+#: rust/snapnab/src/dialogs.rs:581
 msgid "Reduzir para 1080p"
 msgstr "Уменьшать до 1080p"
 
-#: rust/snapnab/src/dialogs.rs:580
+#: rust/snapnab/src/dialogs.rs:582
 msgid "Codificação por hardware"
 msgstr "Аппаратное кодирование"
 
-#: rust/snapnab/src/dialogs.rs:581
+#: rust/snapnab/src/dialogs.rs:583
 msgid "Áudio"
 msgstr "Звук"
 
-#: rust/snapnab/src/dialogs.rs:582
+#: rust/snapnab/src/dialogs.rs:584
 msgid "Volume do microfone (%)"
 msgstr "Громкость микрофона (%)"
 
-#: rust/snapnab/src/dialogs.rs:583
+#: rust/snapnab/src/dialogs.rs:585
 msgid "Volume do áudio do sistema (%)"
 msgstr "Громкость системного звука (%)"
 
-#: rust/snapnab/src/dialogs.rs:584 rust/snapnab/src/hud.rs:361
+#: rust/snapnab/src/dialogs.rs:586 rust/snapnab/src/hud.rs:361
 msgid "Ganho automático do microfone"
 msgstr "Автоусиление микрофона"
 
-#: rust/snapnab/src/dialogs.rs:585
+#: rust/snapnab/src/dialogs.rs:587
 msgid "Também ajustáveis no painel da gravação."
 msgstr "Также настраиваются на панели записи."
 
-#: rust/snapnab/src/dialogs.rs:586
+#: rust/snapnab/src/dialogs.rs:588
 msgid "Gravar somente o áudio (sem vídeo)"
 msgstr "Записывать только звук (без видео)"
 
-#: rust/snapnab/src/dialogs.rs:587
+#: rust/snapnab/src/dialogs.rs:589
 msgid "Formato do áudio"
 msgstr "Формат звука"
 
-#: rust/snapnab/src/dialogs.rs:588
+#: rust/snapnab/src/dialogs.rs:590
 msgid "Na gravação (todos os presets)"
 msgstr "Во время записи (все пресеты)"
 
-#: rust/snapnab/src/dialogs.rs:589 rust/snapnab/src/engine/video.rs:360
+#: rust/snapnab/src/dialogs.rs:591 rust/snapnab/src/engine/video.rs:360
 msgid "Destacar o cursor"
 msgstr "Подсвечивать указатель"
 
-#: rust/snapnab/src/dialogs.rs:590
+#: rust/snapnab/src/dialogs.rs:592
 msgid "Cor do destaque"
 msgstr "Цвет подсветки"
 
-#: rust/snapnab/src/dialogs.rs:591
+#: rust/snapnab/src/dialogs.rs:593
 msgid "Tamanho do destaque (px)"
 msgstr "Размер подсветки (px)"
 
-#: rust/snapnab/src/dialogs.rs:592 rust/snapnab/src/engine/video.rs:360
+#: rust/snapnab/src/dialogs.rs:594 rust/snapnab/src/engine/video.rs:360
 msgid "Mostrar os cliques"
 msgstr "Показывать щелчки"
 
-#: rust/snapnab/src/dialogs.rs:593
+#: rust/snapnab/src/dialogs.rs:595
 msgid "Cor do clique esquerdo"
 msgstr "Цвет левого щелчка"
 
-#: rust/snapnab/src/dialogs.rs:594
+#: rust/snapnab/src/dialogs.rs:596
 msgid "Cor do clique direito"
 msgstr "Цвет правого щелчка"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Teclas na tela"
 msgstr "Клавиши на экране"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Não mostrar"
 msgstr "Не показывать"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "Только сочетания (Ctrl, Alt, Win, F1…)"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/snapnab/src/dialogs.rs:597
 msgid "Todas (inclusive o que for digitado)"
 msgstr "Все (включая набираемый текст)"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/snapnab/src/dialogs.rs:599
 msgid "Ampliar ao clicar (zoom automático)"
 msgstr "Приближать при щелчке (автомасштаб)"
 
-#: rust/snapnab/src/dialogs.rs:598
+#: rust/snapnab/src/dialogs.rs:600
 msgid "Ampliação do zoom (%)"
 msgstr "Степень приближения (%)"
 
-#: rust/snapnab/src/dialogs.rs:599
+#: rust/snapnab/src/dialogs.rs:601
 msgid "Atalho do zoom durante a gravação"
 msgstr "Сочетание для приближения во время записи"
 
-#: rust/snapnab/src/dialogs.rs:600
+#: rust/snapnab/src/dialogs.rs:602
 msgid "Proteger contra travamentos (recupera a gravação)"
 msgstr "Защита от сбоев (запись восстанавливается)"
 
-#: rust/snapnab/src/dialogs.rs:601
+#: rust/snapnab/src/dialogs.rs:603
 msgid "Confirmar antes de recomeçar a gravação"
 msgstr "Спрашивать перед перезапуском записи"
 
-#: rust/snapnab/src/dialogs.rs:603
+#: rust/snapnab/src/dialogs.rs:605
 msgid "Opções de vídeo"
 msgstr "Параметры видео"
 
-#: rust/snapnab/src/dialogs.rs:631
+#: rust/snapnab/src/dialogs.rs:633
 msgid "Remover o fundo da webcam"
 msgstr "Удалить фон веб-камеры"
 
-#: rust/snapnab/src/dialogs.rs:631
+#: rust/snapnab/src/dialogs.rs:633
 msgid "Cor do fundo"
 msgstr "Цвет фона"
 
-#: rust/snapnab/src/dialogs.rs:632
+#: rust/snapnab/src/dialogs.rs:634
 msgid "Tolerância (0–100)"
 msgstr "Допуск (0–100)"
 
-#: rust/snapnab/src/dialogs.rs:633
+#: rust/snapnab/src/dialogs.rs:635
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "Используйте однотонный, хорошо освещённый фон (идеален зелёный экран)."
 
-#: rust/snapnab/src/dialogs.rs:634
+#: rust/snapnab/src/dialogs.rs:636
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "Без фона веб-камера отображается без рамки."
 
-#: rust/snapnab/src/dialogs.rs:635
+#: rust/snapnab/src/dialogs.rs:637
 msgid "Remover o fundo (chroma key)"
 msgstr "Удалить фон (хромакей)"
 
-#: rust/snapnab/src/dialogs.rs:660
+#: rust/snapnab/src/dialogs.rs:662
 msgid "Deslocamento (px)"
 msgstr "Смещение (пкс)"
 
-#: rust/snapnab/src/dialogs.rs:660
+#: rust/snapnab/src/dialogs.rs:662
 msgid "Desfoque (px)"
 msgstr "Размытие (пкс)"
 
-#: rust/snapnab/src/dialogs.rs:661 rust/snapnab/src/dialogs.rs:678
+#: rust/snapnab/src/dialogs.rs:663 rust/snapnab/src/dialogs.rs:680
 msgid "Opacidade (%)"
 msgstr "Непрозрачность (%)"
 
-#: rust/snapnab/src/dialogs.rs:662
+#: rust/snapnab/src/dialogs.rs:664
 msgid "Campos: {date} {time} {computer} {user}"
 msgstr "Поля: {date} {time} {computer} {user}"
 
-#: rust/snapnab/src/dialogs.rs:665
+#: rust/snapnab/src/dialogs.rs:667
 msgid "Escala (%)"
 msgstr "Масштаб (%)"
 
-#: rust/snapnab/src/dialogs.rs:673
+#: rust/snapnab/src/dialogs.rs:675
 msgid "Remove as faixas de cor uniforme em volta da captura."
 msgstr "Удаляет полосы однородного цвета вокруг снимка."
 
-#: rust/snapnab/src/dialogs.rs:675
+#: rust/snapnab/src/dialogs.rs:677
 msgid "Matiz (graus)"
 msgstr "Оттенок (градусы)"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "90° à direita"
 msgstr "90° вправо"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "90° à esquerda"
 msgstr "90° влево"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "Espelhar na horizontal"
 msgstr "Отразить по горизонтали"
 
-#: rust/snapnab/src/dialogs.rs:676
+#: rust/snapnab/src/dialogs.rs:678
 msgid "Espelhar na vertical"
 msgstr "Отразить по вертикали"
 
-#: rust/snapnab/src/dialogs.rs:679
+#: rust/snapnab/src/dialogs.rs:681
 msgid "Repetir por toda a imagem"
 msgstr "Повторять по всему изображению"
 
-#: rust/snapnab/src/dialogs.rs:680
+#: rust/snapnab/src/dialogs.rs:682
 msgid "Resolução (DPI)"
 msgstr "Разрешение (DPI)"
 
-#: rust/snapnab/src/dialogs.rs:680
+#: rust/snapnab/src/dialogs.rs:682
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "Записывается в сохраняемые файлы (PNG, JPEG, TIFF, BMP)."
 
-#: rust/snapnab/src/dialogs.rs:686
+#: rust/snapnab/src/dialogs.rs:688
 msgid "Original"
 msgstr "Оригинал"
 
-#: rust/snapnab/src/dialogs.rs:664
+#: rust/snapnab/src/dialogs.rs:666
 msgid "Cor a substituir"
 msgstr "Заменяемый цвет"
 
@@ -6359,19 +6375,19 @@ msgstr "Открытое меню не найдено; выделите обла
 msgid "Snapnab — seleção"
 msgstr "Snapnab — выделение"
 
-#: rust/snapnab/src/engine.rs:615
+#: rust/snapnab/src/engine.rs:616
 msgid "vídeo"
 msgstr "видео"
 
-#: rust/snapnab/src/engine.rs:620
+#: rust/snapnab/src/engine.rs:621
 msgid "A biblioteca está vazia"
 msgstr "Библиотека пуста"
 
-#: rust/snapnab/src/engine.rs:773
+#: rust/snapnab/src/engine.rs:774
 msgid "Cursor do mouse"
 msgstr "Указатель мыши"
 
-#: rust/snapnab/src/engine.rs:805
+#: rust/snapnab/src/engine.rs:806
 msgid ""
 "Não foi possível reconhecer o texto.\n"
 "\n"
@@ -6379,35 +6395,35 @@ msgstr ""
 "Не удалось распознать текст.\n"
 "\n"
 
-#: rust/snapnab/src/engine.rs:806 rust/snapnab/src/engine.rs:810
+#: rust/snapnab/src/engine.rs:807 rust/snapnab/src/engine.rs:811
 msgid "Snapnab — Capturar texto"
 msgstr "Snapnab — Захват текста"
 
-#: rust/snapnab/src/engine.rs:810
+#: rust/snapnab/src/engine.rs:811
 msgid "Nenhum texto encontrado na captura."
 msgstr "В снимке не найден текст."
 
-#: rust/snapnab/src/engine.rs:814
+#: rust/snapnab/src/engine.rs:815
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "Захват текста — скопировано в буфер обмена"
 
-#: rust/snapnab/src/engine.rs:845
+#: rust/snapnab/src/engine.rs:846
 msgid "copiada para a área de transferência"
 msgstr "скопирован в буфер обмена"
 
-#: rust/snapnab/src/engine.rs:853 rust/snapnab/src/engine.rs:880
+#: rust/snapnab/src/engine.rs:854 rust/snapnab/src/engine.rs:881
 msgid "salva em "
 msgstr "сохранён в "
 
-#: rust/snapnab/src/engine.rs:913
+#: rust/snapnab/src/engine.rs:914
 msgid "Captura adicionada à biblioteca"
 msgstr "Снимок добавлен в библиотеку"
 
-#: rust/snapnab/src/engine.rs:1103
+#: rust/snapnab/src/engine.rs:1104
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr "Изображения и документы|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Документ Snapnab (*.snap)|*.snap|Видео MP4 (*.mp4)|*.mp4|Все файлы (*.*)|*.*|"
 
-#: rust/snapnab/src/hotkeys.rs:57 rust/snapnab/src/hotkeys.rs:261 rust/snapnab/tests/window.rs:32
+#: rust/snapnab/src/hotkeys.rs:57 rust/snapnab/src/hotkeys.rs:261 rust/snapnab/tests/window.rs:34
 msgid "Print Screen"
 msgstr "Print Screen"
 
@@ -6503,7 +6519,7 @@ msgstr "Интервал (секунды)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "Длительность (минуты, 0 = до остановки)"
 
-#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:698 rust/snapnab/src/window.rs:703
+#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:794 rust/snapnab/src/window.rs:799
 msgid "Capturar o cursor"
 msgstr "Снимать курсор"
 
@@ -6575,7 +6591,7 @@ msgstr "Сочетание клавиш шаблона \"%s\" уже занят�
 msgid "Abrir a janela de captura"
 msgstr "Открыть окно снимка"
 
-#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:200
+#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:205
 msgid "Abrir o Editor"
 msgstr "Открыть Редактор"
 
@@ -6583,11 +6599,11 @@ msgstr "Открыть Редактор"
 msgid "Sair"
 msgstr "Выход"
 
-#: rust/snapnab/src/main.rs:540 rust/snapnab/src/pins.rs:647 rust/snapnab/src/quick.rs:298 rust/snapnab/src/window.rs:41
+#: rust/snapnab/src/main.rs:540 rust/snapnab/src/pins.rs:613 rust/snapnab/src/quick.rs:298 rust/snapnab/src/window.rs:44
 msgid "Ler código QR"
 msgstr "Считать QR-код"
 
-#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:239
+#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:244
 msgid "Mostrar o One Click"
 msgstr "Показать One Click"
 
@@ -6600,7 +6616,7 @@ msgstr "Закреплённые изображения (%zu)"
 msgid "Imagens fixadas"
 msgstr "Закреплённые изображения"
 
-#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:235
+#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:240
 msgid "Gravar só o áudio"
 msgstr "Записать только звук"
 
@@ -6609,7 +6625,7 @@ msgstr "Записать только звук"
 msgid "Parar a captura por intervalo (%d)"
 msgstr "Остановить съёмку по интервалу (%d)"
 
-#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:233
+#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:238
 msgid "Captura por intervalo…"
 msgstr "Съёмка по интервалу…"
 
@@ -6617,7 +6633,7 @@ msgstr "Съёмка по интервалу…"
 msgid "Abrir o Editor depois da captura"
 msgstr "Открывать Редактор после снимка"
 
-#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:213
+#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:218
 msgid "Opções…"
 msgstr "Параметры…"
 
@@ -6646,11 +6662,11 @@ msgstr "Монитора %d нет (всего мониторов: %zu)."
 msgid "Não foi possível fixar: "
 msgstr "Не удалось закрепить: "
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:230
+#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:235
 msgid "Fixar um arquivo…"
 msgstr "Закрепить файл…"
 
-#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:228
+#: rust/snapnab/src/main.rs:863 rust/snapnab/src/window.rs:233
 msgid "Capturar e fixar"
 msgstr "Снять и закрепить"
 
@@ -6662,7 +6678,7 @@ msgstr "Показать все"
 msgid "Ocultar todas"
 msgstr "Скрыть все"
 
-#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:231
+#: rust/snapnab/src/main.rs:864 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:236
 msgid "Fechar todas"
 msgstr "Закрыть все"
 
@@ -6690,7 +6706,7 @@ msgstr ""
 "Процесс снимков (Snapnab.exe) + Редактор (SnapnabEditor.exe), связанные через общую\n"
 "память (канал IPC) и WM_COPYDATA. Снимки хранятся в библиотеке:\n"
 
-#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:246
+#: rust/snapnab/src/main.rs:957 rust/snapnab/src/window.rs:251
 msgid "Sobre o Snapnab"
 msgstr "О Snapnab"
 
@@ -6728,99 +6744,99 @@ msgstr "Закреплено"
 msgid "Salvar a imagem fixada"
 msgstr "Сохранить закреплённое изображение"
 
-#: rust/snapnab/src/pins.rs:438 rust/snapnab/src/pins.rs:1012 rust/snapnab/src/pins.rs:1240
+#: rust/snapnab/src/pins.rs:438 rust/snapnab/src/pins.rs:978 rust/snapnab/src/pins.rs:1206
 msgid "Imagem fixada"
 msgstr "Закреплённое изображение"
 
-#: rust/snapnab/src/pins.rs:644
+#: rust/snapnab/src/pins.rs:610
 msgid "Copiar\tCtrl+C"
 msgstr "Копировать\tCtrl+C"
 
-#: rust/snapnab/src/pins.rs:644
+#: rust/snapnab/src/pins.rs:610
 msgid "Salvar como…\tCtrl+S"
 msgstr "Сохранить как…\tCtrl+S"
 
-#: rust/snapnab/src/pins.rs:644
+#: rust/snapnab/src/pins.rs:610
 msgid "Abrir no Editor"
 msgstr "Открыть в редакторе"
 
-#: rust/snapnab/src/pins.rs:645
+#: rust/snapnab/src/pins.rs:611
 msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
 msgstr "Пометки (перо, маркер, стрелка, прямоугольник, текст)"
 
-#: rust/snapnab/src/pins.rs:645
+#: rust/snapnab/src/pins.rs:611
 msgid "Desfazer a anotação\tCtrl+Z"
 msgstr "Отменить пометку\tCtrl+Z"
 
-#: rust/snapnab/src/pins.rs:646
+#: rust/snapnab/src/pins.rs:612
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: rust/snapnab/src/pins.rs:646
+#: rust/snapnab/src/pins.rs:612
 msgid "Travar a posição"
 msgstr "Закрепить положение"
 
-#: rust/snapnab/src/pins.rs:647
+#: rust/snapnab/src/pins.rs:613
 msgid "Atravessar cliques (desligue pelo menu da bandeja)"
 msgstr "Пропускать щелчки (отключается в меню трея)"
 
-#: rust/snapnab/src/pins.rs:647
+#: rust/snapnab/src/pins.rs:613
 msgid "Sempre visível"
 msgstr "Поверх всех окон"
 
-#: rust/snapnab/src/pins.rs:648
+#: rust/snapnab/src/pins.rs:614
 msgid "Copiar a cor neste ponto\tAlt+clique"
 msgstr "Копировать цвет в этой точке\tAlt+щелчок"
 
-#: rust/snapnab/src/pins.rs:648
+#: rust/snapnab/src/pins.rs:614
 msgid "Arrastar para outro programa: Ctrl+arrastar"
 msgstr "Перетащить в другую программу: Ctrl+перетаскивание"
 
-#: rust/snapnab/src/pins.rs:648
+#: rust/snapnab/src/pins.rs:614
 msgid "Fechar\tEsc"
 msgstr "Закрыть\tEsc"
 
-#: rust/snapnab/src/pins.rs:649
+#: rust/snapnab/src/pins.rs:615
 msgid "Fechar todas as imagens fixadas"
 msgstr "Закрыть все закреплённые изображения"
 
-#: rust/snapnab/src/pins.rs:727
+#: rust/snapnab/src/pins.rs:693
 msgid "Texto na imagem fixada"
 msgstr "Текст на закреплённом изображении"
 
-#: rust/snapnab/src/pins.rs:1178
+#: rust/snapnab/src/pins.rs:1144
 msgid "A área de transferência não tem imagem nem texto para fixar."
 msgstr "В буфере обмена нет изображения или текста для закрепления."
 
-#: rust/snapnab/src/pins.rs:1246
+#: rust/snapnab/src/pins.rs:1212
 msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Vermelho"
 msgstr "Красный"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Amarelo"
 msgstr "Жёлтый"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Verde"
 msgstr "Зелёный"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Azul"
 msgstr "Синий"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Roxo"
 msgstr "Фиолетовый"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Preto"
 msgstr "Чёрный"
 
-#: rust/snapnab/src/pins.rs:606
+#: rust/snapnab/src/pins.rs:572
 msgid "Branco"
 msgstr "Белый"
 
@@ -6828,7 +6844,7 @@ msgstr "Белый"
 msgid "Copiado para a área de transferência."
 msgstr "Скопировано в буфер обмена."
 
-#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:253
+#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:259
 msgid "Vídeo"
 msgstr "Видео"
 
@@ -6931,181 +6947,181 @@ msgstr ""
 msgid "Upload concluído — link copiado"
 msgstr "Загрузка завершена — ссылка скопирована"
 
-#: rust/snapnab/src/window.rs:41 rust/snapnab/src/window.rs:354 rust/snapnab/src/window.rs:375
+#: rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:393 rust/snapnab/src/window.rs:403
 msgid "Nenhum"
 msgstr "Нет"
 
-#: rust/snapnab/src/window.rs:41
+#: rust/snapnab/src/window.rs:44
 msgid "Programa externo"
 msgstr "Внешняя программа"
 
-#: rust/snapnab/src/window.rs:41
+#: rust/snapnab/src/window.rs:44
 msgid "Texto (OCR)"
 msgstr "Текст (OCR)"
 
-#: rust/snapnab/src/window.rs:42
+#: rust/snapnab/src/window.rs:45
 msgid "Upload (copiar o link)"
 msgstr "Загрузить (скопировать ссылку)"
 
-#: rust/snapnab/src/window.rs:238
+#: rust/snapnab/src/window.rs:243
 msgid "Exibir"
 msgstr "Вид"
 
-#: rust/snapnab/src/window.rs:275
-msgid "Configurações"
-msgstr "Настройки"
-
-#: rust/snapnab/src/window.rs:290
+#: rust/snapnab/src/window.rs:324
 msgid "Seleção:"
 msgstr "Выделение:"
 
-#: rust/snapnab/src/window.rs:315
+#: rust/snapnab/src/window.rs:342 rust/snapnab/src/window.rs:657
+msgid "Configurações"
+msgstr "Настройки"
+
+#: rust/snapnab/src/window.rs:347
 msgid "Selecionar a região na captura"
 msgstr "Выделять область во время снимка"
 
-#: rust/snapnab/src/window.rs:320
+#: rust/snapnab/src/window.rs:349
 msgid "Região fixa…"
 msgstr "Фиксированная область…"
 
-#: rust/snapnab/src/window.rs:330
+#: rust/snapnab/src/window.rs:358
 msgid "Cada janela como um objeto separado"
 msgstr "Каждое окно отдельным объектом"
 
-#: rust/snapnab/src/window.rs:335
+#: rust/snapnab/src/window.rs:361
 msgid "Guardar os links da página (clicáveis, também no PDF)"
 msgstr "Сохранять ссылки страницы (кликабельные, и в PDF)"
 
-#: rust/snapnab/src/window.rs:348
+#: rust/snapnab/src/window.rs:387
 msgid "Efeitos:"
 msgstr "Эффекты:"
 
-#: rust/snapnab/src/window.rs:393
+#: rust/snapnab/src/window.rs:408
 msgid "Adicionar outro efeito"
 msgstr "Добавить ещё эффект"
 
-#: rust/snapnab/src/window.rs:397
+#: rust/snapnab/src/window.rs:409
 msgid "Remover este efeito"
 msgstr "Удалить этот эффект"
 
-#: rust/snapnab/src/window.rs:421
+#: rust/snapnab/src/window.rs:450
 msgid "Compartilhar:"
 msgstr "Отправить:"
 
-#: rust/snapnab/src/window.rs:451
+#: rust/snapnab/src/window.rs:473
 msgid "Qualidade:"
 msgstr "Качество:"
 
-#: rust/snapnab/src/window.rs:453
+#: rust/snapnab/src/window.rs:474
 msgid "Muito baixa"
 msgstr "Очень низкое"
 
-#: rust/snapnab/src/window.rs:480
+#: rust/snapnab/src/window.rs:505
 msgid "Webcam:"
 msgstr "Веб-камера:"
 
-#: rust/snapnab/src/window.rs:481
+#: rust/snapnab/src/window.rs:506
 msgid "Ligada"
 msgstr "Вкл."
 
-#: rust/snapnab/src/window.rs:481 rust/snapnab/src/window.rs:488
+#: rust/snapnab/src/window.rs:506 rust/snapnab/src/window.rs:517
 msgid "Desligada"
 msgstr "Выкл."
 
-#: rust/snapnab/src/window.rs:495
+#: rust/snapnab/src/window.rs:519
 msgid "Nenhuma webcam encontrada"
 msgstr "Веб-камера не найдена"
 
-#: rust/snapnab/src/window.rs:518
+#: rust/snapnab/src/window.rs:533
 msgid "Remover o fundo (chroma key)…"
 msgstr "Удалить фон (хромакей)…"
 
-#: rust/snapnab/src/window.rs:534
+#: rust/snapnab/src/window.rs:568
 #, c-format
 msgid "%d s"
 msgstr "%d с"
 
-#: rust/snapnab/src/window.rs:539
+#: rust/snapnab/src/window.rs:572
 msgid "Atraso"
 msgstr "Задержка"
 
-#: rust/snapnab/src/window.rs:546
+#: rust/snapnab/src/window.rs:580
 msgid "1 segundo"
 msgstr "1 секунда"
 
-#: rust/snapnab/src/window.rs:547
+#: rust/snapnab/src/window.rs:581
 #, c-format
 msgid "%d segundos"
 msgstr "%d с"
 
-#: rust/snapnab/src/window.rs:570
+#: rust/snapnab/src/window.rs:620
 msgid "Gravar vídeo  ("
 msgstr "Запись видео  ("
 
-#: rust/snapnab/src/window.rs:570
+#: rust/snapnab/src/window.rs:620
 msgid "Capturar imagem  ("
 msgstr "Снимок изображения  ("
 
-#: rust/snapnab/src/window.rs:580
+#: rust/snapnab/src/window.rs:630
 msgid "Adicionar atalho"
 msgstr "Добавить сочетание"
 
-#: rust/snapnab/src/window.rs:664
-msgid "Abrir Editor"
-msgstr "Открыть Редактор"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Cortar bordas"
-msgstr "Обрезать края"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Ajuste de cor"
-msgstr "Коррекция цвета"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Girar imagem"
-msgstr "Повернуть изображение"
-
-#: rust/snapnab/src/window.rs:85
-msgid "Resolução da imagem"
-msgstr "Разрешение изображения"
-
-#: rust/snapnab/src/window.rs:86
-msgid "Embelezar (fundo, margem e sombra)"
-msgstr "Украсить (фон, поля и тень)"
-
-#: rust/snapnab/src/window.rs:236
-msgid "Abrir a pasta dos áudios"
-msgstr "Открыть папку со звукозаписями"
-
-#: rust/snapnab/src/window.rs:621
+#: rust/snapnab/src/window.rs:702
 msgid "Capturar com este preset"
 msgstr "Снять с этим шаблоном"
 
-#: rust/snapnab/src/window.rs:623
+#: rust/snapnab/src/window.rs:704
 msgid "Renomear…"
 msgstr "Переименовать…"
 
-#: rust/snapnab/src/window.rs:624
+#: rust/snapnab/src/window.rs:705
 msgid "Atalho…"
 msgstr "Сочетание клавиш…"
 
-#: rust/snapnab/src/window.rs:659 rust/snapnab/tests/window.rs:148
+#: rust/snapnab/src/window.rs:746 rust/snapnab/tests/window.rs:150
 msgid "Novo preset…"
 msgstr "Новый шаблон…"
 
-#: rust/snapnab/src/window.rs:696
+#: rust/snapnab/src/window.rs:758
+msgid "Abrir Editor"
+msgstr "Открыть Редактор"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Cortar bordas"
+msgstr "Обрезать края"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Ajuste de cor"
+msgstr "Коррекция цвета"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Girar imagem"
+msgstr "Повернуть изображение"
+
+#: rust/snapnab/src/window.rs:88
+msgid "Resolução da imagem"
+msgstr "Разрешение изображения"
+
+#: rust/snapnab/src/window.rs:89
+msgid "Embelezar (fundo, margem e sombra)"
+msgstr "Украсить (фон, поля и тень)"
+
+#: rust/snapnab/src/window.rs:241
+msgid "Abrir a pasta dos áudios"
+msgstr "Открыть папку со звукозаписями"
+
+#: rust/snapnab/src/window.rs:792
 msgid "Visualizar no Editor"
 msgstr "Просмотр в Редакторе"
 
-#: rust/snapnab/src/window.rs:699
+#: rust/snapnab/src/window.rs:795
 msgid "Gravar microfone"
 msgstr "Записывать микрофон"
 
-#: rust/snapnab/src/window.rs:700
+#: rust/snapnab/src/window.rs:796
 msgid "Gravar áudio do sistema"
 msgstr "Записывать системный звук"
 
-#: rust/snapnab/src/window.rs:702
+#: rust/snapnab/src/window.rs:798
 msgid "Copiar para a área de transferência"
 msgstr "Копировать в буфер обмена"
 
@@ -7401,182 +7417,3 @@ msgstr "Завершите вход в браузере"
 msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "Разрешите доступ Snapnab на открывшейся странице. Это окно закроется само, когда браузер вернёт ответ."
 
-#~ msgid "Abrir o &Editor"
-#~ msgstr "Открыть &Редактор"
-
-#~ msgid "Abrir a pasta de &logs"
-#~ msgstr "Открыть папку &журналов"
-
-#~ msgid "&Importar presets…"
-#~ msgstr "&Импорт шаблонов…"
-
-#~ msgid "E&xportar presets…"
-#~ msgstr "&Экспорт шаблонов…"
-
-#~ msgid "Exportar &todas as configurações…"
-#~ msgstr "Экспорт &всех настроек…"
-
-#~ msgid "Importar t&odas as configurações…"
-#~ msgstr "Импорт в&сех настроек…"
-
-#~ msgid "Abrir a pasta de &backups"
-#~ msgstr "Открыть папку &резервных копий"
-
-#~ msgid "&Limpar a biblioteca agora"
-#~ msgstr "&Очистить библиотеку сейчас"
-
-#~ msgid "&Opções…"
-#~ msgstr "&Параметры…"
-
-#~ msgid "&Sair do Snapnab"
-#~ msgstr "&Выйти из Snapnab"
-
-#~ msgid "Capturar &imagem"
-#~ msgstr "Снимок &изображения"
-
-#~ msgid "Gravar &vídeo"
-#~ msgstr "Запись &видео"
-
-#~ msgid "&Repetir a última captura"
-#~ msgstr "&Повторить последний снимок"
-
-#~ msgid "Da área de &transferência"
-#~ msgstr "Из &буфера обмена"
-
-#~ msgid "De um &arquivo gráfico…"
-#~ msgstr "Из графического &файла…"
-
-#~ msgid "&Conta-gotas de tela"
-#~ msgstr "Экранная &пипетка"
-
-#~ msgid "Ler código &QR"
-#~ msgstr "Считать &QR-код"
-
-#~ msgid "&Fixar na tela"
-#~ msgstr "&Закрепить на экране"
-
-#~ msgid "Captura por &intervalo…"
-#~ msgstr "Съёмка по &интервалу…"
-
-#~ msgid "F&oco de tela (apresentações)"
-#~ msgstr "Ф&окус экрана (презентации)"
-
-#~ msgid "Gravar só o á&udio"
-#~ msgstr "Записать только &звук"
-
-#~ msgid "Mostrar o &One Click"
-#~ msgstr "Показать &One Click"
-
-#~ msgid "Lista de &presets"
-#~ msgstr "Список &шаблонов"
-
-#~ msgid "Como usar os &presets"
-#~ msgstr "Как пользоваться &шаблонами"
-
-#~ msgid "&Sobre o Snapnab"
-#~ msgstr "&О Snapnab"
-
-#~ msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Documento Snapnab (*.snap)|*.snap|"
-#~ msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Документ Snapnab (*.snap)|*.snap|"
-
-#~ msgid "clique para mudar"
-#~ msgstr "щёлкните, чтобы изменить"
-
-#~ msgid "Conta-gotas na tela…"
-#~ msgstr "Пипетка на экране…"
-
-#~ msgid "Objeto oculto: clique no olho para mostrá-lo."
-#~ msgstr "Скрытый объект: щёлкните по глазу, чтобы показать его."
-
-#~ msgid "Mais"
-#~ msgstr "Ещё"
-
-#~ msgid "  •  arraste para mudar de lugar"
-#~ msgstr "  •  перетащите, чтобы переместить"
-
-#~ msgid "Mais ferramentas e personalização da barra"
-#~ msgstr "Другие инструменты и настройка панели"
-
-#~ msgid "Arraste suas ferramentas, efeitos e comandos favoritos para a barra…"
-#~ msgstr "Перетащите любимые инструменты, эффекты и команды на панель…"
-
-#~ msgid "Espaçador"
-#~ msgstr "Разделитель"
-
-#~ msgid "Número de ferramentas na barra automática:"
-#~ msgstr "Число инструментов на автоматической панели:"
-
-#~ msgid "Restaurar padrões"
-#~ msgstr "Восстановить по умолчанию"
-
-#~ msgid "Concluído"
-#~ msgstr "Готово"
-
-#~ msgid "Arraste um item desta janela para a barra de ferramentas para acrescentá-lo; a barra mostra onde ele vai entrar.\n\nNa barra, arraste um item para mudar de lugar, ou para fora da barra para removê-lo.\n“Restaurar padrões” volta à barra automática: Mover, Seleção, Texto, Marcador, Forma, as usadas por último e Lupa. O número de ferramentas dela é escolhido embaixo (de 6 a 16)."
-#~ msgstr "Перетащите элемент из этого окна на панель инструментов, чтобы добавить его; панель покажет, куда он встанет.\n\nНа панели перетащите элемент, чтобы переместить его, или за пределы панели, чтобы убрать.\n«Восстановить по умолчанию» возвращает автоматическую панель: Перемещение, Выделение, Текст, Маркер, Фигура, недавно использованные и Лупа. Число её инструментов выбирается внизу (от 6 до 16)."
-
-#~ msgid "Adicionar"
-#~ msgstr "Добавить"
-
-#~ msgid "Excluir este efeito rápido"
-#~ msgstr "Удалить этот быстрый эффект"
-
-#~ msgid "Pesquisar por nome"
-#~ msgstr "Поиск по имени"
-
-#~ msgid "Aparece na bandeja e na biblioteca. Vazio mostra a data."
-#~ msgstr "Показывается на панели и в библиотеке. Пусто — дата."
-
-#~ msgid "Biblioteca  •  %zu capturas"
-#~ msgstr "Библиотека  •  снимков: %zu"
-
-#~ msgid "  •  %d selecionadas"
-#~ msgstr "  •  выбрано: %d"
-
-#~ msgid "Exportar (%d)…"
-#~ msgstr "Экспорт (%d)…"
-
-#~ msgid "Excluir (%d)"
-#~ msgstr "Удалить (%d)"
-
-#~ msgid "Limpar seleção"
-#~ msgstr "Снять выделение"
-
-#~ msgid "Voltar ao editor"
-#~ msgstr "Назад в редактор"
-
-#~ msgid "Nenhuma captura recente. Capture com o Snapnab (Print Screen) ou solte arquivos aqui."
-#~ msgstr "Недавних снимков нет. Сделайте снимок в Snapnab (Print Screen) или перетащите файлы сюда."
-
-#~ msgid "Nenhuma captura com esse nome."
-#~ msgstr "Нет снимков с таким именем."
-
-#~ msgid "A biblioteca está vazia."
-#~ msgstr "Библиотека пуста."
-
-#~ msgid "Vídeo  •  %lld:%02lld  •  %d × %d"
-#~ msgstr "Видео  •  %lld:%02lld  •  %d × %d"
-
-#~ msgid "Ponta"
-#~ msgstr "Окончание"
-
-#~ msgid "Tema do Snapnab (*.snaptheme)|*.snaptheme|"
-#~ msgstr "Тема Snapnab (*.snaptheme)|*.snaptheme|"
-
-#~ msgid "Tema do Snapnab (*.snaptheme)|*.snaptheme|Todos os arquivos|*.*|"
-#~ msgstr "Тема Snapnab (*.snaptheme)|*.snaptheme|Все файлы|*.*|"
-
-#~ msgid "Zoom %d%%  ▾"
-#~ msgstr "Масштаб %d%%  ▾"
-
-#~ msgid "%d × %d px  ▾"
-#~ msgstr "%d × %d пкс  ▾"
-
-#~ msgid "Barra de ferramentas personalizada. Mais › Voltar ao padrão desfaz."
-#~ msgstr "Пользовательская панель инструментов. Ещё › Вернуть по умолчанию отменяет это."
-
-#~ msgid "Editar"
-#~ msgstr "Правка"
-
-#~ msgid "Ferramentas"
-#~ msgstr "Инструменты"
