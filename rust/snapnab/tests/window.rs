@@ -52,12 +52,18 @@ fn one_gpu_at_a_time() -> std::sync::MutexGuard<'static, ()> {
     GPU.lock().unwrap_or_else(|e| e.into_inner())
 }
 
+/// The title bar's window buttons are 1 px antialiased strokes (the ✕ diagonal): the runner's software GPU draws a
+/// dozen of their pixels differently from a graphics card. A layout change moves far more pixels than this.
+fn loose() -> egui_kittest::SnapshotOptions {
+    egui_kittest::SnapshotOptions::new().max_failed_pixels(40)
+}
+
 #[test]
 fn looks_like_the_snapshot() {
     let _gpu = one_gpu_at_a_time();
     let mut h = harness();
     h.run();
-    h.snapshot("capture_window");
+    h.snapshot_options("capture_window", &loose());
 }
 
 #[test]
@@ -65,7 +71,7 @@ fn the_preset_list_looks_like_the_snapshot() {
     let _gpu = one_gpu_at_a_time();
     let mut h = harness_with(View { presets_open: true, ..Default::default() });
     h.run();
-    h.snapshot("capture_window_presets");
+    h.snapshot_options("capture_window_presets", &loose());
 }
 
 #[test]
