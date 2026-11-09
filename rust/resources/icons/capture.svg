@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="96 86 1062 1062" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3242"/><stop offset="0.35" stop-color="#151a26"/><stop offset="1" stop-color="#0b0d16"/>
+    </linearGradient>
+    <radialGradient id="gGreen" cx="470" cy="400" r="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3dff7a" stop-opacity="1"/><stop offset="1" stop-color="#3dff7a" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gCyan" cx="640" cy="380" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14d8f0" stop-opacity="1"/><stop offset="1" stop-color="#14d8f0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gMag" cx="440" cy="800" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f03ca0" stop-opacity="1"/><stop offset="1" stop-color="#f03ca0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gOr" cx="820" cy="760" r="290" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff8a1e" stop-opacity="1"/><stop offset="1" stop-color="#ff8a1e" stop-opacity="0"/></radialGradient>
+    <linearGradient id="cardBase" x1="350" y1="393" x2="905" y2="808" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1f5a5a"/><stop offset="0.5" stop-color="#26405e"/><stop offset="1" stop-color="#5e4038"/></linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.04"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.08"/></linearGradient>
+    <linearGradient id="arc" x1="432" y1="0" x2="820" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3ff0e0"/><stop offset="0.5" stop-color="#3aa8ff"/><stop offset="1" stop-color="#e060f0"/></linearGradient>
+    <linearGradient id="bar" x1="565" y1="0" x2="690" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb030"/><stop offset="1" stop-color="#ffc02a"/></linearGradient>
+    <linearGradient id="nib" x1="0" y1="512" x2="0" y2="728" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e4e6ee"/></linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="80"/></filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+    <clipPath id="tile"><rect x="96" y="86" width="1062" height="1062" rx="230"/></clipPath>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="32"/></filter>
+    <clipPath id="cardBig"><rect x="330" y="373" width="595" height="455" rx="60"/></clipPath>
+    <clipPath id="card"><rect x="350" y="393" width="555" height="415" rx="50"/></clipPath>
+    <g id="colors">
+      <rect x="150" y="150" width="950" height="950" fill="url(#gCyan)"/>
+      <rect x="150" y="150" width="950" height="950" fill="url(#gGreen)"/>
+      <rect x="150" y="150" width="950" height="950" fill="url(#gMag)"/>
+      <rect x="150" y="150" width="950" height="950" fill="url(#gOr)"/>
+    </g>
+  </defs>
+  <rect x="96" y="86" width="1062" height="1062" rx="230" fill="url(#bg)"/>
+  <!-- glow -->
+  <g clip-path="url(#tile)" filter="url(#blur)" opacity="0.45">
+    <use href="#colors"/>
+  </g>
+  <g clip-path="url(#tile)" filter="url(#glow)">
+    <g clip-path="url(#cardBig)"><use href="#colors"/></g>
+  </g>
+  <!-- glass card -->
+  <g clip-path="url(#card)">
+    <rect x="350" y="393" width="555" height="415" fill="url(#cardBase)"/>
+    <use href="#colors" opacity="0.9"/>
+    <rect x="350" y="393" width="555" height="415" fill="url(#gloss)"/>
+  </g>
+  <rect x="352" y="395" width="551" height="411" rx="48" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="4"/>
+  <!-- corner brackets -->
+  <g fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <g filter="url(#soft)" stroke-opacity="0.55">
+      <path d="M305 460 V385 A45 45 0 0 1 350 340 H425"/>
+      <path d="M829 340 H905 A45 45 0 0 1 950 385 V460"/>
+      <path d="M305 740 V812 A45 45 0 0 0 350 857 H425"/>
+      <path d="M829 857 H905 A45 45 0 0 0 950 812 V740"/>
+    </g>
+    <path d="M305 460 V385 A45 45 0 0 1 350 340 H425"/>
+    <path d="M829 340 H905 A45 45 0 0 1 950 385 V460"/>
+    <path d="M305 740 V812 A45 45 0 0 0 350 857 H425"/>
+    <path d="M829 857 H905 A45 45 0 0 0 950 812 V740"/>
+  </g>
+</svg>

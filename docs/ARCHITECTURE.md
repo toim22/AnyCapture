@@ -62,7 +62,7 @@ linked statically (`rust/.cargo/config.toml`).
 
 ## Capture window
 
-Compact and fixed-size, with a custom title bar (icon and the File, Capture, View and Help menus on the same strip,
+Compact and fixed-size, with a custom title bar (the program's mark and the File, Capture, View and Help menus on the same strip,
 also opened with Alt+letter and F10). Image/Video tabs are vertical; Selection, Effects and Share fields (image) or
 Selection, Quality and Webcam (video); option switches and Delay; a round red capture button (the hotkey is in its tooltip).
 Bottom bar: ⚙ Presets (opens the list), + (new preset from the current settings, new preset, help) and Open Editor.
@@ -233,8 +233,9 @@ Where the Rust version could not do a thing the way the C++ did, it was decided 
   AutomationId of each widget (and as WM_COMMAND ids for the tabs, the presets button, the capture button and every
   menu command), so automation and the e2e suite find them; `tests/e2e/tests/test_05_capture_window.py` clicks them
   with the real mouse through UI Automation (`anycapture_e2e/uia.py`) instead of sending `CB_SETCURSEL` / `BN_CLICKED`.
-- Both windows draw their own title bar, as the C++ CaptionBar did: icon, the menus, the title and the window buttons
-  on one strip (`snapui/src/caption.rs`). `WM_NCCALCSIZE` gives the whole window to the client area except the resize
+- Both windows draw their own title bar, as the C++ CaptionBar did: the program's mark, the menus, the title and the window buttons
+  on one strip (`snapui/src/caption.rs`). The mark is the logo's outline in the text color (the frame corners, with
+  the pen nib in the Editor), not the colored icon, which is left to the taskbar, Start, the tray and the installer. `WM_NCCALCSIZE` gives the whole window to the client area except the resize
   borders, `WM_NCHITTEST` answers caption, client or border from the rectangles the egui strip drew, a right click
   opens the system menu, and Alt+letter, F10, ← and → and hovering another menu name while one is open switch menus
   the way a menu bar does (a `WH_MSGFILTER` hook while `TrackPopupMenuEx` runs). The menus themselves stay native

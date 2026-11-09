@@ -6,6 +6,8 @@ use std::sync::Mutex;
 use std::sync::atomic::{AtomicIsize, Ordering};
 
 use windows::Win32::Foundation::{HWND, POINT};
+use windows::Win32::System::LibraryLoader::GetModuleHandleW;
+use windows::core::PCWSTR;
 use windows::Win32::Graphics::Gdi::{
     BI_RGB, BITMAPINFO, BITMAPINFOHEADER, CreateBitmap, CreateDIBSection, DIB_RGB_COLORS, DeleteObject, HBITMAP,
 };
@@ -14,8 +16,8 @@ use windows::Win32::UI::Shell::{
     NOTIFYICON_VERSION_4, NOTIFYICONDATAW, Shell_NotifyIconW,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    CreateIconIndirect, DestroyIcon, GetCursorPos, GetSystemMetrics, HICON, ICONINFO, PostMessageW, SM_CXICON, SetMenuDefaultItem, WM_APP,
-    WM_NULL,
+    CreateIconIndirect, DestroyIcon, GetCursorPos, GetSystemMetrics, HICON, ICONINFO, IMAGE_ICON, LR_DEFAULTCOLOR, LoadImageW,
+    PostMessageW, SM_CXICON, SM_CXSMICON, SetMenuDefaultItem, WM_APP, WM_NULL,
 };
 
 use snapcore::image::Image;
@@ -32,41 +34,15 @@ pub const NIN_BALLOONUSERCLICK: u32 = 0x405;
 /// The capture the last notification shows (its library file), for a click on it (#7); the icon shown in it.
 static BALLOON: Mutex<(String, isize)> = Mutex::new((String::new(), 0));
 
-/// The app icon drawn at run time (Icons.cpp MakeAppIcon): a blue rounded square with a white capture frame.
+/// The program's icon (resource 1 of AnyCapture.exe) at `size` pixels: the .ico has hand-tuned frames for the small
+/// sizes of the notification area.
 pub fn app_icon(size: i32) -> HICON {
-    let s = size as f32;
-    let mut px = vec![0u32; (size * size) as usize];
-    const SS: i32 = 4; // 4×4 samples per pixel
-    for y in 0..size {
-        for x in 0..size {
-            let (mut cover, mut white) = (0.0f32, 0.0f32);
-            for sy in 0..SS {
-                for sx in 0..SS {
-                    let fx = x as f32 + (sx as f32 + 0.5) / SS as f32;
-                    let fy = y as f32 + (sy as f32 + 0.5) / SS as f32;
-                    if !in_round_rect(fx, fy, s, s * 0.11) {
-                        continue;
-                    }
-                    cover += 1.0;
-                    if in_glyph(fx / s, fy / s) {
-                        white += 1.0;
-                    }
-                }
-            }
-            let n = (SS * SS) as f32;
-            if cover == 0.0 {
-                continue;
-            }
-            let t = (x + y) as f32 / (2.0 * s);
-            let mix = |a: f32, b: f32| a + (b - a) * t;
-            let (r, g, b) = (mix(30.0, 20.0), mix(140.0, 70.0), mix(255.0, 200.0));
-            let w = white / cover;
-            let ch = |c: f32| (c + (255.0 - c) * w).round() as u32;
-            let a = (cover / n * 255.0).round() as u32;
-            px[(y * size + x) as usize] = a << 24 | ch(r) << 16 | ch(g) << 8 | ch(b);
-        }
+    unsafe {
+        let Ok(module) = GetModuleHandleW(None) else { return HICON::default() };
+        LoadImageW(Some(module.into()), PCWSTR(1 as *const u16), IMAGE_ICON, size, size, LR_DEFAULTCOLOR)
+            .map(|h| HICON(h.0))
+            .unwrap_or_default()
     }
-    icon_from_pixels(&px, size)
 }
 
 /// An icon of `size`×`size` ARGB pixels (straight alpha).
@@ -96,22 +72,12 @@ fn icon_from_pixels(px: &[u32], size: i32) -> HICON {
     }
 }
 
-fn in_round_rect(x: f32, y: f32, s: f32, r: f32) -> bool {
-    let cx = x.clamp(r, s - r);
-    let cy = y.clamp(r, s - r);
-    (x - cx).powi(2) + (y - cy).powi(2) <= r * r
-}
-
-/// Corner brackets and a lens, in the unit square.
-fn in_glyph(u: f32, v: f32) -> bool {
-    let (a, b, t, l) = (0.2, 0.8, 0.07, 0.2);
-    let bracket = |p: f32, q: f32| {
-        let near_p = (p >= a && p <= a + t) || (p >= b - t && p <= b);
-        let in_q = (q >= a && q <= a + l) || (q >= b - l && q <= b);
-        near_p && in_q
-    };
-    let d = ((u - 0.5).powi(2) + (v - 0.5).powi(2)).sqrt();
-    bracket(u, v) || bracket(v, u) || (d <= 0.17 && d >= 0.09)
+/// The notification area's icon size (16 pixels at 100%, 20 at 125%, 24 at 150%, 32 at 200%).
+fn tray_size() -> i32 {
+    match unsafe { GetSystemMetrics(SM_CXSMICON) } {
+        n if n > 0 => n,
+        _ => 16,
+    }
 }
 
 fn nid(hwnd: isize) -> NOTIFYICONDATAW {
@@ -132,7 +98,7 @@ fn copy(dst: &mut [u16], s: &str) {
 pub fn add(hwnd: isize, tip: &str) {
     let mut icon = ICON_SMALL.load(Ordering::Relaxed);
     if icon == 0 {
-        icon = app_icon(16).0 as isize;
+        icon = app_icon(tray_size()).0 as isize;
         ICON_SMALL.store(icon, Ordering::Relaxed);
     }
     let mut n = nid(hwnd);
@@ -205,7 +171,7 @@ pub fn set_status(hwnd: isize, busy: bool, tip: &str) {
     let icon = if busy {
         let mut b = ICON_BUSY.load(Ordering::Relaxed);
         if b == 0 {
-            b = busy_icon(16).0 as isize;
+            b = busy_icon(tray_size()).0 as isize;
             ICON_BUSY.store(b, Ordering::Relaxed);
         }
         b

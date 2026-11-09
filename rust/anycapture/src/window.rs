@@ -744,7 +744,7 @@ fn preset_list(ui: &mut egui::Ui, store: &mut PresetStore, hk_text: &dyn Fn(u32,
 /// Draws the window; `hk_text` writes a hotkey ("Ctrl+Alt+F12").
 pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32) -> String, ui: &mut egui::Ui) -> Vec<Action> {
     let mut out = Vec::new();
-    snapui::caption::bar(ui, view.hwnd, "");
+    snapui::caption::bar(ui, view.hwnd, "", snapui::caption::Mark::Capture);
     menu_states(view);
     if store.presets.is_empty() {
         return out;

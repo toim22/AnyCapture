@@ -74,7 +74,7 @@ ol.steps > li::before { content: counter(step); position: absolute; left: 0; top
 .diagram figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
 .mock { min-width: 620px; font-size: 13px; }
 .mock .bar { display: flex; align-items: center; gap: 14px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px 8px 0 0; background: var(--bg); }
-.mock .bar .ico { width: 18px; height: 18px; border-radius: 5px; background: var(--accent); }
+.mock .bar .ico { width: 16px; height: 16px; flex: none; color: var(--text); }
 .mock .body { display: grid; grid-template-columns: 70px 1fr 1fr 120px; gap: 10px; padding: 12px; border: 1px solid var(--line); border-top: 0; background: var(--bg); }
 .mock .tabs div { padding: 8px 4px; text-align: center; border-radius: 6px; margin-bottom: 6px; background: var(--panel); }
 .mock .tabs div.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
@@ -361,7 +361,7 @@ in One Click.</p>
 
 <figure class="diagram">
 <div class="mock" aria-hidden="true">
-  <div class="bar"><span class="ico"></span><span><span class="num">1</span>File</span><span>Capture</span><span>View</span><span>Help</span></div>
+  <div class="bar"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M.75 6.4V3.9a1.6 1.6 0 0 1 1.6-1.6h2.5M11.15 2.3h2.5a1.6 1.6 0 0 1 1.6 1.6v2.5M.75 9.6v2.5a1.6 1.6 0 0 0 1.6 1.6h2.5M11.15 13.7h2.5a1.6 1.6 0 0 0 1.6-1.6V9.6"/></g><rect x="3.3" y="4.4" width="9.4" height="7.2" rx="2" fill="currentColor" opacity=".35"/></svg><span><span class="num">1</span>File</span><span>Capture</span><span>View</span><span>Help</span></div>
   <div class="body">
     <div class="tabs"><span class="num">2</span><div class="on">Image</div><div>Video</div></div>
     <div>

@@ -11,6 +11,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   versions kept moves over by itself: the settings, presets, styles, library, the captures and recordings folders,
   the saved upload logins and the *Start with Windows* entry. Their `.snap` documents and exported settings open as
   before. Installing over an earlier version replaces it, in a folder with the new name.
+- **A new logo.** AnyCapture's icon is a capture frame over a glass card, and the Editor's adds a pen nib; they show
+  on the taskbar, Start, the desktop, the tray and in the installer, with their own drawing at the small sizes so the
+  tray stays sharp. The title bars inside the programs show the logo's outline in one color.
 - **AnyCapture is now written in Rust.** Both programs, `AnyCapture.exe` (capture) and `AnyCaptureEditor.exe` (Editor), and
   `SnapEx64.dll` were rewritten in Rust; the interface is drawn with egui on the GPU (wgpu) and stays accessible to
   screen readers and UI Automation (AccessKit), with the controls under the names of the former Win32 controls. The C++

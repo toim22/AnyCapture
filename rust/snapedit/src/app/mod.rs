@@ -394,7 +394,7 @@ impl Editor {
     // ---------------------------------------------------------------- the frame
     fn main_ui(&mut self, ctl: &mut Ctl, ui: &mut egui::Ui) {
         let ctx = ui.ctx().clone();
-        snapui::caption::bar(ui, self.hwnd, &self.caption_title());
+        snapui::caption::bar(ui, self.hwnd, &self.caption_title(), snapui::caption::Mark::Editor);
         self.timers(ctl, &ctx);
         self.keys(ctl, &ctx);
         let video = self.is_video();

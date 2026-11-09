@@ -3,8 +3,8 @@
 
     python packaging/installer/wizard_images.py
 
-- WizardLarge-<percent>.png: the side picture of the Welcome and Finish pages (164x314 at 100%), a blue panel with the
-  icon in white and the name; WizardLarge-dark-<percent>.png is its dark-mode version.
+- WizardLarge-<percent>.png: the side picture of the Welcome and Finish pages (164x314 at 100%), a panel in the
+  icon's own dark slate with the icon and the name; WizardLarge-dark-<percent>.png is its dark-mode version.
 - WizardSmall-<percent>.png: the icon at the top right of the other pages (55x55 at 100%), for both modes.
 
 AnyCapture.iss lists the files; Setup picks the one that fits the screen's scale. Needs Pillow and Windows' Segoe UI.
@@ -13,7 +13,7 @@ AnyCapture.iss lists the files; Setup picks the one that fits the screen's scale
 import os
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = Path(__file__).resolve().parent
 ICON = HERE.parent.parent / "rust" / "resources" / "AnyCapture.ico"
@@ -21,9 +21,9 @@ FONT = Path(os.environ.get("WINDIR", r"C:\Windows")) / "Fonts" / "seguisb.ttf"  
 SCALES = [100, 125, 150, 175, 200, 250]
 SS = 4  # supersampling
 
-# the icon's blue (top left → bottom right) and the panel's
-BLUE_TOP, BLUE_BOTTOM = (40, 140, 255), (24, 66, 200)
-DARK_TOP, DARK_BOTTOM = (44, 44, 52), (24, 24, 28)
+# the panel: the slate of the icon's background (lighter on the light page, deeper in dark mode)
+LIGHT_TOP, LIGHT_BOTTOM = (43, 50, 66), (21, 26, 38)
+DARK_TOP, DARK_BOTTOM = (32, 36, 46), (11, 13, 22)
 
 
 def icon(size: int) -> Image.Image:
@@ -41,42 +41,16 @@ def gradient(w: int, h: int, top, bottom) -> Image.Image:
     return Image.composite(b, a, g).convert("RGBA")
 
 
-def inverted_icon(size: int) -> Image.Image:
-    """The icon in white with its mark in blue (the white glyph of the icon becomes the blue one)."""
-    src = icon(size)
-    r, g, b, a = src.split()
-    white = ImageChops.darker(ImageChops.darker(r, g), b)  # the glyph is the white part
-    glyph = white.point(lambda v: max(0, min(255, (v - 70) * 255 // 185)))
-    out = Image.new("RGBA", (size, size), (255, 255, 255, 0))
-    out.putalpha(a)
-    blue = gradient(size, size, BLUE_TOP, BLUE_BOTTOM)
-    out = Image.composite(blue, out, glyph)
-    out.putalpha(a)
-    return out
-
-
-def rings(img: Image.Image, cx: float, cy: float, alpha: int) -> None:
-    """The capture mark as a faint large background motif."""
-    w, h = img.size
-    layer = Image.new("RGBA", img.size, (255, 255, 255, 0))
-    d = ImageDraw.Draw(layer)
-    for r, t in [(0.72, 0.03), (0.44, 0.03)]:
-        rr, tt = r * w, t * w
-        d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=(255, 255, 255, alpha), width=max(1, round(tt)))
-    img.alpha_composite(layer)
-
-
 def large(scale: int, dark: bool) -> Image.Image:
     w, h = round(164 * scale / 100), round(314 * scale / 100)
     W, H = w * SS, h * SS
-    img = gradient(W, H, *(DARK_TOP, DARK_BOTTOM) if dark else (BLUE_TOP, BLUE_BOTTOM))
-    rings(img, W * 0.95, H * 0.97, 12 if dark else 22)
+    img = gradient(W, H, *(DARK_TOP, DARK_BOTTOM) if dark else (LIGHT_TOP, LIGHT_BOTTOM))
     # the icon with a soft shadow
     s = round(W * 0.46)
     x, y = (W - s) // 2, round(H * 0.25)
-    mark = icon(s) if dark else inverted_icon(s)
+    mark = icon(s)
     shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    shadow.paste((0, 0, 0, 110 if dark else 70), (x, y + round(s * 0.06)), mark)
+    shadow.paste((0, 0, 0, 110), (x, y + round(s * 0.06)), mark)
     img.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(s * 0.09)))
     img.alpha_composite(mark, (x, y))
     # the name

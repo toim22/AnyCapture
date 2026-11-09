@@ -1,5 +1,5 @@
 //! The title bar of the windows with menus (the capture window and the Editor), as the C++ CaptionBar drew it: the
-//! program's icon and the menus on the same strip as the minimize, maximize and close buttons, and the document's
+//! program's mark and the menus on the same strip as the minimize, maximize and close buttons, and the document's
 //! name after the menus.
 //!
 //! How it works: the window keeps its normal frame (resize borders, Snap, the minimize and maximize animations, the
@@ -132,65 +132,62 @@ fn shown(name: &str) -> String {
     name.replacen('&', "", 1)
 }
 
-/// The app's icon (resource 1 of the executable) as an egui texture of `px` pixels.
-fn app_icon(ctx: &egui::Context, px: u32) -> Option<egui::TextureHandle> {
-    let id = egui::Id::NULL.with(("snapui.caption.icon", px));
-    if let Some(t) = ctx.data(|d| d.get_temp::<Option<egui::TextureHandle>>(id)) {
-        return t;
-    }
-    let img = exe_icon(px as i32);
-    let tex = img.map(|im| {
-        let rgba: Vec<u8> = im.px.iter().flat_map(|p| [(p >> 16) as u8, (p >> 8) as u8, *p as u8, (p >> 24) as u8]).collect();
-        ctx.load_texture("caption-icon", egui::ColorImage::from_rgba_unmultiplied([im.w as usize, im.h as usize], &rgba),
-                         egui::TextureOptions::LINEAR)
-    });
-    ctx.data_mut(|d| d.insert_temp(id, tex.clone()));
-    tex
+/// The program a title bar belongs to, for the mark drawn at its left.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Mark {
+    Capture,
+    Editor,
 }
 
-fn exe_icon(px: i32) -> Option<snapcore::image::Image> {
-    use windows::Win32::Graphics::Gdi::{BI_RGB, BITMAPINFO, BITMAPINFOHEADER, DIB_RGB_COLORS, DeleteObject, GetDC, GetDIBits, ReleaseDC};
-    use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-    unsafe {
-        let module = GetModuleHandleW(None).ok()?;
-        let h = LoadImageW(Some(module.into()), windows::core::PCWSTR(1 as *const u16), IMAGE_ICON, px, px, LR_DEFAULTCOLOR).ok()?;
-        let icon = HICON(h.0);
-        let mut ii = ICONINFO::default();
-        GetIconInfo(icon, &mut ii).ok()?;
-        let mut img = snapcore::image::Image::sized(px, px, 0);
-        let mut bi = BITMAPINFO {
-            bmiHeader: BITMAPINFOHEADER {
-                biSize: size_of::<BITMAPINFOHEADER>() as u32,
-                biWidth: px,
-                biHeight: -px,
-                biPlanes: 1,
-                biBitCount: 32,
-                biCompression: BI_RGB.0,
-                ..Default::default()
-            },
-            ..Default::default()
-        };
-        let dc = GetDC(None);
-        let n = GetDIBits(dc, ii.hbmColor, 0, px as u32, Some(img.px.as_mut_ptr().cast()), &mut bi, DIB_RGB_COLORS);
-        ReleaseDC(None, dc);
-        let _ = DeleteObject(ii.hbmColor.into());
-        let _ = DeleteObject(ii.hbmMask.into());
-        let _ = DestroyIcon(icon);
-        (n > 0).then_some(img)
+/// The program's mark in one color, as the logo's outline: the four frame corners, with the capture area inside
+/// (AnyCapture) or the pen nib (the Editor). The colored logo stays on the taskbar, Start and the installer; inside the
+/// windows the mark takes the text color like the other icons. `r` is a square; `bg` is the strip's color.
+fn mark(p: &egui::Painter, which: Mark, r: Rect, c: Color32, bg: Color32) {
+    let w = r.width();
+    let b = Rect::from_center_size(r.center(), vec2(w, w * 0.8)).shrink(0.75);
+    // the logo's proportions: the corners leave the middle of each side open
+    let (arm_x, arm_y, rad) = (b.width() * 0.25, b.height() * 0.27, w * 0.09);
+    let stroke = Stroke::new(1.5, c);
+    for (corner, dx, dy) in [(b.left_top(), 1.0, 1.0), (b.right_top(), -1.0, 1.0), (b.left_bottom(), 1.0, -1.0), (b.right_bottom(), -1.0, -1.0)] {
+        // from the end of the upright arm, round the corner, to the end of the level one
+        let center = pos2(corner.x + dx * rad, corner.y + dy * rad);
+        let mut pts = vec![pos2(corner.x, corner.y + dy * arm_y)];
+        pts.extend((0..=6).map(|i| {
+            let t = i as f32 / 6.0 * std::f32::consts::FRAC_PI_2;
+            pos2(center.x - dx * rad * t.cos(), center.y - dy * rad * t.sin())
+        }));
+        pts.push(pos2(corner.x + dx * arm_x, corner.y));
+        p.add(egui::Shape::line(pts, stroke));
+    }
+    if which == Mark::Editor {
+        let (h, cx) = (b.height() * 0.66, b.center().x);
+        let (top, bottom, half) = (b.center().y - h / 2.0, b.center().y + h / 2.0, h * 0.45);
+        let nib = vec![
+            pos2(cx, top),
+            pos2(cx + half, top + h * 0.64),
+            pos2(cx + half * 0.55, bottom),
+            pos2(cx - half * 0.55, bottom),
+            pos2(cx - half, top + h * 0.64),
+        ];
+        p.add(egui::Shape::convex_polygon(nib, c, Stroke::NONE));
+        p.line_segment([pos2(cx, top + h * 0.3), pos2(cx, top + h * 0.62)], Stroke::new(1.0, bg));
+    } else {
+        let card = b.shrink2(vec2(w * 0.19, w * 0.16));
+        p.rect_filled(card, CornerRadius::same(2), c.gamma_multiply(0.35));
     }
 }
 
 /// Draws the title bar at the top of the window: call it first in the window's frame. `title` is shown dimmed after
-/// the menus (the Editor's document); `hwnd` 0 (the tests) draws it without a window behind.
-pub fn bar(ui: &mut egui::Ui, hwnd: isize, title: &str) {
+/// the menus (the Editor's document); `hwnd` 0 (the tests) draws it without a window behind. `which` picks the mark.
+pub fn bar(ui: &mut egui::Ui, hwnd: isize, title: &str, which: Mark) {
     let t = tokens();
     let frame = egui::Frame::NONE.fill(t.window);
     egui::Panel::top("snapui.caption").exact_size(HEIGHT).resizable(false).show_separator_line(false).frame(frame).show(ui, |ui| {
-        strip(ui, hwnd, title);
+        strip(ui, hwnd, title, which);
     });
 }
 
-fn strip(ui: &mut egui::Ui, hwnd: isize, title: &str) {
+fn strip(ui: &mut egui::Ui, hwnd: isize, title: &str, which: Mark) {
     let t = tokens();
     let ctx = ui.ctx().clone();
     let ppp = ctx.pixels_per_point();
@@ -206,12 +203,9 @@ fn strip(ui: &mut egui::Ui, hwnd: isize, title: &str) {
         right: (r.right() * ppp).ceil() as i32,
         bottom: (r.bottom() * ppp).ceil() as i32,
     };
-    // icon
+    // the program's mark
     let isz = 16.0;
-    if let Some(tex) = app_icon(&ctx, (isz * ppp).round() as u32) {
-        let r = Rect::from_center_size(pos2(full.left() + 12.0 + isz / 2.0, full.center().y), vec2(isz, isz));
-        ui.painter().image(tex.id(), r, Rect::from_min_max(pos2(0.0, 0.0), pos2(1.0, 1.0)), if focused { Color32::WHITE } else { Color32::from_white_alpha(170) });
-    }
+    mark(ui.painter(), which, Rect::from_center_size(pos2(full.left() + 12.0 + isz / 2.0, full.center().y), vec2(isz, isz)), fg, t.window);
     // menus
     let font = FontId::proportional(t.body);
     let mut x = full.left() + 38.0;
