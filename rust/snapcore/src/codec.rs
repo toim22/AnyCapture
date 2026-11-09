@@ -1,7 +1,7 @@
 //! Image files through the Windows Imaging Component (role of LEADTOOLS, ds_arch §13.3 → WIC): PNG, JPEG, BMP, GIF,
 //! TIFF, and AVIF / HEIC when the Windows codecs are installed. A port of Image.cpp that makes the same WIC calls in the
 //! same order, so the files come out byte for byte the same: decoding to 32 bpp BGRA with the photo's metadata (C29) and
-//! its EXIF orientation applied; encoding with the resolution, Snapnab's metadata (unless stripped) and JPEG / BMP
+//! its EXIF orientation applied; encoding with the resolution, AnyCapture's metadata (unless stripped) and JPEG / BMP
 //! composed over white. WebP is read and written with libwebp 1.5.0 (libwebp-sys), as Image.cpp did, whether or not the
 //! Windows WebP codec is installed.
 
@@ -405,7 +405,7 @@ pub fn decode(data: &[u8]) -> Result<Image, DecodeError> {
 
 // ---------------------------------------------------------------- encoding
 
-/// Metadata written by Snapnab (unless stripped): the program, the date and what the source photo had.
+/// Metadata written by AnyCapture (unless stripped): the program, the date and what the source photo had.
 fn write_meta(frame: &IWICBitmapFrameEncode, fmt: Format, img: &Image, version: &str) {
     let Ok(q) = (unsafe { frame.GetMetadataQueryWriter() }) else { return };
     // the values are allocated with the COM allocator and cleared after the call, as COM wants (WIC copies them)
@@ -427,7 +427,7 @@ fn write_meta(frame: &IWICBitmapFrameEncode, fmt: Format, img: &Image, version: 
         }
     };
     let now = exif_time(&unsafe { GetLocalTime() });
-    let software = format!("Snapnab {version}");
+    let software = format!("AnyCapture {version}");
     let m = img.meta.as_ref();
     let date = m.map(|m| m.date_taken.as_str()).filter(|d| !d.is_empty()).unwrap_or(&now);
     if fmt == Format::Png {
@@ -569,7 +569,7 @@ fn encode_into(
     Ok(())
 }
 
-/// Encodes the image as `fmt`. `version` goes into the metadata ("Snapnab <version>"; WebP gets none).
+/// Encodes the image as `fmt`. `version` goes into the metadata ("AnyCapture <version>"; WebP gets none).
 pub fn encode(img: &Image, fmt: Format, opt: &SaveOptions, version: &str) -> Result<Vec<u8>, EncodeError> {
     if img.is_empty() || img.px.len() != img.w as usize * img.h as usize {
         return Err(EncodeError::Failed);
@@ -730,7 +730,7 @@ mod tests {
         let jpeg = encode(&img, Format::Jpeg, &SaveOptions::default(), "1.2.3").unwrap();
         let m = decode(&jpeg).unwrap().meta.unwrap();
         assert_eq!(m.date_taken, "2024:05:06 07:08:09");
-        assert_eq!((m.make.as_str(), m.model.as_str(), m.software.as_str()), ("Maker", "Model X", "Snapnab 1.2.3"));
+        assert_eq!((m.make.as_str(), m.model.as_str(), m.software.as_str()), ("Maker", "Model X", "AnyCapture 1.2.3"));
         assert!(m.gps && (m.lat + 23.5505).abs() < 1e-4 && (m.lon + 46.6333).abs() < 1e-4);
         let png = encode(&img, Format::Png, &SaveOptions::default(), "1.2.3").unwrap();
         // WIC keeps one tEXt chunk: the second query (Creation Time) replaces the first (Software), as in the C++

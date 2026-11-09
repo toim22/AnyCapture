@@ -1,4 +1,4 @@
-//! Settings in HKCU\Software\Snapnab\1 (RegistryConfig, ds_arch K8): the same values RegGetDword / RegSetDword /
+//! Settings in HKCU\Software\AnyCapture\1 (RegistryConfig, ds_arch K8): the same values RegGetDword / RegSetDword /
 //! RegGetString / RegSetString in Common.h read and write. `sub` is a subkey below the root ("Editor", "Recent"…).
 
 use std::ffi::{OsStr, OsString, c_void};
@@ -11,7 +11,7 @@ use windows::core::PCWSTR;
 
 use crate::wide::{to_os, to_wide};
 
-pub const ROOT: &str = r"Software\Snapnab\1";
+pub const ROOT: &str = r"Software\AnyCapture\1";
 
 fn key(sub: Option<&OsStr>) -> Vec<u16> {
     let mut p = OsString::from(ROOT);

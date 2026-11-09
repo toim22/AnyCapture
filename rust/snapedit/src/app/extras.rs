@@ -317,15 +317,15 @@ fn print_image(owner: isize, img: Image, title: String) -> Result<(), String> {
     }
 }
 
-/// OpenManual: help\Snapnab-Manual.html at `topic`, in the default browser (opening the .html through its association
+/// OpenManual: help\AnyCapture-Manual.html at `topic`, in the default browser (opening the .html through its association
 /// would drop the #fragment).
 pub fn open_manual(owner: isize, topic: &str) {
     use windows::Win32::UI::Shell::{ASSOCF_IS_PROTOCOL, ASSOCSTR_EXECUTABLE, AssocQueryStringW, ShellExecuteW};
     use windows::Win32::UI::WindowsAndMessaging::SW_SHOWNORMAL;
     use windows::core::{PCWSTR, w};
-    let path = paths::exe_dir().join("help").join("Snapnab-Manual.html");
+    let path = paths::exe_dir().join("help").join("AnyCapture-Manual.html");
     if !path.exists() {
-        native::inform(owner, tr("O manual não foi encontrado:\n") + &path.to_string_lossy(), "Snapnab Editor".into());
+        native::inform(owner, tr("O manual não foi encontrado:\n") + &path.to_string_lossy(), "AnyCapture Editor".into());
         return;
     }
     let url = format!("file:///{}#{topic}", path.to_string_lossy().replace('\\', "/").replace(' ', "%20"));
@@ -376,9 +376,9 @@ fn encoded(img: &Image, fmt: Format) -> Vec<u8> {
     codec::encode(img, fmt, &SaveOptions::from_settings(), VERSION).unwrap_or_default()
 }
 
-/// A PNG copy in %TEMP%\Snapnab (File / File path of an image whose library item is a .snap).
+/// A PNG copy in %TEMP%\AnyCapture (File / File path of an image whose library item is a .snap).
 fn temp_image_file(img: &Image, name: &str) -> Option<String> {
-    let dir = std::env::temp_dir().join("Snapnab");
+    let dir = std::env::temp_dir().join("AnyCapture");
     let _ = std::fs::create_dir_all(&dir);
     let name: String = name.chars().map(|c| if "\\/:*?\"<>|".contains(c) { '_' } else { c }).collect();
     let path = dir.join(format!("{name}.png"));
@@ -413,7 +413,7 @@ fn copy_as_menu(owner: isize, img: &Image, file: &str, title: &str, url: &str) -
         if video || (!file.is_empty() && ext_of(file) != ".snap") {
             return Some(file.to_string());
         }
-        let mut name = if title.is_empty() { format!("Snapnab_{}", String::from_utf16_lossy(&library::time_stamp(false))) } else { title.into() };
+        let mut name = if title.is_empty() { format!("AnyCapture_{}", String::from_utf16_lossy(&library::time_stamp(false))) } else { title.into() };
         let e = ext_of(&name);
         if Format::from_ext(&e) != Format::Unknown {
             name.truncate(name.len() - e.len());
@@ -428,7 +428,7 @@ fn copy_as_menu(owner: isize, img: &Image, file: &str, title: &str, url: &str) -
         5 => snapcore::clip::copy_text(owner, &format!("data:image/png;base64,{}", base64(&encoded(img, Format::Png)))),
         6 => snapcore::clip::copy_text(owner, &format!("data:image/webp;base64,{}", base64(&encoded(img, Format::Webp)))),
         8 => snapcore::clip::copy_text(owner, url),
-        7 => snapcore::clip::copy_text(owner, &format!("![{}]({url})", if title.is_empty() { "Snapnab" } else { title })),
+        7 => snapcore::clip::copy_text(owner, &format!("![{}]({url})", if title.is_empty() { "AnyCapture" } else { title })),
         _ => false,
     }
 }
@@ -930,7 +930,7 @@ impl Editor {
         let sent = ipc::mutex_exists(&snapcore::wide::to_wide(ipc::CAPTURE_MUTEX))
             && self.ipc.as_ref().is_some_and(|i| i.send_string(Channel::Capture, ipc::code::PIN_FILE, p, false));
         if !sent {
-            instance::launch_sibling("Snapnab.exe", &format!("/hide /pin \"{p}\""), false);
+            instance::launch_sibling("AnyCapture.exe", &format!("/hide /pin \"{p}\""), false);
         }
         self.status = tr("Imagem fixada na tela.");
     }
@@ -1059,7 +1059,7 @@ fn default_batch_folder() -> String {
             .map(|p| {
                 let s = p.to_string().unwrap_or_default();
                 windows::Win32::System::Com::CoTaskMemFree(Some(p.0 as _));
-                format!("{s}\\Snapnab\\{}", tr("Lote"))
+                format!("{s}\\AnyCapture\\{}", tr("Lote"))
             })
             .unwrap_or_default()
     }

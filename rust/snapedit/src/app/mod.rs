@@ -1,6 +1,6 @@
-//! SnapnabEditor.exe's window (src/editor/main.cpp: CMainFrame): the toolbar, the canvas, the right column with the
+//! AnyCaptureEditor.exe's window (src/editor/main.cpp: CMainFrame): the toolbar, the canvas, the right column with the
 //! Properties, Effects and Layers tabs, the footer and the recent captures tray, the native menu bar, the commands
-//! (the same WM_COMMAND numbers as the C++ editor), the single instance and the IPC with Snapnab.exe.
+//! (the same WM_COMMAND numbers as the C++ editor), the single instance and the IPC with AnyCapture.exe.
 //!
 //! Every modal piece (the forms, message boxes, file and color dialogs) runs on a worker thread; its answer comes
 //! back through the waker as a closure that runs on the UI thread with the editor (`Ev::Do`).
@@ -196,7 +196,7 @@ impl Editor {
     pub fn warn(&self, text: impl Into<String>) {
         let (owner, text) = (self.hwnd, text.into());
         std::thread::spawn(move || {
-            native::message(owner, &text, "Snapnab Editor", windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING);
+            native::message(owner, &text, "AnyCapture Editor", windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING);
         });
     }
 
@@ -214,8 +214,8 @@ impl Editor {
 
     pub fn update_title(&mut self, ctl: &Ctl) {
         let t = match self.cv.doc() {
-            Some(d) => format!("{}{}{}", if d.modified { "• " } else { "" }, d.title, tr(" — Snapnab Editor")),
-            None => "Snapnab Editor".to_owned(),
+            Some(d) => format!("{}{}{}", if d.modified { "• " } else { "" }, d.title, tr(" — AnyCapture Editor")),
+            None => "AnyCapture Editor".to_owned(),
         };
         if t != self.last_title
             && let Some(w) = self.main.and_then(|k| ctl.window(k))
@@ -402,15 +402,15 @@ impl Editor {
         let center = self.center_entries();
         let fx_names: HashMap<u32, String> = self.fx.effects.iter().map(|e| (e.cmd, e.name.clone())).collect();
         let mut bar = Vec::new();
-        egui::Panel::top("SnapnabToolbar").exact_size(60.0).resizable(false).show(ui, |ui| {
+        egui::Panel::top("AnyCaptureToolbar").exact_size(60.0).resizable(false).show(ui, |ui| {
             bar = panels::toolbar(ui, &center, self.tb_active, &|c| fx_names.get(&c).cloned());
         });
         // footer: status, coordinates, image size and zoom
         let mut foot_cmd = None;
-        egui::Panel::bottom("SnapnabStatus").exact_size(26.0).resizable(false).show(ui, |ui| {
+        egui::Panel::bottom("AnyCaptureStatus").exact_size(26.0).resizable(false).show(ui, |ui| {
             ui.horizontal_centered(|ui| {
                 let r = ui.selectable_label(self.show_tray, tr("Capturas recentes"));
-                panels::tag(ui, &r, "SnapnabStatus.Tray");
+                panels::tag(ui, &r, "AnyCaptureStatus.Tray");
                 if r.clicked() {
                     foot_cmd = Some(M_SHOW_TRAY);
                 }
@@ -419,7 +419,7 @@ impl Editor {
                     if let Some(d) = self.cv.doc().filter(|d| !d.is_video) {
                         let z = (self.cv.zoom * 100.0).round() as i32;
                         let r = ui.button(format!("{} ▾", tr("Zoom %d%%").replace("%d", &z.to_string()).replace("%%", "%")));
-                        panels::tag(ui, &r, "SnapnabStatus.Zoom");
+                        panels::tag(ui, &r, "AnyCaptureStatus.Zoom");
                         if r.clicked() {
                             let ppp = ui.ctx().pixels_per_point();
                             self.zoom_at = Some(((r.rect.left() * ppp).round() as i32, (r.rect.top() * ppp).round() as i32));
@@ -427,7 +427,7 @@ impl Editor {
                         }
                         let size = format!("{} × {} px  ▾", d.w(), d.h());
                         let r = ui.button(size);
-                        panels::tag(ui, &r, "SnapnabStatus.Size");
+                        panels::tag(ui, &r, "AnyCaptureStatus.Size");
                         if r.clicked() {
                             foot_cmd = Some(M_RESIZE);
                         }
@@ -439,7 +439,7 @@ impl Editor {
         // recent captures
         let mut tray_acts = Vec::new();
         if self.show_tray {
-            egui::Panel::bottom("SnapnabTray").exact_size(snapedit_app::tray::TRAY_HEIGHT).resizable(false).show(ui, |ui| {
+            egui::Panel::bottom("AnyCaptureTray").exact_size(snapedit_app::tray::TRAY_HEIGHT).resizable(false).show(ui, |ui| {
                 tray_acts = self.tray.ui(ui);
             });
         }
@@ -452,11 +452,11 @@ impl Editor {
         } else if video {
             egui::CentralPanel::default().show(ui, |ui| self.video_ui(ctl, ui));
         } else {
-            egui::Panel::right("SnapnabRight").exact_size(296.0).resizable(false).show(ui, |ui| {
+            egui::Panel::right("AnyCaptureRight").exact_size(296.0).resizable(false).show(ui, |ui| {
                 ui.horizontal(|ui| {
                     for (i, name) in ["Propriedades", "Efeitos", "Camadas"].iter().enumerate() {
                         let r = ui.selectable_label(self.right_tab == i, tr(name));
-                        panels::tag(ui, &r, &format!("SnapnabTabs.{i}"));
+                        panels::tag(ui, &r, &format!("AnyCaptureTabs.{i}"));
                         if r.clicked() {
                             self.set_right_tab(i);
                         }
@@ -470,7 +470,7 @@ impl Editor {
                         let enabled = self.cv.doc().is_some();
                         let ui = &mut ui.new_child(egui::UiBuilder::new().max_rect(ui.available_rect_before_wrap()));
                         let bg = ui.allocate_rect(ui.max_rect(), egui::Sense::hover());
-                        panels::tag(ui, &bg, "SnapnabEffects");
+                        panels::tag(ui, &bg, "AnyCaptureEffects");
                         let ui = &mut ui.new_child(egui::UiBuilder::new().max_rect(bg.rect));
                         egui::ScrollArea::vertical().show(ui, |ui| fx_acts = self.fx.ui(ui, w, h, sel, enabled));
                     }
@@ -711,7 +711,7 @@ impl Editor {
             FxAction::DeleteQuick(i) => {
                 let Some(q) = self.fx.quick.get(i) else { return };
                 let text = tr("Excluir o efeito rápido \"%s\"?").replace("%s", &tr(&q.name));
-                self.modal(move |o| native::message(o, &text, "Snapnab Editor", windows::Win32::UI::WindowsAndMessaging::MB_YESNO
+                self.modal(move |o| native::message(o, &text, "AnyCapture Editor", windows::Win32::UI::WindowsAndMessaging::MB_YESNO
                     | windows::Win32::UI::WindowsAndMessaging::MB_ICONQUESTION), move |e, _, r| {
                     if r == windows::Win32::UI::WindowsAndMessaging::IDYES.0 && i < e.fx.quick.len() {
                         e.fx.quick.remove(i);
@@ -871,7 +871,7 @@ impl Editor {
                 }
             }
             code::RESTART_EDITOR => {
-                if instance::launch_sibling("SnapnabEditor.exe", &instance::restart_args(), false) {
+                if instance::launch_sibling("AnyCaptureEditor.exe", &instance::restart_args(), false) {
                     self.close(ctl);
                 }
             }
@@ -896,8 +896,8 @@ impl Editor {
                     i += 1;
                 }
             } else if a == "/help" || a == "/?" {
-                self.inform(tr("SnapnabEditor.exe [opções] [arquivo…]\n\n/Open \"arquivo\"     abre um arquivo (.snap, imagem, .mp4)\n/NewFromClipboard   cria imagem a partir da área de transferência\n/restartwait        espera a instância anterior fechar"),
-                            "Snapnab Editor");
+                self.inform(tr("AnyCaptureEditor.exe [opções] [arquivo…]\n\n/Open \"arquivo\"     abre um arquivo (.snap, imagem, .mp4)\n/NewFromClipboard   cria imagem a partir da área de transferência\n/restartwait        espera a instância anterior fechar"),
+                            "AnyCapture Editor");
             } else if !a.starts_with('/') {
                 opened |= self.open_path(ctl, &args[i]);
             }
@@ -994,7 +994,7 @@ impl App for Editor {
         }
         let spec = WindowSpec {
             class: ipc::EDITOR_WND_CLASS,
-            title: "Snapnab Editor".into(),
+            title: "AnyCapture Editor".into(),
             size,
             physical_size: physical,
             position,
@@ -1087,7 +1087,7 @@ impl App for Editor {
     }
 }
 
-/// The Editor's registry values (HKCU\Software\Snapnab\Editor).
+/// The Editor's registry values (HKCU\Software\AnyCapture\Editor).
 pub fn reg_dw(name: &str, def: u32) -> u32 {
     reg::get_dword(OsStr::new(name), def, Some(OsStr::new("Editor")))
 }
@@ -1116,16 +1116,21 @@ pub fn run() {
     unsafe {
         let _ = windows::Win32::System::Com::CoInitializeEx(None, windows::Win32::System::Com::COINIT_APARTMENTTHREADED);
     }
-    log::init("SnapnabEditor", VERSION);
+    // the data of the program's former name moves over before anything reads the settings
+    let moved = snapcore::legacy::migrate();
+    log::init("AnyCaptureEditor", VERSION);
+    for m in moved {
+        log::write(&m);
+    }
     std::panic::set_hook(Box::new(|info| log::write(&format!("PANIC: {info}"))));
     snapcore::i18n::init();
     snapcore::gdip::startup();
     if !ipc::mutex_exists(&snapcore::wide::to_wide(ipc::CAPTURE_MUTEX)) {
-        instance::launch_sibling("Snapnab.exe", "/hide", true);
+        instance::launch_sibling("AnyCapture.exe", "/hide", true);
     }
     if let Err(e) = snapui::host::run(Editor::new(), |_| {}) {
         log::write(&format!("Event loop: {e}"));
     }
-    log::write("SnapnabEditor exited");
+    log::write("AnyCaptureEditor exited");
     drop(mutex);
 }

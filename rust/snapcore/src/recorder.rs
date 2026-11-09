@@ -1649,7 +1649,7 @@ mod tests {
     #[test]
     fn records_and_remuxes_a_short_video() {
         // a real recording of a small screen area through the crash-safe path, then its remux
-        let dir = std::env::temp_dir().join(format!("snapnab-rec-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("anycapture-rec-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         let path = dir.join("t.mp4").to_string_lossy().into_owned();
         let mut r = Recorder::new();

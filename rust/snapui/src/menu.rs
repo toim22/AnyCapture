@@ -1,12 +1,12 @@
 //! The menus of both programs: the title bar's menus, the toolbar's "More", the context menus. They are native Win32
 //! popup menus, so Windows still does the hard parts (the keyboard, submenus, the screen edges, the modal loop, the
-//! "#32768" windows UI Automation knows), but every item is owner-drawn: Snapnab paints it in the theme's colors and
+//! "#32768" windows UI Automation knows), but every item is owner-drawn: AnyCapture paints it in the theme's colors and
 //! font, with an icon column on the left, a rounded highlight, the shortcut on the right and its own submenu chevron,
 //! as Windows 11's own menus look.
 //!
 //! How owner-drawn menus work: an item created with MFT_OWNERDRAW carries a pointer (its item data, here a boxed
 //! `ItemData`); when the menu opens, Windows asks the menu's owner window for each item's size (WM_MEASUREITEM) and
-//! then for its picture (WM_DRAWITEM). The owner is always a Snapnab window, whose theme subclass (`theme.rs`) passes
+//! then for its picture (WM_DRAWITEM). The owner is always a AnyCapture window, whose theme subclass (`theme.rs`) passes
 //! those messages here. Each item keeps its text too (MIIM_STRING), so screen readers and UI Automation read it.
 
 use std::cell::RefCell;
@@ -154,7 +154,7 @@ impl Menu {
 
     /// Shows the popup at a screen point. With `ret` it returns the chosen command (0: none); otherwise the command
     /// arrives as WM_COMMAND at `owner`. Any window of this thread can own it: for the time the menu is open, a
-    /// subclass answers the owner-draw messages (a Snapnab window's theme subclass already does).
+    /// subclass answers the owner-draw messages (a AnyCapture window's theme subclass already does).
     pub fn track_at(&self, owner: isize, x: i32, y: i32, ret: bool) -> u32 {
         use windows::Win32::UI::Shell::{RemoveWindowSubclass, SetWindowSubclass};
         follow_theme();

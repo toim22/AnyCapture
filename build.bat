@@ -1,6 +1,6 @@
 @echo off
 rem ===========================================================================
-rem  Snapnab — build and package (Rust + MSVC x64)
+rem  AnyCapture — build and package (Rust + MSVC x64)
 rem
 rem    build.bat             Release + product package in dist\
 rem    build.bat test        Release + the workspace tests (cargo test)
@@ -8,9 +8,9 @@ rem    build.bat debug       Debug (rust\target\debug)
 rem    build.bat clean       deletes rust\target and dist\
 rem
 rem  Release output:
-rem    dist\Snapnab\                      program folder (Snapnab.exe, SnapnabEditor.exe, SnapEx64.dll, lang\, help\)
-rem    dist\Snapnab-<version>-win-x64.zip portable package for distribution
-rem    dist\Snapnab-<version>-setup.exe   installer (only if Inno Setup 6 is installed:
+rem    dist\AnyCapture\                      program folder (AnyCapture.exe, AnyCaptureEditor.exe, SnapEx64.dll, lang\, help\)
+rem    dist\AnyCapture-<version>-win-x64.zip portable package for distribution
+rem    dist\AnyCapture-<version>-setup.exe   installer (only if Inno Setup 6 is installed:
 rem                                       winget install JRSoftware.InnoSetup)
 rem    dist\symbols\                      PDBs (crash debugging; do not distribute)
 rem
@@ -52,38 +52,38 @@ if not defined VER (echo [error] no version in rust\Cargo.toml & exit /b 1)
 
 rem ---- program folder and symbols
 set "BIN=rust\target\release"
-if exist dist\Snapnab rmdir /s /q dist\Snapnab
+if exist dist\AnyCapture rmdir /s /q dist\AnyCapture
 if exist dist\symbols rmdir /s /q dist\symbols
-mkdir dist\Snapnab\lang dist\symbols || goto :fail
-for %%f in (Snapnab.exe SnapnabEditor.exe SnapEx64.dll) do copy /y "%BIN%\%%f" dist\Snapnab\ >nul || goto :fail
-for %%f in (Snapnab.pdb SnapnabEditor.pdb SnapEx64.pdb) do copy /y "%BIN%\%%f" dist\symbols\ >nul || goto :fail
-copy /y packaging\README.txt dist\Snapnab\ >nul || goto :fail
-for %%f in (CHANGELOG.md LICENSE THIRD-PARTY-NOTICES.txt) do copy /y %%f dist\Snapnab\ >nul || goto :fail
-copy /y lang\*.po dist\Snapnab\lang\ >nul || goto :fail
-xcopy /e /i /q /y help dist\Snapnab\help >nul || goto :fail
+mkdir dist\AnyCapture\lang dist\symbols || goto :fail
+for %%f in (AnyCapture.exe AnyCaptureEditor.exe SnapEx64.dll) do copy /y "%BIN%\%%f" dist\AnyCapture\ >nul || goto :fail
+for %%f in (AnyCapture.pdb AnyCaptureEditor.pdb SnapEx64.pdb) do copy /y "%BIN%\%%f" dist\symbols\ >nul || goto :fail
+copy /y packaging\README.txt dist\AnyCapture\ >nul || goto :fail
+for %%f in (CHANGELOG.md LICENSE THIRD-PARTY-NOTICES.txt) do copy /y %%f dist\AnyCapture\ >nul || goto :fail
+copy /y lang\*.po dist\AnyCapture\lang\ >nul || goto :fail
+xcopy /e /i /q /y help dist\AnyCapture\help >nul || goto :fail
 
 rem ---- portable package (one top folder, as before)
-set "PKG=Snapnab-%VER%-win-x64"
+set "PKG=AnyCapture-%VER%-win-x64"
 if exist dist\%PKG%.zip del /q dist\%PKG%.zip
 if exist dist\_zip rmdir /s /q dist\_zip
-xcopy /e /i /q /y dist\Snapnab dist\_zip\%PKG% >nul || goto :fail
+xcopy /e /i /q /y dist\AnyCapture dist\_zip\%PKG% >nul || goto :fail
 powershell -NoProfile -Command "Compress-Archive -Path 'dist\_zip\%PKG%' -DestinationPath 'dist\%PKG%.zip' -CompressionLevel Optimal" || goto :fail
 rmdir /s /q dist\_zip
 
 rem ---- installer (Inno Setup 6) with the same version
-if exist dist\Snapnab-*-setup.exe del /q dist\Snapnab-*-setup.exe
+if exist dist\AnyCapture-*-setup.exe del /q dist\AnyCapture-*-setup.exe
 set "ISCC="
 for %%p in ("%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" "%ProgramFiles%\Inno Setup 6\ISCC.exe") do if not defined ISCC if exist "%%~p" set "ISCC=%%~p"
 if not defined ISCC for /f "delims=" %%p in ('where iscc 2^>nul') do if not defined ISCC set "ISCC=%%p"
 if not defined ISCC goto :noinno
-"%ISCC%" /Q /DAppVersion=%VER% packaging\installer\Snapnab.iss || goto :fail
+"%ISCC%" /Q /DAppVersion=%VER% packaging\installer\AnyCapture.iss || goto :fail
 :noinno
 
 echo.
 echo Build OK (version %VER%)
-echo   Program:    dist\Snapnab\Snapnab.exe
-for %%z in (dist\Snapnab-*-win-x64.zip) do echo   Package:    %%z
-for %%s in (dist\Snapnab-*-setup.exe) do echo   Installer:  %%s
+echo   Program:    dist\AnyCapture\AnyCapture.exe
+for %%z in (dist\AnyCapture-*-win-x64.zip) do echo   Package:    %%z
+for %%s in (dist\AnyCapture-*-setup.exe) do echo   Installer:  %%s
 if not defined ISCC echo   Installer:  Inno Setup 6 not found - install it with: winget install JRSoftware.InnoSetup
 exit /b 0
 

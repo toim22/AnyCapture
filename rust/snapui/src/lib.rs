@@ -1,8 +1,8 @@
-//! Snapnab's user interface in egui (immediate mode: the UI is a function called every frame, which reads the state
+//! AnyCapture's user interface in egui (immediate mode: the UI is a function called every frame, which reads the state
 //! and draws the widgets, instead of a tree of window objects kept in sync).
 //!
 //! - `host`: the windows (winit), drawn by egui on the GPU (wgpu), with their Win32 classes and messages
-//! - the fonts and the text check of the scripts Snapnab ships
+//! - the fonts and the text check of the scripts AnyCapture ships
 
 use std::sync::{Arc, OnceLock};
 
@@ -32,7 +32,7 @@ pub fn fixed_look() -> bool {
 }
 
 /// The interface font: Inter (SIL Open Font License, rust/resources/fonts), drawn for screens and the same on every
-/// machine. Windows' own fonts follow it for the letters Inter lacks, so every language Snapnab ships has its
+/// machine. Windows' own fonts follow it for the letters Inter lacks, so every language AnyCapture ships has its
 /// letters: Segoe UI (Arabic, Hebrew), Nirmala UI (Hindi, Bengali and the other Indic scripts), Segoe UI Symbol and
 /// Segoe UI Emoji.
 pub const INTER: &[u8] = include_bytes!("../../resources/fonts/Inter-Regular.ttf");

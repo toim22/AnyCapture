@@ -103,7 +103,7 @@ pub fn configure_now(owner: isize) -> bool {
                     d.drain(..3);
                 }
                 if !snapcore::upload::custom_valid(&d) {
-                    message(owner, &tr("Arquivo .sxcu inválido."), "Snapnab", MB_ICONWARNING);
+                    message(owner, &tr("Arquivo .sxcu inválido."), "AnyCapture", MB_ICONWARNING);
                     return false;
                 }
                 s.custom_json = String::from_utf8_lossy(&d).into_owned();
@@ -153,13 +153,13 @@ pub fn configure_now(owner: isize) -> bool {
     }
     s.save();
     let oauth = matches!(s.dest, Dest::Dropbox | Dest::GoogleDrive | Dest::OneDrive);
-    if oauth && (need_login || message(owner, &tr("Fazer login de novo agora?"), "Snapnab", MB_YESNO | MB_ICONQUESTION) == IDYES) {
+    if oauth && (need_login || message(owner, &tr("Fazer login de novo agora?"), "AnyCapture", MB_YESNO | MB_ICONQUESTION) == IDYES) {
         match sign_in(owner, &s) {
             Ok(()) => {
-                message(owner, &tr("Login concluído. As capturas podem ser enviadas."), "Snapnab", MB_ICONINFORMATION);
+                message(owner, &tr("Login concluído. As capturas podem ser enviadas."), "AnyCapture", MB_ICONINFORMATION);
             }
             Err(e) if !e.is_empty() => {
-                message(owner, &e, "Snapnab", MB_ICONWARNING);
+                message(owner, &e, "AnyCapture", MB_ICONWARNING);
             }
             Err(_) => {}
         }
@@ -206,8 +206,8 @@ fn wait_for_browser(owner: isize, si: &mut SignIn) -> bool {
     }
     let mut ctx = Ctx { si, got: false };
     let w = |s: &str| snapcore::wide::to_wide(s);
-    let (title, main, content) = (w("Snapnab"), w(&tr("Conclua o login no navegador")),
-                                  w(&tr("Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar.")));
+    let (title, main, content) = (w("AnyCapture"), w(&tr("Conclua o login no navegador")),
+                                  w(&tr("Autorize o AnyCapture na página que abriu. Esta janela fecha sozinha quando o navegador voltar.")));
     let tc = TASKDIALOGCONFIG {
         cbSize: std::mem::size_of::<TASKDIALOGCONFIG>() as u32,
         hwndParent: HWND(owner as _),

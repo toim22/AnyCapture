@@ -636,7 +636,7 @@ impl QuickStyleStore {
                 self.add_theme(theme_from_xml(&n));
                 Ok(())
             }
-            _ => Err(tr("O arquivo não é um tema do Snapnab (.snaptheme).")),
+            _ => Err(tr("O arquivo não é um tema do AnyCapture (.snaptheme).")),
         }
     }
 

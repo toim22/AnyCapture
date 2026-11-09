@@ -360,7 +360,7 @@ impl LibraryTray {
         let mut acts = Vec::new();
         let ctx = ui.ctx().clone();
         let tray = self.mode == Mode::Tray;
-        let name = if tray { "SnapnabTray" } else { "SnapnabLibrary" };
+        let name = if tray { "AnyCaptureTray" } else { "AnyCaptureLibrary" };
         let bg = ui.allocate_rect(ui.max_rect(), Sense::hover());
         crate::panels::tag(ui, &bg, name);
         let mut ui = ui.new_child(egui::UiBuilder::new().max_rect(ui.max_rect().shrink(4.0)));
@@ -368,7 +368,7 @@ impl LibraryTray {
             if tray {
                 ui.label(RichText::new(tr("Capturas recentes")).strong());
                 let r = ui.small_button(tr("Biblioteca…"));
-                crate::panels::tag(ui, &r, "SnapnabTray.Library");
+                crate::panels::tag(ui, &r, "AnyCaptureTray.Library");
                 if r.clicked() {
                     acts.push(TrayAction::ShowLibrary(true));
                 }
@@ -377,12 +377,12 @@ impl LibraryTray {
                 ui.label(format!("({})", self.items.len()));
                 ui.add_space(12.0);
                 let r = ui.add(egui::TextEdit::singleline(&mut self.query).hint_text(tr("Pesquisar")).desired_width(200.0));
-                crate::panels::tag(ui, &r, "SnapnabLibrary.Search");
+                crate::panels::tag(ui, &r, "AnyCaptureLibrary.Search");
                 if r.changed() {
                     self.reload();
                 }
                 let r = ui.button(tr("Voltar à imagem"));
-                crate::panels::tag(ui, &r, "SnapnabLibrary.Close");
+                crate::panels::tag(ui, &r, "AnyCaptureLibrary.Close");
                 if r.clicked() {
                     acts.push(TrayAction::ShowLibrary(false));
                 }

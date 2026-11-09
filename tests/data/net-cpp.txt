@@ -66,10 +66,10 @@ build {"s":"x\\"y","n":2048,"f":0.5,"t":true,"a":[null,{},[]]}
 ai gemini {"contents":[{"parts":[{"text":"Explain\\n\\"this\\" \xc3\xa9"},{"inline_data":{"mime_type":"image/png","data":"QUJD"}}]}]}
 ai anthropic {"model":"m-1","max_tokens":2048,"messages":[{"role":"user","content":[{"type":"image","source":{"type":"base64","media_type":"image/png","data":"QUJD"}},{"type":"text","text":"Explain\\n\\"this\\" \xc3\xa9"}]}]}
 ai openai {"model":"m-1","messages":[{"role":"user","content":[{"type":"text","text":"Explain\\n\\"this\\" \xc3\xa9"},{"type":"image_url","image_url":{"url":"data:image/png;base64,QUJD"}}]}]}
-multipart boundary 43 ----SnapnabBoundary
+multipart boundary 46 ----AnyCaptureBound
 multipart --B\x0d\x0aContent-Disposition: form-data; name="a"\x0d\x0a\x0d\x0a1\x0d\x0a--B\x0d\x0aContent-Disposition: form-data; name="\xc3\xbc"\x0d\x0a\x0d\x0ax\x0d\x0ay\x0d\x0a--B\x0d\x0aContent-Disposition: form-data; name="file"; filename="a b.png"\x0d\x0aContent-Type: image/png\x0d\x0a\x0d\x0a\x89PNG\x00\x01\x0d\x0a--B--\x0d\x0a Content-Type: multipart/form-data; boundary=B
 sigv4 AWS4-HMAC-SHA256 Credential=AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request,SignedHeaders=host;range;x-amz-content-sha256;x-amz-date,Signature=f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41
-sigv4 AWS4-HMAC-SHA256 Credential=AK/20260102/eu-west-2/s3/aws4_request,SignedHeaders=content-type;host;x-amz-acl;x-amz-content-sha256;x-amz-date,Signature=84ed8450dfe2279ab7e887dbc1522278c2228ebc5ca52411eaf0a83577572866
+sigv4 AWS4-HMAC-SHA256 Credential=AK/20260102/eu-west-2/s3/aws4_request,SignedHeaders=content-type;host;x-amz-acl;x-amz-content-sha256;x-amz-date,Signature=7030de3854f6fddf26a36aebd858564d6cde21cfa63bf6ba373656e20a236e16
 expand [{json:data.link}] -> [https://i.example/abc.png]
 expand [{json:data.id}] -> [7]
 expand [{json:\\{"a":1\\}|a}] -> [1]

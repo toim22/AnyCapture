@@ -177,7 +177,7 @@ pub fn wait_for_previous_instance(class: &str) {
     }
 }
 
-/// Starts the other program from this program's folder ("SnapnabEditor.exe", "Snapnab.exe").
+/// Starts the other program from this program's folder ("AnyCaptureEditor.exe", "AnyCapture.exe").
 pub fn launch_sibling(exe_name: &str, args: &str, low_priority: bool) -> bool {
     let dir = paths::exe_dir();
     let exe = dir.join(exe_name);
@@ -208,8 +208,8 @@ mod tests {
 
     #[test]
     fn command_line_blocks() {
-        let b = copy_data_block(r#""C:\x\Snapnab.exe" /preset "Região ç""#);
-        assert_eq!(parse_copy_data_block(COPYDATA_CMDLINE, &b).as_deref(), Some(r#""C:\x\Snapnab.exe" /preset "Região ç""#));
+        let b = copy_data_block(r#""C:\x\AnyCapture.exe" /preset "Região ç""#);
+        assert_eq!(parse_copy_data_block(COPYDATA_CMDLINE, &b).as_deref(), Some(r#""C:\x\AnyCapture.exe" /preset "Região ç""#));
         assert_eq!(parse_copy_data_block(0x8011, &b), None);
         let mut bad = b.clone();
         bad[0] ^= 1;

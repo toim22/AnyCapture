@@ -6,7 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ## [0.5.0] — not released yet
 
 ### Changed
-- **Snapnab is now written in Rust.** Both programs, `Snapnab.exe` (capture) and `SnapnabEditor.exe` (Editor), and
+- **A new name: AnyCapture.** The programs are `AnyCapture.exe` and `AnyCaptureEditor.exe`, and the installer, the
+  Start menu, the manual and every window carry the new name. The first time either program starts, what the earlier
+  versions kept moves over by itself: the settings, presets, styles, library, the captures and recordings folders,
+  the saved upload logins and the *Start with Windows* entry. Their `.snap` documents and exported settings open as
+  before. Installing over an earlier version replaces it, in a folder with the new name.
+- **AnyCapture is now written in Rust.** Both programs, `AnyCapture.exe` (capture) and `AnyCaptureEditor.exe` (Editor), and
   `SnapEx64.dll` were rewritten in Rust; the interface is drawn with egui on the GPU (wgpu) and stays accessible to
   screen readers and UI Automation (AccessKit), with the controls under the names of the former Win32 controls. The C++
   code is gone. Same features, same files: captures, presets, settings, the library and the `.snap` documents written
@@ -31,16 +36,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 - **Light and dark theme:** *Options › Appearance* follows Windows or picks light or dark; the title bar and the
-  Editor's menu bar follow it too. It applies when Snapnab reopens.
-- `SnapnabTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
+  Editor's menu bar follow it too. It applies when AnyCapture reopens.
+- `AnyCaptureTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
   and for debugging.
 
 ### Fixed
+- *Compare images* shows the share of different pixels, and the video view its frame rate, instead of a `%.2f` /
+  `%.0f` placeholder.
 - The Pen and the Eraser show their tip as the mouse pointer, a circle as wide as the chosen width at the current zoom,
   instead of a cross (#4).
 - *Save as* in the Editor (Ctrl+Shift+S) opens in the folder used the last time, instead of the capture folder (#5).
 - Print Screen can be typed into a hotkey box (Options and preset hotkeys), alone or with Shift, Ctrl or Alt. Windows
-  sends no key press for it, and the Snipping Tool or a Snapnab capture could take it first (#6).
+  sends no key press for it, and the Snipping Tool or a AnyCapture capture could take it first (#6).
 - With *Only copy to the clipboard*, the notification after a capture shows a miniature of it, and a click on the
   notification opens the capture in the Editor (#7).
 - The Editor's drawing tools are centered on the toolbar, and *Recent captures* is no longer cut off at the bottom when
@@ -124,11 +131,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Fixed
 - The names of the capture effects (Border, Filters…) were always in Portuguese, whatever the language.
-- Running Snapnab or a command line switch while it was already open could crash the second process on PCs with
+- Running AnyCapture or a command line switch while it was already open could crash the second process on PCs with
   audio overlays that inject themselves into every program (Nahimic on Alienware/Dell).
 - *Print* did nothing without a printer or with the print service stopped; it now says why.
 - Editor shortcuts such as Ctrl+S and Ctrl+Shift+S were ignored while a field of the side panel had the focus.
-- A capture that did not end cleanly could leave Snapnab busy until it restarted (the record button stopped
+- A capture that did not end cleanly could leave AnyCapture busy until it restarted (the record button stopped
   working); a new capture now resets it.
 - Editor: starting a pen stroke on or next to the previous one dragged that stroke instead of drawing; the pen now
   always draws (the Move tool moves strokes).
@@ -138,11 +145,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ## [0.3.0] — 2026-10-26
 
 ### Added
-- **User manual** in English (`help/Snapnab-Manual.html`, installed next to the programs): quick-start lessons and a
+- **User manual** in English (`help/AnyCapture-Manual.html`, installed next to the programs): quick-start lessons and a
   complete reference of every capture, recording, preset, Editor, library and settings feature, with keyboard shortcut
   tables, troubleshooting and a glossary; contents sidebar, search, light/dark theme and print layout. It opens from
-  *Help › Snapnab Manual* and with **F1** in the capture window and the Editor; in the Editor, F1 opens the chapter of
-  the current tool (or of the library or the video editor). The installer adds a *Snapnab Manual* Start menu shortcut.
+  *Help › AnyCapture Manual* and with **F1** in the capture window and the Editor; in the Editor, F1 opens the chapter of
+  the current tool (or of the library or the video editor). The installer adds a *AnyCapture Manual* Start menu shortcut.
 - Editor: **Shift draws perfect geometry in every shape-based tool** — rectangle → square, ellipse → circle, rounded
   rectangle → rounded square, triangle → equilateral, hexagon → regular, lines and polygon sides in 45° steps, stamps in
   the proportion of their image — in Shape, Highlighter, Spotlight, Hide, Magnifier, Callout and Stamp, and a square
@@ -213,7 +220,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **Backup of the settings**: *File › Export all settings…* / *Import all settings…* (one `.snapsettings` file with the
   registry settings, presets, themes and quick styles, favorites, tool styles, quick effects, stamp order and toolbar
   layout); importing asks whether to replace or merge, keeps a copy of the current settings and restarts both
-  programs. A backup is also written automatically once a week to `%LOCALAPPDATA%\Snapnab\Backups` (the last 5 are kept).
+  programs. A backup is also written automatically once a week to `%LOCALAPPDATA%\AnyCapture\Backups` (the last 5 are kept).
 
 ### Fixed
 - Editor: the properties panel could keep the old pixels of a number field over a button after another object was
@@ -236,17 +243,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Added
 - Interface in 12 languages, the most widely spoken: Portuguese, English, Chinese (Simplified), Hindi, Spanish, Arabic,
   French, Bengali, Russian, Indonesian, Urdu and German. The default is the Windows language and, if it has no
-  translation, English; *File › Options… › Language* picks another one and restarts Snapnab and the Editor to apply it.
+  translation, English; *File › Options… › Language* picks another one and restarts AnyCapture and the Editor to apply it.
   Chinese, Hindi and Bengali use a font with the language's characters; in Arabic and Urdu the strings read right to
   left (the window layout stays the same).
-- Translations in gettext catalogs (`lang/<language>.po`, template `lang/snapnab.pot`), editable in Poedit;
+- Translations in gettext catalogs (`lang/<language>.po`, template `lang/anycapture.pot`), editable in Poedit;
   `scripts/i18n.py` extracts the strings from the code and checks the catalogs (missing strings and `%d`/`%s` markers).
-- `Snapnab-<version>-setup.exe` installer, built by `build.bat` along with the portable zip (when Inno Setup 6 is
+- `AnyCapture-<version>-setup.exe` installer, built by `build.bat` along with the portable zip (when Inno Setup 6 is
   installed). It installs for the current user only, without asking for administrator rights, or for all users;
-  creates the Start menu shortcuts, an optional desktop shortcut and "start with Windows"; closes a running Snapnab
+  creates the Start menu shortcuts, an optional desktop shortcut and "start with Windows"; closes a running AnyCapture
   before updating; uninstalls from *Settings › Apps* keeping captures and settings. The wizard comes in the same 12
   languages as the program (chosen from the Windows language), follows the Windows light/dark theme and uses the
-  Snapnab icon.
+  AnyCapture icon.
 - Webcam in video recordings: pick the camera under *Webcam*; it appears inside the recorded area, with a button on the
   recording panel to show or hide it. Shapes: circle, rounded square, square, 16:9 and 4:3 rectangles, plus background
   removal by color (chroma key, with adjustable color and tolerance), which leaves the webcam without a frame.
@@ -361,7 +368,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 First pre-release: the main features already work, but the program is still under development.
 
-### Capture (Snapnab.exe)
+### Capture (AnyCapture.exe)
 - Region, window, full screen, monitor, fixed region, freehand, multiple areas, object, scrolling,
   extended window, menu, clipboard and file capture.
 - MP4 video recording (H.264 + AAC) with microphone and system audio, pause, and a control panel outside the video.
@@ -370,7 +377,7 @@ First pre-release: the main features already work, but the program is still unde
   edge effects, trim edges, color adjustment, rotate, watermark and resolution.
 - Compact capture window, with modern controls and colors that follow the Windows accent color.
 
-### Editor (SnapnabEditor.exe)
+### Editor (AnyCaptureEditor.exe)
 - Annotation tools (arrow, shapes, text, callouts, steps, stamps, blur, highlight, magnifier…),
   selection with Smart Move, magic wand and smart fill.
 - Image effects, OCR (Grab Text), PNG/JPG/BMP/GIF/TIFF/PDF/SNAP export, printing and email.

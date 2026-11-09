@@ -1,5 +1,5 @@
 //! Minimal XML (the role of libxml2 / MSXML in the original): presets, the .snap index, document objects, Names.xml.
-//! An exact port of the reader and writer in Xml.cpp, so the files Snapnab writes keep the same bytes:
+//! An exact port of the reader and writer in Xml.cpp, so the files AnyCapture writes keep the same bytes:
 //!
 //! - written with a two-space indent, `<a/>` for empty elements and attributes in double quotes; `& < > " '`, line
 //!   breaks and tabs are written as entities;
@@ -7,7 +7,7 @@
 //!   dropped, and a closing tag ends the element whatever its name. On malformed input the reader stops and reports
 //!   a failure, but keeps what it had read (the C++ callers see the same partial tree).
 //!
-//! Text is UTF-8: what Snapnab writes always is; invalid bytes in a foreign file become U+FFFD.
+//! Text is UTF-8: what AnyCapture writes always is; invalid bytes in a foreign file become U+FFFD.
 
 use std::path::Path;
 

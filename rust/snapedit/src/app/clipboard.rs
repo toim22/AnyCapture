@@ -1,6 +1,6 @@
 //! Copy and paste (main.cpp CopyToClipboard / Paste): the image goes to the clipboard as before; the selected objects
-//! also go in the Editor's own format ("Snapnab.Objects", to paste in another image or in the same place), and a copied
-//! area of the image takes its position along ("Snapnab.Origin").
+//! also go in the Editor's own format ("AnyCapture.Objects", to paste in another image or in the same place), and a copied
+//! area of the image takes its position along ("AnyCapture.Origin").
 
 use snapcore::doc::Style;
 use snapcore::gdip::pt;
@@ -25,11 +25,11 @@ fn format(name: &str) -> u32 {
 }
 
 fn objects_format() -> u32 {
-    format("Snapnab.Objects")
+    format("AnyCapture.Objects")
 }
 
 fn origin_format() -> u32 {
-    format("Snapnab.Origin")
+    format("AnyCapture.Origin")
 }
 
 fn available(f: u32) -> bool {

@@ -1,5 +1,5 @@
 """The upload and Office outputs. The upload goes to a fake HTTP server on 127.0.0.1 through a custom uploader in a
-temporary Uploaders.xml (SNAPNAB_UPLOADERS_FILE): no real service, no Credential Manager, the user's destinations
+temporary Uploaders.xml (ANYCAPTURE_UPLOADERS_FILE): no real service, no Credential Manager, the user's destinations
 untouched. Office runs only when Word / PowerPoint are installed and not already open (so a document of the user's is
 never touched); the test documents are closed without saving."""
 import http.server
@@ -13,8 +13,8 @@ import psutil
 import pytest
 from PIL import Image
 
-from snapnab_e2e import presets, win
-from snapnab_e2e.config import LIBRARY_DIR
+from anycapture_e2e import presets, win
+from anycapture_e2e.config import LIBRARY_DIR
 
 
 class _Server(http.server.ThreadingHTTPServer):
@@ -58,13 +58,13 @@ def uploaders(tmp_path, server):
     from xml.sax.saxutils import escape
     f.write_text('<?xml version="1.0" encoding="UTF-8"?>\n<Uploaders Destination="7" CopyLink="1">'
                  f"<Custom>{escape(json.dumps(sxcu))}</Custom></Uploaders>\n", encoding="utf-8")
-    old = os.environ.get("SNAPNAB_UPLOADERS_FILE")
-    os.environ["SNAPNAB_UPLOADERS_FILE"] = str(f)
+    old = os.environ.get("ANYCAPTURE_UPLOADERS_FILE")
+    os.environ["ANYCAPTURE_UPLOADERS_FILE"] = str(f)
     yield f
     if old is None:
-        os.environ.pop("SNAPNAB_UPLOADERS_FILE", None)
+        os.environ.pop("ANYCAPTURE_UPLOADERS_FILE", None)
     else:
-        os.environ["SNAPNAB_UPLOADERS_FILE"] = old
+        os.environ["ANYCAPTURE_UPLOADERS_FILE"] = old
 
 
 def png_in(body):

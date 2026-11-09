@@ -37,7 +37,8 @@ pub fn in_library(path: &str) -> bool {
     std::path::Path::new(path).parent().is_some_and(|p| same_path(&p.to_string_lossy(), &dir))
 }
 
-/// Formats "%d"/"%zu"/"%s" in order (the translated strings keep the C++ printf placeholders).
+/// Formats "%d"/"%zu"/"%s"/"%.Nf" in order (the translated strings keep the C++ printf placeholders; a "%.Nf" argument
+/// comes already formatted).
 pub fn fmt(s: &str, args: &[&dyn std::fmt::Display]) -> String {
     let mut out = String::new();
     let mut rest = s;
@@ -45,7 +46,9 @@ pub fn fmt(s: &str, args: &[&dyn std::fmt::Display]) -> String {
     while let Some(p) = rest.find('%') {
         out += &rest[..p];
         let tail = &rest[p..];
-        let len = ["%zu", "%d", "%s", "%u", "%%"].iter().find(|t| tail.starts_with(**t)).map(|t| t.len());
+        let b = tail.as_bytes();
+        let float = b.len() >= 4 && b[1] == b'.' && b[2].is_ascii_digit() && b[3] == b'f';
+        let len = if float { Some(4) } else { ["%zu", "%d", "%s", "%u", "%%"].iter().find(|t| tail.starts_with(**t)).map(|t| t.len()) };
         match len {
             Some(2) if tail.starts_with("%%") => {
                 out.push('%');
@@ -255,7 +258,7 @@ impl Editor {
         let fi = reg_dw("SaveAsFilter", 1);
         self.modal(
             move |owner| {
-                let filter = "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg;*.jpeg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif;*.tiff|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|Snapnab (*.snap)|*.snap|";
+                let filter = "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg;*.jpeg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif;*.tiff|WebP (*.webp)|*.webp|AVIF (*.avif)|*.avif|PDF (*.pdf)|*.pdf|AnyCapture (*.snap)|*.snap|";
                 let (mut path, fi) = native::save_file(owner, &tr("Salvar como"), &initial, filter, "png", fi)?;
                 const EXTS: [&str; 9] = [".png", ".jpg", ".bmp", ".gif", ".tif", ".webp", ".avif", ".pdf", ".snap"];
                 let ext = ext_of(&path);
@@ -283,7 +286,7 @@ impl Editor {
                     set_reg_root("WebPQuality", f[1].int() as u32);
                 } else if ext == ".avif" {
                     if !snapcore::codec::can_encode(snapcore::codec::Format::Avif) {
-                        native::message(owner, &snapcore::codec::avif_unavailable_text(), "Snapnab Editor", MB_ICONWARNING);
+                        native::message(owner, &snapcore::codec::avif_unavailable_text(), "AnyCapture Editor", MB_ICONWARNING);
                         return None;
                     }
                     let mut f = vec![Field::Int { label: tr("Qualidade AVIF (1–100)"), value: reg_root("AvifQuality", 80) as i32, min: 1, max: 100 }];
@@ -371,7 +374,7 @@ impl Editor {
         if running && let Some(i) = &self.ipc {
             i.send_int(Channel::Capture, ipc::code::EDITOR_START_CAPTURE, kind, false);
         } else {
-            snapcore::instance::launch_sibling("Snapnab.exe", if kind != 0 { "/video" } else { "/capture" }, false);
+            snapcore::instance::launch_sibling("AnyCapture.exe", if kind != 0 { "/video" } else { "/capture" }, false);
         }
     }
 
@@ -408,7 +411,7 @@ impl Editor {
         } else {
             fmt(&tr("Enviar %zu itens da biblioteca para a Lixeira?"), &[&paths.len()])
         };
-        self.modal(move |o| native::message(o, &q, "Snapnab Editor", MB_YESNO | MB_ICONQUESTION), move |e, _, r| {
+        self.modal(move |o| native::message(o, &q, "AnyCapture Editor", MB_YESNO | MB_ICONQUESTION), move |e, _, r| {
             if r != IDYES.0 {
                 return;
             }
@@ -547,7 +550,7 @@ impl Editor {
         let subject = tr("Captura: ") + &self.cv.doc().map(|d| d.title.clone()).unwrap_or_default();
         self.modal(move |owner| super::extras::mapi_send(owner, &file, &subject), |e, _, r| {
             if let Err(m) = r {
-                e.inform(m, "Snapnab Editor");
+                e.inform(m, "AnyCapture Editor");
             }
         });
     }

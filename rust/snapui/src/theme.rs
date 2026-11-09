@@ -1,10 +1,10 @@
-//! The look of every Snapnab window: one set of colors, radii, spacing and fonts applied to each egui Context, so a
+//! The look of every AnyCapture window: one set of colors, radii, spacing and fonts applied to each egui Context, so a
 //! theme changes everything at once. egui keeps all of this in `Visuals` (colors, corners, shadows) and `Style`
 //! (spacing, text sizes); widgets read them every frame, so setting them once per window is enough.
 //!
-//! Snapnab looks like Windows 11 (Fluent): Segoe UI Variable, 4 px controls, 8 px windows, the Windows accent color and
+//! AnyCapture looks like Windows 11 (Fluent): Segoe UI Variable, 4 px controls, 8 px windows, the Windows accent color and
 //! the Fluent gray surfaces, in light or dark. Options › Appearance picks the mode (follow Windows, light or dark); the
-//! `SNAPNAB_THEME` variable (`light` / `dark`) overrides it, for the tests' screenshots.
+//! `ANYCAPTURE_THEME` variable (`light` / `dark`) overrides it, for the tests' screenshots.
 
 use std::sync::Arc;
 
@@ -21,7 +21,7 @@ impl Theme {
         if crate::fixed_look() {
             return Theme::Light;
         }
-        let v = std::env::var("SNAPNAB_THEME").unwrap_or_default().to_ascii_lowercase();
+        let v = std::env::var("ANYCAPTURE_THEME").unwrap_or_default().to_ascii_lowercase();
         match v.as_str() {
             "light" | "win11-light" => Theme::Light,
             "dark" | "win11-dark" => Theme::Dark,

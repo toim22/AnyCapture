@@ -49,7 +49,7 @@ P emboss3 97x61 7032ade63a479245 dpi=144 meta=1
 P emboss10 97x61 af72127157ad51de dpi=144 meta=1
 P sharpen40 97x61 5672e7fdc1e52da7 dpi=144 meta=1
 P sharpen100 97x61 882e119b80eb2718 dpi=144 meta=1
-P watermark 97x61 982c4f5615231f8d dpi=144 meta=1
+P watermark 97x61 bf7e95b867f132fa dpi=144 meta=1
 P watermarkTiled 97x61 5ff94cc6d473a118 dpi=144 meta=1
 P border 107x71 cc58cd0d42dad125 dpi=0 meta=0
 P shadow 127x91 514757946757d156 dpi=0 meta=0
@@ -99,7 +99,7 @@ P curl3 97x61 692edec7398b8a33 dpi=0 meta=0
 P spot 97x61 ec8b92fb57e6465f dpi=144 meta=1
 P spotZoom 97x61 9b6e29d21ef05b53 dpi=144 meta=1
 P spotOut 97x61 64cdd3b0d6dfd3c5 dpi=144 meta=1
-P caption 97x85 5053ba28eb86e54a dpi=0 meta=0
+P caption 97x85 c3a09f1c14071fb0 dpi=0 meta=0
 P captionTop 97x89 6006a2aad486d0a4 dpi=0 meta=0
 P scaleHQ 45x31 24e460e9a5015689 dpi=0 meta=0
 P scaleNN 150x20 20b7cffbae552e1c dpi=0 meta=0
@@ -155,7 +155,7 @@ A emboss3 80x50 65573a2b737a4e17 dpi=0 meta=0
 A emboss10 80x50 42c65605f576f69a dpi=0 meta=0
 A sharpen40 80x50 77de65dac89a3816 dpi=0 meta=0
 A sharpen100 80x50 06255a1a373499e6 dpi=0 meta=0
-A watermark 80x50 a2425030d4338f11 dpi=0 meta=0
+A watermark 80x50 2f59d85c7ab83702 dpi=0 meta=0
 A watermarkTiled 80x50 2c08cca7b0d5f1f1 dpi=0 meta=0
 A border 90x60 fccf96aac015b151 dpi=0 meta=0
 A shadow 110x80 c231a385ac140dc4 dpi=0 meta=0
@@ -205,7 +205,7 @@ A curl3 80x50 7389e416d21be288 dpi=0 meta=0
 A spot 80x50 584be2b6cd6d68d3 dpi=0 meta=0
 A spotZoom 80x50 9df029af6994bf27 dpi=0 meta=0
 A spotOut 80x50 7c9b44e310523e71 dpi=0 meta=0
-A caption 80x74 3b54c78f190e63fd dpi=0 meta=0
+A caption 80x74 fc4720f7c772610b dpi=0 meta=0
 A captionTop 80x78 fcae9f12c4d3b4d4 dpi=0 meta=0
 A scaleHQ 45x31 9267baab11e8ebb8 dpi=0 meta=0
 A scaleNN 150x20 772ad5155ac544c2 dpi=0 meta=0
@@ -261,7 +261,7 @@ framed emboss3 60x40 13157d4ee7d579f7 dpi=0 meta=0
 framed emboss10 60x40 34a61fb90408f45d dpi=0 meta=0
 framed sharpen40 60x40 e6fc6a8f381c9ecb dpi=0 meta=0
 framed sharpen100 60x40 1adc1c1aa9a87c1e dpi=0 meta=0
-framed watermark 60x40 a20c09b6bc6ceb60 dpi=0 meta=0
+framed watermark 60x40 bb8da9b1ba6230bb dpi=0 meta=0
 framed watermarkTiled 60x40 d60e4ce1bd5efb32 dpi=0 meta=0
 framed border 70x50 f437b3bba8cd6439 dpi=0 meta=0
 framed shadow 90x70 1a844be5b43b19b2 dpi=0 meta=0
@@ -311,7 +311,7 @@ framed curl3 60x40 6496e2cb7d1eaa9f dpi=0 meta=0
 framed spot 60x40 9b78e0585f18e88f dpi=0 meta=0
 framed spotZoom 60x40 bfa00779f75710af dpi=0 meta=0
 framed spotOut 60x40 1ab0783977266819 dpi=0 meta=0
-framed caption 60x64 3d6c3e370f9741b6 dpi=0 meta=0
+framed caption 60x64 69dedb635cd04e99 dpi=0 meta=0
 framed captionTop 60x68 7be433e723764107 dpi=0 meta=0
 framed scaleHQ 45x31 ca7d6d097a848bc0 dpi=0 meta=0
 framed scaleNN 150x20 672a5eec11192ffe dpi=0 meta=0
@@ -367,7 +367,7 @@ tiny emboss3 1x1 8709bf77de53579a dpi=0 meta=0
 tiny emboss10 1x1 8709bf77de53579a dpi=0 meta=0
 tiny sharpen40 1x1 74fa2435aa5d7e2a dpi=0 meta=0
 tiny sharpen100 1x1 74fa2435aa5d7e2a dpi=0 meta=0
-tiny watermark 1x1 34c82ceb9cfe8fb9 dpi=0 meta=0
+tiny watermark 1x1 a90522763f35c527 dpi=0 meta=0
 tiny watermarkTiled 1x1 893ebc22376334e3 dpi=0 meta=0
 tiny border 11x11 8e9a44aec6939d6a dpi=0 meta=0
 tiny shadow 31x31 1fc4fa4fe5742e2a dpi=0 meta=0
@@ -417,7 +417,7 @@ tiny curl3 1x1 315446a086a23133 dpi=0 meta=0
 tiny spot 1x1 74fa2435aa5d7e2a dpi=0 meta=0
 tiny spotZoom 1x1 74fa2435aa5d7e2a dpi=0 meta=0
 tiny spotOut 1x1 74fa2435aa5d7e2a dpi=0 meta=0
-tiny caption 1x25 d3fde7e8ee890b4c dpi=0 meta=0
+tiny caption 1x25 627007ee84824a3f dpi=0 meta=0
 tiny captionTop 1x29 82dd71b3819dd738 dpi=0 meta=0
 tiny scaleHQ 45x31 49eac4f085f16a96 dpi=0 meta=0
 tiny scaleNN 150x20 ae448862ebdcc693 dpi=0 meta=0
@@ -450,20 +450,20 @@ ce filter3 77x48 8ebaa629a860bb7e dpi=0 meta=0
 ce filter3-A 64x40 850de8181dc23e29 dpi=0 meta=0
 ce replace 77x48 93a469d7923f0ce1 dpi=0 meta=0
 ce replace-A 64x40 482add7dbf19d540 dpi=0 meta=0
-ce watermark 77x48 334063466df6cb72 dpi=0 meta=0
-ce watermark-A 64x40 eb89964615981b73 dpi=0 meta=0
-ce caption 77x76 7178ab1b653216b0 dpi=0 meta=0
-ce caption-A 64x68 726f390bb4d29266 dpi=0 meta=0
-ce border 85x84 3466af4b8eec71f0 dpi=0 meta=0
-ce border-A 72x76 defc91a16ac291a6 dpi=0 meta=0
-ce edge 85x84 8e5c4bcb4171e121 dpi=0 meta=0
-ce edge-A 72x76 c01031ce68b25113 dpi=0 meta=0
-ce shadow 115x114 e6633e936cecb595 dpi=0 meta=0
-ce shadow-A 102x106 2cc3efa35be35158 dpi=0 meta=0
-ce beautify 240x240 0643b61f9f2e273c dpi=0 meta=0
-ce beautify-A 225x232 e6fca125e8018b7c dpi=0 meta=0
-ce resolution 240x240 0643b61f9f2e273c dpi=200 meta=0
-ce resolution-A 225x232 e6fca125e8018b7c dpi=200 meta=0
+ce watermark 77x48 08c1c23c92646b29 dpi=0 meta=0
+ce watermark-A 64x40 55a706223dc7e78e dpi=0 meta=0
+ce caption 77x76 a497f3ccb2696606 dpi=0 meta=0
+ce caption-A 64x68 2c2fa27c43fedfe9 dpi=0 meta=0
+ce border 85x84 609f814ebe9621c6 dpi=0 meta=0
+ce border-A 72x76 62ea82da50848ae9 dpi=0 meta=0
+ce edge 85x84 84d1a68a90a6b9b3 dpi=0 meta=0
+ce edge-A 72x76 b61d1914050f72ce dpi=0 meta=0
+ce shadow 115x114 75e66590c9482a33 dpi=0 meta=0
+ce shadow-A 102x106 cea5f2c3c663c3e8 dpi=0 meta=0
+ce beautify 240x240 fe61d1993d878e6e dpi=0 meta=0
+ce beautify-A 225x232 6dabf8348f9362a1 dpi=0 meta=0
+ce resolution 240x240 fe61d1993d878e6e dpi=200 meta=0
+ce resolution-A 225x232 6dabf8348f9362a1 dpi=200 meta=0
 beautify0 P 117x81 16d46b6e5741a4a5 dpi=144 meta=1 at 10,10
 beautify0 A 100x70 bd8586ba17bb0043 dpi=0 meta=0 at 10,10
 beautify0 framed 68x58 c2809b71330e10fd dpi=0 meta=0 at 10,10
@@ -847,8 +847,8 @@ split3 300x1300 2df50f3b5182d0cb dpi=0 meta=0
 splitV4 30x61 b394a4bc54b029ed dpi=0 meta=0
 splitV5 30x61 9ce0d36e075be404 dpi=0 meta=0
 splitV6 37x61 56b86455341491bc dpi=0 meta=0
-pdf page ok=1 392105 4ccc4a7888c75d99 err=
-pdf P ok=1 5546 f61673ae0a3909bc err=
-pdf wide ok=1 30203 81f7f2fe715fe406 err=
-pdf A ok=1 4795 46ddabef79311e5a err=
+pdf page ok=1 392108 9145108f9ffa6013 err=
+pdf P ok=1 5549 1e9fecc643103778 err=
+pdf wide ok=1 30206 a7bedfb6647738fe err=
+pdf A ok=1 4798 0e92fa164d0cba61 err=
 pdf empty ok=0 0 14650fb0739d0383 err=Imagem vazia.

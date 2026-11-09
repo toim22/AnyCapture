@@ -1,10 +1,10 @@
-# Snapnab — interface translations.
+# AnyCapture — interface translations.
 # Copyright © 2026 Antonio Rezende. GPL-3.0.
 # Language: العربية.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Snapnab\n"
+"Project-Id-Version: AnyCapture\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -99,7 +99,7 @@ msgstr "اكتشاف الوجوه غير متاح في نظام Windows هذا."
 msgid "Falha na detecção de rostos."
 msgstr "فشل اكتشاف الوجوه."
 
-#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:860
+#: rust/snapcore/src/office.rs:181 rust/anycapture/src/main.rs:860
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s غير مثبت على هذا الحاسوب (أو أنه إصدار Microsoft Store بلا أتمتة)."
@@ -154,7 +154,7 @@ msgstr "تمرير تلقائي (نافذة)"
 msgid "Rolagem panorâmica"
 msgstr "تمرير بانورامي"
 
-#: rust/snapcore/src/presets.rs:66 rust/snapnab/src/engine/scroll.rs:163
+#: rust/snapcore/src/presets.rs:66 rust/anycapture/src/engine/scroll.rs:163
 msgid "Janela estendida"
 msgstr "نافذة ممتدة"
 
@@ -170,7 +170,7 @@ msgstr "الحافظة"
 msgid "Arquivo gráfico"
 msgstr "ملف رسومي"
 
-#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:765
+#: rust/snapcore/src/presets.rs:185 rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:765
 msgid "Novo preset"
 msgstr "إعداد مسبق جديد"
 
@@ -178,7 +178,7 @@ msgstr "إعداد مسبق جديد"
 msgid "Captura"
 msgstr "التقاط"
 
-#: rust/snapcore/src/presets.rs:491 rust/snapcore/src/presets.rs:500 rust/snapnab/src/dialogs.rs:182 rust/snapnab/src/main.rs:539
+#: rust/snapcore/src/presets.rs:491 rust/snapcore/src/presets.rs:500 rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:539
 msgid "Presets"
 msgstr "إعدادات مسبقة"
 
@@ -202,7 +202,7 @@ msgstr "فيديو — منطقة"
 msgid "Vídeo — Tela inteira"
 msgstr "فيديو — ملء الشاشة"
 
-#: rust/snapcore/src/presets.rs:601 rust/snapnab/src/cmdline.rs:152 rust/snapnab/src/cmdline.rs:153
+#: rust/snapcore/src/presets.rs:601 rust/anycapture/src/cmdline.rs:152 rust/anycapture/src/cmdline.rs:153
 msgid "Imagem — Região"
 msgstr "صورة — منطقة"
 
@@ -256,7 +256,7 @@ msgstr "ا"
 msgid "Não foi possível gravar o arquivo."
 msgstr "تعذّرت كتابة الملف."
 
-#: rust/snapcore/src/settings.rs:220 rust/snapnab/src/dialogs.rs:300
+#: rust/snapcore/src/settings.rs:220 rust/anycapture/src/dialogs.rs:300
 msgid "Arquivo de configurações inválido."
 msgstr "ملف إعدادات غير صالح."
 
@@ -264,7 +264,7 @@ msgstr "ملف إعدادات غير صالح."
 msgid "Não foi possível gravar "
 msgstr "تعذّرت كتابة "
 
-#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:591 rust/snapnab/src/window.rs:602
+#: rust/snapcore/src/sounds.rs:31 rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:591 rust/anycapture/src/window.rs:602
 msgid "Desligado"
 msgstr "إيقاف"
 
@@ -297,8 +297,8 @@ msgid "Nenhum (desligado)"
 msgstr "لا شيء (متوقف)"
 
 #: rust/snapcore/src/upload.rs:383
-msgid "Snapnab: login concluído. Você já pode fechar esta janela."
-msgstr "Snapnab: اكتمل تسجيل الدخول. يمكنك إغلاق هذه النافذة الآن."
+msgid "AnyCapture: login concluído. Você já pode fechar esta janela."
+msgstr "AnyCapture: اكتمل تسجيل الدخول. يمكنك إغلاق هذه النافذة الآن."
 
 #: rust/snapcore/src/upload.rs:398
 msgid "Falha ao renovar o acesso (faça login de novo nas opções de upload)"
@@ -718,7 +718,7 @@ msgstr "تأثير"
 msgid "Efeitos rápidos"
 msgstr "تأثيرات سريعة"
 
-#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/snapnab/src/window.rs:731
+#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/anycapture/src/window.rs:731
 msgid "Excluir"
 msgstr "حذف"
 
@@ -730,11 +730,11 @@ msgstr "+ إضافة إلى التأثيرات السريعة"
 msgid "Aplicar"
 msgstr "تطبيق"
 
-#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
+#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574 rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387
 msgid "Cancelar"
 msgstr "إلغاء"
 
-#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:579 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:579 rust/anycapture/src/window.rs:87
 msgid "Borda"
 msgstr "إطار"
 
@@ -810,7 +810,7 @@ msgstr "الحجم"
 msgid "Pequena"
 msgstr "صغير"
 
-#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
+#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
 msgid "Média"
 msgstr "متوسطة"
 
@@ -822,19 +822,19 @@ msgstr "كبير"
 msgid "Canto"
 msgstr "الزاوية"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
 msgid "Superior esquerdo"
 msgstr "أعلى اليسار"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
 msgid "Superior direito"
 msgstr "أعلى اليمين"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:691
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:691
 msgid "Inferior direito"
 msgstr "أسفل اليمين"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
 msgid "Inferior esquerdo"
 msgstr "أسفل اليسار"
 
@@ -846,51 +846,51 @@ msgstr "الحواف"
 msgid "Rasgada, onda, serrilhada, tubarão, esmaecida ou chanfrada."
 msgstr "ممزّق أو موجة أو منشار أو قرش أو متلاشٍ أو مشطوف."
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/anycapture/src/dialogs.rs:670
 msgid "Estilo"
 msgstr "النمط"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Rasgada"
 msgstr "ممزّق"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/anycapture/src/dialogs.rs:670
 msgid "Onda"
 msgstr "موجة"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Dente de serra"
 msgstr "أسنان المنشار"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Dente de tubarão"
 msgstr "أسنان القرش"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/anycapture/src/dialogs.rs:670
 msgid "Esmaecer"
 msgstr "تلاشٍ"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Chanfrada"
 msgstr "مشطوف"
 
-#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:671 rust/snapnab/src/dialogs.rs:665
+#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:671 rust/anycapture/src/dialogs.rs:665
 msgid "Em cima"
 msgstr "أعلى"
 
-#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:672
+#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:672
 msgid "Direita"
 msgstr "يمين"
 
-#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:672 rust/snapnab/src/dialogs.rs:665
+#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:672 rust/anycapture/src/dialogs.rs:665
 msgid "Embaixo"
 msgstr "أسفل"
 
-#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:673
+#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:673
 msgid "Esquerda"
 msgstr "يسار"
 
-#: rust/snapedit/src/effects.rs:123 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:123 rust/anycapture/src/window.rs:87
 msgid "Filtros"
 msgstr "مرشّحات"
 
@@ -902,23 +902,23 @@ msgstr "رمادي، بني داكن، عكس، أبيض وأسود، نقش ب�
 msgid "Cores"
 msgstr "الألوان"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Filtro"
 msgstr "المرشّح"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Tons de cinza"
 msgstr "تدرّج رمادي"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Sépia"
 msgstr "بني داكن"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Inverter cores"
 msgstr "عكس الألوان"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Preto e branco"
 msgstr "أبيض وأسود"
 
@@ -938,11 +938,11 @@ msgstr "حدّة"
 msgid "Intensidade"
 msgstr "الشدة"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
+#: rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
 msgid "Baixa"
 msgstr "منخفضة"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
+#: rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
 msgid "Alta"
 msgstr "عالية"
 
@@ -954,11 +954,11 @@ msgstr "ضبط الألوان"
 msgid "Brilho, contraste, gama, matiz e saturação."
 msgstr "السطوع والتباين وغاما وتدرّج اللون والتشبّع."
 
-#: rust/snapedit/src/effects.rs:129 rust/snapnab/src/dialogs.rs:676
+#: rust/snapedit/src/effects.rs:129 rust/anycapture/src/dialogs.rs:676
 msgid "Brilho"
 msgstr "السطوع"
 
-#: rust/snapedit/src/effects.rs:130 rust/snapnab/src/dialogs.rs:676
+#: rust/snapedit/src/effects.rs:130 rust/anycapture/src/dialogs.rs:676
 msgid "Contraste"
 msgstr "التباين"
 
@@ -970,11 +970,11 @@ msgstr "غاما"
 msgid "Matiz"
 msgstr "تدرّج اللون"
 
-#: rust/snapedit/src/effects.rs:135 rust/snapnab/src/dialogs.rs:677
+#: rust/snapedit/src/effects.rs:135 rust/anycapture/src/dialogs.rs:677
 msgid "Saturação"
 msgstr "التشبّع"
 
-#: rust/snapedit/src/effects.rs:137 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:137 rust/anycapture/src/window.rs:87
 msgid "Substituição de cor"
 msgstr "استبدال اللون"
 
@@ -986,7 +986,7 @@ msgstr "يستبدل لونًا بآخر (أو بالشفافية)."
 msgid "Cor atual"
 msgstr "اللون الحالي"
 
-#: rust/snapedit/src/effects.rs:139 rust/snapnab/src/dialogs.rs:666
+#: rust/snapedit/src/effects.rs:139 rust/anycapture/src/dialogs.rs:666
 msgid "Nova cor"
 msgstr "لون جديد"
 
@@ -1018,7 +1018,7 @@ msgstr "تكبير"
 msgid "Sombra na área em foco"
 msgstr "ظل في منطقة التركيز"
 
-#: rust/snapedit/src/effects.rs:149 rust/snapnab/src/window.rs:88
+#: rust/snapedit/src/effects.rs:149 rust/anycapture/src/window.rs:88
 msgid "Marca d'água"
 msgstr "علامة مائية"
 
@@ -1030,7 +1030,7 @@ msgstr "نص شفاف فوق الصورة، مرة واحدة أو متكرر."
 msgid "Repetir em mosaico"
 msgstr "تكرار متجانب"
 
-#: rust/snapedit/src/effects.rs:155 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:155 rust/anycapture/src/window.rs:87
 msgid "Informações da captura"
 msgstr "معلومات اللقطة"
 
@@ -1038,7 +1038,7 @@ msgstr "معلومات اللقطة"
 msgid "Faixa de texto em cima ou embaixo; aceita {date} e {time}."
 msgstr "شريط نص في الأعلى أو الأسفل؛ يقبل {date} و{time}."
 
-#: rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:665
+#: rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:665
 msgid "Posição"
 msgstr "الموضع"
 
@@ -1130,7 +1130,7 @@ msgstr "تدوير(&O)"
 msgid "Inserir c&ursor"
 msgstr "إدراج مؤشر(&U)"
 
-#: rust/snapedit/src/menu.rs:234 rust/snapnab/src/window.rs:243
+#: rust/snapedit/src/menu.rs:234 rust/anycapture/src/window.rs:243
 msgid "&Arquivo"
 msgstr "ملف(&F)"
 
@@ -1146,11 +1146,11 @@ msgstr "صورة(&I)"
 msgid "&Ferramentas"
 msgstr "الأدوات(&F)"
 
-#: rust/snapedit/src/menu.rs:238 rust/snapnab/src/window.rs:243
+#: rust/snapedit/src/menu.rs:238 rust/anycapture/src/window.rs:243
 msgid "E&xibir"
 msgstr "عرض(&V)"
 
-#: rust/snapedit/src/menu.rs:239 rust/snapnab/src/window.rs:243
+#: rust/snapedit/src/menu.rs:239 rust/anycapture/src/window.rs:243
 msgid "A&juda"
 msgstr "تعليمات(&H)"
 
@@ -1611,16 +1611,16 @@ msgid "&Personalizar a barra de ferramentas…"
 msgstr "تخصيص شريط الأدوات(&C)…"
 
 #: rust/snapedit/src/menu.rs:210
-msgid "&Manual do Snapnab\tF1"
-msgstr "&دليل Snapnab\tF1"
+msgid "&Manual do AnyCapture\tF1"
+msgstr "&دليل AnyCapture\tF1"
 
 #: rust/snapedit/src/menu.rs:211
 msgid "&Atalhos de teclado"
 msgstr "اختصارات لوحة المفاتيح(&K)"
 
 #: rust/snapedit/src/menu.rs:212
-msgid "&Sobre o Snapnab Editor"
-msgstr "حول Snapnab Editor(&A)"
+msgid "&Sobre o AnyCapture Editor"
+msgstr "حول AnyCapture Editor(&A)"
 
 #: rust/snapedit/src/menu.rs:217
 msgid "Ler código &QR\tCtrl+Shift+Q"
@@ -1691,7 +1691,7 @@ msgstr "تقطيع بكسلي"
 msgid "Peça solta"
 msgstr "قطعة عائمة"
 
-#: rust/snapedit/src/panels.rs:399 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/panels.rs:399 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Imagem"
 msgstr "صورة"
 
@@ -1736,7 +1736,7 @@ msgstr "إحضار للأمام"
 msgid "Fundo (imagem)"
 msgstr "الخلفية (الصورة)"
 
-#: rust/snapedit/src/panels.rs:62 rust/snapnab/src/window.rs:44
+#: rust/snapedit/src/panels.rs:62 rust/anycapture/src/window.rs:44
 msgid "Arquivo"
 msgstr "ملف"
 
@@ -1748,11 +1748,11 @@ msgstr "حفظ كملف (PNG، JPG، PDF…)"
 msgid "Enviar por e-mail"
 msgstr "إرسال بالبريد"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/snapnab/src/dialogs.rs:526
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/anycapture/src/dialogs.rs:526
 msgid "Programa"
 msgstr "البرنامج"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapnab/src/dialogs.rs:527
+#: rust/snapedit/src/panels.rs:64 rust/anycapture/src/dialogs.rs:527
 msgid "Abrir em um programa externo"
 msgstr "فتح في برنامج خارجي"
 
@@ -1812,7 +1812,7 @@ msgstr "حفظ"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "حفظ في المكتبة (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:259 rust/anycapture/src/quick.rs:247
 msgid "Salvar como"
 msgstr "حفظ باسم"
 
@@ -1820,7 +1820,7 @@ msgstr "حفظ باسم"
 msgid "Salvar como arquivo (Ctrl+Shift+S)"
 msgstr "حفظ كملف (Ctrl+Shift+S)"
 
-#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/snapnab/src/window.rs:729
+#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/anycapture/src/window.rs:729
 msgid "Duplicar"
 msgstr "تكرار"
 
@@ -1860,7 +1860,7 @@ msgstr "دمج الكل"
 msgid "Mesclar todos os objetos na imagem"
 msgstr "دمج كل العناصر في الصورة"
 
-#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:629 rust/snapnab/src/dialogs.rs:678
+#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:629 rust/anycapture/src/dialogs.rs:678
 msgid "Girar"
 msgstr "تدوير"
 
@@ -1956,15 +1956,15 @@ msgstr "المساطر"
 msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
 msgstr "إظهار المساطر والأدلة والإحداثيات (Ctrl+Shift+R)"
 
-#: rust/snapedit/src/panels.rs:243 rust/snapnab/src/window.rs:619
+#: rust/snapedit/src/panels.rs:243 rust/anycapture/src/window.rs:619
 msgid "Capturar"
 msgstr "التقاط"
 
 #: rust/snapedit/src/panels.rs:243
-msgid "Nova captura de imagem (pede ao Snapnab)"
-msgstr "لقطة صورة جديدة (تطلبها من Snapnab)"
+msgid "Nova captura de imagem (pede ao AnyCapture)"
+msgstr "لقطة صورة جديدة (تطلبها من AnyCapture)"
 
-#: rust/snapedit/src/panels.rs:244 rust/snapnab/src/window.rs:619
+#: rust/snapedit/src/panels.rs:244 rust/anycapture/src/window.rs:619
 msgid "Gravar"
 msgstr "تسجيل"
 
@@ -2066,8 +2066,8 @@ msgid "Meu tema"
 msgstr "نسقي"
 
 #: rust/snapedit/src/props.rs:567 rust/snapedit/src/props.rs:601
-msgid "Tema do Snapnab (*.snaptheme)"
-msgstr "نسق Snapnab (*.snaptheme)"
+msgid "Tema do AnyCapture (*.snaptheme)"
+msgstr "نسق AnyCapture (*.snaptheme)"
 
 #: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:91
 msgid "Todos os arquivos"
@@ -2085,7 +2085,7 @@ msgstr "تحرير نسخة من النسق…"
 msgid "Editar o tema…"
 msgstr "تحرير النسق…"
 
-#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/anycapture/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (نسخة)"
 
@@ -2158,7 +2158,7 @@ msgstr "استخدام هذا الختم"
 msgid "Propriedades da ferramenta"
 msgstr "خصائص الأداة"
 
-#: rust/snapedit/src/props.rs:860 rust/snapnab/src/window.rs:772
+#: rust/snapedit/src/props.rs:860 rust/anycapture/src/window.rs:772
 msgid "Ajuda"
 msgstr "تعليمات"
 
@@ -2424,7 +2424,7 @@ msgstr "تنويع الخط"
 msgid "Avançado"
 msgstr "متقدّم"
 
-#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/snapnab/src/dialogs.rs:689
+#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/anycapture/src/dialogs.rs:689
 msgid "Alinhamento"
 msgstr "المحاذاة"
 
@@ -4082,8 +4082,8 @@ msgid "Tema"
 msgstr "نسق"
 
 #: rust/snapedit/src/styles.rs:639
-msgid "O arquivo não é um tema do Snapnab (.snaptheme)."
-msgstr "الملف ليس نسق Snapnab (.snaptheme)."
+msgid "O arquivo não é um tema do AnyCapture (.snaptheme)."
+msgstr "الملف ليس نسق AnyCapture (.snaptheme)."
 
 #: rust/snapedit/src/styles.rs:470 rust/snapedit/src/styles.rs:522
 msgid "Básico"
@@ -4102,11 +4102,11 @@ msgstr "إظهار في المجلد"
 msgid "Exportar %zu itens…"
 msgstr "تصدير %zu عنصر…"
 
-#: rust/snapedit/src/tray.rs:306 rust/snapedit/src/app/commands.rs:778 rust/snapnab/src/quick.rs:297
+#: rust/snapedit/src/tray.rs:306 rust/snapedit/src/app/commands.rs:778 rust/anycapture/src/quick.rs:297
 msgid "Copiar como…"
 msgstr "نسخ كـ…"
 
-#: rust/snapedit/src/tray.rs:308 rust/snapedit/src/app/commands.rs:783 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:44
+#: rust/snapedit/src/tray.rs:308 rust/snapedit/src/app/commands.rs:783 rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44
 msgid "Fixar na tela"
 msgstr "تثبيت على الشاشة"
 
@@ -4313,7 +4313,7 @@ msgstr ""
 "تحرير اللقطات بعناصر متجهة وتأثيرات وSmart Move\n"
 "وOCR وتصدير PDF وتحرير الفيديو (القص وGIF)."
 
-#: rust/snapedit/src/app/commands.rs:439 rust/snapnab/src/main.rs:961
+#: rust/snapedit/src/app/commands.rs:439 rust/anycapture/src/main.rs:961
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "برنامج حر بموجب رخصة جنو العمومية العامة، الإصدار 3."
 
@@ -4342,7 +4342,7 @@ msgstr "تأثيري %zu"
 msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
 msgstr "تأتي الإعدادات من التأثيرات في اللوحة (افتح كل تأثير لتغييره):"
 
-#: rust/snapedit/src/app/commands.rs:580 rust/snapnab/src/window.rs:88
+#: rust/snapedit/src/app/commands.rs:580 rust/anycapture/src/window.rs:88
 msgid "Bordas especiais"
 msgstr "حواف خاصة"
 
@@ -4378,7 +4378,7 @@ msgstr "سيتم دمج العناصر في الصورة."
 msgid "Largura (px)"
 msgstr "العرض (بكسل)"
 
-#: rust/snapedit/src/app/commands.rs:652 rust/snapedit/src/app/commands.rs:699 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
+#: rust/snapedit/src/app/commands.rs:652 rust/snapedit/src/app/commands.rs:699 rust/snapedit/src/app/docs.rs:354 rust/anycapture/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "الارتفاع (بكسل)"
 
@@ -4386,7 +4386,7 @@ msgstr "الارتفاع (بكسل)"
 msgid "ou escala (%)"
 msgstr "أو المقياس (%)"
 
-#: rust/snapedit/src/app/commands.rs:656 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/app/commands.rs:656 rust/anycapture/src/window.rs:87
 msgid "Redimensionar imagem"
 msgstr "تغيير حجم الصورة"
 
@@ -4398,7 +4398,7 @@ msgstr "نقطة الارتكاز"
 msgid "Cor do canvas"
 msgstr "لون اللوحة"
 
-#: rust/snapedit/src/app/commands.rs:702 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/commands.rs:702 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "شفاف"
 
@@ -4475,7 +4475,7 @@ msgstr "%zu عنصر"
 msgid "Superior esquerda"
 msgstr "أعلى اليسار"
 
-#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:690
 msgid "Superior"
 msgstr "أعلى"
 
@@ -4483,7 +4483,7 @@ msgstr "أعلى"
 msgid "Superior direita"
 msgstr "أعلى اليمين"
 
-#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/anycapture/src/dialogs.rs:690
 msgid "Centro"
 msgstr "الوسط"
 
@@ -4491,7 +4491,7 @@ msgstr "الوسط"
 msgid "Inferior esquerda"
 msgstr "أسفل اليسار"
 
-#: rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:691
+#: rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/extras.rs:129 rust/anycapture/src/dialogs.rs:691
 msgid "Inferior"
 msgstr "أسفل"
 
@@ -4531,7 +4531,7 @@ msgstr "جودة مع فقد (1–100)"
 msgid "Qualidade AVIF (1–100)"
 msgstr "جودة AVIF (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:319 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
+#: rust/snapedit/src/app/docs.rs:319 rust/anycapture/src/pins.rs:429 rust/anycapture/src/quick.rs:255
 msgid "Não foi possível salvar:\n"
 msgstr "تعذّر الحفظ:\n"
 
@@ -4539,11 +4539,11 @@ msgstr "تعذّر الحفظ:\n"
 msgid "Salvo em "
 msgstr "تم الحفظ في "
 
-#: rust/snapedit/src/app/docs.rs:342 rust/snapnab/src/engine.rs:479
+#: rust/snapedit/src/app/docs.rs:342 rust/anycapture/src/engine.rs:479
 msgid "A área de transferência não contém imagem."
 msgstr "لا تحتوي الحافظة على صورة."
 
-#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:222
+#: rust/snapedit/src/app/docs.rs:345 rust/anycapture/src/window.rs:222
 msgid "Da área de transferência"
 msgstr "من الحافظة"
 
@@ -4632,43 +4632,43 @@ msgstr "(الإعدادات أدناه)"
 msgid "Predefinição"
 msgstr "إعداد مسبق"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771 rust/anycapture/src/dialogs.rs:683
 msgid "Fundo"
 msgstr "الخلفية"
 
-#: rust/snapedit/src/app/extras.rs:113 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:113 rust/anycapture/src/dialogs.rs:684
 msgid "Cor 1"
 msgstr "اللون 1"
 
-#: rust/snapedit/src/app/extras.rs:114 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:114 rust/anycapture/src/dialogs.rs:684
 msgid "Cor 2 (degradê)"
 msgstr "اللون 2 (التدرج)"
 
-#: rust/snapedit/src/app/extras.rs:115 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:115 rust/anycapture/src/dialogs.rs:684
 msgid "Ângulo do degradê"
 msgstr "زاوية التدرج"
 
-#: rust/snapedit/src/app/extras.rs:116 rust/snapnab/src/dialogs.rs:685
+#: rust/snapedit/src/app/extras.rs:116 rust/anycapture/src/dialogs.rs:685
 msgid "Imagem de fundo"
 msgstr "صورة الخلفية"
 
-#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/snapnab/src/dialogs.rs:685
+#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/anycapture/src/dialogs.rs:685
 msgid "Margem (px)"
 msgstr "الهامش (px)"
 
-#: rust/snapedit/src/app/extras.rs:118 rust/snapnab/src/dialogs.rs:686
+#: rust/snapedit/src/app/extras.rs:118 rust/anycapture/src/dialogs.rs:686
 msgid "Cantos arredondados (px)"
 msgstr "الزوايا المستديرة (px)"
 
-#: rust/snapedit/src/app/extras.rs:119 rust/snapnab/src/dialogs.rs:686
+#: rust/snapedit/src/app/extras.rs:119 rust/anycapture/src/dialogs.rs:686
 msgid "Sombra (%)"
 msgstr "الظل (%)"
 
-#: rust/snapedit/src/app/extras.rs:120 rust/snapnab/src/dialogs.rs:687
+#: rust/snapedit/src/app/extras.rs:120 rust/anycapture/src/dialogs.rs:687
 msgid "Tamanho da sombra (px)"
 msgstr "حجم الظل (px)"
 
-#: rust/snapedit/src/app/extras.rs:122 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/app/extras.rs:122 rust/anycapture/src/dialogs.rs:688
 msgid "Proporção"
 msgstr "نسبة الأبعاد"
 
@@ -4676,7 +4676,7 @@ msgstr "نسبة الأبعاد"
 msgid "Livre"
 msgstr "حر"
 
-#: rust/snapedit/src/app/extras.rs:132 rust/snapnab/src/dialogs.rs:692
+#: rust/snapedit/src/app/extras.rs:132 rust/anycapture/src/dialogs.rs:692
 msgid "Equilibrar as margens (corta bordas lisas da captura)"
 msgstr "موازنة الهوامش (يقص الحواف الملساء للقطة)"
 
@@ -4684,7 +4684,7 @@ msgstr "موازنة الهوامش (يقص الحواف الملساء للقط
 msgid "Salvar como predefinição (nome)"
 msgstr "حفظ كإعداد مسبق (الاسم)"
 
-#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/snapnab/src/dialogs.rs:694
+#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/anycapture/src/dialogs.rs:694
 msgid "Embelezar"
 msgstr "تجميل"
 
@@ -4706,27 +4706,27 @@ msgstr "تعذّر فتح الطباعة: لا توجد طابعة مثبتة أ
 msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
 msgstr "لم تقبل الطابعة المستند (تحقق من أنها قيد التشغيل وأن خدمة الطباعة في Windows تعمل)."
 
-#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:919
+#: rust/snapedit/src/app/extras.rs:328 rust/anycapture/src/main.rs:919
 msgid "O manual não foi encontrado:\n"
 msgstr "لم يتم العثور على الدليل:\n"
 
-#: rust/snapedit/src/app/extras.rs:395 rust/snapnab/src/share.rs:53
+#: rust/snapedit/src/app/extras.rs:395 rust/anycapture/src/share.rs:53
 msgid "Arquivo (para colar no Explorer, e-mail, chat)"
 msgstr "ملف (للصق في المستكشف أو البريد أو الدردشة)"
 
-#: rust/snapedit/src/app/extras.rs:396 rust/snapnab/src/share.rs:53
+#: rust/snapedit/src/app/extras.rs:396 rust/anycapture/src/share.rs:53
 msgid "Caminho do arquivo"
 msgstr "مسار الملف"
 
-#: rust/snapedit/src/app/extras.rs:399 rust/snapnab/src/share.rs:53
+#: rust/snapedit/src/app/extras.rs:399 rust/anycapture/src/share.rs:53
 msgid "Base64 (PNG)"
 msgstr "Base64 (PNG)"
 
-#: rust/snapedit/src/app/extras.rs:400 rust/snapnab/src/share.rs:54
+#: rust/snapedit/src/app/extras.rs:400 rust/anycapture/src/share.rs:54
 msgid "Data URL (PNG)"
 msgstr "عنوان URL للبيانات (PNG)"
 
-#: rust/snapedit/src/app/extras.rs:401 rust/snapnab/src/share.rs:54
+#: rust/snapedit/src/app/extras.rs:401 rust/anycapture/src/share.rs:54
 msgid "Data URL (WebP)"
 msgstr "عنوان URL للبيانات (WebP)"
 
@@ -4884,7 +4884,7 @@ msgstr "حجم كل جزء (px)"
 msgid "Número de partes"
 msgstr "عدد الأجزاء"
 
-#: rust/snapedit/src/app/extras.rs:757 rust/snapnab/src/dialogs.rs:671
+#: rust/snapedit/src/app/extras.rs:757 rust/anycapture/src/dialogs.rs:671
 msgid "Tamanho (px)"
 msgstr "الحجم (بكسل)"
 
@@ -4910,7 +4910,7 @@ msgstr "صورة مقسّمة"
 msgid "Imagem dividida em %zu partes (imagens novas na bandeja)."
 msgstr "تم تقسيم الصورة إلى %zu جزء (صور جديدة في الشريط)."
 
-#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:107
+#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:107
 msgid "Formato"
 msgstr "التنسيق"
 
@@ -4988,7 +4988,7 @@ msgstr "طباعة"
 msgid "Lote"
 msgstr "دفعة"
 
-#: rust/snapedit/src/app/extras.rs:1086 rust/snapnab/src/hotkeys.rs:48
+#: rust/snapedit/src/app/extras.rs:1086 rust/anycapture/src/hotkeys.rs:48
 msgid "(nenhum)"
 msgstr "(لا شيء)"
 
@@ -5099,7 +5099,7 @@ msgstr "النعناع"
 msgid "Grafite"
 msgstr "الجرافيت"
 
-#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Papel de parede"
 msgstr "خلفية سطح المكتب"
 
@@ -5107,11 +5107,11 @@ msgstr "خلفية سطح المكتب"
 msgid "Branco simples"
 msgstr "أبيض بسيط"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Cor sólida"
 msgstr "لون خالص"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Degradê"
 msgstr "تدرج"
 
@@ -5140,8 +5140,8 @@ msgid "Largura/altura máxima"
 msgstr "أقصى عرض/ارتفاع"
 
 #: rust/snapedit/src/app/mod.rs:217
-msgid " — Snapnab Editor"
-msgstr " — Snapnab Editor"
+msgid " — AnyCapture Editor"
+msgstr " — AnyCapture Editor"
 
 #: rust/snapedit/src/app/mod.rs:231
 msgid "Vídeo: "
@@ -5227,13 +5227,13 @@ msgstr "هل تريد حذف التأثير السريع \"%s\"؟"
 
 #: rust/snapedit/src/app/mod.rs:899
 msgid ""
-"SnapnabEditor.exe [opções] [arquivo…]\n"
+"AnyCaptureEditor.exe [opções] [arquivo…]\n"
 "\n"
 "/Open \"arquivo\"     abre um arquivo (.snap, imagem, .mp4)\n"
 "/NewFromClipboard   cria imagem a partir da área de transferência\n"
 "/restartwait        espera a instância anterior fechar"
 msgstr ""
-"SnapnabEditor.exe [خيارات] [ملف…]\n"
+"AnyCaptureEditor.exe [خيارات] [ملف…]\n"
 "\n"
 "/Open \"ملف\"        يفتح ملفًا (.snap، صورة، .mp4)\n"
 "/NewFromClipboard   ينشئ صورة من الحافظة\n"
@@ -5288,7 +5288,7 @@ msgstr "إطار فيديو"
 msgid "Salvar vídeo"
 msgstr "حفظ الفيديو"
 
-#: rust/snapedit/src/app/video.rs:413 rust/snapnab/src/quick.rs:241
+#: rust/snapedit/src/app/video.rs:413 rust/anycapture/src/quick.rs:241
 msgid "Vídeo MP4 (*.mp4)|*.mp4|"
 msgstr "فيديو MP4 (*.mp4)|*.mp4|"
 
@@ -5316,7 +5316,7 @@ msgstr "النطاق: التحديد المعلَّم."
 msgid "Intervalo: o vídeo inteiro (marque início/fim para limitar)."
 msgstr "النطاق: الفيديو كله (علّم البداية/النهاية للتقييد)."
 
-#: rust/snapedit/src/app/video.rs:455 rust/snapnab/src/dialogs.rs:580
+#: rust/snapedit/src/app/video.rs:455 rust/anycapture/src/dialogs.rs:580
 msgid "Quadros por segundo"
 msgstr "إطار في الثانية"
 
@@ -5458,8 +5458,8 @@ msgid "Informe o modelo."
 msgstr "أدخل النموذج."
 
 #: rust/snapedit/src/app/windows_aux.rs:378
-msgid "Atalhos do Snapnab Editor"
-msgstr "اختصارات Snapnab Editor"
+msgid "Atalhos do AnyCapture Editor"
+msgstr "اختصارات AnyCapture Editor"
 
 #: rust/snapedit/src/app/windows_aux.rs:389 rust/snapedit/src/app/windows_aux.rs:513
 msgid "Ampliar parte da imagem"
@@ -5644,7 +5644,7 @@ msgstr "جارٍ السؤال…"
 msgid "Resposta de %s (%s)."
 msgstr "إجابة من %s (%s)."
 
-#: rust/snapedit/src/app/windows_aux.rs:869 rust/snapnab/src/quick.rs:53
+#: rust/snapedit/src/app/windows_aux.rs:869 rust/anycapture/src/quick.rs:53
 msgid "Copiar"
 msgstr "نسخ"
 
@@ -5716,7 +5716,7 @@ msgstr "استخراج الخطوات"
 msgid "Extrair o texto"
 msgstr "استخراج النص"
 
-#: rust/snapedit/src/app/windows_aux.rs:577 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
+#: rust/snapedit/src/app/windows_aux.rs:577 rust/anycapture/src/select.rs:674 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "موافق"
 
@@ -5732,13 +5732,13 @@ msgstr "فشل كتابة الملف."
 msgid "Falha ao codificar a imagem."
 msgstr "فشل ترميز الصورة."
 
-#: rust/snapnab/src/camwin.rs:81 rust/snapnab/src/engine/video.rs:178
-msgid "Snapnab — webcam"
-msgstr "Snapnab — كاميرا الويب"
+#: rust/anycapture/src/camwin.rs:81 rust/anycapture/src/engine/video.rs:178
+msgid "AnyCapture — webcam"
+msgstr "AnyCapture — كاميرا الويب"
 
-#: rust/snapnab/src/cmdline.rs:111
+#: rust/anycapture/src/cmdline.rs:111
 msgid ""
-"Snapnab.exe [opções]\n"
+"AnyCapture.exe [opções]\n"
 "\n"
 "/hide                 inicia só na bandeja\n"
 "/capture              captura imagem com o preset de imagem atual\n"
@@ -5757,9 +5757,9 @@ msgid ""
 "/focus                liga ou desliga o foco de tela\n"
 "/interval [stop]      inicia (ou para) a captura por intervalo\n"
 "/output clipboard|editor|none|\"arquivo\"   para onde vai a captura\n"
-"/exit                 encerra o Snapnab em execução"
+"/exit                 encerra o AnyCapture em execução"
 msgstr ""
-"Snapnab.exe [خيارات]\n"
+"AnyCapture.exe [خيارات]\n"
 "\n"
 "/hide                 البدء في منطقة الإعلامات فقط\n"
 "/capture              التقاط صورة بالإعداد المسبق الحالي للصور\n"
@@ -5778,63 +5778,63 @@ msgstr ""
 "/focus                يشغّل تركيز الشاشة أو يوقفه\n"
 "/interval [stop]      يبدأ (أو يوقف) الالتقاط على فترات\n"
 "/output clipboard|editor|none|\"ملف\"   وجهة اللقطة\n"
-"/exit                 إغلاق Snapnab قيد التشغيل"
+"/exit                 إغلاق AnyCapture قيد التشغيل"
 
-#: rust/snapnab/src/desk.rs:450
+#: rust/anycapture/src/desk.rs:450
 msgid "Conta-gotas: clique para copiar a cor • setas movem 1 px (Shift = 10) • Enter = copiar • Esc = cancelar"
 msgstr "منتقي الألوان: انقر لنسخ اللون • الأسهم تحرّك 1 px (Shift = 10) • Enter = نسخ • Esc = إلغاء"
 
-#: rust/snapnab/src/desk.rs:602
-msgid "Snapnab — conta-gotas"
-msgstr "Snapnab — منتقي الألوان"
+#: rust/anycapture/src/desk.rs:602
+msgid "AnyCapture — conta-gotas"
+msgstr "AnyCapture — منتقي الألوان"
 
-#: rust/snapnab/src/desk.rs:644
+#: rust/anycapture/src/desk.rs:644
 msgid "Cores recentes"
 msgstr "الألوان الأخيرة"
 
-#: rust/snapnab/src/desk.rs:644
+#: rust/anycapture/src/desk.rs:644
 msgid "Formato padrão"
 msgstr "التنسيق الافتراضي"
 
-#: rust/snapnab/src/dialogs.rs:85
+#: rust/anycapture/src/dialogs.rs:85
 msgid "Nome do preset"
 msgstr "اسم الإعداد المسبق"
 
-#: rust/snapnab/src/dialogs.rs:110
+#: rust/anycapture/src/dialogs.rs:110
 #, c-format
 msgid "Preset %zu"
 msgstr "إعداد مسبق %zu"
 
-#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:769
+#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:769
 msgid "Novo preset com as configurações atuais"
 msgstr "إعداد مسبق جديد من الإعدادات الحالية"
 
-#: rust/snapnab/src/dialogs.rs:127
+#: rust/anycapture/src/dialogs.rs:127
 msgid "Renomear preset"
 msgstr "إعادة تسمية الإعداد المسبق"
 
-#: rust/snapnab/src/dialogs.rs:151
+#: rust/anycapture/src/dialogs.rs:151
 msgid "É preciso manter pelo menos um preset."
 msgstr "يجب الإبقاء على إعداد مسبق واحد على الأقل."
 
-#: rust/snapnab/src/dialogs.rs:154
+#: rust/anycapture/src/dialogs.rs:154
 #, c-format
 msgid "Excluir o preset \"%s\"?"
 msgstr "هل تريد حذف الإعداد المسبق \"%s\"؟"
 
-#: rust/snapnab/src/dialogs.rs:170
+#: rust/anycapture/src/dialogs.rs:170
 msgid "Atalho do preset"
 msgstr "اختصار الإعداد المسبق"
 
-#: rust/snapnab/src/dialogs.rs:170
+#: rust/anycapture/src/dialogs.rs:170
 msgid "Deixe vazio (Backspace) para remover."
 msgstr "اتركه فارغًا (Backspace) للإزالة."
 
-#: rust/snapnab/src/dialogs.rs:171
+#: rust/anycapture/src/dialogs.rs:171
 msgid "Atalho — "
 msgstr "الاختصار — "
 
-#: rust/snapnab/src/dialogs.rs:181
+#: rust/anycapture/src/dialogs.rs:181
 msgid ""
 "Um preset guarda tudo o que a janela de captura mostra: tipo (imagem ou vídeo), seleção, efeitos, destino e opções de gravação.\n"
 "\n"
@@ -5850,39 +5850,39 @@ msgstr ""
 "•  ترس الصف يعيد تسمية الإعداد المسبق أو يكرّره أو يحذفه.\n"
 "•  \"إعداد مسبق جديد من الإعدادات الحالية\" يحفظ ما في النافذة الآن."
 
-#: rust/snapnab/src/dialogs.rs:210
-msgid "Presets do Snapnab (*.snappresets)|*.snappresets|"
-msgstr "إعدادات Snapnab المسبقة (*.snappresets)|*.snappresets|"
+#: rust/anycapture/src/dialogs.rs:210
+msgid "Presets do AnyCapture (*.snappresets)|*.snappresets|"
+msgstr "إعدادات AnyCapture المسبقة (*.snappresets)|*.snappresets|"
 
-#: rust/snapnab/src/dialogs.rs:216
+#: rust/anycapture/src/dialogs.rs:216
 msgid "Não foi possível exportar."
 msgstr "تعذّر التصدير."
 
-#: rust/snapnab/src/dialogs.rs:223
-msgid "Presets do Snapnab (*.snappresets;*.xml)|*.snappresets;*.xml|"
-msgstr "إعدادات Snapnab المسبقة (*.snappresets;*.xml)|*.snappresets;*.xml|"
+#: rust/anycapture/src/dialogs.rs:223
+msgid "Presets do AnyCapture (*.snappresets;*.xml)|*.snappresets;*.xml|"
+msgstr "إعدادات AnyCapture المسبقة (*.snappresets;*.xml)|*.snappresets;*.xml|"
 
-#: rust/snapnab/src/dialogs.rs:226
+#: rust/anycapture/src/dialogs.rs:226
 msgid "Presets importados."
 msgstr "تم استيراد الإعدادات المسبقة."
 
-#: rust/snapnab/src/dialogs.rs:228
+#: rust/anycapture/src/dialogs.rs:228
 msgid "Arquivo de presets inválido."
 msgstr "ملف إعدادات مسبقة غير صالح."
 
-#: rust/snapnab/src/dialogs.rs:237
-msgid "Configurações do Snapnab (*.snapsettings)|*.snapsettings|"
-msgstr "إعدادات Snapnab (*.snapsettings)|*.snapsettings|"
+#: rust/anycapture/src/dialogs.rs:237
+msgid "Configurações do AnyCapture (*.snapsettings)|*.snapsettings|"
+msgstr "إعدادات AnyCapture (*.snapsettings)|*.snapsettings|"
 
-#: rust/snapnab/src/dialogs.rs:246
+#: rust/anycapture/src/dialogs.rs:246
 msgid "Exportar configurações"
 msgstr "تصدير الإعدادات"
 
-#: rust/snapnab/src/dialogs.rs:252
+#: rust/anycapture/src/dialogs.rs:252
 msgid "Configurações exportadas: presets, temas, estilos rápidos, favoritos, efeitos rápidos, ordem dos carimbos e barra de ferramentas."
 msgstr "تم تصدير الإعدادات: الإعدادات المسبقة والأنساق والأنماط السريعة والمفضلة والتأثيرات السريعة وترتيب الأختام وشريط الأدوات."
 
-#: rust/snapnab/src/dialogs.rs:266
+#: rust/anycapture/src/dialogs.rs:266
 msgid ""
 "Substituir\n"
 "As configurações atuais dão lugar às do arquivo."
@@ -5890,7 +5890,7 @@ msgstr ""
 "استبدال\n"
 "تحل إعدادات الملف محل الإعدادات الحالية."
 
-#: rust/snapnab/src/dialogs.rs:267
+#: rust/anycapture/src/dialogs.rs:267
 msgid ""
 "Mesclar\n"
 "Mantém as configurações atuais e acrescenta o que faltar (presets, temas, favoritos, efeitos rápidos…)."
@@ -5898,512 +5898,512 @@ msgstr ""
 "دمج\n"
 "يحتفظ بالإعدادات الحالية ويضيف ما ينقص (الإعدادات المسبقة والأنساق والمفضلة والتأثيرات السريعة…)."
 
-#: rust/snapnab/src/dialogs.rs:268 rust/snapnab/src/dialogs.rs:298
+#: rust/anycapture/src/dialogs.rs:268 rust/anycapture/src/dialogs.rs:298
 msgid "Importar configurações"
 msgstr "استيراد الإعدادات"
 
-#: rust/snapnab/src/dialogs.rs:269
-msgid "O Snapnab e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
-msgstr "يُعاد تشغيل Snapnab والمحرر بالإعدادات المستوردة. تُحفظ نسخة من الإعدادات الحالية في مجلد النسخ الاحتياطية."
+#: rust/anycapture/src/dialogs.rs:269
+msgid "O AnyCapture e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
+msgstr "يُعاد تشغيل AnyCapture والمحرر بالإعدادات المستوردة. تُحفظ نسخة من الإعدادات الحالية في مجلد النسخ الاحتياطية."
 
-#: rust/snapnab/src/dialogs.rs:374
+#: rust/anycapture/src/dialogs.rs:374
 msgid "Automático (idioma do Windows)"
 msgstr "تلقائي (لغة Windows)"
 
-#: rust/snapnab/src/dialogs.rs:385
+#: rust/anycapture/src/dialogs.rs:385
 msgid "Atalhos globais"
 msgstr "اختصارات عامة"
 
-#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:218
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:218
 msgid "Capturar imagem"
 msgstr "التقاط صورة"
 
-#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:219
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:219
 msgid "Gravar vídeo"
 msgstr "تسجيل فيديو"
 
-#: rust/snapnab/src/dialogs.rs:388
+#: rust/anycapture/src/dialogs.rs:388
 msgid "Pausar/retomar vídeo"
 msgstr "إيقاف/استئناف الفيديو مؤقتًا"
 
-#: rust/snapnab/src/dialogs.rs:389
+#: rust/anycapture/src/dialogs.rs:389
 msgid "Parar vídeo"
 msgstr "إيقاف الفيديو"
 
-#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:225
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:544 rust/anycapture/src/window.rs:225
 msgid "Conta-gotas de tela"
 msgstr "منتقي ألوان الشاشة"
 
-#: rust/snapnab/src/dialogs.rs:391
+#: rust/anycapture/src/dialogs.rs:391
 msgid "Capturar e fixar na tela"
 msgstr "الالتقاط والتثبيت على الشاشة"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:213
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:213
 msgid "Fixar da área de transferência"
 msgstr "التثبيت من الحافظة"
 
-#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:229
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:550 rust/anycapture/src/window.rs:229
 msgid "Foco de tela (apresentações)"
 msgstr "تركيز الشاشة (العروض التقديمية)"
 
-#: rust/snapnab/src/dialogs.rs:394
+#: rust/anycapture/src/dialogs.rs:394
 msgid "Geral"
 msgstr "عام"
 
-#: rust/snapnab/src/dialogs.rs:395
+#: rust/anycapture/src/dialogs.rs:395
 msgid "Pasta de saída"
 msgstr "مجلد الإخراج"
 
-#: rust/snapnab/src/dialogs.rs:396
+#: rust/anycapture/src/dialogs.rs:396
 msgid "Monitorar área de transferência"
 msgstr "مراقبة الحافظة"
 
-#: rust/snapnab/src/dialogs.rs:397
+#: rust/anycapture/src/dialogs.rs:397
 msgid "Só a Ferramenta de Captura do Windows"
 msgstr "أداة القص في Windows فقط"
 
-#: rust/snapnab/src/dialogs.rs:397
+#: rust/anycapture/src/dialogs.rs:397
 msgid "Qualquer aplicativo"
 msgstr "أي تطبيق"
 
-#: rust/snapnab/src/dialogs.rs:398
+#: rust/anycapture/src/dialogs.rs:398
 msgid "Iniciar com o Windows"
 msgstr "البدء مع Windows"
 
-#: rust/snapnab/src/dialogs.rs:399
+#: rust/anycapture/src/dialogs.rs:399
 msgid "Mostrar a janela de captura ao iniciar"
 msgstr "إظهار نافذة الالتقاط عند البدء"
 
-#: rust/snapnab/src/dialogs.rs:400
+#: rust/anycapture/src/dialogs.rs:400
 msgid "Idioma"
 msgstr "اللغة"
 
-#: rust/snapnab/src/dialogs.rs:401
+#: rust/anycapture/src/dialogs.rs:401
 msgid "Depois da captura"
 msgstr "بعد الالتقاط"
 
-#: rust/snapnab/src/dialogs.rs:402
+#: rust/anycapture/src/dialogs.rs:402
 msgid "Copiar toda captura para a área de transferência"
 msgstr "نسخ كل لقطة إلى الحافظة"
 
-#: rust/snapnab/src/dialogs.rs:403
+#: rust/anycapture/src/dialogs.rs:403
 msgid "Ao terminar"
 msgstr "عند الانتهاء"
 
-#: rust/snapnab/src/dialogs.rs:404
+#: rust/anycapture/src/dialogs.rs:404
 msgid "Abrir no Editor (como o preset diz)"
 msgstr "فتح في المحرر (حسب الإعداد المسبق)"
 
-#: rust/snapnab/src/dialogs.rs:404
+#: rust/anycapture/src/dialogs.rs:404
 msgid "Mostrar a miniatura rápida em vez do Editor"
 msgstr "إظهار المصغّرة السريعة بدلًا من المحرر"
 
-#: rust/snapnab/src/dialogs.rs:405
+#: rust/anycapture/src/dialogs.rs:405
 msgid "Mostrar a miniatura e abrir o Editor"
 msgstr "إظهار المصغّرة وفتح المحرر"
 
-#: rust/snapnab/src/dialogs.rs:405
+#: rust/anycapture/src/dialogs.rs:405
 msgid "Só copiar para a área de transferência"
 msgstr "النسخ إلى الحافظة فقط"
 
-#: rust/snapnab/src/dialogs.rs:407
+#: rust/anycapture/src/dialogs.rs:407
 msgid "A miniatura fecha após (s, 0 = não fecha)"
 msgstr "تُغلق المصغّرة بعد (ث، 0 = لا تُغلق)"
 
-#: rust/snapnab/src/dialogs.rs:408
+#: rust/anycapture/src/dialogs.rs:408
 msgid "Canto da miniatura"
 msgstr "زاوية المصغّرة"
 
-#: rust/snapnab/src/dialogs.rs:411
+#: rust/anycapture/src/dialogs.rs:411
 msgid "Som da captura"
 msgstr "صوت الالتقاط"
 
-#: rust/snapnab/src/dialogs.rs:412
+#: rust/anycapture/src/dialogs.rs:412
 msgid "Arquivo WAV do som"
 msgstr "ملف WAV للصوت"
 
-#: rust/snapnab/src/dialogs.rs:414
+#: rust/anycapture/src/dialogs.rs:414
 msgid "Capturar a região assim que soltar o mouse"
 msgstr "التقاط المنطقة بمجرد تحرير الفأرة"
 
-#: rust/snapnab/src/dialogs.rs:415
+#: rust/anycapture/src/dialogs.rs:415
 msgid "Corrigir as cores em monitores HDR"
 msgstr "تصحيح الألوان على شاشات HDR"
 
-#: rust/snapnab/src/dialogs.rs:416
+#: rust/anycapture/src/dialogs.rs:416
 msgid "Cantos arredondados transparentes nas janelas"
 msgstr "زوايا مستديرة شفافة للنوافذ"
 
-#: rust/snapnab/src/dialogs.rs:417
+#: rust/anycapture/src/dialogs.rs:417
 msgid "Sombra nas capturas de janela"
 msgstr "ظل في لقطات النوافذ"
 
-#: rust/snapnab/src/dialogs.rs:418
+#: rust/anycapture/src/dialogs.rs:418
 msgid "Ocultar os ícones da área de trabalho ao capturar"
 msgstr "إخفاء أيقونات سطح المكتب أثناء الالتقاط"
 
-#: rust/snapnab/src/dialogs.rs:419
+#: rust/anycapture/src/dialogs.rs:419
 msgid "Não perturbe (sem notificações) ao gravar"
 msgstr "عدم الإزعاج (بلا إشعارات) أثناء التسجيل"
 
-#: rust/snapnab/src/dialogs.rs:420
+#: rust/anycapture/src/dialogs.rs:420
 msgid "Manter a tela acesa durante a captura"
 msgstr "إبقاء الشاشة مضاءة أثناء الالتقاط"
 
-#: rust/snapnab/src/dialogs.rs:421
+#: rust/anycapture/src/dialogs.rs:421
 msgid "Privacidade e biblioteca"
 msgstr "الخصوصية والمكتبة"
 
-#: rust/snapnab/src/dialogs.rs:422
+#: rust/anycapture/src/dialogs.rs:422
 msgid "Remover metadados (câmera, GPS, datas) ao salvar"
 msgstr "إزالة البيانات الوصفية (الكاميرا، GPS، التواريخ) عند الحفظ"
 
-#: rust/snapnab/src/dialogs.rs:423
+#: rust/anycapture/src/dialogs.rs:423
 msgid "Limpar a biblioteca automaticamente"
 msgstr "تنظيف المكتبة تلقائيًا"
 
-#: rust/snapnab/src/dialogs.rs:424
+#: rust/anycapture/src/dialogs.rs:424
 msgid "Apagar capturas com mais de (dias)"
 msgstr "حذف اللقطات الأقدم من (أيام)"
 
-#: rust/snapnab/src/dialogs.rs:425
+#: rust/anycapture/src/dialogs.rs:425
 msgid "Manter as capturas que têm nome"
 msgstr "الاحتفاظ باللقطات التي لها اسم"
 
-#: rust/snapnab/src/dialogs.rs:426
+#: rust/anycapture/src/dialogs.rs:426
 msgid "Manter as capturas com etiquetas"
 msgstr "الاحتفاظ باللقطات ذات الوسوم"
 
-#: rust/snapnab/src/dialogs.rs:427
+#: rust/anycapture/src/dialogs.rs:427
 msgid "Enviar para a Lixeira em vez de apagar"
 msgstr "الإرسال إلى سلة المحذوفات بدلًا من الحذف"
 
-#: rust/snapnab/src/dialogs.rs:428
+#: rust/anycapture/src/dialogs.rs:428
 msgid "Cursor capturado como objeto no Editor"
 msgstr "المؤشر الملتقط كعنصر في المحرر"
 
-#: rust/snapnab/src/dialogs.rs:429
+#: rust/anycapture/src/dialogs.rs:429
 msgid "Dividir imagens longas em páginas (impressão e PDF)"
 msgstr "تقسيم الصور الطويلة على صفحات (الطباعة وPDF)"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Aparência (vale ao reabrir)"
 msgstr "المظهر (يُطبَّق بعد إعادة الفتح)"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Seguir o Windows"
 msgstr "اتباع Windows"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Claro"
 msgstr "فاتح"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Escuro"
 msgstr "داكن"
 
-#: rust/snapnab/src/dialogs.rs:432
+#: rust/anycapture/src/dialogs.rs:432
 msgid "Biblioteca: "
 msgstr "المكتبة: "
 
-#: rust/snapnab/src/dialogs.rs:442
+#: rust/anycapture/src/dialogs.rs:442
 msgid "Dois atalhos iguais: "
 msgstr "اختصاران متطابقان: "
 
-#: rust/snapnab/src/dialogs.rs:448
-msgid "Opções do Snapnab"
-msgstr "خيارات Snapnab"
+#: rust/anycapture/src/dialogs.rs:448
+msgid "Opções do AnyCapture"
+msgstr "خيارات AnyCapture"
 
-#: rust/snapnab/src/dialogs.rs:475
+#: rust/anycapture/src/dialogs.rs:475
 msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
 msgstr "اختر ملف WAV لصوت الالتقاط (المسار الكامل)."
 
-#: rust/snapnab/src/dialogs.rs:485
-msgid "O novo idioma vale depois que o Snapnab e o Editor reiniciarem. Reiniciar agora?"
-msgstr "ستُطبَّق اللغة الجديدة بعد إعادة تشغيل Snapnab والمحرّر. هل تريد إعادة التشغيل الآن؟"
+#: rust/anycapture/src/dialogs.rs:485
+msgid "O novo idioma vale depois que o AnyCapture e o Editor reiniciarem. Reiniciar agora?"
+msgstr "ستُطبَّق اللغة الجديدة بعد إعادة تشغيل AnyCapture والمحرّر. هل تريد إعادة التشغيل الآن؟"
 
-#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:108
+#: rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:108
 msgid "Prefixo do nome"
 msgstr "بادئة الاسم"
 
-#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
+#: rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
 msgid "Pasta"
 msgstr "المجلد"
 
-#: rust/snapnab/src/dialogs.rs:502
+#: rust/anycapture/src/dialogs.rs:502
 msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
 msgstr "اسم تلقائي: <البادئة><الرقم>، مثل: Capture001.png"
 
-#: rust/snapnab/src/dialogs.rs:505 rust/snapnab/src/interval.rs:131
+#: rust/anycapture/src/dialogs.rs:505 rust/anycapture/src/interval.rs:131
 msgid "O prefixo contém caracteres inválidos."
 msgstr "تحتوي البادئة على أحرف غير صالحة."
 
-#: rust/snapnab/src/dialogs.rs:507
+#: rust/anycapture/src/dialogs.rs:507
 msgid "Salvar em arquivo"
 msgstr "حفظ في ملف"
 
-#: rust/snapnab/src/dialogs.rs:526
+#: rust/anycapture/src/dialogs.rs:526
 msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
 msgstr "تُفتح اللقطة في هذا البرنامج (مثل: mspaint.exe)."
 
-#: rust/snapnab/src/dialogs.rs:541
+#: rust/anycapture/src/dialogs.rs:541
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "كل لقطة في شريحة جديدة (عند الإيقاف: في الشريحة الحالية)"
 
-#: rust/snapnab/src/dialogs.rs:554
+#: rust/anycapture/src/dialogs.rs:554
 msgid "Capturar sempre na mesma posição"
 msgstr "الالتقاط دائمًا في الموضع نفسه"
 
-#: rust/snapnab/src/dialogs.rs:555
+#: rust/anycapture/src/dialogs.rs:555
 msgid "Esquerda (X)"
 msgstr "يسار (X)"
 
-#: rust/snapnab/src/dialogs.rs:555
+#: rust/anycapture/src/dialogs.rs:555
 msgid "Topo (Y)"
 msgstr "أعلى (Y)"
 
-#: rust/snapnab/src/dialogs.rs:556
+#: rust/anycapture/src/dialogs.rs:556
 msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
 msgstr "بدون موضع ثابت، تسحب المستطيل إلى مكانه وقت الالتقاط."
 
-#: rust/snapnab/src/dialogs.rs:557 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:349
+#: rust/anycapture/src/dialogs.rs:557 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:349
 msgid "Região fixa"
 msgstr "منطقة ثابتة"
 
-#: rust/snapnab/src/dialogs.rs:581
+#: rust/anycapture/src/dialogs.rs:581
 msgid "Reduzir para 1080p"
 msgstr "تصغير إلى 1080p"
 
-#: rust/snapnab/src/dialogs.rs:582
+#: rust/anycapture/src/dialogs.rs:582
 msgid "Codificação por hardware"
 msgstr "الترميز بالأجهزة"
 
-#: rust/snapnab/src/dialogs.rs:583
+#: rust/anycapture/src/dialogs.rs:583
 msgid "Áudio"
 msgstr "الصوت"
 
-#: rust/snapnab/src/dialogs.rs:584
+#: rust/anycapture/src/dialogs.rs:584
 msgid "Volume do microfone (%)"
 msgstr "مستوى صوت الميكروفون (%)"
 
-#: rust/snapnab/src/dialogs.rs:585
+#: rust/anycapture/src/dialogs.rs:585
 msgid "Volume do áudio do sistema (%)"
 msgstr "مستوى صوت النظام (%)"
 
-#: rust/snapnab/src/dialogs.rs:586 rust/snapnab/src/hud.rs:361
+#: rust/anycapture/src/dialogs.rs:586 rust/anycapture/src/hud.rs:361
 msgid "Ganho automático do microfone"
 msgstr "كسب تلقائي للميكروفون"
 
-#: rust/snapnab/src/dialogs.rs:587
+#: rust/anycapture/src/dialogs.rs:587
 msgid "Também ajustáveis no painel da gravação."
 msgstr "يمكن ضبطها أيضًا في لوحة التسجيل."
 
-#: rust/snapnab/src/dialogs.rs:588
+#: rust/anycapture/src/dialogs.rs:588
 msgid "Gravar somente o áudio (sem vídeo)"
 msgstr "تسجيل الصوت فقط (بدون فيديو)"
 
-#: rust/snapnab/src/dialogs.rs:589
+#: rust/anycapture/src/dialogs.rs:589
 msgid "Formato do áudio"
 msgstr "تنسيق الصوت"
 
-#: rust/snapnab/src/dialogs.rs:590
+#: rust/anycapture/src/dialogs.rs:590
 msgid "Na gravação (todos os presets)"
 msgstr "أثناء التسجيل (كل الإعدادات المسبقة)"
 
-#: rust/snapnab/src/dialogs.rs:591 rust/snapnab/src/engine/video.rs:360
+#: rust/anycapture/src/dialogs.rs:591 rust/anycapture/src/engine/video.rs:360
 msgid "Destacar o cursor"
 msgstr "إبراز المؤشر"
 
-#: rust/snapnab/src/dialogs.rs:592
+#: rust/anycapture/src/dialogs.rs:592
 msgid "Cor do destaque"
 msgstr "لون الإبراز"
 
-#: rust/snapnab/src/dialogs.rs:593
+#: rust/anycapture/src/dialogs.rs:593
 msgid "Tamanho do destaque (px)"
 msgstr "حجم الإبراز (px)"
 
-#: rust/snapnab/src/dialogs.rs:594 rust/snapnab/src/engine/video.rs:360
+#: rust/anycapture/src/dialogs.rs:594 rust/anycapture/src/engine/video.rs:360
 msgid "Mostrar os cliques"
 msgstr "إظهار النقرات"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/anycapture/src/dialogs.rs:595
 msgid "Cor do clique esquerdo"
 msgstr "لون النقر الأيسر"
 
-#: rust/snapnab/src/dialogs.rs:596
+#: rust/anycapture/src/dialogs.rs:596
 msgid "Cor do clique direito"
 msgstr "لون النقر الأيمن"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Teclas na tela"
 msgstr "المفاتيح على الشاشة"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Não mostrar"
 msgstr "عدم الإظهار"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "الاختصارات فقط (Ctrl وAlt وWin وF1…)"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Todas (inclusive o que for digitado)"
 msgstr "الكل (بما في ذلك ما تكتبه)"
 
-#: rust/snapnab/src/dialogs.rs:599
+#: rust/anycapture/src/dialogs.rs:599
 msgid "Ampliar ao clicar (zoom automático)"
 msgstr "التكبير عند النقر (تكبير تلقائي)"
 
-#: rust/snapnab/src/dialogs.rs:600
+#: rust/anycapture/src/dialogs.rs:600
 msgid "Ampliação do zoom (%)"
 msgstr "مستوى التكبير (%)"
 
-#: rust/snapnab/src/dialogs.rs:601
+#: rust/anycapture/src/dialogs.rs:601
 msgid "Atalho do zoom durante a gravação"
 msgstr "اختصار التكبير أثناء التسجيل"
 
-#: rust/snapnab/src/dialogs.rs:602
+#: rust/anycapture/src/dialogs.rs:602
 msgid "Proteger contra travamentos (recupera a gravação)"
 msgstr "الحماية من الأعطال (يستعيد التسجيل)"
 
-#: rust/snapnab/src/dialogs.rs:603
+#: rust/anycapture/src/dialogs.rs:603
 msgid "Confirmar antes de recomeçar a gravação"
 msgstr "التأكيد قبل إعادة بدء التسجيل"
 
-#: rust/snapnab/src/dialogs.rs:605
+#: rust/anycapture/src/dialogs.rs:605
 msgid "Opções de vídeo"
 msgstr "خيارات الفيديو"
 
-#: rust/snapnab/src/dialogs.rs:633
+#: rust/anycapture/src/dialogs.rs:633
 msgid "Remover o fundo da webcam"
 msgstr "إزالة خلفية كاميرا الويب"
 
-#: rust/snapnab/src/dialogs.rs:633
+#: rust/anycapture/src/dialogs.rs:633
 msgid "Cor do fundo"
 msgstr "لون الخلفية"
 
-#: rust/snapnab/src/dialogs.rs:634
+#: rust/anycapture/src/dialogs.rs:634
 msgid "Tolerância (0–100)"
 msgstr "التفاوت (0–100)"
 
-#: rust/snapnab/src/dialogs.rs:635
+#: rust/anycapture/src/dialogs.rs:635
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "استخدم خلفية سادة وجيدة الإضاءة (الشاشة الخضراء هي الأمثل)."
 
-#: rust/snapnab/src/dialogs.rs:636
+#: rust/anycapture/src/dialogs.rs:636
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "بعد إزالة الخلفية تظهر كاميرا الويب بلا إطار."
 
-#: rust/snapnab/src/dialogs.rs:637
+#: rust/anycapture/src/dialogs.rs:637
 msgid "Remover o fundo (chroma key)"
 msgstr "إزالة الخلفية (مفتاح الكروما)"
 
-#: rust/snapnab/src/dialogs.rs:662
+#: rust/anycapture/src/dialogs.rs:662
 msgid "Deslocamento (px)"
 msgstr "الإزاحة (بكسل)"
 
-#: rust/snapnab/src/dialogs.rs:662
+#: rust/anycapture/src/dialogs.rs:662
 msgid "Desfoque (px)"
 msgstr "التمويه (بكسل)"
 
-#: rust/snapnab/src/dialogs.rs:663 rust/snapnab/src/dialogs.rs:680
+#: rust/anycapture/src/dialogs.rs:663 rust/anycapture/src/dialogs.rs:680
 msgid "Opacidade (%)"
 msgstr "العتامة (%)"
 
-#: rust/snapnab/src/dialogs.rs:664
+#: rust/anycapture/src/dialogs.rs:664
 msgid "Campos: {date} {time} {computer} {user}"
 msgstr "الحقول: {date} {time} {computer} {user}"
 
-#: rust/snapnab/src/dialogs.rs:667
+#: rust/anycapture/src/dialogs.rs:667
 msgid "Escala (%)"
 msgstr "المقياس (%)"
 
-#: rust/snapnab/src/dialogs.rs:675
+#: rust/anycapture/src/dialogs.rs:675
 msgid "Remove as faixas de cor uniforme em volta da captura."
 msgstr "يزيل الأشرطة ذات اللون الموحّد حول اللقطة."
 
-#: rust/snapnab/src/dialogs.rs:677
+#: rust/anycapture/src/dialogs.rs:677
 msgid "Matiz (graus)"
 msgstr "تدرّج اللون (درجات)"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "90° à direita"
 msgstr "90° لليمين"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "90° à esquerda"
 msgstr "90° لليسار"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "Espelhar na horizontal"
 msgstr "انعكاس أفقي"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "Espelhar na vertical"
 msgstr "انعكاس عمودي"
 
-#: rust/snapnab/src/dialogs.rs:681
+#: rust/anycapture/src/dialogs.rs:681
 msgid "Repetir por toda a imagem"
 msgstr "التكرار على الصورة كلها"
 
-#: rust/snapnab/src/dialogs.rs:682
+#: rust/anycapture/src/dialogs.rs:682
 msgid "Resolução (DPI)"
 msgstr "الدقة (DPI)"
 
-#: rust/snapnab/src/dialogs.rs:682
+#: rust/anycapture/src/dialogs.rs:682
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "تُكتب في الملفات المحفوظة (PNG وJPEG وTIFF وBMP)."
 
-#: rust/snapnab/src/dialogs.rs:688
+#: rust/anycapture/src/dialogs.rs:688
 msgid "Original"
 msgstr "الأصلية"
 
-#: rust/snapnab/src/dialogs.rs:666
+#: rust/anycapture/src/dialogs.rs:666
 msgid "Cor a substituir"
 msgstr "اللون المراد استبداله"
 
-#: rust/snapnab/src/engine.rs:373
+#: rust/anycapture/src/engine.rs:373
 #, c-format
 msgid "Captura em %d s…"
 msgstr "الالتقاط خلال %d ث…"
 
-#: rust/snapnab/src/engine.rs:441
+#: rust/anycapture/src/engine.rs:441
 msgid "A região fixa está fora da tela. Ajuste a posição na engrenagem da Seleção."
 msgstr "المنطقة الثابتة خارج الشاشة. اضبط موضعها من قائمة الترس في التحديد."
 
-#: rust/snapnab/src/engine.rs:466
+#: rust/anycapture/src/engine.rs:466
 msgid "Janelas como objetos"
 msgstr "النوافذ كعناصر"
 
-#: rust/snapnab/src/engine.rs:488
+#: rust/anycapture/src/engine.rs:488
 msgid "Capturar de arquivo gráfico"
 msgstr "الالتقاط من ملف رسومي"
 
-#: rust/snapnab/src/engine.rs:493
+#: rust/anycapture/src/engine.rs:493
 msgid "Não foi possível abrir a imagem."
 msgstr "تعذّر فتح الصورة."
 
-#: rust/snapnab/src/engine.rs:507
+#: rust/anycapture/src/engine.rs:507
 msgid "Nenhum menu aberto encontrado; selecione a região."
 msgstr "لم يتم العثور على قائمة مفتوحة؛ حدّد المنطقة."
 
-#: rust/snapnab/src/engine.rs:557
-msgid "Snapnab — seleção"
-msgstr "Snapnab — تحديد"
+#: rust/anycapture/src/engine.rs:557
+msgid "AnyCapture — seleção"
+msgstr "AnyCapture — تحديد"
 
-#: rust/snapnab/src/engine.rs:616
+#: rust/anycapture/src/engine.rs:616
 msgid "vídeo"
 msgstr "فيديو"
 
-#: rust/snapnab/src/engine.rs:621
+#: rust/anycapture/src/engine.rs:621
 msgid "A biblioteca está vazia"
 msgstr "المكتبة فارغة"
 
-#: rust/snapnab/src/engine.rs:774
+#: rust/anycapture/src/engine.rs:774
 msgid "Cursor do mouse"
 msgstr "مؤشر الفأرة"
 
-#: rust/snapnab/src/engine.rs:806
+#: rust/anycapture/src/engine.rs:806
 msgid ""
 "Não foi possível reconhecer o texto.\n"
 "\n"
@@ -6411,190 +6411,190 @@ msgstr ""
 "تعذّر التعرّف على النص.\n"
 "\n"
 
-#: rust/snapnab/src/engine.rs:807 rust/snapnab/src/engine.rs:811
-msgid "Snapnab — Capturar texto"
-msgstr "Snapnab — استخراج النص"
+#: rust/anycapture/src/engine.rs:807 rust/anycapture/src/engine.rs:811
+msgid "AnyCapture — Capturar texto"
+msgstr "AnyCapture — استخراج النص"
 
-#: rust/snapnab/src/engine.rs:811
+#: rust/anycapture/src/engine.rs:811
 msgid "Nenhum texto encontrado na captura."
 msgstr "لم يتم العثور على نص في اللقطة."
 
-#: rust/snapnab/src/engine.rs:815
+#: rust/anycapture/src/engine.rs:815
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "استخراج النص — تم النسخ إلى الحافظة"
 
-#: rust/snapnab/src/engine.rs:846
+#: rust/anycapture/src/engine.rs:846
 msgid "copiada para a área de transferência"
 msgstr "تم نسخها إلى الحافظة"
 
-#: rust/snapnab/src/engine.rs:854 rust/snapnab/src/engine.rs:881
+#: rust/anycapture/src/engine.rs:854 rust/anycapture/src/engine.rs:881
 msgid "salva em "
 msgstr "تم حفظها في "
 
-#: rust/snapnab/src/engine.rs:914
+#: rust/anycapture/src/engine.rs:914
 msgid "Captura adicionada à biblioteca"
 msgstr "تمت إضافة اللقطة إلى المكتبة"
 
-#: rust/snapnab/src/engine.rs:922
+#: rust/anycapture/src/engine.rs:922
 msgid "Clique para abrir no Editor."
 msgstr "انقر لفتحها في المحرر."
 
-#: rust/snapnab/src/engine.rs:1109
-msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
-msgstr "الصور والمستندات|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|مستند Snapnab (*.snap)|*.snap|فيديو MP4 (*.mp4)|*.mp4|كل الملفات (*.*)|*.*|"
+#: rust/anycapture/src/engine.rs:1109
+msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
+msgstr "الصور والمستندات|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|مستند AnyCapture (*.snap)|*.snap|فيديو MP4 (*.mp4)|*.mp4|كل الملفات (*.*)|*.*|"
 
-#: rust/snapnab/src/hotkeys.rs:57 rust/snapnab/src/hotkeys.rs:261 rust/snapnab/tests/window.rs:34
+#: rust/anycapture/src/hotkeys.rs:57 rust/anycapture/src/hotkeys.rs:261 rust/anycapture/tests/window.rs:34
 msgid "Print Screen"
 msgstr "Print Screen"
 
-#: rust/snapnab/src/hud.rs:152
+#: rust/anycapture/src/hud.rs:152
 msgid "Gravar / pausar"
 msgstr "تسجيل / إيقاف مؤقت"
 
-#: rust/snapnab/src/hud.rs:153
+#: rust/anycapture/src/hud.rs:153
 msgid "Parar e salvar"
 msgstr "إيقاف وحفظ"
 
-#: rust/snapnab/src/hud.rs:154
+#: rust/anycapture/src/hud.rs:154
 msgid "Recomeçar a gravação"
 msgstr "إعادة بدء التسجيل"
 
-#: rust/snapnab/src/hud.rs:155
+#: rust/anycapture/src/hud.rs:155
 msgid "Cancelar (descarta a gravação)"
 msgstr "إلغاء (يتجاهل التسجيل)"
 
-#: rust/snapnab/src/hud.rs:156
+#: rust/anycapture/src/hud.rs:156
 msgid "Microfone: liga / desliga"
 msgstr "الميكروفون: تشغيل / إيقاف"
 
-#: rust/snapnab/src/hud.rs:157
+#: rust/anycapture/src/hud.rs:157
 msgid "Áudio do sistema: liga / desliga"
 msgstr "صوت النظام: تشغيل / إيقاف"
 
-#: rust/snapnab/src/hud.rs:158
+#: rust/anycapture/src/hud.rs:158
 msgid "Volume do microfone e do sistema"
 msgstr "مستوى صوت الميكروفون والنظام"
 
-#: rust/snapnab/src/hud.rs:159
+#: rust/anycapture/src/hud.rs:159
 msgid "Webcam: mostra / oculta"
 msgstr "كاميرا الويب: إظهار / إخفاء"
 
-#: rust/snapnab/src/hud.rs:160
+#: rust/anycapture/src/hud.rs:160
 msgid "Capturar uma imagem sem parar a gravação"
 msgstr "التقاط صورة دون إيقاف التسجيل"
 
-#: rust/snapnab/src/hud.rs:161
+#: rust/anycapture/src/hud.rs:161
 msgid "Zoom em volta do ponteiro"
 msgstr "تكبير حول المؤشر"
 
-#: rust/snapnab/src/hud.rs:162
+#: rust/anycapture/src/hud.rs:162
 msgid "No vídeo: destaque do cursor, cliques e teclas"
 msgstr "في الفيديو: إبراز المؤشر والنقرات والمفاتيح"
 
-#: rust/snapnab/src/hud.rs:263
+#: rust/anycapture/src/hud.rs:263
 msgid "Pronto"
 msgstr "جاهز"
 
-#: rust/snapnab/src/hud.rs:314 rust/snapnab/src/engine/video.rs:539
+#: rust/anycapture/src/hud.rs:314 rust/anycapture/src/engine/video.rs:539
 msgid "Volume"
 msgstr "مستوى الصوت"
 
-#: rust/snapnab/src/hud.rs:340
+#: rust/anycapture/src/hud.rs:340
 msgid "Microfone"
 msgstr "الميكروفون"
 
-#: rust/snapnab/src/hud.rs:340
+#: rust/anycapture/src/hud.rs:340
 msgid "Áudio do sistema"
 msgstr "صوت النظام"
 
-#: rust/snapnab/src/interval.rs:70 rust/snapnab/src/interval.rs:71
+#: rust/anycapture/src/interval.rs:70 rust/anycapture/src/interval.rs:71
 msgid "Intervalo"
 msgstr "الفاصل"
 
-#: rust/snapnab/src/interval.rs:101
+#: rust/anycapture/src/interval.rs:101
 msgid "Área"
 msgstr "المنطقة"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Tela inteira"
 msgstr "الشاشة كاملة"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Monitor do cursor"
 msgstr "الشاشة التي عليها المؤشر"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Região (escolher agora)"
 msgstr "منطقة (اخترها الآن)"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Janela (escolher agora)"
 msgstr "نافذة (اخترها الآن)"
 
-#: rust/snapnab/src/interval.rs:105
+#: rust/anycapture/src/interval.rs:105
 msgid "Intervalo (segundos)"
 msgstr "الفاصل (ثوانٍ)"
 
-#: rust/snapnab/src/interval.rs:106
+#: rust/anycapture/src/interval.rs:106
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "المدة (دقائق، 0 = حتى الإيقاف)"
 
-#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:818 rust/snapnab/src/window.rs:823
+#: rust/anycapture/src/interval.rs:110 rust/anycapture/src/window.rs:818 rust/anycapture/src/window.rs:823
 msgid "Capturar o cursor"
 msgstr "التقاط المؤشر"
 
-#: rust/snapnab/src/interval.rs:111
+#: rust/anycapture/src/interval.rs:111
 msgid "Um ponto vermelho no ícone da bandeja indica que está capturando; pare pelo menu da bandeja."
 msgstr "تشير نقطة حمراء على أيقونة شريط المهام إلى أن الالتقاط جارٍ؛ أوقفه من قائمة الأيقونة."
 
-#: rust/snapnab/src/interval.rs:114 rust/snapnab/src/interval.rs:142
+#: rust/anycapture/src/interval.rs:114 rust/anycapture/src/interval.rs:142
 msgid "Captura por intervalo"
 msgstr "الالتقاط على فترات"
 
-#: rust/snapnab/src/interval.rs:133
+#: rust/anycapture/src/interval.rs:133
 msgid "Escolha uma pasta."
 msgstr "اختر مجلدًا."
 
-#: rust/snapnab/src/interval.rs:161
+#: rust/anycapture/src/interval.rs:161
 msgid "Não foi possível criar a pasta: "
 msgstr "تعذر إنشاء المجلد: "
 
-#: rust/snapnab/src/interval.rs:225
+#: rust/anycapture/src/interval.rs:225
 #, c-format
 msgid "Captura por intervalo parada: %d imagem(ns) em %s"
 msgstr "توقف الالتقاط على فترات: %d صورة في %s"
 
-#: rust/snapnab/src/main.rs:175
-msgid "Esse atalho já está em uso por outra ação do Snapnab."
-msgstr "هذا الاختصار مستخدم بالفعل لإجراء آخر في Snapnab."
+#: rust/anycapture/src/main.rs:175
+msgid "Esse atalho já está em uso por outra ação do AnyCapture."
+msgstr "هذا الاختصار مستخدم بالفعل لإجراء آخر في AnyCapture."
 
-#: rust/snapnab/src/main.rs:175 rust/snapnab/src/main.rs:260
+#: rust/anycapture/src/main.rs:175 rust/anycapture/src/main.rs:260
 msgid "Conflito de atalho"
 msgstr "تعارض في الاختصار"
 
-#: rust/snapnab/src/main.rs:183
-msgid "Outro programa já usa esse atalho. O Snapnab vai interceptá-lo por um gancho de teclado."
-msgstr "يستخدم برنامج آخر هذا الاختصار بالفعل. سيعترضه Snapnab عبر خطاف لوحة المفاتيح."
+#: rust/anycapture/src/main.rs:183
+msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
+msgstr "يستخدم برنامج آخر هذا الاختصار بالفعل. سيعترضه AnyCapture عبر خطاف لوحة المفاتيح."
 
-#: rust/snapnab/src/main.rs:184
+#: rust/anycapture/src/main.rs:184
 msgid "Atalho"
 msgstr "الاختصار"
 
-#: rust/snapnab/src/main.rs:209
+#: rust/anycapture/src/main.rs:209
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "هل تريد إزالة اللقطات الأقدم من %u يومًا الآن (وفق قواعد الخيارات)؟"
 
-#: rust/snapnab/src/main.rs:223
+#: rust/anycapture/src/main.rs:223
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "تمت إزالة %d لقطة من المكتبة."
 
-#: rust/snapnab/src/main.rs:230
+#: rust/anycapture/src/main.rs:230
 msgid "Fixar imagem na tela"
 msgstr "تثبيت الصورة على الشاشة"
 
-#: rust/snapnab/src/main.rs:232
+#: rust/anycapture/src/main.rs:232
 msgid ""
 "Não foi possível abrir a imagem.\n"
 "\n"
@@ -6602,352 +6602,352 @@ msgstr ""
 "تعذر فتح الصورة.\n"
 "\n"
 
-#: rust/snapnab/src/main.rs:261
+#: rust/anycapture/src/main.rs:261
 #, c-format
 msgid "O atalho do preset \"%s\" já está em uso por outra ação."
 msgstr "اختصار الإعداد المسبق \"%s\" مستخدم بالفعل لإجراء آخر."
 
-#: rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568
+#: rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568
 msgid "Abrir a janela de captura"
 msgstr "فتح نافذة الالتقاط"
 
-#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:194
+#: rust/anycapture/src/main.rs:539 rust/anycapture/src/window.rs:194
 msgid "Abrir o Editor"
 msgstr "فتح المحرّر"
 
-#: rust/snapnab/src/main.rs:539
+#: rust/anycapture/src/main.rs:539
 msgid "Sair"
 msgstr "إنهاء"
 
-#: rust/snapnab/src/main.rs:540 rust/snapnab/src/pins.rs:613 rust/snapnab/src/quick.rs:298 rust/snapnab/src/window.rs:44
+#: rust/anycapture/src/main.rs:540 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
 msgid "Ler código QR"
 msgstr "قراءة رمز QR"
 
-#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:234
+#: rust/anycapture/src/main.rs:541 rust/anycapture/src/window.rs:234
 msgid "Mostrar o One Click"
 msgstr "إظهار One Click"
 
-#: rust/snapnab/src/main.rs:543
+#: rust/anycapture/src/main.rs:543
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "الصور المثبتة (%zu)"
 
-#: rust/snapnab/src/main.rs:543
+#: rust/anycapture/src/main.rs:543
 msgid "Imagens fixadas"
 msgstr "الصور المثبتة"
 
-#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:230
+#: rust/anycapture/src/main.rs:544 rust/anycapture/src/window.rs:230
 msgid "Gravar só o áudio"
 msgstr "تسجيل الصوت فقط"
 
-#: rust/snapnab/src/main.rs:546
+#: rust/anycapture/src/main.rs:546
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "إيقاف الالتقاط على فترات (%d)"
 
-#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:228
+#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:228
 msgid "Captura por intervalo…"
 msgstr "الالتقاط على فترات…"
 
-#: rust/snapnab/src/main.rs:550
+#: rust/anycapture/src/main.rs:550
 msgid "Abrir o Editor depois da captura"
 msgstr "فتح المحرّر بعد الالتقاط"
 
-#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:207
+#: rust/anycapture/src/main.rs:550 rust/anycapture/src/window.rs:207
 msgid "Opções…"
 msgstr "خيارات…"
 
-#: rust/snapnab/src/main.rs:568
+#: rust/anycapture/src/main.rs:568
 msgid "Ocultar o One Click"
 msgstr "إخفاء One Click"
 
-#: rust/snapnab/src/main.rs:650
-msgid "Snapnab — linha de comando"
-msgstr "Snapnab — سطر الأوامر"
+#: rust/anycapture/src/main.rs:650
+msgid "AnyCapture — linha de comando"
+msgstr "AnyCapture — سطر الأوامر"
 
-#: rust/snapnab/src/main.rs:680
+#: rust/anycapture/src/main.rs:680
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "يتوقع /region القيم x,y,العرض,الارتفاع (مثال: /region 100,100,800,600)."
 
-#: rust/snapnab/src/main.rs:692
+#: rust/anycapture/src/main.rs:692
 msgid "Nenhuma janela com esse título: "
 msgstr "لا توجد نافذة بهذا العنوان: "
 
-#: rust/snapnab/src/main.rs:704
+#: rust/anycapture/src/main.rs:704
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "الشاشة %d غير موجودة (يوجد %zu)."
 
-#: rust/snapnab/src/main.rs:724
+#: rust/anycapture/src/main.rs:724
 msgid "Não foi possível fixar: "
 msgstr "تعذر التثبيت: "
 
-#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:214
+#: rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:214
 msgid "Fixar um arquivo…"
 msgstr "تثبيت ملف…"
 
-#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:212
+#: rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:212
 msgid "Capturar e fixar"
 msgstr "الالتقاط والتثبيت"
 
-#: rust/snapnab/src/main.rs:872
+#: rust/anycapture/src/main.rs:872
 msgid "Mostrar todas"
 msgstr "إظهار الكل"
 
-#: rust/snapnab/src/main.rs:873
+#: rust/anycapture/src/main.rs:873
 msgid "Ocultar todas"
 msgstr "إخفاء الكل"
 
-#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:215
+#: rust/anycapture/src/main.rs:873 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:215
 msgid "Fechar todas"
 msgstr "إغلاق الكل"
 
-#: rust/snapnab/src/main.rs:873
+#: rust/anycapture/src/main.rs:873
 msgid "Desligar \"atravessar cliques\""
 msgstr "إيقاف \"تمرير النقرات\""
 
-#: rust/snapnab/src/main.rs:873
+#: rust/anycapture/src/main.rs:873
 msgid "Reabrir a última fechada"
 msgstr "إعادة فتح آخر صورة مغلقة"
 
-#: rust/snapnab/src/main.rs:874
+#: rust/anycapture/src/main.rs:874
 msgid "Histórico"
 msgstr "السجل"
 
-#: rust/snapnab/src/main.rs:960
+#: rust/anycapture/src/main.rs:960
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — التقاط الشاشة وتسجيل الفيديو"
 
-#: rust/snapnab/src/main.rs:964 rust/snapnab/src/window.rs:241
-msgid "Sobre o Snapnab"
-msgstr "حول Snapnab"
+#: rust/anycapture/src/main.rs:964 rust/anycapture/src/window.rs:241
+msgid "Sobre o AnyCapture"
+msgstr "حول AnyCapture"
 
-#: rust/snapnab/src/main.rs:1003 rust/snapnab/src/main.rs:1071 rust/snapnab/src/main.rs:1151
-msgid "Snapnab — clique para capturar"
-msgstr "Snapnab — انقر للالتقاط"
+#: rust/anycapture/src/main.rs:1003 rust/anycapture/src/main.rs:1071 rust/anycapture/src/main.rs:1151
+msgid "AnyCapture — clique para capturar"
+msgstr "AnyCapture — انقر للالتقاط"
 
-#: rust/snapnab/src/main.rs:1023
-msgid "Snapnab — gravação recuperada"
-msgstr "Snapnab — تم استعادة التسجيل"
+#: rust/anycapture/src/main.rs:1023
+msgid "AnyCapture — gravação recuperada"
+msgstr "AnyCapture — تم استعادة التسجيل"
 
-#: rust/snapnab/src/main.rs:1024
+#: rust/anycapture/src/main.rs:1024
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "تمت استعادة %zu تسجيل منقطع في المكتبة."
 
-#: rust/snapnab/src/main.rs:1149
+#: rust/anycapture/src/main.rs:1149
 #, c-format
-msgid "Snapnab — captura por intervalo: %d imagem(ns)"
-msgstr "Snapnab — الالتقاط على فترات: %d صورة"
+msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
+msgstr "AnyCapture — الالتقاط على فترات: %d صورة"
 
-#: rust/snapnab/src/oneclick.rs:500
+#: rust/anycapture/src/oneclick.rs:500
 msgid "Iniciar uma captura"
 msgstr "بدء لقطة"
 
-#: rust/snapnab/src/pins.rs:412 rust/snapnab/src/select.rs:578
+#: rust/anycapture/src/pins.rs:412 rust/anycapture/src/select.rs:578
 msgid "Cor copiada: "
 msgstr "تم نسخ اللون: "
 
-#: rust/snapnab/src/pins.rs:420
+#: rust/anycapture/src/pins.rs:420
 msgid "Fixada"
 msgstr "مثبتة"
 
-#: rust/snapnab/src/pins.rs:421
+#: rust/anycapture/src/pins.rs:421
 msgid "Salvar a imagem fixada"
 msgstr "حفظ الصورة المثبتة"
 
-#: rust/snapnab/src/pins.rs:438 rust/snapnab/src/pins.rs:978 rust/snapnab/src/pins.rs:1206
+#: rust/anycapture/src/pins.rs:438 rust/anycapture/src/pins.rs:978 rust/anycapture/src/pins.rs:1206
 msgid "Imagem fixada"
 msgstr "صورة مثبتة"
 
-#: rust/snapnab/src/pins.rs:610
+#: rust/anycapture/src/pins.rs:610
 msgid "Copiar\tCtrl+C"
 msgstr "نسخ\tCtrl+C"
 
-#: rust/snapnab/src/pins.rs:610
+#: rust/anycapture/src/pins.rs:610
 msgid "Salvar como…\tCtrl+S"
 msgstr "حفظ باسم…\tCtrl+S"
 
-#: rust/snapnab/src/pins.rs:610
+#: rust/anycapture/src/pins.rs:610
 msgid "Abrir no Editor"
 msgstr "فتح في المحرر"
 
-#: rust/snapnab/src/pins.rs:611
+#: rust/anycapture/src/pins.rs:611
 msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
 msgstr "تعليق توضيحي (قلم، مُحدِّد، سهم، مستطيل، نص)"
 
-#: rust/snapnab/src/pins.rs:611
+#: rust/anycapture/src/pins.rs:611
 msgid "Desfazer a anotação\tCtrl+Z"
 msgstr "التراجع عن التعليق\tCtrl+Z"
 
-#: rust/snapnab/src/pins.rs:612
+#: rust/anycapture/src/pins.rs:612
 msgid "Zoom"
 msgstr "تكبير"
 
-#: rust/snapnab/src/pins.rs:612
+#: rust/anycapture/src/pins.rs:612
 msgid "Travar a posição"
 msgstr "قفل الموضع"
 
-#: rust/snapnab/src/pins.rs:613
+#: rust/anycapture/src/pins.rs:613
 msgid "Atravessar cliques (desligue pelo menu da bandeja)"
 msgstr "تمرير النقرات (أوقفه من قائمة الأيقونة)"
 
-#: rust/snapnab/src/pins.rs:613
+#: rust/anycapture/src/pins.rs:613
 msgid "Sempre visível"
 msgstr "دائمًا في المقدمة"
 
-#: rust/snapnab/src/pins.rs:614
+#: rust/anycapture/src/pins.rs:614
 msgid "Copiar a cor neste ponto\tAlt+clique"
 msgstr "نسخ اللون عند هذه النقطة\tAlt+نقرة"
 
-#: rust/snapnab/src/pins.rs:614
+#: rust/anycapture/src/pins.rs:614
 msgid "Arrastar para outro programa: Ctrl+arrastar"
 msgstr "السحب إلى برنامج آخر: Ctrl+سحب"
 
-#: rust/snapnab/src/pins.rs:614
+#: rust/anycapture/src/pins.rs:614
 msgid "Fechar\tEsc"
 msgstr "إغلاق\tEsc"
 
-#: rust/snapnab/src/pins.rs:615
+#: rust/anycapture/src/pins.rs:615
 msgid "Fechar todas as imagens fixadas"
 msgstr "إغلاق كل الصور المثبتة"
 
-#: rust/snapnab/src/pins.rs:693
+#: rust/anycapture/src/pins.rs:693
 msgid "Texto na imagem fixada"
 msgstr "نص على الصورة المثبتة"
 
-#: rust/snapnab/src/pins.rs:1144
+#: rust/anycapture/src/pins.rs:1144
 msgid "A área de transferência não tem imagem nem texto para fixar."
 msgstr "لا تحتوي الحافظة على صورة أو نص لتثبيته."
 
-#: rust/snapnab/src/pins.rs:1212
+#: rust/anycapture/src/pins.rs:1212
 msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Vermelho"
 msgstr "أحمر"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Amarelo"
 msgstr "أصفر"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Verde"
 msgstr "أخضر"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Azul"
 msgstr "أزرق"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Roxo"
 msgstr "بنفسجي"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Preto"
 msgstr "أسود"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Branco"
 msgstr "أبيض"
 
-#: rust/snapnab/src/quick.rs:236
+#: rust/anycapture/src/quick.rs:236
 msgid "Copiado para a área de transferência."
 msgstr "تم النسخ إلى الحافظة."
 
-#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:282
+#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:282
 msgid "Vídeo"
 msgstr "فيديو"
 
-#: rust/snapnab/src/quick.rs:241
+#: rust/anycapture/src/quick.rs:241
 msgid "Salvar o vídeo"
 msgstr "حفظ الفيديو"
 
-#: rust/snapnab/src/quick.rs:299
+#: rust/anycapture/src/quick.rs:299
 msgid "Enviar (upload) e copiar o link"
 msgstr "الرفع ونسخ الرابط"
 
-#: rust/snapnab/src/quick.rs:54
+#: rust/anycapture/src/quick.rs:54
 msgid "Salvar como…"
 msgstr "حفظ باسم…"
 
-#: rust/snapnab/src/quick.rs:55
+#: rust/anycapture/src/quick.rs:55
 msgid "Anotar no Editor"
 msgstr "التعليق في المحرر"
 
-#: rust/snapnab/src/quick.rs:57
+#: rust/anycapture/src/quick.rs:57
 msgid "Excluir da biblioteca"
 msgstr "حذف من المكتبة"
 
-#: rust/snapnab/src/rawwin.rs:194
+#: rust/anycapture/src/rawwin.rs:194
 msgid "Pular"
 msgstr "تخطٍّ"
 
-#: rust/snapnab/src/select.rs:556
+#: rust/anycapture/src/select.rs:556
 msgid "Nenhuma região anterior ainda"
 msgstr "لا توجد مناطق سابقة بعد"
 
-#: rust/snapnab/src/select.rs:566
+#: rust/anycapture/src/select.rs:566
 #, c-format
 msgid "Região anterior %d de %d"
 msgstr "المنطقة السابقة %d من %d"
 
-#: rust/snapnab/src/select.rs:660
+#: rust/anycapture/src/select.rs:660
 msgid "Tamanho da seleção"
 msgstr "حجم التحديد"
 
-#: rust/snapnab/src/select.rs:808
+#: rust/anycapture/src/select.rs:808
 msgid "Setas movem (Shift = 10 px) • Ctrl+setas aumentam, Ctrl+Shift+setas diminuem • clique no tamanho para digitar • Enter ou duplo clique captura • Esc = cancelar"
 msgstr "الأسهم تحرّك (Shift = 10 px) • Ctrl+الأسهم تكبّر، Ctrl+Shift+الأسهم تصغّر • انقر على الحجم لكتابته • Enter أو النقر المزدوج يلتقط • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:809
+#: rust/anycapture/src/select.rs:809
 msgid "Arraste para selecionar • clique captura a janela/área destacada • Enter = monitor • Tab = regiões anteriores • H = capturas recentes • C = copiar a cor • Esc = cancelar"
 msgstr "اسحب للتحديد • النقر يلتقط النافذة/المنطقة المُبرزة • Enter = الشاشة • Tab = المناطق السابقة • H = اللقطات الأخيرة • C = نسخ اللون • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:810
+#: rust/anycapture/src/select.rs:810
 msgid "Clique na janela a capturar • Esc = cancelar"
 msgstr "انقر النافذة المراد التقاطها • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:811
+#: rust/anycapture/src/select.rs:811
 msgid "Clique no controle/objeto a capturar • Esc = cancelar"
 msgstr "انقر عنصر التحكم/العنصر المراد التقاطه • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:812
+#: rust/anycapture/src/select.rs:812
 #, c-format
 msgid "Região fixa %d × %d — clique para capturar • Esc = cancelar"
 msgstr "منطقة ثابتة %d × %d — انقر للالتقاط • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:813
+#: rust/anycapture/src/select.rs:813
 msgid "Desenhe o contorno com o botão pressionado • Esc = cancelar"
 msgstr "ارسم المحيط مع الضغط على الزر • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:814
+#: rust/anycapture/src/select.rs:814
 msgid "Arraste várias áreas • Backspace desfaz • Enter ou botão direito conclui • Esc = cancelar"
 msgstr "اسحب عدة مناطق • Backspace للتراجع • Enter أو النقر بزر الماوس الأيمن للإنهاء • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:815
+#: rust/anycapture/src/select.rs:815
 msgid "Clique na janela/área rolável • Esc = cancelar"
 msgstr "انقر النافذة/المنطقة القابلة للتمرير • Esc = إلغاء"
 
-#: rust/snapnab/src/select.rs:817
+#: rust/anycapture/src/select.rs:817
 msgid "Gravação: "
 msgstr "التسجيل: "
 
-#: rust/snapnab/src/share.rs:40
+#: rust/anycapture/src/share.rs:40
 #, c-format
 msgid "Captura enviada para o %s."
 msgstr "تم إرسال اللقطة إلى %s."
 
-#: rust/snapnab/src/share.rs:98
+#: rust/anycapture/src/share.rs:98
 msgid "O upload ainda não está configurado. Configurar agora?"
 msgstr "لم يتم إعداد الرفع بعد. هل تريد إعداده الآن؟"
 
-#: rust/snapnab/src/share.rs:105
+#: rust/anycapture/src/share.rs:105
 msgid "Enviando a captura…"
 msgstr "جارٍ رفع اللقطة…"
 
-#: rust/snapnab/src/share.rs:109
+#: rust/anycapture/src/share.rs:109
 msgid ""
 "O upload falhou.\n"
 "\n"
@@ -6955,294 +6955,294 @@ msgstr ""
 "فشل الرفع.\n"
 "\n"
 
-#: rust/snapnab/src/share.rs:118
+#: rust/anycapture/src/share.rs:118
 msgid "Upload concluído — link copiado"
 msgstr "اكتمل الرفع — تم نسخ الرابط"
 
-#: rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:416 rust/snapnab/src/window.rs:426
+#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:416 rust/anycapture/src/window.rs:426
 msgid "Nenhum"
 msgstr "لا شيء"
 
-#: rust/snapnab/src/window.rs:44
+#: rust/anycapture/src/window.rs:44
 msgid "Programa externo"
 msgstr "برنامج خارجي"
 
-#: rust/snapnab/src/window.rs:44
+#: rust/anycapture/src/window.rs:44
 msgid "Texto (OCR)"
 msgstr "نص (OCR)"
 
-#: rust/snapnab/src/window.rs:45
+#: rust/anycapture/src/window.rs:45
 msgid "Upload (copiar o link)"
 msgstr "الرفع (نسخ الرابط)"
 
-#: rust/snapnab/src/window.rs:195
+#: rust/anycapture/src/window.rs:195
 msgid "Abrir a pasta da biblioteca"
 msgstr "فتح مجلد المكتبة"
 
-#: rust/snapnab/src/window.rs:196
+#: rust/anycapture/src/window.rs:196
 msgid "Abrir a pasta de logs"
 msgstr "فتح مجلد السجلات"
 
-#: rust/snapnab/src/window.rs:198
+#: rust/anycapture/src/window.rs:198
 msgid "Importar presets…"
 msgstr "استيراد إعدادات مسبقة…"
 
-#: rust/snapnab/src/window.rs:199
+#: rust/anycapture/src/window.rs:199
 msgid "Exportar presets…"
 msgstr "تصدير إعدادات مسبقة…"
 
-#: rust/snapnab/src/window.rs:201
+#: rust/anycapture/src/window.rs:201
 msgid "Exportar todas as configurações…"
 msgstr "تصدير كل الإعدادات…"
 
-#: rust/snapnab/src/window.rs:202
+#: rust/anycapture/src/window.rs:202
 msgid "Importar todas as configurações…"
 msgstr "استيراد كل الإعدادات…"
 
-#: rust/snapnab/src/window.rs:203
+#: rust/anycapture/src/window.rs:203
 msgid "Abrir a pasta de backups"
 msgstr "فتح مجلد النسخ الاحتياطية"
 
-#: rust/snapnab/src/window.rs:205
+#: rust/anycapture/src/window.rs:205
 msgid "Configurar o upload…"
 msgstr "إعداد الرفع…"
 
-#: rust/snapnab/src/window.rs:206
+#: rust/anycapture/src/window.rs:206
 msgid "Limpar a biblioteca agora"
 msgstr "تنظيف المكتبة الآن"
 
-#: rust/snapnab/src/window.rs:209
-msgid "Sair do Snapnab"
-msgstr "إنهاء Snapnab"
+#: rust/anycapture/src/window.rs:209
+msgid "Sair do AnyCapture"
+msgstr "إنهاء AnyCapture"
 
-#: rust/snapnab/src/window.rs:220
+#: rust/anycapture/src/window.rs:220
 msgid "Repetir a última captura"
 msgstr "تكرار آخر التقاط"
 
-#: rust/snapnab/src/window.rs:223
+#: rust/anycapture/src/window.rs:223
 msgid "De um arquivo gráfico…"
 msgstr "من ملف صورة…"
 
-#: rust/snapnab/src/window.rs:231
+#: rust/anycapture/src/window.rs:231
 msgid "Abrir a pasta dos áudios"
 msgstr "فتح مجلد الصوتيات"
 
-#: rust/snapnab/src/window.rs:235
+#: rust/anycapture/src/window.rs:235
 msgid "Lista de presets"
 msgstr "قائمة الإعدادات المسبقة"
 
-#: rust/snapnab/src/window.rs:238
-msgid "Manual do Snapnab"
-msgstr "دليل Snapnab"
+#: rust/anycapture/src/window.rs:238
+msgid "Manual do AnyCapture"
+msgstr "دليل AnyCapture"
 
-#: rust/snapnab/src/window.rs:239
+#: rust/anycapture/src/window.rs:239
 msgid "Como usar os presets"
 msgstr "كيفية استخدام الإعدادات المسبقة"
 
-#: rust/snapnab/src/window.rs:243
+#: rust/anycapture/src/window.rs:243
 msgid "&Captura"
 msgstr "التقاط(&C)"
 
-#: rust/snapnab/src/window.rs:347
+#: rust/anycapture/src/window.rs:347
 msgid "Seleção:"
 msgstr "التحديد:"
 
-#: rust/snapnab/src/window.rs:365 rust/snapnab/src/window.rs:680
+#: rust/anycapture/src/window.rs:365 rust/anycapture/src/window.rs:680
 msgid "Configurações"
 msgstr "الإعدادات"
 
-#: rust/snapnab/src/window.rs:370
+#: rust/anycapture/src/window.rs:370
 msgid "Selecionar a região na captura"
 msgstr "تحديد المنطقة وقت الالتقاط"
 
-#: rust/snapnab/src/window.rs:372
+#: rust/anycapture/src/window.rs:372
 msgid "Região fixa…"
 msgstr "منطقة ثابتة…"
 
-#: rust/snapnab/src/window.rs:381
+#: rust/anycapture/src/window.rs:381
 msgid "Cada janela como um objeto separado"
 msgstr "كل نافذة كعنصر منفصل"
 
-#: rust/snapnab/src/window.rs:384
+#: rust/anycapture/src/window.rs:384
 msgid "Guardar os links da página (clicáveis, também no PDF)"
 msgstr "الاحتفاظ بروابط الصفحة (قابلة للنقر، في PDF أيضًا)"
 
-#: rust/snapnab/src/window.rs:410
+#: rust/anycapture/src/window.rs:410
 msgid "Efeitos:"
 msgstr "التأثيرات:"
 
-#: rust/snapnab/src/window.rs:431
+#: rust/anycapture/src/window.rs:431
 msgid "Adicionar outro efeito"
 msgstr "إضافة تأثير آخر"
 
-#: rust/snapnab/src/window.rs:432
+#: rust/anycapture/src/window.rs:432
 msgid "Remover este efeito"
 msgstr "إزالة هذا التأثير"
 
-#: rust/snapnab/src/window.rs:473
+#: rust/anycapture/src/window.rs:473
 msgid "Compartilhar:"
 msgstr "المشاركة:"
 
-#: rust/snapnab/src/window.rs:496
+#: rust/anycapture/src/window.rs:496
 msgid "Qualidade:"
 msgstr "الجودة:"
 
-#: rust/snapnab/src/window.rs:497
+#: rust/anycapture/src/window.rs:497
 msgid "Muito baixa"
 msgstr "منخفضة جدًا"
 
-#: rust/snapnab/src/window.rs:528
+#: rust/anycapture/src/window.rs:528
 msgid "Webcam:"
 msgstr "كاميرا الويب:"
 
-#: rust/snapnab/src/window.rs:529
+#: rust/anycapture/src/window.rs:529
 msgid "Ligada"
 msgstr "تشغيل"
 
-#: rust/snapnab/src/window.rs:529 rust/snapnab/src/window.rs:540
+#: rust/anycapture/src/window.rs:529 rust/anycapture/src/window.rs:540
 msgid "Desligada"
 msgstr "إيقاف"
 
-#: rust/snapnab/src/window.rs:542
+#: rust/anycapture/src/window.rs:542
 msgid "Nenhuma webcam encontrada"
 msgstr "لم يتم العثور على كاميرا ويب"
 
-#: rust/snapnab/src/window.rs:556
+#: rust/anycapture/src/window.rs:556
 msgid "Remover o fundo (chroma key)…"
 msgstr "إزالة الخلفية (مفتاح الكروما)…"
 
-#: rust/snapnab/src/window.rs:591
+#: rust/anycapture/src/window.rs:591
 #, c-format
 msgid "%d s"
 msgstr "%d ث"
 
-#: rust/snapnab/src/window.rs:595
+#: rust/anycapture/src/window.rs:595
 msgid "Atraso"
 msgstr "تأخير"
 
-#: rust/snapnab/src/window.rs:603
+#: rust/anycapture/src/window.rs:603
 msgid "1 segundo"
 msgstr "ثانية واحدة"
 
-#: rust/snapnab/src/window.rs:604
+#: rust/anycapture/src/window.rs:604
 #, c-format
 msgid "%d segundos"
 msgstr "%d ثوانٍ"
 
-#: rust/snapnab/src/window.rs:643
+#: rust/anycapture/src/window.rs:643
 msgid "Gravar vídeo  ("
 msgstr "تسجيل فيديو  ("
 
-#: rust/snapnab/src/window.rs:643
+#: rust/anycapture/src/window.rs:643
 msgid "Capturar imagem  ("
 msgstr "التقاط صورة  ("
 
-#: rust/snapnab/src/window.rs:653
+#: rust/anycapture/src/window.rs:653
 msgid "Adicionar atalho"
 msgstr "إضافة اختصار"
 
-#: rust/snapnab/src/window.rs:725
+#: rust/anycapture/src/window.rs:725
 msgid "Capturar com este preset"
 msgstr "الالتقاط بهذا الإعداد المسبق"
 
-#: rust/snapnab/src/window.rs:727
+#: rust/anycapture/src/window.rs:727
 msgid "Renomear…"
 msgstr "إعادة تسمية…"
 
-#: rust/snapnab/src/window.rs:728
+#: rust/anycapture/src/window.rs:728
 msgid "Atalho…"
 msgstr "اختصار…"
 
-#: rust/snapnab/src/window.rs:770 rust/snapnab/tests/window.rs:160
+#: rust/anycapture/src/window.rs:770 rust/anycapture/tests/window.rs:160
 msgid "Novo preset…"
 msgstr "إعداد مسبق جديد…"
 
-#: rust/snapnab/src/window.rs:782
+#: rust/anycapture/src/window.rs:782
 msgid "Abrir Editor"
 msgstr "فتح المحرّر"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Cortar bordas"
 msgstr "قصّ الحواف"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Ajuste de cor"
 msgstr "ضبط الألوان"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Girar imagem"
 msgstr "تدوير الصورة"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Resolução da imagem"
 msgstr "دقة الصورة"
 
-#: rust/snapnab/src/window.rs:89
+#: rust/anycapture/src/window.rs:89
 msgid "Embelezar (fundo, margem e sombra)"
 msgstr "تجميل (الخلفية والهامش والظل)"
 
-#: rust/snapnab/src/window.rs:816
+#: rust/anycapture/src/window.rs:816
 msgid "Visualizar no Editor"
 msgstr "المعاينة في المحرّر"
 
-#: rust/snapnab/src/window.rs:819
+#: rust/anycapture/src/window.rs:819
 msgid "Gravar microfone"
 msgstr "تسجيل الميكروفون"
 
-#: rust/snapnab/src/window.rs:820
+#: rust/anycapture/src/window.rs:820
 msgid "Gravar áudio do sistema"
 msgstr "تسجيل صوت النظام"
 
-#: rust/snapnab/src/window.rs:822
+#: rust/anycapture/src/window.rs:822
 msgid "Copiar para a área de transferência"
 msgstr "نسخ إلى الحافظة"
 
-#: rust/snapnab/src/engine/scroll.rs:159
+#: rust/anycapture/src/engine/scroll.rs:159
 msgid "A janela será ampliada além da tela, capturada e restaurada."
 msgstr "سيتم تكبير النافذة إلى ما بعد الشاشة والتقاطها ثم استعادتها."
 
-#: rust/snapnab/src/engine/scroll.rs:160
+#: rust/anycapture/src/engine/scroll.rs:160
 msgid "Nova largura (px)"
 msgstr "العرض الجديد (بكسل)"
 
-#: rust/snapnab/src/engine/scroll.rs:161
+#: rust/anycapture/src/engine/scroll.rs:161
 msgid "Nova altura (px)"
 msgstr "الارتفاع الجديد (بكسل)"
 
-#: rust/snapnab/src/engine/scroll.rs:283
-msgid "Snapnab — rolagem panorâmica"
-msgstr "Snapnab — تمرير بانورامي"
+#: rust/anycapture/src/engine/scroll.rs:283
+msgid "AnyCapture — rolagem panorâmica"
+msgstr "AnyCapture — تمرير بانورامي"
 
-#: rust/snapnab/src/engine/scroll.rs:379
+#: rust/anycapture/src/engine/scroll.rs:379
 msgid "Role o conteúdo dentro da moldura…"
 msgstr "مرّر المحتوى داخل الإطار…"
 
-#: rust/snapnab/src/engine/scroll.rs:381
+#: rust/anycapture/src/engine/scroll.rs:381
 #, c-format
 msgid "Capturando: %d × %d px"
 msgstr "جارٍ الالتقاط: %d × %d بكسل"
 
-#: rust/snapnab/src/engine/scroll.rs:387
+#: rust/anycapture/src/engine/scroll.rs:387
 msgid "Concluir"
 msgstr "إنهاء"
 
-#: rust/snapnab/src/engine/video.rs:123
+#: rust/anycapture/src/engine/video.rs:123
 msgid "Recomeçar a gravação?"
 msgstr "إعادة بدء التسجيل؟"
 
-#: rust/snapnab/src/engine/video.rs:124
+#: rust/anycapture/src/engine/video.rs:124
 msgid "O que foi gravado até agora será descartado."
 msgstr "سيتم تجاهل ما تم تسجيله حتى الآن."
 
-#: rust/snapnab/src/engine/video.rs:125
+#: rust/anycapture/src/engine/video.rs:125
 msgid "Não perguntar de novo"
 msgstr "عدم السؤال مرة أخرى"
 
-#: rust/snapnab/src/engine/video.rs:191
-msgid "Snapnab — gravação"
-msgstr "Snapnab — تسجيل"
+#: rust/anycapture/src/engine/video.rs:191
+msgid "AnyCapture — gravação"
+msgstr "AnyCapture — تسجيل"
 
-#: rust/snapnab/src/engine/video.rs:318
+#: rust/anycapture/src/engine/video.rs:318
 msgid ""
 "Não foi possível iniciar a gravação.\n"
 "\n"
@@ -7250,39 +7250,39 @@ msgstr ""
 "تعذّر بدء التسجيل.\n"
 "\n"
 
-#: rust/snapnab/src/engine/video.rs:360
+#: rust/anycapture/src/engine/video.rs:360
 msgid "Teclas: não mostrar"
 msgstr "المفاتيح: عدم الإظهار"
 
-#: rust/snapnab/src/engine/video.rs:361
+#: rust/anycapture/src/engine/video.rs:361
 msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "المفاتيح: الاختصارات فقط (Ctrl وAlt وWin وF1…)"
 
-#: rust/snapnab/src/engine/video.rs:361
+#: rust/anycapture/src/engine/video.rs:361
 msgid "Teclas: todas (inclusive o que for digitado)"
 msgstr "المفاتيح: الكل (بما في ذلك ما تكتبه)"
 
-#: rust/snapnab/src/engine/video.rs:405
+#: rust/anycapture/src/engine/video.rs:405
 msgid "Há uma gravação em andamento. Parar e sair?"
 msgstr "يوجد تسجيل قيد التقدم. هل تريد الإيقاف والإنهاء؟"
 
-#: rust/snapnab/src/engine/video.rs:415
+#: rust/anycapture/src/engine/video.rs:415
 msgid "Imagem durante gravação"
 msgstr "صورة أثناء التسجيل"
 
-#: rust/snapnab/src/engine/video.rs:421
+#: rust/anycapture/src/engine/video.rs:421
 msgid "Imagem capturada sem parar a gravação."
 msgstr "تم التقاط الصورة دون إيقاف التسجيل."
 
-#: rust/snapnab/src/engine/video.rs:481
-msgid "Snapnab — áudio salvo"
-msgstr "Snapnab — تم حفظ الصوت"
+#: rust/anycapture/src/engine/video.rs:481
+msgid "AnyCapture — áudio salvo"
+msgstr "AnyCapture — تم حفظ الصوت"
 
-#: rust/snapnab/src/engine/video.rs:506
+#: rust/anycapture/src/engine/video.rs:506
 msgid "Vídeo salvo na biblioteca: "
 msgstr "تم حفظ الفيديو في المكتبة: "
 
-#: rust/snapnab/src/engine/video.rs:509
+#: rust/anycapture/src/engine/video.rs:509
 msgid ""
 "A gravação falhou.\n"
 "\n"
@@ -7290,15 +7290,15 @@ msgstr ""
 "فشل التسجيل.\n"
 "\n"
 
-#: rust/snapnab/src/engine/video.rs:520
-msgid "Snapnab — pouco espaço em disco"
-msgstr "Snapnab — مساحة القرص منخفضة"
+#: rust/anycapture/src/engine/video.rs:520
+msgid "AnyCapture — pouco espaço em disco"
+msgstr "AnyCapture — مساحة القرص منخفضة"
 
-#: rust/snapnab/src/engine/video.rs:520
+#: rust/anycapture/src/engine/video.rs:520
 msgid "Restam menos de 1 GB livres na unidade da biblioteca."
 msgstr "تبقّى أقل من 1 غيغابايت حرّة على محرك المكتبة."
 
-#: rust/snapnab/src/engine/video.rs:522
+#: rust/anycapture/src/engine/video.rs:522
 msgid "Gravação interrompida: espaço em disco insuficiente."
 msgstr "توقف التسجيل: مساحة القرص غير كافية."
 
@@ -7486,6 +7486,6 @@ msgid "Conclua o login no navegador"
 msgstr "أكمل تسجيل الدخول في المتصفح"
 
 #: rust/snapui/src/upload_ui.rs:210
-msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
-msgstr "امنح Snapnab الإذن في الصفحة التي فُتحت. تُغلق هذه النافذة تلقائيًا عند عودة المتصفح."
+msgid "Autorize o AnyCapture na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
+msgstr "امنح AnyCapture الإذن في الصفحة التي فُتحت. تُغلق هذه النافذة تلقائيًا عند عودة المتصفح."
 

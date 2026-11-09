@@ -1,7 +1,7 @@
 [package]
 name = "snapui"
 version = "0.1.0"
-description = "Snapnab's user interface in egui (the capture app and the Editor), on top of snapcore"
+description = "AnyCapture's user interface in egui (the capture app and the Editor), on top of snapcore"
 edition.workspace = true
 license.workspace = true
 publish.workspace = true

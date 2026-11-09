@@ -1,5 +1,5 @@
 //! The capture presets (Presets.cpp, comp_7 §2): what a capture takes (image or video, the selection mode), its
-//! effects and where it goes. They live in %LOCALAPPDATA%\Snapnab\Presets1.xml as <SavedPresets>, one <CaptureSettings>
+//! effects and where it goes. They live in %LOCALAPPDATA%\AnyCapture\Presets1.xml as <SavedPresets>, one <CaptureSettings>
 //! per preset, with the same elements and attributes the C++ capture app wrote (tests/data/presets-cpp.txt).
 
 use std::ffi::OsStr;
@@ -136,7 +136,7 @@ pub struct Preset {
     pub save_to_file: bool,
     pub file_format: FileFormat,
     pub file_prefix: String,
-    /// empty = Pictures\Snapnab
+    /// empty = Pictures\AnyCapture
     pub folder: String,
     pub open_in_program: bool,
     pub program_path: String,

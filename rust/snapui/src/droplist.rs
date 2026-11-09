@@ -1,4 +1,4 @@
-//! Drop-down lists in a window of their own, as Windows (and the C++ SnapnabComboList) shows them: the list opens below
+//! Drop-down lists in a window of their own, as Windows (and the C++ AnyCaptureComboList) shows them: the list opens below
 //! its box and may go past the edges of the window it belongs to. An egui popup cannot, since egui draws everything
 //! inside one window.
 //!

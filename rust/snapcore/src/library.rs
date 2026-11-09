@@ -176,7 +176,7 @@ fn app_data_dir() -> W {
 
 // ---------------------------------------------------------------- folders
 
-/// LibraryDir: LibraryFolder from the settings, otherwise %LOCALAPPDATA%\Snapnab\Library (created if missing).
+/// LibraryDir: LibraryFolder from the settings, otherwise %LOCALAPPDATA%\AnyCapture\Library (created if missing).
 pub fn library_dir() -> W {
     let custom = reg_string("LibraryFolder");
     let d = if custom.is_empty() {
@@ -199,12 +199,12 @@ pub fn thumb_path_for(dir: &[u16], item: &[u16]) -> W {
     cat(&[&thumb_dir(dir), &w("\\"), &file_name(item), &w(".png")])
 }
 
-/// Audio-only recordings (C32): AudioFolder from the settings, otherwise Music\Snapnab (created if missing).
+/// Audio-only recordings (C32): AudioFolder from the settings, otherwise Music\AnyCapture (created if missing).
 pub fn audio_dir() -> W {
     let mut d = reg_string("AudioFolder");
     if d.is_empty() {
         if let Ok(p) = unsafe { SHGetKnownFolderPath(&FOLDERID_Music, KNOWN_FOLDER_FLAG(0), None) } {
-            d = cat(&[unsafe { p.as_wide() }, &w("\\Snapnab")]);
+            d = cat(&[unsafe { p.as_wide() }, &w("\\AnyCapture")]);
             unsafe { CoTaskMemFree(Some(p.0 as *const _)) };
         }
         if d.is_empty() {
@@ -350,8 +350,8 @@ pub fn delete_item(dir: &[u16], item: &[u16], owner: HWND) -> bool {
         fFlags: (FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT).0 as u16,
         ..Default::default()
     };
-    // the e2e suite deletes for real (SNAPNAB_NO_RECYCLE=1): its files must not fill the user's Recycle Bin
-    let ok = if std::env::var_os("SNAPNAB_NO_RECYCLE").is_some_and(|v| v == "1") {
+    // the e2e suite deletes for real (ANYCAPTURE_NO_RECYCLE=1): its files must not fill the user's Recycle Bin
+    let ok = if std::env::var_os("ANYCAPTURE_NO_RECYCLE").is_some_and(|v| v == "1") {
         delete_file(&nul(item))
     } else {
         unsafe { SHFileOperationW(&mut op) == 0 }

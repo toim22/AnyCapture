@@ -22,10 +22,10 @@ use windows::core::PCWSTR;
 use crate::log;
 use crate::wide::to_wide;
 
-pub const CAPTURE_MUTEX: &str = "Snapnab-Capture-{41F1BF9C-5A4E-4B6F-9C33-1D2E3F405A61}";
-pub const EDITOR_MUTEX: &str = "Snapnab-Editor-{800F2EB3-7C1D-4E2A-A3B4-C5D6E7F80912}";
-pub const CAPTURE_WND_CLASS: &str = "SnapnabUI";
-pub const EDITOR_WND_CLASS: &str = "SnapnabEditor";
+pub const CAPTURE_MUTEX: &str = "AnyCapture-Capture-{41F1BF9C-5A4E-4B6F-9C33-1D2E3F405A61}";
+pub const EDITOR_MUTEX: &str = "AnyCapture-Editor-{800F2EB3-7C1D-4E2A-A3B4-C5D6E7F80912}";
+pub const CAPTURE_WND_CLASS: &str = "AnyCaptureUI";
+pub const EDITOR_WND_CLASS: &str = "AnyCaptureEditor";
 
 const MAP_SIZE: u32 = 0x1000;
 
@@ -70,7 +70,7 @@ pub struct Message {
 }
 
 /// The names of the kernel objects. `prefix` is empty for the real programs; the tests use their own so they never
-/// reach a running Snapnab.
+/// reach a running AnyCapture.
 #[derive(Clone, Debug, Default)]
 pub struct Names {
     pub prefix: String,
@@ -81,19 +81,19 @@ impl Names {
         to_wide(format!("{}{s}", self.prefix))
     }
     fn map(&self) -> Vec<u16> {
-        self.n("SnapnabIPCNotifyMemMapFile")
+        self.n("AnyCaptureIPCNotifyMemMapFile")
     }
     fn mutex(&self) -> Vec<u16> {
-        self.n("SnapnabIPCNotifyMutex")
+        self.n("AnyCaptureIPCNotifyMutex")
     }
     fn event(&self, ch: Channel) -> Vec<u16> {
-        self.n(&format!("SnapnabIPCNotifyEvent{}", ch as u32))
+        self.n(&format!("AnyCaptureIPCNotifyEvent{}", ch as u32))
     }
     fn ack(&self, ch: Channel) -> Vec<u16> {
-        self.n(&format!("SnapnabIPCNotifyWaitUntilMessageSentEvent{}", ch as u32))
+        self.n(&format!("AnyCaptureIPCNotifyWaitUntilMessageSentEvent{}", ch as u32))
     }
     fn alive(&self, ch: Channel) -> Vec<u16> {
-        self.n(&format!("SnapnabIPCNotifyThreadStartedMutex{}", ch as u32))
+        self.n(&format!("AnyCaptureIPCNotifyThreadStartedMutex{}", ch as u32))
     }
     /// The single-instance mutex of the program behind a channel.
     pub fn program_mutex(&self, ch: Channel) -> Vec<u16> {

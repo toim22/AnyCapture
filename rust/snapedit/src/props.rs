@@ -480,7 +480,7 @@ impl PropsPanel {
             if !fav && !stamps {
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     let r = ui.button("+").on_hover_text(tr("Adicionar o estilo atual aos estilos rápidos"));
-                    crate::panels::tag(ui, &r, "SnapnabProps.AddStyle");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.AddStyle");
                     if r.clicked() {
                         qs.add_custom(pt, &cur);
                     }
@@ -493,11 +493,11 @@ impl PropsPanel {
         }
         if stamps {
             let r = ui.add(egui::TextEdit::singleline(&mut self.stamp_search).hint_text(tr("Pesquisar carimbos")).desired_width(f32::INFINITY));
-            crate::panels::tag(ui, &r, "SnapnabProps.StampSearch");
+            crate::panels::tag(ui, &r, "AnyCaptureProps.StampSearch");
             let names: Vec<String> = self.stamp_cats.iter().map(|c| c.name.clone()).collect();
             let mut sel = self.stamp_cat.min(names.len().saturating_sub(1));
             let r = snapui::widgets::combo_index(ui, "stamp-cat", &mut sel, &names, ui.available_width());
-            crate::panels::tag(ui, &r, "SnapnabProps.StampCategory");
+            crate::panels::tag(ui, &r, "AnyCaptureProps.StampCategory");
             if sel != self.stamp_cat {
                 self.stamp_cat = sel;
                 set_reg_dword("LastUsedStampCategory", sel as u32);
@@ -515,12 +515,12 @@ impl PropsPanel {
             ui.horizontal(|ui| {
                 let w = (ui.available_width() - 8.0) / 2.0;
                 let r = ui.add_sized([w, 28.0], egui::Button::new(tr("Organizar carimbos…")));
-                crate::panels::tag(ui, &r, "SnapnabProps.OrganizeStamps");
+                crate::panels::tag(ui, &r, "AnyCaptureProps.OrganizeStamps");
                 if r.clicked() {
                     crate::shell_open(&stamps::my_stamps_dir());
                 }
                 let r = ui.add_sized([w, 28.0], egui::Button::new(tr("Importar…")));
-                crate::panels::tag(ui, &r, "SnapnabProps.ImportStamps");
+                crate::panels::tag(ui, &r, "AnyCaptureProps.ImportStamps");
                 if r.clicked() {
                     acts.push(PropAction::Modal(Box::new(|owner| {
                         let n = stamps::import(owner);
@@ -550,7 +550,7 @@ impl PropsPanel {
             names.push(tr("Importar…"));
             let mut sel = qs.current;
             let r = snapui::widgets::combo_index(ui, "theme", &mut sel, &names, ui.available_width() - 40.0);
-            crate::panels::tag(ui, &r, "SnapnabProps.Theme");
+            crate::panels::tag(ui, &r, "AnyCaptureProps.Theme");
             if sel != qs.current {
                 if sel < n {
                     qs.current = sel;
@@ -564,13 +564,13 @@ impl PropsPanel {
                     acts.push(theme_form(t, name, None));
                 } else {
                     acts.push(PropAction::Modal(Box::new(|owner| {
-                        let filter = format!("{}|*.snaptheme|{}|*.*|", tr("Tema do Snapnab (*.snaptheme)"), tr("Todos os arquivos"));
+                        let filter = format!("{}|*.snaptheme|{}|*.*|", tr("Tema do AnyCapture (*.snaptheme)"), tr("Todos os arquivos"));
                         let path = crate::native::open_file(owner, &tr("Importar tema"), &filter)?;
                         Some(Box::new(move |_: &mut PropsPanel, _: &mut Canvas, qs: &mut QuickStyleStore| {
                             match qs.import_theme(&path) {
                                 Ok(()) => vec![],
                                 Err(e) => vec![PropAction::Modal(Box::new(move |owner| {
-                                    crate::native::message(owner, &e, "Snapnab Editor", windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING);
+                                    crate::native::message(owner, &e, "AnyCapture Editor", windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING);
                                     None
                                 }))],
                             }
@@ -598,14 +598,14 @@ impl PropsPanel {
                     let name = th.name.clone();
                     acts.push(PropAction::Modal(Box::new(move |owner| {
                         let initial = format!("{}\\{}.snaptheme", crate::files::default_save_dir(), crate::files::safe_name(&name, ""));
-                        let filter = format!("{}|*.snaptheme|", tr("Tema do Snapnab (*.snaptheme)"));
+                        let filter = format!("{}|*.snaptheme|", tr("Tema do AnyCapture (*.snaptheme)"));
                         let (path, _) = crate::native::save_file(owner, &tr("Exportar tema"), &initial, &filter, "snaptheme", 1)?;
                         Some(Box::new(move |_: &mut PropsPanel, _: &mut Canvas, qs: &mut QuickStyleStore| {
                             if qs.export_theme(cur, &path) {
                                 vec![]
                             } else {
                                 vec![PropAction::Modal(Box::new(|owner| {
-                                    crate::native::message(owner, &tr("Não foi possível exportar o tema."), "Snapnab Editor",
+                                    crate::native::message(owner, &tr("Não foi possível exportar o tema."), "AnyCapture Editor",
                                                            windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING);
                                     None
                                 }))]
@@ -620,7 +620,7 @@ impl PropsPanel {
                     acts.push(PropAction::Modal(Box::new(move |owner| {
                         use windows::Win32::UI::WindowsAndMessaging::{IDYES, MB_ICONQUESTION, MB_YESNO};
                         let q = tr("Excluir o tema \"%s\"?").replace("%s", &name);
-                        (crate::native::message(owner, &q, "Snapnab Editor", MB_YESNO | MB_ICONQUESTION) == IDYES.0).then(|| -> Apply {
+                        (crate::native::message(owner, &q, "AnyCapture Editor", MB_YESNO | MB_ICONQUESTION) == IDYES.0).then(|| -> Apply {
                             Box::new(move |_: &mut PropsPanel, _: &mut Canvas, qs: &mut QuickStyleStore| {
                                 qs.delete_theme(cur);
                                 vec![]
@@ -661,7 +661,7 @@ impl PropsPanel {
                     let sel = (!fav || *tool == pt) && same_style(st, &cur);
                     let is_fav = fav || qs.is_favorite(*tool, st);
                     let (r, star) = Self::tile(ui, &tex, ts, sel, Some(is_fav));
-                    crate::panels::tag(ui, &r, &format!("SnapnabProps.Style.{i}"));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureProps.Style.{i}"));
                     if r.clicked() {
                         if star {
                             qs.toggle_favorite(*tool, st);
@@ -706,7 +706,7 @@ impl PropsPanel {
                     p.rect_stroke(r.rect.shrink(1.0), 4.0, egui::Stroke::new(1.5, ui.visuals().selection.bg_fill), egui::StrokeKind::Inside);
                     p.text(r.rect.right_bottom() - egui::vec2(9.0, 9.0), egui::Align2::CENTER_CENTER, "+", egui::FontId::proportional(16.0),
                            ui.visuals().selection.bg_fill);
-                    crate::panels::tag(ui, &r, "SnapnabProps.AddTile");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.AddTile");
                     if r.clicked() {
                         qs.add_custom(pt, &cur);
                     }
@@ -778,7 +778,7 @@ impl PropsPanel {
                 for (i, it) in items.iter().enumerate() {
                     let tex = self.stamp_thumb(ui.ctx(), &it.id, px);
                     let (r, _) = Self::tile(ui, &tex, ts, it.id == cv.stamp_id, None);
-                    crate::panels::tag(ui, &r, &format!("SnapnabProps.Stamp.{i}"));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureProps.Stamp.{i}"));
                     let r = r.on_hover_text(&it.name);
                     rects.push(r.rect);
                     if stamps::is_pinned(&it.id) {
@@ -858,7 +858,7 @@ impl PropsPanel {
             ui.label(RichText::new(tr("Propriedades da ferramenta")).strong().size(14.0));
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 let r = ui.small_button("?").on_hover_text(tr("Ajuda"));
-                crate::panels::tag(ui, &r, "SnapnabProps.Help");
+                crate::panels::tag(ui, &r, "AnyCaptureProps.Help");
                 if r.clicked() {
                     let h = help_for(pt);
                     let title = pt.name();
@@ -993,7 +993,7 @@ impl PropsPanel {
             Tool::Fill => {
                 ui.horizontal(|ui| {
                     let r = ui.add_sized([52.0, 50.0], egui::Button::new(tr("Conta-gotas")).wrap());
-                    crate::panels::tag(ui, &r, "SnapnabProps.Eyedrop");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.Eyedrop");
                     if r.clicked() {
                         cv.pick_color_once = true;
                         acts.push(PropAction::Hint(tr("Conta-gotas: clique na imagem para pegar a cor de preenchimento.")));
@@ -1017,14 +1017,14 @@ impl PropsPanel {
                     let items = ["1, 2, 3…".to_owned(), "A, B, C…".to_owned(), "a, b, c…".to_owned(), tr("I, II, III…"), tr("i, ii, iii…")];
                     let mut sel = st.step_type.clamp(0, 4) as usize;
                     let r = snapui::widgets::combo_index(ui, "step-type", &mut sel, &items, (ui.available_width() - 40.0).max(90.0));
-                    crate::panels::tag(ui, &r, "SnapnabProps.StepType");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.StepType");
                     if sel as i32 != st.step_type {
                         let mut s = Self::cur(cv);
                         s.step_type = sel as i32;
                         Self::set_style(cv, s, true, acts);
                     }
                     let r = ui.button("⟲").on_hover_text(tr("Reiniciar a sequência"));
-                    crate::panels::tag(ui, &r, "SnapnabProps.StepReset");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.StepReset");
                     if r.clicked()
                         && let Some(d) = cv.doc_mut()
                     {
@@ -1063,7 +1063,7 @@ impl PropsPanel {
                     let items = [tr("Desfoque"), tr("Pixelado")];
                     let mut sel = st.hide_kind.clamp(0, 1) as usize;
                     let r = snapui::widgets::combo_index(ui, "hide-kind", &mut sel, &items, ui.available_width().max(90.0));
-                    crate::panels::tag(ui, &r, "SnapnabProps.HideKind");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.HideKind");
                     if sel as i32 != st.hide_kind {
                         let mut s = Self::cur(cv);
                         s.hide_kind = sel as i32;
@@ -1082,7 +1082,7 @@ impl PropsPanel {
                 if nsel <= 1 {
                     let mut on = cv.smart_move;
                     let r = snapui::widgets::toggle(ui, &mut on, &tr("Smart Move"), ui.available_width());
-                    crate::panels::tag(ui, &r, "SnapnabProps.SmartMove");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.SmartMove");
                     if r.changed() {
                         self.set_value(cv, C::SmartMove, on as i32, true, acts);
                     }
@@ -1109,7 +1109,7 @@ impl PropsPanel {
                 self.button(ui, 325, &tr("Copiar seleção"), acts);
                 self.button(ui, 326, &tr("Excluir seleção"), acts);
                 let r = ui.add_sized([ui.available_width(), 28.0], egui::Button::new(tr("Levantar a seleção (peça solta)")));
-                crate::panels::tag(ui, &r, "SnapnabProps.Lift");
+                crate::panels::tag(ui, &r, "AnyCaptureProps.Lift");
                 if r.clicked() {
                     if !cv.has_raster_selection() {
                         acts.push(PropAction::Hint(tr("Selecione uma área com a ferramenta Seleção para levantá-la.")));
@@ -1135,7 +1135,7 @@ impl PropsPanel {
 
     fn button(&self, ui: &mut egui::Ui, id: u32, text: &str, acts: &mut Vec<PropAction>) {
         let r = ui.add_sized([ui.available_width(), 28.0], egui::Button::new(text));
-        crate::panels::tag(ui, &r, &format!("SnapnabProps.{id}"));
+        crate::panels::tag(ui, &r, &format!("AnyCaptureProps.{id}"));
         if r.clicked() {
             acts.push(PropAction::Command(id));
         }
@@ -1143,7 +1143,7 @@ impl PropsPanel {
 
     fn drop_button(&self, ui: &mut egui::Ui, cv: &mut Canvas, acts: &mut Vec<PropAction>) {
         let r = ui.add_sized([ui.available_width(), 28.0], egui::Button::new(tr("Soltar a peça na imagem")));
-        crate::panels::tag(ui, &r, "SnapnabProps.Drop");
+        crate::panels::tag(ui, &r, "AnyCaptureProps.Drop");
         if r.clicked() && cv.drop_floating() {
             acts.push(PropAction::Hint(tr("Peça solta na imagem.")));
             acts.push(PropAction::DocChanged);
@@ -1160,7 +1160,7 @@ impl PropsPanel {
             };
             let mut sel = (*v).clamp(0, items.len() as i32 - 1) as usize;
             let r = snapui::widgets::combo_index(ui, id, &mut sel, items, ui.available_width());
-            crate::panels::tag(ui, &r, &format!("SnapnabProps.{id}"));
+            crate::panels::tag(ui, &r, &format!("AnyCaptureProps.{id}"));
             if sel as i32 != *v {
                 *v = sel as i32;
                 if which == 0 {
@@ -1178,7 +1178,7 @@ impl PropsPanel {
                 ui.add_sized([94.0, 20.0], egui::Label::new(label).truncate());
                 ui.spacing_mut().slider_width = (ui.available_width() - 60.0).max(40.0);
                 let r = ui.add(egui::Slider::new(&mut v, min..=max));
-                crate::panels::tag(ui, &r, &format!("SnapnabProps.{id:?}"));
+                crate::panels::tag(ui, &r, &format!("AnyCaptureProps.{id:?}"));
                 if r.changed() {
                     // one undo step per drag (the first change opens it)
                     let new_step = r.drag_started() || !r.dragged();
@@ -1192,7 +1192,7 @@ impl PropsPanel {
         let mut on = self.value(cv, id) != 0;
         let w = ui.available_width();
         let r = ui.add_enabled_ui(enabled, |ui| snapui::widgets::toggle(ui, &mut on, label, w)).inner;
-        crate::panels::tag(ui, &r, &format!("SnapnabProps.{id:?}"));
+        crate::panels::tag(ui, &r, &format!("AnyCaptureProps.{id:?}"));
         if r.changed() {
             self.set_value(cv, id, on as i32, true, acts);
         }
@@ -1208,7 +1208,7 @@ impl PropsPanel {
             });
             let on = Self::cur(cv).sketch;
             let r = ui.add_enabled(on, egui::Button::new("✨")).on_hover_text(tr("Variar o traço"));
-            crate::panels::tag(ui, &r, "SnapnabProps.SketchSeed");
+            crate::panels::tag(ui, &r, "AnyCaptureProps.SketchSeed");
             if r.clicked() {
                 let mut s = Self::cur(cv);
                 s.sketch_seed = (std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis()).unwrap_or(1) % 9973) as i32 + 1;
@@ -1224,7 +1224,7 @@ impl PropsPanel {
             let list = fonts();
             let rows = || list.iter().map(|f| snapui::droplist::ListItem::new(f.clone()).selected(f.eq_ignore_ascii_case(&s.font))).collect();
             let r = snapui::widgets::combo(ui, "font", &s.font, (ui.available_width() - 4.0).max(80.0), None, rows, false);
-            crate::panels::tag(ui, &r.response, "SnapnabProps.Font");
+            crate::panels::tag(ui, &r.response, "AnyCaptureProps.Font");
             if let Some(f) = r.picked.and_then(|i| list.get(i)).cloned() {
                 let mut s = s;
                 s.font = f;
@@ -1235,7 +1235,7 @@ impl PropsPanel {
 
     fn advanced_text(&mut self, ui: &mut egui::Ui, cv: &mut Canvas, callout: bool, acts: &mut Vec<PropAction>) {
         let r = ui.add(egui::Button::new(RichText::new(format!("{} {}", if self.advanced { "▾" } else { "▸" }, tr("Avançado"))).strong()).frame(false));
-        crate::panels::tag(ui, &r, "SnapnabProps.Advanced");
+        crate::panels::tag(ui, &r, "AnyCaptureProps.Advanced");
         if r.clicked() {
             self.advanced = !self.advanced;
             set_reg_dword("PropsAdvanced", self.advanced as u32);
@@ -1248,7 +1248,7 @@ impl PropsPanel {
             for (id, t) in [(C::Bold, RichText::new("B").strong()), (C::Italic, RichText::new("I").italics()), (C::Underline, RichText::new("U").underline())] {
                 let on = self.value(cv, id) != 0;
                 let r = ui.add(egui::Button::new(t).selected(on).min_size(Vec2::new(26.0, 26.0)));
-                crate::panels::tag(ui, &r, &format!("SnapnabProps.{id:?}"));
+                crate::panels::tag(ui, &r, &format!("AnyCaptureProps.{id:?}"));
                 if r.clicked() {
                     self.set_value(cv, id, !on as i32, true, acts);
                 }
@@ -1259,7 +1259,7 @@ impl PropsPanel {
             for (a, t) in [(0, "⇤"), (1, "↔"), (2, "⇥")] {
                 let on = self.value(cv, C::AlignH(a)) != 0;
                 let r = ui.add(egui::Button::new(t).selected(on).min_size(Vec2::new(24.0, 26.0)));
-                crate::panels::tag(ui, &r, &format!("SnapnabProps.AlignH.{a}"));
+                crate::panels::tag(ui, &r, &format!("AnyCaptureProps.AlignH.{a}"));
                 if r.clicked() {
                     self.set_value(cv, C::AlignH(a), 1, true, acts);
                 }
@@ -1268,7 +1268,7 @@ impl PropsPanel {
             for (a, t) in [(0, "⤒"), (1, "↕"), (2, "⤓")] {
                 let on = self.value(cv, C::AlignV(a)) != 0;
                 let r = ui.add(egui::Button::new(t).selected(on).min_size(Vec2::new(24.0, 26.0)));
-                crate::panels::tag(ui, &r, &format!("SnapnabProps.AlignV.{a}"));
+                crate::panels::tag(ui, &r, &format!("AnyCaptureProps.AlignV.{a}"));
                 if r.clicked() {
                     self.set_value(cv, C::AlignV(a), 1, true, acts);
                 }
@@ -1354,7 +1354,7 @@ impl PropsPanel {
                 r
             })
             .inner;
-        crate::panels::tag(ui, &r, &format!("SnapnabProps.Color.{t:?}"));
+        crate::panels::tag(ui, &r, &format!("AnyCaptureProps.Color.{t:?}"));
         egui::Popup::from_toggle_button_response(&r)
             .close_behavior(egui::PopupCloseBehavior::CloseOnClickOutside)
             .show(|ui| {
@@ -1532,11 +1532,11 @@ impl PropsPanel {
                     }
                 });
             });
-            crate::panels::tag(ui, &r.response, "SnapnabProps.ShadowMenu");
+            crate::panels::tag(ui, &r.response, "AnyCaptureProps.ShadowMenu");
             // the direction grid: a click picks the side, a click on the chosen one turns the shadow off
             let cs = 15.0;
             let (rect, gr) = ui.allocate_exact_size(Vec2::new(cs * 3.0 + 8.0, cs * 3.0), Sense::click());
-            crate::panels::tag(ui, &gr, "SnapnabProps.Shadow");
+            crate::panels::tag(ui, &gr, "AnyCaptureProps.Shadow");
             let gx = rect.center().x - cs * 1.5;
             let accent = ui.visuals().selection.bg_fill;
             for i in 0..9 {
@@ -1608,14 +1608,14 @@ impl PropsPanel {
             ui.label(RichText::new(tr("Forma")).size(11.0));
             let tex = self.variant_thumb(ui.ctx(), preview_tool, &with(sel));
             let r = ui.add(egui::Button::image(egui::Image::new((tex.id(), Vec2::splat(30.0)))).min_size(Vec2::new(52.0, 30.0)));
-            crate::panels::tag(ui, &r, "SnapnabProps.Shape");
+            crate::panels::tag(ui, &r, "AnyCaptureProps.Shape");
             let mut picked: Option<i32> = None;
             egui::Popup::from_toggle_button_response(&r).close_behavior(egui::PopupCloseBehavior::CloseOnClickOutside).show(|ui| {
                 egui::Grid::new("shape-grid").spacing([2.0, 2.0]).show(ui, |ui| {
                     for i in 0..count {
                         let tex = self.variant_thumb(ui.ctx(), preview_tool, &with(i));
                         let r = ui.add(egui::Button::image(egui::Image::new((tex.id(), Vec2::splat(36.0)))).selected(i == sel));
-                        crate::panels::tag(ui, &r, &format!("SnapnabProps.Shape.{i}"));
+                        crate::panels::tag(ui, &r, &format!("AnyCaptureProps.Shape.{i}"));
                         if r.clicked() {
                             picked = Some(i);
                             ui.close();
@@ -1672,13 +1672,13 @@ impl PropsPanel {
         let tex = self.variant_thumb(ui.ctx(), Tool::Line, &with(cur));
         let r = ui.add(egui::Button::image(egui::Image::new((tex.id(), Vec2::splat(24.0)))))
             .on_hover_text(if start { tr("Ponta inicial") } else { tr("Ponta final") });
-        crate::panels::tag(ui, &r, if start { "SnapnabProps.CapStart" } else { "SnapnabProps.CapEnd" });
+        crate::panels::tag(ui, &r, if start { "AnyCaptureProps.CapStart" } else { "AnyCaptureProps.CapEnd" });
         let mut picked = None;
         egui::Popup::from_toggle_button_response(&r).show(|ui| {
             for (i, &c) in CAP_ORDER.iter().enumerate() {
                 let tex = self.variant_thumb(ui.ctx(), Tool::Line, &with(c));
                 let b = ui.add(egui::Button::image(egui::Image::new((tex.id(), Vec2::splat(28.0)))).selected(c == cur));
-                crate::panels::tag(ui, &b, &format!("SnapnabProps.Cap.{i}"));
+                crate::panels::tag(ui, &b, &format!("AnyCaptureProps.Cap.{i}"));
                 if b.clicked() {
                     picked = Some(c);
                 }
@@ -1705,13 +1705,13 @@ impl PropsPanel {
         let tex = self.variant_thumb(ui.ctx(), Tool::Line, &with(s.dash));
         let r = ui.add(egui::Button::image(egui::Image::new((tex.id(), Vec2::splat(24.0)))).min_size(Vec2::new(60.0, 24.0)))
             .on_hover_text(tr("Tracejado"));
-        crate::panels::tag(ui, &r, "SnapnabProps.Dash");
+        crate::panels::tag(ui, &r, "AnyCaptureProps.Dash");
         let mut picked = None;
         egui::Popup::from_toggle_button_response(&r).show(|ui| {
             for d in 0..DASH_COUNT {
                 let tex = self.variant_thumb(ui.ctx(), Tool::Line, &with(d));
                 let b = ui.add(egui::Button::image(egui::Image::new((tex.id(), Vec2::splat(28.0)))).selected(d == s.dash));
-                crate::panels::tag(ui, &b, &format!("SnapnabProps.Dash.{d}"));
+                crate::panels::tag(ui, &b, &format!("AnyCaptureProps.Dash.{d}"));
                 if b.clicked() {
                     picked = Some(d);
                 }
@@ -1756,7 +1756,7 @@ impl PropsPanel {
                     let en = !(step && i >= 2);
                     let w = ((ui.available_width() - 60.0) / (2 - k) as f32).max(40.0);
                     let r = ui.add_enabled(en, egui::TextEdit::singleline(&mut self.geom[i]).desired_width(w).align(egui::Align2::RIGHT_CENTER));
-                    crate::panels::tag(ui, &r, &format!("SnapnabProps.Geometry.{i}"));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureProps.Geometry.{i}"));
                     if r.gained_focus() {
                         self.geom_first = true;
                     }
@@ -1768,7 +1768,7 @@ impl PropsPanel {
                 if row == 1 {
                     let on = self.aspect_lock;
                     let r = ui.add(egui::Button::new("🔗").selected(on)).on_hover_text(tr("Manter proporção"));
-                    crate::panels::tag(ui, &r, "SnapnabProps.Aspect");
+                    crate::panels::tag(ui, &r, "AnyCaptureProps.Aspect");
                     if r.clicked() {
                         let mut a = Vec::new();
                         self.set_value(cv, C::Aspect, !on as i32, true, &mut a);
@@ -1814,7 +1814,7 @@ impl PropsPanel {
         self.button(ui, 328, &tr("Enviar para trás"), acts);
         let locked = cv.selection_locked();
         let r = ui.add_sized([ui.available_width(), 28.0], egui::Button::new(if locked { tr("Desbloquear") } else { tr("Bloquear") }));
-        crate::panels::tag(ui, &r, "SnapnabProps.Lock");
+        crate::panels::tag(ui, &r, "AnyCaptureProps.Lock");
         if r.clicked() {
             let v = cv.selected_list();
             cv.set_locked(&v, !locked);

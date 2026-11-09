@@ -225,7 +225,7 @@ impl Editor {
         let full = ui.available_rect_before_wrap();
         ui.painter().rect_filled(full, 0.0, Color32::from_rgb(32, 33, 36));
         let resp = ui.allocate_rect(full, egui::Sense::click_and_drag());
-        panels::tag(ui, &resp, "SnapnabVideoView");
+        panels::tag(ui, &resp, "AnyCaptureVideoView");
         if v.reader.is_none() {
             ui.painter().text(
                 full.center(),
@@ -317,7 +317,7 @@ impl Editor {
                 for (id, label) in BUTTONS {
                     let text = if id == B_PLAY && playing { tr("❚❚ Pausar") } else { tr(label) };
                     let r = ui.button(RichText::new(text));
-                    panels::tag(ui, &r, &format!("SnapnabVideoView.{}", id - 2000));
+                    panels::tag(ui, &r, &format!("AnyCaptureVideoView.{}", id - 2000));
                     if r.clicked() {
                         clicked = Some(id);
                     }
@@ -371,7 +371,7 @@ impl Editor {
                 if b <= a {
                     let owner = self.hwnd;
                     self.modal(
-                        move |_| native::message(owner, &tr("Marque o início e o fim do trecho a remover."), "Snapnab", MB_ICONINFORMATION),
+                        move |_| native::message(owner, &tr("Marque o início e o fim do trecho a remover."), "AnyCapture", MB_ICONINFORMATION),
                         |_, _, _| {},
                     );
                     return;
@@ -412,7 +412,7 @@ impl Editor {
                 let init = strip_ext(&src) + "_editado.mp4";
                 let (out, _) = native::save_file(o, &tr("Salvar vídeo"), &init, &tr("Vídeo MP4 (*.mp4)|*.mp4|"), "mp4", 1)?;
                 if out.eq_ignore_ascii_case(&src) {
-                    native::message(o, &tr("Escolha um arquivo diferente do original."), "Snapnab", MB_ICONWARNING);
+                    native::message(o, &tr("Escolha um arquivo diferente do original."), "AnyCapture", MB_ICONWARNING);
                     return None;
                 }
                 let progress = native::Progress::open(o, &tr("Salvando vídeo…"));
@@ -424,7 +424,7 @@ impl Editor {
                 });
                 drop(progress);
                 if let Err(e) = &r {
-                    native::message(o, &(tr("Não foi possível salvar o vídeo.\n") + e), "Snapnab", MB_ICONWARNING);
+                    native::message(o, &(tr("Não foi possível salvar o vídeo.\n") + e), "AnyCapture", MB_ICONWARNING);
                 }
                 r.ok().map(|_| out)
             },
@@ -477,7 +477,7 @@ impl Editor {
                         Some(out)
                     }
                     Err(e) => {
-                        native::message(o, &(tr("Não foi possível criar o GIF.\n") + &e), "Snapnab", MB_ICONWARNING);
+                        native::message(o, &(tr("Não foi possível criar o GIF.\n") + &e), "AnyCapture", MB_ICONWARNING);
                         None
                     }
                 }

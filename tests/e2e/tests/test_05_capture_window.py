@@ -1,4 +1,4 @@
-"""The capture window (rust/snapnab/src/window.rs): tabs, switches, combo boxes, the capture button, preset management,
+"""The capture window (rust/anycapture/src/window.rs): tabs, switches, combo boxes, the capture button, preset management,
 Options, preset and settings export/import, One Click, About and the folder shortcuts."""
 import re
 import time
@@ -7,10 +7,10 @@ import pytest
 import win32con
 import win32gui
 
-from snapnab_e2e import apps, filedialog, presets, regs, uia, win
-from snapnab_e2e.apps import CaptureCmd as C
-from snapnab_e2e.config import DATA_DIR
-from snapnab_e2e.logs import RELOAD_CONFIG, ipc_received, ipc_sent
+from anycapture_e2e import apps, filedialog, presets, regs, uia, win
+from anycapture_e2e.apps import CaptureCmd as C
+from anycapture_e2e.config import DATA_DIR
+from anycapture_e2e.logs import RELOAD_CONFIG, ipc_received, ipc_sent
 
 LB_SETCURSEL, LB_GETCOUNT, LBN_SELCHANGE = 0x0186, 0x018B, 1
 HKM_SETHOTKEY = 0x0401
@@ -214,7 +214,7 @@ def test_preset_hotkey_form(window, logs):
         win.wait_until(lambda: not notice(), what="notice closed")
     apps.wait_quiet(0.5)
     win.keys("^%{F12}")
-    overlay = win.wait_window("SnapnabSelectWindowClass")   # "e2e one" is a region capture: the crosshair opens
+    overlay = win.wait_window("AnyCaptureSelectWindowClass")   # "e2e one" is a region capture: the crosshair opens
     win.foreground(overlay)
     win.keys("{ESC}")
 
@@ -289,17 +289,17 @@ def test_settings_export_and_import_merge(window, tmp_path, logs):
 def test_one_click_panel_toggle(window):
     regs.set_dword("OneClickEnabled", 0)
     window.command(C.IDM_ONECLICK)
-    win.wait_window("SnapnabOneClick")
+    win.wait_window("AnyCaptureOneClick")
     assert regs.get("OneClickEnabled") == 1
     window.command(C.IDM_ONECLICK)
-    win.wait_no_window("SnapnabOneClick")
+    win.wait_no_window("AnyCaptureOneClick")
     assert regs.get("OneClickEnabled") == 0
 
 
 def test_about_shows_the_version(window):
     window.command(C.IDM_ABOUT)
     box = message_box(window)
-    assert re.search(r"Snapnab \d+\.\d+\.\d+", box_text(box)), box_text(box)
+    assert re.search(r"AnyCapture \d+\.\d+\.\d+", box_text(box)), box_text(box)
     win.post_command(box, win32con.IDOK)
 
 
@@ -338,7 +338,7 @@ def test_folder_shortcuts_open_explorer(window, cmd, folder):
         win.wait_until(lambda: len(views()) > already, 15, what=f"Explorer on {folder}")
     except AssertionError:
         # Explorer sometimes reuses an existing window (or a background tab) instead of showing the folder;
-        # Snapnab only calls ShellExecute, so that is not counted as a Snapnab failure
+        # AnyCapture only calls ShellExecute, so that is not counted as a AnyCapture failure
         for h in set(win.top_windows("CabinetWClass")) - windows_before:
             win.close_window(h)
         assert window.running and win.is_visible(window.hwnd)
@@ -355,5 +355,5 @@ def test_capture_from_clipboard_menu(window, lib):
     from PIL import Image
     win.set_clipboard_image(Image.new("RGB", (123, 45), (9, 9, 9)))
     window.command(C.IDM_CAPTURE_CLIPBOARD)
-    from snapnab_e2e import library
+    from anycapture_e2e import library
     assert library.size(library.dump(lib.wait_new()[-1])) == (123, 45)

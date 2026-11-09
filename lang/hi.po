@@ -1,10 +1,10 @@
-# Snapnab — interface translations.
+# AnyCapture — interface translations.
 # Copyright © 2026 Antonio Rezende. GPL-3.0.
 # Language: हिन्दी.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Snapnab\n"
+"Project-Id-Version: AnyCapture\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -99,7 +99,7 @@ msgstr "इस Windows पर चेहरा पहचान उपलब्ध
 msgid "Falha na detecção de rostos."
 msgstr "चेहरा पहचान विफल रही।"
 
-#: rust/snapcore/src/office.rs:181 rust/snapnab/src/main.rs:860
+#: rust/snapcore/src/office.rs:181 rust/anycapture/src/main.rs:860
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s इस कंप्यूटर पर इंस्टॉल नहीं है (या यह Microsoft Store संस्करण है, बिना ऑटोमेशन के)।"
@@ -154,7 +154,7 @@ msgstr "स्वचालित स्क्रॉल (विंडो)"
 msgid "Rolagem panorâmica"
 msgstr "पैनोरमा स्क्रॉल"
 
-#: rust/snapcore/src/presets.rs:66 rust/snapnab/src/engine/scroll.rs:163
+#: rust/snapcore/src/presets.rs:66 rust/anycapture/src/engine/scroll.rs:163
 msgid "Janela estendida"
 msgstr "विस्तारित विंडो"
 
@@ -170,7 +170,7 @@ msgstr "क्लिपबोर्ड"
 msgid "Arquivo gráfico"
 msgstr "ग्राफ़िक फ़ाइल"
 
-#: rust/snapcore/src/presets.rs:185 rust/snapnab/src/dialogs.rs:115 rust/snapnab/src/window.rs:765
+#: rust/snapcore/src/presets.rs:185 rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:765
 msgid "Novo preset"
 msgstr "नया प्रीसेट"
 
@@ -178,7 +178,7 @@ msgstr "नया प्रीसेट"
 msgid "Captura"
 msgstr "कैप्चर"
 
-#: rust/snapcore/src/presets.rs:491 rust/snapcore/src/presets.rs:500 rust/snapnab/src/dialogs.rs:182 rust/snapnab/src/main.rs:539
+#: rust/snapcore/src/presets.rs:491 rust/snapcore/src/presets.rs:500 rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:539
 msgid "Presets"
 msgstr "प्रीसेट"
 
@@ -202,7 +202,7 @@ msgstr "वीडियो — क्षेत्र"
 msgid "Vídeo — Tela inteira"
 msgstr "वीडियो — पूरी स्क्रीन"
 
-#: rust/snapcore/src/presets.rs:601 rust/snapnab/src/cmdline.rs:152 rust/snapnab/src/cmdline.rs:153
+#: rust/snapcore/src/presets.rs:601 rust/anycapture/src/cmdline.rs:152 rust/anycapture/src/cmdline.rs:153
 msgid "Imagem — Região"
 msgstr "छवि — क्षेत्र"
 
@@ -256,7 +256,7 @@ msgstr "ऊँ"
 msgid "Não foi possível gravar o arquivo."
 msgstr "फ़ाइल नहीं लिखी जा सकी।"
 
-#: rust/snapcore/src/settings.rs:220 rust/snapnab/src/dialogs.rs:300
+#: rust/snapcore/src/settings.rs:220 rust/anycapture/src/dialogs.rs:300
 msgid "Arquivo de configurações inválido."
 msgstr "अमान्य सेटिंग्स फ़ाइल।"
 
@@ -264,7 +264,7 @@ msgstr "अमान्य सेटिंग्स फ़ाइल।"
 msgid "Não foi possível gravar "
 msgstr "नहीं लिखा जा सका: "
 
-#: rust/snapcore/src/sounds.rs:31 rust/snapnab/src/dialogs.rs:397 rust/snapnab/src/window.rs:591 rust/snapnab/src/window.rs:602
+#: rust/snapcore/src/sounds.rs:31 rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:591 rust/anycapture/src/window.rs:602
 msgid "Desligado"
 msgstr "बंद"
 
@@ -297,8 +297,8 @@ msgid "Nenhum (desligado)"
 msgstr "कोई नहीं (बंद)"
 
 #: rust/snapcore/src/upload.rs:383
-msgid "Snapnab: login concluído. Você já pode fechar esta janela."
-msgstr "Snapnab: साइन-इन पूरा हुआ। अब आप यह विंडो बंद कर सकते हैं।"
+msgid "AnyCapture: login concluído. Você já pode fechar esta janela."
+msgstr "AnyCapture: साइन-इन पूरा हुआ। अब आप यह विंडो बंद कर सकते हैं।"
 
 #: rust/snapcore/src/upload.rs:398
 msgid "Falha ao renovar o acesso (faça login de novo nas opções de upload)"
@@ -718,7 +718,7 @@ msgstr "प्रभाव"
 msgid "Efeitos rápidos"
 msgstr "त्वरित प्रभाव"
 
-#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/snapnab/src/window.rs:731
+#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/anycapture/src/window.rs:731
 msgid "Excluir"
 msgstr "हटाएँ"
 
@@ -730,11 +730,11 @@ msgstr "+ त्वरित प्रभावों में जोड़े�
 msgid "Aplicar"
 msgstr "लागू करें"
 
-#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574 rust/snapnab/src/select.rs:677 rust/snapnab/src/engine/scroll.rs:387
+#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574 rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387
 msgid "Cancelar"
 msgstr "रद्द करें"
 
-#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:579 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:579 rust/anycapture/src/window.rs:87
 msgid "Borda"
 msgstr "बॉर्डर"
 
@@ -810,7 +810,7 @@ msgstr "आकार"
 msgid "Pequena"
 msgstr "छोटा"
 
-#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
+#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
 msgid "Média"
 msgstr "मध्यम"
 
@@ -822,19 +822,19 @@ msgstr "बड़ा"
 msgid "Canto"
 msgstr "कोना"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
 msgid "Superior esquerdo"
 msgstr "ऊपर बाएँ"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
 msgid "Superior direito"
 msgstr "ऊपर दाएँ"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:691
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:691
 msgid "Inferior direito"
 msgstr "नीचे दाएँ"
 
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:409 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
 msgid "Inferior esquerdo"
 msgstr "नीचे बाएँ"
 
@@ -846,51 +846,51 @@ msgstr "किनारे"
 msgid "Rasgada, onda, serrilhada, tubarão, esmaecida ou chanfrada."
 msgstr "फटा, लहर, आरी, शार्क, धुँधला या ढलान।"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/anycapture/src/dialogs.rs:670
 msgid "Estilo"
 msgstr "शैली"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Rasgada"
 msgstr "फटा हुआ"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/anycapture/src/dialogs.rs:670
 msgid "Onda"
 msgstr "लहर"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Dente de serra"
 msgstr "आरी के दाँत"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Dente de tubarão"
 msgstr "शार्क के दाँत"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/anycapture/src/dialogs.rs:670
 msgid "Esmaecer"
 msgstr "धुँधला होना"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapnab/src/dialogs.rs:670
+#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
 msgid "Chanfrada"
 msgstr "ढलान"
 
-#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:671 rust/snapnab/src/dialogs.rs:665
+#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:671 rust/anycapture/src/dialogs.rs:665
 msgid "Em cima"
 msgstr "ऊपर"
 
-#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:672
+#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:672
 msgid "Direita"
 msgstr "दाएँ"
 
-#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:672 rust/snapnab/src/dialogs.rs:665
+#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:672 rust/anycapture/src/dialogs.rs:665
 msgid "Embaixo"
 msgstr "नीचे"
 
-#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:673
+#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:673
 msgid "Esquerda"
 msgstr "बाएँ"
 
-#: rust/snapedit/src/effects.rs:123 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:123 rust/anycapture/src/window.rs:87
 msgid "Filtros"
 msgstr "फ़िल्टर"
 
@@ -902,23 +902,23 @@ msgstr "धूसर, सीपिया, उलटें, श्वेत-श�
 msgid "Cores"
 msgstr "रंग"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Filtro"
 msgstr "फ़िल्टर"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Tons de cinza"
 msgstr "ग्रेस्केल"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Sépia"
 msgstr "सीपिया"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Inverter cores"
 msgstr "रंग उलटें"
 
-#: rust/snapedit/src/effects.rs:124 rust/snapnab/src/dialogs.rs:661
+#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
 msgid "Preto e branco"
 msgstr "श्वेत-श्याम"
 
@@ -938,11 +938,11 @@ msgstr "तीक्ष्णता"
 msgid "Intensidade"
 msgstr "तीव्रता"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
+#: rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
 msgid "Baixa"
 msgstr "कम"
 
-#: rust/snapedit/src/effects.rs:126 rust/snapnab/src/window.rs:497
+#: rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
 msgid "Alta"
 msgstr "उच्च"
 
@@ -954,11 +954,11 @@ msgstr "रंग समायोजन"
 msgid "Brilho, contraste, gama, matiz e saturação."
 msgstr "चमक, कंट्रास्ट, गामा, ह्यू और संतृप्ति।"
 
-#: rust/snapedit/src/effects.rs:129 rust/snapnab/src/dialogs.rs:676
+#: rust/snapedit/src/effects.rs:129 rust/anycapture/src/dialogs.rs:676
 msgid "Brilho"
 msgstr "चमक"
 
-#: rust/snapedit/src/effects.rs:130 rust/snapnab/src/dialogs.rs:676
+#: rust/snapedit/src/effects.rs:130 rust/anycapture/src/dialogs.rs:676
 msgid "Contraste"
 msgstr "कंट्रास्ट"
 
@@ -970,11 +970,11 @@ msgstr "गामा"
 msgid "Matiz"
 msgstr "ह्यू"
 
-#: rust/snapedit/src/effects.rs:135 rust/snapnab/src/dialogs.rs:677
+#: rust/snapedit/src/effects.rs:135 rust/anycapture/src/dialogs.rs:677
 msgid "Saturação"
 msgstr "संतृप्ति"
 
-#: rust/snapedit/src/effects.rs:137 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:137 rust/anycapture/src/window.rs:87
 msgid "Substituição de cor"
 msgstr "रंग बदलें"
 
@@ -986,7 +986,7 @@ msgstr "एक रंग को दूसरे से (या पारदर�
 msgid "Cor atual"
 msgstr "वर्तमान रंग"
 
-#: rust/snapedit/src/effects.rs:139 rust/snapnab/src/dialogs.rs:666
+#: rust/snapedit/src/effects.rs:139 rust/anycapture/src/dialogs.rs:666
 msgid "Nova cor"
 msgstr "नया रंग"
 
@@ -1018,7 +1018,7 @@ msgstr "बड़ा करें"
 msgid "Sombra na área em foco"
 msgstr "फ़ोकस वाले क्षेत्र में छाया"
 
-#: rust/snapedit/src/effects.rs:149 rust/snapnab/src/window.rs:88
+#: rust/snapedit/src/effects.rs:149 rust/anycapture/src/window.rs:88
 msgid "Marca d'água"
 msgstr "वॉटरमार्क"
 
@@ -1030,7 +1030,7 @@ msgstr "छवि पर पारभासी पाठ, एक बार य�
 msgid "Repetir em mosaico"
 msgstr "टाइल करें"
 
-#: rust/snapedit/src/effects.rs:155 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/effects.rs:155 rust/anycapture/src/window.rs:87
 msgid "Informações da captura"
 msgstr "कैप्चर जानकारी"
 
@@ -1038,7 +1038,7 @@ msgstr "कैप्चर जानकारी"
 msgid "Faixa de texto em cima ou embaixo; aceita {date} e {time}."
 msgstr "ऊपर या नीचे पाठ की पट्टी; {date} और {time} स्वीकार करती है।"
 
-#: rust/snapedit/src/effects.rs:157 rust/snapnab/src/dialogs.rs:665
+#: rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:665
 msgid "Posição"
 msgstr "स्थिति"
 
@@ -1130,7 +1130,7 @@ msgstr "घुमाएँ(&O)"
 msgid "Inserir c&ursor"
 msgstr "कर्सर डालें(&U)"
 
-#: rust/snapedit/src/menu.rs:234 rust/snapnab/src/window.rs:243
+#: rust/snapedit/src/menu.rs:234 rust/anycapture/src/window.rs:243
 msgid "&Arquivo"
 msgstr "फ़ाइल(&F)"
 
@@ -1146,11 +1146,11 @@ msgstr "छवि(&I)"
 msgid "&Ferramentas"
 msgstr "टूल्स(&F)"
 
-#: rust/snapedit/src/menu.rs:238 rust/snapnab/src/window.rs:243
+#: rust/snapedit/src/menu.rs:238 rust/anycapture/src/window.rs:243
 msgid "E&xibir"
 msgstr "दृश्य(&V)"
 
-#: rust/snapedit/src/menu.rs:239 rust/snapnab/src/window.rs:243
+#: rust/snapedit/src/menu.rs:239 rust/anycapture/src/window.rs:243
 msgid "A&juda"
 msgstr "सहायता(&H)"
 
@@ -1611,16 +1611,16 @@ msgid "&Personalizar a barra de ferramentas…"
 msgstr "टूलबार अनुकूलित करें(&C)…"
 
 #: rust/snapedit/src/menu.rs:210
-msgid "&Manual do Snapnab\tF1"
-msgstr "Snapnab &मैनुअल\tF1"
+msgid "&Manual do AnyCapture\tF1"
+msgstr "AnyCapture &मैनुअल\tF1"
 
 #: rust/snapedit/src/menu.rs:211
 msgid "&Atalhos de teclado"
 msgstr "कीबोर्ड शॉर्टकट(&K)"
 
 #: rust/snapedit/src/menu.rs:212
-msgid "&Sobre o Snapnab Editor"
-msgstr "Snapnab Editor के बारे में(&A)"
+msgid "&Sobre o AnyCapture Editor"
+msgstr "AnyCapture Editor के बारे में(&A)"
 
 #: rust/snapedit/src/menu.rs:217
 msgid "Ler código &QR\tCtrl+Shift+Q"
@@ -1691,7 +1691,7 @@ msgstr "पिक्सेलेट"
 msgid "Peça solta"
 msgstr "अलग किया टुकड़ा"
 
-#: rust/snapedit/src/panels.rs:399 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/panels.rs:399 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Imagem"
 msgstr "छवि"
 
@@ -1736,7 +1736,7 @@ msgstr "आगे लाएँ"
 msgid "Fundo (imagem)"
 msgstr "पृष्ठभूमि (छवि)"
 
-#: rust/snapedit/src/panels.rs:62 rust/snapnab/src/window.rs:44
+#: rust/snapedit/src/panels.rs:62 rust/anycapture/src/window.rs:44
 msgid "Arquivo"
 msgstr "फ़ाइल"
 
@@ -1748,11 +1748,11 @@ msgstr "फ़ाइल के रूप में सहेजें (PNG, JPG,
 msgid "Enviar por e-mail"
 msgstr "ईमेल से भेजें"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/snapnab/src/dialogs.rs:526
+#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/anycapture/src/dialogs.rs:526
 msgid "Programa"
 msgstr "प्रोग्राम"
 
-#: rust/snapedit/src/panels.rs:64 rust/snapnab/src/dialogs.rs:527
+#: rust/snapedit/src/panels.rs:64 rust/anycapture/src/dialogs.rs:527
 msgid "Abrir em um programa externo"
 msgstr "बाहरी प्रोग्राम में खोलें"
 
@@ -1812,7 +1812,7 @@ msgstr "सहेजें"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "लाइब्रेरी में सहेजें (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:259 rust/snapnab/src/quick.rs:247
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:259 rust/anycapture/src/quick.rs:247
 msgid "Salvar como"
 msgstr "इस रूप में सहेजें"
 
@@ -1820,7 +1820,7 @@ msgstr "इस रूप में सहेजें"
 msgid "Salvar como arquivo (Ctrl+Shift+S)"
 msgstr "फ़ाइल के रूप में सहेजें (Ctrl+Shift+S)"
 
-#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/snapnab/src/window.rs:729
+#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/anycapture/src/window.rs:729
 msgid "Duplicar"
 msgstr "प्रति बनाएँ"
 
@@ -1860,7 +1860,7 @@ msgstr "सब मिलाएँ"
 msgid "Mesclar todos os objetos na imagem"
 msgstr "सभी ऑब्जेक्ट छवि में मिलाएँ"
 
-#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:629 rust/snapnab/src/dialogs.rs:678
+#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:629 rust/anycapture/src/dialogs.rs:678
 msgid "Girar"
 msgstr "घुमाएँ"
 
@@ -1956,15 +1956,15 @@ msgstr "रूलर"
 msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
 msgstr "रूलर, गाइड और निर्देशांक दिखाएँ (Ctrl+Shift+R)"
 
-#: rust/snapedit/src/panels.rs:243 rust/snapnab/src/window.rs:619
+#: rust/snapedit/src/panels.rs:243 rust/anycapture/src/window.rs:619
 msgid "Capturar"
 msgstr "कैप्चर"
 
 #: rust/snapedit/src/panels.rs:243
-msgid "Nova captura de imagem (pede ao Snapnab)"
-msgstr "नया छवि कैप्चर (Snapnab से माँगता है)"
+msgid "Nova captura de imagem (pede ao AnyCapture)"
+msgstr "नया छवि कैप्चर (AnyCapture से माँगता है)"
 
-#: rust/snapedit/src/panels.rs:244 rust/snapnab/src/window.rs:619
+#: rust/snapedit/src/panels.rs:244 rust/anycapture/src/window.rs:619
 msgid "Gravar"
 msgstr "रिकॉर्ड करें"
 
@@ -2066,8 +2066,8 @@ msgid "Meu tema"
 msgstr "मेरी थीम"
 
 #: rust/snapedit/src/props.rs:567 rust/snapedit/src/props.rs:601
-msgid "Tema do Snapnab (*.snaptheme)"
-msgstr "Snapnab थीम (*.snaptheme)"
+msgid "Tema do AnyCapture (*.snaptheme)"
+msgstr "AnyCapture थीम (*.snaptheme)"
 
 #: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:91
 msgid "Todos os arquivos"
@@ -2085,7 +2085,7 @@ msgstr "थीम की प्रति संपादित करें…"
 msgid "Editar o tema…"
 msgstr "थीम संपादित करें…"
 
-#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/snapnab/src/dialogs.rs:120
+#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/anycapture/src/dialogs.rs:120
 msgid " (cópia)"
 msgstr " (प्रति)"
 
@@ -2158,7 +2158,7 @@ msgstr "यह मुहर उपयोग करें"
 msgid "Propriedades da ferramenta"
 msgstr "टूल के गुण"
 
-#: rust/snapedit/src/props.rs:860 rust/snapnab/src/window.rs:772
+#: rust/snapedit/src/props.rs:860 rust/anycapture/src/window.rs:772
 msgid "Ajuda"
 msgstr "सहायता"
 
@@ -2424,7 +2424,7 @@ msgstr "रेखा बदलें"
 msgid "Avançado"
 msgstr "उन्नत"
 
-#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/snapnab/src/dialogs.rs:689
+#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/anycapture/src/dialogs.rs:689
 msgid "Alinhamento"
 msgstr "संरेखण"
 
@@ -4082,8 +4082,8 @@ msgid "Tema"
 msgstr "थीम"
 
 #: rust/snapedit/src/styles.rs:639
-msgid "O arquivo não é um tema do Snapnab (.snaptheme)."
-msgstr "यह फ़ाइल Snapnab थीम (.snaptheme) नहीं है।"
+msgid "O arquivo não é um tema do AnyCapture (.snaptheme)."
+msgstr "यह फ़ाइल AnyCapture थीम (.snaptheme) नहीं है।"
 
 #: rust/snapedit/src/styles.rs:470 rust/snapedit/src/styles.rs:522
 msgid "Básico"
@@ -4102,11 +4102,11 @@ msgstr "फ़ोल्डर में दिखाएँ"
 msgid "Exportar %zu itens…"
 msgstr "%zu आइटम निर्यात करें…"
 
-#: rust/snapedit/src/tray.rs:306 rust/snapedit/src/app/commands.rs:778 rust/snapnab/src/quick.rs:297
+#: rust/snapedit/src/tray.rs:306 rust/snapedit/src/app/commands.rs:778 rust/anycapture/src/quick.rs:297
 msgid "Copiar como…"
 msgstr "इस रूप में कॉपी करें…"
 
-#: rust/snapedit/src/tray.rs:308 rust/snapedit/src/app/commands.rs:783 rust/snapnab/src/quick.rs:56 rust/snapnab/src/window.rs:44
+#: rust/snapedit/src/tray.rs:308 rust/snapedit/src/app/commands.rs:783 rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44
 msgid "Fixar na tela"
 msgstr "स्क्रीन पर पिन करें"
 
@@ -4313,7 +4313,7 @@ msgstr ""
 "वेक्टर ऑब्जेक्ट, प्रभाव, Smart Move,\n"
 "OCR, PDF निर्यात और वीडियो संपादन (कटौती और GIF) के साथ कैप्चर संपादन।"
 
-#: rust/snapedit/src/app/commands.rs:439 rust/snapnab/src/main.rs:961
+#: rust/snapedit/src/app/commands.rs:439 rust/anycapture/src/main.rs:961
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "GNU General Public License संस्करण 3 के अंतर्गत मुक्त सॉफ़्टवेयर।"
 
@@ -4342,7 +4342,7 @@ msgstr "मेरा प्रभाव %zu"
 msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
 msgstr "सेटिंग्स पैनल के प्रभावों से आती हैं (बदलने के लिए हर एक को खोलें):"
 
-#: rust/snapedit/src/app/commands.rs:580 rust/snapnab/src/window.rs:88
+#: rust/snapedit/src/app/commands.rs:580 rust/anycapture/src/window.rs:88
 msgid "Bordas especiais"
 msgstr "विशेष किनारे"
 
@@ -4378,7 +4378,7 @@ msgstr "ऑब्जेक्ट छवि में मिला दिए ज�
 msgid "Largura (px)"
 msgstr "चौड़ाई (px)"
 
-#: rust/snapedit/src/app/commands.rs:652 rust/snapedit/src/app/commands.rs:699 rust/snapedit/src/app/docs.rs:354 rust/snapnab/src/dialogs.rs:553
+#: rust/snapedit/src/app/commands.rs:652 rust/snapedit/src/app/commands.rs:699 rust/snapedit/src/app/docs.rs:354 rust/anycapture/src/dialogs.rs:553
 msgid "Altura (px)"
 msgstr "ऊँचाई (px)"
 
@@ -4386,7 +4386,7 @@ msgstr "ऊँचाई (px)"
 msgid "ou escala (%)"
 msgstr "या पैमाना (%)"
 
-#: rust/snapedit/src/app/commands.rs:656 rust/snapnab/src/window.rs:87
+#: rust/snapedit/src/app/commands.rs:656 rust/anycapture/src/window.rs:87
 msgid "Redimensionar imagem"
 msgstr "छवि का आकार बदलें"
 
@@ -4398,7 +4398,7 @@ msgstr "एंकर"
 msgid "Cor do canvas"
 msgstr "कैनवास का रंग"
 
-#: rust/snapedit/src/app/commands.rs:702 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/commands.rs:702 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Transparente"
 msgstr "पारदर्शी"
 
@@ -4475,7 +4475,7 @@ msgstr "%zu आइटम"
 msgid "Superior esquerda"
 msgstr "ऊपर बाएँ"
 
-#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:690
 msgid "Superior"
 msgstr "ऊपर"
 
@@ -4483,7 +4483,7 @@ msgstr "ऊपर"
 msgid "Superior direita"
 msgstr "ऊपर दाएँ"
 
-#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/snapnab/src/dialogs.rs:690
+#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/anycapture/src/dialogs.rs:690
 msgid "Centro"
 msgstr "बीच में"
 
@@ -4491,7 +4491,7 @@ msgstr "बीच में"
 msgid "Inferior esquerda"
 msgstr "नीचे बाएँ"
 
-#: rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/extras.rs:129 rust/snapnab/src/dialogs.rs:691
+#: rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/extras.rs:129 rust/anycapture/src/dialogs.rs:691
 msgid "Inferior"
 msgstr "नीचे"
 
@@ -4531,7 +4531,7 @@ msgstr "लॉसी गुणवत्ता (1–100)"
 msgid "Qualidade AVIF (1–100)"
 msgstr "AVIF गुणवत्ता (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:319 rust/snapnab/src/pins.rs:429 rust/snapnab/src/quick.rs:255
+#: rust/snapedit/src/app/docs.rs:319 rust/anycapture/src/pins.rs:429 rust/anycapture/src/quick.rs:255
 msgid "Não foi possível salvar:\n"
 msgstr "सहेजा नहीं जा सका:\n"
 
@@ -4539,11 +4539,11 @@ msgstr "सहेजा नहीं जा सका:\n"
 msgid "Salvo em "
 msgstr "यहाँ सहेजा गया: "
 
-#: rust/snapedit/src/app/docs.rs:342 rust/snapnab/src/engine.rs:479
+#: rust/snapedit/src/app/docs.rs:342 rust/anycapture/src/engine.rs:479
 msgid "A área de transferência não contém imagem."
 msgstr "क्लिपबोर्ड में कोई छवि नहीं है।"
 
-#: rust/snapedit/src/app/docs.rs:345 rust/snapnab/src/window.rs:222
+#: rust/snapedit/src/app/docs.rs:345 rust/anycapture/src/window.rs:222
 msgid "Da área de transferência"
 msgstr "क्लिपबोर्ड से"
 
@@ -4632,43 +4632,43 @@ msgstr "(नीचे की सेटिंग)"
 msgid "Predefinição"
 msgstr "पूर्वनिर्धारित"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771 rust/anycapture/src/dialogs.rs:683
 msgid "Fundo"
 msgstr "पृष्ठभूमि"
 
-#: rust/snapedit/src/app/extras.rs:113 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:113 rust/anycapture/src/dialogs.rs:684
 msgid "Cor 1"
 msgstr "रंग 1"
 
-#: rust/snapedit/src/app/extras.rs:114 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:114 rust/anycapture/src/dialogs.rs:684
 msgid "Cor 2 (degradê)"
 msgstr "रंग 2 (ग्रेडिएंट)"
 
-#: rust/snapedit/src/app/extras.rs:115 rust/snapnab/src/dialogs.rs:684
+#: rust/snapedit/src/app/extras.rs:115 rust/anycapture/src/dialogs.rs:684
 msgid "Ângulo do degradê"
 msgstr "ग्रेडिएंट का कोण"
 
-#: rust/snapedit/src/app/extras.rs:116 rust/snapnab/src/dialogs.rs:685
+#: rust/snapedit/src/app/extras.rs:116 rust/anycapture/src/dialogs.rs:685
 msgid "Imagem de fundo"
 msgstr "पृष्ठभूमि छवि"
 
-#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/snapnab/src/dialogs.rs:685
+#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/anycapture/src/dialogs.rs:685
 msgid "Margem (px)"
 msgstr "मार्जिन (px)"
 
-#: rust/snapedit/src/app/extras.rs:118 rust/snapnab/src/dialogs.rs:686
+#: rust/snapedit/src/app/extras.rs:118 rust/anycapture/src/dialogs.rs:686
 msgid "Cantos arredondados (px)"
 msgstr "गोल कोने (px)"
 
-#: rust/snapedit/src/app/extras.rs:119 rust/snapnab/src/dialogs.rs:686
+#: rust/snapedit/src/app/extras.rs:119 rust/anycapture/src/dialogs.rs:686
 msgid "Sombra (%)"
 msgstr "छाया (%)"
 
-#: rust/snapedit/src/app/extras.rs:120 rust/snapnab/src/dialogs.rs:687
+#: rust/snapedit/src/app/extras.rs:120 rust/anycapture/src/dialogs.rs:687
 msgid "Tamanho da sombra (px)"
 msgstr "छाया का आकार (px)"
 
-#: rust/snapedit/src/app/extras.rs:122 rust/snapnab/src/dialogs.rs:688
+#: rust/snapedit/src/app/extras.rs:122 rust/anycapture/src/dialogs.rs:688
 msgid "Proporção"
 msgstr "अनुपात"
 
@@ -4676,7 +4676,7 @@ msgstr "अनुपात"
 msgid "Livre"
 msgstr "मुक्त"
 
-#: rust/snapedit/src/app/extras.rs:132 rust/snapnab/src/dialogs.rs:692
+#: rust/snapedit/src/app/extras.rs:132 rust/anycapture/src/dialogs.rs:692
 msgid "Equilibrar as margens (corta bordas lisas da captura)"
 msgstr "मार्जिन संतुलित करें (कैप्चर के सादे किनारे काटता है)"
 
@@ -4684,7 +4684,7 @@ msgstr "मार्जिन संतुलित करें (कैप्�
 msgid "Salvar como predefinição (nome)"
 msgstr "पूर्वनिर्धारित के रूप में सहेजें (नाम)"
 
-#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/snapnab/src/dialogs.rs:694
+#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/anycapture/src/dialogs.rs:694
 msgid "Embelezar"
 msgstr "सुंदर बनाएँ"
 
@@ -4706,27 +4706,27 @@ msgstr "प्रिंट नहीं खुल सका: कोई प्र
 msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
 msgstr "प्रिंटर ने दस्तावेज़ स्वीकार नहीं किया (जाँचें कि वह चालू है और Windows प्रिंट सेवा चल रही है)।"
 
-#: rust/snapedit/src/app/extras.rs:328 rust/snapnab/src/main.rs:919
+#: rust/snapedit/src/app/extras.rs:328 rust/anycapture/src/main.rs:919
 msgid "O manual não foi encontrado:\n"
 msgstr "मैनुअल नहीं मिला:\n"
 
-#: rust/snapedit/src/app/extras.rs:395 rust/snapnab/src/share.rs:53
+#: rust/snapedit/src/app/extras.rs:395 rust/anycapture/src/share.rs:53
 msgid "Arquivo (para colar no Explorer, e-mail, chat)"
 msgstr "फ़ाइल (एक्सप्लोरर, ई-मेल, चैट में चिपकाने के लिए)"
 
-#: rust/snapedit/src/app/extras.rs:396 rust/snapnab/src/share.rs:53
+#: rust/snapedit/src/app/extras.rs:396 rust/anycapture/src/share.rs:53
 msgid "Caminho do arquivo"
 msgstr "फ़ाइल पथ"
 
-#: rust/snapedit/src/app/extras.rs:399 rust/snapnab/src/share.rs:53
+#: rust/snapedit/src/app/extras.rs:399 rust/anycapture/src/share.rs:53
 msgid "Base64 (PNG)"
 msgstr "Base64 (PNG)"
 
-#: rust/snapedit/src/app/extras.rs:400 rust/snapnab/src/share.rs:54
+#: rust/snapedit/src/app/extras.rs:400 rust/anycapture/src/share.rs:54
 msgid "Data URL (PNG)"
 msgstr "डेटा URL (PNG)"
 
-#: rust/snapedit/src/app/extras.rs:401 rust/snapnab/src/share.rs:54
+#: rust/snapedit/src/app/extras.rs:401 rust/anycapture/src/share.rs:54
 msgid "Data URL (WebP)"
 msgstr "डेटा URL (WebP)"
 
@@ -4884,7 +4884,7 @@ msgstr "हर भाग का आकार (px)"
 msgid "Número de partes"
 msgstr "भागों की संख्या"
 
-#: rust/snapedit/src/app/extras.rs:757 rust/snapnab/src/dialogs.rs:671
+#: rust/snapedit/src/app/extras.rs:757 rust/anycapture/src/dialogs.rs:671
 msgid "Tamanho (px)"
 msgstr "आकार (px)"
 
@@ -4910,7 +4910,7 @@ msgstr "बाँटी गई छवि"
 msgid "Imagem dividida em %zu partes (imagens novas na bandeja)."
 msgstr "छवि %zu भागों में बाँटी गई (ट्रे में नई छवियाँ)।"
 
-#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:107
+#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:107
 msgid "Formato"
 msgstr "फ़ॉर्मेट"
 
@@ -4988,7 +4988,7 @@ msgstr "प्रिंट"
 msgid "Lote"
 msgstr "बैच"
 
-#: rust/snapedit/src/app/extras.rs:1086 rust/snapnab/src/hotkeys.rs:48
+#: rust/snapedit/src/app/extras.rs:1086 rust/anycapture/src/hotkeys.rs:48
 msgid "(nenhum)"
 msgstr "(कोई नहीं)"
 
@@ -5099,7 +5099,7 @@ msgstr "पुदीना"
 msgid "Grafite"
 msgstr "ग्रेफ़ाइट"
 
-#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Papel de parede"
 msgstr "वॉलपेपर"
 
@@ -5107,11 +5107,11 @@ msgstr "वॉलपेपर"
 msgid "Branco simples"
 msgstr "सादा सफ़ेद"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Cor sólida"
 msgstr "ठोस रंग"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapnab/src/dialogs.rs:683
+#: rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
 msgid "Degradê"
 msgstr "ग्रेडिएंट"
 
@@ -5140,8 +5140,8 @@ msgid "Largura/altura máxima"
 msgstr "अधिकतम चौड़ाई/ऊँचाई"
 
 #: rust/snapedit/src/app/mod.rs:217
-msgid " — Snapnab Editor"
-msgstr " — Snapnab Editor"
+msgid " — AnyCapture Editor"
+msgstr " — AnyCapture Editor"
 
 #: rust/snapedit/src/app/mod.rs:231
 msgid "Vídeo: "
@@ -5227,13 +5227,13 @@ msgstr "त्वरित प्रभाव \"%s\" हटाएँ?"
 
 #: rust/snapedit/src/app/mod.rs:899
 msgid ""
-"SnapnabEditor.exe [opções] [arquivo…]\n"
+"AnyCaptureEditor.exe [opções] [arquivo…]\n"
 "\n"
 "/Open \"arquivo\"     abre um arquivo (.snap, imagem, .mp4)\n"
 "/NewFromClipboard   cria imagem a partir da área de transferência\n"
 "/restartwait        espera a instância anterior fechar"
 msgstr ""
-"SnapnabEditor.exe [विकल्प] [फ़ाइल…]\n"
+"AnyCaptureEditor.exe [विकल्प] [फ़ाइल…]\n"
 "\n"
 "/Open \"फ़ाइल\"     फ़ाइल खोलता है (.snap, छवि, .mp4)\n"
 "/NewFromClipboard   क्लिपबोर्ड से छवि बनाता है\n"
@@ -5288,7 +5288,7 @@ msgstr "वीडियो फ़्रेम"
 msgid "Salvar vídeo"
 msgstr "वीडियो सहेजें"
 
-#: rust/snapedit/src/app/video.rs:413 rust/snapnab/src/quick.rs:241
+#: rust/snapedit/src/app/video.rs:413 rust/anycapture/src/quick.rs:241
 msgid "Vídeo MP4 (*.mp4)|*.mp4|"
 msgstr "MP4 वीडियो (*.mp4)|*.mp4|"
 
@@ -5316,7 +5316,7 @@ msgstr "सीमा: चिह्नित चयन।"
 msgid "Intervalo: o vídeo inteiro (marque início/fim para limitar)."
 msgstr "सीमा: पूरा वीडियो (सीमित करने के लिए शुरुआत/अंत चिह्नित करें)।"
 
-#: rust/snapedit/src/app/video.rs:455 rust/snapnab/src/dialogs.rs:580
+#: rust/snapedit/src/app/video.rs:455 rust/anycapture/src/dialogs.rs:580
 msgid "Quadros por segundo"
 msgstr "फ़्रेम प्रति सेकंड"
 
@@ -5458,8 +5458,8 @@ msgid "Informe o modelo."
 msgstr "मॉडल दर्ज करें।"
 
 #: rust/snapedit/src/app/windows_aux.rs:378
-msgid "Atalhos do Snapnab Editor"
-msgstr "Snapnab Editor के शॉर्टकट"
+msgid "Atalhos do AnyCapture Editor"
+msgstr "AnyCapture Editor के शॉर्टकट"
 
 #: rust/snapedit/src/app/windows_aux.rs:389 rust/snapedit/src/app/windows_aux.rs:513
 msgid "Ampliar parte da imagem"
@@ -5644,7 +5644,7 @@ msgstr "पूछ रहे हैं…"
 msgid "Resposta de %s (%s)."
 msgstr "%s (%s) का उत्तर।"
 
-#: rust/snapedit/src/app/windows_aux.rs:869 rust/snapnab/src/quick.rs:53
+#: rust/snapedit/src/app/windows_aux.rs:869 rust/anycapture/src/quick.rs:53
 msgid "Copiar"
 msgstr "कॉपी करें"
 
@@ -5716,7 +5716,7 @@ msgstr "चरण निकालें"
 msgid "Extrair o texto"
 msgstr "टेक्स्ट निकालें"
 
-#: rust/snapedit/src/app/windows_aux.rs:577 rust/snapnab/src/select.rs:674 rust/snapui/src/form.rs:461
+#: rust/snapedit/src/app/windows_aux.rs:577 rust/anycapture/src/select.rs:674 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "ठीक है"
 
@@ -5732,13 +5732,13 @@ msgstr "फ़ाइल लिखने में विफल।"
 msgid "Falha ao codificar a imagem."
 msgstr "छवि एनकोड करने में विफल।"
 
-#: rust/snapnab/src/camwin.rs:81 rust/snapnab/src/engine/video.rs:178
-msgid "Snapnab — webcam"
-msgstr "Snapnab — वेबकैम"
+#: rust/anycapture/src/camwin.rs:81 rust/anycapture/src/engine/video.rs:178
+msgid "AnyCapture — webcam"
+msgstr "AnyCapture — वेबकैम"
 
-#: rust/snapnab/src/cmdline.rs:111
+#: rust/anycapture/src/cmdline.rs:111
 msgid ""
-"Snapnab.exe [opções]\n"
+"AnyCapture.exe [opções]\n"
 "\n"
 "/hide                 inicia só na bandeja\n"
 "/capture              captura imagem com o preset de imagem atual\n"
@@ -5757,9 +5757,9 @@ msgid ""
 "/focus                liga ou desliga o foco de tela\n"
 "/interval [stop]      inicia (ou para) a captura por intervalo\n"
 "/output clipboard|editor|none|\"arquivo\"   para onde vai a captura\n"
-"/exit                 encerra o Snapnab em execução"
+"/exit                 encerra o AnyCapture em execução"
 msgstr ""
-"Snapnab.exe [विकल्प]\n"
+"AnyCapture.exe [विकल्प]\n"
 "\n"
 "/hide                 केवल सूचना क्षेत्र में शुरू करें\n"
 "/capture              वर्तमान छवि प्रीसेट से छवि कैप्चर करें\n"
@@ -5778,63 +5778,63 @@ msgstr ""
 "/focus                स्क्रीन फ़ोकस चालू या बंद करता है\n"
 "/interval [stop]      अंतराल कैप्चर शुरू (या बंद) करता है\n"
 "/output clipboard|editor|none|\"फ़ाइल\"   कैप्चर कहाँ जाता है\n"
-"/exit                 चल रहे Snapnab को बंद करें"
+"/exit                 चल रहे AnyCapture को बंद करें"
 
-#: rust/snapnab/src/desk.rs:450
+#: rust/anycapture/src/desk.rs:450
 msgid "Conta-gotas: clique para copiar a cor • setas movem 1 px (Shift = 10) • Enter = copiar • Esc = cancelar"
 msgstr "रंग चयनकर्ता: रंग कॉपी करने के लिए क्लिक करें • तीर 1 px खिसकाते हैं (Shift = 10) • Enter = कॉपी • Esc = रद्द"
 
-#: rust/snapnab/src/desk.rs:602
-msgid "Snapnab — conta-gotas"
-msgstr "Snapnab — रंग चयनकर्ता"
+#: rust/anycapture/src/desk.rs:602
+msgid "AnyCapture — conta-gotas"
+msgstr "AnyCapture — रंग चयनकर्ता"
 
-#: rust/snapnab/src/desk.rs:644
+#: rust/anycapture/src/desk.rs:644
 msgid "Cores recentes"
 msgstr "हाल के रंग"
 
-#: rust/snapnab/src/desk.rs:644
+#: rust/anycapture/src/desk.rs:644
 msgid "Formato padrão"
 msgstr "डिफ़ॉल्ट प्रारूप"
 
-#: rust/snapnab/src/dialogs.rs:85
+#: rust/anycapture/src/dialogs.rs:85
 msgid "Nome do preset"
 msgstr "प्रीसेट का नाम"
 
-#: rust/snapnab/src/dialogs.rs:110
+#: rust/anycapture/src/dialogs.rs:110
 #, c-format
 msgid "Preset %zu"
 msgstr "प्रीसेट %zu"
 
-#: rust/snapnab/src/dialogs.rs:121 rust/snapnab/src/window.rs:769
+#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:769
 msgid "Novo preset com as configurações atuais"
 msgstr "वर्तमान सेटिंग्स से नया प्रीसेट"
 
-#: rust/snapnab/src/dialogs.rs:127
+#: rust/anycapture/src/dialogs.rs:127
 msgid "Renomear preset"
 msgstr "प्रीसेट का नाम बदलें"
 
-#: rust/snapnab/src/dialogs.rs:151
+#: rust/anycapture/src/dialogs.rs:151
 msgid "É preciso manter pelo menos um preset."
 msgstr "कम से कम एक प्रीसेट रखना ज़रूरी है।"
 
-#: rust/snapnab/src/dialogs.rs:154
+#: rust/anycapture/src/dialogs.rs:154
 #, c-format
 msgid "Excluir o preset \"%s\"?"
 msgstr "प्रीसेट \"%s\" हटाएँ?"
 
-#: rust/snapnab/src/dialogs.rs:170
+#: rust/anycapture/src/dialogs.rs:170
 msgid "Atalho do preset"
 msgstr "प्रीसेट शॉर्टकट"
 
-#: rust/snapnab/src/dialogs.rs:170
+#: rust/anycapture/src/dialogs.rs:170
 msgid "Deixe vazio (Backspace) para remover."
 msgstr "हटाने के लिए खाली छोड़ें (Backspace)।"
 
-#: rust/snapnab/src/dialogs.rs:171
+#: rust/anycapture/src/dialogs.rs:171
 msgid "Atalho — "
 msgstr "शॉर्टकट — "
 
-#: rust/snapnab/src/dialogs.rs:181
+#: rust/anycapture/src/dialogs.rs:181
 msgid ""
 "Um preset guarda tudo o que a janela de captura mostra: tipo (imagem ou vídeo), seleção, efeitos, destino e opções de gravação.\n"
 "\n"
@@ -5850,39 +5850,39 @@ msgstr ""
 "•  पंक्ति का गियर प्रीसेट का नाम बदलता है, उसकी प्रति बनाता है या उसे हटाता है।\n"
 "•  \"वर्तमान सेटिंग्स से नया प्रीसेट\" अभी विंडो में जो है उसे सहेजता है।"
 
-#: rust/snapnab/src/dialogs.rs:210
-msgid "Presets do Snapnab (*.snappresets)|*.snappresets|"
-msgstr "Snapnab प्रीसेट (*.snappresets)|*.snappresets|"
+#: rust/anycapture/src/dialogs.rs:210
+msgid "Presets do AnyCapture (*.snappresets)|*.snappresets|"
+msgstr "AnyCapture प्रीसेट (*.snappresets)|*.snappresets|"
 
-#: rust/snapnab/src/dialogs.rs:216
+#: rust/anycapture/src/dialogs.rs:216
 msgid "Não foi possível exportar."
 msgstr "निर्यात नहीं किया जा सका।"
 
-#: rust/snapnab/src/dialogs.rs:223
-msgid "Presets do Snapnab (*.snappresets;*.xml)|*.snappresets;*.xml|"
-msgstr "Snapnab प्रीसेट (*.snappresets;*.xml)|*.snappresets;*.xml|"
+#: rust/anycapture/src/dialogs.rs:223
+msgid "Presets do AnyCapture (*.snappresets;*.xml)|*.snappresets;*.xml|"
+msgstr "AnyCapture प्रीसेट (*.snappresets;*.xml)|*.snappresets;*.xml|"
 
-#: rust/snapnab/src/dialogs.rs:226
+#: rust/anycapture/src/dialogs.rs:226
 msgid "Presets importados."
 msgstr "प्रीसेट आयात किए गए।"
 
-#: rust/snapnab/src/dialogs.rs:228
+#: rust/anycapture/src/dialogs.rs:228
 msgid "Arquivo de presets inválido."
 msgstr "अमान्य प्रीसेट फ़ाइल।"
 
-#: rust/snapnab/src/dialogs.rs:237
-msgid "Configurações do Snapnab (*.snapsettings)|*.snapsettings|"
-msgstr "Snapnab सेटिंग्स (*.snapsettings)|*.snapsettings|"
+#: rust/anycapture/src/dialogs.rs:237
+msgid "Configurações do AnyCapture (*.snapsettings)|*.snapsettings|"
+msgstr "AnyCapture सेटिंग्स (*.snapsettings)|*.snapsettings|"
 
-#: rust/snapnab/src/dialogs.rs:246
+#: rust/anycapture/src/dialogs.rs:246
 msgid "Exportar configurações"
 msgstr "सेटिंग्स निर्यात करें"
 
-#: rust/snapnab/src/dialogs.rs:252
+#: rust/anycapture/src/dialogs.rs:252
 msgid "Configurações exportadas: presets, temas, estilos rápidos, favoritos, efeitos rápidos, ordem dos carimbos e barra de ferramentas."
 msgstr "सेटिंग्स निर्यात हुईं: प्रीसेट, थीम, त्वरित शैलियाँ, पसंदीदा, त्वरित प्रभाव, मुहरों का क्रम और टूलबार।"
 
-#: rust/snapnab/src/dialogs.rs:266
+#: rust/anycapture/src/dialogs.rs:266
 msgid ""
 "Substituir\n"
 "As configurações atuais dão lugar às do arquivo."
@@ -5890,7 +5890,7 @@ msgstr ""
 "बदलें\n"
 "वर्तमान सेटिंग्स की जगह फ़ाइल की सेटिंग्स आ जाएँगी।"
 
-#: rust/snapnab/src/dialogs.rs:267
+#: rust/anycapture/src/dialogs.rs:267
 msgid ""
 "Mesclar\n"
 "Mantém as configurações atuais e acrescenta o que faltar (presets, temas, favoritos, efeitos rápidos…)."
@@ -5898,512 +5898,512 @@ msgstr ""
 "मिलाएँ\n"
 "वर्तमान सेटिंग्स रखता है और जो कमी है उसे जोड़ता है (प्रीसेट, थीम, पसंदीदा, त्वरित प्रभाव…)।"
 
-#: rust/snapnab/src/dialogs.rs:268 rust/snapnab/src/dialogs.rs:298
+#: rust/anycapture/src/dialogs.rs:268 rust/anycapture/src/dialogs.rs:298
 msgid "Importar configurações"
 msgstr "सेटिंग्स आयात करें"
 
-#: rust/snapnab/src/dialogs.rs:269
-msgid "O Snapnab e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
-msgstr "Snapnab और एडिटर आयात की गई सेटिंग्स के साथ फिर से शुरू होंगे। वर्तमान सेटिंग्स की एक प्रति बैकअप फ़ोल्डर में रहेगी।"
+#: rust/anycapture/src/dialogs.rs:269
+msgid "O AnyCapture e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
+msgstr "AnyCapture और एडिटर आयात की गई सेटिंग्स के साथ फिर से शुरू होंगे। वर्तमान सेटिंग्स की एक प्रति बैकअप फ़ोल्डर में रहेगी।"
 
-#: rust/snapnab/src/dialogs.rs:374
+#: rust/anycapture/src/dialogs.rs:374
 msgid "Automático (idioma do Windows)"
 msgstr "स्वचालित (Windows की भाषा)"
 
-#: rust/snapnab/src/dialogs.rs:385
+#: rust/anycapture/src/dialogs.rs:385
 msgid "Atalhos globais"
 msgstr "वैश्विक शॉर्टकट"
 
-#: rust/snapnab/src/dialogs.rs:386 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:218
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:218
 msgid "Capturar imagem"
 msgstr "छवि कैप्चर करें"
 
-#: rust/snapnab/src/dialogs.rs:387 rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568 rust/snapnab/src/window.rs:219
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:219
 msgid "Gravar vídeo"
 msgstr "वीडियो रिकॉर्ड करें"
 
-#: rust/snapnab/src/dialogs.rs:388
+#: rust/anycapture/src/dialogs.rs:388
 msgid "Pausar/retomar vídeo"
 msgstr "वीडियो रोकें/जारी रखें"
 
-#: rust/snapnab/src/dialogs.rs:389
+#: rust/anycapture/src/dialogs.rs:389
 msgid "Parar vídeo"
 msgstr "वीडियो बंद करें"
 
-#: rust/snapnab/src/dialogs.rs:390 rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:225
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:544 rust/anycapture/src/window.rs:225
 msgid "Conta-gotas de tela"
 msgstr "स्क्रीन रंग चयनकर्ता"
 
-#: rust/snapnab/src/dialogs.rs:391
+#: rust/anycapture/src/dialogs.rs:391
 msgid "Capturar e fixar na tela"
 msgstr "कैप्चर करें और स्क्रीन पर पिन करें"
 
-#: rust/snapnab/src/dialogs.rs:392 rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:213
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:213
 msgid "Fixar da área de transferência"
 msgstr "क्लिपबोर्ड से पिन करें"
 
-#: rust/snapnab/src/dialogs.rs:393 rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:229
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:550 rust/anycapture/src/window.rs:229
 msgid "Foco de tela (apresentações)"
 msgstr "स्क्रीन फ़ोकस (प्रस्तुतियाँ)"
 
-#: rust/snapnab/src/dialogs.rs:394
+#: rust/anycapture/src/dialogs.rs:394
 msgid "Geral"
 msgstr "सामान्य"
 
-#: rust/snapnab/src/dialogs.rs:395
+#: rust/anycapture/src/dialogs.rs:395
 msgid "Pasta de saída"
 msgstr "आउटपुट फ़ोल्डर"
 
-#: rust/snapnab/src/dialogs.rs:396
+#: rust/anycapture/src/dialogs.rs:396
 msgid "Monitorar área de transferência"
 msgstr "क्लिपबोर्ड पर नज़र रखें"
 
-#: rust/snapnab/src/dialogs.rs:397
+#: rust/anycapture/src/dialogs.rs:397
 msgid "Só a Ferramenta de Captura do Windows"
 msgstr "केवल Windows स्निपिंग टूल"
 
-#: rust/snapnab/src/dialogs.rs:397
+#: rust/anycapture/src/dialogs.rs:397
 msgid "Qualquer aplicativo"
 msgstr "कोई भी ऐप्लिकेशन"
 
-#: rust/snapnab/src/dialogs.rs:398
+#: rust/anycapture/src/dialogs.rs:398
 msgid "Iniciar com o Windows"
 msgstr "Windows के साथ शुरू करें"
 
-#: rust/snapnab/src/dialogs.rs:399
+#: rust/anycapture/src/dialogs.rs:399
 msgid "Mostrar a janela de captura ao iniciar"
 msgstr "शुरू होने पर कैप्चर विंडो दिखाएँ"
 
-#: rust/snapnab/src/dialogs.rs:400
+#: rust/anycapture/src/dialogs.rs:400
 msgid "Idioma"
 msgstr "भाषा"
 
-#: rust/snapnab/src/dialogs.rs:401
+#: rust/anycapture/src/dialogs.rs:401
 msgid "Depois da captura"
 msgstr "कैप्चर के बाद"
 
-#: rust/snapnab/src/dialogs.rs:402
+#: rust/anycapture/src/dialogs.rs:402
 msgid "Copiar toda captura para a área de transferência"
 msgstr "हर कैप्चर को क्लिपबोर्ड पर कॉपी करें"
 
-#: rust/snapnab/src/dialogs.rs:403
+#: rust/anycapture/src/dialogs.rs:403
 msgid "Ao terminar"
 msgstr "समाप्त होने पर"
 
-#: rust/snapnab/src/dialogs.rs:404
+#: rust/anycapture/src/dialogs.rs:404
 msgid "Abrir no Editor (como o preset diz)"
 msgstr "एडिटर में खोलें (प्रीसेट के अनुसार)"
 
-#: rust/snapnab/src/dialogs.rs:404
+#: rust/anycapture/src/dialogs.rs:404
 msgid "Mostrar a miniatura rápida em vez do Editor"
 msgstr "एडिटर के बजाय त्वरित थंबनेल दिखाएँ"
 
-#: rust/snapnab/src/dialogs.rs:405
+#: rust/anycapture/src/dialogs.rs:405
 msgid "Mostrar a miniatura e abrir o Editor"
 msgstr "थंबनेल दिखाएँ और एडिटर खोलें"
 
-#: rust/snapnab/src/dialogs.rs:405
+#: rust/anycapture/src/dialogs.rs:405
 msgid "Só copiar para a área de transferência"
 msgstr "सिर्फ़ क्लिपबोर्ड पर कॉपी करें"
 
-#: rust/snapnab/src/dialogs.rs:407
+#: rust/anycapture/src/dialogs.rs:407
 msgid "A miniatura fecha após (s, 0 = não fecha)"
 msgstr "थंबनेल इतने बाद बंद होता है (से., 0 = बंद नहीं होता)"
 
-#: rust/snapnab/src/dialogs.rs:408
+#: rust/anycapture/src/dialogs.rs:408
 msgid "Canto da miniatura"
 msgstr "थंबनेल का कोना"
 
-#: rust/snapnab/src/dialogs.rs:411
+#: rust/anycapture/src/dialogs.rs:411
 msgid "Som da captura"
 msgstr "कैप्चर ध्वनि"
 
-#: rust/snapnab/src/dialogs.rs:412
+#: rust/anycapture/src/dialogs.rs:412
 msgid "Arquivo WAV do som"
 msgstr "ध्वनि की WAV फ़ाइल"
 
-#: rust/snapnab/src/dialogs.rs:414
+#: rust/anycapture/src/dialogs.rs:414
 msgid "Capturar a região assim que soltar o mouse"
 msgstr "माउस छोड़ते ही क्षेत्र कैप्चर करें"
 
-#: rust/snapnab/src/dialogs.rs:415
+#: rust/anycapture/src/dialogs.rs:415
 msgid "Corrigir as cores em monitores HDR"
 msgstr "HDR मॉनिटर पर रंग ठीक करें"
 
-#: rust/snapnab/src/dialogs.rs:416
+#: rust/anycapture/src/dialogs.rs:416
 msgid "Cantos arredondados transparentes nas janelas"
 msgstr "विंडो पर पारदर्शी गोल कोने"
 
-#: rust/snapnab/src/dialogs.rs:417
+#: rust/anycapture/src/dialogs.rs:417
 msgid "Sombra nas capturas de janela"
 msgstr "विंडो कैप्चर पर छाया"
 
-#: rust/snapnab/src/dialogs.rs:418
+#: rust/anycapture/src/dialogs.rs:418
 msgid "Ocultar os ícones da área de trabalho ao capturar"
 msgstr "कैप्चर करते समय डेस्कटॉप आइकन छिपाएँ"
 
-#: rust/snapnab/src/dialogs.rs:419
+#: rust/anycapture/src/dialogs.rs:419
 msgid "Não perturbe (sem notificações) ao gravar"
 msgstr "रिकॉर्डिंग के दौरान परेशान न करें (कोई सूचना नहीं)"
 
-#: rust/snapnab/src/dialogs.rs:420
+#: rust/anycapture/src/dialogs.rs:420
 msgid "Manter a tela acesa durante a captura"
 msgstr "कैप्चर के दौरान स्क्रीन चालू रखें"
 
-#: rust/snapnab/src/dialogs.rs:421
+#: rust/anycapture/src/dialogs.rs:421
 msgid "Privacidade e biblioteca"
 msgstr "गोपनीयता और लाइब्रेरी"
 
-#: rust/snapnab/src/dialogs.rs:422
+#: rust/anycapture/src/dialogs.rs:422
 msgid "Remover metadados (câmera, GPS, datas) ao salvar"
 msgstr "सहेजते समय मेटाडेटा हटाएँ (कैमरा, GPS, तिथियाँ)"
 
-#: rust/snapnab/src/dialogs.rs:423
+#: rust/anycapture/src/dialogs.rs:423
 msgid "Limpar a biblioteca automaticamente"
 msgstr "लाइब्रेरी अपने आप साफ़ करें"
 
-#: rust/snapnab/src/dialogs.rs:424
+#: rust/anycapture/src/dialogs.rs:424
 msgid "Apagar capturas com mais de (dias)"
 msgstr "इससे पुराने कैप्चर हटाएँ (दिन)"
 
-#: rust/snapnab/src/dialogs.rs:425
+#: rust/anycapture/src/dialogs.rs:425
 msgid "Manter as capturas que têm nome"
 msgstr "नाम वाले कैप्चर रखें"
 
-#: rust/snapnab/src/dialogs.rs:426
+#: rust/anycapture/src/dialogs.rs:426
 msgid "Manter as capturas com etiquetas"
 msgstr "टैग वाले कैप्चर रखें"
 
-#: rust/snapnab/src/dialogs.rs:427
+#: rust/anycapture/src/dialogs.rs:427
 msgid "Enviar para a Lixeira em vez de apagar"
 msgstr "हटाने के बजाय रीसायकल बिन में भेजें"
 
-#: rust/snapnab/src/dialogs.rs:428
+#: rust/anycapture/src/dialogs.rs:428
 msgid "Cursor capturado como objeto no Editor"
 msgstr "कैप्चर किया गया कर्सर एडिटर में ऑब्जेक्ट के रूप में"
 
-#: rust/snapnab/src/dialogs.rs:429
+#: rust/anycapture/src/dialogs.rs:429
 msgid "Dividir imagens longas em páginas (impressão e PDF)"
 msgstr "लंबी छवियों को पृष्ठों में बाँटें (प्रिंट और PDF)"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Aparência (vale ao reabrir)"
 msgstr "रूप (फिर से खोलने पर लागू)"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Seguir o Windows"
 msgstr "Windows के अनुसार"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Claro"
 msgstr "हल्का"
 
-#: rust/snapnab/src/dialogs.rs:430
+#: rust/anycapture/src/dialogs.rs:430
 msgid "Escuro"
 msgstr "गहरा"
 
-#: rust/snapnab/src/dialogs.rs:432
+#: rust/anycapture/src/dialogs.rs:432
 msgid "Biblioteca: "
 msgstr "लाइब्रेरी: "
 
-#: rust/snapnab/src/dialogs.rs:442
+#: rust/anycapture/src/dialogs.rs:442
 msgid "Dois atalhos iguais: "
 msgstr "दो एक जैसे शॉर्टकट: "
 
-#: rust/snapnab/src/dialogs.rs:448
-msgid "Opções do Snapnab"
-msgstr "Snapnab विकल्प"
+#: rust/anycapture/src/dialogs.rs:448
+msgid "Opções do AnyCapture"
+msgstr "AnyCapture विकल्प"
 
-#: rust/snapnab/src/dialogs.rs:475
+#: rust/anycapture/src/dialogs.rs:475
 msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
 msgstr "कैप्चर ध्वनि की WAV फ़ाइल चुनें (पूरा पथ)।"
 
-#: rust/snapnab/src/dialogs.rs:485
-msgid "O novo idioma vale depois que o Snapnab e o Editor reiniciarem. Reiniciar agora?"
-msgstr "नई भाषा Snapnab और एडिटर के फिर से शुरू होने के बाद लागू होगी। अभी फिर से शुरू करें?"
+#: rust/anycapture/src/dialogs.rs:485
+msgid "O novo idioma vale depois que o AnyCapture e o Editor reiniciarem. Reiniciar agora?"
+msgstr "नई भाषा AnyCapture और एडिटर के फिर से शुरू होने के बाद लागू होगी। अभी फिर से शुरू करें?"
 
-#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:108
+#: rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:108
 msgid "Prefixo do nome"
 msgstr "नाम उपसर्ग"
 
-#: rust/snapnab/src/dialogs.rs:501 rust/snapnab/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
+#: rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
 msgid "Pasta"
 msgstr "फ़ोल्डर"
 
-#: rust/snapnab/src/dialogs.rs:502
+#: rust/anycapture/src/dialogs.rs:502
 msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
 msgstr "स्वचालित नाम: <उपसर्ग><संख्या>, जैसे: Capture001.png"
 
-#: rust/snapnab/src/dialogs.rs:505 rust/snapnab/src/interval.rs:131
+#: rust/anycapture/src/dialogs.rs:505 rust/anycapture/src/interval.rs:131
 msgid "O prefixo contém caracteres inválidos."
 msgstr "उपसर्ग में अमान्य वर्ण हैं।"
 
-#: rust/snapnab/src/dialogs.rs:507
+#: rust/anycapture/src/dialogs.rs:507
 msgid "Salvar em arquivo"
 msgstr "फ़ाइल में सहेजें"
 
-#: rust/snapnab/src/dialogs.rs:526
+#: rust/anycapture/src/dialogs.rs:526
 msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
 msgstr "कैप्चर इस प्रोग्राम में खुलता है (जैसे: mspaint.exe)।"
 
-#: rust/snapnab/src/dialogs.rs:541
+#: rust/anycapture/src/dialogs.rs:541
 msgid "Cada captura num slide novo (desligado: no slide atual)"
 msgstr "हर कैप्चर नई स्लाइड पर (बंद: वर्तमान स्लाइड पर)"
 
-#: rust/snapnab/src/dialogs.rs:554
+#: rust/anycapture/src/dialogs.rs:554
 msgid "Capturar sempre na mesma posição"
 msgstr "हमेशा उसी स्थिति पर कैप्चर करें"
 
-#: rust/snapnab/src/dialogs.rs:555
+#: rust/anycapture/src/dialogs.rs:555
 msgid "Esquerda (X)"
 msgstr "बाएँ (X)"
 
-#: rust/snapnab/src/dialogs.rs:555
+#: rust/anycapture/src/dialogs.rs:555
 msgid "Topo (Y)"
 msgstr "ऊपर (Y)"
 
-#: rust/snapnab/src/dialogs.rs:556
+#: rust/anycapture/src/dialogs.rs:556
 msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
 msgstr "स्थिर स्थिति के बिना, कैप्चर के समय आप आयत को उसकी जगह पर खींचते हैं।"
 
-#: rust/snapnab/src/dialogs.rs:557 rust/snapnab/src/engine.rs:445 rust/snapnab/src/window.rs:349
+#: rust/anycapture/src/dialogs.rs:557 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:349
 msgid "Região fixa"
 msgstr "स्थिर क्षेत्र"
 
-#: rust/snapnab/src/dialogs.rs:581
+#: rust/anycapture/src/dialogs.rs:581
 msgid "Reduzir para 1080p"
 msgstr "1080p तक छोटा करें"
 
-#: rust/snapnab/src/dialogs.rs:582
+#: rust/anycapture/src/dialogs.rs:582
 msgid "Codificação por hardware"
 msgstr "हार्डवेयर एनकोडिंग"
 
-#: rust/snapnab/src/dialogs.rs:583
+#: rust/anycapture/src/dialogs.rs:583
 msgid "Áudio"
 msgstr "ऑडियो"
 
-#: rust/snapnab/src/dialogs.rs:584
+#: rust/anycapture/src/dialogs.rs:584
 msgid "Volume do microfone (%)"
 msgstr "माइक्रोफ़ोन वॉल्यूम (%)"
 
-#: rust/snapnab/src/dialogs.rs:585
+#: rust/anycapture/src/dialogs.rs:585
 msgid "Volume do áudio do sistema (%)"
 msgstr "सिस्टम ऑडियो वॉल्यूम (%)"
 
-#: rust/snapnab/src/dialogs.rs:586 rust/snapnab/src/hud.rs:361
+#: rust/anycapture/src/dialogs.rs:586 rust/anycapture/src/hud.rs:361
 msgid "Ganho automático do microfone"
 msgstr "माइक्रोफ़ोन का स्वचालित गेन"
 
-#: rust/snapnab/src/dialogs.rs:587
+#: rust/anycapture/src/dialogs.rs:587
 msgid "Também ajustáveis no painel da gravação."
 msgstr "रिकॉर्डिंग पैनल में भी समायोज्य।"
 
-#: rust/snapnab/src/dialogs.rs:588
+#: rust/anycapture/src/dialogs.rs:588
 msgid "Gravar somente o áudio (sem vídeo)"
 msgstr "केवल ऑडियो रिकॉर्ड करें (बिना वीडियो)"
 
-#: rust/snapnab/src/dialogs.rs:589
+#: rust/anycapture/src/dialogs.rs:589
 msgid "Formato do áudio"
 msgstr "ऑडियो प्रारूप"
 
-#: rust/snapnab/src/dialogs.rs:590
+#: rust/anycapture/src/dialogs.rs:590
 msgid "Na gravação (todos os presets)"
 msgstr "रिकॉर्डिंग के दौरान (सभी प्रीसेट)"
 
-#: rust/snapnab/src/dialogs.rs:591 rust/snapnab/src/engine/video.rs:360
+#: rust/anycapture/src/dialogs.rs:591 rust/anycapture/src/engine/video.rs:360
 msgid "Destacar o cursor"
 msgstr "कर्सर हाइलाइट करें"
 
-#: rust/snapnab/src/dialogs.rs:592
+#: rust/anycapture/src/dialogs.rs:592
 msgid "Cor do destaque"
 msgstr "हाइलाइट का रंग"
 
-#: rust/snapnab/src/dialogs.rs:593
+#: rust/anycapture/src/dialogs.rs:593
 msgid "Tamanho do destaque (px)"
 msgstr "हाइलाइट का आकार (px)"
 
-#: rust/snapnab/src/dialogs.rs:594 rust/snapnab/src/engine/video.rs:360
+#: rust/anycapture/src/dialogs.rs:594 rust/anycapture/src/engine/video.rs:360
 msgid "Mostrar os cliques"
 msgstr "क्लिक दिखाएँ"
 
-#: rust/snapnab/src/dialogs.rs:595
+#: rust/anycapture/src/dialogs.rs:595
 msgid "Cor do clique esquerdo"
 msgstr "बाएँ क्लिक का रंग"
 
-#: rust/snapnab/src/dialogs.rs:596
+#: rust/anycapture/src/dialogs.rs:596
 msgid "Cor do clique direito"
 msgstr "दाएँ क्लिक का रंग"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Teclas na tela"
 msgstr "स्क्रीन पर कुंजियाँ"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Não mostrar"
 msgstr "न दिखाएँ"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "केवल शॉर्टकट (Ctrl, Alt, Win, F1…)"
 
-#: rust/snapnab/src/dialogs.rs:597
+#: rust/anycapture/src/dialogs.rs:597
 msgid "Todas (inclusive o que for digitado)"
 msgstr "सभी (जो टाइप किया जाए वह भी)"
 
-#: rust/snapnab/src/dialogs.rs:599
+#: rust/anycapture/src/dialogs.rs:599
 msgid "Ampliar ao clicar (zoom automático)"
 msgstr "क्लिक पर ज़ूम करें (स्वचालित ज़ूम)"
 
-#: rust/snapnab/src/dialogs.rs:600
+#: rust/anycapture/src/dialogs.rs:600
 msgid "Ampliação do zoom (%)"
 msgstr "ज़ूम स्तर (%)"
 
-#: rust/snapnab/src/dialogs.rs:601
+#: rust/anycapture/src/dialogs.rs:601
 msgid "Atalho do zoom durante a gravação"
 msgstr "रिकॉर्डिंग के दौरान ज़ूम शॉर्टकट"
 
-#: rust/snapnab/src/dialogs.rs:602
+#: rust/anycapture/src/dialogs.rs:602
 msgid "Proteger contra travamentos (recupera a gravação)"
 msgstr "क्रैश से बचाव (रिकॉर्डिंग वापस मिलती है)"
 
-#: rust/snapnab/src/dialogs.rs:603
+#: rust/anycapture/src/dialogs.rs:603
 msgid "Confirmar antes de recomeçar a gravação"
 msgstr "रिकॉर्डिंग फिर से शुरू करने से पहले पुष्टि करें"
 
-#: rust/snapnab/src/dialogs.rs:605
+#: rust/anycapture/src/dialogs.rs:605
 msgid "Opções de vídeo"
 msgstr "वीडियो विकल्प"
 
-#: rust/snapnab/src/dialogs.rs:633
+#: rust/anycapture/src/dialogs.rs:633
 msgid "Remover o fundo da webcam"
 msgstr "वेबकैम की पृष्ठभूमि हटाएँ"
 
-#: rust/snapnab/src/dialogs.rs:633
+#: rust/anycapture/src/dialogs.rs:633
 msgid "Cor do fundo"
 msgstr "पृष्ठभूमि का रंग"
 
-#: rust/snapnab/src/dialogs.rs:634
+#: rust/anycapture/src/dialogs.rs:634
 msgid "Tolerância (0–100)"
 msgstr "सहनशीलता (0–100)"
 
-#: rust/snapnab/src/dialogs.rs:635
+#: rust/anycapture/src/dialogs.rs:635
 msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
 msgstr "सादी और अच्छी रोशनी वाली पृष्ठभूमि का उपयोग करें (ग्रीन स्क्रीन सबसे अच्छी है)।"
 
-#: rust/snapnab/src/dialogs.rs:636
+#: rust/anycapture/src/dialogs.rs:636
 msgid "Com o fundo removido, a webcam aparece sem moldura."
 msgstr "पृष्ठभूमि हटने पर वेबकैम बिना फ़्रेम के दिखता है।"
 
-#: rust/snapnab/src/dialogs.rs:637
+#: rust/anycapture/src/dialogs.rs:637
 msgid "Remover o fundo (chroma key)"
 msgstr "पृष्ठभूमि हटाएँ (क्रोमा की)"
 
-#: rust/snapnab/src/dialogs.rs:662
+#: rust/anycapture/src/dialogs.rs:662
 msgid "Deslocamento (px)"
 msgstr "खिसकाव (px)"
 
-#: rust/snapnab/src/dialogs.rs:662
+#: rust/anycapture/src/dialogs.rs:662
 msgid "Desfoque (px)"
 msgstr "धुंधलापन (px)"
 
-#: rust/snapnab/src/dialogs.rs:663 rust/snapnab/src/dialogs.rs:680
+#: rust/anycapture/src/dialogs.rs:663 rust/anycapture/src/dialogs.rs:680
 msgid "Opacidade (%)"
 msgstr "अपारदर्शिता (%)"
 
-#: rust/snapnab/src/dialogs.rs:664
+#: rust/anycapture/src/dialogs.rs:664
 msgid "Campos: {date} {time} {computer} {user}"
 msgstr "फ़ील्ड: {date} {time} {computer} {user}"
 
-#: rust/snapnab/src/dialogs.rs:667
+#: rust/anycapture/src/dialogs.rs:667
 msgid "Escala (%)"
 msgstr "पैमाना (%)"
 
-#: rust/snapnab/src/dialogs.rs:675
+#: rust/anycapture/src/dialogs.rs:675
 msgid "Remove as faixas de cor uniforme em volta da captura."
 msgstr "कैप्चर के चारों ओर एक जैसे रंग की पट्टियाँ हटाता है।"
 
-#: rust/snapnab/src/dialogs.rs:677
+#: rust/anycapture/src/dialogs.rs:677
 msgid "Matiz (graus)"
 msgstr "ह्यू (डिग्री)"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "90° à direita"
 msgstr "90° दाएँ"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "90° à esquerda"
 msgstr "90° बाएँ"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "Espelhar na horizontal"
 msgstr "क्षैतिज पलटें"
 
-#: rust/snapnab/src/dialogs.rs:678
+#: rust/anycapture/src/dialogs.rs:678
 msgid "Espelhar na vertical"
 msgstr "लंबवत पलटें"
 
-#: rust/snapnab/src/dialogs.rs:681
+#: rust/anycapture/src/dialogs.rs:681
 msgid "Repetir por toda a imagem"
 msgstr "पूरी छवि पर दोहराएँ"
 
-#: rust/snapnab/src/dialogs.rs:682
+#: rust/anycapture/src/dialogs.rs:682
 msgid "Resolução (DPI)"
 msgstr "रिज़ॉल्यूशन (DPI)"
 
-#: rust/snapnab/src/dialogs.rs:682
+#: rust/anycapture/src/dialogs.rs:682
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "सहेजी गई फ़ाइलों में लिखा जाता है (PNG, JPEG, TIFF, BMP)।"
 
-#: rust/snapnab/src/dialogs.rs:688
+#: rust/anycapture/src/dialogs.rs:688
 msgid "Original"
 msgstr "मूल"
 
-#: rust/snapnab/src/dialogs.rs:666
+#: rust/anycapture/src/dialogs.rs:666
 msgid "Cor a substituir"
 msgstr "बदला जाने वाला रंग"
 
-#: rust/snapnab/src/engine.rs:373
+#: rust/anycapture/src/engine.rs:373
 #, c-format
 msgid "Captura em %d s…"
 msgstr "%d सेकंड में कैप्चर…"
 
-#: rust/snapnab/src/engine.rs:441
+#: rust/anycapture/src/engine.rs:441
 msgid "A região fixa está fora da tela. Ajuste a posição na engrenagem da Seleção."
 msgstr "स्थिर क्षेत्र स्क्रीन से बाहर है। चयन के गियर मेनू में उसकी स्थिति ठीक करें।"
 
-#: rust/snapnab/src/engine.rs:466
+#: rust/anycapture/src/engine.rs:466
 msgid "Janelas como objetos"
 msgstr "विंडो ऑब्जेक्ट के रूप में"
 
-#: rust/snapnab/src/engine.rs:488
+#: rust/anycapture/src/engine.rs:488
 msgid "Capturar de arquivo gráfico"
 msgstr "ग्राफ़िक फ़ाइल से कैप्चर करें"
 
-#: rust/snapnab/src/engine.rs:493
+#: rust/anycapture/src/engine.rs:493
 msgid "Não foi possível abrir a imagem."
 msgstr "छवि नहीं खोली जा सकी।"
 
-#: rust/snapnab/src/engine.rs:507
+#: rust/anycapture/src/engine.rs:507
 msgid "Nenhum menu aberto encontrado; selecione a região."
 msgstr "कोई खुला मेनू नहीं मिला; क्षेत्र चुनें।"
 
-#: rust/snapnab/src/engine.rs:557
-msgid "Snapnab — seleção"
-msgstr "Snapnab — चयन"
+#: rust/anycapture/src/engine.rs:557
+msgid "AnyCapture — seleção"
+msgstr "AnyCapture — चयन"
 
-#: rust/snapnab/src/engine.rs:616
+#: rust/anycapture/src/engine.rs:616
 msgid "vídeo"
 msgstr "वीडियो"
 
-#: rust/snapnab/src/engine.rs:621
+#: rust/anycapture/src/engine.rs:621
 msgid "A biblioteca está vazia"
 msgstr "लाइब्रेरी खाली है"
 
-#: rust/snapnab/src/engine.rs:774
+#: rust/anycapture/src/engine.rs:774
 msgid "Cursor do mouse"
 msgstr "माउस कर्सर"
 
-#: rust/snapnab/src/engine.rs:806
+#: rust/anycapture/src/engine.rs:806
 msgid ""
 "Não foi possível reconhecer o texto.\n"
 "\n"
@@ -6411,190 +6411,190 @@ msgstr ""
 "पाठ पहचाना नहीं जा सका।\n"
 "\n"
 
-#: rust/snapnab/src/engine.rs:807 rust/snapnab/src/engine.rs:811
-msgid "Snapnab — Capturar texto"
-msgstr "Snapnab — पाठ निकालें"
+#: rust/anycapture/src/engine.rs:807 rust/anycapture/src/engine.rs:811
+msgid "AnyCapture — Capturar texto"
+msgstr "AnyCapture — पाठ निकालें"
 
-#: rust/snapnab/src/engine.rs:811
+#: rust/anycapture/src/engine.rs:811
 msgid "Nenhum texto encontrado na captura."
 msgstr "कैप्चर में कोई पाठ नहीं मिला।"
 
-#: rust/snapnab/src/engine.rs:815
+#: rust/anycapture/src/engine.rs:815
 msgid "Capturar texto — copiado para a área de transferência"
 msgstr "पाठ निकालें — क्लिपबोर्ड पर कॉपी किया गया"
 
-#: rust/snapnab/src/engine.rs:846
+#: rust/anycapture/src/engine.rs:846
 msgid "copiada para a área de transferência"
 msgstr "क्लिपबोर्ड पर कॉपी की गई"
 
-#: rust/snapnab/src/engine.rs:854 rust/snapnab/src/engine.rs:881
+#: rust/anycapture/src/engine.rs:854 rust/anycapture/src/engine.rs:881
 msgid "salva em "
 msgstr "यहाँ सहेजी गई: "
 
-#: rust/snapnab/src/engine.rs:914
+#: rust/anycapture/src/engine.rs:914
 msgid "Captura adicionada à biblioteca"
 msgstr "कैप्चर लाइब्रेरी में जोड़ा गया"
 
-#: rust/snapnab/src/engine.rs:922
+#: rust/anycapture/src/engine.rs:922
 msgid "Clique para abrir no Editor."
 msgstr "एडिटर में खोलने के लिए क्लिक करें।"
 
-#: rust/snapnab/src/engine.rs:1109
-msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento Snapnab (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
-msgstr "छवियाँ और दस्तावेज़|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Snapnab दस्तावेज़ (*.snap)|*.snap|MP4 वीडियो (*.mp4)|*.mp4|सभी फ़ाइलें (*.*)|*.*|"
+#: rust/anycapture/src/engine.rs:1109
+msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
+msgstr "छवियाँ और दस्तावेज़|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|AnyCapture दस्तावेज़ (*.snap)|*.snap|MP4 वीडियो (*.mp4)|*.mp4|सभी फ़ाइलें (*.*)|*.*|"
 
-#: rust/snapnab/src/hotkeys.rs:57 rust/snapnab/src/hotkeys.rs:261 rust/snapnab/tests/window.rs:34
+#: rust/anycapture/src/hotkeys.rs:57 rust/anycapture/src/hotkeys.rs:261 rust/anycapture/tests/window.rs:34
 msgid "Print Screen"
 msgstr "Print Screen"
 
-#: rust/snapnab/src/hud.rs:152
+#: rust/anycapture/src/hud.rs:152
 msgid "Gravar / pausar"
 msgstr "रिकॉर्ड / रोकें"
 
-#: rust/snapnab/src/hud.rs:153
+#: rust/anycapture/src/hud.rs:153
 msgid "Parar e salvar"
 msgstr "रोकें और सहेजें"
 
-#: rust/snapnab/src/hud.rs:154
+#: rust/anycapture/src/hud.rs:154
 msgid "Recomeçar a gravação"
 msgstr "रिकॉर्डिंग फिर से शुरू करें"
 
-#: rust/snapnab/src/hud.rs:155
+#: rust/anycapture/src/hud.rs:155
 msgid "Cancelar (descarta a gravação)"
 msgstr "रद्द करें (रिकॉर्डिंग हटा दी जाती है)"
 
-#: rust/snapnab/src/hud.rs:156
+#: rust/anycapture/src/hud.rs:156
 msgid "Microfone: liga / desliga"
 msgstr "माइक्रोफ़ोन: चालू / बंद"
 
-#: rust/snapnab/src/hud.rs:157
+#: rust/anycapture/src/hud.rs:157
 msgid "Áudio do sistema: liga / desliga"
 msgstr "सिस्टम ऑडियो: चालू / बंद"
 
-#: rust/snapnab/src/hud.rs:158
+#: rust/anycapture/src/hud.rs:158
 msgid "Volume do microfone e do sistema"
 msgstr "माइक्रोफ़ोन और सिस्टम का वॉल्यूम"
 
-#: rust/snapnab/src/hud.rs:159
+#: rust/anycapture/src/hud.rs:159
 msgid "Webcam: mostra / oculta"
 msgstr "वेबकैम: दिखाएँ / छिपाएँ"
 
-#: rust/snapnab/src/hud.rs:160
+#: rust/anycapture/src/hud.rs:160
 msgid "Capturar uma imagem sem parar a gravação"
 msgstr "रिकॉर्डिंग रोके बिना एक छवि कैप्चर करें"
 
-#: rust/snapnab/src/hud.rs:161
+#: rust/anycapture/src/hud.rs:161
 msgid "Zoom em volta do ponteiro"
 msgstr "पॉइंटर के आसपास ज़ूम"
 
-#: rust/snapnab/src/hud.rs:162
+#: rust/anycapture/src/hud.rs:162
 msgid "No vídeo: destaque do cursor, cliques e teclas"
 msgstr "वीडियो में: कर्सर हाइलाइट, क्लिक और कुंजियाँ"
 
-#: rust/snapnab/src/hud.rs:263
+#: rust/anycapture/src/hud.rs:263
 msgid "Pronto"
 msgstr "तैयार"
 
-#: rust/snapnab/src/hud.rs:314 rust/snapnab/src/engine/video.rs:539
+#: rust/anycapture/src/hud.rs:314 rust/anycapture/src/engine/video.rs:539
 msgid "Volume"
 msgstr "वॉल्यूम"
 
-#: rust/snapnab/src/hud.rs:340
+#: rust/anycapture/src/hud.rs:340
 msgid "Microfone"
 msgstr "माइक्रोफ़ोन"
 
-#: rust/snapnab/src/hud.rs:340
+#: rust/anycapture/src/hud.rs:340
 msgid "Áudio do sistema"
 msgstr "सिस्टम ऑडियो"
 
-#: rust/snapnab/src/interval.rs:70 rust/snapnab/src/interval.rs:71
+#: rust/anycapture/src/interval.rs:70 rust/anycapture/src/interval.rs:71
 msgid "Intervalo"
 msgstr "अंतराल"
 
-#: rust/snapnab/src/interval.rs:101
+#: rust/anycapture/src/interval.rs:101
 msgid "Área"
 msgstr "क्षेत्र"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Tela inteira"
 msgstr "पूरी स्क्रीन"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Monitor do cursor"
 msgstr "कर्सर वाला मॉनिटर"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Região (escolher agora)"
 msgstr "क्षेत्र (अभी चुनें)"
 
-#: rust/snapnab/src/interval.rs:102
+#: rust/anycapture/src/interval.rs:102
 msgid "Janela (escolher agora)"
 msgstr "विंडो (अभी चुनें)"
 
-#: rust/snapnab/src/interval.rs:105
+#: rust/anycapture/src/interval.rs:105
 msgid "Intervalo (segundos)"
 msgstr "अंतराल (सेकंड)"
 
-#: rust/snapnab/src/interval.rs:106
+#: rust/anycapture/src/interval.rs:106
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "अवधि (मिनट, 0 = रोकने तक)"
 
-#: rust/snapnab/src/interval.rs:110 rust/snapnab/src/window.rs:818 rust/snapnab/src/window.rs:823
+#: rust/anycapture/src/interval.rs:110 rust/anycapture/src/window.rs:818 rust/anycapture/src/window.rs:823
 msgid "Capturar o cursor"
 msgstr "कर्सर कैप्चर करें"
 
-#: rust/snapnab/src/interval.rs:111
+#: rust/anycapture/src/interval.rs:111
 msgid "Um ponto vermelho no ícone da bandeja indica que está capturando; pare pelo menu da bandeja."
 msgstr "ट्रे आइकन पर लाल बिंदु बताता है कि कैप्चर चल रहा है; ट्रे मेनू से रोकें।"
 
-#: rust/snapnab/src/interval.rs:114 rust/snapnab/src/interval.rs:142
+#: rust/anycapture/src/interval.rs:114 rust/anycapture/src/interval.rs:142
 msgid "Captura por intervalo"
 msgstr "अंतराल कैप्चर"
 
-#: rust/snapnab/src/interval.rs:133
+#: rust/anycapture/src/interval.rs:133
 msgid "Escolha uma pasta."
 msgstr "एक फ़ोल्डर चुनें।"
 
-#: rust/snapnab/src/interval.rs:161
+#: rust/anycapture/src/interval.rs:161
 msgid "Não foi possível criar a pasta: "
 msgstr "फ़ोल्डर नहीं बनाया जा सका: "
 
-#: rust/snapnab/src/interval.rs:225
+#: rust/anycapture/src/interval.rs:225
 #, c-format
 msgid "Captura por intervalo parada: %d imagem(ns) em %s"
 msgstr "अंतराल कैप्चर रुका: %d छवि(याँ) %s में"
 
-#: rust/snapnab/src/main.rs:175
-msgid "Esse atalho já está em uso por outra ação do Snapnab."
-msgstr "यह शॉर्टकट पहले से Snapnab की किसी दूसरी क्रिया में उपयोग हो रहा है।"
+#: rust/anycapture/src/main.rs:175
+msgid "Esse atalho já está em uso por outra ação do AnyCapture."
+msgstr "यह शॉर्टकट पहले से AnyCapture की किसी दूसरी क्रिया में उपयोग हो रहा है।"
 
-#: rust/snapnab/src/main.rs:175 rust/snapnab/src/main.rs:260
+#: rust/anycapture/src/main.rs:175 rust/anycapture/src/main.rs:260
 msgid "Conflito de atalho"
 msgstr "शॉर्टकट का टकराव"
 
-#: rust/snapnab/src/main.rs:183
-msgid "Outro programa já usa esse atalho. O Snapnab vai interceptá-lo por um gancho de teclado."
-msgstr "कोई दूसरा प्रोग्राम यह शॉर्टकट उपयोग कर रहा है। Snapnab इसे कीबोर्ड हुक से पकड़ेगा।"
+#: rust/anycapture/src/main.rs:183
+msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
+msgstr "कोई दूसरा प्रोग्राम यह शॉर्टकट उपयोग कर रहा है। AnyCapture इसे कीबोर्ड हुक से पकड़ेगा।"
 
-#: rust/snapnab/src/main.rs:184
+#: rust/anycapture/src/main.rs:184
 msgid "Atalho"
 msgstr "शॉर्टकट"
 
-#: rust/snapnab/src/main.rs:209
+#: rust/anycapture/src/main.rs:209
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "%u दिन से पुराने कैप्चर अभी हटाएँ (विकल्पों के नियमों के साथ)?"
 
-#: rust/snapnab/src/main.rs:223
+#: rust/anycapture/src/main.rs:223
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "लाइब्रेरी से %d कैप्चर हटाए गए।"
 
-#: rust/snapnab/src/main.rs:230
+#: rust/anycapture/src/main.rs:230
 msgid "Fixar imagem na tela"
 msgstr "छवि स्क्रीन पर पिन करें"
 
-#: rust/snapnab/src/main.rs:232
+#: rust/anycapture/src/main.rs:232
 msgid ""
 "Não foi possível abrir a imagem.\n"
 "\n"
@@ -6602,352 +6602,352 @@ msgstr ""
 "छवि नहीं खोली जा सकी।\n"
 "\n"
 
-#: rust/snapnab/src/main.rs:261
+#: rust/anycapture/src/main.rs:261
 #, c-format
 msgid "O atalho do preset \"%s\" já está em uso por outra ação."
 msgstr "प्रीसेट \"%s\" का शॉर्टकट पहले से किसी दूसरी क्रिया में उपयोग हो रहा है।"
 
-#: rust/snapnab/src/main.rs:538 rust/snapnab/src/main.rs:568
+#: rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568
 msgid "Abrir a janela de captura"
 msgstr "कैप्चर विंडो खोलें"
 
-#: rust/snapnab/src/main.rs:539 rust/snapnab/src/window.rs:194
+#: rust/anycapture/src/main.rs:539 rust/anycapture/src/window.rs:194
 msgid "Abrir o Editor"
 msgstr "एडिटर खोलें"
 
-#: rust/snapnab/src/main.rs:539
+#: rust/anycapture/src/main.rs:539
 msgid "Sair"
 msgstr "बाहर निकलें"
 
-#: rust/snapnab/src/main.rs:540 rust/snapnab/src/pins.rs:613 rust/snapnab/src/quick.rs:298 rust/snapnab/src/window.rs:44
+#: rust/anycapture/src/main.rs:540 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
 msgid "Ler código QR"
 msgstr "QR कोड पढ़ें"
 
-#: rust/snapnab/src/main.rs:541 rust/snapnab/src/window.rs:234
+#: rust/anycapture/src/main.rs:541 rust/anycapture/src/window.rs:234
 msgid "Mostrar o One Click"
 msgstr "One Click दिखाएँ"
 
-#: rust/snapnab/src/main.rs:543
+#: rust/anycapture/src/main.rs:543
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "पिन की गई छवियाँ (%zu)"
 
-#: rust/snapnab/src/main.rs:543
+#: rust/anycapture/src/main.rs:543
 msgid "Imagens fixadas"
 msgstr "पिन की गई छवियाँ"
 
-#: rust/snapnab/src/main.rs:544 rust/snapnab/src/window.rs:230
+#: rust/anycapture/src/main.rs:544 rust/anycapture/src/window.rs:230
 msgid "Gravar só o áudio"
 msgstr "केवल ऑडियो रिकॉर्ड करें"
 
-#: rust/snapnab/src/main.rs:546
+#: rust/anycapture/src/main.rs:546
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "अंतराल कैप्चर रोकें (%d)"
 
-#: rust/snapnab/src/main.rs:548 rust/snapnab/src/window.rs:228
+#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:228
 msgid "Captura por intervalo…"
 msgstr "अंतराल कैप्चर…"
 
-#: rust/snapnab/src/main.rs:550
+#: rust/anycapture/src/main.rs:550
 msgid "Abrir o Editor depois da captura"
 msgstr "कैप्चर के बाद एडिटर खोलें"
 
-#: rust/snapnab/src/main.rs:550 rust/snapnab/src/window.rs:207
+#: rust/anycapture/src/main.rs:550 rust/anycapture/src/window.rs:207
 msgid "Opções…"
 msgstr "विकल्प…"
 
-#: rust/snapnab/src/main.rs:568
+#: rust/anycapture/src/main.rs:568
 msgid "Ocultar o One Click"
 msgstr "One Click छिपाएँ"
 
-#: rust/snapnab/src/main.rs:650
-msgid "Snapnab — linha de comando"
-msgstr "Snapnab — कमांड लाइन"
+#: rust/anycapture/src/main.rs:650
+msgid "AnyCapture — linha de comando"
+msgstr "AnyCapture — कमांड लाइन"
 
-#: rust/snapnab/src/main.rs:680
+#: rust/anycapture/src/main.rs:680
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region को x,y,चौड़ाई,ऊँचाई चाहिए (उदा.: /region 100,100,800,600)।"
 
-#: rust/snapnab/src/main.rs:692
+#: rust/anycapture/src/main.rs:692
 msgid "Nenhuma janela com esse título: "
 msgstr "इस शीर्षक की कोई विंडो नहीं: "
 
-#: rust/snapnab/src/main.rs:704
+#: rust/anycapture/src/main.rs:704
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "मॉनिटर %d मौजूद नहीं है (कुल %zu हैं)।"
 
-#: rust/snapnab/src/main.rs:724
+#: rust/anycapture/src/main.rs:724
 msgid "Não foi possível fixar: "
 msgstr "पिन नहीं किया जा सका: "
 
-#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:214
+#: rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:214
 msgid "Fixar um arquivo…"
 msgstr "फ़ाइल पिन करें…"
 
-#: rust/snapnab/src/main.rs:872 rust/snapnab/src/window.rs:212
+#: rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:212
 msgid "Capturar e fixar"
 msgstr "कैप्चर करें और पिन करें"
 
-#: rust/snapnab/src/main.rs:872
+#: rust/anycapture/src/main.rs:872
 msgid "Mostrar todas"
 msgstr "सभी दिखाएँ"
 
-#: rust/snapnab/src/main.rs:873
+#: rust/anycapture/src/main.rs:873
 msgid "Ocultar todas"
 msgstr "सभी छिपाएँ"
 
-#: rust/snapnab/src/main.rs:873 rust/snapnab/src/quick.rs:300 rust/snapnab/src/window.rs:215
+#: rust/anycapture/src/main.rs:873 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:215
 msgid "Fechar todas"
 msgstr "सभी बंद करें"
 
-#: rust/snapnab/src/main.rs:873
+#: rust/anycapture/src/main.rs:873
 msgid "Desligar \"atravessar cliques\""
 msgstr "\"क्लिक आर-पार\" बंद करें"
 
-#: rust/snapnab/src/main.rs:873
+#: rust/anycapture/src/main.rs:873
 msgid "Reabrir a última fechada"
 msgstr "अंतिम बंद की गई फिर खोलें"
 
-#: rust/snapnab/src/main.rs:874
+#: rust/anycapture/src/main.rs:874
 msgid "Histórico"
 msgstr "इतिहास"
 
-#: rust/snapnab/src/main.rs:960
+#: rust/anycapture/src/main.rs:960
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — स्क्रीन कैप्चर और वीडियो रिकॉर्डिंग"
 
-#: rust/snapnab/src/main.rs:964 rust/snapnab/src/window.rs:241
-msgid "Sobre o Snapnab"
-msgstr "Snapnab के बारे में"
+#: rust/anycapture/src/main.rs:964 rust/anycapture/src/window.rs:241
+msgid "Sobre o AnyCapture"
+msgstr "AnyCapture के बारे में"
 
-#: rust/snapnab/src/main.rs:1003 rust/snapnab/src/main.rs:1071 rust/snapnab/src/main.rs:1151
-msgid "Snapnab — clique para capturar"
-msgstr "Snapnab — कैप्चर करने के लिए क्लिक करें"
+#: rust/anycapture/src/main.rs:1003 rust/anycapture/src/main.rs:1071 rust/anycapture/src/main.rs:1151
+msgid "AnyCapture — clique para capturar"
+msgstr "AnyCapture — कैप्चर करने के लिए क्लिक करें"
 
-#: rust/snapnab/src/main.rs:1023
-msgid "Snapnab — gravação recuperada"
-msgstr "Snapnab — रिकॉर्डिंग वापस मिली"
+#: rust/anycapture/src/main.rs:1023
+msgid "AnyCapture — gravação recuperada"
+msgstr "AnyCapture — रिकॉर्डिंग वापस मिली"
 
-#: rust/snapnab/src/main.rs:1024
+#: rust/anycapture/src/main.rs:1024
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu बाधित रिकॉर्डिंग लाइब्रेरी में वापस मिलीं।"
 
-#: rust/snapnab/src/main.rs:1149
+#: rust/anycapture/src/main.rs:1149
 #, c-format
-msgid "Snapnab — captura por intervalo: %d imagem(ns)"
-msgstr "Snapnab — अंतराल कैप्चर: %d छवि(याँ)"
+msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
+msgstr "AnyCapture — अंतराल कैप्चर: %d छवि(याँ)"
 
-#: rust/snapnab/src/oneclick.rs:500
+#: rust/anycapture/src/oneclick.rs:500
 msgid "Iniciar uma captura"
 msgstr "कैप्चर शुरू करें"
 
-#: rust/snapnab/src/pins.rs:412 rust/snapnab/src/select.rs:578
+#: rust/anycapture/src/pins.rs:412 rust/anycapture/src/select.rs:578
 msgid "Cor copiada: "
 msgstr "रंग कॉपी हुआ: "
 
-#: rust/snapnab/src/pins.rs:420
+#: rust/anycapture/src/pins.rs:420
 msgid "Fixada"
 msgstr "पिन की गई"
 
-#: rust/snapnab/src/pins.rs:421
+#: rust/anycapture/src/pins.rs:421
 msgid "Salvar a imagem fixada"
 msgstr "पिन की गई छवि सहेजें"
 
-#: rust/snapnab/src/pins.rs:438 rust/snapnab/src/pins.rs:978 rust/snapnab/src/pins.rs:1206
+#: rust/anycapture/src/pins.rs:438 rust/anycapture/src/pins.rs:978 rust/anycapture/src/pins.rs:1206
 msgid "Imagem fixada"
 msgstr "पिन की गई छवि"
 
-#: rust/snapnab/src/pins.rs:610
+#: rust/anycapture/src/pins.rs:610
 msgid "Copiar\tCtrl+C"
 msgstr "कॉपी करें\tCtrl+C"
 
-#: rust/snapnab/src/pins.rs:610
+#: rust/anycapture/src/pins.rs:610
 msgid "Salvar como…\tCtrl+S"
 msgstr "इस रूप में सहेजें…\tCtrl+S"
 
-#: rust/snapnab/src/pins.rs:610
+#: rust/anycapture/src/pins.rs:610
 msgid "Abrir no Editor"
 msgstr "एडिटर में खोलें"
 
-#: rust/snapnab/src/pins.rs:611
+#: rust/anycapture/src/pins.rs:611
 msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
 msgstr "एनोटेट करें (पेन, हाइलाइटर, तीर, आयत, टेक्स्ट)"
 
-#: rust/snapnab/src/pins.rs:611
+#: rust/anycapture/src/pins.rs:611
 msgid "Desfazer a anotação\tCtrl+Z"
 msgstr "एनोटेशन पूर्ववत करें\tCtrl+Z"
 
-#: rust/snapnab/src/pins.rs:612
+#: rust/anycapture/src/pins.rs:612
 msgid "Zoom"
 msgstr "ज़ूम"
 
-#: rust/snapnab/src/pins.rs:612
+#: rust/anycapture/src/pins.rs:612
 msgid "Travar a posição"
 msgstr "स्थिति लॉक करें"
 
-#: rust/snapnab/src/pins.rs:613
+#: rust/anycapture/src/pins.rs:613
 msgid "Atravessar cliques (desligue pelo menu da bandeja)"
 msgstr "क्लिक आर-पार (ट्रे मेनू से बंद करें)"
 
-#: rust/snapnab/src/pins.rs:613
+#: rust/anycapture/src/pins.rs:613
 msgid "Sempre visível"
 msgstr "हमेशा ऊपर"
 
-#: rust/snapnab/src/pins.rs:614
+#: rust/anycapture/src/pins.rs:614
 msgid "Copiar a cor neste ponto\tAlt+clique"
 msgstr "इस बिंदु का रंग कॉपी करें\tAlt+क्लिक"
 
-#: rust/snapnab/src/pins.rs:614
+#: rust/anycapture/src/pins.rs:614
 msgid "Arrastar para outro programa: Ctrl+arrastar"
 msgstr "दूसरे प्रोग्राम में खींचें: Ctrl+खींचें"
 
-#: rust/snapnab/src/pins.rs:614
+#: rust/anycapture/src/pins.rs:614
 msgid "Fechar\tEsc"
 msgstr "बंद करें\tEsc"
 
-#: rust/snapnab/src/pins.rs:615
+#: rust/anycapture/src/pins.rs:615
 msgid "Fechar todas as imagens fixadas"
 msgstr "सभी पिन की गई छवियाँ बंद करें"
 
-#: rust/snapnab/src/pins.rs:693
+#: rust/anycapture/src/pins.rs:693
 msgid "Texto na imagem fixada"
 msgstr "पिन की गई छवि पर टेक्स्ट"
 
-#: rust/snapnab/src/pins.rs:1144
+#: rust/anycapture/src/pins.rs:1144
 msgid "A área de transferência não tem imagem nem texto para fixar."
 msgstr "क्लिपबोर्ड में पिन करने के लिए कोई छवि या टेक्स्ट नहीं है।"
 
-#: rust/snapnab/src/pins.rs:1212
+#: rust/anycapture/src/pins.rs:1212
 msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Vermelho"
 msgstr "लाल"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Amarelo"
 msgstr "पीला"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Verde"
 msgstr "हरा"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Azul"
 msgstr "नीला"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Roxo"
 msgstr "बैंगनी"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Preto"
 msgstr "काला"
 
-#: rust/snapnab/src/pins.rs:572
+#: rust/anycapture/src/pins.rs:572
 msgid "Branco"
 msgstr "सफ़ेद"
 
-#: rust/snapnab/src/quick.rs:236
+#: rust/anycapture/src/quick.rs:236
 msgid "Copiado para a área de transferência."
 msgstr "क्लिपबोर्ड पर कॉपी हुआ।"
 
-#: rust/snapnab/src/quick.rs:240 rust/snapnab/src/window.rs:282
+#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:282
 msgid "Vídeo"
 msgstr "वीडियो"
 
-#: rust/snapnab/src/quick.rs:241
+#: rust/anycapture/src/quick.rs:241
 msgid "Salvar o vídeo"
 msgstr "वीडियो सहेजें"
 
-#: rust/snapnab/src/quick.rs:299
+#: rust/anycapture/src/quick.rs:299
 msgid "Enviar (upload) e copiar o link"
 msgstr "अपलोड करें और लिंक कॉपी करें"
 
-#: rust/snapnab/src/quick.rs:54
+#: rust/anycapture/src/quick.rs:54
 msgid "Salvar como…"
 msgstr "इस रूप में सहेजें…"
 
-#: rust/snapnab/src/quick.rs:55
+#: rust/anycapture/src/quick.rs:55
 msgid "Anotar no Editor"
 msgstr "एडिटर में एनोटेट करें"
 
-#: rust/snapnab/src/quick.rs:57
+#: rust/anycapture/src/quick.rs:57
 msgid "Excluir da biblioteca"
 msgstr "लाइब्रेरी से हटाएँ"
 
-#: rust/snapnab/src/rawwin.rs:194
+#: rust/anycapture/src/rawwin.rs:194
 msgid "Pular"
 msgstr "छोड़ें"
 
-#: rust/snapnab/src/select.rs:556
+#: rust/anycapture/src/select.rs:556
 msgid "Nenhuma região anterior ainda"
 msgstr "अभी कोई पिछला क्षेत्र नहीं"
 
-#: rust/snapnab/src/select.rs:566
+#: rust/anycapture/src/select.rs:566
 #, c-format
 msgid "Região anterior %d de %d"
 msgstr "पिछला क्षेत्र %d / %d"
 
-#: rust/snapnab/src/select.rs:660
+#: rust/anycapture/src/select.rs:660
 msgid "Tamanho da seleção"
 msgstr "चयन का आकार"
 
-#: rust/snapnab/src/select.rs:808
+#: rust/anycapture/src/select.rs:808
 msgid "Setas movem (Shift = 10 px) • Ctrl+setas aumentam, Ctrl+Shift+setas diminuem • clique no tamanho para digitar • Enter ou duplo clique captura • Esc = cancelar"
 msgstr "तीर खिसकाते हैं (Shift = 10 px) • Ctrl+तीर बढ़ाते हैं, Ctrl+Shift+तीर घटाते हैं • आकार लिखने के लिए उस पर क्लिक करें • Enter या डबल क्लिक कैप्चर करता है • Esc = रद्द"
 
-#: rust/snapnab/src/select.rs:809
+#: rust/anycapture/src/select.rs:809
 msgid "Arraste para selecionar • clique captura a janela/área destacada • Enter = monitor • Tab = regiões anteriores • H = capturas recentes • C = copiar a cor • Esc = cancelar"
 msgstr "चुनने के लिए खींचें • क्लिक हाइलाइट विंडो/क्षेत्र कैप्चर करता है • Enter = मॉनिटर • Tab = पिछले क्षेत्र • H = हाल के कैप्चर • C = रंग कॉपी करें • Esc = रद्द"
 
-#: rust/snapnab/src/select.rs:810
+#: rust/anycapture/src/select.rs:810
 msgid "Clique na janela a capturar • Esc = cancelar"
 msgstr "कैप्चर करने के लिए विंडो पर क्लिक करें • Esc = रद्द करें"
 
-#: rust/snapnab/src/select.rs:811
+#: rust/anycapture/src/select.rs:811
 msgid "Clique no controle/objeto a capturar • Esc = cancelar"
 msgstr "कैप्चर करने के लिए नियंत्रण/ऑब्जेक्ट पर क्लिक करें • Esc = रद्द करें"
 
-#: rust/snapnab/src/select.rs:812
+#: rust/anycapture/src/select.rs:812
 #, c-format
 msgid "Região fixa %d × %d — clique para capturar • Esc = cancelar"
 msgstr "स्थिर क्षेत्र %d × %d — कैप्चर करने के लिए क्लिक करें • Esc = रद्द करें"
 
-#: rust/snapnab/src/select.rs:813
+#: rust/anycapture/src/select.rs:813
 msgid "Desenhe o contorno com o botão pressionado • Esc = cancelar"
 msgstr "बटन दबाए रखकर रूपरेखा बनाएँ • Esc = रद्द करें"
 
-#: rust/snapnab/src/select.rs:814
+#: rust/anycapture/src/select.rs:814
 msgid "Arraste várias áreas • Backspace desfaz • Enter ou botão direito conclui • Esc = cancelar"
 msgstr "कई क्षेत्र खींचें • Backspace पूर्ववत करता है • Enter या दायाँ क्लिक पूरा करता है • Esc = रद्द करें"
 
-#: rust/snapnab/src/select.rs:815
+#: rust/anycapture/src/select.rs:815
 msgid "Clique na janela/área rolável • Esc = cancelar"
 msgstr "स्क्रॉल होने वाली विंडो/क्षेत्र पर क्लिक करें • Esc = रद्द करें"
 
-#: rust/snapnab/src/select.rs:817
+#: rust/anycapture/src/select.rs:817
 msgid "Gravação: "
 msgstr "रिकॉर्डिंग: "
 
-#: rust/snapnab/src/share.rs:40
+#: rust/anycapture/src/share.rs:40
 #, c-format
 msgid "Captura enviada para o %s."
 msgstr "कैप्चर %s को भेजा गया।"
 
-#: rust/snapnab/src/share.rs:98
+#: rust/anycapture/src/share.rs:98
 msgid "O upload ainda não está configurado. Configurar agora?"
 msgstr "अपलोड अभी सेट नहीं है। अभी सेट करें?"
 
-#: rust/snapnab/src/share.rs:105
+#: rust/anycapture/src/share.rs:105
 msgid "Enviando a captura…"
 msgstr "कैप्चर अपलोड हो रहा है…"
 
-#: rust/snapnab/src/share.rs:109
+#: rust/anycapture/src/share.rs:109
 msgid ""
 "O upload falhou.\n"
 "\n"
@@ -6955,294 +6955,294 @@ msgstr ""
 "अपलोड विफल रहा।\n"
 "\n"
 
-#: rust/snapnab/src/share.rs:118
+#: rust/anycapture/src/share.rs:118
 msgid "Upload concluído — link copiado"
 msgstr "अपलोड पूरा — लिंक कॉपी हुआ"
 
-#: rust/snapnab/src/window.rs:44 rust/snapnab/src/window.rs:416 rust/snapnab/src/window.rs:426
+#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:416 rust/anycapture/src/window.rs:426
 msgid "Nenhum"
 msgstr "कोई नहीं"
 
-#: rust/snapnab/src/window.rs:44
+#: rust/anycapture/src/window.rs:44
 msgid "Programa externo"
 msgstr "बाहरी प्रोग्राम"
 
-#: rust/snapnab/src/window.rs:44
+#: rust/anycapture/src/window.rs:44
 msgid "Texto (OCR)"
 msgstr "पाठ (OCR)"
 
-#: rust/snapnab/src/window.rs:45
+#: rust/anycapture/src/window.rs:45
 msgid "Upload (copiar o link)"
 msgstr "अपलोड (लिंक कॉपी करें)"
 
-#: rust/snapnab/src/window.rs:195
+#: rust/anycapture/src/window.rs:195
 msgid "Abrir a pasta da biblioteca"
 msgstr "लाइब्रेरी फ़ोल्डर खोलें"
 
-#: rust/snapnab/src/window.rs:196
+#: rust/anycapture/src/window.rs:196
 msgid "Abrir a pasta de logs"
 msgstr "लॉग फ़ोल्डर खोलें"
 
-#: rust/snapnab/src/window.rs:198
+#: rust/anycapture/src/window.rs:198
 msgid "Importar presets…"
 msgstr "प्रीसेट आयात करें…"
 
-#: rust/snapnab/src/window.rs:199
+#: rust/anycapture/src/window.rs:199
 msgid "Exportar presets…"
 msgstr "प्रीसेट निर्यात करें…"
 
-#: rust/snapnab/src/window.rs:201
+#: rust/anycapture/src/window.rs:201
 msgid "Exportar todas as configurações…"
 msgstr "सभी सेटिंग्स निर्यात करें…"
 
-#: rust/snapnab/src/window.rs:202
+#: rust/anycapture/src/window.rs:202
 msgid "Importar todas as configurações…"
 msgstr "सभी सेटिंग्स आयात करें…"
 
-#: rust/snapnab/src/window.rs:203
+#: rust/anycapture/src/window.rs:203
 msgid "Abrir a pasta de backups"
 msgstr "बैकअप फ़ोल्डर खोलें"
 
-#: rust/snapnab/src/window.rs:205
+#: rust/anycapture/src/window.rs:205
 msgid "Configurar o upload…"
 msgstr "अपलोड सेट करें…"
 
-#: rust/snapnab/src/window.rs:206
+#: rust/anycapture/src/window.rs:206
 msgid "Limpar a biblioteca agora"
 msgstr "लाइब्रेरी अभी साफ़ करें"
 
-#: rust/snapnab/src/window.rs:209
-msgid "Sair do Snapnab"
-msgstr "Snapnab से बाहर निकलें"
+#: rust/anycapture/src/window.rs:209
+msgid "Sair do AnyCapture"
+msgstr "AnyCapture से बाहर निकलें"
 
-#: rust/snapnab/src/window.rs:220
+#: rust/anycapture/src/window.rs:220
 msgid "Repetir a última captura"
 msgstr "पिछला कैप्चर दोहराएँ"
 
-#: rust/snapnab/src/window.rs:223
+#: rust/anycapture/src/window.rs:223
 msgid "De um arquivo gráfico…"
 msgstr "छवि फ़ाइल से…"
 
-#: rust/snapnab/src/window.rs:231
+#: rust/anycapture/src/window.rs:231
 msgid "Abrir a pasta dos áudios"
 msgstr "ऑडियो फ़ोल्डर खोलें"
 
-#: rust/snapnab/src/window.rs:235
+#: rust/anycapture/src/window.rs:235
 msgid "Lista de presets"
 msgstr "प्रीसेट सूची"
 
-#: rust/snapnab/src/window.rs:238
-msgid "Manual do Snapnab"
-msgstr "Snapnab मैनुअल"
+#: rust/anycapture/src/window.rs:238
+msgid "Manual do AnyCapture"
+msgstr "AnyCapture मैनुअल"
 
-#: rust/snapnab/src/window.rs:239
+#: rust/anycapture/src/window.rs:239
 msgid "Como usar os presets"
 msgstr "प्रीसेट कैसे उपयोग करें"
 
-#: rust/snapnab/src/window.rs:243
+#: rust/anycapture/src/window.rs:243
 msgid "&Captura"
 msgstr "कैप्चर(&C)"
 
-#: rust/snapnab/src/window.rs:347
+#: rust/anycapture/src/window.rs:347
 msgid "Seleção:"
 msgstr "चयन:"
 
-#: rust/snapnab/src/window.rs:365 rust/snapnab/src/window.rs:680
+#: rust/anycapture/src/window.rs:365 rust/anycapture/src/window.rs:680
 msgid "Configurações"
 msgstr "सेटिंग्स"
 
-#: rust/snapnab/src/window.rs:370
+#: rust/anycapture/src/window.rs:370
 msgid "Selecionar a região na captura"
 msgstr "कैप्चर के समय क्षेत्र चुनें"
 
-#: rust/snapnab/src/window.rs:372
+#: rust/anycapture/src/window.rs:372
 msgid "Região fixa…"
 msgstr "स्थिर क्षेत्र…"
 
-#: rust/snapnab/src/window.rs:381
+#: rust/anycapture/src/window.rs:381
 msgid "Cada janela como um objeto separado"
 msgstr "हर विंडो एक अलग ऑब्जेक्ट के रूप में"
 
-#: rust/snapnab/src/window.rs:384
+#: rust/anycapture/src/window.rs:384
 msgid "Guardar os links da página (clicáveis, também no PDF)"
 msgstr "पेज के लिंक रखें (क्लिक करने योग्य, PDF में भी)"
 
-#: rust/snapnab/src/window.rs:410
+#: rust/anycapture/src/window.rs:410
 msgid "Efeitos:"
 msgstr "प्रभाव:"
 
-#: rust/snapnab/src/window.rs:431
+#: rust/anycapture/src/window.rs:431
 msgid "Adicionar outro efeito"
 msgstr "दूसरा प्रभाव जोड़ें"
 
-#: rust/snapnab/src/window.rs:432
+#: rust/anycapture/src/window.rs:432
 msgid "Remover este efeito"
 msgstr "यह प्रभाव हटाएँ"
 
-#: rust/snapnab/src/window.rs:473
+#: rust/anycapture/src/window.rs:473
 msgid "Compartilhar:"
 msgstr "साझा करें:"
 
-#: rust/snapnab/src/window.rs:496
+#: rust/anycapture/src/window.rs:496
 msgid "Qualidade:"
 msgstr "गुणवत्ता:"
 
-#: rust/snapnab/src/window.rs:497
+#: rust/anycapture/src/window.rs:497
 msgid "Muito baixa"
 msgstr "बहुत कम"
 
-#: rust/snapnab/src/window.rs:528
+#: rust/anycapture/src/window.rs:528
 msgid "Webcam:"
 msgstr "वेबकैम:"
 
-#: rust/snapnab/src/window.rs:529
+#: rust/anycapture/src/window.rs:529
 msgid "Ligada"
 msgstr "चालू"
 
-#: rust/snapnab/src/window.rs:529 rust/snapnab/src/window.rs:540
+#: rust/anycapture/src/window.rs:529 rust/anycapture/src/window.rs:540
 msgid "Desligada"
 msgstr "बंद"
 
-#: rust/snapnab/src/window.rs:542
+#: rust/anycapture/src/window.rs:542
 msgid "Nenhuma webcam encontrada"
 msgstr "कोई वेबकैम नहीं मिला"
 
-#: rust/snapnab/src/window.rs:556
+#: rust/anycapture/src/window.rs:556
 msgid "Remover o fundo (chroma key)…"
 msgstr "पृष्ठभूमि हटाएँ (क्रोमा की)…"
 
-#: rust/snapnab/src/window.rs:591
+#: rust/anycapture/src/window.rs:591
 #, c-format
 msgid "%d s"
 msgstr "%d से."
 
-#: rust/snapnab/src/window.rs:595
+#: rust/anycapture/src/window.rs:595
 msgid "Atraso"
 msgstr "विलंब"
 
-#: rust/snapnab/src/window.rs:603
+#: rust/anycapture/src/window.rs:603
 msgid "1 segundo"
 msgstr "1 सेकंड"
 
-#: rust/snapnab/src/window.rs:604
+#: rust/anycapture/src/window.rs:604
 #, c-format
 msgid "%d segundos"
 msgstr "%d सेकंड"
 
-#: rust/snapnab/src/window.rs:643
+#: rust/anycapture/src/window.rs:643
 msgid "Gravar vídeo  ("
 msgstr "वीडियो रिकॉर्ड करें  ("
 
-#: rust/snapnab/src/window.rs:643
+#: rust/anycapture/src/window.rs:643
 msgid "Capturar imagem  ("
 msgstr "छवि कैप्चर करें  ("
 
-#: rust/snapnab/src/window.rs:653
+#: rust/anycapture/src/window.rs:653
 msgid "Adicionar atalho"
 msgstr "शॉर्टकट जोड़ें"
 
-#: rust/snapnab/src/window.rs:725
+#: rust/anycapture/src/window.rs:725
 msgid "Capturar com este preset"
 msgstr "इस प्रीसेट से कैप्चर करें"
 
-#: rust/snapnab/src/window.rs:727
+#: rust/anycapture/src/window.rs:727
 msgid "Renomear…"
 msgstr "नाम बदलें…"
 
-#: rust/snapnab/src/window.rs:728
+#: rust/anycapture/src/window.rs:728
 msgid "Atalho…"
 msgstr "शॉर्टकट…"
 
-#: rust/snapnab/src/window.rs:770 rust/snapnab/tests/window.rs:160
+#: rust/anycapture/src/window.rs:770 rust/anycapture/tests/window.rs:160
 msgid "Novo preset…"
 msgstr "नया प्रीसेट…"
 
-#: rust/snapnab/src/window.rs:782
+#: rust/anycapture/src/window.rs:782
 msgid "Abrir Editor"
 msgstr "एडिटर खोलें"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Cortar bordas"
 msgstr "किनारे काटें"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Ajuste de cor"
 msgstr "रंग समायोजन"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Girar imagem"
 msgstr "छवि घुमाएँ"
 
-#: rust/snapnab/src/window.rs:88
+#: rust/anycapture/src/window.rs:88
 msgid "Resolução da imagem"
 msgstr "छवि रिज़ॉल्यूशन"
 
-#: rust/snapnab/src/window.rs:89
+#: rust/anycapture/src/window.rs:89
 msgid "Embelezar (fundo, margem e sombra)"
 msgstr "सुंदर बनाएँ (पृष्ठभूमि, मार्जिन और छाया)"
 
-#: rust/snapnab/src/window.rs:816
+#: rust/anycapture/src/window.rs:816
 msgid "Visualizar no Editor"
 msgstr "एडिटर में पूर्वावलोकन"
 
-#: rust/snapnab/src/window.rs:819
+#: rust/anycapture/src/window.rs:819
 msgid "Gravar microfone"
 msgstr "माइक्रोफ़ोन रिकॉर्ड करें"
 
-#: rust/snapnab/src/window.rs:820
+#: rust/anycapture/src/window.rs:820
 msgid "Gravar áudio do sistema"
 msgstr "सिस्टम ऑडियो रिकॉर्ड करें"
 
-#: rust/snapnab/src/window.rs:822
+#: rust/anycapture/src/window.rs:822
 msgid "Copiar para a área de transferência"
 msgstr "क्लिपबोर्ड पर कॉपी करें"
 
-#: rust/snapnab/src/engine/scroll.rs:159
+#: rust/anycapture/src/engine/scroll.rs:159
 msgid "A janela será ampliada além da tela, capturada e restaurada."
 msgstr "विंडो को स्क्रीन से बड़ा किया जाएगा, कैप्चर किया जाएगा और फिर पहले जैसा कर दिया जाएगा।"
 
-#: rust/snapnab/src/engine/scroll.rs:160
+#: rust/anycapture/src/engine/scroll.rs:160
 msgid "Nova largura (px)"
 msgstr "नई चौड़ाई (px)"
 
-#: rust/snapnab/src/engine/scroll.rs:161
+#: rust/anycapture/src/engine/scroll.rs:161
 msgid "Nova altura (px)"
 msgstr "नई ऊँचाई (px)"
 
-#: rust/snapnab/src/engine/scroll.rs:283
-msgid "Snapnab — rolagem panorâmica"
-msgstr "Snapnab — पैनोरमा स्क्रॉल"
+#: rust/anycapture/src/engine/scroll.rs:283
+msgid "AnyCapture — rolagem panorâmica"
+msgstr "AnyCapture — पैनोरमा स्क्रॉल"
 
-#: rust/snapnab/src/engine/scroll.rs:379
+#: rust/anycapture/src/engine/scroll.rs:379
 msgid "Role o conteúdo dentro da moldura…"
 msgstr "फ़्रेम के अंदर सामग्री स्क्रॉल करें…"
 
-#: rust/snapnab/src/engine/scroll.rs:381
+#: rust/anycapture/src/engine/scroll.rs:381
 #, c-format
 msgid "Capturando: %d × %d px"
 msgstr "कैप्चर हो रहा है: %d × %d px"
 
-#: rust/snapnab/src/engine/scroll.rs:387
+#: rust/anycapture/src/engine/scroll.rs:387
 msgid "Concluir"
 msgstr "पूरा करें"
 
-#: rust/snapnab/src/engine/video.rs:123
+#: rust/anycapture/src/engine/video.rs:123
 msgid "Recomeçar a gravação?"
 msgstr "रिकॉर्डिंग फिर से शुरू करें?"
 
-#: rust/snapnab/src/engine/video.rs:124
+#: rust/anycapture/src/engine/video.rs:124
 msgid "O que foi gravado até agora será descartado."
 msgstr "अब तक जो रिकॉर्ड हुआ है वह हटा दिया जाएगा।"
 
-#: rust/snapnab/src/engine/video.rs:125
+#: rust/anycapture/src/engine/video.rs:125
 msgid "Não perguntar de novo"
 msgstr "फिर से न पूछें"
 
-#: rust/snapnab/src/engine/video.rs:191
-msgid "Snapnab — gravação"
-msgstr "Snapnab — रिकॉर्डिंग"
+#: rust/anycapture/src/engine/video.rs:191
+msgid "AnyCapture — gravação"
+msgstr "AnyCapture — रिकॉर्डिंग"
 
-#: rust/snapnab/src/engine/video.rs:318
+#: rust/anycapture/src/engine/video.rs:318
 msgid ""
 "Não foi possível iniciar a gravação.\n"
 "\n"
@@ -7250,39 +7250,39 @@ msgstr ""
 "रिकॉर्डिंग शुरू नहीं हो सकी।\n"
 "\n"
 
-#: rust/snapnab/src/engine/video.rs:360
+#: rust/anycapture/src/engine/video.rs:360
 msgid "Teclas: não mostrar"
 msgstr "कुंजियाँ: न दिखाएँ"
 
-#: rust/snapnab/src/engine/video.rs:361
+#: rust/anycapture/src/engine/video.rs:361
 msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
 msgstr "कुंजियाँ: केवल शॉर्टकट (Ctrl, Alt, Win, F1…)"
 
-#: rust/snapnab/src/engine/video.rs:361
+#: rust/anycapture/src/engine/video.rs:361
 msgid "Teclas: todas (inclusive o que for digitado)"
 msgstr "कुंजियाँ: सभी (जो टाइप किया जाए वह भी)"
 
-#: rust/snapnab/src/engine/video.rs:405
+#: rust/anycapture/src/engine/video.rs:405
 msgid "Há uma gravação em andamento. Parar e sair?"
 msgstr "रिकॉर्डिंग चल रही है। रोकें और बाहर निकलें?"
 
-#: rust/snapnab/src/engine/video.rs:415
+#: rust/anycapture/src/engine/video.rs:415
 msgid "Imagem durante gravação"
 msgstr "रिकॉर्डिंग के दौरान छवि"
 
-#: rust/snapnab/src/engine/video.rs:421
+#: rust/anycapture/src/engine/video.rs:421
 msgid "Imagem capturada sem parar a gravação."
 msgstr "रिकॉर्डिंग रोके बिना छवि कैप्चर की गई।"
 
-#: rust/snapnab/src/engine/video.rs:481
-msgid "Snapnab — áudio salvo"
-msgstr "Snapnab — ऑडियो सहेजा गया"
+#: rust/anycapture/src/engine/video.rs:481
+msgid "AnyCapture — áudio salvo"
+msgstr "AnyCapture — ऑडियो सहेजा गया"
 
-#: rust/snapnab/src/engine/video.rs:506
+#: rust/anycapture/src/engine/video.rs:506
 msgid "Vídeo salvo na biblioteca: "
 msgstr "वीडियो लाइब्रेरी में सहेजा गया: "
 
-#: rust/snapnab/src/engine/video.rs:509
+#: rust/anycapture/src/engine/video.rs:509
 msgid ""
 "A gravação falhou.\n"
 "\n"
@@ -7290,15 +7290,15 @@ msgstr ""
 "रिकॉर्डिंग विफल रही।\n"
 "\n"
 
-#: rust/snapnab/src/engine/video.rs:520
-msgid "Snapnab — pouco espaço em disco"
-msgstr "Snapnab — डिस्क में कम जगह"
+#: rust/anycapture/src/engine/video.rs:520
+msgid "AnyCapture — pouco espaço em disco"
+msgstr "AnyCapture — डिस्क में कम जगह"
 
-#: rust/snapnab/src/engine/video.rs:520
+#: rust/anycapture/src/engine/video.rs:520
 msgid "Restam menos de 1 GB livres na unidade da biblioteca."
 msgstr "लाइब्रेरी ड्राइव पर 1 GB से कम जगह बची है।"
 
-#: rust/snapnab/src/engine/video.rs:522
+#: rust/anycapture/src/engine/video.rs:522
 msgid "Gravação interrompida: espaço em disco insuficiente."
 msgstr "रिकॉर्डिंग रुकी: डिस्क में पर्याप्त जगह नहीं है।"
 
@@ -7486,6 +7486,6 @@ msgid "Conclua o login no navegador"
 msgstr "ब्राउज़र में साइन-इन पूरा करें"
 
 #: rust/snapui/src/upload_ui.rs:210
-msgid "Autorize o Snapnab na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
-msgstr "खुले पेज पर Snapnab को अधिकृत करें। ब्राउज़र लौटने पर यह विंडो अपने आप बंद हो जाएगी।"
+msgid "Autorize o AnyCapture na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
+msgstr "खुले पेज पर AnyCapture को अधिकृत करें। ब्राउज़र लौटने पर यह विंडो अपने आप बंद हो जाएगी।"
 

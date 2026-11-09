@@ -1,4 +1,4 @@
-# Builds Snapnab on GitHub Actions with the same build.bat used locally.
+# Builds AnyCapture on GitHub Actions with the same build.bat used locally.
 # The artifacts produced here are the ones that will be sent to SignPath
 # for code signing (signing must start from a CI build of the public source).
 name: Build
@@ -30,7 +30,7 @@ jobs:
       - name: Rust tests (rust/)
         shell: cmd
         env:
-          SNAPNAB_GOLDEN_PIXELS: loose
+          ANYCAPTURE_GOLDEN_PIXELS: loose
         run: cargo test --locked --release --workspace --manifest-path rust/Cargo.toml
 
       - name: Build and package
@@ -40,34 +40,34 @@ jobs:
       - name: Check outputs
         shell: pwsh
         run: |
-          foreach ($pattern in 'dist\Snapnab\Snapnab.exe', 'dist\Snapnab\SnapnabEditor.exe', 'dist\Snapnab\SnapEx64.dll',
-                               'dist\Snapnab-*-win-x64.zip', 'dist\Snapnab-*-setup.exe') {
+          foreach ($pattern in 'dist\AnyCapture\AnyCapture.exe', 'dist\AnyCapture\AnyCaptureEditor.exe', 'dist\AnyCapture\SnapEx64.dll',
+                               'dist\AnyCapture-*-win-x64.zip', 'dist\AnyCapture-*-setup.exe') {
             if (-not (Test-Path $pattern)) { throw "missing: $pattern" }
           }
-          Get-ChildItem dist\Snapnab-* | ForEach-Object {
+          Get-ChildItem dist\AnyCapture-* | ForEach-Object {
             "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash, $_.Name
           } | Tee-Object dist\SHA256SUMS.txt
 
       - name: Upload program folder
         uses: actions/upload-artifact@v7
         with:
-          name: Snapnab-program
-          path: dist/Snapnab/
+          name: AnyCapture-program
+          path: dist/AnyCapture/
           if-no-files-found: error
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
         with:
-          name: Snapnab-packages
+          name: AnyCapture-packages
           path: |
-            dist/Snapnab-*-win-x64.zip
-            dist/Snapnab-*-setup.exe
+            dist/AnyCapture-*-win-x64.zip
+            dist/AnyCapture-*-setup.exe
             dist/SHA256SUMS.txt
           if-no-files-found: error
 
       - name: Upload symbols
         uses: actions/upload-artifact@v7
         with:
-          name: Snapnab-symbols
+          name: AnyCapture-symbols
           path: dist/symbols/
           if-no-files-found: warn

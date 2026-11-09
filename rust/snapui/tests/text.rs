@@ -1,4 +1,4 @@
-//! The interface's text in every script Snapnab ships, rendered on the GPU (wgpu) as the window draws it, against the
+//! The interface's text in every script AnyCapture ships, rendered on the GPU (wgpu) as the window draws it, against the
 //! image in tests/snapshots (Arabic and Urdu joined and right to left, Hindi and Bengali with their conjuncts).
 //! After an intended change: UPDATE_SNAPSHOTS=1 cargo test -p snapui, then look at the new image before committing.
 

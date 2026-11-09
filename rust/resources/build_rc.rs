@@ -1,4 +1,4 @@
-// Shared by the build.rs of Snapnab.exe and SnapnabEditor.exe (include!): fills resources/app.rc.in and links the
+// Shared by the build.rs of AnyCapture.exe and AnyCaptureEditor.exe (include!): fills resources/app.rc.in and links the
 // compiled resources (icon, manifest, version information) into the executable.
 
 fn embed_app_resources(name: &str, icon: &str, description: &str) {

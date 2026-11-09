@@ -1,4 +1,4 @@
-//! Internal log (CSnagitLogger, comp_10): %LOCALAPPDATA%\Snapnab\Logs\<program>.log, UTF-8 with a BOM, one line per
+//! Internal log (CSnagitLogger, comp_10): %LOCALAPPDATA%\AnyCapture\Logs\<program>.log, UTF-8 with a BOM, one line per
 //! message as "2026-11-03 02:52:05.705 [40284] text" (local time, thread id). Above 2 MB at startup the file moves to
 //! <program>.log.old. Every line also goes to OutputDebugString. The e2e suite reads these lines (tests/e2e logs.py).
 
@@ -24,7 +24,7 @@ pub fn app_version() -> &'static str {
     VERSION.get().map_or("", |v| v.as_str())
 }
 
-/// Opens the log of `component` ("Snapnab", "SnapnabEditor") and writes the start line.
+/// Opens the log of `component` ("AnyCapture", "AnyCaptureEditor") and writes the start line.
 pub fn init(component: &str, version: &str) {
     let path = crate::paths::logs_dir().join(format!("{component}.log"));
     if std::fs::metadata(&path).is_ok_and(|m| m.len() > ROTATE_AT) {

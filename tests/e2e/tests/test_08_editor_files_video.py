@@ -4,11 +4,11 @@ import time
 import pytest
 from PIL import Image
 
-from snapnab_e2e import apps, filedialog, library, presets, uia, win
-from snapnab_e2e import video as v
-from snapnab_e2e.apps import EditorCmd as M
-from snapnab_e2e.editor import BLUE, EditorSession, close, make_picture
-from snapnab_e2e.library import LibraryWatcher
+from anycapture_e2e import apps, filedialog, library, presets, uia, win
+from anycapture_e2e import video as v
+from anycapture_e2e.apps import EditorCmd as M
+from anycapture_e2e.editor import BLUE, EditorSession, close, make_picture
+from anycapture_e2e.library import LibraryWatcher
 
 # video view buttons (rust/snapedit/src/app/video.rs)
 # the video view's buttons: WM_COMMAND to the Editor's main window (the view is drawn inside it)
@@ -99,7 +99,7 @@ def video_in_editor(capture, logs):
     mp4 = v.record(capture, logs, 4)
     ed = apps.Editor()
     win.wait_until(lambda: win.is_visible(ed.hwnd) and mp4.stem in ed.title(), 20, what="video in the Editor")
-    win.wait_until(lambda: uia.exists(ed.hwnd, "SnapnabVideoView"), what="video view")
+    win.wait_until(lambda: uia.exists(ed.hwnd, "AnyCaptureVideoView"), what="video view")
     view = ed.hwnd
     apps.wait_quiet(1)
     return ed, view, mp4
@@ -132,7 +132,7 @@ def test_video_cut_and_save_mp4(video_in_editor, tmp_path):
     out = tmp_path / "cut.mp4"
     vcmd(view, B_SAVEMP4)
     filedialog.fill(ed.pid, out)
-    win.wait_until(lambda: out.exists() and out.stat().st_size > 1000 and not ed.popups("SnapnabForm"), 60,
+    win.wait_until(lambda: out.exists() and out.stat().st_size > 1000 and not ed.popups("AnyCaptureForm"), 60,
                    what="MP4 exported")
     time.sleep(1)
     d = v.duration(out)
@@ -164,7 +164,7 @@ def test_video_to_animated_gif(video_in_editor, tmp_path):
 def test_video_play_pause(video_in_editor):
     ed, view, mp4 = video_in_editor
     def label():
-        return uia.find(view, f"SnapnabVideoView.{B_PLAY - 2000}").window_text()
+        return uia.find(view, f"AnyCaptureVideoView.{B_PLAY - 2000}").window_text()
     before = label()
     vcmd(view, B_PLAY, 0.8)
     assert label() != before, "the button turns into Pause while playing"

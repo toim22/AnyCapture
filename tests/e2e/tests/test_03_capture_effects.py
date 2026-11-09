@@ -4,7 +4,7 @@ Each test captures the same fixed region of the solid red target window (#C81E1E
 import pytest
 from PIL import Image
 
-from snapnab_e2e import presets, win
+from anycapture_e2e import presets, win
 
 RED = (200, 30, 30)
 W, H = 240, 120
@@ -109,7 +109,7 @@ def test_rotate(capture, tmp_path, target, kind, size):
 
 
 def test_watermark(capture, tmp_path, target):
-    from snapnab_e2e import apps
+    from anycapture_e2e import apps
     base, _ = shoot(capture, tmp_path, target, name="base")
     apps.kill_all()
     img, _ = shoot(capture, tmp_path, target, dict(Watermark=1, WatermarkText="E2E", WatermarkOpacity=80,

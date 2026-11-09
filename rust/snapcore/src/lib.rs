@@ -1,9 +1,10 @@
-//! snapcore — Snapnab's shared Rust layer, used by both programs (Snapnab.exe and SnapnabEditor.exe) and by
-//! SnapnabTool.exe (docs/ARCHITECTURE.md).
+//! snapcore — AnyCapture's shared Rust layer, used by both programs (AnyCapture.exe and AnyCaptureEditor.exe) and by
+//! AnyCaptureTool.exe (docs/ARCHITECTURE.md).
 //!
 //! - `container`: the compound file inside every .snap
-//! - `log`: %LOCALAPPDATA%\Snapnab\Logs\<program>.log
-//! - `reg`: the settings in HKCU\Software\Snapnab\1
+//! - `log`: %LOCALAPPDATA%\AnyCapture\Logs\<program>.log
+//! - `reg`: the settings in HKCU\Software\AnyCapture\1
+//! - `legacy`: what the program's former name left (folders, settings, logins), moved over on the first start
 //! - `i18n`: the interface language and the lang\<code>.po catalogs
 //! - `xml`: the XML reader and writer (presets, .snap documents, Names.xml)
 //! - `image`, `codec`: images in memory and image files through the Windows codecs (WIC)
@@ -49,6 +50,7 @@ pub mod i18n;
 pub mod image;
 pub mod instance;
 pub mod ipc;
+pub mod legacy;
 pub mod library;
 pub mod links;
 pub mod log;

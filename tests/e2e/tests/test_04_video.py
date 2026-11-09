@@ -5,9 +5,9 @@ import time
 
 import pytest
 
-from snapnab_e2e import apps, library, presets, win
-from snapnab_e2e import video as v
-from snapnab_e2e.logs import state
+from anycapture_e2e import apps, library, presets, win
+from anycapture_e2e import video as v
+from anycapture_e2e.logs import state
 
 pytestmark = pytest.mark.video
 TDM_CLICK_BUTTON = 0x0400 + 102
@@ -62,7 +62,7 @@ def test_restart_discards_what_was_recorded(capture, logs, lib):
     td = win.wait_until(lambda: [h for h in capture.popups("#32770")], what="restart confirmation")[0]
     win.send(td, TDM_CLICK_BUTTON, 6)            # IDYES
     logs.capture.wait(r"Recorder: canceled")
-    win.wait_window("SnapnabCountdown", 5)
+    win.wait_window("AnyCaptureCountdown", 5)
     v.click(hud, "record")
     logs.capture.wait(r"Recorder: started", 15, count=2)
     time.sleep(1.5)
@@ -123,10 +123,10 @@ def test_pause_and_stop_hotkeys(capture, logs, lib):
     if failed:
         v.click(hud, "cancel")
         raise AssertionError(
-            "the recording hotkeys could not be registered (another program owns them) and Snapnab has no fallback "
+            "the recording hotkeys could not be registered (another program owns them) and AnyCapture has no fallback "
             "for them nor tells the user — only the HUD buttons work:\n" + "\n".join(failed))
     win.keys("+{F9}")
-    win.wait_window("SnapnabCountdown", 5)
+    win.wait_window("AnyCaptureCountdown", 5)
     win.keys("+{F9}")
     logs.capture.wait(r"Recorder: started", 15)
     time.sleep(1.5)

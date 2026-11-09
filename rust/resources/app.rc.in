@@ -1,4 +1,4 @@
-// Resources of Snapnab.exe and SnapnabEditor.exe (the former src/capture/Snapnab.rc and src/editor/SnapnabEditor.rc):
+// Resources of AnyCapture.exe and AnyCaptureEditor.exe (the former src/capture/AnyCapture.rc and src/editor/AnyCaptureEditor.rc):
 // the icon, the manifest (per-monitor DPI v2, Common Controls 6, asInvoker) and the version information. build.rs
 // fills the @…@ fields and compiles it with rc.exe.
 #pragma code_page(65001)
@@ -23,7 +23,7 @@ BEGIN
       VALUE "InternalName", "@NAME@"
       VALUE "OriginalFilename", "@NAME@.exe"
       VALUE "LegalCopyright", "Copyright © 2026 Antonio Rezende"
-      VALUE "ProductName", "Snapnab"
+      VALUE "ProductName", "AnyCapture"
       VALUE "ProductVersion", "@VERSION@"
     END
   END

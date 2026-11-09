@@ -3,7 +3,7 @@
 //! requested language it falls back to English and, without that, to the Portuguese in the code itself.
 //!
 //! The strings in the code are Brazilian Portuguese; `tr` returns the translation for the current language.
-//! scripts/i18n.py extracts the strings to lang/snapnab.pot and checks the catalogs.
+//! scripts/i18n.py extracts the strings to lang/anycapture.pot and checks the catalogs.
 
 use std::collections::HashMap;
 use std::ffi::OsStr;

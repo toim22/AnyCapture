@@ -207,9 +207,9 @@ pub fn build_menu() -> Vec<(String, Menu)> {
         cmd(M_TB_CUSTOMIZE, "&Personalizar a barra de ferramentas…"),
     ]);
     let help = Menu::popup(vec![
-        cmd(M_MANUAL, "&Manual do Snapnab\tF1"),
+        cmd(M_MANUAL, "&Manual do AnyCapture\tF1"),
         cmd(M_SHORTCUTS, "&Atalhos de teclado"),
-        cmd(M_ABOUT, "&Sobre o Snapnab Editor"),
+        cmd(M_ABOUT, "&Sobre o AnyCapture Editor"),
     ]);
     let cursors =
         Menu::popup(cursor_stamps().into_iter().enumerate().map(|(i, (_, n))| Item::Cmd(M_CURSOR_BASE + i as u32, n)).collect());

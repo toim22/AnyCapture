@@ -210,7 +210,7 @@ pub fn save_pdf(path: &[u16], img: &Image, links: &[Link]) -> Result<(), PdfErro
             *c = b'_';
         }
     }
-    let mut info = b"<< /Producer (Snapnab) /Title (".to_vec();
+    let mut info = b"<< /Producer (AnyCapture) /Title (".to_vec();
     info.extend_from_slice(&title);
     info.extend_from_slice(b") >>");
     obj(&mut out, &mut offs, &info);

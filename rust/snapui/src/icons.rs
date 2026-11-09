@@ -13,7 +13,7 @@ pub use snapcore::icons::Icon;
 struct Cache(Arc<Mutex<HashMap<(Icon, u32, Color32), TextureHandle>>>);
 
 fn texture(ctx: &egui::Context, icon: Icon, px: u32, c: Color32) -> TextureHandle {
-    let cache = ctx.data_mut(|d| d.get_temp_mut_or_default::<Cache>(egui::Id::unique("snapnab-icons")).clone());
+    let cache = ctx.data_mut(|d| d.get_temp_mut_or_default::<Cache>(egui::Id::unique("anycapture-icons")).clone());
     let mut map = cache.0.lock().unwrap();
     map.entry((icon, px, c))
         .or_insert_with(|| {

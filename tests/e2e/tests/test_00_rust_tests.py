@@ -6,7 +6,7 @@ import subprocess
 
 import pytest
 
-from snapnab_e2e.config import ARTIFACTS, RUST_DIR
+from anycapture_e2e.config import ARTIFACTS, RUST_DIR
 
 
 @pytest.mark.slow

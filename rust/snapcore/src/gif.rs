@@ -596,7 +596,7 @@ mod tests {
     #[test]
     fn writes_a_gif() {
         let p = std::env::temp_dir().join(format!("snapcore_gif_{}.gif", std::process::id()));
-        let mut g = GifWriter::open(&p, 40, 30, 10.0, 8, true, true, b"Snapnab").unwrap();
+        let mut g = GifWriter::open(&p, 40, 30, 10.0, 8, true, true, b"AnyCapture").unwrap();
         let mut img = Image::new(40, 30, 0xFF2080C0);
         assert!(g.add_frame(&img, -1));
         for i in 0..200 {

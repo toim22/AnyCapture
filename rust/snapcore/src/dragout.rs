@@ -105,12 +105,12 @@ pub fn drag_files_out(source: isize, files: &[String], thumb: Option<&Image>, al
     }
 }
 
-/// TempImageFile: a temporary copy of an image for dragging or copying as a file, %TEMP%\Snapnab\<name>.png (C29:
+/// TempImageFile: a temporary copy of an image for dragging or copying as a file, %TEMP%\AnyCapture\<name>.png (C29:
 /// metadata stripped when StripMetadata or `strip` says so).
 pub fn temp_image_file(img: &Image, name: &str, strip: bool, version: &str) -> Option<String> {
-    let dir = std::env::temp_dir().join("Snapnab");
+    let dir = std::env::temp_dir().join("AnyCapture");
     let _ = std::fs::create_dir_all(&dir);
-    let name = if name.is_empty() { format!("Snapnab_{}", String::from_utf16_lossy(&crate::library::time_stamp(false))) } else { name.to_string() };
+    let name = if name.is_empty() { format!("AnyCapture_{}", String::from_utf16_lossy(&crate::library::time_stamp(false))) } else { name.to_string() };
     let name: String = name.chars().map(|c| if "\\/:*?\"<>|".contains(c) { '_' } else { c }).collect();
     let path = dir.join(format!("{name}.png"));
     let mut o = SaveOptions::from_settings();

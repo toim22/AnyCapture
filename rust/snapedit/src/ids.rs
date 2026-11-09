@@ -1,5 +1,5 @@
 //! The Editor's command IDs: the same numbers as the C++ editor (src/editor/main.cpp), which the menus, the toolbar and
-//! the e2e suite (WM_COMMAND posted to the "SnapnabEditor" window) use.
+//! the e2e suite (WM_COMMAND posted to the "AnyCaptureEditor" window) use.
 
 // toolbar actions
 pub const T_CAPTURE: u32 = 1;

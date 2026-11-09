@@ -1,4 +1,4 @@
-//! SnapnabEditor.exe: the image and video editor.
+//! AnyCaptureEditor.exe: the image and video editor.
 #![windows_subsystem = "windows"]
 
 mod app;

@@ -1,4 +1,4 @@
-# Generates rust/resources/Snapnab.ico and SnapnabEditor.ico (PNG embedded in ICO) without external dependencies.
+# Generates rust/resources/AnyCapture.ico and AnyCaptureEditor.ico (PNG embedded in ICO) without external dependencies.
 #   python scripts/make_icons.py
 import zlib, struct, math, os
 
@@ -61,6 +61,6 @@ def ico(path, editor):
     out += b''.join(imgs)
     open(path, 'wb').write(out)
 
-ico(os.path.join(OUT, 'Snapnab.ico'), False)
-ico(os.path.join(OUT, 'SnapnabEditor.ico'), True)
+ico(os.path.join(OUT, 'AnyCapture.ico'), False)
+ico(os.path.join(OUT, 'AnyCaptureEditor.ico'), True)
 print('ok')

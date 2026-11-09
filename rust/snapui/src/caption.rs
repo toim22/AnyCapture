@@ -63,7 +63,7 @@ fn scale(v: i32, dpi: i32) -> i32 {
     (v * dpi + 48) / 96
 }
 
-/// Gives a window the Snapnab title bar (called by the host as soon as the window exists).
+/// Gives a window the AnyCapture title bar (called by the host as soon as the window exists).
 pub fn install(hwnd: isize, resizable: bool) {
     {
         let mut g = CAPS.lock().unwrap_or_else(|e| e.into_inner());
@@ -221,7 +221,7 @@ fn strip(ui: &mut egui::Ui, hwnd: isize, title: &str) {
         let w = ui.painter().layout_no_wrap(label.clone(), font.clone(), fg).size().x + 20.0;
         let r = Rect::from_min_size(pos2(x, full.top() + HIT_PAD), vec2(w, full.height() - 2.0 * HIT_PAD));
         let resp = ui.interact(r, ui.scope_id().with(("caption-menu", i)), Sense::click());
-        crate::widgets::set_aid(ui, &resp, &format!("SnapnabMenu.{i}"));
+        crate::widgets::set_aid(ui, &resp, &format!("AnyCaptureMenu.{i}"));
         resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, &label));
         let lit = open == Some(i) || (open.is_none() && resp.hovered());
         if lit {
@@ -254,7 +254,7 @@ fn strip(ui: &mut egui::Ui, hwnd: isize, title: &str) {
             1 => "Maximize",
             _ => "Close",
         };
-        crate::widgets::set_aid(ui, &resp, &format!("SnapnabCaption.{name}"));
+        crate::widgets::set_aid(ui, &resp, &format!("AnyCaptureCaption.{name}"));
         resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, name));
         let close = k == 2;
         let mut glyph = fg;

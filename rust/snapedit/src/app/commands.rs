@@ -433,7 +433,7 @@ impl Editor {
             M_ABOUT => {
                 // no paths or other details of this computer: the box may end up in a screenshot
                 let text = format!(
-                    "Snapnab Editor {}\nCopyright © 2026 Antonio Rezende\n\n{}\n\n{}",
+                    "AnyCapture Editor {}\nCopyright © 2026 Antonio Rezende\n\n{}\n\n{}",
                     super::VERSION,
                     tr("Edição de capturas com objetos vetoriais, efeitos, Smart Move,\nOCR, exportação PDF e edição de vídeo (cortes e GIF)."),
                     tr("Software livre sob a GNU General Public License versão 3.")
@@ -613,7 +613,7 @@ impl Editor {
                 if self.cv.has_raster_selection() || self.cv.has_crop() {
                     self.cv.crop_to_selection();
                 } else {
-                    self.inform(tr("Faça uma seleção (ferramenta Seleção) ou um recorte primeiro."), "Snapnab Editor");
+                    self.inform(tr("Faça uma seleção (ferramenta Seleção) ou um recorte primeiro."), "AnyCapture Editor");
                 }
                 return;
             }
@@ -1002,11 +1002,11 @@ impl Editor {
         }
     }
 
-    /// FilesForDrag: images go as PNG with the annotations (in %TEMP%\Snapnab, named after the capture's time),
+    /// FilesForDrag: images go as PNG with the annotations (in %TEMP%\AnyCapture, named after the capture's time),
     /// videos as the library's MP4.
     fn files_for_drag(&self, paths: &[String]) -> Vec<String> {
         use std::os::windows::fs::MetadataExt;
-        let dir = std::env::temp_dir().join("Snapnab");
+        let dir = std::env::temp_dir().join("AnyCapture");
         let _ = std::fs::create_dir_all(&dir);
         let mut out: Vec<String> = Vec::new();
         for p in paths {

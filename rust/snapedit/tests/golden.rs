@@ -1,5 +1,5 @@
 //! The golden checks: what the code gives for fixed inputs, against what the former C++ code (or the libraries as the
-//! C++ build used them) gave, kept in `tests/data`. The C++ test program (`SnapnabTests.exe`) ran these until the C++
+//! C++ build used them) gave, kept in `tests/data`. The C++ test program (`AnyCaptureTests.exe`) ran these until the C++
 //! went away; each generator here builds the same lines, in the same order, with the same printf formatting.
 //!
 //! A mismatch writes what this build gives to `target/golden/<file>` so it can be compared with the reference.
@@ -27,12 +27,12 @@ fn data_dir() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("..").join("..").join("tests").join("data")
 }
 
-/// `SNAPNAB_GOLDEN_PIXELS=loose` (set by the CI) compares the lines without their 16-digit hashes, and the PDF lines
+/// `ANYCAPTURE_GOLDEN_PIXELS=loose` (set by the CI) compares the lines without their 16-digit hashes, and the PDF lines
 /// without their byte size. Drawing and PNG encoding go through Windows (GDI+, WIC), and another Windows version, such
 /// as the CI's Windows Server, gives a few different edge pixels; the rest of each line (sizes, bounds, XML, texts)
 /// must still match. Without the variable every line must match exactly, as on the machine the references come from.
 fn loose_pixels() -> bool {
-    std::env::var("SNAPNAB_GOLDEN_PIXELS").is_ok_and(|v| v.eq_ignore_ascii_case("loose"))
+    std::env::var("ANYCAPTURE_GOLDEN_PIXELS").is_ok_and(|v| v.eq_ignore_ascii_case("loose"))
 }
 
 fn mask_pixels(line: &str) -> String {
@@ -72,7 +72,7 @@ fn compare(file: &str, lines: &[String]) {
         }
     }
     if diffs.is_empty() {
-        eprintln!("{file}: {masked} line(s) differ only in pixel hashes (SNAPNAB_GOLDEN_PIXELS=loose)");
+        eprintln!("{file}: {masked} line(s) differ only in pixel hashes (ANYCAPTURE_GOLDEN_PIXELS=loose)");
         return;
     }
     panic!("{file}: {} line(s) differ (this build's lines are in target/golden/{file})\n{}", diffs.len(),
@@ -262,7 +262,7 @@ fn misc() {
     for v in [-1.0f32, 0.0, 0.001, 0.5, 1.0, 2.0, 12.5, 1e9] {
         l.push(format!("tone {}: {} {}", g(v as f64), hdr::tone_map(v, 80.0), hdr::tone_map(v, 240.0)));
     }
-    for (n, t) in ["Hello Snapnab 2026", "4111 1111 1111 1111", "Grab text from the screen", "ABC-123 xyz"].iter().enumerate() {
+    for (n, t) in ["Hello AnyCapture 2026", "4111 1111 1111 1111", "Grab text from the screen", "ABC-123 xyz"].iter().enumerate() {
         let img = fx::caption(&Image::sized(560, 4, 0xFFFFFFFF), &w(t), true, 28, 0xFF000000, 0xFFFFFFFF);
         let r = ocr::run_ocr(&img);
         let r2 = ocr::run_ocr_lines(&img);
@@ -353,7 +353,7 @@ fn pixels() {
         inplace("emboss10", &|t| fx::emboss(t, 12));
         inplace("sharpen40", &|t| fx::sharpen(t, 40));
         inplace("sharpen100", &|t| fx::sharpen(t, 100));
-        inplace("watermark", &|t| fx::watermark(t, &w("Snapnab"), 35, false, false));
+        inplace("watermark", &|t| fx::watermark(t, &w("AnyCapture"), 35, false, false));
         inplace("watermarkTiled", &|t| fx::watermark(t, &w("Confidencial ação"), 60, true, true));
         l.push(fp(&k("border"), &fx::border(im, 5, 0xFF00FF00)));
         l.push(fp(&k("shadow"), &fx::shadow(im, 6, 6, 50)));
@@ -373,7 +373,7 @@ fn pixels() {
         l.push(fp(&k("spot"), &fx::spotlight(im, Rect::new(10, 8, 40, 30), 50, 3, 100, false)));
         l.push(fp(&k("spotZoom"), &fx::spotlight(im, Rect::new(10, 8, 40, 30), 70, 0, 150, true)));
         l.push(fp(&k("spotOut"), &fx::spotlight(im, Rect::new(500, 500, 600, 600), 70, 0, 150, true)));
-        l.push(fp(&k("caption"), &fx::caption(im, &w("Snapnab — teste"), false, 12, 0xFFFFFFFF, 0xFF202020)));
+        l.push(fp(&k("caption"), &fx::caption(im, &w("AnyCapture — teste"), false, 12, 0xFFFFFFFF, 0xFF202020)));
         l.push(fp(&k("captionTop"), &fx::caption(im, &w("Um texto bem comprido que não cabe na largura"), true, 14, 0xFF000000, 0x80FFFFFF)));
         l.push(fp(&k("scaleHQ"), &gdip::scale_image(im, 45, 31, true)));
         l.push(fp(&k("scaleNN"), &gdip::scale_image(im, 150, 20, false)));
@@ -413,7 +413,7 @@ fn pixels() {
         e.watermark = true;
         run("ce watermark", &e);
         e.caption = true;
-        e.caption_text = w("Snapnab");
+        e.caption_text = w("AnyCapture");
         e.caption_top = true;
         run("ce caption", &e);
         e.border = true;
@@ -821,7 +821,7 @@ fn painters() {
     for h in 0..3 {
         for v in 0..3 {
             let mut o = obj(ObjType::Text, 15.0, 10.0, 185.0, 140.0);
-            o.text = w("Snapnab text\nsecond line");
+            o.text = w("AnyCapture text\nsecond line");
             o.style.align_h = h;
             o.style.align_v = v;
             o.style.font_size = 18.0 + h as f32 * 4.0;
@@ -1062,7 +1062,7 @@ fn extra(o: &DrawObj) -> String {
 }
 
 fn tmp(name: &str) -> String {
-    std::env::temp_dir().join(format!("snapnab_test_{name}")).to_string_lossy().into_owned()
+    std::env::temp_dir().join(format!("anycapture_test_{name}")).to_string_lossy().into_owned()
 }
 
 #[test]
@@ -1070,7 +1070,7 @@ fn documents() {
     gdip::startup();
     let mut l: Vec<String> = Vec::new();
     let read_xml = |x: &str| {
-        objects_from_clip(format!("<SnapnabObjects Source=\"\"><Objects>{x}</Objects></SnapnabObjects>").as_bytes()).0.into_iter().next()
+        objects_from_clip(format!("<AnyCaptureObjects Source=\"\"><Objects>{x}</Objects></AnyCaptureObjects>").as_bytes()).0.into_iter().next()
     };
 
     // a set of objects that touches every attribute
@@ -1347,9 +1347,9 @@ fn documents() {
         let bad = [
             "",
             "<Other/>",
-            r#"<SnapnabObjects><Objects><Arrow X1="1"/><Nope/></Objects></SnapnabObjects>"#,
-            r#"<SnapnabObjects Source="s"><Objects><Image StreamName="Image_1.png"/></Objects><Embedded Name="Image_1.png" Data="!!!"/></SnapnabObjects>"#,
-            r#"<SnapnabObjects Source="x">"#,
+            r#"<AnyCaptureObjects><Objects><Arrow X1="1"/><Nope/></Objects></AnyCaptureObjects>"#,
+            r#"<AnyCaptureObjects Source="s"><Objects><Image StreamName="Image_1.png"/></Objects><Embedded Name="Image_1.png" Data="!!!"/></AnyCaptureObjects>"#,
+            r#"<AnyCaptureObjects Source="x">"#,
         ];
         for b in bad {
             let (r, src) = objects_from_clip(b.as_bytes());

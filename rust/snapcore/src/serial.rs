@@ -445,7 +445,7 @@ fn base64_decode(s: &str) -> Vec<u8> {
 /// The objects as XML (as in the .snap), with their images as base64 PNG; `source` names the document.
 pub fn objects_to_clip(objs: &[DrawObj], source: &str) -> String {
     let mut embedded = Embedded::new();
-    let mut root = Node::new("SnapnabObjects");
+    let mut root = Node::new("AnyCaptureObjects");
     root.set("Source", source);
     let mut list = Node::new("Objects");
     let mut counter = 1;
@@ -461,9 +461,9 @@ pub fn objects_to_clip(objs: &[DrawObj], source: &str) -> String {
     xml::serialize(&root, false)
 }
 
-/// The objects of a clipboard text, and its source (None when the text is not Snapnab objects).
+/// The objects of a clipboard text, and its source (None when the text is not AnyCapture objects).
 pub fn objects_from_clip(text: &[u8]) -> (Vec<DrawObj>, Option<String>) {
-    let Some(root) = xml::parse(text).filter(|r| r.name == "SnapnabObjects") else { return (Vec::new(), None) };
+    let Some(root) = xml::parse(text).filter(|r| r.name == "AnyCaptureObjects") else { return (Vec::new(), None) };
     let source = get(&root, "Source").to_owned();
     let mut embedded = Embedded::new();
     for c in root.children.iter().filter(|c| c.name == "Embedded") {

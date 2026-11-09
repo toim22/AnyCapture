@@ -240,12 +240,12 @@ pub fn toolbar(ui: &mut egui::Ui, center: &[Entry], active: Tool, effect_name: &
     ui.horizontal_centered(|ui| {
         ui.spacing_mut().item_spacing.x = 2.0;
         for (id, label, h, primary) in [
-            (T_CAPTURE, "Capturar", "Nova captura de imagem (pede ao Snapnab)", true),
+            (T_CAPTURE, "Capturar", "Nova captura de imagem (pede ao AnyCapture)", true),
             (T_RECORD, "Gravar", "Nova gravação de vídeo", false),
         ] {
             let icon = command_icon(id).unwrap_or(Icon::Capture);
             let r = icons::tile(ui, icon, &tr(label), false, primary.then_some(CAPTURE_RED));
-            tag(ui, &r, &format!("SnapnabToolbar.{id}"));
+            tag(ui, &r, &format!("AnyCaptureToolbar.{id}"));
             hint(&r, &tr(h), &mut acts);
             if r.clicked() {
                 acts.push(BarAction::Command(id));
@@ -285,14 +285,14 @@ pub fn toolbar(ui: &mut egui::Ui, center: &[Entry], active: Tool, effect_name: &
                 EntryKind::Tool => T_TOOL_BASE + e.id,
                 _ => e.id,
             };
-            tag(ui, &r, &format!("SnapnabToolbar.{id}"));
+            tag(ui, &r, &format!("AnyCaptureToolbar.{id}"));
             hint(&r, &h, &mut acts);
             if r.clicked() {
                 acts.push(BarAction::Entry(*e));
             }
         }
         let r = more_tile(ui);
-        tag(ui, &r, "SnapnabToolbar.More");
+        tag(ui, &r, "AnyCaptureToolbar.More");
         if r.clicked() {
             acts.push(BarAction::More(r.rect.left_bottom()));
         }
@@ -305,7 +305,7 @@ pub fn toolbar(ui: &mut egui::Ui, center: &[Entry], active: Tool, effect_name: &
         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
             for (id, label, h) in outputs {
                 let r = icons::tile(ui, command_icon(id).unwrap_or(Icon::Gear), &tr(label), false, None);
-                tag(ui, &r, &format!("SnapnabToolbar.{id}"));
+                tag(ui, &r, &format!("AnyCaptureToolbar.{id}"));
                 hint(&r, &tr(h), &mut acts);
                 if r.clicked() {
                     acts.push(BarAction::Command(id));
@@ -418,7 +418,7 @@ pub enum LayerAction {
 pub fn layers(ui: &mut egui::Ui, c: &Canvas) -> Vec<LayerAction> {
     let mut acts = Vec::new();
     let bg = ui.allocate_rect(ui.max_rect(), egui::Sense::hover());
-    tag(ui, &bg, "SnapnabLayers");
+    tag(ui, &bg, "AnyCaptureLayers");
     let mut ui = ui.new_child(egui::UiBuilder::new().max_rect(ui.max_rect().shrink(6.0)));
     ui.label(RichText::new(tr("Camadas")).strong());
     let Some(d) = c.doc().filter(|d| !d.is_video) else {
@@ -436,18 +436,18 @@ pub fn layers(ui: &mut egui::Ui, c: &Canvas) -> Vec<LayerAction> {
             let sel = c.is_selected(i);
             ui.horizontal(|ui| {
                 let eye = icon_button(ui, if o.hidden { Icon::EyeOff } else { Icon::Eye }, o.hidden).on_hover_text(tr("Mostrar ou ocultar"));
-                tag(ui, &eye, &format!("SnapnabLayers.Eye.{i}"));
+                tag(ui, &eye, &format!("AnyCaptureLayers.Eye.{i}"));
                 if eye.clicked() {
                     acts.push(LayerAction::Hidden(i, !o.hidden));
                 }
                 let lock = icon_button(ui, if o.locked { Icon::Lock } else { Icon::Unlock }, !o.locked).on_hover_text(tr("Bloquear ou desbloquear"));
-                tag(ui, &lock, &format!("SnapnabLayers.Lock.{i}"));
+                tag(ui, &lock, &format!("AnyCaptureLayers.Lock.{i}"));
                 if lock.clicked() {
                     acts.push(LayerAction::Locked(i, !o.locked));
                 }
                 let img = icons::image(ui.ctx(), type_icon(o), 16.0, ui.visuals().text_color());
                 let r = ui.add(egui::Button::image_and_text(img, display_name(o)).selected(sel).frame_when_inactive(false));
-                tag(ui, &r, &format!("SnapnabLayers.{i}"));
+                tag(ui, &r, &format!("AnyCaptureLayers.{i}"));
                 if r.clicked() {
                     acts.push(LayerAction::Select(i, ui.input(|x| x.modifiers.ctrl)));
                 }

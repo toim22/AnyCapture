@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Draws the setup wizard's pictures from the app icon (rust/resources/Snapnab.ico), one file per display scale:
+"""Draws the setup wizard's pictures from the app icon (rust/resources/AnyCapture.ico), one file per display scale:
 
     python packaging/installer/wizard_images.py
 
@@ -7,7 +7,7 @@
   icon in white and the name; WizardLarge-dark-<percent>.png is its dark-mode version.
 - WizardSmall-<percent>.png: the icon at the top right of the other pages (55x55 at 100%), for both modes.
 
-Snapnab.iss lists the files; Setup picks the one that fits the screen's scale. Needs Pillow and Windows' Segoe UI.
+AnyCapture.iss lists the files; Setup picks the one that fits the screen's scale. Needs Pillow and Windows' Segoe UI.
 """
 
 import os
@@ -16,7 +16,7 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 HERE = Path(__file__).resolve().parent
-ICON = HERE.parent.parent / "rust" / "resources" / "Snapnab.ico"
+ICON = HERE.parent.parent / "rust" / "resources" / "AnyCapture.ico"
 FONT = Path(os.environ.get("WINDIR", r"C:\Windows")) / "Fonts" / "seguisb.ttf"  # Segoe UI Semibold
 SCALES = [100, 125, 150, 175, 200, 250]
 SS = 4  # supersampling
@@ -82,7 +82,7 @@ def large(scale: int, dark: bool) -> Image.Image:
     # the name
     font = ImageFont.truetype(str(FONT), round(W * 0.155))
     d = ImageDraw.Draw(img)
-    d.text((W / 2, y + s + round(H * 0.075)), "Snapnab", font=font, fill=(255, 255, 255, 255), anchor="mt")
+    d.text((W / 2, y + s + round(H * 0.075)), "AnyCapture", font=font, fill=(255, 255, 255, 255), anchor="mt")
     return img.resize((w, h), Image.LANCZOS).convert("RGB")
 
 

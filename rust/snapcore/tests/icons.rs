@@ -1,4 +1,4 @@
-//! Every icon draws something; SNAPNAB_ICON_SHEET=<file.png> also writes them all on one sheet to look at.
+//! Every icon draws something; ANYCAPTURE_ICON_SHEET=<file.png> also writes them all on one sheet to look at.
 
 use snapcore::codec::{self, Format, SaveOptions};
 use snapcore::icons::{Icon, render};
@@ -26,7 +26,7 @@ fn every_icon_draws() {
             }
         }
     }
-    if let Ok(out) = std::env::var("SNAPNAB_ICON_SHEET") {
+    if let Ok(out) = std::env::var("ANYCAPTURE_ICON_SHEET") {
         assert!(codec::save_file(std::path::Path::new(&out), &sheet, Format::Png, &SaveOptions::default(), "test"));
     }
 }

@@ -1,4 +1,4 @@
-qr_url: [QRCode|https://snapnab.example/a?b=1&c=ç|16,16,133,133|1]
+qr_url: [QRCode|https://anycapture.example/a?b=1&c=ç|16,16,133,133|1]
 qr_unicode: [QRCode|Olá, mundo — 中文 ✓|12,12,88,88|0]
 qr_one_pixel: [QRCode|tiny|4,4,26,26|0]
 qr_inverted: [QRCode|inverted|16,16,101,101|0]

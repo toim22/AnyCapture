@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Snapnab translations (gettext format).
+"""AnyCapture translations (gettext format).
 
-    python scripts/i18n.py extract    writes lang/snapnab.pot with the strings marked in the code
+    python scripts/i18n.py extract    writes lang/anycapture.pot with the strings marked in the code
     python scripts/i18n.py update     adds the new .pot strings to lang/*.po (and marks the ones that were removed)
     python scripts/i18n.py check      checks the catalogs: missing strings and %d/%s markers that differ from the original
 
 The strings in the code (rust/) are Brazilian Portuguese. Mark them with tr("...") or tr!("...") where the string is
 shown. A string in a static table, translated when it is shown (tr(label)), is extracted while it is already in
-lang/snapnab.pot; a new one in a table also needs a tr("...") call somewhere, or it is not extracted. The names of
+lang/anycapture.pot; a new one in a table also needs a tr("...") call somewhere, or it is not extracted. The names of
 the built-in stamps (rust/snapedit/src/stamp_data.rs, "emoji name|emoji name|…") are extracted too, one by one. The
 msgid is the literal's text as it is in the code (the \\n, \\t, \\" and \\\\ escapes are the same as in the .po).
 """
@@ -17,7 +17,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LANG_DIR = os.path.join(ROOT, 'lang')
-POT = os.path.join(LANG_DIR, 'snapnab.pot')
+POT = os.path.join(LANG_DIR, 'anycapture.pot')
 
 RUST_CALL = re.compile(r'\btr!?\(\s*"((?:[^"\\]|\\.)*)"\s*\)', re.S)
 RUST_LIT = re.compile(r'"((?:[^"\\]|\\.)*)"', re.S)
@@ -60,7 +60,7 @@ def strip_rust_comments(src):
 
 
 def known_msgids():
-    """The msgids of the current lang/snapnab.pot."""
+    """The msgids of the current lang/anycapture.pot."""
     if not os.path.exists(POT):
         return set()
     return {msgid for _, msgid, _, _ in parse_po(POT)[1]}
@@ -108,10 +108,10 @@ def po_quote(s):
 
 
 def header(lang=None):
-    h = ['# Snapnab — interface translations.', '# Copyright © 2026 Antonio Rezende. GPL-3.0.']
+    h = ['# AnyCapture — interface translations.', '# Copyright © 2026 Antonio Rezende. GPL-3.0.']
     if lang:
         h.append(f'# Language: {lang}.')
-    h += ['#', 'msgid ""', 'msgstr ""', '"Project-Id-Version: Snapnab\\n"', '"MIME-Version: 1.0\\n"',
+    h += ['#', 'msgid ""', 'msgstr ""', '"Project-Id-Version: AnyCapture\\n"', '"MIME-Version: 1.0\\n"',
           '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"']
     if lang:
         h.append(f'"Language: {lang}\\n"')

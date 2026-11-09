@@ -1,4 +1,4 @@
-//! SnapEx64.dll, "Snapnab Extended Window Capture" (≙ SnagEx64.dll, ds_pseudocode §6 / ds_arch §10.1).
+//! SnapEx64.dll, "AnyCapture Extended Window Capture" (≙ SnagEx64.dll, ds_pseudocode §6 / ds_arch §10.1).
 //!
 //! `Snap5000(msgEnter, msgLeave, threadId)` installs a WH_CALLWNDPROC hook on the target window's thread; when the
 //! window receives `msgEnter` it is subclassed and answers WM_GETMINMAXINFO with 19500×19500, so it can grow beyond
@@ -77,7 +77,7 @@ unsafe extern "system" fn hook_proc(code: i32, wp: WPARAM, lp: LPARAM) -> LRESUL
     unsafe { CallNextHookEx(None, code, wp, lp) }
 }
 
-/// threadId = 0: every thread of the desktop (like the original); Snapnab passes the target window's thread.
+/// threadId = 0: every thread of the desktop (like the original); AnyCapture passes the target window's thread.
 #[unsafe(no_mangle)]
 pub extern "system" fn Snap5000(msg_enter: u32, msg_leave: u32, thread_id: u32) -> BOOL {
     MSG_ENTER.store(msg_enter, SeqCst);

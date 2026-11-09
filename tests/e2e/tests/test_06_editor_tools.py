@@ -3,9 +3,9 @@ read from the saved .snap (objects) or from the composed image (raster tools).""
 import pytest
 import win32con
 
-from snapnab_e2e import library, win
-from snapnab_e2e.apps import EditorCmd as M
-from snapnab_e2e.editor import BLUE, BLUE_BOX, GREEN, GREEN_BOX, WHITE, EditorSession, close, make_picture
+from anycapture_e2e import library, win
+from anycapture_e2e.apps import EditorCmd as M
+from anycapture_e2e.editor import BLUE, BLUE_BOX, GREEN, GREEN_BOX, WHITE, EditorSession, close, make_picture
 
 
 @pytest.fixture

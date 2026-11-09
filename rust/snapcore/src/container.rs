@@ -10,11 +10,16 @@ use std::path::PathBuf;
 
 use cfb::{CompoundFile, Version};
 
-/// 0xCB + "SNAPNAB" + 16-byte format identifier (same bytes as kHeader in SnapFile.cpp)
+/// 0xCB + "ANYCAPT" + 16-byte format identifier (the identifier of kHeader in SnapFile.cpp)
 pub const HEADER: [u8; 24] = [
-    0xCB, b'S', b'N', b'A', b'P', b'N', b'A', b'B', 0x5A, 0x3C, 0x91, 0x0E, 0x6B, 0x2D, 0x4F, 0x18, 0xA7, 0x44, 0xC2, 0x9B,
+    0xCB, b'A', b'N', b'Y', b'C', b'A', b'P', b'T', 0x5A, 0x3C, 0x91, 0x0E, 0x6B, 0x2D, 0x4F, 0x18, 0xA7, 0x44, 0xC2, 0x9B,
     0x10, 0x7E, 0xD3, 0x55,
 ];
+
+/// The header the versions released under the program's former name wrote: their documents open as before.
+fn known_header(h: &[u8; 24]) -> bool {
+    h == &HEADER || (h[8..] == HEADER[8..] && h[..8] == crate::legacy::SNAP_SIGNATURE)
+}
 
 /// Largest stream read into memory: a bigger one is treated as a damaged file (a capture of 16k × 16k pixels as PNG is
 /// far below this).
@@ -70,7 +75,7 @@ impl Reader {
         let mut f = File::open(path)?;
         let mut h = [0u8; 24];
         f.read_exact(&mut h)?;
-        if h != HEADER {
+        if !known_header(&h) {
             return Err(io::Error::new(io::ErrorKind::InvalidData, "not a .snap file"));
         }
         Ok(Reader { cf: CompoundFile::open(Offset::new(f)?)? })
@@ -93,7 +98,7 @@ pub struct Writer {
 }
 
 impl Writer {
-    /// Creates (or truncates) the file. V3 (512-byte sectors), like the Windows API writes them, so older Snapnab
+    /// Creates (or truncates) the file. V3 (512-byte sectors), like the Windows API writes them, so older AnyCapture
     /// versions open the result too.
     pub fn create(path: &std::path::Path) -> io::Result<Writer> {
         let mut f = File::create(path)?;
@@ -136,7 +141,7 @@ fn stream_path(stream: &str) -> PathBuf {
 
 pub fn is_snap(path: &std::path::Path) -> bool {
     let mut h = [0u8; 24];
-    File::open(path).and_then(|mut f| f.read_exact(&mut h)).is_ok() && h == HEADER
+    File::open(path).and_then(|mut f| f.read_exact(&mut h)).is_ok() && known_header(&h)
 }
 
 #[cfg(test)]
@@ -164,6 +169,23 @@ mod tests {
         assert!(r.read("Frame0/ImageStorage/Image_1.png").unwrap().is_empty());
         assert!(r.read("Frame1/Document").is_err());
         drop(r);
+        std::fs::remove_file(&p).unwrap();
+    }
+
+    #[test]
+    fn opens_documents_of_the_former_name() {
+        let p = tmp("old.snap");
+        let mut w = Writer::create(&p).unwrap();
+        w.write("Index", b"<Index/>").unwrap();
+        w.finish().unwrap();
+        let mut bytes = std::fs::read(&p).unwrap();
+        bytes[..8].copy_from_slice(&crate::legacy::SNAP_SIGNATURE);
+        std::fs::write(&p, &bytes).unwrap();
+        assert!(is_snap(&p));
+        assert_eq!(Reader::open(&p).unwrap().read("Index").unwrap(), b"<Index/>");
+        bytes[9] ^= 1; // a different format identifier is not a .snap
+        std::fs::write(&p, &bytes).unwrap();
+        assert!(!is_snap(&p));
         std::fs::remove_file(&p).unwrap();
     }
 

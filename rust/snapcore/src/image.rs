@@ -1,7 +1,7 @@
 //! In-memory image (BGRA 32 bpp, straight alpha), as `Image` in Image.h: 0xAARRGGBB per pixel, rows from top to bottom,
 //! with the helpers of Image.cpp (Crop, Blit, FillRect, BlendOver) and of Image.h (ARGB, CA…, FromColorref).
 
-/// Metadata carried with an image (C29): what an imported photo had (EXIF) and what Snapnab writes when saving.
+/// Metadata carried with an image (C29): what an imported photo had (EXIF) and what AnyCapture writes when saving.
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Meta {
     pub date_taken: String, // "YYYY:MM:DD HH:MM:SS" (EXIF form)

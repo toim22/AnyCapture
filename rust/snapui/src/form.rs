@@ -124,7 +124,7 @@ thread_local! {
 }
 
 /// Print Screen in a hotkey field (#6): Windows sends no key-down for it, so the hotkey control never sees it, and the
-/// key may belong to the Snipping Tool or to a Snapnab capture. While a hotkey field of this thread's form has the
+/// key may belong to the Snipping Tool or to a AnyCapture capture. While a hotkey field of this thread's form has the
 /// focus, this low-level hook (installed after those, so it comes first) puts the key in the field and keeps it.
 unsafe extern "system" fn print_screen_proc(code: i32, w: WPARAM, l: LPARAM) -> LRESULT {
     let msg = w.0 as u32;
@@ -281,7 +281,7 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
             hInstance: windows::Win32::System::LibraryLoader::GetModuleHandleW(None).unwrap_or_default().into(),
             hCursor: LoadCursorW(None, IDC_ARROW).unwrap_or_default(),
             hbrBackground: GetSysColorBrush(COLOR_WINDOW),
-            lpszClassName: w!("SnapnabForm"),
+            lpszClassName: w!("AnyCaptureForm"),
             ..Default::default()
         };
         RegisterClassW(&wc);
@@ -370,7 +370,7 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
         let (ww, wh) = (wr.right - wr.left, wr.bottom - wr.top);
         let (x, y) = ((area.left + area.right - ww) / 2, ((area.top + area.bottom - wh) / 2).max(work.top));
         let t = to_wide(title);
-        let Ok(h) = CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, w!("SnapnabForm"), PCWSTR(t.as_ptr()), style, x, y, ww, wh,
+        let Ok(h) = CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOPMOST, w!("AnyCaptureForm"), PCWSTR(t.as_ptr()), style, x, y, ww, wh,
                                     owner_h, None, None, None)
         else {
             return false;
@@ -495,7 +495,7 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
                 done = true;
                 break;
             }
-            let (t, c) = (to_wide(&err), to_wide("Snapnab"));
+            let (t, c) = (to_wide(&err), to_wide("AnyCapture"));
             MessageBoxW(Some(h), PCWSTR(t.as_ptr()), PCWSTR(c.as_ptr()), MB_ICONWARNING);
             DONE.with(|d| d.set(None)); // the form stays open
         }

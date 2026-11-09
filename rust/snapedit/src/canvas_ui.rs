@@ -190,7 +190,7 @@ impl CanvasView {
         self.ppp = ui.ctx().pixels_per_point();
         self.rect = rect;
         let resp = ui.allocate_rect(rect, Sense::click_and_drag());
-        ui.ctx().accesskit_node_builder(resp.id, |n| n.set_author_id("SnapnabCanvas".to_owned()));
+        ui.ctx().accesskit_node_builder(resp.id, |n| n.set_author_id("AnyCaptureCanvas".to_owned()));
         c.set_view_size((rect.width() * self.ppp).round() as i32, (rect.height() * self.ppp).round() as i32);
         self.input(ui, &resp, c);
         if let Some(t) = c.hold_at {
@@ -688,7 +688,7 @@ impl CanvasView {
             .desired_width(r.width())
             .margin(egui::Margin::ZERO)
             .show(&mut ui.new_child(egui::UiBuilder::new().max_rect(r)));
-        ui.ctx().accesskit_node_builder(out.response.id, |n| n.set_author_id("SnapnabCanvas.Text".to_owned()));
+        ui.ctx().accesskit_node_builder(out.response.id, |n| n.set_author_id("AnyCaptureCanvas.Text".to_owned()));
         if e.fresh {
             out.response.request_focus();
             let all = egui::text::CCursorRange::two(egui::text::CCursor::new(0), egui::text::CCursor::new(text.chars().count()));

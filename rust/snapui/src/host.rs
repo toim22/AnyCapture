@@ -1,6 +1,6 @@
-//! The window host: every Snapnab window is a winit window drawn by egui on the GPU (wgpu). eframe would do this for
-//! one app window, but Snapnab needs things eframe hides: its own window classes ("SnapnabUI", the selection overlay's
-//! "SnapnabSelectWindowClass"…, which the Editor and the e2e suite look for), raw Win32 messages (the command line
+//! The window host: every AnyCapture window is a winit window drawn by egui on the GPU (wgpu). eframe would do this for
+//! one app window, but AnyCapture needs things eframe hides: its own window classes ("AnyCaptureUI", the selection overlay's
+//! "AnyCaptureSelectWindowClass"…, which the Editor and the e2e suite look for), raw Win32 messages (the command line
 //! another instance forwards, tray clicks, hotkeys) and many windows at once (overlays, pins, the recording HUD).
 //!
 //! How a frame happens (immediate mode): when a window needs drawing, its egui `Context` runs the app's `ui` function
@@ -72,7 +72,7 @@ pub struct WindowSpec {
     pub owner: Option<isize>,
     /// a popup: rounded corners and Windows' drop shadow, though it has no frame
     pub popup: bool,
-    /// Snapnab's own title bar (caption.rs: the icon and the menus on the title strip); the app draws it with
+    /// AnyCapture's own title bar (caption.rs: the icon and the menus on the title strip); the app draws it with
     /// `caption::bar` at the top of each frame
     pub caption: bool,
 }
@@ -80,8 +80,8 @@ pub struct WindowSpec {
 impl Default for WindowSpec {
     fn default() -> Self {
         WindowSpec {
-            class: "SnapnabWindow",
-            title: "Snapnab".into(),
+            class: "AnyCaptureWindow",
+            title: "AnyCapture".into(),
             size: (640.0, 400.0),
             physical_size: false,
             position: None,
@@ -474,7 +474,7 @@ impl<A: App> Host<A> {
         }
         let [r, g, b, _] = crate::theme::tokens().card.to_normalized_gamma_f32();
         let spec = WindowSpec {
-            class: "SnapnabDropList",
+            class: "AnyCaptureDropList",
             title: String::new(),
             size: (w as f32, h as f32),
             physical_size: true,

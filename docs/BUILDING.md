@@ -35,46 +35,46 @@ The end-to-end suite (`tests/e2e`, Python, pywinauto) drives the real programs; 
 ## Editors
 
 Open the repository folder in VS Code (with rust-analyzer), RustRover or Visual Studio. To debug, run
-`rust\target\debug\Snapnab.exe` or `SnapnabEditor.exe` from the debugger.
+`rust\target\debug\AnyCapture.exe` or `AnyCaptureEditor.exe` from the debugger.
 
 ## Where things go
 
 | Folder | What | Committed? |
 |---|---|---|
-| `rust/target/` | Cargo build tree; `release/` has `Snapnab.exe`, `SnapnabEditor.exe`, `SnapEx64.dll` and `SnapnabTool.exe` | no |
-| `dist/Snapnab/` | the program as the user gets it (`Snapnab.exe`, `SnapnabEditor.exe`, `SnapEx64.dll`, `lang/`, `help/`, `README.txt`) | no |
-| `dist/Snapnab-<version>-win-x64.zip` | portable package for distribution (for example, attached to a GitHub *release*) | no |
-| `dist/Snapnab-<version>-setup.exe` | installer (built when Inno Setup is installed) | no |
+| `rust/target/` | Cargo build tree; `release/` has `AnyCapture.exe`, `AnyCaptureEditor.exe`, `SnapEx64.dll` and `AnyCaptureTool.exe` | no |
+| `dist/AnyCapture/` | the program as the user gets it (`AnyCapture.exe`, `AnyCaptureEditor.exe`, `SnapEx64.dll`, `lang/`, `help/`, `README.txt`) | no |
+| `dist/AnyCapture-<version>-win-x64.zip` | portable package for distribution (for example, attached to a GitHub *release*) | no |
+| `dist/AnyCapture-<version>-setup.exe` | installer (built when Inno Setup is installed) | no |
 | `dist/symbols/` | Release PDBs, to analyze crashes; not included in the package | no |
 
-`SnapnabTool.exe` is a helper for the tests and for debugging (`dump file.snap` prints a capture's document XML,
+`AnyCaptureTool.exe` is a helper for the tests and for debugging (`dump file.snap` prints a capture's document XML,
 `audio file.mp4` reads a recording's audio track); it is not part of the package.
 
 ## Installer
 
-`packaging/installer/Snapnab.iss` is an [Inno Setup 6](https://jrsoftware.org/isinfo.php) script that packages
-`dist\Snapnab\` into an installer (`dist\Snapnab-<version>-setup.exe`). `build.bat` compiles it automatically when it
+`packaging/installer/AnyCapture.iss` is an [Inno Setup 6](https://jrsoftware.org/isinfo.php) script that packages
+`dist\AnyCapture\` into an installer (`dist\AnyCapture-<version>-setup.exe`). `build.bat` compiles it automatically when it
 finds `ISCC.exe` (in `%LOCALAPPDATA%\Programs`, `Program Files` or on the `PATH`), passing the version from
 `rust\Cargo.toml`. To compile it by hand after `build.bat`:
 
 ```bat
-ISCC.exe /DAppVersion=0.5.0 packaging\installer\Snapnab.iss
+ISCC.exe /DAppVersion=0.5.0 packaging\installer\AnyCapture.iss
 ```
 
 What the installer does:
 
 - asks whether to install **just for the current user** (default, no administrator prompt, in
-  `%LOCALAPPDATA%\Programs\Snapnab`) or **for all users** (in *Program Files*, asks for administrator rights); if, in
+  `%LOCALAPPDATA%\Programs\AnyCapture`) or **for all users** (in *Program Files*, asks for administrator rights); if, in
   per-user mode, the user picks a folder they cannot write to (such as *Program Files*), it offers to restart as
   administrator with that folder;
 - the wizard comes in the same 12 languages as the program, chosen from the Windows language: 7 official Inno Setup
   translations and 5 in `packaging/installer/Languages/` (Chinese, Hindi, Bengali, Indonesian and Urdu); it follows
-  the Windows light/dark theme in Inno Setup's Windows 11 style, with a Welcome page and the Snapnab pictures
+  the Windows light/dark theme in Inno Setup's Windows 11 style, with a Welcome page and the AnyCapture pictures
   (`WizardLarge-*.png`, `WizardLarge-dark-*.png` and `WizardSmall-*.png`, one per display scale, drawn from the app
   icon by `python packaging/installer/wizard_images.py`);
-- Start menu shortcuts (Snapnab and Snapnab Editor), an optional desktop shortcut and "start with Windows"
+- Start menu shortcuts (AnyCapture and AnyCapture Editor), an optional desktop shortcut and "start with Windows"
   (the same value that *Options › Start with Windows* writes);
-- closes Snapnab if it is running, and on an update installs over the previous version keeping the settings: in
+- closes AnyCapture if it is running, and on an update installs over the previous version keeping the settings: in
   the same folder and mode (all users or just this one) as before, with no question; installing for all users also
   removes a copy that was installed only for this user;
 - uninstalls from *Settings › Apps*; captures, presets and settings stay in the user profile.

@@ -627,7 +627,7 @@ unsafe fn play(path: &str, from: i64, cuts: &[Interval], run: &AtomicBool) {
 
 /// "mm:ss.ss"
 /// Reads only the audio track and reports it (the e2e suite checks that a recording has sound; the former
-/// `SnapnabTests.exe audio`): the samples, the end of the stream and the peak level.
+/// `AnyCaptureTests.exe audio`): the samples, the end of the stream and the peak level.
 pub fn audio_report(path: &str) -> String {
     use std::fmt::Write;
     let _com = Com::mta();

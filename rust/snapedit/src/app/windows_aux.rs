@@ -1,6 +1,6 @@
 //! The Editor's other windows, each an egui window of its own with the C++ window class: the text windows (Grab Text,
-//! shortcuts — SnapnabTextWnd), Customize the toolbar (SnapnabTbCustomize), the Magnify intro (SnapnabToolIntro),
-//! Compare images (SnapnabCompare), the contrast checker (SnapnabContrast) and the AI assistant (SnapnabAssistant).
+//! shortcuts — AnyCaptureTextWnd), Customize the toolbar (AnyCaptureTbCustomize), the Magnify intro (AnyCaptureToolIntro),
+//! Compare images (AnyCaptureCompare), the contrast checker (AnyCaptureContrast) and the AI assistant (AnyCaptureAssistant).
 //! They do not disable the Editor while open (the C++ ones were modal loops).
 
 use std::path::Path;
@@ -369,13 +369,13 @@ fn swatch_color(c: u32) -> Color32 {
 impl Editor {
     /// ShowTextWindow: the text (selectable, copyable) and a copy button.
     pub fn show_text(&mut self, ctl: &mut Ctl, title: String, text: String) {
-        if let Some(k) = ctl.create(&spec("SnapnabTextWnd", title, (560.0, 420.0))) {
+        if let Some(k) = ctl.create(&spec("AnyCaptureTextWnd", title, (560.0, 420.0))) {
             self.aux.texts.push(TextWin { key: k, text });
         }
     }
 
     pub fn show_shortcuts(&mut self, ctl: &mut Ctl) {
-        self.show_text(ctl, tr("Atalhos do Snapnab Editor"), tr(SHORTCUTS));
+        self.show_text(ctl, tr("Atalhos do AnyCapture Editor"), tr(SHORTCUTS));
     }
 
     /// The first time the Magnify tool is chosen: what it does.
@@ -386,7 +386,7 @@ impl Editor {
         set_reg_dw("MagnifyIntroShown", 1);
         if let Some(w) = &self.waker {
             w.send(Ev::Do(Box::new(|e: &mut Editor, ctl: &mut Ctl| {
-                e.aux.intro = ctl.create(&spec("SnapnabToolIntro", tr("Ampliar parte da imagem"), (520.0, 220.0)));
+                e.aux.intro = ctl.create(&spec("AnyCaptureToolIntro", tr("Ampliar parte da imagem"), (520.0, 220.0)));
             })));
         }
     }
@@ -401,7 +401,7 @@ impl Editor {
         }
         let before = (self.tb_custom, self.tb_custom_list.clone(), self.tb_recent.clone(), self.tb_tool_count);
         let list = self.center_entries();
-        if let Some(k) = ctl.create(&spec("SnapnabTbCustomize", tr("Personalizar a barra de ferramentas"), (720.0, 560.0))) {
+        if let Some(k) = ctl.create(&spec("AnyCaptureTbCustomize", tr("Personalizar a barra de ferramentas"), (720.0, 560.0))) {
             self.aux.customize = Some(Customize { key: k, before, list });
         }
     }
@@ -410,7 +410,7 @@ impl Editor {
         if let Some(c) = self.aux.contrast.take() {
             ctl.close(c.key);
         }
-        if let Some(k) = ctl.create(&spec("SnapnabContrast", tr("Verificador de contraste (WCAG)"), (460.0, 400.0))) {
+        if let Some(k) = ctl.create(&spec("AnyCaptureContrast", tr("Verificador de contraste (WCAG)"), (460.0, 400.0))) {
             self.aux.contrast = Some(Contrast { key: k, fg, bg });
         }
     }
@@ -419,7 +419,7 @@ impl Editor {
         if let Some(c) = self.aux.compare.take() {
             ctl.close(c.key);
         }
-        if let Some(k) = ctl.create(&spec("SnapnabCompare", tr("Comparar imagens"), (960.0, 640.0))) {
+        if let Some(k) = ctl.create(&spec("AnyCaptureCompare", tr("Comparar imagens"), (960.0, 640.0))) {
             self.aux.compare =
                 Some(Compare { key: k, a: a.0, b: b.0, na: a.1, nb: b.1, view: 0, amount: 50, tex: None, swapped: false });
         }
@@ -429,7 +429,7 @@ impl Editor {
         if let Some(a) = self.aux.assistant.take() {
             ctl.close(a.key);
         }
-        if let Some(k) = ctl.create(&spec("SnapnabAssistant", tr("Assistente de IA"), (640.0, 520.0))) {
+        if let Some(k) = ctl.create(&spec("AnyCaptureAssistant", tr("Assistente de IA"), (640.0, 520.0))) {
             self.aux.assistant = Some(Assistant {
                 key: k,
                 img,
@@ -493,7 +493,7 @@ impl Editor {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 let mut t = self.aux.texts[i].text.as_str();
                 let r = ui.add(egui::TextEdit::multiline(&mut t).desired_width(f32::INFINITY).font(egui::TextStyle::Monospace));
-                panels::tag(ui, &r, "SnapnabTextWnd.Text");
+                panels::tag(ui, &r, "AnyCaptureTextWnd.Text");
             });
         });
         if copy {

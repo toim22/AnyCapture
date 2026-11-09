@@ -3,7 +3,7 @@
 //! Destinations: S3-compatible storage (AWS Signature V4), Dropbox, Google Drive and OneDrive (OAuth 2.0 with PKCE, with
 //! the user's own app key / client id), FTP (WinINet), SFTP (the OpenSSH client of Windows, key authentication) and a
 //! custom HTTP uploader (request template compatible with ShareX .sxcu). Settings in Uploaders.xml; passwords, secrets
-//! and tokens in the Windows Credential Manager ("Snapnab/…"), never in files. The dialogs stay with the interface.
+//! and tokens in the Windows Credential Manager ("AnyCapture/…"), never in files. The dialogs stay with the interface.
 
 use std::collections::BTreeMap;
 use std::ffi::{OsStr, c_void};
@@ -114,7 +114,7 @@ impl Default for Settings {
             s3_endpoint: "s3.amazonaws.com".into(),
             s3_region: "us-east-1".into(),
             s3_bucket: String::new(),
-            s3_prefix: "snapnab/".into(),
+            s3_prefix: "anycapture/".into(),
             s3_access_key: String::new(),
             s3_public_url: String::new(),
             s3_path_style: false,
@@ -122,7 +122,7 @@ impl Default for Settings {
             dropbox_app_key: String::new(),
             google_client_id: String::new(),
             ms_client_id: String::new(),
-            folder: "Snapnab".into(),
+            folder: "AnyCapture".into(),
             public_link: true,
             host: String::new(),
             user: String::new(),
@@ -135,10 +135,10 @@ impl Default for Settings {
     }
 }
 
-/// %LOCALAPPDATA%\Snapnab\Uploaders.xml; SNAPNAB_UPLOADERS_FILE points the end-to-end tests at their own copy, so a
+/// %LOCALAPPDATA%\AnyCapture\Uploaders.xml; ANYCAPTURE_UPLOADERS_FILE points the end-to-end tests at their own copy, so a
 /// test never reads or writes the user's destinations.
 fn settings_file() -> std::path::PathBuf {
-    match std::env::var_os("SNAPNAB_UPLOADERS_FILE") {
+    match std::env::var_os("ANYCAPTURE_UPLOADERS_FILE") {
         Some(f) if !f.is_empty() => std::path::PathBuf::from(f),
         _ => crate::paths::app_data_dir().join("Uploaders.xml"),
     }
@@ -380,7 +380,7 @@ impl Loopback {
         self.code = query_param(req, "code");
         self.error = query_param(req, "error");
         self.state = query_param(req, "state");
-        let page = tr!("Snapnab: login concluído. Você já pode fechar esta janela.");
+        let page = tr!("AnyCapture: login concluído. Você já pode fechar esta janela.");
         let html = format!("<html><head><meta charset=\"utf-8\"></head><body style=\"font-family:Segoe UI;margin:40px\"><h2>{page}</h2></body></html>");
         let resp = format!("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nConnection: close\r\nContent-Length: {}\r\n\r\n{html}",
                            html.len());
@@ -539,7 +539,7 @@ fn upload_drive(s: &Settings, data: &[u8], name: &str) -> Outcome {
     }
     let meta = format!("{{\"name\":\"{}\"{}}}", net::json_escape(name),
                        if folder_id.is_empty() { String::new() } else { format!(",\"parents\":[\"{folder_id}\"]") });
-    let boundary = format!("snapnab{}", net::hex(&net::random_bytes(8)));
+    let boundary = format!("anycapture{}", net::hex(&net::random_bytes(8)));
     let mut body = format!("--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{meta}\r\n--{boundary}\r\nContent-Type: {}\r\n\r\n",
                            mime_of(name)).into_bytes();
     body.extend_from_slice(data);
@@ -605,7 +605,7 @@ fn public_url(s: &Settings, name: &str, scheme: &str) -> String {
 
 fn upload_ftp(s: &Settings, local: &[u16], name: &str) -> Outcome {
     let pass = to_wide(net::load_secret("FtpPassword"));
-    let (agent, host, user) = (to_wide("Snapnab"), to_wide(&s.host), to_wide(&s.user));
+    let (agent, host, user) = (to_wide("AnyCapture"), to_wide(&s.host), to_wide(&s.user));
     unsafe {
         let inet = InternetOpenW(PCWSTR(agent.as_ptr()), INTERNET_OPEN_TYPE_PRECONFIG.0, PCWSTR::null(), PCWSTR::null(), 0);
         let port = if s.port != 0 { s.port as u16 } else { 21 };
@@ -654,7 +654,7 @@ fn upload_sftp(s: &Settings, local: &[u16], name: &str) -> Outcome {
     if !Path::new(&exe).is_file() {
         return Outcome::fail(tr!("O cliente OpenSSH do Windows não está instalado (Configurações › Sistema › Recursos opcionais)."));
     }
-    let batch = std::env::temp_dir().join(format!("snapnab_sftp_{}.txt", String::from_utf16_lossy(&library::time_stamp(false))));
+    let batch = std::env::temp_dir().join(format!("anycapture_sftp_{}.txt", String::from_utf16_lossy(&library::time_stamp(false))));
     let remote = format!("{}{name}", if s.folder.is_empty() { String::new() } else { format!("{}/", s.folder) });
     let local_s = String::from_utf16_lossy(local);
     let cmds = format!("{}put \"{local_s}\" \"{remote}\"\n",
@@ -936,13 +936,13 @@ pub fn upload_file(s: &Settings, path: &[u16], remote_name: &str) -> Outcome {
     r
 }
 
-/// UploadImageAsync's work (run it on a thread): the image as a PNG in %TEMP%\Snapnab (metadata stripped unless
+/// UploadImageAsync's work (run it on a thread): the image as a PNG in %TEMP%\AnyCapture (metadata stripped unless
 /// StripMetadataOnUpload is 0), sent with the saved settings, the file deleted after.
 pub fn upload_image(img: &crate::image::Image, name: &str, version: &str) -> Outcome {
     use std::os::windows::ffi::OsStrExt;
-    let dir = std::env::temp_dir().join("Snapnab");
+    let dir = std::env::temp_dir().join("AnyCapture");
     let _ = std::fs::create_dir_all(&dir);
-    let name: String = if name.is_empty() { format!("Snapnab_{}", String::from_utf16_lossy(&library::time_stamp(false))) } else { name.to_owned() };
+    let name: String = if name.is_empty() { format!("AnyCapture_{}", String::from_utf16_lossy(&library::time_stamp(false))) } else { name.to_owned() };
     let name: String = name.chars().map(|c| if "\\/:*?\"<>|".contains(c) { '_' } else { c }).collect();
     let path = dir.join(format!("{name}.png"));
     let mut o = crate::codec::SaveOptions::from_settings();
@@ -1145,7 +1145,7 @@ mod tests {
         o
     }
 
-    /// The same results as the C++ code (tests/data/net-cpp.txt, written by `SnapnabTests.exe netgolden` before the
+    /// The same results as the C++ code (tests/data/net-cpp.txt, written by `AnyCaptureTests.exe netgolden` before the
     /// move; NetFingerprints in tests.cpp makes the same lines).
     #[test]
     fn golden() {
@@ -1199,7 +1199,7 @@ mod tests {
                                                        "AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")));
         let h2 = map(&[("content-type", "image/png"), ("host", "b.s3.eu-west-2.wasabisys.com"), ("x-amz-acl", "public-read"),
                        ("x-amz-content-sha256", "abc"), ("x-amz-date", "20260102T030405Z")]);
-        l.push(format!("sigv4 {}", sigv4_authorization("PUT", "/snapnab/a%20b.png", "x=1&y=2", &h2, "abc", "20260102T030405Z", "eu-west-2",
+        l.push(format!("sigv4 {}", sigv4_authorization("PUT", "/anycapture/a%20b.png", "x=1&y=2", &h2, "abc", "20260102T030405Z", "eu-west-2",
                                                        "s3", "AK", "cé secret")));
         let resp = br#"{"data":{"link":"https://i.example/abc.png","id":7},"ok":true,"list":["a","b"]}"#;
         let hd = map(&[("location", "https://x/y"), ("x-id", "42")]);

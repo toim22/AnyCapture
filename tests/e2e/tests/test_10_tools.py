@@ -5,11 +5,11 @@ import win32api
 import win32con
 from PIL import Image
 
-from snapnab_e2e import apps, regs, win
-from snapnab_e2e.target import TITLE
+from anycapture_e2e import apps, regs, win
+from anycapture_e2e.target import TITLE
 
-PICKER = "SnapnabColorPicker"
-FOCUS = "SnapnabScreenFocus"
+PICKER = "AnyCaptureColorPicker"
+FOCUS = "AnyCaptureScreenFocus"
 MENU = "#32768"
 IDM_COLOR_PICKER, IDM_INTERVAL, IDM_FOCUS, IDM_AFTER_EDITOR = 1028, 1036, 1037, 1044
 
@@ -137,7 +137,7 @@ def test_region_to_the_clipboard(capture):
     capture.send("/region", "50,60,200,150", "/output", "clipboard")
     img = win.wait_until(win.clipboard_image, what="the image on the clipboard")
     assert img.size == (200, 150)
-    assert not win.find_window("SnapnabEditor", visible_only=True)
+    assert not win.find_window("AnyCaptureEditor", visible_only=True)
 
 
 def test_window_by_title_to_a_file(capture, target, tmp_path):

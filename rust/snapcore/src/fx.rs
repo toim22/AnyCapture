@@ -926,7 +926,7 @@ impl Default for CaptureEffects {
             rotate: false,
             rotate_kind: 0,
             watermark: false,
-            watermark_text: "Snapnab".encode_utf16().collect(),
+            watermark_text: "AnyCapture".encode_utf16().collect(),
             watermark_opacity: 35,
             watermark_tiled: true,
             resolution: false,

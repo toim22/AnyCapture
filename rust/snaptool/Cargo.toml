@@ -1,13 +1,13 @@
 [package]
 name = "snaptool"
 version.workspace = true
-description = "SnapnabTool.exe: helper modes for the e2e suite and for debugging (prints a .snap's XML, reads an MP4's audio track)"
+description = "AnyCaptureTool.exe: helper modes for the e2e suite and for debugging (prints a .snap's XML, reads an MP4's audio track)"
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
 
 [[bin]]
-name = "SnapnabTool"
+name = "AnyCaptureTool"
 path = "src/main.rs"
 
 [dependencies]

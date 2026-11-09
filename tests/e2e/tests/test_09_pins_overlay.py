@@ -4,15 +4,15 @@ after a capture and One Click. Driven with the command line and WM_COMMAND."""
 import win32con
 from PIL import Image
 
-from snapnab_e2e import apps, presets, regs, win
-from snapnab_e2e.config import DATA_DIR
+from anycapture_e2e import apps, presets, regs, win
+from anycapture_e2e.config import DATA_DIR
 
-PIN = "SnapnabPin"
-SELECT = "SnapnabSelectWindowClass"
+PIN = "AnyCapturePin"
+SELECT = "AnyCaptureSelectWindowClass"
 IDM_PIN_CLIPBOARD, IDM_PIN_FILE, IDM_PINS_SHOW, IDM_PINS_HIDE, IDM_PINS_CLOSE, IDM_PINS_REOPEN = range(1029, 1035)
 IDM_CAPTURE_PIN = 1040
 IDM_ONECLICK = 1014
-QUICK = "SnapnabQuickOverlay"
+QUICK = "AnyCaptureQuickOverlay"
 
 
 def history():
@@ -107,7 +107,7 @@ def test_quick_overlay_after_capture_closes_by_itself(capture, lib):
         assert capture.send("/preset", "e2e quick") == 0
         lib.wait_new()
         win.wait_window(QUICK)
-        assert not win.find_window("SnapnabEditor", visible_only=True), "the overlay comes instead of the Editor"
+        assert not win.find_window("AnyCaptureEditor", visible_only=True), "the overlay comes instead of the Editor"
         win.wait_no_window(QUICK, timeout=8)
     finally:
         regs.delete("AfterCaptureMode")
@@ -119,10 +119,10 @@ def test_one_click_toggle(capture):
     try:
         capture.start("/hide")
         capture.command(IDM_ONECLICK)
-        win.wait_window("SnapnabOneClick")
+        win.wait_window("AnyCaptureOneClick")
         assert regs.get("OneClickEnabled") == 1
         capture.command(IDM_ONECLICK)
-        win.wait_no_window("SnapnabOneClick")
+        win.wait_no_window("AnyCaptureOneClick")
         assert regs.get("OneClickEnabled") == 0
     finally:
         regs.delete("OneClickEnabled")

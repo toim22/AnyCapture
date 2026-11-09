@@ -171,7 +171,7 @@ pub fn request(method: &str, url: &str, headers: &[String], body: &[u8], timeout
         .chain(part(uc.lpszExtraInfo, uc.dwExtraInfoLength))
         .chain([0])
         .collect();
-    let agent = to_wide(format!("Snapnab/{}", crate::log::app_version()));
+    let agent = to_wide(format!("AnyCapture/{}", crate::log::app_version()));
     let s = Handle(unsafe {
         WinHttpOpen(PCWSTR(agent.as_ptr()), WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, PCWSTR::null(), PCWSTR::null(), 0)
     });
@@ -264,7 +264,7 @@ impl Default for Multipart {
 
 impl Multipart {
     pub fn new() -> Self {
-        Multipart { boundary: format!("----SnapnabBoundary{}", hex(&random_bytes(12))), data: Vec::new() }
+        Multipart { boundary: format!("----AnyCaptureBoundary{}", hex(&random_bytes(12))), data: Vec::new() }
     }
 
     pub fn field(&mut self, name: &[u8], value: &[u8]) {
@@ -746,11 +746,11 @@ pub fn json_field(body: &[u8], path: &str) -> String {
     Json::parse(body).and_then(|j| j.path(path).map(Json::text)).unwrap_or_default()
 }
 
-// ---------------------------------------------------------------- secrets (Credential Manager, "Snapnab/<name>")
+// ---------------------------------------------------------------- secrets (Credential Manager, "AnyCapture/<name>")
 
 pub fn save_secret(name: &str, value: &str) -> bool {
-    let target = to_wide(format!("Snapnab/{name}"));
-    let user = to_wide("Snapnab");
+    let target = to_wide(format!("AnyCapture/{name}"));
+    let user = to_wide("AnyCapture");
     let mut blob = value.as_bytes().to_vec();
     let c = CREDENTIALW {
         Flags: CRED_FLAGS(0),
@@ -765,12 +765,27 @@ pub fn save_secret(name: &str, value: &str) -> bool {
     unsafe { CredWriteW(&c, 0) }.is_ok()
 }
 
+/// The saved secret, or "" if there is none. One saved under the program's former name moves to this name.
 pub fn load_secret(name: &str) -> String {
-    let target = to_wide(format!("Snapnab/{name}"));
+    if let Some(v) = read_credential(&format!("AnyCapture/{name}")) {
+        return v;
+    }
+    let old = crate::legacy::credential_target(name);
+    match read_credential(&old) {
+        Some(v) if crate::legacy::enabled() && save_secret(name, &v) => {
+            delete_credential(&old);
+            v
+        }
+        other => other.unwrap_or_default(),
+    }
+}
+
+fn read_credential(target: &str) -> Option<String> {
+    let target = to_wide(target);
     let mut c: *mut CREDENTIALW = std::ptr::null_mut();
     unsafe {
         if CredReadW(PCWSTR(target.as_ptr()), CRED_TYPE_GENERIC, None, &mut c).is_err() || c.is_null() {
-            return String::new();
+            return None;
         }
         let r = &*c;
         let v = if r.CredentialBlob.is_null() {
@@ -779,15 +794,20 @@ pub fn load_secret(name: &str) -> String {
             String::from_utf8_lossy(std::slice::from_raw_parts(r.CredentialBlob, r.CredentialBlobSize as usize)).into_owned()
         };
         CredFree(c as *const c_void);
-        v
+        Some(v)
+    }
+}
+
+fn delete_credential(target: &str) {
+    let target = to_wide(target);
+    unsafe {
+        let _ = CredDeleteW(PCWSTR(target.as_ptr()), CRED_TYPE_GENERIC, None);
     }
 }
 
 pub fn delete_secret(name: &str) {
-    let target = to_wide(format!("Snapnab/{name}"));
-    unsafe {
-        let _ = CredDeleteW(PCWSTR(target.as_ptr()), CRED_TYPE_GENERIC, None);
-    }
+    delete_credential(&format!("AnyCapture/{name}"));
+    delete_credential(&crate::legacy::credential_target(name));
 }
 
 #[cfg(test)]

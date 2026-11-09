@@ -72,7 +72,7 @@ pub fn load_thumbnail(path: &str) -> Option<Image> {
     load_image(&t)
 }
 
-/// Pictures\\Snapnab (or the OutputFolder setting), created if missing.
+/// Pictures\\AnyCapture (or the OutputFolder setting), created if missing.
 pub fn default_save_dir() -> String {
     use windows::Win32::UI::Shell::{FOLDERID_Pictures, KNOWN_FOLDER_FLAG, SHGetKnownFolderPath};
     let set = snapcore::reg::get_string(std::ffi::OsStr::new("OutputFolder"), None).map(|s| s.to_string_lossy().into_owned());
@@ -86,7 +86,7 @@ pub fn default_save_dir() -> String {
                     s
                 })
                 .unwrap_or_default();
-            format!("{pics}\\Snapnab")
+            format!("{pics}\\AnyCapture")
         }
     };
     let _ = std::fs::create_dir_all(&d);
@@ -101,7 +101,7 @@ pub fn safe_name(title: &str, extra: &str) -> String {
 /// Writes the composed image to a temporary PNG (e-mail, external program, Office, pin).
 pub fn temp_export(title: &str, img: &Image) -> String {
     let base = safe_name(title, ". ");
-    let base: String = if base.is_empty() { "Snapnab".into() } else { base.chars().take(40).collect() };
+    let base: String = if base.is_empty() { "AnyCapture".into() } else { base.chars().take(40).collect() };
     let p = std::env::temp_dir().join(format!("{base}.png")).to_string_lossy().into_owned();
     let _ = save_image(&p, img, 90);
     p

@@ -1,4 +1,4 @@
-//! The parts of SnapnabEditor.exe that do not need its windows running, so the tests reach them: the document and its
+//! The parts of AnyCaptureEditor.exe that do not need its windows running, so the tests reach them: the document and its
 //! undo history, the canvas (tools, selection, zoom) and the panels' drawing.
 
 #![recursion_limit = "256"]

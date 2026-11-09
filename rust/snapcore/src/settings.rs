@@ -1,5 +1,5 @@
 //! Backup and transfer of the settings (Settings.cpp, F51): one .snapsettings file with the registry values
-//! (HKCU\Software\Snapnab\1 and its subkeys) and the settings files of the data folder (presets, tool themes and quick
+//! (HKCU\Software\AnyCapture\1 and its subkeys) and the settings files of the data folder (presets, tool themes and quick
 //! styles, favorites, tool styles, quick effects, stamp order, Beautify presets, uploaders, AI settings). Import
 //! replaces them or merges the file into the current ones.
 
@@ -190,7 +190,7 @@ fn data_dir() -> PathBuf {
 }
 
 pub fn export(path: &Path) -> Result<(), String> {
-    let mut root = Node::new("SnapnabSettings");
+    let mut root = Node::new("AnyCaptureSettings");
     let stamp = String::from_utf16_lossy(&crate::library::time_stamp(true));
     root.set("Version", "1").set("Created", stamp).set("Program", crate::log::app_version());
     export_key("", root.add("Registry"));
@@ -209,15 +209,20 @@ pub fn export(path: &Path) -> Result<(), String> {
     Ok(())
 }
 
+/// The root element of a settings file: this name's, or the one written under the program's former name.
+fn is_settings_root(name: &str) -> bool {
+    name == "AnyCaptureSettings" || name == crate::legacy::SETTINGS_ROOT
+}
+
 /// A settings file that can be imported.
 pub fn validate(path: &Path) -> bool {
-    xml::load_file(path).is_some_and(|r| r.name == "SnapnabSettings" && r.child("Registry").is_some())
+    xml::load_file(path).is_some_and(|r| is_settings_root(&r.name) && r.child("Registry").is_some())
 }
 
 /// Replace: the current settings give way to the file's; merge: the current ones stay and the file adds what is
 /// missing (registry values and list items — presets, themes, favorites, quick effects — by name).
 pub fn import(path: &Path, merge: bool) -> Result<(), String> {
-    let root = xml::load_file(path).filter(|r| r.name == "SnapnabSettings").ok_or_else(|| tr!("Arquivo de configurações inválido."))?;
+    let root = xml::load_file(path).filter(|r| is_settings_root(&r.name)).ok_or_else(|| tr!("Arquivo de configurações inválido."))?;
     if !merge {
         let k = to_wide(ROOT);
         unsafe {
@@ -270,7 +275,7 @@ pub fn import(path: &Path, merge: bool) -> Result<(), String> {
     Ok(())
 }
 
-/// %LOCALAPPDATA%\Snapnab\Backups (created if missing)
+/// %LOCALAPPDATA%\AnyCapture\Backups (created if missing)
 pub fn backup_dir() -> PathBuf {
     let d = data_dir().join("Backups");
     let _ = std::fs::create_dir_all(&d);

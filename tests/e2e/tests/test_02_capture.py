@@ -1,5 +1,5 @@
 """Image capture: every selection mode, the outputs (Editor, clipboard, file, program, text) and the capture engine
-state machine, driven through presets written to Presets1.xml and run with `Snapnab.exe /preset "name"`."""
+state machine, driven through presets written to Presets1.xml and run with `AnyCapture.exe /preset "name"`."""
 import time
 
 import psutil
@@ -7,12 +7,12 @@ import pytest
 import win32api
 from PIL import Image
 
-from snapnab_e2e import apps, library, presets, regs, win
-from snapnab_e2e.apps import CaptureCmd
-from snapnab_e2e.config import EDITOR_EXE, LIBRARY_DIR
-from snapnab_e2e.logs import state
+from anycapture_e2e import apps, library, presets, regs, win
+from anycapture_e2e.apps import CaptureCmd
+from anycapture_e2e.config import EDITOR_EXE, LIBRARY_DIR
+from anycapture_e2e.logs import state
 
-OVERLAY = "SnapnabSelectWindowClass"
+OVERLAY = "AnyCaptureSelectWindowClass"
 
 
 def virtual_screen():
@@ -198,8 +198,8 @@ def pano_region(capture, target):
     overlay()
     l, t, _, _ = target.rect
     win.drag([(l + 50, t + 60), (l + 350, t + 260)])
-    win.wait_window("SnapnabPanoBar", 10)            # the bar below the region, with the orange frame around it
-    win.wait_window("SnapnabPanoBorder", 5)
+    win.wait_window("AnyCapturePanoBar", 10)            # the bar below the region, with the orange frame around it
+    win.wait_window("AnyCapturePanoBorder", 5)
 
 
 def test_panoramic_without_scrolling_is_the_region(capture, lib, target):
@@ -207,7 +207,7 @@ def test_panoramic_without_scrolling_is_the_region(capture, lib, target):
     win.keys("{ENTER}")                               # Enter finishes
     w, h = library.size(library.dump(lib.wait_new()[-1]))
     assert near(w, 300, 2) and near(h, 200, 2), (w, h)
-    assert not win.find_window("SnapnabPanoBar", visible_only=True)
+    assert not win.find_window("AnyCapturePanoBar", visible_only=True)
 
 
 def test_panoramic_esc_cancels(capture, logs, lib, target):
@@ -229,7 +229,7 @@ def test_capture_from_file(capture, lib, tmp_path):
     Image.new("RGB", (271, 133), (1, 2, 3)).save(src)
     start_with(capture, presets.preset("e2e file", "File", editor=False))
     capture.command(CaptureCmd.IDM_PRESET_BASE)         # also covers running a preset from the menu
-    from snapnab_e2e import filedialog
+    from anycapture_e2e import filedialog
     filedialog.fill(capture.pid, src)
     assert library.size(library.dump(lib.wait_new()[-1])) == (271, 133)
 
@@ -238,7 +238,7 @@ def test_delay_shows_countdown(capture, logs, lib):
     start_with(capture, presets.preset("e2e delay", "FullScreen", editor=False, delay=2))
     t0 = time.time()
     run_preset(capture, "e2e delay")
-    win.wait_window("SnapnabDelay", 5)
+    win.wait_window("AnyCaptureDelay", 5)
     lib.wait_new(timeout=15)
     assert time.time() - t0 >= 1.8, "the capture must wait for the delay"
 
@@ -292,7 +292,7 @@ def test_print_screen_runs_first_image_preset(capture, logs, lib):
         snip = windows_print_screen_opens_snipping()
         win.keys("{ESC}")                    # closes the Snipping Tool overlay if it took the key
         raise AssertionError(
-            "Print Screen did not start a Snapnab capture"
+            "Print Screen did not start a AnyCapture capture"
             + (" — Windows opened the Snipping Tool instead: RegisterHotKey succeeds while the Windows 11 setting "
                "'Use the Print screen key to open screen capture' is on, so the low-level hook fallback never engages"
                if snip else ""))
@@ -335,7 +335,7 @@ def test_after_capture_only_copy(capture, logs, lib):
         wait_idle(logs)
         time.sleep(1.5)
         assert not apps.Editor().running, "the Editor opened"
-        assert not win.find_window("SnapnabQuickOverlay", visible_only=True), "the quick thumbnail appeared"
+        assert not win.find_window("AnyCaptureQuickOverlay", visible_only=True), "the quick thumbnail appeared"
     finally:
         regs.delete("AfterCaptureMode")
         regs.delete("CopyEveryCapture")
@@ -396,7 +396,7 @@ def test_output_external_program(capture, lib):
     try:
         p = win.wait_until(lambda: [p for p in apps.processes("mspaint.exe") if p.pid not in before], 20,
                            what="Paint opened with the capture")[0]
-        assert any("Snapnab_" in a for a in p.cmdline()), p.cmdline()
+        assert any("AnyCapture_" in a for a in p.cmdline()), p.cmdline()
     finally:
         for p in apps.processes("mspaint.exe"):
             if p.pid not in before:
@@ -412,7 +412,7 @@ def test_grab_text_ocr(capture, target):
                                        region_fixed=True, region_pos=(l + 20, (t + b) // 2 - 60)))
     win.set_clipboard_text("")
     run_preset(capture, "e2e text")
-    tw = win.wait_window("SnapnabTextWnd", 20)
+    tw = win.wait_window("AnyCaptureTextWnd", 20)
     text = win.wait_until(win.clipboard_text, 10, what="recognized text on the clipboard")
     win.close_window(tw)
     assert "Target" in text or "E2E" in text, f"OCR text: {text!r}"

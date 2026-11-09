@@ -1,8 +1,8 @@
-Third-party software included in Snapnab
+Third-party software included in AnyCapture
 ========================================
 
-Snapnab is distributed under the GNU General Public License version 3 (see LICENSE). Snapnab.exe,
-SnapnabEditor.exe and SnapEx64.dll are built from Rust code that includes the following libraries
+AnyCapture is distributed under the GNU General Public License version 3 (see LICENSE). AnyCapture.exe,
+AnyCaptureEditor.exe and SnapEx64.dll are built from Rust code that includes the following libraries
 (Rust crates, plus the libwebp C library) and the Inter typeface, each under its own license.
 
 How to read this file:

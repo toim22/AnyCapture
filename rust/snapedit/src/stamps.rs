@@ -1,6 +1,6 @@
 //! The stamp gallery (src/editor/Stamps.cpp; StampGalleryManager, StampSearcher, OrganizeStamps, ed_comp_8 §4):
 //! built-in categories of color stamps (emoji), label badges, cursors and "My stamps" (images in
-//! %LOCALAPPDATA%\Snapnab\Stamps; each subfolder is one more category). The order the user drags and the pinned
+//! %LOCALAPPDATA%\AnyCapture\Stamps; each subfolder is one more category). The order the user drags and the pinned
 //! stamps are kept in StampOrder.xml.
 
 use std::collections::BTreeMap;

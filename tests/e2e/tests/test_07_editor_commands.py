@@ -4,10 +4,10 @@ import pytest
 import win32con
 from PIL import Image
 
-from snapnab_e2e import apps, library, regs, uia, win
-from snapnab_e2e.apps import EditorCmd as M
-from snapnab_e2e.editor import BLUE, GREEN, WHITE, EditorSession, close, make_picture
-from snapnab_e2e.library import LibraryWatcher
+from anycapture_e2e import apps, library, regs, uia, win
+from anycapture_e2e.apps import EditorCmd as M
+from anycapture_e2e.editor import BLUE, GREEN, WHITE, EditorSession, close, make_picture
+from anycapture_e2e.library import LibraryWatcher
 
 
 @pytest.fixture
@@ -307,10 +307,10 @@ def test_delete_document_asks_and_recycles(s):
 
 def test_grab_text_ocr(s):
     s.post(M.M_OCR)
-    tw = win.wait_until(lambda: s.popups("SnapnabTextWnd"), 20, what="recognized text window")[0]
-    text = uia.value(tw, "SnapnabTextWnd.Text")
+    tw = win.wait_until(lambda: s.popups("AnyCaptureTextWnd"), 20, what="recognized text window")[0]
+    text = uia.value(tw, "AnyCaptureTextWnd.Text")
     win.close_window(tw)
-    assert "Snapnab" in text or "OCR" in text or "2026" in text, text
+    assert "AnyCapture" in text or "OCR" in text or "2026" in text, text
 
 
 # ---------- view and settings ----------
@@ -336,7 +336,7 @@ def test_layers_and_effects_panels(s):
     s.tool("Shape")
     s.drag((300, 300), (500, 450))
     s.cmd(M.M_SHOW_LAYERS)
-    win.wait_until(lambda: uia.exists(s.ed.hwnd, "SnapnabLayers"), what="layers panel")
+    win.wait_until(lambda: uia.exists(s.ed.hwnd, "AnyCaptureLayers"), what="layers panel")
     s.cmd(M.M_SHOW_EFFECTS)
     win.wait_until(s.effects_panel_shown, what="effects panel")
 
@@ -349,9 +349,9 @@ def test_library_view_toggle(s):
 
 def test_customize_toolbar_window(s):
     s.post(M.M_TB_CUSTOMIZE)
-    w = win.wait_window("SnapnabTbCustomize", pid=s.ed.pid)
+    w = win.wait_window("AnyCaptureTbCustomize", pid=s.ed.pid)
     win.close_window(w)
-    win.wait_no_window("SnapnabTbCustomize")
+    win.wait_no_window("AnyCaptureTbCustomize")
     s.cmd(M.M_TB_RESET)
 
 

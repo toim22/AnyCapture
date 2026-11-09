@@ -536,7 +536,7 @@ impl EffectsPanel {
                     for i in 0..nq {
                         let name = tr(&self.quick[i].name);
                         let r = self.thumb_button(ui, i, &name);
-                        crate::panels::tag(ui, &r, &format!("SnapnabEffects.Quick.{i}"));
+                        crate::panels::tag(ui, &r, &format!("AnyCaptureEffects.Quick.{i}"));
                         if r.clicked() {
                             acts.push(FxAction::Quick(i));
                         }
@@ -549,7 +549,7 @@ impl EffectsPanel {
                     }
                 });
                 let r = ui.button(tr("+ Adicionar aos efeitos rápidos"));
-                crate::panels::tag(ui, &r, "SnapnabEffects.AddQuick");
+                crate::panels::tag(ui, &r, "AnyCaptureEffects.AddQuick");
                 if r.clicked() {
                     acts.push(FxAction::AddQuick);
                 }
@@ -563,7 +563,7 @@ impl EffectsPanel {
                     }
                     let name = e.name.clone();
                     let r = self.thumb_button(ui, nq + j, &name).on_hover_text(&self.effects[j].desc);
-                    crate::panels::tag(ui, &r, &format!("SnapnabEffects.{}", self.effects[j].cmd));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureEffects.{}", self.effects[j].cmd));
                     if r.clicked() {
                         acts.push(FxAction::Preview(self.effects[j].cmd));
                         self.open = Some(self.effects[j].cmd);
@@ -599,7 +599,7 @@ impl EffectsPanel {
                     let mut sel = cur;
                     ui.label(label.as_str());
                     let r = snapui::widgets::combo_index(ui, ("fx-choice", i), &mut sel, items, ui.available_width().min(260.0));
-                    crate::panels::tag(ui, &r, &format!("SnapnabEffects.Param.{i}"));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureEffects.Param.{i}"));
                     if sel != cur {
                         *value = values[sel];
                         changed = true;
@@ -607,13 +607,13 @@ impl EffectsPanel {
                 }
                 Param::Toggle { label, on } => {
                     let r = snapui::widgets::toggle(ui, on, label.as_str(), ui.available_width().min(320.0));
-                    crate::panels::tag(ui, &r, &format!("SnapnabEffects.Param.{i}"));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureEffects.Param.{i}"));
                     changed |= r.changed();
                 }
                 Param::Text { label, text } => {
                     ui.label(label.as_str());
                     let r = ui.text_edit_singleline(text);
-                    crate::panels::tag(ui, &r, &format!("SnapnabEffects.Param.{i}"));
+                    crate::panels::tag(ui, &r, &format!("AnyCaptureEffects.Param.{i}"));
                     changed |= r.changed();
                 }
                 Param::Color { label, color } => {
@@ -621,7 +621,7 @@ impl EffectsPanel {
                         let c = *color;
                         let fill = Color32::from_rgb((c & 255) as u8, (c >> 8 & 255) as u8, (c >> 16 & 255) as u8);
                         let r = ui.add(egui::Button::new("    ").fill(fill));
-                        crate::panels::tag(ui, &r, &format!("SnapnabEffects.Param.{i}"));
+                        crate::panels::tag(ui, &r, &format!("AnyCaptureEffects.Param.{i}"));
                         if r.clicked() {
                             acts.push(FxAction::PickColor(cmd, i));
                         }
@@ -636,12 +636,12 @@ impl EffectsPanel {
         ui.add_space(10.0);
         ui.horizontal(|ui| {
             let r = ui.add(egui::Button::new(RichText::new(tr("Aplicar")).strong()).min_size(egui::vec2(90.0, 28.0)));
-            crate::panels::tag(ui, &r, "SnapnabEffects.Apply");
+            crate::panels::tag(ui, &r, "AnyCaptureEffects.Apply");
             if r.clicked() {
                 acts.push(FxAction::Apply(cmd));
             }
             let r = ui.add(egui::Button::new(tr("Cancelar")).min_size(egui::vec2(90.0, 28.0)));
-            crate::panels::tag(ui, &r, "SnapnabEffects.Cancel");
+            crate::panels::tag(ui, &r, "AnyCaptureEffects.Cancel");
             if r.clicked() {
                 acts.push(FxAction::Cancel);
             }

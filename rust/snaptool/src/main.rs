@@ -1,7 +1,7 @@
-//! SnapnabTool.exe: the helper modes the C++ SnapnabTests.exe had, for the e2e suite and for debugging.
+//! AnyCaptureTool.exe: the helper modes the C++ AnyCaptureTests.exe had, for the e2e suite and for debugging.
 //!
-//!   SnapnabTool dump file.snap     prints the XML of the first frame's document
-//!   SnapnabTool audio file.mp4     reads only the audio track: samples, end of stream and peak level
+//!   AnyCaptureTool dump file.snap     prints the XML of the first frame's document
+//!   AnyCaptureTool audio file.mp4     reads only the audio track: samples, end of stream and peak level
 
 use std::io::Write;
 use std::path::Path;
@@ -24,7 +24,7 @@ fn main() {
             0
         }
         _ => {
-            eprintln!("usage: SnapnabTool dump <file.snap> | audio <file.mp4>");
+            eprintln!("usage: AnyCaptureTool dump <file.snap> | audio <file.mp4>");
             2
         }
     };
