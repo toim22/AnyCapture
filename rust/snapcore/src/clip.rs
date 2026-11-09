@@ -66,6 +66,31 @@ pub fn copy_image(owner: isize, img: &Image, version: &str) -> bool {
     if img.is_empty() {
         return false;
     }
+    let (dib, png) = image_formats(img, version);
+    let Some(hdib) = global(&dib, 0) else { return false };
+    if !open(owner, 1, 0) {
+        unsafe {
+            let _ = GlobalFree(Some(hdib));
+        }
+        return false;
+    }
+    unsafe {
+        let _ = EmptyClipboard();
+    }
+    set(CF_DIB.0 as u32, hdib);
+    if !png.is_empty()
+        && let Some(h) = global(&png, 0)
+    {
+        set(png_format(), h);
+    }
+    unsafe {
+        let _ = CloseClipboard();
+    }
+    true
+}
+
+/// The picture's clipboard data: the CF_DIB bytes (32 bpp bottom-up, over white) and the PNG ones (alpha kept).
+fn image_formats(img: &Image, version: &str) -> (Vec<u8>, Vec<u8>) {
     let opt = SaveOptions { strip_metadata: true, ..SaveOptions::from_settings() };
     let png = codec::encode(img, Format::Png, &opt, version).unwrap_or_default();
     let bih = BITMAPINFOHEADER {
@@ -87,26 +112,7 @@ pub fn copy_image(owner: isize, img: &Image, version: &str) -> bool {
             dib.extend_from_slice(&blend_over(0xFFFF_FFFF, p).to_le_bytes());
         }
     }
-    let Some(hdib) = global(&dib, 0) else { return false };
-    if !open(owner, 1, 0) {
-        unsafe {
-            let _ = GlobalFree(Some(hdib));
-        }
-        return false;
-    }
-    unsafe {
-        let _ = EmptyClipboard();
-    }
-    set(CF_DIB.0 as u32, hdib);
-    if !png.is_empty()
-        && let Some(h) = global(&png, 0)
-    {
-        set(png_format(), h);
-    }
-    unsafe {
-        let _ = CloseClipboard();
-    }
-    true
+    (dib, png)
 }
 
 /// ClipboardHasImage
@@ -227,9 +233,16 @@ pub fn copy_text(owner: isize, text: &str) -> bool {
 
 /// CopyFiles: the files as Explorer's Copy puts them (CF_HDROP and "Preferred DropEffect" = copy).
 pub fn copy_files(owner: isize, paths: &[String]) -> bool {
+    copy_files_and_image(owner, paths, None, "")
+}
+
+/// The files as Explorer's Copy puts them and, with `img`, the picture as [`copy_image`] puts it, in one clipboard
+/// entry: pasting in a folder gives the files, pasting in a chat or a document the picture.
+pub fn copy_files_and_image(owner: isize, paths: &[String], img: Option<&Image>, version: &str) -> bool {
     if paths.is_empty() {
         return false;
     }
+    let picture = img.filter(|i| !i.is_empty()).map(|i| image_formats(i, version));
     let df = DROPFILES { pFiles: std::mem::size_of::<DROPFILES>() as u32, fWide: true.into(), ..Default::default() };
     let mut b: Vec<u8> =
         unsafe { std::slice::from_raw_parts(&df as *const _ as *const u8, std::mem::size_of::<DROPFILES>()) }.to_vec();
@@ -255,6 +268,16 @@ pub fn copy_files(owner: isize, paths: &[String]) -> bool {
     let ok = set(CF_HDROP.0 as u32, hd);
     if let Some(h) = he {
         set(unsafe { RegisterClipboardFormatW(w!("Preferred DropEffect")) }, h);
+    }
+    if let Some((dib, png)) = picture {
+        if let Some(h) = global(&dib, 0) {
+            set(CF_DIB.0 as u32, h);
+        }
+        if !png.is_empty()
+            && let Some(h) = global(&png, 0)
+        {
+            set(png_format(), h);
+        }
     }
     unsafe {
         let _ = CloseClipboard();

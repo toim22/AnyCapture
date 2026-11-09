@@ -10,6 +10,2097 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: বাংলা\n"
 
+#: rust/anycapture/src/camwin.rs:81 rust/anycapture/src/engine/video.rs:178
+msgid "AnyCapture — webcam"
+msgstr "AnyCapture — ওয়েবক্যাম"
+
+#: rust/anycapture/src/cmdline.rs:114
+msgid ""
+"AnyCapture.exe [opções]\n"
+"\n"
+"/hide                 inicia só na bandeja\n"
+"/capture              captura imagem com o preset de imagem atual\n"
+"/video                grava vídeo com o preset de vídeo atual\n"
+"/preset \"nome\"        executa um preset pelo nome\n"
+"/clipboard            captura a imagem da área de transferência\n"
+"/region x,y,l,a       captura essa área da tela\n"
+"/window \"título\"      captura a janela cujo título contém o texto\n"
+"/monitor n            captura o monitor n (1, 2…, da esquerda para a direita)\n"
+"/fullscreen           captura a tela inteira\n"
+"/delay s              espera s segundos antes de capturar\n"
+"/ocr  /qr  /upload    reconhece o texto, lê o código QR ou envia a captura\n"
+"/pin [arquivo]        fixa o arquivo na tela (sem arquivo: captura e fixa)\n"
+"/pinclipboard         fixa o conteúdo da área de transferência\n"
+"/colorpicker          abre o conta-gotas de tela\n"
+"/focus                liga ou desliga o foco de tela\n"
+"/interval [stop]      inicia (ou para) a captura por intervalo\n"
+"/output clipboard|editor|none|\"arquivo\"   para onde vai a captura\n"
+"/exit                 encerra o AnyCapture em execução"
+msgstr ""
+"AnyCapture.exe [বিকল্প]\n"
+"\n"
+"/hide                 শুধু নোটিফিকেশন এলাকায় চালু করে\n"
+"/capture              বর্তমান ছবি প্রিসেট দিয়ে ছবি ক্যাপচার করে\n"
+"/video                বর্তমান ভিডিও প্রিসেট দিয়ে ভিডিও রেকর্ড করে\n"
+"/preset \"নাম\"       নাম দিয়ে প্রিসেট চালায়\n"
+"/clipboard            ক্লিপবোর্ডের ছবি ক্যাপচার করে\n"
+"/region x,y,প্র,উ     স্ক্রিনের এই এলাকা ক্যাপচার করে\n"
+"/window \"শিরোনাম\"   যে উইন্ডোর শিরোনামে টেক্সট আছে তা ক্যাপচার করে\n"
+"/monitor n            মনিটর n ক্যাপচার করে (1, 2…, বাম থেকে ডানে)\n"
+"/fullscreen           সম্পূর্ণ স্ক্রিন ক্যাপচার করে\n"
+"/delay s              ক্যাপচারের আগে s সেকেন্ড অপেক্ষা করে\n"
+"/ocr  /qr  /upload    টেক্সট শনাক্ত করে, QR কোড পড়ে বা ক্যাপচার আপলোড করে\n"
+"/pin [ফাইল]           ফাইল স্ক্রিনে পিন করে (ফাইল ছাড়া: ক্যাপচার করে পিন করে)\n"
+"/pinclipboard         ক্লিপবোর্ডের বিষয়বস্তু পিন করে\n"
+"/colorpicker          স্ক্রিন রং বাছাই খোলে\n"
+"/focus                স্ক্রিন ফোকাস চালু বা বন্ধ করে\n"
+"/interval [stop]      ব্যবধানে ক্যাপচার শুরু (বা বন্ধ) করে\n"
+"/output clipboard|editor|none|\"ফাইল\"   ক্যাপচার কোথায় যাবে\n"
+"/exit                 চলমান AnyCapture বন্ধ করে"
+
+#: rust/anycapture/src/cmdline.rs:155 rust/anycapture/src/cmdline.rs:156 rust/snapcore/src/presets.rs:601
+msgid "Imagem — Região"
+msgstr "ছবি — এলাকা"
+
+#: rust/anycapture/src/desk.rs:450
+msgid "Conta-gotas: clique para copiar a cor • setas movem 1 px (Shift = 10) • Enter = copiar • Esc = cancelar"
+msgstr "রং বাছাই: রং কপি করতে ক্লিক করুন • তীর 1 px সরায় (Shift = 10) • Enter = কপি • Esc = বাতিল"
+
+#: rust/anycapture/src/desk.rs:602
+msgid "AnyCapture — conta-gotas"
+msgstr "AnyCapture — রং বাছাই"
+
+#: rust/anycapture/src/desk.rs:644
+msgid "Cores recentes"
+msgstr "সাম্প্রতিক রং"
+
+#: rust/anycapture/src/desk.rs:644
+msgid "Formato padrão"
+msgstr "ডিফল্ট ফরম্যাট"
+
+#: rust/anycapture/src/dialogs.rs:85
+msgid "Nome do preset"
+msgstr "প্রিসেটের নাম"
+
+#: rust/anycapture/src/dialogs.rs:110
+#, c-format
+msgid "Preset %zu"
+msgstr "প্রিসেট %zu"
+
+#: rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:769 rust/snapcore/src/presets.rs:185
+msgid "Novo preset"
+msgstr "নতুন প্রিসেট"
+
+#: rust/anycapture/src/dialogs.rs:120 rust/anycapture/src/dialogs.rs:139 rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593
+msgid " (cópia)"
+msgstr " (প্রতিলিপি)"
+
+#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:773
+msgid "Novo preset com as configurações atuais"
+msgstr "বর্তমান সেটিংস থেকে নতুন প্রিসেট"
+
+#: rust/anycapture/src/dialogs.rs:127
+msgid "Renomear preset"
+msgstr "প্রিসেটের নাম বদলান"
+
+#: rust/anycapture/src/dialogs.rs:151
+msgid "É preciso manter pelo menos um preset."
+msgstr "অন্তত একটি প্রিসেট রাখতে হবে।"
+
+#: rust/anycapture/src/dialogs.rs:154
+#, c-format
+msgid "Excluir o preset \"%s\"?"
+msgstr "প্রিসেট \"%s\" মুছবেন?"
+
+#: rust/anycapture/src/dialogs.rs:170
+msgid "Atalho do preset"
+msgstr "প্রিসেটের শর্টকাট"
+
+#: rust/anycapture/src/dialogs.rs:170
+msgid "Deixe vazio (Backspace) para remover."
+msgstr "সরাতে খালি রাখুন (Backspace)।"
+
+#: rust/anycapture/src/dialogs.rs:171
+msgid "Atalho — "
+msgstr "শর্টকাট — "
+
+#: rust/anycapture/src/dialogs.rs:181
+msgid ""
+"Um preset guarda tudo o que a janela de captura mostra: tipo (imagem ou vídeo), seleção, efeitos, destino e opções de gravação.\n"
+"\n"
+"•  Clique em um preset para carregá-lo na janela; clique duas vezes para capturar com ele.\n"
+"•  \"Adicionar atalho\" dá a ele uma tecla de atalho global.\n"
+"•  A engrenagem da linha renomeia, duplica ou exclui o preset.\n"
+"•  \"Novo preset com as configurações atuais\" salva o que está na janela agora."
+msgstr ""
+"প্রিসেট ক্যাপচার উইন্ডোতে দেখানো সবকিছু সংরক্ষণ করে: ধরন (ছবি বা ভিডিও), নির্বাচন, প্রভাব, গন্তব্য এবং রেকর্ডিং বিকল্প।\n"
+"\n"
+"•  প্রিসেট উইন্ডোতে লোড করতে তাতে ক্লিক করুন; এটি দিয়ে ক্যাপচার করতে ডাবল-ক্লিক করুন।\n"
+"•  \"শর্টকাট যোগ করুন\" এটিকে একটি গ্লোবাল শর্টকাট কী দেয়।\n"
+"•  সারির গিয়ার প্রিসেটের নাম বদলায়, প্রতিলিপি করে বা মুছে ফেলে।\n"
+"•  \"বর্তমান সেটিংস থেকে নতুন প্রিসেট\" এখন উইন্ডোতে যা আছে তা সংরক্ষণ করে।"
+
+#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:543 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:763
+msgid "Presets"
+msgstr "প্রিসেট"
+
+#: rust/anycapture/src/dialogs.rs:210
+msgid "Presets do AnyCapture (*.snappresets)|*.snappresets|"
+msgstr "AnyCapture প্রিসেট (*.snappresets)|*.snappresets|"
+
+#: rust/anycapture/src/dialogs.rs:216
+msgid "Não foi possível exportar."
+msgstr "রপ্তানি করা যায়নি।"
+
+#: rust/anycapture/src/dialogs.rs:223
+msgid "Presets do AnyCapture (*.snappresets;*.xml)|*.snappresets;*.xml|"
+msgstr "AnyCapture প্রিসেট (*.snappresets;*.xml)|*.snappresets;*.xml|"
+
+#: rust/anycapture/src/dialogs.rs:226
+msgid "Presets importados."
+msgstr "প্রিসেট আমদানি হয়েছে।"
+
+#: rust/anycapture/src/dialogs.rs:228
+msgid "Arquivo de presets inválido."
+msgstr "অবৈধ প্রিসেট ফাইল।"
+
+#: rust/anycapture/src/dialogs.rs:237
+msgid "Configurações do AnyCapture (*.snapsettings)|*.snapsettings|"
+msgstr "AnyCapture সেটিংস (*.snapsettings)|*.snapsettings|"
+
+#: rust/anycapture/src/dialogs.rs:246
+msgid "Exportar configurações"
+msgstr "সেটিংস রপ্তানি করুন"
+
+#: rust/anycapture/src/dialogs.rs:252
+msgid "Configurações exportadas: presets, temas, estilos rápidos, favoritos, efeitos rápidos, ordem dos carimbos e barra de ferramentas."
+msgstr "সেটিংস রপ্তানি হয়েছে: প্রিসেট, থিম, দ্রুত স্টাইল, প্রিয়, দ্রুত ইফেক্ট, স্ট্যাম্পের ক্রম ও টুলবার।"
+
+#: rust/anycapture/src/dialogs.rs:266
+msgid ""
+"Substituir\n"
+"As configurações atuais dão lugar às do arquivo."
+msgstr ""
+"প্রতিস্থাপন\n"
+"বর্তমান সেটিংসের জায়গায় ফাইলের সেটিংস আসবে।"
+
+#: rust/anycapture/src/dialogs.rs:267
+msgid ""
+"Mesclar\n"
+"Mantém as configurações atuais e acrescenta o que faltar (presets, temas, favoritos, efeitos rápidos…)."
+msgstr ""
+"একত্রিত করুন\n"
+"বর্তমান সেটিংস রাখে এবং যা নেই তা যোগ করে (প্রিসেট, থিম, প্রিয়, দ্রুত ইফেক্ট…)।"
+
+#: rust/anycapture/src/dialogs.rs:268 rust/anycapture/src/dialogs.rs:298
+msgid "Importar configurações"
+msgstr "সেটিংস আমদানি করুন"
+
+#: rust/anycapture/src/dialogs.rs:269
+msgid "O AnyCapture e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
+msgstr "AnyCapture ও এডিটর আমদানি করা সেটিংস নিয়ে আবার চালু হবে। বর্তমান সেটিংসের একটি কপি ব্যাকআপ ফোল্ডারে থাকবে।"
+
+#: rust/anycapture/src/dialogs.rs:300 rust/snapcore/src/settings.rs:225
+msgid "Arquivo de configurações inválido."
+msgstr "অবৈধ সেটিংস ফাইল।"
+
+#: rust/anycapture/src/dialogs.rs:374
+msgid "Automático (idioma do Windows)"
+msgstr "স্বয়ংক্রিয় (Windows-এর ভাষা)"
+
+#: rust/anycapture/src/dialogs.rs:385
+msgid "Atalhos globais"
+msgstr "গ্লোবাল শর্টকাট"
+
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:218
+msgid "Capturar imagem"
+msgstr "ছবি ক্যাপচার"
+
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:219
+msgid "Gravar vídeo"
+msgstr "ভিডিও রেকর্ড"
+
+#: rust/anycapture/src/dialogs.rs:388
+msgid "Pausar/retomar vídeo"
+msgstr "ভিডিও বিরতি/চালু"
+
+#: rust/anycapture/src/dialogs.rs:389
+msgid "Parar vídeo"
+msgstr "ভিডিও থামান"
+
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:225
+msgid "Conta-gotas de tela"
+msgstr "স্ক্রিন রং বাছাই"
+
+#: rust/anycapture/src/dialogs.rs:391
+msgid "Capturar e fixar na tela"
+msgstr "ক্যাপচার করে স্ক্রিনে পিন করুন"
+
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:213
+msgid "Fixar da área de transferência"
+msgstr "ক্লিপবোর্ড থেকে পিন করুন"
+
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:229
+msgid "Foco de tela (apresentações)"
+msgstr "স্ক্রিন ফোকাস (উপস্থাপনা)"
+
+#: rust/anycapture/src/dialogs.rs:394
+msgid "Geral"
+msgstr "সাধারণ"
+
+#: rust/anycapture/src/dialogs.rs:395
+msgid "Pasta de saída"
+msgstr "আউটপুট ফোল্ডার"
+
+#: rust/anycapture/src/dialogs.rs:396
+msgid "Monitorar área de transferência"
+msgstr "ক্লিপবোর্ডে নজর রাখুন"
+
+#: rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:595 rust/anycapture/src/window.rs:606 rust/snapcore/src/sounds.rs:31
+msgid "Desligado"
+msgstr "বন্ধ"
+
+#: rust/anycapture/src/dialogs.rs:397
+msgid "Só a Ferramenta de Captura do Windows"
+msgstr "শুধু Windows স্নিপিং টুল"
+
+#: rust/anycapture/src/dialogs.rs:397
+msgid "Qualquer aplicativo"
+msgstr "যেকোনো অ্যাপ্লিকেশন"
+
+#: rust/anycapture/src/dialogs.rs:398
+msgid "Iniciar com o Windows"
+msgstr "Windows-এর সাথে চালু করুন"
+
+#: rust/anycapture/src/dialogs.rs:399
+msgid "Mostrar a janela de captura ao iniciar"
+msgstr "চালুর সময় ক্যাপচার উইন্ডো দেখান"
+
+#: rust/anycapture/src/dialogs.rs:400
+msgid "Idioma"
+msgstr "ভাষা"
+
+#: rust/anycapture/src/dialogs.rs:401
+msgid "Depois da captura"
+msgstr "ক্যাপচারের পরে"
+
+#: rust/anycapture/src/dialogs.rs:402
+msgid "Copiar toda captura para a área de transferência"
+msgstr "প্রতিটি ক্যাপচার ক্লিপবোর্ডে কপি করুন"
+
+#: rust/anycapture/src/dialogs.rs:403
+msgid "Ao terminar"
+msgstr "শেষ হলে"
+
+#: rust/anycapture/src/dialogs.rs:404
+msgid "Abrir no Editor (como o preset diz)"
+msgstr "এডিটরে খুলুন (প্রিসেট অনুযায়ী)"
+
+#: rust/anycapture/src/dialogs.rs:404
+msgid "Mostrar a miniatura rápida em vez do Editor"
+msgstr "এডিটরের বদলে দ্রুত থাম্বনেইল দেখান"
+
+#: rust/anycapture/src/dialogs.rs:405
+msgid "Mostrar a miniatura e abrir o Editor"
+msgstr "থাম্বনেইল দেখান ও এডিটর খুলুন"
+
+#: rust/anycapture/src/dialogs.rs:405
+msgid "Só copiar para a área de transferência"
+msgstr "শুধু ক্লিপবোর্ডে কপি করুন"
+
+#: rust/anycapture/src/dialogs.rs:407
+msgid "A miniatura fecha após (s, 0 = não fecha)"
+msgstr "থাম্বনেইল বন্ধ হয় (সে., 0 = বন্ধ হয় না)"
+
+#: rust/anycapture/src/dialogs.rs:408
+msgid "Canto da miniatura"
+msgstr "থাম্বনেইলের কোণ"
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:693 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129
+msgid "Inferior direito"
+msgstr "নিচে ডানে"
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128
+msgid "Inferior esquerdo"
+msgstr "নিচে বামে"
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128
+msgid "Superior direito"
+msgstr "উপরে ডানে"
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128
+msgid "Superior esquerdo"
+msgstr "উপরে বামে"
+
+#: rust/anycapture/src/dialogs.rs:411
+msgid "Som da captura"
+msgstr "ক্যাপচারের শব্দ"
+
+#: rust/anycapture/src/dialogs.rs:412
+msgid "Arquivo WAV do som"
+msgstr "শব্দের WAV ফাইল"
+
+#: rust/anycapture/src/dialogs.rs:413 rust/anycapture/src/engine.rs:878 rust/anycapture/src/quick.rs:245 rust/snapcore/src/presets.rs:202
+msgid "Captura"
+msgstr "ক্যাপচার"
+
+#: rust/anycapture/src/dialogs.rs:414
+msgid "Capturar a região assim que soltar o mouse"
+msgstr "মাউস ছাড়লেই অঞ্চল ক্যাপচার করুন"
+
+#: rust/anycapture/src/dialogs.rs:415
+msgid "Corrigir as cores em monitores HDR"
+msgstr "HDR মনিটরে রং ঠিক করুন"
+
+#: rust/anycapture/src/dialogs.rs:416
+msgid "Cantos arredondados transparentes nas janelas"
+msgstr "উইন্ডোতে স্বচ্ছ গোল কোণ"
+
+#: rust/anycapture/src/dialogs.rs:417
+msgid "Sombra nas capturas de janela"
+msgstr "উইন্ডো ক্যাপচারে ছায়া"
+
+#: rust/anycapture/src/dialogs.rs:418
+msgid "Ocultar os ícones da área de trabalho ao capturar"
+msgstr "ক্যাপচারের সময় ডেস্কটপ আইকন লুকান"
+
+#: rust/anycapture/src/dialogs.rs:419
+msgid "Não perturbe (sem notificações) ao gravar"
+msgstr "রেকর্ডিংয়ের সময় বিরক্ত করবেন না (কোনো বিজ্ঞপ্তি নয়)"
+
+#: rust/anycapture/src/dialogs.rs:420
+msgid "Manter a tela acesa durante a captura"
+msgstr "ক্যাপচারের সময় স্ক্রিন চালু রাখুন"
+
+#: rust/anycapture/src/dialogs.rs:421
+msgid "Privacidade e biblioteca"
+msgstr "গোপনীয়তা ও লাইব্রেরি"
+
+#: rust/anycapture/src/dialogs.rs:422
+msgid "Remover metadados (câmera, GPS, datas) ao salvar"
+msgstr "সংরক্ষণের সময় মেটাডেটা মুছুন (ক্যামেরা, GPS, তারিখ)"
+
+#: rust/anycapture/src/dialogs.rs:423
+msgid "Limpar a biblioteca automaticamente"
+msgstr "লাইব্রেরি স্বয়ংক্রিয়ভাবে পরিষ্কার করুন"
+
+#: rust/anycapture/src/dialogs.rs:424
+msgid "Apagar capturas com mais de (dias)"
+msgstr "এর চেয়ে পুরোনো ক্যাপচার মুছুন (দিন)"
+
+#: rust/anycapture/src/dialogs.rs:425
+msgid "Manter as capturas que têm nome"
+msgstr "নামযুক্ত ক্যাপচার রাখুন"
+
+#: rust/anycapture/src/dialogs.rs:426
+msgid "Manter as capturas com etiquetas"
+msgstr "ট্যাগযুক্ত ক্যাপচার রাখুন"
+
+#: rust/anycapture/src/dialogs.rs:427
+msgid "Enviar para a Lixeira em vez de apagar"
+msgstr "মুছে না ফেলে রিসাইকেল বিনে পাঠান"
+
+#: rust/anycapture/src/dialogs.rs:428
+msgid "Cursor capturado como objeto no Editor"
+msgstr "ক্যাপচার করা কার্সর এডিটরে অবজেক্ট হিসেবে"
+
+#: rust/anycapture/src/dialogs.rs:429
+msgid "Dividir imagens longas em páginas (impressão e PDF)"
+msgstr "লম্বা ছবি পৃষ্ঠায় ভাগ করুন (প্রিন্ট ও PDF)"
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Aparência (vale ao reabrir)"
+msgstr "চেহারা (আবার খুললে প্রযোজ্য)"
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Seguir o Windows"
+msgstr "Windows অনুযায়ী"
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Claro"
+msgstr "হালকা"
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Escuro"
+msgstr "গাঢ়"
+
+#: rust/anycapture/src/dialogs.rs:432
+msgid "Biblioteca: "
+msgstr "লাইব্রেরি: "
+
+#: rust/anycapture/src/dialogs.rs:433
+msgid "Atualizações"
+msgstr "আপডেট"
+
+#: rust/anycapture/src/dialogs.rs:434
+msgid "Verificar atualizações ao iniciar"
+msgstr "চালু হওয়ার সময় আপডেট খুঁজুন"
+
+#: rust/anycapture/src/dialogs.rs:444
+msgid "Dois atalhos iguais: "
+msgstr "দুটি একই শর্টকাট: "
+
+#: rust/anycapture/src/dialogs.rs:450
+msgid "Opções do AnyCapture"
+msgstr "AnyCapture বিকল্প"
+
+#: rust/anycapture/src/dialogs.rs:477
+msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
+msgstr "ক্যাপচারের শব্দের WAV ফাইল বেছে নিন (পূর্ণ পথ)।"
+
+#: rust/anycapture/src/dialogs.rs:487
+msgid "O novo idioma vale depois que o AnyCapture e o Editor reiniciarem. Reiniciar agora?"
+msgstr "নতুন ভাষা AnyCapture ও এডিটর পুনরায় চালুর পর কার্যকর হবে। এখনই পুনরায় চালু করবেন?"
+
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:108 rust/anycapture/src/window.rs:557 rust/snapedit/src/app/extras.rs:793
+msgid "Formato"
+msgstr "ফরম্যাট"
+
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:109
+msgid "Prefixo do nome"
+msgstr "নামের উপসর্গ"
+
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:110 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
+msgid "Pasta"
+msgstr "ফোল্ডার"
+
+#: rust/anycapture/src/dialogs.rs:504
+msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
+msgstr "স্বয়ংক্রিয় নাম: <উপসর্গ><সংখ্যা>, যেমন: Capture001.png"
+
+#: rust/anycapture/src/dialogs.rs:507 rust/anycapture/src/interval.rs:132
+msgid "O prefixo contém caracteres inválidos."
+msgstr "উপসর্গে অবৈধ অক্ষর আছে।"
+
+#: rust/anycapture/src/dialogs.rs:509
+msgid "Salvar em arquivo"
+msgstr "ফাইলে সংরক্ষণ"
+
+#: rust/anycapture/src/dialogs.rs:528 rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:572
+msgid "Programa"
+msgstr "প্রোগ্রাম"
+
+#: rust/anycapture/src/dialogs.rs:528
+msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
+msgstr "ক্যাপচার এই প্রোগ্রামে খোলে (যেমন: mspaint.exe)।"
+
+#: rust/anycapture/src/dialogs.rs:529 rust/snapedit/src/panels.rs:64
+msgid "Abrir em um programa externo"
+msgstr "বাইরের প্রোগ্রামে খুলুন"
+
+#: rust/anycapture/src/dialogs.rs:543
+msgid "Cada captura num slide novo (desligado: no slide atual)"
+msgstr "প্রতিটি ক্যাপচার নতুন স্লাইডে (বন্ধ: বর্তমান স্লাইডে)"
+
+#: rust/anycapture/src/dialogs.rs:555 rust/anycapture/src/dialogs.rs:662 rust/anycapture/src/select.rs:666 rust/snapedit/src/app/commands.rs:661
+msgid "Largura (px)"
+msgstr "প্রস্থ (px)"
+
+#: rust/anycapture/src/dialogs.rs:555 rust/anycapture/src/select.rs:669 rust/snapedit/src/app/commands.rs:662 rust/snapedit/src/app/commands.rs:709
+msgid "Altura (px)"
+msgstr "উচ্চতা (px)"
+
+#: rust/anycapture/src/dialogs.rs:556
+msgid "Capturar sempre na mesma posição"
+msgstr "সবসময় একই অবস্থানে ক্যাপচার করুন"
+
+#: rust/anycapture/src/dialogs.rs:557
+msgid "Esquerda (X)"
+msgstr "বাম (X)"
+
+#: rust/anycapture/src/dialogs.rs:557
+msgid "Topo (Y)"
+msgstr "উপর (Y)"
+
+#: rust/anycapture/src/dialogs.rs:558
+msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
+msgstr "স্থির অবস্থান না থাকলে, ক্যাপচারের সময় আয়তক্ষেত্রটি টেনে জায়গায় আনেন।"
+
+#: rust/anycapture/src/dialogs.rs:559 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:353
+msgid "Região fixa"
+msgstr "স্থির এলাকা"
+
+#: rust/anycapture/src/dialogs.rs:582 rust/snapedit/src/app/video.rs:455
+msgid "Quadros por segundo"
+msgstr "প্রতি সেকেন্ডে ফ্রেম"
+
+#: rust/anycapture/src/dialogs.rs:583
+msgid "Reduzir para 1080p"
+msgstr "1080p-তে ছোট করুন"
+
+#: rust/anycapture/src/dialogs.rs:584
+msgid "Codificação por hardware"
+msgstr "হার্ডওয়্যার এনকোডিং"
+
+#: rust/anycapture/src/dialogs.rs:585
+msgid "Áudio"
+msgstr "অডিও"
+
+#: rust/anycapture/src/dialogs.rs:586
+msgid "Volume do microfone (%)"
+msgstr "মাইক্রোফোনের ভলিউম (%)"
+
+#: rust/anycapture/src/dialogs.rs:587
+msgid "Volume do áudio do sistema (%)"
+msgstr "সিস্টেম অডিওর ভলিউম (%)"
+
+#: rust/anycapture/src/dialogs.rs:588 rust/anycapture/src/hud.rs:361
+msgid "Ganho automático do microfone"
+msgstr "মাইক্রোফোনের স্বয়ংক্রিয় গেইন"
+
+#: rust/anycapture/src/dialogs.rs:589
+msgid "Também ajustáveis no painel da gravação."
+msgstr "রেকর্ডিং প্যানেলেও সমন্বয়যোগ্য।"
+
+#: rust/anycapture/src/dialogs.rs:590
+msgid "Gravar somente o áudio (sem vídeo)"
+msgstr "শুধু অডিও রেকর্ড করুন (ভিডিও ছাড়া)"
+
+#: rust/anycapture/src/dialogs.rs:591
+msgid "Formato do áudio"
+msgstr "অডিও ফরম্যাট"
+
+#: rust/anycapture/src/dialogs.rs:592
+msgid "Na gravação (todos os presets)"
+msgstr "রেকর্ডিংয়ের সময় (সব প্রিসেট)"
+
+#: rust/anycapture/src/dialogs.rs:593 rust/anycapture/src/engine/video.rs:360
+msgid "Destacar o cursor"
+msgstr "কার্সর হাইলাইট করুন"
+
+#: rust/anycapture/src/dialogs.rs:594
+msgid "Cor do destaque"
+msgstr "হাইলাইটের রং"
+
+#: rust/anycapture/src/dialogs.rs:595
+msgid "Tamanho do destaque (px)"
+msgstr "হাইলাইটের আকার (px)"
+
+#: rust/anycapture/src/dialogs.rs:596 rust/anycapture/src/engine/video.rs:360
+msgid "Mostrar os cliques"
+msgstr "ক্লিক দেখান"
+
+#: rust/anycapture/src/dialogs.rs:597
+msgid "Cor do clique esquerdo"
+msgstr "বাম ক্লিকের রং"
+
+#: rust/anycapture/src/dialogs.rs:598
+msgid "Cor do clique direito"
+msgstr "ডান ক্লিকের রং"
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Teclas na tela"
+msgstr "স্ক্রিনে কী"
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Não mostrar"
+msgstr "দেখাবেন না"
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
+msgstr "শুধু শর্টকাট (Ctrl, Alt, Win, F1…)"
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Todas (inclusive o que for digitado)"
+msgstr "সব (যা টাইপ করা হয় তাও)"
+
+#: rust/anycapture/src/dialogs.rs:601
+msgid "Ampliar ao clicar (zoom automático)"
+msgstr "ক্লিকে বড় করুন (স্বয়ংক্রিয় জুম)"
+
+#: rust/anycapture/src/dialogs.rs:602
+msgid "Ampliação do zoom (%)"
+msgstr "জুমের মাত্রা (%)"
+
+#: rust/anycapture/src/dialogs.rs:603
+msgid "Atalho do zoom durante a gravação"
+msgstr "রেকর্ডিংয়ের সময় জুমের শর্টকাট"
+
+#: rust/anycapture/src/dialogs.rs:604
+msgid "Proteger contra travamentos (recupera a gravação)"
+msgstr "ক্র্যাশ থেকে সুরক্ষা (রেকর্ডিং পুনরুদ্ধার হয়)"
+
+#: rust/anycapture/src/dialogs.rs:605
+msgid "Confirmar antes de recomeçar a gravação"
+msgstr "রেকর্ডিং আবার শুরুর আগে নিশ্চিত করুন"
+
+#: rust/anycapture/src/dialogs.rs:607
+msgid "Opções de vídeo"
+msgstr "ভিডিও বিকল্প"
+
+#: rust/anycapture/src/dialogs.rs:635
+msgid "Remover o fundo da webcam"
+msgstr "ওয়েবক্যামের পটভূমি সরান"
+
+#: rust/anycapture/src/dialogs.rs:635
+msgid "Cor do fundo"
+msgstr "পটভূমির রং"
+
+#: rust/anycapture/src/dialogs.rs:636
+msgid "Tolerância (0–100)"
+msgstr "সহনশীলতা (0–100)"
+
+#: rust/anycapture/src/dialogs.rs:637
+msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
+msgstr "সাধারণ, ভালো আলোযুক্ত পটভূমি ব্যবহার করুন (গ্রিন স্ক্রিন সবচেয়ে ভালো)।"
+
+#: rust/anycapture/src/dialogs.rs:638
+msgid "Com o fundo removido, a webcam aparece sem moldura."
+msgstr "পটভূমি সরালে ওয়েবক্যাম ফ্রেম ছাড়া দেখা যায়।"
+
+#: rust/anycapture/src/dialogs.rs:639
+msgid "Remover o fundo (chroma key)"
+msgstr "পটভূমি সরান (ক্রোমা কি)"
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Filtro"
+msgstr "ফিল্টার"
+
+#: rust/anycapture/src/dialogs.rs:664
+msgid "Deslocamento (px)"
+msgstr "সরণ (px)"
+
+#: rust/anycapture/src/dialogs.rs:664
+msgid "Desfoque (px)"
+msgstr "ঝাপসা (px)"
+
+#: rust/anycapture/src/dialogs.rs:665 rust/anycapture/src/dialogs.rs:682
+msgid "Opacidade (%)"
+msgstr "অস্বচ্ছতা (%)"
+
+#: rust/anycapture/src/dialogs.rs:666 rust/anycapture/src/dialogs.rs:682 rust/anycapture/src/pins.rs:692 rust/anycapture/src/pins.rs:1149
+msgid "Texto"
+msgstr "লেখা"
+
+#: rust/anycapture/src/dialogs.rs:666
+msgid "Campos: {date} {time} {computer} {user}"
+msgstr "ক্ষেত্র: {date} {time} {computer} {user}"
+
+#: rust/anycapture/src/dialogs.rs:667 rust/snapedit/src/effects.rs:157
+msgid "Posição"
+msgstr "অবস্থান"
+
+#: rust/anycapture/src/dialogs.rs:668 rust/anycapture/src/dialogs.rs:677 rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004
+msgid "Tolerância"
+msgstr "সহনশীলতা"
+
+#: rust/anycapture/src/dialogs.rs:669
+msgid "Escala (%)"
+msgstr "স্কেল (%)"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247
+msgid "Estilo"
+msgstr "শৈলী"
+
+#: rust/anycapture/src/dialogs.rs:673 rust/snapedit/src/app/extras.rs:757
+msgid "Tamanho (px)"
+msgstr "আকার (px)"
+
+#: rust/anycapture/src/dialogs.rs:673 rust/anycapture/src/dialogs.rs:667 rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157
+msgid "Em cima"
+msgstr "উপরে"
+
+#: rust/anycapture/src/dialogs.rs:674 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:705
+msgid "Direita"
+msgstr "ডানে"
+
+#: rust/anycapture/src/dialogs.rs:674 rust/anycapture/src/dialogs.rs:667 rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157
+msgid "Embaixo"
+msgstr "নিচে"
+
+#: rust/anycapture/src/dialogs.rs:675 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:705
+msgid "Esquerda"
+msgstr "বামে"
+
+#: rust/anycapture/src/dialogs.rs:677
+msgid "Remove as faixas de cor uniforme em volta da captura."
+msgstr "ক্যাপচারের চারপাশের একই রঙের ফিতা সরায়।"
+
+#: rust/anycapture/src/dialogs.rs:678 rust/snapedit/src/effects.rs:129
+msgid "Brilho"
+msgstr "উজ্জ্বলতা"
+
+#: rust/anycapture/src/dialogs.rs:678 rust/snapedit/src/effects.rs:130
+msgid "Contraste"
+msgstr "কনট্রাস্ট"
+
+#: rust/anycapture/src/dialogs.rs:679
+msgid "Matiz (graus)"
+msgstr "হিউ (ডিগ্রি)"
+
+#: rust/anycapture/src/dialogs.rs:679 rust/snapedit/src/effects.rs:135
+msgid "Saturação"
+msgstr "স্যাচুরেশন"
+
+#: rust/anycapture/src/dialogs.rs:680 rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:639
+msgid "Girar"
+msgstr "ঘোরান"
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "90° à direita"
+msgstr "ডানে 90°"
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "90° à esquerda"
+msgstr "বামে 90°"
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "Espelhar na horizontal"
+msgstr "অনুভূমিকভাবে উল্টান"
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "Espelhar na vertical"
+msgstr "উল্লম্বভাবে উল্টান"
+
+#: rust/anycapture/src/dialogs.rs:683
+msgid "Repetir por toda a imagem"
+msgstr "পুরো ছবিতে পুনরাবৃত্তি"
+
+#: rust/anycapture/src/dialogs.rs:684
+msgid "Resolução (DPI)"
+msgstr "রেজোলিউশন (DPI)"
+
+#: rust/anycapture/src/dialogs.rs:684
+msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
+msgstr "সংরক্ষিত ফাইলে লেখা হয় (PNG, JPEG, TIFF, BMP)।"
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771
+msgid "Fundo"
+msgstr "পটভূমি"
+
+#: rust/anycapture/src/dialogs.rs:686 rust/snapedit/src/app/extras.rs:115
+msgid "Ângulo do degradê"
+msgstr "গ্রেডিয়েন্টের কোণ"
+
+#: rust/anycapture/src/dialogs.rs:687 rust/snapedit/src/app/extras.rs:116
+msgid "Imagem de fundo"
+msgstr "পটভূমির ছবি"
+
+#: rust/anycapture/src/dialogs.rs:687 rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531
+msgid "Margem (px)"
+msgstr "মার্জিন (px)"
+
+#: rust/anycapture/src/dialogs.rs:688 rust/snapedit/src/app/extras.rs:118
+msgid "Cantos arredondados (px)"
+msgstr "গোল কোণ (px)"
+
+#: rust/anycapture/src/dialogs.rs:688 rust/snapedit/src/app/extras.rs:119
+msgid "Sombra (%)"
+msgstr "ছায়া (%)"
+
+#: rust/anycapture/src/dialogs.rs:689 rust/snapedit/src/app/extras.rs:120
+msgid "Tamanho da sombra (px)"
+msgstr "ছায়ার আকার (px)"
+
+#: rust/anycapture/src/dialogs.rs:690 rust/snapedit/src/app/extras.rs:122
+msgid "Proporção"
+msgstr "অনুপাত"
+
+#: rust/anycapture/src/dialogs.rs:690
+msgid "Original"
+msgstr "মূল"
+
+#: rust/anycapture/src/dialogs.rs:691 rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533
+msgid "Alinhamento"
+msgstr "সারিবদ্ধতা"
+
+#: rust/anycapture/src/dialogs.rs:694 rust/snapedit/src/app/extras.rs:132
+msgid "Equilibrar as margens (corta bordas lisas da captura)"
+msgstr "মার্জিন সমান করুন (ক্যাপচারের সাদামাটা প্রান্ত ছাঁটে)"
+
+#: rust/anycapture/src/dialogs.rs:696 rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587
+msgid "Embelezar"
+msgstr "সুন্দর করুন"
+
+#: rust/anycapture/src/dialogs.rs:662 rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:894 rust/snapedit/src/props.rs:917
+msgid "Cor"
+msgstr "রং"
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Tons de cinza"
+msgstr "গ্রেস্কেল"
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Sépia"
+msgstr "সেপিয়া"
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Inverter cores"
+msgstr "রং উল্টান"
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Preto e branco"
+msgstr "সাদা-কালো"
+
+#: rust/anycapture/src/dialogs.rs:668
+msgid "Cor a substituir"
+msgstr "যে রং বদলাবেন"
+
+#: rust/anycapture/src/dialogs.rs:668 rust/snapedit/src/effects.rs:139
+msgid "Nova cor"
+msgstr "নতুন রং"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Rasgada"
+msgstr "ছেঁড়া"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341
+msgid "Onda"
+msgstr "ঢেউ"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Dente de serra"
+msgstr "করাতের দাঁত"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Dente de tubarão"
+msgstr "হাঙরের দাঁত"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343
+msgid "Esmaecer"
+msgstr "মিলিয়ে যাওয়া"
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Chanfrada"
+msgstr "ঢালু"
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112
+msgid "Cor sólida"
+msgstr "একটানা রং"
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112
+msgid "Degradê"
+msgstr "গ্রেডিয়েন্ট"
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112
+msgid "Papel de parede"
+msgstr "ওয়ালপেপার"
+
+#: rust/anycapture/src/dialogs.rs:685 rust/anycapture/src/share.rs:53 rust/anycapture/src/window.rs:285 rust/snapedit/src/panels.rs:399
+msgid "Imagem"
+msgstr "ছবি"
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/commands.rs:712 rust/snapedit/src/app/docs.rs:359 rust/snapedit/src/app/extras.rs:112
+msgid "Transparente"
+msgstr "স্বচ্ছ"
+
+#: rust/anycapture/src/dialogs.rs:686 rust/snapedit/src/app/extras.rs:113
+msgid "Cor 1"
+msgstr "রং 1"
+
+#: rust/anycapture/src/dialogs.rs:686 rust/snapedit/src/app/extras.rs:114
+msgid "Cor 2 (degradê)"
+msgstr "রং 2 (গ্রেডিয়েন্ট)"
+
+#: rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/app/commands.rs:705 rust/snapedit/src/app/extras.rs:128
+msgid "Superior"
+msgstr "উপরে"
+
+#: rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/app/commands.rs:705 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534
+msgid "Centro"
+msgstr "মাঝখানে"
+
+#: rust/anycapture/src/dialogs.rs:693 rust/snapedit/src/app/commands.rs:706 rust/snapedit/src/app/extras.rs:129
+msgid "Inferior"
+msgstr "নিচে"
+
+#: rust/anycapture/src/engine.rs:373
+#, c-format
+msgid "Captura em %d s…"
+msgstr "%d সেকেন্ডে ক্যাপচার…"
+
+#: rust/anycapture/src/engine.rs:441
+msgid "A região fixa está fora da tela. Ajuste a posição na engrenagem da Seleção."
+msgstr "স্থির এলাকাটি স্ক্রিনের বাইরে। নির্বাচনের গিয়ার মেনুতে এর অবস্থান ঠিক করুন।"
+
+#: rust/anycapture/src/engine.rs:466
+msgid "Janelas como objetos"
+msgstr "উইন্ডো অবজেক্ট হিসেবে"
+
+#: rust/anycapture/src/engine.rs:479 rust/snapedit/src/app/docs.rs:345
+msgid "A área de transferência não contém imagem."
+msgstr "ক্লিপবোর্ডে কোনো ছবি নেই।"
+
+#: rust/anycapture/src/engine.rs:483 rust/anycapture/src/pins.rs:1139 rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65
+msgid "Área de transferência"
+msgstr "ক্লিপবোর্ড"
+
+#: rust/anycapture/src/engine.rs:488
+msgid "Capturar de arquivo gráfico"
+msgstr "গ্রাফিক ফাইল থেকে ক্যাপচার"
+
+#: rust/anycapture/src/engine.rs:493
+msgid "Não foi possível abrir a imagem."
+msgstr "ছবিটি খোলা যায়নি।"
+
+#: rust/anycapture/src/engine.rs:507
+msgid "Nenhum menu aberto encontrado; selecione a região."
+msgstr "কোনো খোলা মেনু পাওয়া যায়নি; এলাকা নির্বাচন করুন।"
+
+#: rust/anycapture/src/engine.rs:557
+msgid "AnyCapture — seleção"
+msgstr "AnyCapture — নির্বাচন"
+
+#: rust/anycapture/src/engine.rs:616
+msgid "vídeo"
+msgstr "ভিডিও"
+
+#: rust/anycapture/src/engine.rs:621
+msgid "A biblioteca está vazia"
+msgstr "লাইব্রেরি খালি"
+
+#: rust/anycapture/src/engine.rs:774
+msgid "Cursor do mouse"
+msgstr "মাউস কার্সর"
+
+#: rust/anycapture/src/engine.rs:806
+msgid ""
+"Não foi possível reconhecer o texto.\n"
+"\n"
+msgstr ""
+"লেখা শনাক্ত করা যায়নি।\n"
+"\n"
+
+#: rust/anycapture/src/engine.rs:807 rust/anycapture/src/engine.rs:811
+msgid "AnyCapture — Capturar texto"
+msgstr "AnyCapture — লেখা বের করুন"
+
+#: rust/anycapture/src/engine.rs:811
+msgid "Nenhum texto encontrado na captura."
+msgstr "ক্যাপচারে কোনো লেখা পাওয়া যায়নি।"
+
+#: rust/anycapture/src/engine.rs:815
+msgid "Capturar texto — copiado para a área de transferência"
+msgstr "লেখা বের করুন — ক্লিপবোর্ডে কপি হয়েছে"
+
+#: rust/anycapture/src/engine.rs:846
+msgid "copiada para a área de transferência"
+msgstr "ক্লিপবোর্ডে কপি হয়েছে"
+
+#: rust/anycapture/src/engine.rs:854 rust/anycapture/src/engine.rs:881
+msgid "salva em "
+msgstr "এখানে সংরক্ষিত: "
+
+#: rust/anycapture/src/engine.rs:914
+msgid "Captura adicionada à biblioteca"
+msgstr "ক্যাপচার লাইব্রেরিতে যোগ হয়েছে"
+
+#: rust/anycapture/src/engine.rs:922
+msgid "Clique para abrir no Editor."
+msgstr "এডিটরে খুলতে ক্লিক করুন।"
+
+#: rust/anycapture/src/engine.rs:953 rust/anycapture/src/quick.rs:58 rust/snapedit/src/app/windows_aux.rs:487 rust/snapedit/src/app/windows_aux.rs:691
+msgid "Fechar"
+msgstr "বন্ধ করুন"
+
+#: rust/anycapture/src/engine.rs:1109
+msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
+msgstr "ছবি ও নথি|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|AnyCapture নথি (*.snap)|*.snap|MP4 ভিডিও (*.mp4)|*.mp4|সব ফাইল (*.*)|*.*|"
+
+#: rust/anycapture/src/hotkeys.rs:48 rust/snapedit/src/app/extras.rs:1086
+msgid "(nenhum)"
+msgstr "(কোনোটি নয়)"
+
+#: rust/anycapture/src/hotkeys.rs:57 rust/anycapture/src/hotkeys.rs:261 rust/anycapture/tests/window.rs:34
+msgid "Print Screen"
+msgstr "Print Screen"
+
+#: rust/anycapture/src/hud.rs:152
+msgid "Gravar / pausar"
+msgstr "রেকর্ড / বিরতি"
+
+#: rust/anycapture/src/hud.rs:153
+msgid "Parar e salvar"
+msgstr "থামান ও সংরক্ষণ করুন"
+
+#: rust/anycapture/src/hud.rs:154
+msgid "Recomeçar a gravação"
+msgstr "রেকর্ডিং আবার শুরু করুন"
+
+#: rust/anycapture/src/hud.rs:155
+msgid "Cancelar (descarta a gravação)"
+msgstr "বাতিল (রেকর্ডিং বাদ দেওয়া হয়)"
+
+#: rust/anycapture/src/hud.rs:156
+msgid "Microfone: liga / desliga"
+msgstr "মাইক্রোফোন: চালু / বন্ধ"
+
+#: rust/anycapture/src/hud.rs:157
+msgid "Áudio do sistema: liga / desliga"
+msgstr "সিস্টেম অডিও: চালু / বন্ধ"
+
+#: rust/anycapture/src/hud.rs:158
+msgid "Volume do microfone e do sistema"
+msgstr "মাইক্রোফোন ও সিস্টেমের ভলিউম"
+
+#: rust/anycapture/src/hud.rs:159
+msgid "Webcam: mostra / oculta"
+msgstr "ওয়েবক্যাম: দেখান / লুকান"
+
+#: rust/anycapture/src/hud.rs:160
+msgid "Capturar uma imagem sem parar a gravação"
+msgstr "রেকর্ডিং না থামিয়ে একটি ছবি ক্যাপচার করুন"
+
+#: rust/anycapture/src/hud.rs:161
+msgid "Zoom em volta do ponteiro"
+msgstr "পয়েন্টারের চারপাশে জুম"
+
+#: rust/anycapture/src/hud.rs:162
+msgid "No vídeo: destaque do cursor, cliques e teclas"
+msgstr "ভিডিওতে: কার্সর হাইলাইট, ক্লিক ও কী"
+
+#: rust/anycapture/src/hud.rs:263
+msgid "Pronto"
+msgstr "প্রস্তুত"
+
+#: rust/anycapture/src/hud.rs:314 rust/anycapture/src/engine/video.rs:539
+msgid "Volume"
+msgstr "ভলিউম"
+
+#: rust/anycapture/src/hud.rs:340
+msgid "Microfone"
+msgstr "মাইক্রোফোন"
+
+#: rust/anycapture/src/hud.rs:340
+msgid "Áudio do sistema"
+msgstr "সিস্টেম অডিও"
+
+#: rust/anycapture/src/interval.rs:71 rust/anycapture/src/interval.rs:72
+msgid "Intervalo"
+msgstr "ব্যবধান"
+
+#: rust/anycapture/src/interval.rs:102
+msgid "Área"
+msgstr "এলাকা"
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Tela inteira"
+msgstr "সম্পূর্ণ স্ক্রিন"
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Monitor do cursor"
+msgstr "কার্সরের মনিটর"
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Região (escolher agora)"
+msgstr "অঞ্চল (এখন বেছে নিন)"
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Janela (escolher agora)"
+msgstr "উইন্ডো (এখন বেছে নিন)"
+
+#: rust/anycapture/src/interval.rs:106
+msgid "Intervalo (segundos)"
+msgstr "ব্যবধান (সেকেন্ড)"
+
+#: rust/anycapture/src/interval.rs:107
+msgid "Duração (minutos, 0 = até parar)"
+msgstr "সময়কাল (মিনিট, 0 = থামানো পর্যন্ত)"
+
+#: rust/anycapture/src/interval.rs:111 rust/anycapture/src/window.rs:822 rust/anycapture/src/window.rs:827
+msgid "Capturar o cursor"
+msgstr "কার্সর ক্যাপচার"
+
+#: rust/anycapture/src/interval.rs:112
+msgid "Um ponto vermelho no ícone da bandeja indica que está capturando; pare pelo menu da bandeja."
+msgstr "ট্রে আইকনের লাল বিন্দু দেখায় যে ক্যাপচার চলছে; ট্রে মেনু থেকে থামান।"
+
+#: rust/anycapture/src/interval.rs:115 rust/anycapture/src/interval.rs:143 rust/anycapture/src/interval.rs:283
+msgid "Captura por intervalo"
+msgstr "ব্যবধানে ক্যাপচার"
+
+#: rust/anycapture/src/interval.rs:134
+msgid "Escolha uma pasta."
+msgstr "একটি ফোল্ডার বেছে নিন।"
+
+#: rust/anycapture/src/interval.rs:162
+msgid "Não foi possível criar a pasta: "
+msgstr "ফোল্ডার তৈরি করা যায়নি: "
+
+#: rust/anycapture/src/interval.rs:226
+#, c-format
+msgid "Captura por intervalo parada: %d imagem(ns) em %s"
+msgstr "ব্যবধানে ক্যাপচার থেমেছে: %d ছবি %s-এ"
+
+#: rust/anycapture/src/main.rs:176
+msgid "Esse atalho já está em uso por outra ação do AnyCapture."
+msgstr "এই শর্টকাট ইতিমধ্যে AnyCapture-এর অন্য কাজে ব্যবহৃত হচ্ছে।"
+
+#: rust/anycapture/src/main.rs:176 rust/anycapture/src/main.rs:261
+msgid "Conflito de atalho"
+msgstr "শর্টকাটের সংঘাত"
+
+#: rust/anycapture/src/main.rs:184
+msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
+msgstr "অন্য একটি প্রোগ্রাম এই শর্টকাট ব্যবহার করছে। AnyCapture কিবোর্ড হুক দিয়ে এটি ধরবে।"
+
+#: rust/anycapture/src/main.rs:185
+msgid "Atalho"
+msgstr "শর্টকাট"
+
+#: rust/anycapture/src/main.rs:210
+#, c-format
+msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
+msgstr "%u দিনের পুরোনো ক্যাপচার এখনই সরাবেন (অপশনের নিয়ম অনুযায়ী)?"
+
+#: rust/anycapture/src/main.rs:224
+#, c-format
+msgid "%d captura(s) removida(s) da biblioteca."
+msgstr "লাইব্রেরি থেকে %dটি ক্যাপচার সরানো হয়েছে।"
+
+#: rust/anycapture/src/main.rs:231
+msgid "Fixar imagem na tela"
+msgstr "ছবি স্ক্রিনে পিন করুন"
+
+#: rust/anycapture/src/main.rs:233
+msgid ""
+"Não foi possível abrir a imagem.\n"
+"\n"
+msgstr ""
+"ছবি খোলা যায়নি।\n"
+"\n"
+
+#: rust/anycapture/src/main.rs:262
+#, c-format
+msgid "O atalho do preset \"%s\" já está em uso por outra ação."
+msgstr "প্রিসেট \"%s\"-এর শর্টকাট ইতিমধ্যে অন্য কাজে ব্যবহৃত হচ্ছে।"
+
+#: rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572
+msgid "Abrir a janela de captura"
+msgstr "ক্যাপচার উইন্ডো খুলুন"
+
+#: rust/anycapture/src/main.rs:543 rust/anycapture/src/window.rs:194
+msgid "Abrir o Editor"
+msgstr "এডিটর খুলুন"
+
+#: rust/anycapture/src/main.rs:543
+msgid "Sair"
+msgstr "প্রস্থান"
+
+#: rust/anycapture/src/main.rs:544 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
+msgid "Ler código QR"
+msgstr "QR কোড পড়ুন"
+
+#: rust/anycapture/src/main.rs:545 rust/anycapture/src/window.rs:234
+msgid "Mostrar o One Click"
+msgstr "One Click দেখান"
+
+#: rust/anycapture/src/main.rs:547
+#, c-format
+msgid "Imagens fixadas (%zu)"
+msgstr "পিন করা ছবি (%zu)"
+
+#: rust/anycapture/src/main.rs:547
+msgid "Imagens fixadas"
+msgstr "পিন করা ছবি"
+
+#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:230
+msgid "Gravar só o áudio"
+msgstr "শুধু অডিও রেকর্ড করুন"
+
+#: rust/anycapture/src/main.rs:550
+#, c-format
+msgid "Parar a captura por intervalo (%d)"
+msgstr "ব্যবধানে ক্যাপচার থামান (%d)"
+
+#: rust/anycapture/src/main.rs:552 rust/anycapture/src/window.rs:228
+msgid "Captura por intervalo…"
+msgstr "ব্যবধানে ক্যাপচার…"
+
+#: rust/anycapture/src/main.rs:554
+msgid "Abrir o Editor depois da captura"
+msgstr "ক্যাপচারের পরে এডিটর খুলুন"
+
+#: rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:207
+msgid "Opções…"
+msgstr "বিকল্প…"
+
+#: rust/anycapture/src/main.rs:572
+msgid "Ocultar o One Click"
+msgstr "One Click লুকান"
+
+#: rust/anycapture/src/main.rs:658
+msgid "AnyCapture — linha de comando"
+msgstr "AnyCapture — কমান্ড লাইন"
+
+#: rust/anycapture/src/main.rs:688
+msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
+msgstr "/region-এর প্রয়োজন x,y,প্রস্থ,উচ্চতা (যেমন: /region 100,100,800,600)।"
+
+#: rust/anycapture/src/main.rs:700
+msgid "Nenhuma janela com esse título: "
+msgstr "এই শিরোনামের কোনো উইন্ডো নেই: "
+
+#: rust/anycapture/src/main.rs:712
+#, c-format
+msgid "Monitor %d não existe (há %zu)."
+msgstr "মনিটর %d নেই (মোট %zuটি আছে)।"
+
+#: rust/anycapture/src/main.rs:732
+msgid "Não foi possível fixar: "
+msgstr "পিন করা যায়নি: "
+
+#: rust/anycapture/src/main.rs:868 rust/snapcore/src/office.rs:181
+#, c-format
+msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
+msgstr "%s এই কম্পিউটারে ইনস্টল নেই (বা এটি Microsoft Store সংস্করণ, অটোমেশন ছাড়া)।"
+
+#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:214
+msgid "Fixar um arquivo…"
+msgstr "একটি ফাইল পিন করুন…"
+
+#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:212
+msgid "Capturar e fixar"
+msgstr "ক্যাপচার করে পিন করুন"
+
+#: rust/anycapture/src/main.rs:880
+msgid "Mostrar todas"
+msgstr "সব দেখান"
+
+#: rust/anycapture/src/main.rs:881
+msgid "Ocultar todas"
+msgstr "সব লুকান"
+
+#: rust/anycapture/src/main.rs:881 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:215
+msgid "Fechar todas"
+msgstr "সব বন্ধ করুন"
+
+#: rust/anycapture/src/main.rs:881
+msgid "Desligar \"atravessar cliques\""
+msgstr "\"ক্লিক ভেদ করে যাবে\" বন্ধ করুন"
+
+#: rust/anycapture/src/main.rs:881
+msgid "Reabrir a última fechada"
+msgstr "শেষ বন্ধ করাটি আবার খুলুন"
+
+#: rust/anycapture/src/main.rs:882
+msgid "Histórico"
+msgstr "ইতিহাস"
+
+#: rust/anycapture/src/main.rs:927 rust/snapedit/src/app/extras.rs:328
+msgid "O manual não foi encontrado:\n"
+msgstr "ম্যানুয়ালটি পাওয়া যায়নি:\n"
+
+#: rust/anycapture/src/main.rs:968
+msgid " — captura de tela e gravação de vídeo"
+msgstr " — স্ক্রিন ক্যাপচার ও ভিডিও রেকর্ডিং"
+
+#: rust/anycapture/src/main.rs:969 rust/snapedit/src/app/commands.rs:449
+msgid "Software livre sob a GNU General Public License versão 3."
+msgstr "GNU General Public License সংস্করণ 3-এর অধীনে মুক্ত সফটওয়্যার।"
+
+#: rust/anycapture/src/main.rs:972 rust/anycapture/src/window.rs:245
+msgid "Sobre o AnyCapture"
+msgstr "AnyCapture সম্পর্কে"
+
+#: rust/anycapture/src/main.rs:1011 rust/anycapture/src/main.rs:1080 rust/anycapture/src/main.rs:1160
+msgid "AnyCapture — clique para capturar"
+msgstr "AnyCapture — ক্যাপচারে ক্লিক করুন"
+
+#: rust/anycapture/src/main.rs:1031
+msgid "AnyCapture — gravação recuperada"
+msgstr "AnyCapture — রেকর্ডিং পুনরুদ্ধার হয়েছে"
+
+#: rust/anycapture/src/main.rs:1032
+#, c-format
+msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
+msgstr "%zuটি বাধাপ্রাপ্ত রেকর্ডিং লাইব্রেরিতে পুনরুদ্ধার হয়েছে।"
+
+#: rust/anycapture/src/main.rs:1158
+#, c-format
+msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
+msgstr "AnyCapture — ব্যবধানে ক্যাপচার: %d ছবি"
+
+#: rust/anycapture/src/oneclick.rs:500
+msgid "Iniciar uma captura"
+msgstr "ক্যাপচার শুরু করুন"
+
+#: rust/anycapture/src/pins.rs:412 rust/anycapture/src/select.rs:578
+msgid "Cor copiada: "
+msgstr "রং কপি হয়েছে: "
+
+#: rust/anycapture/src/pins.rs:420
+msgid "Fixada"
+msgstr "পিন করা"
+
+#: rust/anycapture/src/pins.rs:421
+msgid "Salvar a imagem fixada"
+msgstr "পিন করা ছবি সংরক্ষণ করুন"
+
+#: rust/anycapture/src/pins.rs:429 rust/anycapture/src/quick.rs:255 rust/snapedit/src/app/docs.rs:322
+msgid "Não foi possível salvar:\n"
+msgstr "সংরক্ষণ করা যায়নি:\n"
+
+#: rust/anycapture/src/pins.rs:438 rust/anycapture/src/pins.rs:978 rust/anycapture/src/pins.rs:1206
+msgid "Imagem fixada"
+msgstr "পিন করা ছবি"
+
+#: rust/anycapture/src/pins.rs:610 rust/snapedit/src/tray.rs:318
+msgid "Copiar\tCtrl+C"
+msgstr "কপি করুন\tCtrl+C"
+
+#: rust/anycapture/src/pins.rs:610
+msgid "Salvar como…\tCtrl+S"
+msgstr "এভাবে সংরক্ষণ করুন…\tCtrl+S"
+
+#: rust/anycapture/src/pins.rs:610
+msgid "Abrir no Editor"
+msgstr "এডিটরে খুলুন"
+
+#: rust/anycapture/src/pins.rs:611
+msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
+msgstr "টীকা দিন (কলম, হাইলাইটার, তীর, আয়তক্ষেত্র, টেক্সট)"
+
+#: rust/anycapture/src/pins.rs:611
+msgid "Desfazer a anotação\tCtrl+Z"
+msgstr "টীকা পূর্বাবস্থায় ফেরান\tCtrl+Z"
+
+#: rust/anycapture/src/pins.rs:612
+msgid "Zoom"
+msgstr "জুম"
+
+#: rust/anycapture/src/pins.rs:612 rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:899
+msgid "Opacidade"
+msgstr "অস্বচ্ছতা"
+
+#: rust/anycapture/src/pins.rs:612
+msgid "Travar a posição"
+msgstr "অবস্থান লক করুন"
+
+#: rust/anycapture/src/pins.rs:613
+msgid "Atravessar cliques (desligue pelo menu da bandeja)"
+msgstr "ক্লিক ভেদ করে যাবে (ট্রে মেনু থেকে বন্ধ করুন)"
+
+#: rust/anycapture/src/pins.rs:613
+msgid "Sempre visível"
+msgstr "সর্বদা উপরে"
+
+#: rust/anycapture/src/pins.rs:613 rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:100 rust/snapedit/src/effects.rs:121
+msgid "Sombra"
+msgstr "ছায়া"
+
+#: rust/anycapture/src/pins.rs:614
+msgid "Copiar a cor neste ponto\tAlt+clique"
+msgstr "এই বিন্দুর রং কপি করুন\tAlt+ক্লিক"
+
+#: rust/anycapture/src/pins.rs:614
+msgid "Arrastar para outro programa: Ctrl+arrastar"
+msgstr "অন্য প্রোগ্রামে টেনে নিন: Ctrl+টানুন"
+
+#: rust/anycapture/src/pins.rs:614
+msgid "Fechar\tEsc"
+msgstr "বন্ধ করুন\tEsc"
+
+#: rust/anycapture/src/pins.rs:615
+msgid "Fechar todas as imagens fixadas"
+msgstr "সব পিন করা ছবি বন্ধ করুন"
+
+#: rust/anycapture/src/pins.rs:693
+msgid "Texto na imagem fixada"
+msgstr "পিন করা ছবিতে টেক্সট"
+
+#: rust/anycapture/src/pins.rs:1144
+msgid "A área de transferência não tem imagem nem texto para fixar."
+msgstr "ক্লিপবোর্ডে পিন করার মতো কোনো ছবি বা টেক্সট নেই।"
+
+#: rust/anycapture/src/pins.rs:1212
+msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
+msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Vermelho"
+msgstr "লাল"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Amarelo"
+msgstr "হলুদ"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Verde"
+msgstr "সবুজ"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Azul"
+msgstr "নীল"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Roxo"
+msgstr "বেগুনি"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Preto"
+msgstr "কালো"
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Branco"
+msgstr "সাদা"
+
+#: rust/anycapture/src/quick.rs:236
+msgid "Copiado para a área de transferência."
+msgstr "ক্লিপবোর্ডে কপি হয়েছে।"
+
+#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:286
+msgid "Vídeo"
+msgstr "ভিডিও"
+
+#: rust/anycapture/src/quick.rs:241
+msgid "Salvar o vídeo"
+msgstr "ভিডিও সংরক্ষণ করুন"
+
+#: rust/anycapture/src/quick.rs:241 rust/snapedit/src/app/video.rs:413
+msgid "Vídeo MP4 (*.mp4)|*.mp4|"
+msgstr "MP4 ভিডিও (*.mp4)|*.mp4|"
+
+#: rust/anycapture/src/quick.rs:247 rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:262
+msgid "Salvar como"
+msgstr "এভাবে সংরক্ষণ"
+
+#: rust/anycapture/src/quick.rs:297 rust/snapedit/src/tray.rs:322 rust/snapedit/src/app/commands.rs:788
+msgid "Copiar como…"
+msgstr "এভাবে কপি করুন…"
+
+#: rust/anycapture/src/quick.rs:299
+msgid "Enviar (upload) e copiar o link"
+msgstr "আপলোড করে লিংক কপি করুন"
+
+#: rust/anycapture/src/quick.rs:53 rust/snapedit/src/app/windows_aux.rs:869
+msgid "Copiar"
+msgstr "কপি করুন"
+
+#: rust/anycapture/src/quick.rs:54
+msgid "Salvar como…"
+msgstr "এভাবে সংরক্ষণ করুন…"
+
+#: rust/anycapture/src/quick.rs:55
+msgid "Anotar no Editor"
+msgstr "এডিটরে টীকা দিন"
+
+#: rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:227 rust/snapedit/src/tray.rs:324
+msgid "Fixar na tela"
+msgstr "স্ক্রিনে পিন করুন"
+
+#: rust/anycapture/src/quick.rs:57
+msgid "Excluir da biblioteca"
+msgstr "লাইব্রেরি থেকে মুছুন"
+
+#: rust/anycapture/src/rawwin.rs:194
+msgid "Pular"
+msgstr "এড়িয়ে যান"
+
+#: rust/anycapture/src/select.rs:556
+msgid "Nenhuma região anterior ainda"
+msgstr "এখনও আগের কোনো অঞ্চল নেই"
+
+#: rust/anycapture/src/select.rs:566
+#, c-format
+msgid "Região anterior %d de %d"
+msgstr "আগের অঞ্চল %d / %d"
+
+#: rust/anycapture/src/select.rs:660
+msgid "Tamanho da seleção"
+msgstr "নির্বাচনের আকার"
+
+#: rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387 rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574
+msgid "Cancelar"
+msgstr "বাতিল"
+
+#: rust/anycapture/src/select.rs:808
+msgid "Setas movem (Shift = 10 px) • Ctrl+setas aumentam, Ctrl+Shift+setas diminuem • clique no tamanho para digitar • Enter ou duplo clique captura • Esc = cancelar"
+msgstr "তীর সরায় (Shift = 10 px) • Ctrl+তীর বড় করে, Ctrl+Shift+তীর ছোট করে • আকার লিখতে তাতে ক্লিক করুন • Enter বা ডাবল ক্লিকে ক্যাপচার • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:809
+msgid "Arraste para selecionar • clique captura a janela/área destacada • Enter = monitor • Tab = regiões anteriores • H = capturas recentes • C = copiar a cor • Esc = cancelar"
+msgstr "বেছে নিতে টানুন • ক্লিকে হাইলাইট করা উইন্ডো/এলাকা ক্যাপচার • Enter = মনিটর • Tab = আগের অঞ্চল • H = সাম্প্রতিক ক্যাপচার • C = রং কপি • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:810
+msgid "Clique na janela a capturar • Esc = cancelar"
+msgstr "যে উইন্ডো ক্যাপচার করবেন তাতে ক্লিক করুন • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:811
+msgid "Clique no controle/objeto a capturar • Esc = cancelar"
+msgstr "যে নিয়ন্ত্রণ/অবজেক্ট ক্যাপচার করবেন তাতে ক্লিক করুন • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:812
+#, c-format
+msgid "Região fixa %d × %d — clique para capturar • Esc = cancelar"
+msgstr "স্থির এলাকা %d × %d — ক্যাপচারে ক্লিক করুন • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:813
+msgid "Desenhe o contorno com o botão pressionado • Esc = cancelar"
+msgstr "বোতাম চেপে ধরে রূপরেখা আঁকুন • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:814
+msgid "Arraste várias áreas • Backspace desfaz • Enter ou botão direito conclui • Esc = cancelar"
+msgstr "একাধিক এলাকা টানুন • Backspace পূর্বাবস্থায় ফেরায় • Enter বা ডান ক্লিকে শেষ • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:815
+msgid "Clique na janela/área rolável • Esc = cancelar"
+msgstr "স্ক্রলযোগ্য উইন্ডো/এলাকায় ক্লিক করুন • Esc = বাতিল"
+
+#: rust/anycapture/src/select.rs:817
+msgid "Gravação: "
+msgstr "রেকর্ডিং: "
+
+#: rust/anycapture/src/select.rs:294 rust/snapcore/src/recorder.rs:1081 rust/snapcore/src/recorder.rs:1614 rust/snapedit/src/edtools.rs:740
+msgid "ok"
+msgstr "ঠিক আছে"
+
+#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:577 rust/snapui/src/form.rs:461
+msgid "OK"
+msgstr "ঠিক আছে"
+
+#: rust/anycapture/src/share.rs:40
+#, c-format
+msgid "Captura enviada para o %s."
+msgstr "ক্যাপচার %s-এ পাঠানো হয়েছে।"
+
+#: rust/anycapture/src/share.rs:53 rust/snapedit/src/app/extras.rs:395
+msgid "Arquivo (para colar no Explorer, e-mail, chat)"
+msgstr "ফাইল (এক্সপ্লোরার, ই-মেইল, চ্যাটে পেস্ট করতে)"
+
+#: rust/anycapture/src/share.rs:53 rust/snapedit/src/app/extras.rs:396
+msgid "Caminho do arquivo"
+msgstr "ফাইলের পথ"
+
+#: rust/anycapture/src/share.rs:53 rust/snapedit/src/app/extras.rs:399
+msgid "Base64 (PNG)"
+msgstr "Base64 (PNG)"
+
+#: rust/anycapture/src/share.rs:54 rust/snapedit/src/app/extras.rs:400
+msgid "Data URL (PNG)"
+msgstr "ডেটা URL (PNG)"
+
+#: rust/anycapture/src/share.rs:54 rust/snapedit/src/app/extras.rs:401
+msgid "Data URL (WebP)"
+msgstr "ডেটা URL (WebP)"
+
+#: rust/anycapture/src/share.rs:98
+msgid "O upload ainda não está configurado. Configurar agora?"
+msgstr "আপলোড এখনও সেট করা হয়নি। এখন সেট করবেন?"
+
+#: rust/anycapture/src/share.rs:105
+msgid "Enviando a captura…"
+msgstr "ক্যাপচার আপলোড হচ্ছে…"
+
+#: rust/anycapture/src/share.rs:109
+msgid ""
+"O upload falhou.\n"
+"\n"
+msgstr ""
+"আপলোড ব্যর্থ হয়েছে।\n"
+"\n"
+
+#: rust/anycapture/src/share.rs:118
+msgid "Upload concluído — link copiado"
+msgstr "আপলোড সম্পন্ন — লিংক কপি হয়েছে"
+
+#: rust/anycapture/src/update.rs:75
+#, c-format
+msgid "Você já está usando a versão mais recente do AnyCapture (%s)."
+msgstr "আপনি ইতিমধ্যে AnyCapture-এর সর্বশেষ সংস্করণ (%s) ব্যবহার করছেন।"
+
+#: rust/anycapture/src/update.rs:80
+msgid "Não foi possível verificar se há atualizações. Verifique a conexão com a internet."
+msgstr "আপডেট খোঁজা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।"
+
+#: rust/anycapture/src/update.rs:97
+#, c-format
+msgid "O AnyCapture %s está disponível"
+msgstr "AnyCapture %s পাওয়া যাচ্ছে"
+
+#: rust/anycapture/src/update.rs:98
+#, c-format
+msgid "Você está usando a versão %s."
+msgstr "আপনি সংস্করণ %s ব্যবহার করছেন।"
+
+#: rust/anycapture/src/update.rs:105
+msgid "Mostrar as novidades"
+msgstr "নতুন কী আছে দেখান"
+
+#: rust/anycapture/src/update.rs:105
+msgid "Ocultar as novidades"
+msgstr "নতুন কী আছে লুকান"
+
+#: rust/anycapture/src/update.rs:108
+msgid ""
+"Atualizar agora\n"
+"Baixa o instalador, fecha o AnyCapture e o Editor e instala a nova versão."
+msgstr ""
+"এখনই আপডেট করুন\n"
+"ইনস্টলার ডাউনলোড করে, AnyCapture ও এডিটর বন্ধ করে এবং নতুন সংস্করণ ইনস্টল করে।"
+
+#: rust/anycapture/src/update.rs:109
+msgid ""
+"Ver a página da versão\n"
+"Abre a versão no GitHub, com as novidades e os arquivos."
+msgstr ""
+"সংস্করণের পাতা দেখুন\n"
+"GitHub-এ সংস্করণটি খোলে, নতুন বিষয় ও ফাইলসহ।"
+
+#: rust/anycapture/src/update.rs:110
+msgid ""
+"Pular esta versão\n"
+"Não avisa mais desta versão ao iniciar."
+msgstr ""
+"এই সংস্করণ এড়িয়ে যান\n"
+"চালু হওয়ার সময় এই সংস্করণের কথা আর মনে করাবে না।"
+
+#: rust/anycapture/src/update.rs:171
+#, c-format
+msgid "Baixando o AnyCapture %s…"
+msgstr "AnyCapture %s ডাউনলোড হচ্ছে…"
+
+#: rust/anycapture/src/update.rs:172
+msgid "A instalação começa assim que o download terminar."
+msgstr "ডাউনলোড শেষ হলেই ইনস্টলেশন শুরু হবে।"
+
+#: rust/anycapture/src/update.rs:201
+msgid "Não foi possível baixar a atualização."
+msgstr "আপডেট ডাউনলোড করা যায়নি।"
+
+#: rust/anycapture/src/update.rs:219
+msgid "O instalador não foi iniciado. Você pode instalar a nova versão pela página da versão no GitHub."
+msgstr "ইনস্টলার চালু হয়নি। আপনি GitHub-এর সংস্করণের পাতা থেকে নতুন সংস্করণ ইনস্টল করতে পারেন।"
+
+#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:420 rust/anycapture/src/window.rs:430
+msgid "Nenhum"
+msgstr "কোনোটি নয়"
+
+#: rust/anycapture/src/window.rs:44 rust/snapedit/src/panels.rs:62
+msgid "Arquivo"
+msgstr "ফাইল"
+
+#: rust/anycapture/src/window.rs:44
+msgid "Programa externo"
+msgstr "বাইরের প্রোগ্রাম"
+
+#: rust/anycapture/src/window.rs:44
+msgid "Texto (OCR)"
+msgstr "লেখা (OCR)"
+
+#: rust/anycapture/src/window.rs:45
+msgid "Upload (copiar o link)"
+msgstr "আপলোড (লিংক কপি করুন)"
+
+#: rust/anycapture/src/window.rs:195
+msgid "Abrir a pasta da biblioteca"
+msgstr "লাইব্রেরি ফোল্ডার খুলুন"
+
+#: rust/anycapture/src/window.rs:196
+msgid "Abrir a pasta de logs"
+msgstr "লগ ফোল্ডার খুলুন"
+
+#: rust/anycapture/src/window.rs:198
+msgid "Importar presets…"
+msgstr "প্রিসেট ইমপোর্ট করুন…"
+
+#: rust/anycapture/src/window.rs:199
+msgid "Exportar presets…"
+msgstr "প্রিসেট এক্সপোর্ট করুন…"
+
+#: rust/anycapture/src/window.rs:201
+msgid "Exportar todas as configurações…"
+msgstr "সব সেটিংস এক্সপোর্ট করুন…"
+
+#: rust/anycapture/src/window.rs:202
+msgid "Importar todas as configurações…"
+msgstr "সব সেটিংস ইমপোর্ট করুন…"
+
+#: rust/anycapture/src/window.rs:203
+msgid "Abrir a pasta de backups"
+msgstr "ব্যাকআপ ফোল্ডার খুলুন"
+
+#: rust/anycapture/src/window.rs:205
+msgid "Configurar o upload…"
+msgstr "আপলোড সেট আপ করুন…"
+
+#: rust/anycapture/src/window.rs:206
+msgid "Limpar a biblioteca agora"
+msgstr "এখনই লাইব্রেরি পরিষ্কার করুন"
+
+#: rust/anycapture/src/window.rs:209
+msgid "Sair do AnyCapture"
+msgstr "AnyCapture থেকে বের হন"
+
+#: rust/anycapture/src/window.rs:220
+msgid "Repetir a última captura"
+msgstr "শেষ ক্যাপচারটি আবার করুন"
+
+#: rust/anycapture/src/window.rs:222 rust/snapedit/src/app/docs.rs:348
+msgid "Da área de transferência"
+msgstr "ক্লিপবোর্ড থেকে"
+
+#: rust/anycapture/src/window.rs:223
+msgid "De um arquivo gráfico…"
+msgstr "একটি ছবি ফাইল থেকে…"
+
+#: rust/anycapture/src/window.rs:231
+msgid "Abrir a pasta dos áudios"
+msgstr "অডিও ফোল্ডার খুলুন"
+
+#: rust/anycapture/src/window.rs:235
+msgid "Lista de presets"
+msgstr "প্রিসেট তালিকা"
+
+#: rust/anycapture/src/window.rs:238
+msgid "Manual do AnyCapture"
+msgstr "AnyCapture ম্যানুয়াল"
+
+#: rust/anycapture/src/window.rs:239
+msgid "Como usar os presets"
+msgstr "প্রিসেট কীভাবে ব্যবহার করবেন"
+
+#: rust/anycapture/src/window.rs:241
+msgid "Verificar atualizações…"
+msgstr "আপডেট খুঁজুন…"
+
+#: rust/anycapture/src/window.rs:242
+msgid "Relatar um problema…"
+msgstr "সমস্যা জানান…"
+
+#: rust/anycapture/src/window.rs:243
+msgid "Enviar sugestão ou feedback…"
+msgstr "পরামর্শ বা মতামত পাঠান…"
+
+#: rust/anycapture/src/window.rs:247 rust/snapedit/src/menu.rs:239
+msgid "&Arquivo"
+msgstr "ফাইল(&F)"
+
+#: rust/anycapture/src/window.rs:247
+msgid "&Captura"
+msgstr "ক্যাপচার(&C)"
+
+#: rust/anycapture/src/window.rs:247 rust/snapedit/src/menu.rs:243
+msgid "E&xibir"
+msgstr "দেখুন(&V)"
+
+#: rust/anycapture/src/window.rs:247 rust/snapedit/src/menu.rs:244
+msgid "A&juda"
+msgstr "সহায়তা(&H)"
+
+#: rust/anycapture/src/window.rs:351
+msgid "Seleção:"
+msgstr "নির্বাচন:"
+
+#: rust/anycapture/src/window.rs:369 rust/anycapture/src/window.rs:684
+msgid "Configurações"
+msgstr "সেটিংস"
+
+#: rust/anycapture/src/window.rs:374
+msgid "Selecionar a região na captura"
+msgstr "ক্যাপচারের সময় এলাকা নির্বাচন"
+
+#: rust/anycapture/src/window.rs:376
+msgid "Região fixa…"
+msgstr "স্থির এলাকা…"
+
+#: rust/anycapture/src/window.rs:385
+msgid "Cada janela como um objeto separado"
+msgstr "প্রতিটি উইন্ডো আলাদা অবজেক্ট হিসেবে"
+
+#: rust/anycapture/src/window.rs:388
+msgid "Guardar os links da página (clicáveis, também no PDF)"
+msgstr "পেজের লিঙ্ক রাখুন (ক্লিকযোগ্য, PDF-এও)"
+
+#: rust/anycapture/src/window.rs:414
+msgid "Efeitos:"
+msgstr "প্রভাব:"
+
+#: rust/anycapture/src/window.rs:435
+msgid "Adicionar outro efeito"
+msgstr "আরেকটি প্রভাব যোগ করুন"
+
+#: rust/anycapture/src/window.rs:436
+msgid "Remover este efeito"
+msgstr "এই প্রভাব সরান"
+
+#: rust/anycapture/src/window.rs:477
+msgid "Compartilhar:"
+msgstr "শেয়ার:"
+
+#: rust/anycapture/src/window.rs:500
+msgid "Qualidade:"
+msgstr "মান:"
+
+#: rust/anycapture/src/window.rs:501
+msgid "Muito baixa"
+msgstr "খুব কম"
+
+#: rust/anycapture/src/window.rs:501 rust/snapedit/src/effects.rs:126
+msgid "Baixa"
+msgstr "কম"
+
+#: rust/anycapture/src/window.rs:501 rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126
+msgid "Média"
+msgstr "মাঝারি"
+
+#: rust/anycapture/src/window.rs:501 rust/snapedit/src/effects.rs:126
+msgid "Alta"
+msgstr "উচ্চ"
+
+#: rust/anycapture/src/window.rs:532
+msgid "Webcam:"
+msgstr "ওয়েবক্যাম:"
+
+#: rust/anycapture/src/window.rs:533
+msgid "Ligada"
+msgstr "চালু"
+
+#: rust/anycapture/src/window.rs:533 rust/anycapture/src/window.rs:544
+msgid "Desligada"
+msgstr "বন্ধ"
+
+#: rust/anycapture/src/window.rs:546
+msgid "Nenhuma webcam encontrada"
+msgstr "কোনো ওয়েবক্যাম পাওয়া যায়নি"
+
+#: rust/anycapture/src/window.rs:560
+msgid "Remover o fundo (chroma key)…"
+msgstr "পটভূমি সরান (ক্রোমা কি)…"
+
+#: rust/anycapture/src/window.rs:595
+#, c-format
+msgid "%d s"
+msgstr "%d সে."
+
+#: rust/anycapture/src/window.rs:599
+msgid "Atraso"
+msgstr "বিলম্ব"
+
+#: rust/anycapture/src/window.rs:607
+msgid "1 segundo"
+msgstr "১ সেকেন্ড"
+
+#: rust/anycapture/src/window.rs:608
+#, c-format
+msgid "%d segundos"
+msgstr "%d সেকেন্ড"
+
+#: rust/anycapture/src/window.rs:623 rust/snapedit/src/panels.rs:244
+msgid "Gravar"
+msgstr "রেকর্ড"
+
+#: rust/anycapture/src/window.rs:623 rust/snapedit/src/panels.rs:243
+msgid "Capturar"
+msgstr "ক্যাপচার"
+
+#: rust/anycapture/src/window.rs:647
+msgid "Gravar vídeo  ("
+msgstr "ভিডিও রেকর্ড  ("
+
+#: rust/anycapture/src/window.rs:647
+msgid "Capturar imagem  ("
+msgstr "ছবি ক্যাপচার  ("
+
+#: rust/anycapture/src/window.rs:657
+msgid "Adicionar atalho"
+msgstr "শর্টকাট যোগ করুন"
+
+#: rust/anycapture/src/window.rs:729
+msgid "Capturar com este preset"
+msgstr "এই প্রিসেট দিয়ে ক্যাপচার"
+
+#: rust/anycapture/src/window.rs:731
+msgid "Renomear…"
+msgstr "নাম বদলান…"
+
+#: rust/anycapture/src/window.rs:732
+msgid "Atalho…"
+msgstr "শর্টকাট…"
+
+#: rust/anycapture/src/window.rs:733 rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591
+msgid "Duplicar"
+msgstr "প্রতিলিপি"
+
+#: rust/anycapture/src/window.rs:735 rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618
+msgid "Excluir"
+msgstr "মুছুন"
+
+#: rust/anycapture/src/window.rs:774 rust/anycapture/tests/window.rs:166
+msgid "Novo preset…"
+msgstr "নতুন প্রিসেট…"
+
+#: rust/anycapture/src/window.rs:776 rust/snapedit/src/props.rs:860
+msgid "Ajuda"
+msgstr "সহায়তা"
+
+#: rust/anycapture/src/window.rs:786
+msgid "Abrir Editor"
+msgstr "এডিটর খুলুন"
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:589
+msgid "Borda"
+msgstr "বর্ডার"
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:123
+msgid "Filtros"
+msgstr "ফিল্টার"
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:155
+msgid "Informações da captura"
+msgstr "ক্যাপচারের তথ্য"
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:137
+msgid "Substituição de cor"
+msgstr "রং প্রতিস্থাপন"
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/app/commands.rs:666
+msgid "Redimensionar imagem"
+msgstr "ছবির আকার পরিবর্তন"
+
+#: rust/anycapture/src/window.rs:88 rust/snapedit/src/app/commands.rs:590
+msgid "Bordas especiais"
+msgstr "বিশেষ প্রান্ত"
+
+#: rust/anycapture/src/window.rs:88
+msgid "Cortar bordas"
+msgstr "প্রান্ত ছাঁটুন"
+
+#: rust/anycapture/src/window.rs:88
+msgid "Ajuste de cor"
+msgstr "রং সমন্বয়"
+
+#: rust/anycapture/src/window.rs:88
+msgid "Girar imagem"
+msgstr "ছবি ঘোরান"
+
+#: rust/anycapture/src/window.rs:88 rust/snapedit/src/effects.rs:149
+msgid "Marca d'água"
+msgstr "জলছাপ"
+
+#: rust/anycapture/src/window.rs:88
+msgid "Resolução da imagem"
+msgstr "ছবির রেজোলিউশন"
+
+#: rust/anycapture/src/window.rs:89
+msgid "Embelezar (fundo, margem e sombra)"
+msgstr "সুন্দর করুন (পটভূমি, মার্জিন ও ছায়া)"
+
+#: rust/anycapture/src/window.rs:820
+msgid "Visualizar no Editor"
+msgstr "এডিটরে প্রিভিউ"
+
+#: rust/anycapture/src/window.rs:823
+msgid "Gravar microfone"
+msgstr "মাইক্রোফোন রেকর্ড"
+
+#: rust/anycapture/src/window.rs:824
+msgid "Gravar áudio do sistema"
+msgstr "সিস্টেমের অডিও রেকর্ড"
+
+#: rust/anycapture/src/window.rs:826
+msgid "Copiar para a área de transferência"
+msgstr "ক্লিপবোর্ডে কপি করুন"
+
+#: rust/anycapture/src/engine/scroll.rs:159
+msgid "A janela será ampliada além da tela, capturada e restaurada."
+msgstr "উইন্ডোটি স্ক্রিনের চেয়ে বড় করা হবে, ক্যাপচার করা হবে এবং আগের অবস্থায় ফেরানো হবে।"
+
+#: rust/anycapture/src/engine/scroll.rs:160
+msgid "Nova largura (px)"
+msgstr "নতুন প্রস্থ (px)"
+
+#: rust/anycapture/src/engine/scroll.rs:161
+msgid "Nova altura (px)"
+msgstr "নতুন উচ্চতা (px)"
+
+#: rust/anycapture/src/engine/scroll.rs:163 rust/snapcore/src/presets.rs:66
+msgid "Janela estendida"
+msgstr "বর্ধিত উইন্ডো"
+
+#: rust/anycapture/src/engine/scroll.rs:283
+msgid "AnyCapture — rolagem panorâmica"
+msgstr "AnyCapture — প্যানোরামিক স্ক্রল"
+
+#: rust/anycapture/src/engine/scroll.rs:379
+msgid "Role o conteúdo dentro da moldura…"
+msgstr "ফ্রেমের ভেতরের বিষয়বস্তু স্ক্রল করুন…"
+
+#: rust/anycapture/src/engine/scroll.rs:381
+#, c-format
+msgid "Capturando: %d × %d px"
+msgstr "ক্যাপচার হচ্ছে: %d × %d px"
+
+#: rust/anycapture/src/engine/scroll.rs:387
+msgid "Concluir"
+msgstr "শেষ করুন"
+
+#: rust/anycapture/src/engine/video.rs:123
+msgid "Recomeçar a gravação?"
+msgstr "রেকর্ডিং আবার শুরু করবেন?"
+
+#: rust/anycapture/src/engine/video.rs:124
+msgid "O que foi gravado até agora será descartado."
+msgstr "এ পর্যন্ত যা রেকর্ড হয়েছে তা বাতিল হবে।"
+
+#: rust/anycapture/src/engine/video.rs:125
+msgid "Não perguntar de novo"
+msgstr "আর জিজ্ঞেস করবেন না"
+
+#: rust/anycapture/src/engine/video.rs:191
+msgid "AnyCapture — gravação"
+msgstr "AnyCapture — রেকর্ডিং"
+
+#: rust/anycapture/src/engine/video.rs:318
+msgid ""
+"Não foi possível iniciar a gravação.\n"
+"\n"
+msgstr ""
+"রেকর্ডিং শুরু করা যায়নি।\n"
+"\n"
+
+#: rust/anycapture/src/engine/video.rs:360
+msgid "Teclas: não mostrar"
+msgstr "কী: দেখাবেন না"
+
+#: rust/anycapture/src/engine/video.rs:361
+msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
+msgstr "কী: শুধু শর্টকাট (Ctrl, Alt, Win, F1…)"
+
+#: rust/anycapture/src/engine/video.rs:361
+msgid "Teclas: todas (inclusive o que for digitado)"
+msgstr "কী: সব (যা টাইপ করা হয় তাও)"
+
+#: rust/anycapture/src/engine/video.rs:405
+msgid "Há uma gravação em andamento. Parar e sair?"
+msgstr "রেকর্ডিং চলছে। থামিয়ে প্রস্থান করবেন?"
+
+#: rust/anycapture/src/engine/video.rs:415
+msgid "Imagem durante gravação"
+msgstr "রেকর্ডিংয়ের সময় ছবি"
+
+#: rust/anycapture/src/engine/video.rs:421
+msgid "Imagem capturada sem parar a gravação."
+msgstr "রেকর্ডিং না থামিয়েই ছবি ক্যাপচার হয়েছে।"
+
+#: rust/anycapture/src/engine/video.rs:481
+msgid "AnyCapture — áudio salvo"
+msgstr "AnyCapture — অডিও সংরক্ষিত"
+
+#: rust/anycapture/src/engine/video.rs:506
+msgid "Vídeo salvo na biblioteca: "
+msgstr "ভিডিও লাইব্রেরিতে সংরক্ষিত: "
+
+#: rust/anycapture/src/engine/video.rs:509
+msgid ""
+"A gravação falhou.\n"
+"\n"
+msgstr ""
+"রেকর্ডিং ব্যর্থ হয়েছে।\n"
+"\n"
+
+#: rust/anycapture/src/engine/video.rs:520
+msgid "AnyCapture — pouco espaço em disco"
+msgstr "AnyCapture — ডিস্কে জায়গা কম"
+
+#: rust/anycapture/src/engine/video.rs:520
+msgid "Restam menos de 1 GB livres na unidade da biblioteca."
+msgstr "লাইব্রেরির ড্রাইভে ১ GB-এর কম জায়গা খালি আছে।"
+
+#: rust/anycapture/src/engine/video.rs:522
+msgid "Gravação interrompida: espaço em disco insuficiente."
+msgstr "রেকর্ডিং থেমেছে: ডিস্কে যথেষ্ট জায়গা নেই।"
+
 #: rust/snapcore/src/ai.rs:61
 msgid "Sem resposta do provedor: "
 msgstr "প্রদানকারীর কাছ থেকে উত্তর নেই: "
@@ -59,9 +2150,13 @@ msgstr "WebP এনকোড করতে ব্যর্থ।"
 msgid "L"
 msgstr "প্র"
 
-#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:299 rust/snapedit/src/app/commands.rs:91
+#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:314 rust/snapedit/src/app/commands.rs:91
 msgid "Abrir"
 msgstr "খুলুন"
+
+#: rust/snapcore/src/legacy.rs:315 rust/snapcore/src/net.rs:828 rust/snapcore/src/settings.rs:291 rust/snapcore/src/snap.rs:323
+msgid "abc"
+msgstr "abc"
 
 #: rust/snapcore/src/library.rs:219
 msgid "Audio"
@@ -71,11 +2166,7 @@ msgstr "Audio"
 msgid "Região"
 msgstr "এলাকা"
 
-#: rust/snapcore/src/net.rs:808 rust/snapcore/src/settings.rs:286 rust/snapcore/src/snap.rs:323 rust/snapcore/src/upload.rs:1153
-msgid "abc"
-msgstr "abc"
-
-#: rust/snapcore/src/net.rs:809 rust/snapcore/src/settings.rs:286 rust/snapedit/src/stamp_data.rs:12
+#: rust/snapcore/src/net.rs:829 rust/snapcore/src/settings.rs:291 rust/snapedit/src/stamp_data.rs:12
 msgid "ab"
 msgstr "ab"
 
@@ -98,11 +2189,6 @@ msgstr "এই Windows-এ মুখ শনাক্তকরণ উপলব্
 #: rust/snapcore/src/ocr.rs:38
 msgid "Falha na detecção de rostos."
 msgstr "মুখ শনাক্তকরণ ব্যর্থ হয়েছে।"
-
-#: rust/snapcore/src/office.rs:181 rust/anycapture/src/main.rs:860
-#, c-format
-msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
-msgstr "%s এই কম্পিউটারে ইনস্টল নেই (বা এটি Microsoft Store সংস্করণ, অটোমেশন ছাড়া)।"
 
 #: rust/snapcore/src/office.rs:190
 #, c-format
@@ -154,33 +2240,13 @@ msgstr "স্বয়ংক্রিয় স্ক্রল (উইন্ড
 msgid "Rolagem panorâmica"
 msgstr "প্যানোরামিক স্ক্রল"
 
-#: rust/snapcore/src/presets.rs:66 rust/anycapture/src/engine/scroll.rs:163
-msgid "Janela estendida"
-msgstr "বর্ধিত উইন্ডো"
-
 #: rust/snapcore/src/presets.rs:67
 msgid "Menu"
 msgstr "মেনু"
 
-#: rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65 rust/snapedit/src/app/clipboard.rs:185 rust/snapedit/src/app/commands.rs:777
-msgid "Área de transferência"
-msgstr "ক্লিপবোর্ড"
-
 #: rust/snapcore/src/presets.rs:69
 msgid "Arquivo gráfico"
 msgstr "গ্রাফিক ফাইল"
-
-#: rust/snapcore/src/presets.rs:185 rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:765
-msgid "Novo preset"
-msgstr "নতুন প্রিসেট"
-
-#: rust/snapcore/src/presets.rs:202 rust/snapedit/src/app/commands.rs:1019 rust/snapedit/src/app/docs.rs:254 rust/snapedit/src/app/docs.rs:484
-msgid "Captura"
-msgstr "ক্যাপচার"
-
-#: rust/snapcore/src/presets.rs:491 rust/snapcore/src/presets.rs:500 rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:539
-msgid "Presets"
-msgstr "প্রিসেট"
 
 #: rust/snapcore/src/presets.rs:585
 msgid "Imagem — Janela"
@@ -201,10 +2267,6 @@ msgstr "ভিডিও — এলাকা"
 #: rust/snapcore/src/presets.rs:597
 msgid "Vídeo — Tela inteira"
 msgstr "ভিডিও — পূর্ণ স্ক্রিন"
-
-#: rust/snapcore/src/presets.rs:601 rust/anycapture/src/cmdline.rs:152 rust/anycapture/src/cmdline.rs:153
-msgid "Imagem — Região"
-msgstr "ছবি — এলাকা"
 
 #: rust/snapcore/src/presets.rs:605
 msgid "Captura com rolagem panorâmica"
@@ -244,10 +2306,6 @@ msgstr "স্পেস"
 msgid "Falha ao gravar quadro de vídeo."
 msgstr "ভিডিও ফ্রেম রেকর্ড করতে ব্যর্থ।"
 
-#: rust/snapcore/src/recorder.rs:1081 rust/snapcore/src/recorder.rs:1614 rust/snapedit/src/edtools.rs:740 rust/snapedit/src/stamp_data.rs:10
-msgid "ok"
-msgstr "ঠিক আছে"
-
 #: rust/snapcore/src/recorder.rs:1645 rust/snapedit/src/props.rs:1750 rust/snapedit/src/styles.rs:788 rust/snapedit/src/styles.rs:795
 msgid "A"
 msgstr "উ"
@@ -256,17 +2314,9 @@ msgstr "উ"
 msgid "Não foi possível gravar o arquivo."
 msgstr "ফাইলটি লেখা যায়নি।"
 
-#: rust/snapcore/src/settings.rs:220 rust/anycapture/src/dialogs.rs:300
-msgid "Arquivo de configurações inválido."
-msgstr "অবৈধ সেটিংস ফাইল।"
-
-#: rust/snapcore/src/settings.rs:265
+#: rust/snapcore/src/settings.rs:270
 msgid "Não foi possível gravar "
 msgstr "লেখা যায়নি: "
-
-#: rust/snapcore/src/sounds.rs:31 rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:591 rust/anycapture/src/window.rs:602
-msgid "Desligado"
-msgstr "বন্ধ"
 
 #: rust/snapcore/src/sounds.rs:32
 msgid "Obturador de câmera"
@@ -498,7 +2548,7 @@ msgstr "কোনো ওয়েবক্যাম পাওয়া যায
 msgid "Selecione 3 ou mais objetos para distribuir."
 msgstr "বিতরণ করতে ৩ বা তার বেশি অবজেক্ট নির্বাচন করুন।"
 
-#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:569 rust/snapedit/src/app/extras.rs:614
+#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:616 rust/snapedit/src/app/extras.rs:614
 msgid "OCR indisponível: "
 msgstr "OCR উপলব্ধ নয়: "
 
@@ -549,10 +2599,6 @@ msgstr "কলম"
 #: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:384
 msgid "Marcador"
 msgstr "হাইলাইটার"
-
-#: rust/snapedit/src/canvas.rs:74 rust/snapedit/src/effects.rs:149 rust/snapedit/src/effects.rs:150 rust/snapedit/src/effects.rs:155
-msgid "Texto"
-msgstr "লেখা"
 
 #: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:386
 msgid "Balão"
@@ -718,10 +2764,6 @@ msgstr "প্রভাব"
 msgid "Efeitos rápidos"
 msgstr "দ্রুত প্রভাব"
 
-#: rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618 rust/anycapture/src/window.rs:731
-msgid "Excluir"
-msgstr "মুছুন"
-
 #: rust/snapedit/src/effects.rs:551
 msgid "+ Adicionar aos efeitos rápidos"
 msgstr "+ দ্রুত প্রভাবে যোগ করুন"
@@ -729,14 +2771,6 @@ msgstr "+ দ্রুত প্রভাবে যোগ করুন"
 #: rust/snapedit/src/effects.rs:638
 msgid "Aplicar"
 msgstr "প্রয়োগ"
-
-#: rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574 rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387
-msgid "Cancelar"
-msgstr "বাতিল"
-
-#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:579 rust/anycapture/src/window.rs:87
-msgid "Borda"
-msgstr "বর্ডার"
 
 #: rust/snapedit/src/effects.rs:96
 msgid "Contorno sólido em volta da imagem, na largura e cor que você escolher."
@@ -750,14 +2784,6 @@ msgstr "বর্ডার ও ছায়া"
 msgid "Largura"
 msgstr "প্রস্থ"
 
-#: rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:894 rust/snapedit/src/props.rs:917 rust/snapedit/src/props.rs:926
-msgid "Cor"
-msgstr "রং"
-
-#: rust/snapedit/src/effects.rs:100 rust/snapedit/src/effects.rs:121 rust/snapedit/src/effects.rs:335 rust/snapedit/src/app/commands.rs:581
-msgid "Sombra"
-msgstr "ছায়া"
-
 #: rust/snapedit/src/effects.rs:100
 msgid "Sombra suave atrás da imagem, que destaca a captura do fundo."
 msgstr "ছবির পেছনে নরম ছায়া, যা ক্যাপচারকে পটভূমি থেকে আলাদা করে।"
@@ -769,10 +2795,6 @@ msgstr "সরণ"
 #: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:395
 msgid "Desfoque"
 msgstr "ঝাপসা"
-
-#: rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:899 rust/snapedit/src/props.rs:922
-msgid "Opacidade"
-msgstr "অস্বচ্ছতা"
 
 #: rust/snapedit/src/effects.rs:105
 msgid "Perspectiva"
@@ -794,7 +2816,7 @@ msgstr "উল্লম্ব"
 msgid "Inclinação"
 msgstr "হেলানো"
 
-#: rust/snapedit/src/effects.rs:110 rust/snapedit/src/effects.rs:339 rust/snapedit/src/app/commands.rs:582
+#: rust/snapedit/src/effects.rs:110 rust/snapedit/src/effects.rs:339 rust/snapedit/src/app/commands.rs:592
 msgid "Dobra de página"
 msgstr "ভাঁজ করা কোণ"
 
@@ -810,10 +2832,6 @@ msgstr "আকার"
 msgid "Pequena"
 msgstr "ছোট"
 
-#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
-msgid "Média"
-msgstr "মাঝারি"
-
 #: rust/snapedit/src/effects.rs:111
 msgid "Grande"
 msgstr "বড়"
@@ -821,22 +2839,6 @@ msgstr "বড়"
 #: rust/snapedit/src/effects.rs:112
 msgid "Canto"
 msgstr "কোণ"
-
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
-msgid "Superior esquerdo"
-msgstr "উপরে বামে"
-
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
-msgid "Superior direito"
-msgstr "উপরে ডানে"
-
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:691
-msgid "Inferior direito"
-msgstr "নিচে ডানে"
-
-#: rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:690
-msgid "Inferior esquerdo"
-msgstr "নিচে বামে"
 
 #: rust/snapedit/src/effects.rs:114
 msgid "Bordas"
@@ -846,54 +2848,6 @@ msgstr "প্রান্ত"
 msgid "Rasgada, onda, serrilhada, tubarão, esmaecida ou chanfrada."
 msgstr "ছেঁড়া, ঢেউ, করাত, হাঙর, মিলিয়ে যাওয়া বা ঢালু।"
 
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247 rust/anycapture/src/dialogs.rs:670
-msgid "Estilo"
-msgstr "শৈলী"
-
-#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
-msgid "Rasgada"
-msgstr "ছেঁড়া"
-
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341 rust/anycapture/src/dialogs.rs:670
-msgid "Onda"
-msgstr "ঢেউ"
-
-#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
-msgid "Dente de serra"
-msgstr "করাতের দাঁত"
-
-#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
-msgid "Dente de tubarão"
-msgstr "হাঙরের দাঁত"
-
-#: rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343 rust/anycapture/src/dialogs.rs:670
-msgid "Esmaecer"
-msgstr "মিলিয়ে যাওয়া"
-
-#: rust/snapedit/src/effects.rs:115 rust/anycapture/src/dialogs.rs:670
-msgid "Chanfrada"
-msgstr "ঢালু"
-
-#: rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:671 rust/anycapture/src/dialogs.rs:665
-msgid "Em cima"
-msgstr "উপরে"
-
-#: rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:672
-msgid "Direita"
-msgstr "ডানে"
-
-#: rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:672 rust/anycapture/src/dialogs.rs:665
-msgid "Embaixo"
-msgstr "নিচে"
-
-#: rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:673
-msgid "Esquerda"
-msgstr "বামে"
-
-#: rust/snapedit/src/effects.rs:123 rust/anycapture/src/window.rs:87
-msgid "Filtros"
-msgstr "ফিল্টার"
-
 #: rust/snapedit/src/effects.rs:123
 msgid "Cinza, sépia, inverter, P&B, relevo, mosaico, nitidez, desfoque."
 msgstr "ধূসর, সেপিয়া, উল্টানো, সাদা-কালো, উঁচু নকশা, মোজাইক, তীক্ষ্ণতা, ঝাপসা।"
@@ -901,26 +2855,6 @@ msgstr "ধূসর, সেপিয়া, উল্টানো, সাদা
 #: rust/snapedit/src/effects.rs:123 rust/snapedit/src/effects.rs:128 rust/snapedit/src/effects.rs:137 rust/snapedit/src/app/video.rs:457
 msgid "Cores"
 msgstr "রং"
-
-#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
-msgid "Filtro"
-msgstr "ফিল্টার"
-
-#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
-msgid "Tons de cinza"
-msgstr "গ্রেস্কেল"
-
-#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
-msgid "Sépia"
-msgstr "সেপিয়া"
-
-#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
-msgid "Inverter cores"
-msgstr "রং উল্টান"
-
-#: rust/snapedit/src/effects.rs:124 rust/anycapture/src/dialogs.rs:661
-msgid "Preto e branco"
-msgstr "সাদা-কালো"
 
 #: rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:153
 msgid "Relevo"
@@ -938,14 +2872,6 @@ msgstr "তীক্ষ্ণতা"
 msgid "Intensidade"
 msgstr "তীব্রতা"
 
-#: rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
-msgid "Baixa"
-msgstr "কম"
-
-#: rust/snapedit/src/effects.rs:126 rust/anycapture/src/window.rs:497
-msgid "Alta"
-msgstr "উচ্চ"
-
 #: rust/snapedit/src/effects.rs:128
 msgid "Ajuste de cores"
 msgstr "রং সমন্বয়"
@@ -953,14 +2879,6 @@ msgstr "রং সমন্বয়"
 #: rust/snapedit/src/effects.rs:128
 msgid "Brilho, contraste, gama, matiz e saturação."
 msgstr "উজ্জ্বলতা, কনট্রাস্ট, গামা, হিউ ও স্যাচুরেশন।"
-
-#: rust/snapedit/src/effects.rs:129 rust/anycapture/src/dialogs.rs:676
-msgid "Brilho"
-msgstr "উজ্জ্বলতা"
-
-#: rust/snapedit/src/effects.rs:130 rust/anycapture/src/dialogs.rs:676
-msgid "Contraste"
-msgstr "কনট্রাস্ট"
 
 #: rust/snapedit/src/effects.rs:131
 msgid "Gama"
@@ -970,14 +2888,6 @@ msgstr "গামা"
 msgid "Matiz"
 msgstr "হিউ"
 
-#: rust/snapedit/src/effects.rs:135 rust/anycapture/src/dialogs.rs:677
-msgid "Saturação"
-msgstr "স্যাচুরেশন"
-
-#: rust/snapedit/src/effects.rs:137 rust/anycapture/src/window.rs:87
-msgid "Substituição de cor"
-msgstr "রং প্রতিস্থাপন"
-
 #: rust/snapedit/src/effects.rs:137
 msgid "Troca uma cor por outra (ou por transparente)."
 msgstr "একটি রং অন্য রং (বা স্বচ্ছ) দিয়ে বদলায়।"
@@ -986,17 +2896,9 @@ msgstr "একটি রং অন্য রং (বা স্বচ্ছ) দ�
 msgid "Cor atual"
 msgstr "বর্তমান রং"
 
-#: rust/snapedit/src/effects.rs:139 rust/anycapture/src/dialogs.rs:666
-msgid "Nova cor"
-msgstr "নতুন রং"
-
 #: rust/snapedit/src/effects.rs:140
 msgid "Tornar transparente"
 msgstr "স্বচ্ছ করুন"
-
-#: rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004 rust/snapedit/src/props.rs:1104 rust/snapedit/src/app/windows_aux.rs:686
-msgid "Tolerância"
-msgstr "সহনশীলতা"
 
 #: rust/snapedit/src/effects.rs:143
 msgid "Spotlight e lupa"
@@ -1018,10 +2920,6 @@ msgstr "বড় করুন"
 msgid "Sombra na área em foco"
 msgstr "ফোকাস এলাকায় ছায়া"
 
-#: rust/snapedit/src/effects.rs:149 rust/anycapture/src/window.rs:88
-msgid "Marca d'água"
-msgstr "জলছাপ"
-
 #: rust/snapedit/src/effects.rs:149
 msgid "Texto translúcido sobre a imagem, uma vez ou em mosaico."
 msgstr "ছবির উপর অর্ধস্বচ্ছ লেখা, একবার বা টাইল করে।"
@@ -1030,17 +2928,9 @@ msgstr "ছবির উপর অর্ধস্বচ্ছ লেখা, এ�
 msgid "Repetir em mosaico"
 msgstr "টাইল করুন"
 
-#: rust/snapedit/src/effects.rs:155 rust/anycapture/src/window.rs:87
-msgid "Informações da captura"
-msgstr "ক্যাপচারের তথ্য"
-
 #: rust/snapedit/src/effects.rs:155
 msgid "Faixa de texto em cima ou embaixo; aceita {date} e {time}."
 msgstr "উপরে বা নিচে লেখার ফিতা; {date} ও {time} গ্রহণ করে।"
-
-#: rust/snapedit/src/effects.rs:157 rust/anycapture/src/dialogs.rs:665
-msgid "Posição"
-msgstr "অবস্থান"
 
 #: rust/snapedit/src/effects.rs:159 rust/snapedit/src/props.rs:1010
 msgid "Cor do texto"
@@ -1126,33 +3016,33 @@ msgstr "সাজান(&R)"
 msgid "&Girar"
 msgstr "ঘোরান(&O)"
 
-#: rust/snapedit/src/menu.rs:224
+#: rust/snapedit/src/menu.rs:213
+msgid "&Verificar atualizações…"
+msgstr "আপডেট খুঁজুন(&U)…"
+
+#: rust/snapedit/src/menu.rs:214
+msgid "&Relatar um problema…"
+msgstr "সমস্যা জানান(&R)…"
+
+#: rust/snapedit/src/menu.rs:215
+msgid "Enviar su&gestão ou feedback…"
+msgstr "পরামর্শ বা মতামত পাঠান(&G)…"
+
+#: rust/snapedit/src/menu.rs:229
 msgid "Inserir c&ursor"
 msgstr "কার্সর যোগ করুন(&U)"
 
-#: rust/snapedit/src/menu.rs:234 rust/anycapture/src/window.rs:243
-msgid "&Arquivo"
-msgstr "ফাইল(&F)"
-
-#: rust/snapedit/src/menu.rs:235
+#: rust/snapedit/src/menu.rs:240
 msgid "&Editar"
 msgstr "সম্পাদনা(&E)"
 
-#: rust/snapedit/src/menu.rs:236
+#: rust/snapedit/src/menu.rs:241
 msgid "&Imagem"
 msgstr "ছবি(&I)"
 
-#: rust/snapedit/src/menu.rs:237
+#: rust/snapedit/src/menu.rs:242
 msgid "&Ferramentas"
 msgstr "টুলস(&F)"
-
-#: rust/snapedit/src/menu.rs:238 rust/anycapture/src/window.rs:243
-msgid "E&xibir"
-msgstr "দেখুন(&V)"
-
-#: rust/snapedit/src/menu.rs:239 rust/anycapture/src/window.rs:243
-msgid "A&juda"
-msgstr "সহায়তা(&H)"
 
 #: rust/snapedit/src/menu.rs:45
 msgid "Favoritos: seus estilos favoritos de todas as ferramentas"
@@ -1330,11 +3220,11 @@ msgstr "আবার করুন(&R)\tCtrl+Y"
 msgid "Desfazer &tudo"
 msgstr "সব পূর্বাবস্থায় ফেরান(&L)"
 
-#: rust/snapedit/src/menu.rs:106 rust/snapedit/src/app/commands.rs:864
+#: rust/snapedit/src/menu.rs:106 rust/snapedit/src/app/commands.rs:874
 msgid "Recor&tar\tCtrl+X"
 msgstr "কাটুন(&T)\tCtrl+X"
 
-#: rust/snapedit/src/menu.rs:107 rust/snapedit/src/app/commands.rs:865 rust/snapedit/src/app/commands.rs:899
+#: rust/snapedit/src/menu.rs:107 rust/snapedit/src/app/commands.rs:875 rust/snapedit/src/app/commands.rs:909
 msgid "&Copiar\tCtrl+C"
 msgstr "কপি(&C)\tCtrl+C"
 
@@ -1346,27 +3236,27 @@ msgstr "সব কপি(&O)\tCtrl+Shift+C"
 msgid "Copiar co&mo…"
 msgstr "এভাবে কপি করুন(&M)…"
 
-#: rust/snapedit/src/menu.rs:110 rust/snapedit/src/app/commands.rs:866 rust/snapedit/src/app/commands.rs:895
+#: rust/snapedit/src/menu.rs:110 rust/snapedit/src/app/commands.rs:876 rust/snapedit/src/app/commands.rs:905
 msgid "C&olar\tCtrl+V"
 msgstr "পেস্ট(&P)\tCtrl+V"
 
-#: rust/snapedit/src/menu.rs:111 rust/snapedit/src/app/commands.rs:867 rust/snapedit/src/app/commands.rs:896
+#: rust/snapedit/src/menu.rs:111 rust/snapedit/src/app/commands.rs:877 rust/snapedit/src/app/commands.rs:906
 msgid "Colar no &mesmo lugar\tCtrl+Shift+V"
 msgstr "একই জায়গায় পেস্ট(&I)\tCtrl+Shift+V"
 
-#: rust/snapedit/src/menu.rs:112 rust/snapedit/src/app/commands.rs:868
+#: rust/snapedit/src/menu.rs:112 rust/snapedit/src/app/commands.rs:878
 msgid "E&xcluir\tDel"
 msgstr "মুছুন(&D)\tDel"
 
-#: rust/snapedit/src/menu.rs:113 rust/snapedit/src/app/commands.rs:907
+#: rust/snapedit/src/menu.rs:113 rust/snapedit/src/app/commands.rs:917
 msgid "Selecionar tu&do\tCtrl+A"
 msgstr "সব নির্বাচন(&A)\tCtrl+A"
 
-#: rust/snapedit/src/menu.rs:114 rust/snapedit/src/app/commands.rs:900
+#: rust/snapedit/src/menu.rs:114 rust/snapedit/src/app/commands.rs:910
 msgid "Cortar para a &seleção"
 msgstr "নির্বাচন পর্যন্ত ক্রপ(&S)"
 
-#: rust/snapedit/src/menu.rs:115 rust/snapedit/src/app/commands.rs:901
+#: rust/snapedit/src/menu.rs:115 rust/snapedit/src/app/commands.rs:911
 msgid "&Levantar a seleção (peça solta)\tCtrl+Shift+L"
 msgstr "নির্বাচন তুলে নিন (আলগা অংশ)(&L)\tCtrl+Shift+L"
 
@@ -1470,19 +3360,19 @@ msgstr "অনুভূমিকভাবে বিতরণ(&H)"
 msgid "Distribuir na &vertical"
 msgstr "উল্লম্বভাবে বিতরণ(&V)"
 
-#: rust/snapedit/src/menu.rs:152 rust/snapedit/src/app/commands.rs:876
+#: rust/snapedit/src/menu.rs:152 rust/snapedit/src/app/commands.rs:886
 msgid "Trazer para a &frente\tCtrl+Shift+F"
 msgstr "সামনে আনুন(&F)\tCtrl+Shift+F"
 
-#: rust/snapedit/src/menu.rs:153 rust/snapedit/src/app/commands.rs:875
+#: rust/snapedit/src/menu.rs:153 rust/snapedit/src/app/commands.rs:885
 msgid "Trazer para o &primeiro plano"
 msgstr "সবার সামনে আনুন(&O)"
 
-#: rust/snapedit/src/menu.rs:154 rust/snapedit/src/app/commands.rs:877
+#: rust/snapedit/src/menu.rs:154 rust/snapedit/src/app/commands.rs:887
 msgid "Enviar para &trás\tCtrl+Shift+B"
 msgstr "পেছনে পাঠান(&B)\tCtrl+Shift+B"
 
-#: rust/snapedit/src/menu.rs:155 rust/snapedit/src/app/commands.rs:878
+#: rust/snapedit/src/menu.rs:155 rust/snapedit/src/app/commands.rs:888
 msgid "Enviar para o plano de &fundo"
 msgstr "সবার পেছনে পাঠান(&K)"
 
@@ -1510,11 +3400,11 @@ msgstr "180 ডিগ্রি(&1)"
 msgid "Ângulo &personalizado…"
 msgstr "নিজস্ব কোণ(&A)…"
 
-#: rust/snapedit/src/menu.rs:173 rust/snapedit/src/app/commands.rs:889
+#: rust/snapedit/src/menu.rs:173 rust/snapedit/src/app/commands.rs:899
 msgid "A&grupar\tCtrl+Shift+G"
 msgstr "গ্রুপ করুন(&G)\tCtrl+Shift+G"
 
-#: rust/snapedit/src/menu.rs:174 rust/snapedit/src/app/commands.rs:892
+#: rust/snapedit/src/menu.rs:174 rust/snapedit/src/app/commands.rs:902
 msgid "Desagr&upar\tCtrl+Shift+U"
 msgstr "গ্রুপ ভাঙুন(&U)\tCtrl+Shift+U"
 
@@ -1618,51 +3508,51 @@ msgstr "AnyCapture &ম্যানুয়াল\tF1"
 msgid "&Atalhos de teclado"
 msgstr "কিবোর্ড শর্টকাট(&K)"
 
-#: rust/snapedit/src/menu.rs:212
+#: rust/snapedit/src/menu.rs:217
 msgid "&Sobre o AnyCapture Editor"
 msgstr "AnyCapture Editor সম্পর্কে(&A)"
 
-#: rust/snapedit/src/menu.rs:217
+#: rust/snapedit/src/menu.rs:222
 msgid "Ler código &QR\tCtrl+Shift+Q"
 msgstr "QR কোড পড়ুন(&Q)\tCtrl+Shift+Q"
 
-#: rust/snapedit/src/menu.rs:218
+#: rust/snapedit/src/menu.rs:223
 msgid "&Ocultar dados sensíveis…\tCtrl+Shift+E"
 msgstr "সংবেদনশীল ডেটা লুকান(&O)…\tCtrl+Shift+E"
 
-#: rust/snapedit/src/menu.rs:219
+#: rust/snapedit/src/menu.rs:224
 msgid "Remover o &fundo…"
 msgstr "পটভূমি সরান(&F)…"
 
-#: rust/snapedit/src/menu.rs:220
+#: rust/snapedit/src/menu.rs:225
 msgid "&Dividir imagem…"
 msgstr "ছবি ভাগ করুন(&D)…"
 
-#: rust/snapedit/src/menu.rs:221
+#: rust/snapedit/src/menu.rs:226
 msgid "Adicionar ca&ptura"
 msgstr "ক্যাপচার যোগ করুন(&P)"
 
-#: rust/snapedit/src/menu.rs:223
+#: rust/snapedit/src/menu.rs:228
 msgid "Inserir data e &hora\tCtrl+Shift+D"
 msgstr "তারিখ ও সময় যোগ করুন(&H)\tCtrl+Shift+D"
 
-#: rust/snapedit/src/menu.rs:225
+#: rust/snapedit/src/menu.rs:230
 msgid "Formato da data e hora…"
 msgstr "তারিখ ও সময়ের ফরম্যাট…"
 
-#: rust/snapedit/src/menu.rs:227
+#: rust/snapedit/src/menu.rs:232
 msgid "Verificador de &contraste…"
 msgstr "কনট্রাস্ট পরীক্ষক(&C)…"
 
-#: rust/snapedit/src/menu.rs:228
+#: rust/snapedit/src/menu.rs:233
 msgid "&Assistente de IA…"
 msgstr "AI সহকারী(&A)…"
 
-#: rust/snapedit/src/menu.rs:230
+#: rust/snapedit/src/menu.rs:235
 msgid "Configurar o assistente de IA…"
 msgstr "AI সহকারী সেট করুন…"
 
-#: rust/snapedit/src/menu.rs:231
+#: rust/snapedit/src/menu.rs:236
 msgid "Configurar o &upload…"
 msgstr "আপলোড সেট করুন(&U)…"
 
@@ -1690,10 +3580,6 @@ msgstr "পিক্সেলেট"
 #: rust/snapedit/src/panels.rs:399
 msgid "Peça solta"
 msgstr "আলগা অংশ"
-
-#: rust/snapedit/src/panels.rs:399 rust/snapedit/src/app/extras.rs:393 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
-msgid "Imagem"
-msgstr "ছবি"
 
 #: rust/snapedit/src/panels.rs:400
 #, c-format
@@ -1736,10 +3622,6 @@ msgstr "সামনে আনুন"
 msgid "Fundo (imagem)"
 msgstr "পটভূমি (ছবি)"
 
-#: rust/snapedit/src/panels.rs:62 rust/anycapture/src/window.rs:44
-msgid "Arquivo"
-msgstr "ফাইল"
-
 #: rust/snapedit/src/panels.rs:62
 msgid "Salvar como arquivo (PNG, JPG, PDF…)"
 msgstr "ফাইল হিসেবে সংরক্ষণ (PNG, JPG, PDF…)"
@@ -1747,14 +3629,6 @@ msgstr "ফাইল হিসেবে সংরক্ষণ (PNG, JPG, PDF…)
 #: rust/snapedit/src/panels.rs:63
 msgid "Enviar por e-mail"
 msgstr "ইমেইলে পাঠান"
-
-#: rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:525 rust/anycapture/src/dialogs.rs:526
-msgid "Programa"
-msgstr "প্রোগ্রাম"
-
-#: rust/snapedit/src/panels.rs:64 rust/anycapture/src/dialogs.rs:527
-msgid "Abrir em um programa externo"
-msgstr "বাইরের প্রোগ্রামে খুলুন"
 
 #: rust/snapedit/src/panels.rs:65
 msgid "Copiar a imagem inteira"
@@ -1784,7 +3658,7 @@ msgstr "আবার করুন"
 msgid "Refazer (Ctrl+Y)"
 msgstr "আবার করুন (Ctrl+Y)"
 
-#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:358 rust/snapedit/src/app/docs.rs:363
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:361 rust/snapedit/src/app/docs.rs:366
 msgid "Nova imagem"
 msgstr "নতুন ছবি"
 
@@ -1812,17 +3686,9 @@ msgstr "সংরক্ষণ"
 msgid "Salvar na biblioteca (Ctrl+S)"
 msgstr "লাইব্রেরিতে সংরক্ষণ (Ctrl+S)"
 
-#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:259 rust/anycapture/src/quick.rs:247
-msgid "Salvar como"
-msgstr "এভাবে সংরক্ষণ"
-
 #: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259
 msgid "Salvar como arquivo (Ctrl+Shift+S)"
 msgstr "ফাইল হিসেবে সংরক্ষণ (Ctrl+Shift+S)"
-
-#: rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591 rust/anycapture/src/window.rs:729
-msgid "Duplicar"
-msgstr "প্রতিলিপি"
 
 #: rust/snapedit/src/panels.rs:77
 msgid "Duplicar a imagem"
@@ -1860,10 +3726,6 @@ msgstr "সব মিশিয়ে দিন"
 msgid "Mesclar todos os objetos na imagem"
 msgstr "সব অবজেক্ট ছবিতে মিশিয়ে দিন"
 
-#: rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:629 rust/anycapture/src/dialogs.rs:678
-msgid "Girar"
-msgstr "ঘোরান"
-
 #: rust/snapedit/src/panels.rs:82
 msgid "Girar 90° no sentido horário (Ctrl+R)"
 msgstr "ঘড়ির কাঁটার দিকে 90° ঘোরান (Ctrl+R)"
@@ -1876,7 +3738,7 @@ msgstr "স্বয়ংক্রিয় ছাঁটাই"
 msgid "Cortar as bordas de cor uniforme"
 msgstr "একই রঙের প্রান্ত ছাঁটুন"
 
-#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:881
+#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:891
 msgid "Alinhar à esquerda"
 msgstr "বাঁয়ে সারিবদ্ধ"
 
@@ -1884,7 +3746,7 @@ msgstr "বাঁয়ে সারিবদ্ধ"
 msgid "Alinhar os objetos à esquerda"
 msgstr "অবজেক্টগুলো বাঁয়ে সারিবদ্ধ করুন"
 
-#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:881
+#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:891
 msgid "Alinhar ao centro"
 msgstr "কেন্দ্রে সারিবদ্ধ"
 
@@ -1892,7 +3754,7 @@ msgstr "কেন্দ্রে সারিবদ্ধ"
 msgid "Alinhar os objetos ao centro"
 msgstr "অবজেক্টগুলো কেন্দ্রে সারিবদ্ধ করুন"
 
-#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:881
+#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:891
 msgid "Alinhar à direita"
 msgstr "ডানে সারিবদ্ধ"
 
@@ -1900,7 +3762,7 @@ msgstr "ডানে সারিবদ্ধ"
 msgid "Alinhar os objetos à direita"
 msgstr "অবজেক্টগুলো ডানে সারিবদ্ধ করুন"
 
-#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:882
+#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:892
 msgid "Alinhar em cima"
 msgstr "ওপরে সারিবদ্ধ"
 
@@ -1908,7 +3770,7 @@ msgstr "ওপরে সারিবদ্ধ"
 msgid "Alinhar os objetos em cima"
 msgstr "অবজেক্টগুলো ওপরে সারিবদ্ধ করুন"
 
-#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:882
+#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:892
 msgid "Alinhar no meio"
 msgstr "মাঝে সারিবদ্ধ"
 
@@ -1916,7 +3778,7 @@ msgstr "মাঝে সারিবদ্ধ"
 msgid "Alinhar os objetos no meio"
 msgstr "অবজেক্টগুলো মাঝে সারিবদ্ধ করুন"
 
-#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:882
+#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:892
 msgid "Alinhar embaixo"
 msgstr "নিচে সারিবদ্ধ"
 
@@ -1924,7 +3786,7 @@ msgstr "নিচে সারিবদ্ধ"
 msgid "Alinhar os objetos embaixo"
 msgstr "অবজেক্টগুলো নিচে সারিবদ্ধ করুন"
 
-#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:886
+#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:896
 msgid "Distribuir na horizontal"
 msgstr "অনুভূমিকভাবে বিতরণ"
 
@@ -1932,7 +3794,7 @@ msgstr "অনুভূমিকভাবে বিতরণ"
 msgid "Espaçar 3 ou mais objetos igualmente na horizontal"
 msgstr "৩ বা তার বেশি অবজেক্ট অনুভূমিকভাবে সমান দূরত্বে রাখুন"
 
-#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:887
+#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:897
 msgid "Distribuir na vertical"
 msgstr "উল্লম্বভাবে বিতরণ"
 
@@ -1956,17 +3818,9 @@ msgstr "রুলার"
 msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
 msgstr "রুলার, গাইড ও স্থানাঙ্ক দেখান (Ctrl+Shift+R)"
 
-#: rust/snapedit/src/panels.rs:243 rust/anycapture/src/window.rs:619
-msgid "Capturar"
-msgstr "ক্যাপচার"
-
 #: rust/snapedit/src/panels.rs:243
 msgid "Nova captura de imagem (pede ao AnyCapture)"
 msgstr "নতুন ছবি ক্যাপচার (AnyCapture-এর কাছে চায়)"
-
-#: rust/snapedit/src/panels.rs:244 rust/anycapture/src/window.rs:619
-msgid "Gravar"
-msgstr "রেকর্ড"
 
 #: rust/snapedit/src/panels.rs:244
 msgid "Nova gravação de vídeo"
@@ -2085,11 +3939,7 @@ msgstr "থিমের প্রতিলিপি সম্পাদনা…"
 msgid "Editar o tema…"
 msgstr "থিম সম্পাদনা…"
 
-#: rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 rust/snapedit/src/app/docs.rs:384 rust/anycapture/src/dialogs.rs:120
-msgid " (cópia)"
-msgstr " (প্রতিলিপি)"
-
-#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:303
+#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:319
 msgid "Exportar…"
 msgstr "রপ্তানি…"
 
@@ -2157,10 +4007,6 @@ msgstr "এই স্ট্যাম্প ব্যবহার করুন"
 #: rust/snapedit/src/props.rs:858
 msgid "Propriedades da ferramenta"
 msgstr "টুলের বৈশিষ্ট্য"
-
-#: rust/snapedit/src/props.rs:860 rust/anycapture/src/window.rs:772
-msgid "Ajuda"
-msgstr "সহায়তা"
 
 #: rust/snapedit/src/props.rs:882
 #, c-format
@@ -2380,11 +4226,11 @@ msgstr "নির্বাচন মুছুন"
 msgid "Levantar a seleção (peça solta)"
 msgstr "নির্বাচন তুলে নিন (আলগা অংশ)"
 
-#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:170
+#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:171
 msgid "Selecione uma área com a ferramenta Seleção para levantá-la."
 msgstr "তুলে নিতে নির্বাচন টুল দিয়ে একটি এলাকা নির্বাচন করুন।"
 
-#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:172
+#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:173
 msgid "Peça solta: ajuste o resto da imagem (cortar, recortar faixa…), posicione a peça e tecle Enter para soltá-la."
 msgstr "আলগা অংশ: ছবির বাকিটা ঠিক করুন (ক্রপ, পট্টি কাটা…), অংশটি বসান এবং ছাড়তে Enter চাপুন।"
 
@@ -2412,7 +4258,7 @@ msgstr "রং নিতে ছবিতে ক্লিক করুন; সে
 msgid "Soltar a peça na imagem"
 msgstr "অংশটি ছবিতে বসিয়ে দিন"
 
-#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:177
+#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:178
 msgid "Peça solta na imagem."
 msgstr "অংশটি ছবিতে বসানো হয়েছে।"
 
@@ -2423,10 +4269,6 @@ msgstr "রেখা বদলান"
 #: rust/snapedit/src/props.rs:1237
 msgid "Avançado"
 msgstr "উন্নত"
-
-#: rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533 rust/anycapture/src/dialogs.rs:689
-msgid "Alinhamento"
-msgstr "সারিবদ্ধতা"
 
 #: rust/snapedit/src/props.rs:1278
 msgid "Margem interna"
@@ -2516,7 +4358,7 @@ msgstr "নির্বাচন (px)"
 msgid "Posição e tamanho (px)"
 msgstr "অবস্থান ও আকার (px)"
 
-#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:654
+#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:664
 msgid "Manter proporção"
 msgstr "অনুপাত ঠিক রাখুন"
 
@@ -2572,7 +4414,7 @@ msgstr "কোণ রৈখিক গ্রেডিয়েন্টে প্
 msgid "Gradiente"
 msgstr "গ্রেডিয়েন্ট"
 
-#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:243 rust/snapedit/src/app/commands.rs:577 rust/snapedit/src/app/commands.rs:951
+#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:244 rust/snapedit/src/app/commands.rs:587 rust/snapedit/src/app/commands.rs:962
 msgid "Nome"
 msgstr "নাম"
 
@@ -4093,87 +5935,79 @@ msgstr "মৌলিক"
 msgid "Industrial"
 msgstr "শিল্প"
 
-#: rust/snapedit/src/tray.rs:300
+#: rust/snapedit/src/tray.rs:315
 msgid "Mostrar na pasta"
 msgstr "ফোল্ডারে দেখান"
 
-#: rust/snapedit/src/tray.rs:303
+#: rust/snapedit/src/tray.rs:319
 #, c-format
 msgid "Exportar %zu itens…"
 msgstr "%zu টি আইটেম রপ্তানি…"
 
-#: rust/snapedit/src/tray.rs:306 rust/snapedit/src/app/commands.rs:778 rust/anycapture/src/quick.rs:297
-msgid "Copiar como…"
-msgstr "এভাবে কপি করুন…"
-
-#: rust/snapedit/src/tray.rs:308 rust/snapedit/src/app/commands.rs:783 rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44
-msgid "Fixar na tela"
-msgstr "স্ক্রিনে পিন করুন"
-
-#: rust/snapedit/src/tray.rs:310 rust/snapedit/src/app/commands.rs:784
+#: rust/snapedit/src/tray.rs:326 rust/snapedit/src/app/commands.rs:794
 msgid "Enviar (upload)"
 msgstr "আপলোড করুন"
 
-#: rust/snapedit/src/tray.rs:313
+#: rust/snapedit/src/tray.rs:329
 #, c-format
 msgid "Combinar %zu imagens…"
 msgstr "%zuটি ছবি একত্র করুন…"
 
-#: rust/snapedit/src/tray.rs:316
+#: rust/snapedit/src/tray.rs:332
 msgid "Comparar as duas…"
 msgstr "দুটি তুলনা করুন…"
 
-#: rust/snapedit/src/tray.rs:318
+#: rust/snapedit/src/tray.rs:334
 #, c-format
 msgid "Processar %zu em lote…"
 msgstr "%zuটি ব্যাচে প্রসেস করুন…"
 
-#: rust/snapedit/src/tray.rs:318
+#: rust/snapedit/src/tray.rs:334
 msgid "Processamento em lote…"
 msgstr "ব্যাচ প্রসেসিং…"
 
-#: rust/snapedit/src/tray.rs:321
+#: rust/snapedit/src/tray.rs:337
 msgid "Selecionar tudo\tCtrl+A"
 msgstr "সব নির্বাচন\tCtrl+A"
 
-#: rust/snapedit/src/tray.rs:323
+#: rust/snapedit/src/tray.rs:339
 msgid "Renomear…\tF2"
 msgstr "নাম বদলান…\tF2"
 
-#: rust/snapedit/src/tray.rs:326
+#: rust/snapedit/src/tray.rs:342
 msgid "Remover da bandeja"
 msgstr "ট্রে থেকে সরান"
 
-#: rust/snapedit/src/tray.rs:326
+#: rust/snapedit/src/tray.rs:342
 msgid "Remover da bandeja (continua na biblioteca)"
 msgstr "ট্রে থেকে সরান (লাইব্রেরিতে থাকবে)"
 
-#: rust/snapedit/src/tray.rs:330
+#: rust/snapedit/src/tray.rs:346
 #, c-format
 msgid "Excluir %zu itens (Lixeira)\tDel"
 msgstr "%zu টি আইটেম মুছুন (রিসাইকেল বিন)\tDel"
 
-#: rust/snapedit/src/tray.rs:330
+#: rust/snapedit/src/tray.rs:346
 msgid "Excluir (Lixeira)\tDel"
 msgstr "মুছুন (রিসাইকেল বিন)\tDel"
 
-#: rust/snapedit/src/tray.rs:369 rust/snapedit/src/app/mod.rs:412
+#: rust/snapedit/src/tray.rs:393 rust/snapedit/src/app/mod.rs:412
 msgid "Capturas recentes"
 msgstr "সাম্প্রতিক ক্যাপচার"
 
-#: rust/snapedit/src/tray.rs:370
+#: rust/snapedit/src/tray.rs:394
 msgid "Biblioteca…"
 msgstr "লাইব্রেরি…"
 
-#: rust/snapedit/src/tray.rs:376
+#: rust/snapedit/src/tray.rs:400
 msgid "Biblioteca"
 msgstr "লাইব্রেরি"
 
-#: rust/snapedit/src/tray.rs:379
+#: rust/snapedit/src/tray.rs:403
 msgid "Pesquisar"
 msgstr "খুঁজুন"
 
-#: rust/snapedit/src/tray.rs:384
+#: rust/snapedit/src/tray.rs:408
 msgid "Voltar à imagem"
 msgstr "ছবিতে ফিরুন"
 
@@ -4209,103 +6043,103 @@ msgstr "পুরো ছবি ক্লিপবোর্ডে কপি হ�
 msgid "Imagens e capturas"
 msgstr "ছবি ও ক্যাপচার"
 
-#: rust/snapedit/src/app/commands.rs:137 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
+#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1054 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
 msgid "Copiado."
 msgstr "কপি হয়েছে।"
 
-#: rust/snapedit/src/app/commands.rs:153
+#: rust/snapedit/src/app/commands.rs:154
 msgid "Selecione um objeto para bloquear ou desbloquear."
 msgstr "লক বা আনলক করতে একটি অবজেক্ট নির্বাচন করুন।"
 
-#: rust/snapedit/src/app/commands.rs:160
+#: rust/snapedit/src/app/commands.rs:161
 msgid "Objeto bloqueado: não pode ser movido, redimensionado nem excluído."
 msgstr "অবজেক্ট লক করা হয়েছে: এটি সরানো, আকার বদলানো বা মোছা যাবে না।"
 
-#: rust/snapedit/src/app/commands.rs:162
+#: rust/snapedit/src/app/commands.rs:163
 msgid "Objeto desbloqueado."
 msgstr "অবজেক্ট আনলক হয়েছে।"
 
-#: rust/snapedit/src/app/commands.rs:192
+#: rust/snapedit/src/app/commands.rs:193
 msgid "Réguas ligadas: arraste de uma régua para criar uma guia; arraste a guia de volta para removê-la."
 msgstr "রুলার চালু: গাইড তৈরি করতে রুলার থেকে টানুন; সরাতে গাইডটি ফিরিয়ে টানুন।"
 
-#: rust/snapedit/src/app/commands.rs:194
+#: rust/snapedit/src/app/commands.rs:195
 msgid "Réguas desligadas."
 msgstr "রুলার বন্ধ।"
 
-#: rust/snapedit/src/app/commands.rs:212
+#: rust/snapedit/src/app/commands.rs:213
 msgid "A seleção e o corte encaixam nas bordas da imagem (Alt desliga na hora)."
 msgstr "নির্বাচন ও ক্রপ ছবির প্রান্তে আটকায় (Alt তাৎক্ষণিক বন্ধ করে)।"
 
-#: rust/snapedit/src/app/commands.rs:214
+#: rust/snapedit/src/app/commands.rs:215
 msgid "Encaixe nas bordas desligado."
 msgstr "প্রান্তে আটকানো বন্ধ।"
 
-#: rust/snapedit/src/app/commands.rs:221
+#: rust/snapedit/src/app/commands.rs:222
 msgid "Caneta: desenhe uma linha, seta, retângulo, elipse ou triângulo e segure parado para virar a forma."
 msgstr "কলম: রেখা, তীর, আয়তক্ষেত্র, উপবৃত্ত বা ত্রিভুজ আঁকুন এবং স্থির ধরে রাখুন যাতে আকৃতি হয়।"
 
-#: rust/snapedit/src/app/commands.rs:223
+#: rust/snapedit/src/app/commands.rs:224
 msgid "Desenhar e segurar desligado."
 msgstr "আঁকুন ও ধরে রাখুন বন্ধ।"
 
-#: rust/snapedit/src/app/commands.rs:230
+#: rust/snapedit/src/app/commands.rs:231
 msgid "Texto colado sem formatação (Ctrl+Shift+V mantém a formatação)."
 msgstr "লেখা ফরম্যাটিং ছাড়া পেস্ট হয় (Ctrl+Shift+V ফরম্যাটিং রাখে)।"
 
-#: rust/snapedit/src/app/commands.rs:232
+#: rust/snapedit/src/app/commands.rs:233
 msgid "Texto colado com a formatação de origem (Ctrl+Shift+V cola sem formatação)."
 msgstr "লেখা মূল ফরম্যাটিংসহ পেস্ট হয় (Ctrl+Shift+V ফরম্যাটিং ছাড়া পেস্ট করে)।"
 
-#: rust/snapedit/src/app/commands.rs:244
+#: rust/snapedit/src/app/commands.rs:245
 msgid "Renomear objeto"
 msgstr "অবজেক্টের নাম বদলান"
 
-#: rust/snapedit/src/app/commands.rs:313
+#: rust/snapedit/src/app/commands.rs:317
 msgid "Selecione dois ou mais objetos (Ctrl+clique ou arraste um retângulo com o Mover) para agrupar."
 msgstr "গ্রুপ করতে দুই বা ততোধিক অবজেক্ট নির্বাচন করুন (Ctrl+ক্লিক বা সরান টুলে আয়তক্ষেত্র টানুন)।"
 
-#: rust/snapedit/src/app/commands.rs:317
+#: rust/snapedit/src/app/commands.rs:321
 msgid "Objetos agrupados. Imagem › Desagrupar (Ctrl+Shift+U) separa."
 msgstr "অবজেক্টগুলো গ্রুপ হয়েছে। ছবি › গ্রুপ ভাঙুন (Ctrl+Shift+U) আলাদা করে।"
 
-#: rust/snapedit/src/app/commands.rs:322
+#: rust/snapedit/src/app/commands.rs:326
 msgid "Grupo desfeito."
 msgstr "গ্রুপ ভাঙা হয়েছে।"
 
-#: rust/snapedit/src/app/commands.rs:336
+#: rust/snapedit/src/app/commands.rs:340
 msgid "Faça a captura: ela será adicionada abaixo desta imagem."
 msgstr "ক্যাপচার নিন: এটি এই ছবির নিচে যোগ হবে।"
 
-#: rust/snapedit/src/app/commands.rs:380
+#: rust/snapedit/src/app/commands.rs:384
 msgid "Encaixe no canvas ligado (Alt ao arrastar desliga na hora)."
 msgstr "ক্যানভাসে স্ন্যাপ চালু (টানার সময় Alt সাময়িকভাবে বন্ধ করে)।"
 
-#: rust/snapedit/src/app/commands.rs:382
+#: rust/snapedit/src/app/commands.rs:386
 msgid "Encaixe no canvas desligado."
 msgstr "ক্যানভাসে স্ন্যাপ বন্ধ।"
 
-#: rust/snapedit/src/app/commands.rs:393
+#: rust/snapedit/src/app/commands.rs:397
 msgid "Etiquetas"
 msgstr "ট্যাগ"
 
-#: rust/snapedit/src/app/commands.rs:394
+#: rust/snapedit/src/app/commands.rs:398
 msgid "Separe as etiquetas por vírgula. Elas ficam gravadas na captura."
 msgstr "কমা দিয়ে ট্যাগ আলাদা করুন। এগুলো ক্যাপচারে সংরক্ষিত হয়।"
 
-#: rust/snapedit/src/app/commands.rs:396
+#: rust/snapedit/src/app/commands.rs:400
 msgid "Etiquetar imagem"
 msgstr "ছবিতে ট্যাগ দিন"
 
-#: rust/snapedit/src/app/commands.rs:408
+#: rust/snapedit/src/app/commands.rs:412
 msgid "Etiquetas removidas."
 msgstr "ট্যাগ সরানো হয়েছে।"
 
-#: rust/snapedit/src/app/commands.rs:408
+#: rust/snapedit/src/app/commands.rs:412
 msgid "Etiquetas: "
 msgstr "ট্যাগ: "
 
-#: rust/snapedit/src/app/commands.rs:438
+#: rust/snapedit/src/app/commands.rs:448
 msgid ""
 "Edição de capturas com objetos vetoriais, efeitos, Smart Move,\n"
 "OCR, exportação PDF e edição de vídeo (cortes e GIF)."
@@ -4313,310 +6147,275 @@ msgstr ""
 "ভেক্টর অবজেক্ট, প্রভাব, Smart Move,\n"
 "OCR, PDF রপ্তানি ও ভিডিও সম্পাদনা (কাটা ও GIF) সহ ক্যাপচার সম্পাদনা।"
 
-#: rust/snapedit/src/app/commands.rs:439 rust/anycapture/src/main.rs:961
-msgid "Software livre sob a GNU General Public License versão 3."
-msgstr "GNU General Public License সংস্করণ 3-এর অধীনে মুক্ত সফটওয়্যার।"
-
-#: rust/snapedit/src/app/commands.rs:441
+#: rust/snapedit/src/app/commands.rs:451
 msgid "Sobre"
 msgstr "সম্পর্কে"
 
-#: rust/snapedit/src/app/commands.rs:530
+#: rust/snapedit/src/app/commands.rs:540
 msgid "Spotlight: sem seleção, o foco é o meio da imagem. Use a ferramenta Seleção para escolher a área."
 msgstr "স্পটলাইট: নির্বাচন না থাকলে ফোকাস ছবির মাঝখানে। এলাকা বেছে নিতে নির্বাচন টুল ব্যবহার করুন।"
 
-#: rust/snapedit/src/app/commands.rs:554
+#: rust/snapedit/src/app/commands.rs:564
 msgid "Efeito aplicado: "
 msgstr "প্রভাব প্রয়োগ হয়েছে: "
 
-#: rust/snapedit/src/app/commands.rs:554
+#: rust/snapedit/src/app/commands.rs:564
 msgid " (Ctrl+Z desfaz)"
 msgstr " (Ctrl+Z পূর্বাবস্থায় ফেরায়)"
 
-#: rust/snapedit/src/app/commands.rs:577
+#: rust/snapedit/src/app/commands.rs:587
 #, c-format
 msgid "Meu efeito %zu"
 msgstr "আমার প্রভাব %zu"
 
-#: rust/snapedit/src/app/commands.rs:578
+#: rust/snapedit/src/app/commands.rs:588
 msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
 msgstr "সেটিংস প্যানেলের প্রভাবগুলো থেকে আসে (বদলাতে প্রতিটি খুলুন):"
 
-#: rust/snapedit/src/app/commands.rs:580 rust/anycapture/src/window.rs:88
-msgid "Bordas especiais"
-msgstr "বিশেষ প্রান্ত"
-
-#: rust/snapedit/src/app/commands.rs:584
+#: rust/snapedit/src/app/commands.rs:594
 msgid "Adicionar aos efeitos rápidos"
 msgstr "দ্রুত প্রভাবে যোগ করুন"
 
-#: rust/snapedit/src/app/commands.rs:593
+#: rust/snapedit/src/app/commands.rs:603
 msgid "Efeito rápido adicionado: "
 msgstr "দ্রুত প্রভাব যোগ হয়েছে: "
 
-#: rust/snapedit/src/app/commands.rs:616
+#: rust/snapedit/src/app/commands.rs:626
 msgid "Faça uma seleção (ferramenta Seleção) ou um recorte primeiro."
 msgstr "আগে একটি নির্বাচন (নির্বাচন টুল) বা কাটা করুন।"
 
-#: rust/snapedit/src/app/commands.rs:624
+#: rust/snapedit/src/app/commands.rs:634
 msgid "Ângulo (graus, horário)"
 msgstr "কোণ (ডিগ্রি, ঘড়ির কাঁটার দিকে)"
 
-#: rust/snapedit/src/app/commands.rs:625 rust/snapedit/src/app/docs.rs:355 rust/snapedit/src/app/extras.rs:539
+#: rust/snapedit/src/app/commands.rs:635 rust/snapedit/src/app/docs.rs:358 rust/snapedit/src/app/extras.rs:539
 msgid "Cor de fundo"
 msgstr "পটভূমির রং"
 
-#: rust/snapedit/src/app/commands.rs:626 rust/snapedit/src/app/extras.rs:538
+#: rust/snapedit/src/app/commands.rs:636 rust/snapedit/src/app/extras.rs:538
 msgid "Fundo transparente"
 msgstr "স্বচ্ছ পটভূমি"
 
-#: rust/snapedit/src/app/commands.rs:627
+#: rust/snapedit/src/app/commands.rs:637
 msgid "Os objetos serão mesclados à imagem."
 msgstr "অবজেক্টগুলো ছবির সাথে মিশে যাবে।"
 
-#: rust/snapedit/src/app/commands.rs:651 rust/snapedit/src/app/commands.rs:698 rust/snapedit/src/app/docs.rs:353 rust/snapedit/src/app/video.rs:456
-msgid "Largura (px)"
-msgstr "প্রস্থ (px)"
-
-#: rust/snapedit/src/app/commands.rs:652 rust/snapedit/src/app/commands.rs:699 rust/snapedit/src/app/docs.rs:354 rust/anycapture/src/dialogs.rs:553
-msgid "Altura (px)"
-msgstr "উচ্চতা (px)"
-
-#: rust/snapedit/src/app/commands.rs:653
+#: rust/snapedit/src/app/commands.rs:663
 msgid "ou escala (%)"
 msgstr "অথবা স্কেল (%)"
 
-#: rust/snapedit/src/app/commands.rs:656 rust/anycapture/src/window.rs:87
-msgid "Redimensionar imagem"
-msgstr "ছবির আকার পরিবর্তন"
-
-#: rust/snapedit/src/app/commands.rs:700
+#: rust/snapedit/src/app/commands.rs:710
 msgid "Âncora"
 msgstr "নোঙর"
 
-#: rust/snapedit/src/app/commands.rs:701
+#: rust/snapedit/src/app/commands.rs:711
 msgid "Cor do canvas"
 msgstr "ক্যানভাসের রং"
 
-#: rust/snapedit/src/app/commands.rs:702 rust/snapedit/src/app/docs.rs:356 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
-msgid "Transparente"
-msgstr "স্বচ্ছ"
-
-#: rust/snapedit/src/app/commands.rs:704
+#: rust/snapedit/src/app/commands.rs:714
 msgid "Tamanho do canvas"
 msgstr "ক্যানভাসের আকার"
 
-#: rust/snapedit/src/app/commands.rs:741
+#: rust/snapedit/src/app/commands.rs:751
 msgid "Nada a cortar: as bordas não são uniformes."
 msgstr "ছাঁটার কিছু নেই: প্রান্তগুলো একরকম নয়।"
 
-#: rust/snapedit/src/app/commands.rs:776
+#: rust/snapedit/src/app/commands.rs:786
 msgid "Arquivo…"
 msgstr "ফাইল…"
 
-#: rust/snapedit/src/app/commands.rs:779
+#: rust/snapedit/src/app/commands.rs:789
 msgid "E-mail…"
 msgstr "ইমেইল…"
 
-#: rust/snapedit/src/app/commands.rs:780
+#: rust/snapedit/src/app/commands.rs:790
 msgid "Impressora…"
 msgstr "প্রিন্টার…"
 
-#: rust/snapedit/src/app/commands.rs:781
+#: rust/snapedit/src/app/commands.rs:791
 msgid "Programa externo…"
 msgstr "বাইরের প্রোগ্রাম…"
 
-#: rust/snapedit/src/app/commands.rs:785
+#: rust/snapedit/src/app/commands.rs:795
 msgid "Enviar para"
 msgstr "এখানে পাঠান"
 
-#: rust/snapedit/src/app/commands.rs:801
+#: rust/snapedit/src/app/commands.rs:811
 msgid "Ajustar à janela\tCtrl+0"
 msgstr "উইন্ডোতে মানানসই\tCtrl+0"
 
-#: rust/snapedit/src/app/commands.rs:828
+#: rust/snapedit/src/app/commands.rs:838
 msgid "Personalizar a barra…"
 msgstr "বার কাস্টমাইজ…"
 
-#: rust/snapedit/src/app/commands.rs:829
+#: rust/snapedit/src/app/commands.rs:839
 msgid "Voltar ao padrão (automática)"
 msgstr "ডিফল্টে ফিরুন (স্বয়ংক্রিয়)"
 
-#: rust/snapedit/src/app/commands.rs:857
+#: rust/snapedit/src/app/commands.rs:867
 msgid "Abrir o link"
 msgstr "লিঙ্ক খুলুন"
 
-#: rust/snapedit/src/app/commands.rs:861 rust/snapedit/src/app/commands.rs:904
+#: rust/snapedit/src/app/commands.rs:871 rust/snapedit/src/app/commands.rs:914
 msgid "Soltar a peça na imagem\tEnter"
 msgstr "অংশটি ছবিতে বসান\tEnter"
 
-#: rust/snapedit/src/app/commands.rs:870
+#: rust/snapedit/src/app/commands.rs:880
 msgid "Desblo&quear\tCtrl+Shift+K"
 msgstr "আনলক করুন(&U)\tCtrl+Shift+K"
 
-#: rust/snapedit/src/app/commands.rs:870
+#: rust/snapedit/src/app/commands.rs:880
 msgid "&Bloquear\tCtrl+L"
 msgstr "লক করুন(&L)\tCtrl+L"
 
-#: rust/snapedit/src/app/commands.rs:872
+#: rust/snapedit/src/app/commands.rs:882
 msgid "Re&nomear…"
 msgstr "নাম বদলান(&N)…"
 
-#: rust/snapedit/src/app/commands.rs:952
+#: rust/snapedit/src/app/commands.rs:963
 msgid "Renomear captura"
 msgstr "ক্যাপচারের নাম বদলান"
 
-#: rust/snapedit/src/app/commands.rs:1060
+#: rust/snapedit/src/app/commands.rs:1054
+#, c-format
+msgid "%zu itens copiados."
+msgstr "%zuটি আইটেম কপি হয়েছে।"
+
+#: rust/snapedit/src/app/commands.rs:1111
 #, c-format
 msgid "%zu itens"
 msgstr "%zu টি আইটেম"
 
-#: rust/snapedit/src/app/commands.rs:695
+#: rust/snapedit/src/app/commands.rs:705
 msgid "Superior esquerda"
 msgstr "উপরে বামে"
 
-#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/anycapture/src/dialogs.rs:690
-msgid "Superior"
-msgstr "উপরে"
-
-#: rust/snapedit/src/app/commands.rs:695
+#: rust/snapedit/src/app/commands.rs:705
 msgid "Superior direita"
 msgstr "উপরে ডানে"
 
-#: rust/snapedit/src/app/commands.rs:695 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534 rust/anycapture/src/dialogs.rs:690
-msgid "Centro"
-msgstr "মাঝখানে"
-
-#: rust/snapedit/src/app/commands.rs:695
+#: rust/snapedit/src/app/commands.rs:705
 msgid "Inferior esquerda"
 msgstr "নিচে বামে"
 
-#: rust/snapedit/src/app/commands.rs:696 rust/snapedit/src/app/extras.rs:129 rust/anycapture/src/dialogs.rs:691
-msgid "Inferior"
-msgstr "নিচে"
-
-#: rust/snapedit/src/app/commands.rs:696
+#: rust/snapedit/src/app/commands.rs:706
 msgid "Inferior direita"
 msgstr "নিচে ডানে"
 
-#: rust/snapedit/src/app/docs.rs:178
+#: rust/snapedit/src/app/docs.rs:181
 msgid "Arquivo não encontrado:\n"
 msgstr "ফাইল পাওয়া যায়নি:\n"
 
-#: rust/snapedit/src/app/docs.rs:185
+#: rust/snapedit/src/app/docs.rs:188
 msgid "Não foi possível abrir:\n"
 msgstr "খোলা যায়নি:\n"
 
-#: rust/snapedit/src/app/docs.rs:191
+#: rust/snapedit/src/app/docs.rs:194
 msgid "Arquivo importado"
 msgstr "আমদানি করা ফাইল"
 
-#: rust/snapedit/src/app/docs.rs:236
+#: rust/snapedit/src/app/docs.rs:239
 msgid "Salvo na biblioteca: "
 msgstr "লাইব্রেরিতে সংরক্ষিত: "
 
-#: rust/snapedit/src/app/docs.rs:269
+#: rust/snapedit/src/app/docs.rs:272
 msgid "Qualidade JPEG (1–100)"
 msgstr "JPEG মান (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:276
+#: rust/snapedit/src/app/docs.rs:279
 msgid "Sem perdas (ideal para capturas de tela)"
 msgstr "লসলেস (স্ক্রিনশটের জন্য আদর্শ)"
 
-#: rust/snapedit/src/app/docs.rs:277
+#: rust/snapedit/src/app/docs.rs:280
 msgid "Qualidade com perdas (1–100)"
 msgstr "লসি মান (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:289
+#: rust/snapedit/src/app/docs.rs:292
 msgid "Qualidade AVIF (1–100)"
 msgstr "AVIF মান (1–100)"
 
-#: rust/snapedit/src/app/docs.rs:319 rust/anycapture/src/pins.rs:429 rust/anycapture/src/quick.rs:255
-msgid "Não foi possível salvar:\n"
-msgstr "সংরক্ষণ করা যায়নি:\n"
-
-#: rust/snapedit/src/app/docs.rs:322
+#: rust/snapedit/src/app/docs.rs:325
 msgid "Salvo em "
 msgstr "এখানে সংরক্ষিত: "
 
-#: rust/snapedit/src/app/docs.rs:342 rust/anycapture/src/engine.rs:479
-msgid "A área de transferência não contém imagem."
-msgstr "ক্লিপবোর্ডে কোনো ছবি নেই।"
-
-#: rust/snapedit/src/app/docs.rs:345 rust/anycapture/src/window.rs:222
-msgid "Da área de transferência"
-msgstr "ক্লিপবোর্ড থেকে"
-
-#: rust/snapedit/src/app/docs.rs:346
+#: rust/snapedit/src/app/docs.rs:349
 msgid "Imagem nova criada a partir da área de transferência."
 msgstr "ক্লিপবোর্ড থেকে নতুন ছবি তৈরি হয়েছে।"
 
-#: rust/snapedit/src/app/docs.rs:363
+#: rust/snapedit/src/app/docs.rs:366
 msgid "Imagem nova"
 msgstr "নতুন ছবি"
 
-#: rust/snapedit/src/app/docs.rs:407
+#: rust/snapedit/src/app/docs.rs:410
 msgid "Enviar para a Lixeira?\n"
 msgstr "রিসাইকেল বিনে পাঠাবেন?\n"
 
-#: rust/snapedit/src/app/docs.rs:409
+#: rust/snapedit/src/app/docs.rs:412
 #, c-format
 msgid "Enviar %zu itens da biblioteca para a Lixeira?"
 msgstr "লাইব্রেরির %zu টি আইটেম রিসাইকেল বিনে পাঠাবেন?"
 
-#: rust/snapedit/src/app/docs.rs:431
+#: rust/snapedit/src/app/docs.rs:434
 msgid "Item enviado para a Lixeira."
 msgstr "আইটেম রিসাইকেল বিনে পাঠানো হয়েছে।"
 
-#: rust/snapedit/src/app/docs.rs:433
+#: rust/snapedit/src/app/docs.rs:436
 #, c-format
 msgid "%zu itens enviados para a Lixeira."
 msgstr "%zu টি আইটেম রিসাইকেল বিনে পাঠানো হয়েছে।"
 
-#: rust/snapedit/src/app/docs.rs:471
+#: rust/snapedit/src/app/docs.rs:476
 msgid "Formato das imagens"
 msgstr "ছবির ফরম্যাট"
 
-#: rust/snapedit/src/app/docs.rs:472
+#: rust/snapedit/src/app/docs.rs:477
+msgid "Exportar como ZIP (todos juntos em um arquivo)"
+msgstr "ZIP হিসেবে রপ্তানি করুন (সব একটি ফাইলে)"
+
+#: rust/snapedit/src/app/docs.rs:478
 msgid "Vídeos são copiados em MP4."
 msgstr "ভিডিও MP4-এ কপি করা হয়।"
 
-#: rust/snapedit/src/app/docs.rs:474
+#: rust/snapedit/src/app/docs.rs:480
 #, c-format
 msgid "Exportar %zu item(ns)"
 msgstr "%zu টি আইটেম রপ্তানি"
 
-#: rust/snapedit/src/app/docs.rs:477
+#: rust/snapedit/src/app/docs.rs:483
 msgid "Exportar para a pasta"
 msgstr "ফোল্ডারে রপ্তানি"
 
-#: rust/snapedit/src/app/docs.rs:506
+#: rust/snapedit/src/app/docs.rs:526
+msgid "Capturas"
+msgstr "ক্যাপচার"
+
+#: rust/snapedit/src/app/docs.rs:553
 #, c-format
 msgid "%d item(ns) exportado(s) para %s"
 msgstr "%d টি আইটেম %s-এ রপ্তানি হয়েছে"
 
-#: rust/snapedit/src/app/docs.rs:507
+#: rust/snapedit/src/app/docs.rs:554
 #, c-format
 msgid " — %d falha(s)"
 msgstr " — %d টি ব্যর্থ"
 
-#: rust/snapedit/src/app/docs.rs:526
+#: rust/snapedit/src/app/docs.rs:573
 msgid "Abrir em programa externo"
 msgstr "বাইরের প্রোগ্রামে খুলুন"
 
-#: rust/snapedit/src/app/docs.rs:547
+#: rust/snapedit/src/app/docs.rs:594
 msgid "Captura: "
 msgstr "ক্যাপচার: "
 
-#: rust/snapedit/src/app/docs.rs:561
+#: rust/snapedit/src/app/docs.rs:608
 msgid "Reconhecendo o texto…"
 msgstr "টেক্সট শনাক্ত করা হচ্ছে…"
 
-#: rust/snapedit/src/app/docs.rs:566
+#: rust/snapedit/src/app/docs.rs:613
 msgid "(nenhum texto reconhecido)"
 msgstr "(কোনো লেখা শনাক্ত হয়নি)"
 
-#: rust/snapedit/src/app/docs.rs:567
+#: rust/snapedit/src/app/docs.rs:614
 msgid "Grab Text — texto reconhecido"
 msgstr "লেখা বের করুন — শনাক্ত লেখা"
 
@@ -4632,61 +6431,13 @@ msgstr "(নিচের সেটিংস)"
 msgid "Predefinição"
 msgstr "পূর্বনির্ধারিত"
 
-#: rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771 rust/anycapture/src/dialogs.rs:683
-msgid "Fundo"
-msgstr "পটভূমি"
-
-#: rust/snapedit/src/app/extras.rs:113 rust/anycapture/src/dialogs.rs:684
-msgid "Cor 1"
-msgstr "রং 1"
-
-#: rust/snapedit/src/app/extras.rs:114 rust/anycapture/src/dialogs.rs:684
-msgid "Cor 2 (degradê)"
-msgstr "রং 2 (গ্রেডিয়েন্ট)"
-
-#: rust/snapedit/src/app/extras.rs:115 rust/anycapture/src/dialogs.rs:684
-msgid "Ângulo do degradê"
-msgstr "গ্রেডিয়েন্টের কোণ"
-
-#: rust/snapedit/src/app/extras.rs:116 rust/anycapture/src/dialogs.rs:685
-msgid "Imagem de fundo"
-msgstr "পটভূমির ছবি"
-
-#: rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531 rust/anycapture/src/dialogs.rs:685
-msgid "Margem (px)"
-msgstr "মার্জিন (px)"
-
-#: rust/snapedit/src/app/extras.rs:118 rust/anycapture/src/dialogs.rs:686
-msgid "Cantos arredondados (px)"
-msgstr "গোল কোণ (px)"
-
-#: rust/snapedit/src/app/extras.rs:119 rust/anycapture/src/dialogs.rs:686
-msgid "Sombra (%)"
-msgstr "ছায়া (%)"
-
-#: rust/snapedit/src/app/extras.rs:120 rust/anycapture/src/dialogs.rs:687
-msgid "Tamanho da sombra (px)"
-msgstr "ছায়ার আকার (px)"
-
-#: rust/snapedit/src/app/extras.rs:122 rust/anycapture/src/dialogs.rs:688
-msgid "Proporção"
-msgstr "অনুপাত"
-
 #: rust/snapedit/src/app/extras.rs:123
 msgid "Livre"
 msgstr "মুক্ত"
 
-#: rust/snapedit/src/app/extras.rs:132 rust/anycapture/src/dialogs.rs:692
-msgid "Equilibrar as margens (corta bordas lisas da captura)"
-msgstr "মার্জিন সমান করুন (ক্যাপচারের সাদামাটা প্রান্ত ছাঁটে)"
-
 #: rust/snapedit/src/app/extras.rs:133
 msgid "Salvar como predefinição (nome)"
 msgstr "পূর্বনির্ধারিত হিসেবে সংরক্ষণ করুন (নাম)"
-
-#: rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587 rust/anycapture/src/dialogs.rs:694
-msgid "Embelezar"
-msgstr "সুন্দর করুন"
 
 #: rust/snapedit/src/app/extras.rs:203
 msgid "Nenhum cliente de e-mail MAPI está configurado. A imagem foi salva em:\n"
@@ -4705,30 +6456,6 @@ msgstr "প্রিন্ট খোলা যায়নি: কোনো প�
 #: rust/snapedit/src/app/extras.rs:307
 msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
 msgstr "প্রিন্টার নথিটি গ্রহণ করেনি (প্রিন্টার চালু আছে কি না এবং Windows প্রিন্ট পরিষেবা চলছে কি না দেখুন)।"
-
-#: rust/snapedit/src/app/extras.rs:328 rust/anycapture/src/main.rs:919
-msgid "O manual não foi encontrado:\n"
-msgstr "ম্যানুয়ালটি পাওয়া যায়নি:\n"
-
-#: rust/snapedit/src/app/extras.rs:395 rust/anycapture/src/share.rs:53
-msgid "Arquivo (para colar no Explorer, e-mail, chat)"
-msgstr "ফাইল (এক্সপ্লোরার, ই-মেইল, চ্যাটে পেস্ট করতে)"
-
-#: rust/snapedit/src/app/extras.rs:396 rust/anycapture/src/share.rs:53
-msgid "Caminho do arquivo"
-msgstr "ফাইলের পথ"
-
-#: rust/snapedit/src/app/extras.rs:399 rust/anycapture/src/share.rs:53
-msgid "Base64 (PNG)"
-msgstr "Base64 (PNG)"
-
-#: rust/snapedit/src/app/extras.rs:400 rust/anycapture/src/share.rs:54
-msgid "Data URL (PNG)"
-msgstr "ডেটা URL (PNG)"
-
-#: rust/snapedit/src/app/extras.rs:401 rust/anycapture/src/share.rs:54
-msgid "Data URL (WebP)"
-msgstr "ডেটা URL (WebP)"
 
 #: rust/snapedit/src/app/extras.rs:405
 msgid "Link do upload"
@@ -4884,10 +6611,6 @@ msgstr "প্রতিটি অংশের আকার (px)"
 msgid "Número de partes"
 msgstr "অংশের সংখ্যা"
 
-#: rust/snapedit/src/app/extras.rs:757 rust/anycapture/src/dialogs.rs:671
-msgid "Tamanho (px)"
-msgstr "আকার (px)"
-
 #: rust/snapedit/src/app/extras.rs:759
 msgid "Não cortar linhas de texto (quebras inteligentes)"
 msgstr "টেক্সটের লাইন কাটবেন না (স্মার্ট বিরতি)"
@@ -4909,10 +6632,6 @@ msgstr "ভাগ করা ছবি"
 #, c-format
 msgid "Imagem dividida em %zu partes (imagens novas na bandeja)."
 msgstr "ছবি %zuটি অংশে ভাগ হয়েছে (ট্রেতে নতুন ছবি)।"
-
-#: rust/snapedit/src/app/extras.rs:793 rust/snapedit/src/app/extras.rs:1099 rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:107
-msgid "Formato"
-msgstr "ফরম্যাট"
 
 #: rust/snapedit/src/app/extras.rs:794
 msgid "Vazio = data e hora curtas. Códigos: yyyy ano · MM mês · MMM/MMMM nome do mês · dd dia · ddd/dddd dia da semana · HH hora (24 h) · hh hora (12 h) · mm minutos · ss segundos · tt AM/PM · '…' texto"
@@ -4987,10 +6706,6 @@ msgstr "প্রিন্ট"
 #: rust/snapedit/src/app/extras.rs:1062
 msgid "Lote"
 msgstr "ব্যাচ"
-
-#: rust/snapedit/src/app/extras.rs:1086 rust/anycapture/src/hotkeys.rs:48
-msgid "(nenhum)"
-msgstr "(কোনোটি নয়)"
 
 #: rust/snapedit/src/app/extras.rs:1088
 msgid "O mesmo do original"
@@ -5099,21 +6814,9 @@ msgstr "পুদিনা"
 msgid "Grafite"
 msgstr "গ্রাফাইট"
 
-#: rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
-msgid "Papel de parede"
-msgstr "ওয়ালপেপার"
-
 #: rust/snapedit/src/app/extras.rs:82
 msgid "Branco simples"
 msgstr "সাদামাটা সাদা"
-
-#: rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
-msgid "Cor sólida"
-msgstr "একটানা রং"
-
-#: rust/snapedit/src/app/extras.rs:112 rust/anycapture/src/dialogs.rs:683
-msgid "Degradê"
-msgstr "গ্রেডিয়েন্ট"
 
 #: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:679
 msgid "Lado a lado"
@@ -5207,25 +6910,25 @@ msgstr "টুল: "
 msgid "Zoom %d%%"
 msgstr "জুম %d%%"
 
-#: rust/snapedit/src/app/mod.rs:643
+#: rust/snapedit/src/app/mod.rs:647
 #, c-format
 msgid "%d objetos selecionados  •  Ctrl+Shift+G agrupa  •  Organizar › Alinhar alinha entre si"
 msgstr "%d টি অবজেক্ট নির্বাচিত  •  Ctrl+Shift+G গ্রুপ করে  •  সাজান › সারিবদ্ধ পরস্পরের সাথে সারিবদ্ধ করে"
 
-#: rust/snapedit/src/app/mod.rs:656
+#: rust/snapedit/src/app/mod.rs:660
 msgid "Cor capturada: "
 msgstr "নেওয়া রং: "
 
-#: rust/snapedit/src/app/mod.rs:656
+#: rust/snapedit/src/app/mod.rs:660
 msgid " (aplicada às ferramentas de desenho)"
 msgstr " (আঁকার টুলে প্রয়োগ হয়েছে)"
 
-#: rust/snapedit/src/app/mod.rs:713
+#: rust/snapedit/src/app/mod.rs:717
 #, c-format
 msgid "Excluir o efeito rápido \"%s\"?"
 msgstr "দ্রুত প্রভাব \"%s\" মুছবেন?"
 
-#: rust/snapedit/src/app/mod.rs:899
+#: rust/snapedit/src/app/mod.rs:903
 msgid ""
 "AnyCaptureEditor.exe [opções] [arquivo…]\n"
 "\n"
@@ -5288,10 +6991,6 @@ msgstr "ভিডিও ফ্রেম"
 msgid "Salvar vídeo"
 msgstr "ভিডিও সংরক্ষণ"
 
-#: rust/snapedit/src/app/video.rs:413 rust/anycapture/src/quick.rs:241
-msgid "Vídeo MP4 (*.mp4)|*.mp4|"
-msgstr "MP4 ভিডিও (*.mp4)|*.mp4|"
-
 #: rust/snapedit/src/app/video.rs:415
 msgid "Escolha um arquivo diferente do original."
 msgstr "মূল থেকে ভিন্ন একটি ফাইল বেছে নিন।"
@@ -5315,10 +7014,6 @@ msgstr "পরিসর: চিহ্নিত নির্বাচন।"
 #: rust/snapedit/src/app/video.rs:453
 msgid "Intervalo: o vídeo inteiro (marque início/fim para limitar)."
 msgstr "পরিসর: পুরো ভিডিও (সীমিত করতে শুরু/শেষ চিহ্নিত করুন)।"
-
-#: rust/snapedit/src/app/video.rs:455 rust/anycapture/src/dialogs.rs:580
-msgid "Quadros por segundo"
-msgstr "প্রতি সেকেন্ডে ফ্রেম"
 
 #: rust/snapedit/src/app/video.rs:457
 msgid "256 cores"
@@ -5476,10 +7171,6 @@ msgstr "কনট্রাস্ট পরীক্ষক (WCAG)"
 #: rust/snapedit/src/app/windows_aux.rs:422
 msgid "Comparar imagens"
 msgstr "ছবি তুলনা করুন"
-
-#: rust/snapedit/src/app/windows_aux.rs:487 rust/snapedit/src/app/windows_aux.rs:691 rust/snapedit/src/app/windows_aux.rs:808 rust/snapedit/src/app/windows_aux.rs:876
-msgid "Fechar"
-msgstr "বন্ধ করুন"
 
 #: rust/snapedit/src/app/windows_aux.rs:515
 msgid "Amplie partes da imagem para destacar os detalhes importantes. Arraste para criar a lupa; com a lente separada, a alça amarela escolhe a área ampliada."
@@ -5644,10 +7335,6 @@ msgstr "জিজ্ঞেস করা হচ্ছে…"
 msgid "Resposta de %s (%s)."
 msgstr "%s (%s)-এর উত্তর।"
 
-#: rust/snapedit/src/app/windows_aux.rs:869 rust/anycapture/src/quick.rs:53
-msgid "Copiar"
-msgstr "কপি করুন"
-
 #: rust/snapedit/src/app/windows_aux.rs:871
 msgid "Resposta copiada."
 msgstr "উত্তর কপি হয়েছে।"
@@ -5716,10 +7403,6 @@ msgstr "ধাপগুলো বের করুন"
 msgid "Extrair o texto"
 msgstr "টেক্সট বের করুন"
 
-#: rust/snapedit/src/app/windows_aux.rs:577 rust/anycapture/src/select.rs:674 rust/snapui/src/form.rs:461
-msgid "OK"
-msgstr "ঠিক আছে"
-
 #: rust/snapedit/tests/golden.rs:594
 msgid "Não foi possível criar o arquivo."
 msgstr "ফাইল তৈরি করা যায়নি।"
@@ -5731,1576 +7414,6 @@ msgstr "ফাইল লিখতে ব্যর্থ।"
 #: rust/snapedit/tests/golden.rs:596
 msgid "Falha ao codificar a imagem."
 msgstr "ছবি এনকোড করতে ব্যর্থ।"
-
-#: rust/anycapture/src/camwin.rs:81 rust/anycapture/src/engine/video.rs:178
-msgid "AnyCapture — webcam"
-msgstr "AnyCapture — ওয়েবক্যাম"
-
-#: rust/anycapture/src/cmdline.rs:111
-msgid ""
-"AnyCapture.exe [opções]\n"
-"\n"
-"/hide                 inicia só na bandeja\n"
-"/capture              captura imagem com o preset de imagem atual\n"
-"/video                grava vídeo com o preset de vídeo atual\n"
-"/preset \"nome\"        executa um preset pelo nome\n"
-"/clipboard            captura a imagem da área de transferência\n"
-"/region x,y,l,a       captura essa área da tela\n"
-"/window \"título\"      captura a janela cujo título contém o texto\n"
-"/monitor n            captura o monitor n (1, 2…, da esquerda para a direita)\n"
-"/fullscreen           captura a tela inteira\n"
-"/delay s              espera s segundos antes de capturar\n"
-"/ocr  /qr  /upload    reconhece o texto, lê o código QR ou envia a captura\n"
-"/pin [arquivo]        fixa o arquivo na tela (sem arquivo: captura e fixa)\n"
-"/pinclipboard         fixa o conteúdo da área de transferência\n"
-"/colorpicker          abre o conta-gotas de tela\n"
-"/focus                liga ou desliga o foco de tela\n"
-"/interval [stop]      inicia (ou para) a captura por intervalo\n"
-"/output clipboard|editor|none|\"arquivo\"   para onde vai a captura\n"
-"/exit                 encerra o AnyCapture em execução"
-msgstr ""
-"AnyCapture.exe [বিকল্প]\n"
-"\n"
-"/hide                 শুধু নোটিফিকেশন এলাকায় চালু করে\n"
-"/capture              বর্তমান ছবি প্রিসেট দিয়ে ছবি ক্যাপচার করে\n"
-"/video                বর্তমান ভিডিও প্রিসেট দিয়ে ভিডিও রেকর্ড করে\n"
-"/preset \"নাম\"       নাম দিয়ে প্রিসেট চালায়\n"
-"/clipboard            ক্লিপবোর্ডের ছবি ক্যাপচার করে\n"
-"/region x,y,প্র,উ     স্ক্রিনের এই এলাকা ক্যাপচার করে\n"
-"/window \"শিরোনাম\"   যে উইন্ডোর শিরোনামে টেক্সট আছে তা ক্যাপচার করে\n"
-"/monitor n            মনিটর n ক্যাপচার করে (1, 2…, বাম থেকে ডানে)\n"
-"/fullscreen           সম্পূর্ণ স্ক্রিন ক্যাপচার করে\n"
-"/delay s              ক্যাপচারের আগে s সেকেন্ড অপেক্ষা করে\n"
-"/ocr  /qr  /upload    টেক্সট শনাক্ত করে, QR কোড পড়ে বা ক্যাপচার আপলোড করে\n"
-"/pin [ফাইল]           ফাইল স্ক্রিনে পিন করে (ফাইল ছাড়া: ক্যাপচার করে পিন করে)\n"
-"/pinclipboard         ক্লিপবোর্ডের বিষয়বস্তু পিন করে\n"
-"/colorpicker          স্ক্রিন রং বাছাই খোলে\n"
-"/focus                স্ক্রিন ফোকাস চালু বা বন্ধ করে\n"
-"/interval [stop]      ব্যবধানে ক্যাপচার শুরু (বা বন্ধ) করে\n"
-"/output clipboard|editor|none|\"ফাইল\"   ক্যাপচার কোথায় যাবে\n"
-"/exit                 চলমান AnyCapture বন্ধ করে"
-
-#: rust/anycapture/src/desk.rs:450
-msgid "Conta-gotas: clique para copiar a cor • setas movem 1 px (Shift = 10) • Enter = copiar • Esc = cancelar"
-msgstr "রং বাছাই: রং কপি করতে ক্লিক করুন • তীর 1 px সরায় (Shift = 10) • Enter = কপি • Esc = বাতিল"
-
-#: rust/anycapture/src/desk.rs:602
-msgid "AnyCapture — conta-gotas"
-msgstr "AnyCapture — রং বাছাই"
-
-#: rust/anycapture/src/desk.rs:644
-msgid "Cores recentes"
-msgstr "সাম্প্রতিক রং"
-
-#: rust/anycapture/src/desk.rs:644
-msgid "Formato padrão"
-msgstr "ডিফল্ট ফরম্যাট"
-
-#: rust/anycapture/src/dialogs.rs:85
-msgid "Nome do preset"
-msgstr "প্রিসেটের নাম"
-
-#: rust/anycapture/src/dialogs.rs:110
-#, c-format
-msgid "Preset %zu"
-msgstr "প্রিসেট %zu"
-
-#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:769
-msgid "Novo preset com as configurações atuais"
-msgstr "বর্তমান সেটিংস থেকে নতুন প্রিসেট"
-
-#: rust/anycapture/src/dialogs.rs:127
-msgid "Renomear preset"
-msgstr "প্রিসেটের নাম বদলান"
-
-#: rust/anycapture/src/dialogs.rs:151
-msgid "É preciso manter pelo menos um preset."
-msgstr "অন্তত একটি প্রিসেট রাখতে হবে।"
-
-#: rust/anycapture/src/dialogs.rs:154
-#, c-format
-msgid "Excluir o preset \"%s\"?"
-msgstr "প্রিসেট \"%s\" মুছবেন?"
-
-#: rust/anycapture/src/dialogs.rs:170
-msgid "Atalho do preset"
-msgstr "প্রিসেটের শর্টকাট"
-
-#: rust/anycapture/src/dialogs.rs:170
-msgid "Deixe vazio (Backspace) para remover."
-msgstr "সরাতে খালি রাখুন (Backspace)।"
-
-#: rust/anycapture/src/dialogs.rs:171
-msgid "Atalho — "
-msgstr "শর্টকাট — "
-
-#: rust/anycapture/src/dialogs.rs:181
-msgid ""
-"Um preset guarda tudo o que a janela de captura mostra: tipo (imagem ou vídeo), seleção, efeitos, destino e opções de gravação.\n"
-"\n"
-"•  Clique em um preset para carregá-lo na janela; clique duas vezes para capturar com ele.\n"
-"•  \"Adicionar atalho\" dá a ele uma tecla de atalho global.\n"
-"•  A engrenagem da linha renomeia, duplica ou exclui o preset.\n"
-"•  \"Novo preset com as configurações atuais\" salva o que está na janela agora."
-msgstr ""
-"প্রিসেট ক্যাপচার উইন্ডোতে দেখানো সবকিছু সংরক্ষণ করে: ধরন (ছবি বা ভিডিও), নির্বাচন, প্রভাব, গন্তব্য এবং রেকর্ডিং বিকল্প।\n"
-"\n"
-"•  প্রিসেট উইন্ডোতে লোড করতে তাতে ক্লিক করুন; এটি দিয়ে ক্যাপচার করতে ডাবল-ক্লিক করুন।\n"
-"•  \"শর্টকাট যোগ করুন\" এটিকে একটি গ্লোবাল শর্টকাট কী দেয়।\n"
-"•  সারির গিয়ার প্রিসেটের নাম বদলায়, প্রতিলিপি করে বা মুছে ফেলে।\n"
-"•  \"বর্তমান সেটিংস থেকে নতুন প্রিসেট\" এখন উইন্ডোতে যা আছে তা সংরক্ষণ করে।"
-
-#: rust/anycapture/src/dialogs.rs:210
-msgid "Presets do AnyCapture (*.snappresets)|*.snappresets|"
-msgstr "AnyCapture প্রিসেট (*.snappresets)|*.snappresets|"
-
-#: rust/anycapture/src/dialogs.rs:216
-msgid "Não foi possível exportar."
-msgstr "রপ্তানি করা যায়নি।"
-
-#: rust/anycapture/src/dialogs.rs:223
-msgid "Presets do AnyCapture (*.snappresets;*.xml)|*.snappresets;*.xml|"
-msgstr "AnyCapture প্রিসেট (*.snappresets;*.xml)|*.snappresets;*.xml|"
-
-#: rust/anycapture/src/dialogs.rs:226
-msgid "Presets importados."
-msgstr "প্রিসেট আমদানি হয়েছে।"
-
-#: rust/anycapture/src/dialogs.rs:228
-msgid "Arquivo de presets inválido."
-msgstr "অবৈধ প্রিসেট ফাইল।"
-
-#: rust/anycapture/src/dialogs.rs:237
-msgid "Configurações do AnyCapture (*.snapsettings)|*.snapsettings|"
-msgstr "AnyCapture সেটিংস (*.snapsettings)|*.snapsettings|"
-
-#: rust/anycapture/src/dialogs.rs:246
-msgid "Exportar configurações"
-msgstr "সেটিংস রপ্তানি করুন"
-
-#: rust/anycapture/src/dialogs.rs:252
-msgid "Configurações exportadas: presets, temas, estilos rápidos, favoritos, efeitos rápidos, ordem dos carimbos e barra de ferramentas."
-msgstr "সেটিংস রপ্তানি হয়েছে: প্রিসেট, থিম, দ্রুত স্টাইল, প্রিয়, দ্রুত ইফেক্ট, স্ট্যাম্পের ক্রম ও টুলবার।"
-
-#: rust/anycapture/src/dialogs.rs:266
-msgid ""
-"Substituir\n"
-"As configurações atuais dão lugar às do arquivo."
-msgstr ""
-"প্রতিস্থাপন\n"
-"বর্তমান সেটিংসের জায়গায় ফাইলের সেটিংস আসবে।"
-
-#: rust/anycapture/src/dialogs.rs:267
-msgid ""
-"Mesclar\n"
-"Mantém as configurações atuais e acrescenta o que faltar (presets, temas, favoritos, efeitos rápidos…)."
-msgstr ""
-"একত্রিত করুন\n"
-"বর্তমান সেটিংস রাখে এবং যা নেই তা যোগ করে (প্রিসেট, থিম, প্রিয়, দ্রুত ইফেক্ট…)।"
-
-#: rust/anycapture/src/dialogs.rs:268 rust/anycapture/src/dialogs.rs:298
-msgid "Importar configurações"
-msgstr "সেটিংস আমদানি করুন"
-
-#: rust/anycapture/src/dialogs.rs:269
-msgid "O AnyCapture e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
-msgstr "AnyCapture ও এডিটর আমদানি করা সেটিংস নিয়ে আবার চালু হবে। বর্তমান সেটিংসের একটি কপি ব্যাকআপ ফোল্ডারে থাকবে।"
-
-#: rust/anycapture/src/dialogs.rs:374
-msgid "Automático (idioma do Windows)"
-msgstr "স্বয়ংক্রিয় (Windows-এর ভাষা)"
-
-#: rust/anycapture/src/dialogs.rs:385
-msgid "Atalhos globais"
-msgstr "গ্লোবাল শর্টকাট"
-
-#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:218
-msgid "Capturar imagem"
-msgstr "ছবি ক্যাপচার"
-
-#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:219
-msgid "Gravar vídeo"
-msgstr "ভিডিও রেকর্ড"
-
-#: rust/anycapture/src/dialogs.rs:388
-msgid "Pausar/retomar vídeo"
-msgstr "ভিডিও বিরতি/চালু"
-
-#: rust/anycapture/src/dialogs.rs:389
-msgid "Parar vídeo"
-msgstr "ভিডিও থামান"
-
-#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:544 rust/anycapture/src/window.rs:225
-msgid "Conta-gotas de tela"
-msgstr "স্ক্রিন রং বাছাই"
-
-#: rust/anycapture/src/dialogs.rs:391
-msgid "Capturar e fixar na tela"
-msgstr "ক্যাপচার করে স্ক্রিনে পিন করুন"
-
-#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:213
-msgid "Fixar da área de transferência"
-msgstr "ক্লিপবোর্ড থেকে পিন করুন"
-
-#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:550 rust/anycapture/src/window.rs:229
-msgid "Foco de tela (apresentações)"
-msgstr "স্ক্রিন ফোকাস (উপস্থাপনা)"
-
-#: rust/anycapture/src/dialogs.rs:394
-msgid "Geral"
-msgstr "সাধারণ"
-
-#: rust/anycapture/src/dialogs.rs:395
-msgid "Pasta de saída"
-msgstr "আউটপুট ফোল্ডার"
-
-#: rust/anycapture/src/dialogs.rs:396
-msgid "Monitorar área de transferência"
-msgstr "ক্লিপবোর্ডে নজর রাখুন"
-
-#: rust/anycapture/src/dialogs.rs:397
-msgid "Só a Ferramenta de Captura do Windows"
-msgstr "শুধু Windows স্নিপিং টুল"
-
-#: rust/anycapture/src/dialogs.rs:397
-msgid "Qualquer aplicativo"
-msgstr "যেকোনো অ্যাপ্লিকেশন"
-
-#: rust/anycapture/src/dialogs.rs:398
-msgid "Iniciar com o Windows"
-msgstr "Windows-এর সাথে চালু করুন"
-
-#: rust/anycapture/src/dialogs.rs:399
-msgid "Mostrar a janela de captura ao iniciar"
-msgstr "চালুর সময় ক্যাপচার উইন্ডো দেখান"
-
-#: rust/anycapture/src/dialogs.rs:400
-msgid "Idioma"
-msgstr "ভাষা"
-
-#: rust/anycapture/src/dialogs.rs:401
-msgid "Depois da captura"
-msgstr "ক্যাপচারের পরে"
-
-#: rust/anycapture/src/dialogs.rs:402
-msgid "Copiar toda captura para a área de transferência"
-msgstr "প্রতিটি ক্যাপচার ক্লিপবোর্ডে কপি করুন"
-
-#: rust/anycapture/src/dialogs.rs:403
-msgid "Ao terminar"
-msgstr "শেষ হলে"
-
-#: rust/anycapture/src/dialogs.rs:404
-msgid "Abrir no Editor (como o preset diz)"
-msgstr "এডিটরে খুলুন (প্রিসেট অনুযায়ী)"
-
-#: rust/anycapture/src/dialogs.rs:404
-msgid "Mostrar a miniatura rápida em vez do Editor"
-msgstr "এডিটরের বদলে দ্রুত থাম্বনেইল দেখান"
-
-#: rust/anycapture/src/dialogs.rs:405
-msgid "Mostrar a miniatura e abrir o Editor"
-msgstr "থাম্বনেইল দেখান ও এডিটর খুলুন"
-
-#: rust/anycapture/src/dialogs.rs:405
-msgid "Só copiar para a área de transferência"
-msgstr "শুধু ক্লিপবোর্ডে কপি করুন"
-
-#: rust/anycapture/src/dialogs.rs:407
-msgid "A miniatura fecha após (s, 0 = não fecha)"
-msgstr "থাম্বনেইল বন্ধ হয় (সে., 0 = বন্ধ হয় না)"
-
-#: rust/anycapture/src/dialogs.rs:408
-msgid "Canto da miniatura"
-msgstr "থাম্বনেইলের কোণ"
-
-#: rust/anycapture/src/dialogs.rs:411
-msgid "Som da captura"
-msgstr "ক্যাপচারের শব্দ"
-
-#: rust/anycapture/src/dialogs.rs:412
-msgid "Arquivo WAV do som"
-msgstr "শব্দের WAV ফাইল"
-
-#: rust/anycapture/src/dialogs.rs:414
-msgid "Capturar a região assim que soltar o mouse"
-msgstr "মাউস ছাড়লেই অঞ্চল ক্যাপচার করুন"
-
-#: rust/anycapture/src/dialogs.rs:415
-msgid "Corrigir as cores em monitores HDR"
-msgstr "HDR মনিটরে রং ঠিক করুন"
-
-#: rust/anycapture/src/dialogs.rs:416
-msgid "Cantos arredondados transparentes nas janelas"
-msgstr "উইন্ডোতে স্বচ্ছ গোল কোণ"
-
-#: rust/anycapture/src/dialogs.rs:417
-msgid "Sombra nas capturas de janela"
-msgstr "উইন্ডো ক্যাপচারে ছায়া"
-
-#: rust/anycapture/src/dialogs.rs:418
-msgid "Ocultar os ícones da área de trabalho ao capturar"
-msgstr "ক্যাপচারের সময় ডেস্কটপ আইকন লুকান"
-
-#: rust/anycapture/src/dialogs.rs:419
-msgid "Não perturbe (sem notificações) ao gravar"
-msgstr "রেকর্ডিংয়ের সময় বিরক্ত করবেন না (কোনো বিজ্ঞপ্তি নয়)"
-
-#: rust/anycapture/src/dialogs.rs:420
-msgid "Manter a tela acesa durante a captura"
-msgstr "ক্যাপচারের সময় স্ক্রিন চালু রাখুন"
-
-#: rust/anycapture/src/dialogs.rs:421
-msgid "Privacidade e biblioteca"
-msgstr "গোপনীয়তা ও লাইব্রেরি"
-
-#: rust/anycapture/src/dialogs.rs:422
-msgid "Remover metadados (câmera, GPS, datas) ao salvar"
-msgstr "সংরক্ষণের সময় মেটাডেটা মুছুন (ক্যামেরা, GPS, তারিখ)"
-
-#: rust/anycapture/src/dialogs.rs:423
-msgid "Limpar a biblioteca automaticamente"
-msgstr "লাইব্রেরি স্বয়ংক্রিয়ভাবে পরিষ্কার করুন"
-
-#: rust/anycapture/src/dialogs.rs:424
-msgid "Apagar capturas com mais de (dias)"
-msgstr "এর চেয়ে পুরোনো ক্যাপচার মুছুন (দিন)"
-
-#: rust/anycapture/src/dialogs.rs:425
-msgid "Manter as capturas que têm nome"
-msgstr "নামযুক্ত ক্যাপচার রাখুন"
-
-#: rust/anycapture/src/dialogs.rs:426
-msgid "Manter as capturas com etiquetas"
-msgstr "ট্যাগযুক্ত ক্যাপচার রাখুন"
-
-#: rust/anycapture/src/dialogs.rs:427
-msgid "Enviar para a Lixeira em vez de apagar"
-msgstr "মুছে না ফেলে রিসাইকেল বিনে পাঠান"
-
-#: rust/anycapture/src/dialogs.rs:428
-msgid "Cursor capturado como objeto no Editor"
-msgstr "ক্যাপচার করা কার্সর এডিটরে অবজেক্ট হিসেবে"
-
-#: rust/anycapture/src/dialogs.rs:429
-msgid "Dividir imagens longas em páginas (impressão e PDF)"
-msgstr "লম্বা ছবি পৃষ্ঠায় ভাগ করুন (প্রিন্ট ও PDF)"
-
-#: rust/anycapture/src/dialogs.rs:430
-msgid "Aparência (vale ao reabrir)"
-msgstr "চেহারা (আবার খুললে প্রযোজ্য)"
-
-#: rust/anycapture/src/dialogs.rs:430
-msgid "Seguir o Windows"
-msgstr "Windows অনুযায়ী"
-
-#: rust/anycapture/src/dialogs.rs:430
-msgid "Claro"
-msgstr "হালকা"
-
-#: rust/anycapture/src/dialogs.rs:430
-msgid "Escuro"
-msgstr "গাঢ়"
-
-#: rust/anycapture/src/dialogs.rs:432
-msgid "Biblioteca: "
-msgstr "লাইব্রেরি: "
-
-#: rust/anycapture/src/dialogs.rs:442
-msgid "Dois atalhos iguais: "
-msgstr "দুটি একই শর্টকাট: "
-
-#: rust/anycapture/src/dialogs.rs:448
-msgid "Opções do AnyCapture"
-msgstr "AnyCapture বিকল্প"
-
-#: rust/anycapture/src/dialogs.rs:475
-msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
-msgstr "ক্যাপচারের শব্দের WAV ফাইল বেছে নিন (পূর্ণ পথ)।"
-
-#: rust/anycapture/src/dialogs.rs:485
-msgid "O novo idioma vale depois que o AnyCapture e o Editor reiniciarem. Reiniciar agora?"
-msgstr "নতুন ভাষা AnyCapture ও এডিটর পুনরায় চালুর পর কার্যকর হবে। এখনই পুনরায় চালু করবেন?"
-
-#: rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:108
-msgid "Prefixo do nome"
-msgstr "নামের উপসর্গ"
-
-#: rust/anycapture/src/dialogs.rs:501 rust/anycapture/src/interval.rs:109 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83
-msgid "Pasta"
-msgstr "ফোল্ডার"
-
-#: rust/anycapture/src/dialogs.rs:502
-msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
-msgstr "স্বয়ংক্রিয় নাম: <উপসর্গ><সংখ্যা>, যেমন: Capture001.png"
-
-#: rust/anycapture/src/dialogs.rs:505 rust/anycapture/src/interval.rs:131
-msgid "O prefixo contém caracteres inválidos."
-msgstr "উপসর্গে অবৈধ অক্ষর আছে।"
-
-#: rust/anycapture/src/dialogs.rs:507
-msgid "Salvar em arquivo"
-msgstr "ফাইলে সংরক্ষণ"
-
-#: rust/anycapture/src/dialogs.rs:526
-msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
-msgstr "ক্যাপচার এই প্রোগ্রামে খোলে (যেমন: mspaint.exe)।"
-
-#: rust/anycapture/src/dialogs.rs:541
-msgid "Cada captura num slide novo (desligado: no slide atual)"
-msgstr "প্রতিটি ক্যাপচার নতুন স্লাইডে (বন্ধ: বর্তমান স্লাইডে)"
-
-#: rust/anycapture/src/dialogs.rs:554
-msgid "Capturar sempre na mesma posição"
-msgstr "সবসময় একই অবস্থানে ক্যাপচার করুন"
-
-#: rust/anycapture/src/dialogs.rs:555
-msgid "Esquerda (X)"
-msgstr "বাম (X)"
-
-#: rust/anycapture/src/dialogs.rs:555
-msgid "Topo (Y)"
-msgstr "উপর (Y)"
-
-#: rust/anycapture/src/dialogs.rs:556
-msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
-msgstr "স্থির অবস্থান না থাকলে, ক্যাপচারের সময় আয়তক্ষেত্রটি টেনে জায়গায় আনেন।"
-
-#: rust/anycapture/src/dialogs.rs:557 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:349
-msgid "Região fixa"
-msgstr "স্থির এলাকা"
-
-#: rust/anycapture/src/dialogs.rs:581
-msgid "Reduzir para 1080p"
-msgstr "1080p-তে ছোট করুন"
-
-#: rust/anycapture/src/dialogs.rs:582
-msgid "Codificação por hardware"
-msgstr "হার্ডওয়্যার এনকোডিং"
-
-#: rust/anycapture/src/dialogs.rs:583
-msgid "Áudio"
-msgstr "অডিও"
-
-#: rust/anycapture/src/dialogs.rs:584
-msgid "Volume do microfone (%)"
-msgstr "মাইক্রোফোনের ভলিউম (%)"
-
-#: rust/anycapture/src/dialogs.rs:585
-msgid "Volume do áudio do sistema (%)"
-msgstr "সিস্টেম অডিওর ভলিউম (%)"
-
-#: rust/anycapture/src/dialogs.rs:586 rust/anycapture/src/hud.rs:361
-msgid "Ganho automático do microfone"
-msgstr "মাইক্রোফোনের স্বয়ংক্রিয় গেইন"
-
-#: rust/anycapture/src/dialogs.rs:587
-msgid "Também ajustáveis no painel da gravação."
-msgstr "রেকর্ডিং প্যানেলেও সমন্বয়যোগ্য।"
-
-#: rust/anycapture/src/dialogs.rs:588
-msgid "Gravar somente o áudio (sem vídeo)"
-msgstr "শুধু অডিও রেকর্ড করুন (ভিডিও ছাড়া)"
-
-#: rust/anycapture/src/dialogs.rs:589
-msgid "Formato do áudio"
-msgstr "অডিও ফরম্যাট"
-
-#: rust/anycapture/src/dialogs.rs:590
-msgid "Na gravação (todos os presets)"
-msgstr "রেকর্ডিংয়ের সময় (সব প্রিসেট)"
-
-#: rust/anycapture/src/dialogs.rs:591 rust/anycapture/src/engine/video.rs:360
-msgid "Destacar o cursor"
-msgstr "কার্সর হাইলাইট করুন"
-
-#: rust/anycapture/src/dialogs.rs:592
-msgid "Cor do destaque"
-msgstr "হাইলাইটের রং"
-
-#: rust/anycapture/src/dialogs.rs:593
-msgid "Tamanho do destaque (px)"
-msgstr "হাইলাইটের আকার (px)"
-
-#: rust/anycapture/src/dialogs.rs:594 rust/anycapture/src/engine/video.rs:360
-msgid "Mostrar os cliques"
-msgstr "ক্লিক দেখান"
-
-#: rust/anycapture/src/dialogs.rs:595
-msgid "Cor do clique esquerdo"
-msgstr "বাম ক্লিকের রং"
-
-#: rust/anycapture/src/dialogs.rs:596
-msgid "Cor do clique direito"
-msgstr "ডান ক্লিকের রং"
-
-#: rust/anycapture/src/dialogs.rs:597
-msgid "Teclas na tela"
-msgstr "স্ক্রিনে কী"
-
-#: rust/anycapture/src/dialogs.rs:597
-msgid "Não mostrar"
-msgstr "দেখাবেন না"
-
-#: rust/anycapture/src/dialogs.rs:597
-msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
-msgstr "শুধু শর্টকাট (Ctrl, Alt, Win, F1…)"
-
-#: rust/anycapture/src/dialogs.rs:597
-msgid "Todas (inclusive o que for digitado)"
-msgstr "সব (যা টাইপ করা হয় তাও)"
-
-#: rust/anycapture/src/dialogs.rs:599
-msgid "Ampliar ao clicar (zoom automático)"
-msgstr "ক্লিকে বড় করুন (স্বয়ংক্রিয় জুম)"
-
-#: rust/anycapture/src/dialogs.rs:600
-msgid "Ampliação do zoom (%)"
-msgstr "জুমের মাত্রা (%)"
-
-#: rust/anycapture/src/dialogs.rs:601
-msgid "Atalho do zoom durante a gravação"
-msgstr "রেকর্ডিংয়ের সময় জুমের শর্টকাট"
-
-#: rust/anycapture/src/dialogs.rs:602
-msgid "Proteger contra travamentos (recupera a gravação)"
-msgstr "ক্র্যাশ থেকে সুরক্ষা (রেকর্ডিং পুনরুদ্ধার হয়)"
-
-#: rust/anycapture/src/dialogs.rs:603
-msgid "Confirmar antes de recomeçar a gravação"
-msgstr "রেকর্ডিং আবার শুরুর আগে নিশ্চিত করুন"
-
-#: rust/anycapture/src/dialogs.rs:605
-msgid "Opções de vídeo"
-msgstr "ভিডিও বিকল্প"
-
-#: rust/anycapture/src/dialogs.rs:633
-msgid "Remover o fundo da webcam"
-msgstr "ওয়েবক্যামের পটভূমি সরান"
-
-#: rust/anycapture/src/dialogs.rs:633
-msgid "Cor do fundo"
-msgstr "পটভূমির রং"
-
-#: rust/anycapture/src/dialogs.rs:634
-msgid "Tolerância (0–100)"
-msgstr "সহনশীলতা (0–100)"
-
-#: rust/anycapture/src/dialogs.rs:635
-msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
-msgstr "সাধারণ, ভালো আলোযুক্ত পটভূমি ব্যবহার করুন (গ্রিন স্ক্রিন সবচেয়ে ভালো)।"
-
-#: rust/anycapture/src/dialogs.rs:636
-msgid "Com o fundo removido, a webcam aparece sem moldura."
-msgstr "পটভূমি সরালে ওয়েবক্যাম ফ্রেম ছাড়া দেখা যায়।"
-
-#: rust/anycapture/src/dialogs.rs:637
-msgid "Remover o fundo (chroma key)"
-msgstr "পটভূমি সরান (ক্রোমা কি)"
-
-#: rust/anycapture/src/dialogs.rs:662
-msgid "Deslocamento (px)"
-msgstr "সরণ (px)"
-
-#: rust/anycapture/src/dialogs.rs:662
-msgid "Desfoque (px)"
-msgstr "ঝাপসা (px)"
-
-#: rust/anycapture/src/dialogs.rs:663 rust/anycapture/src/dialogs.rs:680
-msgid "Opacidade (%)"
-msgstr "অস্বচ্ছতা (%)"
-
-#: rust/anycapture/src/dialogs.rs:664
-msgid "Campos: {date} {time} {computer} {user}"
-msgstr "ক্ষেত্র: {date} {time} {computer} {user}"
-
-#: rust/anycapture/src/dialogs.rs:667
-msgid "Escala (%)"
-msgstr "স্কেল (%)"
-
-#: rust/anycapture/src/dialogs.rs:675
-msgid "Remove as faixas de cor uniforme em volta da captura."
-msgstr "ক্যাপচারের চারপাশের একই রঙের ফিতা সরায়।"
-
-#: rust/anycapture/src/dialogs.rs:677
-msgid "Matiz (graus)"
-msgstr "হিউ (ডিগ্রি)"
-
-#: rust/anycapture/src/dialogs.rs:678
-msgid "90° à direita"
-msgstr "ডানে 90°"
-
-#: rust/anycapture/src/dialogs.rs:678
-msgid "90° à esquerda"
-msgstr "বামে 90°"
-
-#: rust/anycapture/src/dialogs.rs:678
-msgid "Espelhar na horizontal"
-msgstr "অনুভূমিকভাবে উল্টান"
-
-#: rust/anycapture/src/dialogs.rs:678
-msgid "Espelhar na vertical"
-msgstr "উল্লম্বভাবে উল্টান"
-
-#: rust/anycapture/src/dialogs.rs:681
-msgid "Repetir por toda a imagem"
-msgstr "পুরো ছবিতে পুনরাবৃত্তি"
-
-#: rust/anycapture/src/dialogs.rs:682
-msgid "Resolução (DPI)"
-msgstr "রেজোলিউশন (DPI)"
-
-#: rust/anycapture/src/dialogs.rs:682
-msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
-msgstr "সংরক্ষিত ফাইলে লেখা হয় (PNG, JPEG, TIFF, BMP)।"
-
-#: rust/anycapture/src/dialogs.rs:688
-msgid "Original"
-msgstr "মূল"
-
-#: rust/anycapture/src/dialogs.rs:666
-msgid "Cor a substituir"
-msgstr "যে রং বদলাবেন"
-
-#: rust/anycapture/src/engine.rs:373
-#, c-format
-msgid "Captura em %d s…"
-msgstr "%d সেকেন্ডে ক্যাপচার…"
-
-#: rust/anycapture/src/engine.rs:441
-msgid "A região fixa está fora da tela. Ajuste a posição na engrenagem da Seleção."
-msgstr "স্থির এলাকাটি স্ক্রিনের বাইরে। নির্বাচনের গিয়ার মেনুতে এর অবস্থান ঠিক করুন।"
-
-#: rust/anycapture/src/engine.rs:466
-msgid "Janelas como objetos"
-msgstr "উইন্ডো অবজেক্ট হিসেবে"
-
-#: rust/anycapture/src/engine.rs:488
-msgid "Capturar de arquivo gráfico"
-msgstr "গ্রাফিক ফাইল থেকে ক্যাপচার"
-
-#: rust/anycapture/src/engine.rs:493
-msgid "Não foi possível abrir a imagem."
-msgstr "ছবিটি খোলা যায়নি।"
-
-#: rust/anycapture/src/engine.rs:507
-msgid "Nenhum menu aberto encontrado; selecione a região."
-msgstr "কোনো খোলা মেনু পাওয়া যায়নি; এলাকা নির্বাচন করুন।"
-
-#: rust/anycapture/src/engine.rs:557
-msgid "AnyCapture — seleção"
-msgstr "AnyCapture — নির্বাচন"
-
-#: rust/anycapture/src/engine.rs:616
-msgid "vídeo"
-msgstr "ভিডিও"
-
-#: rust/anycapture/src/engine.rs:621
-msgid "A biblioteca está vazia"
-msgstr "লাইব্রেরি খালি"
-
-#: rust/anycapture/src/engine.rs:774
-msgid "Cursor do mouse"
-msgstr "মাউস কার্সর"
-
-#: rust/anycapture/src/engine.rs:806
-msgid ""
-"Não foi possível reconhecer o texto.\n"
-"\n"
-msgstr ""
-"লেখা শনাক্ত করা যায়নি।\n"
-"\n"
-
-#: rust/anycapture/src/engine.rs:807 rust/anycapture/src/engine.rs:811
-msgid "AnyCapture — Capturar texto"
-msgstr "AnyCapture — লেখা বের করুন"
-
-#: rust/anycapture/src/engine.rs:811
-msgid "Nenhum texto encontrado na captura."
-msgstr "ক্যাপচারে কোনো লেখা পাওয়া যায়নি।"
-
-#: rust/anycapture/src/engine.rs:815
-msgid "Capturar texto — copiado para a área de transferência"
-msgstr "লেখা বের করুন — ক্লিপবোর্ডে কপি হয়েছে"
-
-#: rust/anycapture/src/engine.rs:846
-msgid "copiada para a área de transferência"
-msgstr "ক্লিপবোর্ডে কপি হয়েছে"
-
-#: rust/anycapture/src/engine.rs:854 rust/anycapture/src/engine.rs:881
-msgid "salva em "
-msgstr "এখানে সংরক্ষিত: "
-
-#: rust/anycapture/src/engine.rs:914
-msgid "Captura adicionada à biblioteca"
-msgstr "ক্যাপচার লাইব্রেরিতে যোগ হয়েছে"
-
-#: rust/anycapture/src/engine.rs:922
-msgid "Clique para abrir no Editor."
-msgstr "এডিটরে খুলতে ক্লিক করুন।"
-
-#: rust/anycapture/src/engine.rs:1109
-msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
-msgstr "ছবি ও নথি|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|AnyCapture নথি (*.snap)|*.snap|MP4 ভিডিও (*.mp4)|*.mp4|সব ফাইল (*.*)|*.*|"
-
-#: rust/anycapture/src/hotkeys.rs:57 rust/anycapture/src/hotkeys.rs:261 rust/anycapture/tests/window.rs:34
-msgid "Print Screen"
-msgstr "Print Screen"
-
-#: rust/anycapture/src/hud.rs:152
-msgid "Gravar / pausar"
-msgstr "রেকর্ড / বিরতি"
-
-#: rust/anycapture/src/hud.rs:153
-msgid "Parar e salvar"
-msgstr "থামান ও সংরক্ষণ করুন"
-
-#: rust/anycapture/src/hud.rs:154
-msgid "Recomeçar a gravação"
-msgstr "রেকর্ডিং আবার শুরু করুন"
-
-#: rust/anycapture/src/hud.rs:155
-msgid "Cancelar (descarta a gravação)"
-msgstr "বাতিল (রেকর্ডিং বাদ দেওয়া হয়)"
-
-#: rust/anycapture/src/hud.rs:156
-msgid "Microfone: liga / desliga"
-msgstr "মাইক্রোফোন: চালু / বন্ধ"
-
-#: rust/anycapture/src/hud.rs:157
-msgid "Áudio do sistema: liga / desliga"
-msgstr "সিস্টেম অডিও: চালু / বন্ধ"
-
-#: rust/anycapture/src/hud.rs:158
-msgid "Volume do microfone e do sistema"
-msgstr "মাইক্রোফোন ও সিস্টেমের ভলিউম"
-
-#: rust/anycapture/src/hud.rs:159
-msgid "Webcam: mostra / oculta"
-msgstr "ওয়েবক্যাম: দেখান / লুকান"
-
-#: rust/anycapture/src/hud.rs:160
-msgid "Capturar uma imagem sem parar a gravação"
-msgstr "রেকর্ডিং না থামিয়ে একটি ছবি ক্যাপচার করুন"
-
-#: rust/anycapture/src/hud.rs:161
-msgid "Zoom em volta do ponteiro"
-msgstr "পয়েন্টারের চারপাশে জুম"
-
-#: rust/anycapture/src/hud.rs:162
-msgid "No vídeo: destaque do cursor, cliques e teclas"
-msgstr "ভিডিওতে: কার্সর হাইলাইট, ক্লিক ও কী"
-
-#: rust/anycapture/src/hud.rs:263
-msgid "Pronto"
-msgstr "প্রস্তুত"
-
-#: rust/anycapture/src/hud.rs:314 rust/anycapture/src/engine/video.rs:539
-msgid "Volume"
-msgstr "ভলিউম"
-
-#: rust/anycapture/src/hud.rs:340
-msgid "Microfone"
-msgstr "মাইক্রোফোন"
-
-#: rust/anycapture/src/hud.rs:340
-msgid "Áudio do sistema"
-msgstr "সিস্টেম অডিও"
-
-#: rust/anycapture/src/interval.rs:70 rust/anycapture/src/interval.rs:71
-msgid "Intervalo"
-msgstr "ব্যবধান"
-
-#: rust/anycapture/src/interval.rs:101
-msgid "Área"
-msgstr "এলাকা"
-
-#: rust/anycapture/src/interval.rs:102
-msgid "Tela inteira"
-msgstr "সম্পূর্ণ স্ক্রিন"
-
-#: rust/anycapture/src/interval.rs:102
-msgid "Monitor do cursor"
-msgstr "কার্সরের মনিটর"
-
-#: rust/anycapture/src/interval.rs:102
-msgid "Região (escolher agora)"
-msgstr "অঞ্চল (এখন বেছে নিন)"
-
-#: rust/anycapture/src/interval.rs:102
-msgid "Janela (escolher agora)"
-msgstr "উইন্ডো (এখন বেছে নিন)"
-
-#: rust/anycapture/src/interval.rs:105
-msgid "Intervalo (segundos)"
-msgstr "ব্যবধান (সেকেন্ড)"
-
-#: rust/anycapture/src/interval.rs:106
-msgid "Duração (minutos, 0 = até parar)"
-msgstr "সময়কাল (মিনিট, 0 = থামানো পর্যন্ত)"
-
-#: rust/anycapture/src/interval.rs:110 rust/anycapture/src/window.rs:818 rust/anycapture/src/window.rs:823
-msgid "Capturar o cursor"
-msgstr "কার্সর ক্যাপচার"
-
-#: rust/anycapture/src/interval.rs:111
-msgid "Um ponto vermelho no ícone da bandeja indica que está capturando; pare pelo menu da bandeja."
-msgstr "ট্রে আইকনের লাল বিন্দু দেখায় যে ক্যাপচার চলছে; ট্রে মেনু থেকে থামান।"
-
-#: rust/anycapture/src/interval.rs:114 rust/anycapture/src/interval.rs:142
-msgid "Captura por intervalo"
-msgstr "ব্যবধানে ক্যাপচার"
-
-#: rust/anycapture/src/interval.rs:133
-msgid "Escolha uma pasta."
-msgstr "একটি ফোল্ডার বেছে নিন।"
-
-#: rust/anycapture/src/interval.rs:161
-msgid "Não foi possível criar a pasta: "
-msgstr "ফোল্ডার তৈরি করা যায়নি: "
-
-#: rust/anycapture/src/interval.rs:225
-#, c-format
-msgid "Captura por intervalo parada: %d imagem(ns) em %s"
-msgstr "ব্যবধানে ক্যাপচার থেমেছে: %d ছবি %s-এ"
-
-#: rust/anycapture/src/main.rs:175
-msgid "Esse atalho já está em uso por outra ação do AnyCapture."
-msgstr "এই শর্টকাট ইতিমধ্যে AnyCapture-এর অন্য কাজে ব্যবহৃত হচ্ছে।"
-
-#: rust/anycapture/src/main.rs:175 rust/anycapture/src/main.rs:260
-msgid "Conflito de atalho"
-msgstr "শর্টকাটের সংঘাত"
-
-#: rust/anycapture/src/main.rs:183
-msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
-msgstr "অন্য একটি প্রোগ্রাম এই শর্টকাট ব্যবহার করছে। AnyCapture কিবোর্ড হুক দিয়ে এটি ধরবে।"
-
-#: rust/anycapture/src/main.rs:184
-msgid "Atalho"
-msgstr "শর্টকাট"
-
-#: rust/anycapture/src/main.rs:209
-#, c-format
-msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
-msgstr "%u দিনের পুরোনো ক্যাপচার এখনই সরাবেন (অপশনের নিয়ম অনুযায়ী)?"
-
-#: rust/anycapture/src/main.rs:223
-#, c-format
-msgid "%d captura(s) removida(s) da biblioteca."
-msgstr "লাইব্রেরি থেকে %dটি ক্যাপচার সরানো হয়েছে।"
-
-#: rust/anycapture/src/main.rs:230
-msgid "Fixar imagem na tela"
-msgstr "ছবি স্ক্রিনে পিন করুন"
-
-#: rust/anycapture/src/main.rs:232
-msgid ""
-"Não foi possível abrir a imagem.\n"
-"\n"
-msgstr ""
-"ছবি খোলা যায়নি।\n"
-"\n"
-
-#: rust/anycapture/src/main.rs:261
-#, c-format
-msgid "O atalho do preset \"%s\" já está em uso por outra ação."
-msgstr "প্রিসেট \"%s\"-এর শর্টকাট ইতিমধ্যে অন্য কাজে ব্যবহৃত হচ্ছে।"
-
-#: rust/anycapture/src/main.rs:538 rust/anycapture/src/main.rs:568
-msgid "Abrir a janela de captura"
-msgstr "ক্যাপচার উইন্ডো খুলুন"
-
-#: rust/anycapture/src/main.rs:539 rust/anycapture/src/window.rs:194
-msgid "Abrir o Editor"
-msgstr "এডিটর খুলুন"
-
-#: rust/anycapture/src/main.rs:539
-msgid "Sair"
-msgstr "প্রস্থান"
-
-#: rust/anycapture/src/main.rs:540 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
-msgid "Ler código QR"
-msgstr "QR কোড পড়ুন"
-
-#: rust/anycapture/src/main.rs:541 rust/anycapture/src/window.rs:234
-msgid "Mostrar o One Click"
-msgstr "One Click দেখান"
-
-#: rust/anycapture/src/main.rs:543
-#, c-format
-msgid "Imagens fixadas (%zu)"
-msgstr "পিন করা ছবি (%zu)"
-
-#: rust/anycapture/src/main.rs:543
-msgid "Imagens fixadas"
-msgstr "পিন করা ছবি"
-
-#: rust/anycapture/src/main.rs:544 rust/anycapture/src/window.rs:230
-msgid "Gravar só o áudio"
-msgstr "শুধু অডিও রেকর্ড করুন"
-
-#: rust/anycapture/src/main.rs:546
-#, c-format
-msgid "Parar a captura por intervalo (%d)"
-msgstr "ব্যবধানে ক্যাপচার থামান (%d)"
-
-#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:228
-msgid "Captura por intervalo…"
-msgstr "ব্যবধানে ক্যাপচার…"
-
-#: rust/anycapture/src/main.rs:550
-msgid "Abrir o Editor depois da captura"
-msgstr "ক্যাপচারের পরে এডিটর খুলুন"
-
-#: rust/anycapture/src/main.rs:550 rust/anycapture/src/window.rs:207
-msgid "Opções…"
-msgstr "বিকল্প…"
-
-#: rust/anycapture/src/main.rs:568
-msgid "Ocultar o One Click"
-msgstr "One Click লুকান"
-
-#: rust/anycapture/src/main.rs:650
-msgid "AnyCapture — linha de comando"
-msgstr "AnyCapture — কমান্ড লাইন"
-
-#: rust/anycapture/src/main.rs:680
-msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
-msgstr "/region-এর প্রয়োজন x,y,প্রস্থ,উচ্চতা (যেমন: /region 100,100,800,600)।"
-
-#: rust/anycapture/src/main.rs:692
-msgid "Nenhuma janela com esse título: "
-msgstr "এই শিরোনামের কোনো উইন্ডো নেই: "
-
-#: rust/anycapture/src/main.rs:704
-#, c-format
-msgid "Monitor %d não existe (há %zu)."
-msgstr "মনিটর %d নেই (মোট %zuটি আছে)।"
-
-#: rust/anycapture/src/main.rs:724
-msgid "Não foi possível fixar: "
-msgstr "পিন করা যায়নি: "
-
-#: rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:214
-msgid "Fixar um arquivo…"
-msgstr "একটি ফাইল পিন করুন…"
-
-#: rust/anycapture/src/main.rs:872 rust/anycapture/src/window.rs:212
-msgid "Capturar e fixar"
-msgstr "ক্যাপচার করে পিন করুন"
-
-#: rust/anycapture/src/main.rs:872
-msgid "Mostrar todas"
-msgstr "সব দেখান"
-
-#: rust/anycapture/src/main.rs:873
-msgid "Ocultar todas"
-msgstr "সব লুকান"
-
-#: rust/anycapture/src/main.rs:873 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:215
-msgid "Fechar todas"
-msgstr "সব বন্ধ করুন"
-
-#: rust/anycapture/src/main.rs:873
-msgid "Desligar \"atravessar cliques\""
-msgstr "\"ক্লিক ভেদ করে যাবে\" বন্ধ করুন"
-
-#: rust/anycapture/src/main.rs:873
-msgid "Reabrir a última fechada"
-msgstr "শেষ বন্ধ করাটি আবার খুলুন"
-
-#: rust/anycapture/src/main.rs:874
-msgid "Histórico"
-msgstr "ইতিহাস"
-
-#: rust/anycapture/src/main.rs:960
-msgid " — captura de tela e gravação de vídeo"
-msgstr " — স্ক্রিন ক্যাপচার ও ভিডিও রেকর্ডিং"
-
-#: rust/anycapture/src/main.rs:964 rust/anycapture/src/window.rs:241
-msgid "Sobre o AnyCapture"
-msgstr "AnyCapture সম্পর্কে"
-
-#: rust/anycapture/src/main.rs:1003 rust/anycapture/src/main.rs:1071 rust/anycapture/src/main.rs:1151
-msgid "AnyCapture — clique para capturar"
-msgstr "AnyCapture — ক্যাপচারে ক্লিক করুন"
-
-#: rust/anycapture/src/main.rs:1023
-msgid "AnyCapture — gravação recuperada"
-msgstr "AnyCapture — রেকর্ডিং পুনরুদ্ধার হয়েছে"
-
-#: rust/anycapture/src/main.rs:1024
-#, c-format
-msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
-msgstr "%zuটি বাধাপ্রাপ্ত রেকর্ডিং লাইব্রেরিতে পুনরুদ্ধার হয়েছে।"
-
-#: rust/anycapture/src/main.rs:1149
-#, c-format
-msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
-msgstr "AnyCapture — ব্যবধানে ক্যাপচার: %d ছবি"
-
-#: rust/anycapture/src/oneclick.rs:500
-msgid "Iniciar uma captura"
-msgstr "ক্যাপচার শুরু করুন"
-
-#: rust/anycapture/src/pins.rs:412 rust/anycapture/src/select.rs:578
-msgid "Cor copiada: "
-msgstr "রং কপি হয়েছে: "
-
-#: rust/anycapture/src/pins.rs:420
-msgid "Fixada"
-msgstr "পিন করা"
-
-#: rust/anycapture/src/pins.rs:421
-msgid "Salvar a imagem fixada"
-msgstr "পিন করা ছবি সংরক্ষণ করুন"
-
-#: rust/anycapture/src/pins.rs:438 rust/anycapture/src/pins.rs:978 rust/anycapture/src/pins.rs:1206
-msgid "Imagem fixada"
-msgstr "পিন করা ছবি"
-
-#: rust/anycapture/src/pins.rs:610
-msgid "Copiar\tCtrl+C"
-msgstr "কপি করুন\tCtrl+C"
-
-#: rust/anycapture/src/pins.rs:610
-msgid "Salvar como…\tCtrl+S"
-msgstr "এভাবে সংরক্ষণ করুন…\tCtrl+S"
-
-#: rust/anycapture/src/pins.rs:610
-msgid "Abrir no Editor"
-msgstr "এডিটরে খুলুন"
-
-#: rust/anycapture/src/pins.rs:611
-msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
-msgstr "টীকা দিন (কলম, হাইলাইটার, তীর, আয়তক্ষেত্র, টেক্সট)"
-
-#: rust/anycapture/src/pins.rs:611
-msgid "Desfazer a anotação\tCtrl+Z"
-msgstr "টীকা পূর্বাবস্থায় ফেরান\tCtrl+Z"
-
-#: rust/anycapture/src/pins.rs:612
-msgid "Zoom"
-msgstr "জুম"
-
-#: rust/anycapture/src/pins.rs:612
-msgid "Travar a posição"
-msgstr "অবস্থান লক করুন"
-
-#: rust/anycapture/src/pins.rs:613
-msgid "Atravessar cliques (desligue pelo menu da bandeja)"
-msgstr "ক্লিক ভেদ করে যাবে (ট্রে মেনু থেকে বন্ধ করুন)"
-
-#: rust/anycapture/src/pins.rs:613
-msgid "Sempre visível"
-msgstr "সর্বদা উপরে"
-
-#: rust/anycapture/src/pins.rs:614
-msgid "Copiar a cor neste ponto\tAlt+clique"
-msgstr "এই বিন্দুর রং কপি করুন\tAlt+ক্লিক"
-
-#: rust/anycapture/src/pins.rs:614
-msgid "Arrastar para outro programa: Ctrl+arrastar"
-msgstr "অন্য প্রোগ্রামে টেনে নিন: Ctrl+টানুন"
-
-#: rust/anycapture/src/pins.rs:614
-msgid "Fechar\tEsc"
-msgstr "বন্ধ করুন\tEsc"
-
-#: rust/anycapture/src/pins.rs:615
-msgid "Fechar todas as imagens fixadas"
-msgstr "সব পিন করা ছবি বন্ধ করুন"
-
-#: rust/anycapture/src/pins.rs:693
-msgid "Texto na imagem fixada"
-msgstr "পিন করা ছবিতে টেক্সট"
-
-#: rust/anycapture/src/pins.rs:1144
-msgid "A área de transferência não tem imagem nem texto para fixar."
-msgstr "ক্লিপবোর্ডে পিন করার মতো কোনো ছবি বা টেক্সট নেই।"
-
-#: rust/anycapture/src/pins.rs:1212
-msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
-msgstr "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Vermelho"
-msgstr "লাল"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Amarelo"
-msgstr "হলুদ"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Verde"
-msgstr "সবুজ"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Azul"
-msgstr "নীল"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Roxo"
-msgstr "বেগুনি"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Preto"
-msgstr "কালো"
-
-#: rust/anycapture/src/pins.rs:572
-msgid "Branco"
-msgstr "সাদা"
-
-#: rust/anycapture/src/quick.rs:236
-msgid "Copiado para a área de transferência."
-msgstr "ক্লিপবোর্ডে কপি হয়েছে।"
-
-#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:282
-msgid "Vídeo"
-msgstr "ভিডিও"
-
-#: rust/anycapture/src/quick.rs:241
-msgid "Salvar o vídeo"
-msgstr "ভিডিও সংরক্ষণ করুন"
-
-#: rust/anycapture/src/quick.rs:299
-msgid "Enviar (upload) e copiar o link"
-msgstr "আপলোড করে লিংক কপি করুন"
-
-#: rust/anycapture/src/quick.rs:54
-msgid "Salvar como…"
-msgstr "এভাবে সংরক্ষণ করুন…"
-
-#: rust/anycapture/src/quick.rs:55
-msgid "Anotar no Editor"
-msgstr "এডিটরে টীকা দিন"
-
-#: rust/anycapture/src/quick.rs:57
-msgid "Excluir da biblioteca"
-msgstr "লাইব্রেরি থেকে মুছুন"
-
-#: rust/anycapture/src/rawwin.rs:194
-msgid "Pular"
-msgstr "এড়িয়ে যান"
-
-#: rust/anycapture/src/select.rs:556
-msgid "Nenhuma região anterior ainda"
-msgstr "এখনও আগের কোনো অঞ্চল নেই"
-
-#: rust/anycapture/src/select.rs:566
-#, c-format
-msgid "Região anterior %d de %d"
-msgstr "আগের অঞ্চল %d / %d"
-
-#: rust/anycapture/src/select.rs:660
-msgid "Tamanho da seleção"
-msgstr "নির্বাচনের আকার"
-
-#: rust/anycapture/src/select.rs:808
-msgid "Setas movem (Shift = 10 px) • Ctrl+setas aumentam, Ctrl+Shift+setas diminuem • clique no tamanho para digitar • Enter ou duplo clique captura • Esc = cancelar"
-msgstr "তীর সরায় (Shift = 10 px) • Ctrl+তীর বড় করে, Ctrl+Shift+তীর ছোট করে • আকার লিখতে তাতে ক্লিক করুন • Enter বা ডাবল ক্লিকে ক্যাপচার • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:809
-msgid "Arraste para selecionar • clique captura a janela/área destacada • Enter = monitor • Tab = regiões anteriores • H = capturas recentes • C = copiar a cor • Esc = cancelar"
-msgstr "বেছে নিতে টানুন • ক্লিকে হাইলাইট করা উইন্ডো/এলাকা ক্যাপচার • Enter = মনিটর • Tab = আগের অঞ্চল • H = সাম্প্রতিক ক্যাপচার • C = রং কপি • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:810
-msgid "Clique na janela a capturar • Esc = cancelar"
-msgstr "যে উইন্ডো ক্যাপচার করবেন তাতে ক্লিক করুন • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:811
-msgid "Clique no controle/objeto a capturar • Esc = cancelar"
-msgstr "যে নিয়ন্ত্রণ/অবজেক্ট ক্যাপচার করবেন তাতে ক্লিক করুন • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:812
-#, c-format
-msgid "Região fixa %d × %d — clique para capturar • Esc = cancelar"
-msgstr "স্থির এলাকা %d × %d — ক্যাপচারে ক্লিক করুন • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:813
-msgid "Desenhe o contorno com o botão pressionado • Esc = cancelar"
-msgstr "বোতাম চেপে ধরে রূপরেখা আঁকুন • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:814
-msgid "Arraste várias áreas • Backspace desfaz • Enter ou botão direito conclui • Esc = cancelar"
-msgstr "একাধিক এলাকা টানুন • Backspace পূর্বাবস্থায় ফেরায় • Enter বা ডান ক্লিকে শেষ • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:815
-msgid "Clique na janela/área rolável • Esc = cancelar"
-msgstr "স্ক্রলযোগ্য উইন্ডো/এলাকায় ক্লিক করুন • Esc = বাতিল"
-
-#: rust/anycapture/src/select.rs:817
-msgid "Gravação: "
-msgstr "রেকর্ডিং: "
-
-#: rust/anycapture/src/share.rs:40
-#, c-format
-msgid "Captura enviada para o %s."
-msgstr "ক্যাপচার %s-এ পাঠানো হয়েছে।"
-
-#: rust/anycapture/src/share.rs:98
-msgid "O upload ainda não está configurado. Configurar agora?"
-msgstr "আপলোড এখনও সেট করা হয়নি। এখন সেট করবেন?"
-
-#: rust/anycapture/src/share.rs:105
-msgid "Enviando a captura…"
-msgstr "ক্যাপচার আপলোড হচ্ছে…"
-
-#: rust/anycapture/src/share.rs:109
-msgid ""
-"O upload falhou.\n"
-"\n"
-msgstr ""
-"আপলোড ব্যর্থ হয়েছে।\n"
-"\n"
-
-#: rust/anycapture/src/share.rs:118
-msgid "Upload concluído — link copiado"
-msgstr "আপলোড সম্পন্ন — লিংক কপি হয়েছে"
-
-#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:416 rust/anycapture/src/window.rs:426
-msgid "Nenhum"
-msgstr "কোনোটি নয়"
-
-#: rust/anycapture/src/window.rs:44
-msgid "Programa externo"
-msgstr "বাইরের প্রোগ্রাম"
-
-#: rust/anycapture/src/window.rs:44
-msgid "Texto (OCR)"
-msgstr "লেখা (OCR)"
-
-#: rust/anycapture/src/window.rs:45
-msgid "Upload (copiar o link)"
-msgstr "আপলোড (লিংক কপি করুন)"
-
-#: rust/anycapture/src/window.rs:195
-msgid "Abrir a pasta da biblioteca"
-msgstr "লাইব্রেরি ফোল্ডার খুলুন"
-
-#: rust/anycapture/src/window.rs:196
-msgid "Abrir a pasta de logs"
-msgstr "লগ ফোল্ডার খুলুন"
-
-#: rust/anycapture/src/window.rs:198
-msgid "Importar presets…"
-msgstr "প্রিসেট ইমপোর্ট করুন…"
-
-#: rust/anycapture/src/window.rs:199
-msgid "Exportar presets…"
-msgstr "প্রিসেট এক্সপোর্ট করুন…"
-
-#: rust/anycapture/src/window.rs:201
-msgid "Exportar todas as configurações…"
-msgstr "সব সেটিংস এক্সপোর্ট করুন…"
-
-#: rust/anycapture/src/window.rs:202
-msgid "Importar todas as configurações…"
-msgstr "সব সেটিংস ইমপোর্ট করুন…"
-
-#: rust/anycapture/src/window.rs:203
-msgid "Abrir a pasta de backups"
-msgstr "ব্যাকআপ ফোল্ডার খুলুন"
-
-#: rust/anycapture/src/window.rs:205
-msgid "Configurar o upload…"
-msgstr "আপলোড সেট আপ করুন…"
-
-#: rust/anycapture/src/window.rs:206
-msgid "Limpar a biblioteca agora"
-msgstr "এখনই লাইব্রেরি পরিষ্কার করুন"
-
-#: rust/anycapture/src/window.rs:209
-msgid "Sair do AnyCapture"
-msgstr "AnyCapture থেকে বের হন"
-
-#: rust/anycapture/src/window.rs:220
-msgid "Repetir a última captura"
-msgstr "শেষ ক্যাপচারটি আবার করুন"
-
-#: rust/anycapture/src/window.rs:223
-msgid "De um arquivo gráfico…"
-msgstr "একটি ছবি ফাইল থেকে…"
-
-#: rust/anycapture/src/window.rs:231
-msgid "Abrir a pasta dos áudios"
-msgstr "অডিও ফোল্ডার খুলুন"
-
-#: rust/anycapture/src/window.rs:235
-msgid "Lista de presets"
-msgstr "প্রিসেট তালিকা"
-
-#: rust/anycapture/src/window.rs:238
-msgid "Manual do AnyCapture"
-msgstr "AnyCapture ম্যানুয়াল"
-
-#: rust/anycapture/src/window.rs:239
-msgid "Como usar os presets"
-msgstr "প্রিসেট কীভাবে ব্যবহার করবেন"
-
-#: rust/anycapture/src/window.rs:243
-msgid "&Captura"
-msgstr "ক্যাপচার(&C)"
-
-#: rust/anycapture/src/window.rs:347
-msgid "Seleção:"
-msgstr "নির্বাচন:"
-
-#: rust/anycapture/src/window.rs:365 rust/anycapture/src/window.rs:680
-msgid "Configurações"
-msgstr "সেটিংস"
-
-#: rust/anycapture/src/window.rs:370
-msgid "Selecionar a região na captura"
-msgstr "ক্যাপচারের সময় এলাকা নির্বাচন"
-
-#: rust/anycapture/src/window.rs:372
-msgid "Região fixa…"
-msgstr "স্থির এলাকা…"
-
-#: rust/anycapture/src/window.rs:381
-msgid "Cada janela como um objeto separado"
-msgstr "প্রতিটি উইন্ডো আলাদা অবজেক্ট হিসেবে"
-
-#: rust/anycapture/src/window.rs:384
-msgid "Guardar os links da página (clicáveis, também no PDF)"
-msgstr "পেজের লিঙ্ক রাখুন (ক্লিকযোগ্য, PDF-এও)"
-
-#: rust/anycapture/src/window.rs:410
-msgid "Efeitos:"
-msgstr "প্রভাব:"
-
-#: rust/anycapture/src/window.rs:431
-msgid "Adicionar outro efeito"
-msgstr "আরেকটি প্রভাব যোগ করুন"
-
-#: rust/anycapture/src/window.rs:432
-msgid "Remover este efeito"
-msgstr "এই প্রভাব সরান"
-
-#: rust/anycapture/src/window.rs:473
-msgid "Compartilhar:"
-msgstr "শেয়ার:"
-
-#: rust/anycapture/src/window.rs:496
-msgid "Qualidade:"
-msgstr "মান:"
-
-#: rust/anycapture/src/window.rs:497
-msgid "Muito baixa"
-msgstr "খুব কম"
-
-#: rust/anycapture/src/window.rs:528
-msgid "Webcam:"
-msgstr "ওয়েবক্যাম:"
-
-#: rust/anycapture/src/window.rs:529
-msgid "Ligada"
-msgstr "চালু"
-
-#: rust/anycapture/src/window.rs:529 rust/anycapture/src/window.rs:540
-msgid "Desligada"
-msgstr "বন্ধ"
-
-#: rust/anycapture/src/window.rs:542
-msgid "Nenhuma webcam encontrada"
-msgstr "কোনো ওয়েবক্যাম পাওয়া যায়নি"
-
-#: rust/anycapture/src/window.rs:556
-msgid "Remover o fundo (chroma key)…"
-msgstr "পটভূমি সরান (ক্রোমা কি)…"
-
-#: rust/anycapture/src/window.rs:591
-#, c-format
-msgid "%d s"
-msgstr "%d সে."
-
-#: rust/anycapture/src/window.rs:595
-msgid "Atraso"
-msgstr "বিলম্ব"
-
-#: rust/anycapture/src/window.rs:603
-msgid "1 segundo"
-msgstr "১ সেকেন্ড"
-
-#: rust/anycapture/src/window.rs:604
-#, c-format
-msgid "%d segundos"
-msgstr "%d সেকেন্ড"
-
-#: rust/anycapture/src/window.rs:643
-msgid "Gravar vídeo  ("
-msgstr "ভিডিও রেকর্ড  ("
-
-#: rust/anycapture/src/window.rs:643
-msgid "Capturar imagem  ("
-msgstr "ছবি ক্যাপচার  ("
-
-#: rust/anycapture/src/window.rs:653
-msgid "Adicionar atalho"
-msgstr "শর্টকাট যোগ করুন"
-
-#: rust/anycapture/src/window.rs:725
-msgid "Capturar com este preset"
-msgstr "এই প্রিসেট দিয়ে ক্যাপচার"
-
-#: rust/anycapture/src/window.rs:727
-msgid "Renomear…"
-msgstr "নাম বদলান…"
-
-#: rust/anycapture/src/window.rs:728
-msgid "Atalho…"
-msgstr "শর্টকাট…"
-
-#: rust/anycapture/src/window.rs:770 rust/anycapture/tests/window.rs:160
-msgid "Novo preset…"
-msgstr "নতুন প্রিসেট…"
-
-#: rust/anycapture/src/window.rs:782
-msgid "Abrir Editor"
-msgstr "এডিটর খুলুন"
-
-#: rust/anycapture/src/window.rs:88
-msgid "Cortar bordas"
-msgstr "প্রান্ত ছাঁটুন"
-
-#: rust/anycapture/src/window.rs:88
-msgid "Ajuste de cor"
-msgstr "রং সমন্বয়"
-
-#: rust/anycapture/src/window.rs:88
-msgid "Girar imagem"
-msgstr "ছবি ঘোরান"
-
-#: rust/anycapture/src/window.rs:88
-msgid "Resolução da imagem"
-msgstr "ছবির রেজোলিউশন"
-
-#: rust/anycapture/src/window.rs:89
-msgid "Embelezar (fundo, margem e sombra)"
-msgstr "সুন্দর করুন (পটভূমি, মার্জিন ও ছায়া)"
-
-#: rust/anycapture/src/window.rs:816
-msgid "Visualizar no Editor"
-msgstr "এডিটরে প্রিভিউ"
-
-#: rust/anycapture/src/window.rs:819
-msgid "Gravar microfone"
-msgstr "মাইক্রোফোন রেকর্ড"
-
-#: rust/anycapture/src/window.rs:820
-msgid "Gravar áudio do sistema"
-msgstr "সিস্টেমের অডিও রেকর্ড"
-
-#: rust/anycapture/src/window.rs:822
-msgid "Copiar para a área de transferência"
-msgstr "ক্লিপবোর্ডে কপি করুন"
-
-#: rust/anycapture/src/engine/scroll.rs:159
-msgid "A janela será ampliada além da tela, capturada e restaurada."
-msgstr "উইন্ডোটি স্ক্রিনের চেয়ে বড় করা হবে, ক্যাপচার করা হবে এবং আগের অবস্থায় ফেরানো হবে।"
-
-#: rust/anycapture/src/engine/scroll.rs:160
-msgid "Nova largura (px)"
-msgstr "নতুন প্রস্থ (px)"
-
-#: rust/anycapture/src/engine/scroll.rs:161
-msgid "Nova altura (px)"
-msgstr "নতুন উচ্চতা (px)"
-
-#: rust/anycapture/src/engine/scroll.rs:283
-msgid "AnyCapture — rolagem panorâmica"
-msgstr "AnyCapture — প্যানোরামিক স্ক্রল"
-
-#: rust/anycapture/src/engine/scroll.rs:379
-msgid "Role o conteúdo dentro da moldura…"
-msgstr "ফ্রেমের ভেতরের বিষয়বস্তু স্ক্রল করুন…"
-
-#: rust/anycapture/src/engine/scroll.rs:381
-#, c-format
-msgid "Capturando: %d × %d px"
-msgstr "ক্যাপচার হচ্ছে: %d × %d px"
-
-#: rust/anycapture/src/engine/scroll.rs:387
-msgid "Concluir"
-msgstr "শেষ করুন"
-
-#: rust/anycapture/src/engine/video.rs:123
-msgid "Recomeçar a gravação?"
-msgstr "রেকর্ডিং আবার শুরু করবেন?"
-
-#: rust/anycapture/src/engine/video.rs:124
-msgid "O que foi gravado até agora será descartado."
-msgstr "এ পর্যন্ত যা রেকর্ড হয়েছে তা বাতিল হবে।"
-
-#: rust/anycapture/src/engine/video.rs:125
-msgid "Não perguntar de novo"
-msgstr "আর জিজ্ঞেস করবেন না"
-
-#: rust/anycapture/src/engine/video.rs:191
-msgid "AnyCapture — gravação"
-msgstr "AnyCapture — রেকর্ডিং"
-
-#: rust/anycapture/src/engine/video.rs:318
-msgid ""
-"Não foi possível iniciar a gravação.\n"
-"\n"
-msgstr ""
-"রেকর্ডিং শুরু করা যায়নি।\n"
-"\n"
-
-#: rust/anycapture/src/engine/video.rs:360
-msgid "Teclas: não mostrar"
-msgstr "কী: দেখাবেন না"
-
-#: rust/anycapture/src/engine/video.rs:361
-msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
-msgstr "কী: শুধু শর্টকাট (Ctrl, Alt, Win, F1…)"
-
-#: rust/anycapture/src/engine/video.rs:361
-msgid "Teclas: todas (inclusive o que for digitado)"
-msgstr "কী: সব (যা টাইপ করা হয় তাও)"
-
-#: rust/anycapture/src/engine/video.rs:405
-msgid "Há uma gravação em andamento. Parar e sair?"
-msgstr "রেকর্ডিং চলছে। থামিয়ে প্রস্থান করবেন?"
-
-#: rust/anycapture/src/engine/video.rs:415
-msgid "Imagem durante gravação"
-msgstr "রেকর্ডিংয়ের সময় ছবি"
-
-#: rust/anycapture/src/engine/video.rs:421
-msgid "Imagem capturada sem parar a gravação."
-msgstr "রেকর্ডিং না থামিয়েই ছবি ক্যাপচার হয়েছে।"
-
-#: rust/anycapture/src/engine/video.rs:481
-msgid "AnyCapture — áudio salvo"
-msgstr "AnyCapture — অডিও সংরক্ষিত"
-
-#: rust/anycapture/src/engine/video.rs:506
-msgid "Vídeo salvo na biblioteca: "
-msgstr "ভিডিও লাইব্রেরিতে সংরক্ষিত: "
-
-#: rust/anycapture/src/engine/video.rs:509
-msgid ""
-"A gravação falhou.\n"
-"\n"
-msgstr ""
-"রেকর্ডিং ব্যর্থ হয়েছে।\n"
-"\n"
-
-#: rust/anycapture/src/engine/video.rs:520
-msgid "AnyCapture — pouco espaço em disco"
-msgstr "AnyCapture — ডিস্কে জায়গা কম"
-
-#: rust/anycapture/src/engine/video.rs:520
-msgid "Restam menos de 1 GB livres na unidade da biblioteca."
-msgstr "লাইব্রেরির ড্রাইভে ১ GB-এর কম জায়গা খালি আছে।"
-
-#: rust/anycapture/src/engine/video.rs:522
-msgid "Gravação interrompida: espaço em disco insuficiente."
-msgstr "রেকর্ডিং থেমেছে: ডিস্কে যথেষ্ট জায়গা নেই।"
 
 #: rust/snapui/src/qr.rs:27
 msgid "Nenhum código QR ou de barras encontrado na imagem."
@@ -7488,4 +7601,3 @@ msgstr "ব্রাউজারে সাইন-ইন শেষ করুন"
 #: rust/snapui/src/upload_ui.rs:210
 msgid "Autorize o AnyCapture na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
 msgstr "খোলা পৃষ্ঠায় AnyCapture-কে অনুমোদন দিন। ব্রাউজার ফিরলে এই উইন্ডো নিজে বন্ধ হবে।"
-

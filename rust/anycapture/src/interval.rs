@@ -1,7 +1,8 @@
 //! Automatic interval capture (IntervalCapture.cpp, C24; ShareX dossier 01 · A6 AutoCaptureForm): the full screen,
 //! the monitor of the cursor, a region or a window every N seconds (1–86 400), for a set time or until stopped, into a
-//! folder with automatic names (<Prefix><number>). The settings are remembered in the registry (Interval*); a red dot
-//! on the tray icon shows it is running.
+//! folder with automatic names (<Prefix><number>). Each capture also goes to the library, so it shows in the Editor's
+//! Recent captures like any other, and plays the capture sound chosen in Options. The settings are remembered in the
+//! registry (Interval*); a red dot on the tray icon shows it is running.
 
 use std::cell::RefCell;
 use std::ffi::OsStr;
@@ -10,7 +11,7 @@ use std::sync::Once;
 use std::time::{Duration, Instant};
 
 use snapcore::image::Rect;
-use snapcore::{codec, hdr, library, log, reg, screen};
+use snapcore::{codec, gdip, hdr, library, log, reg, screen, sounds};
 use anycapture_app::tr;
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::UI::WindowsAndMessaging::{
@@ -277,6 +278,17 @@ fn tick() {
     let ok = codec::save_file(Path::new(&path), &img, codec::Format::from_ext(ext), &codec::SaveOptions::from_settings(), crate::VERSION);
     if ok {
         S.with(|st| st.borrow_mut().count += 1);
+        sounds::play_capture_sound();
+        // into the library as well: the Editor's Recent captures shows it like any other capture
+        let mut info = library::CaptureInfo { mode: w(&tr("Captura por intervalo")), ..Default::default() };
+        if s.area == 3 {
+            info.window_title = w(&screen::window_title(window));
+            info.application = w(&screen::window_process_name(window));
+        }
+        let thumb = gdip::make_thumbnail(&img, 160, 120);
+        if library::add(&library::library_dir(), img, &thumb, &info, None, Default::default(), crate::VERSION).is_some() {
+            send(UiEv::LibraryChanged);
+        }
     } else {
         log::write(&format!("Interval capture: failed to save {path}"));
     }

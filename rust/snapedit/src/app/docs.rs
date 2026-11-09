@@ -459,7 +459,8 @@ impl Editor {
         Some((img, name)).filter(|(im, _)| !im.is_empty())
     }
 
-    /// Exports library items to a folder: images in the chosen format (objects applied), videos as MP4.
+    /// Exports library items to a folder: images in the chosen format (objects applied), videos as MP4; with Export as
+    /// ZIP, the same files go into one .zip in that folder instead.
     pub fn export_items(&mut self, paths: Vec<String>) {
         if paths.is_empty() {
             return;
@@ -468,10 +469,12 @@ impl Editor {
         let items: Vec<(String, Option<Arc<Image>>)> =
             paths.iter().map(|p| (p.clone(), self.load_item_image(p).map(|(i, _)| Arc::new(i)))).collect();
         let fmt0 = reg_dw("ExportFormat", 0) as i32;
+        let zip0 = reg_dw("ExportZip", 0) != 0;
         self.modal(
             move |owner| {
                 let mut f = vec![
                     Field::Combo { label: tr("Formato das imagens"), items: ["PNG", "JPEG", "BMP", "GIF", "TIFF"].map(String::from).to_vec(), value: fmt0 },
+                    Field::Check { label: tr("Exportar como ZIP (todos juntos em um arquivo)"), value: zip0 },
                     Field::Label(tr("Vídeos são copiados em MP4.")),
                 ];
                 if !form::run(owner, &fmt(&tr("Exportar %zu item(ns)"), &[&items.len()]), &mut f) {
@@ -479,18 +482,29 @@ impl Editor {
                 }
                 let dir = native::pick_folder(owner, &tr("Exportar para a pasta"))?;
                 let fi = f[0].int().clamp(0, 4) as usize;
+                let zip = f[1].on();
                 let ext = [".png", ".jpg", ".bmp", ".gif", ".tif"][fi];
+                // with ZIP the files are written to a folder of their own in %TEMP% first, then packed
+                let out_dir = if zip {
+                    let t = std::env::temp_dir().join(format!("AnyCapture\\export-{}", std::process::id()));
+                    let _ = std::fs::remove_dir_all(&t);
+                    let _ = std::fs::create_dir_all(&t);
+                    t.to_string_lossy().into_owned()
+                } else {
+                    dir.clone()
+                };
                 let (mut ok, mut fail) = (0, 0);
+                let mut written: Vec<(String, std::time::SystemTime)> = Vec::new();
                 for (p, img) in &items {
                     let t = std::fs::metadata(p).and_then(|m| m.modified()).ok();
                     let stamp = t.map(local_stamp).unwrap_or_default();
                     let base = format!("{}_{}", tr("Captura"), stamp);
                     let video = ext_of(p) == ".mp4";
                     let e = if video { ".mp4" } else { ext };
-                    let mut dst = format!("{dir}\\{base}{e}");
+                    let mut dst = format!("{out_dir}\\{base}{e}");
                     let mut n = 2;
                     while std::path::Path::new(&dst).exists() {
-                        dst = format!("{dir}\\{base}_{n}{e}");
+                        dst = format!("{out_dir}\\{base}_{n}{e}");
                         n += 1;
                     }
                     let done = if video {
@@ -498,14 +512,44 @@ impl Editor {
                     } else {
                         img.as_ref().is_some_and(|i| files::save_image(&dst, i, 90).is_ok())
                     };
-                    if done { ok += 1 } else { fail += 1 }
+                    if done {
+                        ok += 1;
+                        written.push((dst, t.unwrap_or_else(std::time::SystemTime::now)));
+                    } else {
+                        fail += 1;
+                    }
                 }
-                snapedit_app::shell_open(&dir);
-                Some((fi, dir, ok, fail))
+                if !zip {
+                    snapedit_app::shell_open(&dir);
+                    return Some((fi, zip, dir, ok, fail));
+                }
+                let base = format!("{dir}\\{}_{}", tr("Capturas"), local_stamp(std::time::SystemTime::now()));
+                let mut target = format!("{base}.zip");
+                let mut n = 2;
+                while std::path::Path::new(&target).exists() {
+                    target = format!("{base}_{n}.zip");
+                    n += 1;
+                }
+                let packed = (|| -> std::io::Result<()> {
+                    let mut z = snapcore::zip::ZipWriter::create(std::path::Path::new(&target))?;
+                    for (f, t) in &written {
+                        z.add(&file_name_of(f), &std::fs::read(f)?, *t)?;
+                    }
+                    z.finish()
+                })();
+                let _ = std::fs::remove_dir_all(&out_dir);
+                if let Err(e) = packed {
+                    snapcore::log::write(&format!("Export: the ZIP {target} failed: {e}"));
+                    let _ = std::fs::remove_file(&target);
+                    return Some((fi, zip, dir, 0, ok + fail));
+                }
+                let _ = std::process::Command::new("explorer.exe").arg(format!("/select,{target}")).spawn();
+                Some((fi, zip, target, ok, fail))
             },
             |e, _, r| {
-                let Some((fi, dir, ok, fail)) = r else { return };
+                let Some((fi, zip, dir, ok, fail)) = r else { return };
                 set_reg_dw("ExportFormat", fi as u32);
+                set_reg_dw("ExportZip", zip as u32);
                 e.status = fmt(&tr("%d item(ns) exportado(s) para %s"), &[&ok, &dir])
                     + &if fail > 0 { fmt(&tr(" — %d falha(s)"), &[&fail]) } else { String::new() };
             },

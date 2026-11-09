@@ -8,6 +8,8 @@ publish.workspace = true
 
 [dependencies]
 cfb = "0.16.0"
+crc32fast = "1.5.4"
+flate2 = "1.1.11"
 libwebp-sys = "=0.12.1"
 regex = "1.13.1"
 rxing = { version = "=0.9.3", default-features = false, features = ["decoders", "multi_barcode_readers", "full_barcode_format_support", "encoding_rs"] }

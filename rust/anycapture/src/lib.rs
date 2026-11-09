@@ -60,6 +60,9 @@ pub mod id {
     pub const RECORD_AUDIO: u32 = 1042;
     pub const AUDIO_FOLDER: u32 = 1043;
     pub const AFTER_EDITOR: u32 = 1044;
+    pub const CHECK_UPDATES: u32 = 1045;
+    pub const REPORT_BUG: u32 = 1046;
+    pub const FEEDBACK: u32 = 1047;
     pub const PIN_HISTORY_BASE: u32 = 1500;
     pub const PRESET_BASE: u32 = 2000;
     // control IDs of the C++ window that are also commands

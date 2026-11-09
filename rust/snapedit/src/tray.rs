@@ -30,6 +30,8 @@ pub enum TrayAction {
     Compare(Vec<String>),
     Batch(Vec<String>),
     ShowLibrary(bool),
+    /// Ctrl+C on the list: the items as files (and the picture, for one image), as Explorer's Copy
+    Copy(Vec<String>),
     /// dragging items to another program (TrayDragDrop): the paths and the item whose thumbnail follows the cursor
     DragOut(Vec<String>, String),
     /// the right button on an item (a video or not): the context menu, see [`LibraryTray::context_menu`]
@@ -46,6 +48,14 @@ pub struct LibraryTray {
     pub items: Vec<Item>,
     /// selected paths
     pub selection: Vec<String>,
+    /// the item a Shift+click selects from (the last one clicked without Shift)
+    anchor: String,
+    /// the keyboard belongs to the list: the last click in the window was on it (Ctrl+A, Ctrl+C, Del and F2 act on
+    /// its items, not on the picture)
+    pub focused: bool,
+    /// a selection rectangle being dragged from an empty part of the list: where it started, and the selection when
+    /// it started (kept with Ctrl)
+    marquee: Option<(egui::Pos2, Vec<String>)>,
     pub current: String,
     recent: Vec<String>,
     hidden: Vec<String>,
@@ -103,6 +113,9 @@ impl LibraryTray {
             mode,
             items: Vec::new(),
             selection: Vec::new(),
+            anchor: String::new(),
+            focused: false,
+            marquee: None,
             current: String::new(),
             recent: Vec::new(),
             hidden: Vec::new(),
@@ -244,6 +257,7 @@ impl LibraryTray {
         self.reload();
         // opening an item leaves only it selected
         self.selection = self.items.iter().map(p).filter(|x| eq(x, path)).collect();
+        self.anchor = path.to_owned();
     }
 
     pub fn invalidate_thumb(&mut self, path: &str) {
@@ -289,6 +303,7 @@ impl LibraryTray {
         const RENAME: u32 = 11;
         const REMOVE: u32 = 12;
         const DELETE: u32 = 13;
+        const COPY: u32 = 14;
         let s = self.selected_paths();
         if s.is_empty() {
             return Vec::new();
@@ -300,6 +315,7 @@ impl LibraryTray {
             m.push(Item::Icon(FOLDER, tr("Mostrar na pasta"), Icon::Folder));
             m.push(Item::Separator);
         }
+        m.push(Item::Icon(COPY, tr("Copiar\tCtrl+C"), Icon::Copy));
         let exp = if s.len() > 1 { tr("Exportar %zu itens…").replace("%zu", &n) } else { tr("Exportar…") };
         m.push(Item::Icon(EXPORT, exp, Icon::SaveAs));
         if s.len() == 1 {
@@ -333,6 +349,7 @@ impl LibraryTray {
         let first = s[0].clone();
         match Menu::popup(m).choose(owner, x, y) {
             OPEN => vec![TrayAction::Open(first)],
+            COPY => vec![TrayAction::Copy(s)],
             FOLDER => vec![TrayAction::ShowInFolder(first)],
             EXPORT => vec![TrayAction::Export(s)],
             COPY_AS => vec![TrayAction::CopyAs(first)],
@@ -361,8 +378,22 @@ impl LibraryTray {
         let ctx = ui.ctx().clone();
         let tray = self.mode == Mode::Tray;
         let name = if tray { "AnyCaptureTray" } else { "AnyCaptureLibrary" };
-        let bg = ui.allocate_rect(ui.max_rect(), Sense::hover());
+        // a click on the empty parts of the list clears the selection, a drag there draws a selection rectangle (see
+        // `marquee`); a drag that starts on an item drags the item out
+        let full = ui.max_rect();
+        let bg = ui.allocate_rect(full, Sense::hover());
         crate::panels::tag(ui, &bg, name);
+        // the keyboard follows the last click: on the list, Ctrl+A and Ctrl+C act on its items. Read from the events: a
+        // quick click can press and release within one frame, which leaves no press origin
+        let press = ctx.input(|i| {
+            i.events.iter().find_map(|e| match e {
+                egui::Event::PointerButton { pos, pressed: true, .. } => Some(*pos),
+                _ => None,
+            })
+        });
+        if let Some(at) = press {
+            self.focused = full.contains(at);
+        }
         let mut ui = ui.new_child(egui::UiBuilder::new().max_rect(ui.max_rect().shrink(4.0)));
         ui.horizontal(|ui| {
             if tray {
@@ -392,6 +423,7 @@ impl LibraryTray {
         // the tray is one row under the picture; the library a grid of larger cells
         let cell = if tray { TRAY_CELL } else { vec2(170.0, 140.0) };
         let tk = snapui::theme::tokens();
+        let mut cells: Vec<(String, egui::Rect)> = Vec::new();
         let mut body = |ui: &mut egui::Ui| {
             for (i, it) in items.iter().enumerate() {
                 let path = p(it);
@@ -399,6 +431,7 @@ impl LibraryTray {
                 let cur = eq(&path, &self.current);
                 let t = self.thumb(&ctx, it);
                 let (r, resp) = ui.allocate_exact_size(cell, Sense::click_and_drag());
+                cells.push((path.clone(), r));
                 crate::panels::tag(ui, &resp, &format!("{name}.{i}"));
                 let fill = if sel { tk.selection } else if resp.hovered() { tk.hover_strong() } else { Color32::TRANSPARENT };
                 ui.painter().rect_filled(r, 6.0, fill);
@@ -419,15 +452,40 @@ impl LibraryTray {
                 ui.painter().text(egui::pos2(r.center().x, r.bottom() - 14.0), egui::Align2::CENTER_CENTER, label, egui::FontId::proportional(12.0),
                                   tk.text_dim);
                 if resp.clicked() {
-                    let ctrl = ui.input(|i| i.modifiers.ctrl);
-                    if ctrl {
+                    // the keys held at the click itself: a quick Shift+click can be over (Shift released) before this frame
+                    let m = ui.input(|i| {
+                        i.events
+                            .iter()
+                            .rev()
+                            .find_map(|e| match e {
+                                egui::Event::PointerButton { button: egui::PointerButton::Primary, modifiers, .. } => Some(*modifiers),
+                                _ => None,
+                            })
+                            .unwrap_or(i.modifiers)
+                    });
+                    let from = items.iter().position(|x| eq(&p(x), &self.anchor));
+                    if m.shift && let Some(a) = from {
+                        // Shift: everything from the anchor to this item, as in Explorer (with Ctrl, added to the
+                        // selection); the anchor stays
+                        let range: Vec<String> = items[a.min(i)..=a.max(i)].iter().map(p).collect();
+                        if !m.ctrl {
+                            self.selection.clear();
+                        }
+                        for x in range {
+                            if !self.selection.iter().any(|s| eq(s, &x)) {
+                                self.selection.push(x);
+                            }
+                        }
+                    } else if m.ctrl {
                         if sel {
                             self.selection.retain(|s| !eq(s, &path));
                         } else {
                             self.selection.push(path.clone());
                         }
+                        self.anchor = path.clone();
                     } else {
                         self.selection = vec![path.clone()];
+                        self.anchor = path.clone();
                         acts.push(TrayAction::Open(path.clone()));
                     }
                 }
@@ -446,15 +504,58 @@ impl LibraryTray {
                 }
             }
         };
-        if tray {
+        let area = if tray {
             egui::ScrollArea::horizontal().id_salt("tray-scroll").auto_shrink([false, false]).show(&mut ui, |ui| {
                 ui.horizontal(|ui| body(ui));
-            });
+            })
         } else {
             egui::ScrollArea::vertical().id_salt("lib-scroll").auto_shrink([false, false]).show(&mut ui, |ui| {
                 ui.horizontal_wrapped(|ui| body(ui));
-            });
-        }
+            })
+        };
+        self.marquee(&ctx, press, area.inner_rect, &cells);
         acts
+    }
+
+    /// The selection rectangle of a drag that starts on an empty part of the list (`press`, this frame's press): the
+    /// items it touches are selected (added to the selection with Ctrl); a click there without a drag clears the
+    /// selection. Read from the raw pointer, as the scroll area under the items takes their drags.
+    fn marquee(&mut self, ctx: &egui::Context, press: Option<egui::Pos2>, view: egui::Rect, cells: &[(String, egui::Rect)]) {
+        let primary = ctx.input(|i| {
+            i.events.iter().any(|e| matches!(e, egui::Event::PointerButton { button: egui::PointerButton::Primary, pressed: true, .. }))
+        });
+        if let Some(at) = press.filter(|a| primary && view.contains(*a) && !cells.iter().any(|(_, r)| r.contains(*a))) {
+            let keep = if ctx.input(|i| i.modifiers.ctrl) { self.selection.clone() } else { Vec::new() };
+            self.marquee = Some((at, keep));
+        }
+        let Some((start, keep)) = self.marquee.clone() else { return };
+        let (now, down) = ctx.input(|i| (i.pointer.latest_pos().unwrap_or(start), i.pointer.primary_down()));
+        let r = egui::Rect::from_two_pos(start, now);
+        if r.width().max(r.height()) < 4.0 {
+            // not a drag (yet): a click on the empty part clears the selection when it ends
+            if !down {
+                self.marquee = None;
+                if !ctx.input(|i| i.modifiers.ctrl || i.modifiers.shift) {
+                    self.selection = keep;
+                }
+            }
+            return;
+        }
+        let mut sel = keep;
+        for (path, cr) in cells {
+            if cr.intersects(r) && !sel.iter().any(|s| eq(s, path)) {
+                sel.push(path.clone());
+            }
+        }
+        self.selection = sel;
+        if down {
+            let tk = snapui::theme::tokens();
+            let painter = ctx.layer_painter(egui::LayerId::new(egui::Order::Foreground, egui::Id::unique("tray-marquee")));
+            painter.rect_filled(r, 0.0, tk.accent.gamma_multiply(0.15));
+            painter.rect_stroke(r, 0.0, egui::Stroke::new(1.0, tk.accent), egui::StrokeKind::Inside);
+            ctx.request_repaint();
+        } else {
+            self.marquee = None;
+        }
     }
 }

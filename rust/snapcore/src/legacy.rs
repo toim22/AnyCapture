@@ -322,7 +322,7 @@ mod tests {
         let set = |key: &str, name: &str, v: &str| {
             let (k, n, w) = (to_wide(key), to_wide(name), to_wide(v));
             unsafe {
-                RegSetKeyValueW(HKEY_CURRENT_USER, PCWSTR(k.as_ptr()), PCWSTR(n.as_ptr()), REG_SZ.0, Some(w.as_ptr() as *const c_void),
+                let _ = RegSetKeyValueW(HKEY_CURRENT_USER, PCWSTR(k.as_ptr()), PCWSTR(n.as_ptr()), REG_SZ.0, Some(w.as_ptr() as *const c_void),
                                 (w.len() * 2) as u32);
             }
         };

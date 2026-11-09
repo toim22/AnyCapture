@@ -136,6 +136,9 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 
 [Run]
 Filename: "{app}\AnyCapture.exe"; Description: "{cm:LaunchProgram,AnyCapture}"; Flags: nowait postinstall skipifsilent
+; an update started by AnyCapture (/UPDATE, silent): the programs it closed start again
+Filename: "{app}\AnyCapture.exe"; Flags: nowait runasoriginaluser; Check: IsUpdate
+Filename: "{app}\AnyCaptureEditor.exe"; Flags: nowait runasoriginaluser; Check: IsUpdateWithEditor
 
 [Code]
 // In "just for me" mode Setup runs without administrator rights; if the user switches to a protected folder (Program
@@ -153,6 +156,45 @@ begin
   for I := 1 to ParamCount do
     if CompareText(ParamStr(I), '/RELAUNCHED') = 0 then
       Result := True;
+end;
+
+function HasParam(Name: String): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 1 to ParamCount do
+    if CompareText(ParamStr(I), Name) = 0 then
+      Result := True;
+end;
+
+// An update AnyCapture downloaded and started (Help > Check for updates): /UPDATE, and /EDITOR when the Editor was
+// open. AnyCapture exits right after starting Setup; Setup waits for both programs to end (up to a minute) before
+// its AppMutex check, and starts them again when it is done ([Run]).
+function IsUpdate: Boolean;
+begin
+  Result := HasParam('/UPDATE');
+end;
+
+function IsUpdateWithEditor: Boolean;
+begin
+  Result := IsUpdate and HasParam('/EDITOR');
+end;
+
+function InitializeSetup: Boolean;
+var
+  I: Integer;
+begin
+  Result := True;
+  if not IsUpdate then
+    Exit;
+  for I := 1 to 120 do
+  begin
+    if not CheckForMutexes('AnyCapture-Capture-{41F1BF9C-5A4E-4B6F-9C33-1D2E3F405A61},AnyCapture-Editor-{800F2EB3-7C1D-4E2A-A3B4-C5D6E7F80912}') then
+      Exit;
+    Sleep(500);
+  end;
+  Log('Update: AnyCapture is still running after a minute');
 end;
 
 // nearest folder that already exists (the install folder may not exist yet)

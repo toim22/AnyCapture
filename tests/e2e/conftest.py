@@ -10,6 +10,8 @@ os.environ["ANYCAPTURE_NO_RECYCLE"] = "1"
 # and leave alone what the program's former name left on this computer (snapcore/src/legacy.rs): the backup and
 # restore below only cover the AnyCapture data, so a test run must never move the user's older data into it
 os.environ["ANYCAPTURE_NO_MIGRATE"] = "1"
+# and never ask GitHub for a newer version (rust/anycapture/src/update.rs): no dialog may pop up in the middle of a test
+os.environ["ANYCAPTURE_NO_UPDATE_CHECK"] = "1"
 
 from anycapture_e2e import apps, win  # noqa: E402  (win sets the DPI awareness first)
 from anycapture_e2e.config import ARTIFACTS, CAPTURE_EXE, EDITOR_EXE, LEGACY_EXES  # noqa: E402

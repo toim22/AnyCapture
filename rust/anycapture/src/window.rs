@@ -238,6 +238,10 @@ pub fn menus() -> Vec<(String, snapui::menu::Menu)> {
         c(id::MANUAL, tr("Manual do AnyCapture")),
         c(id::PRESET_HELP, tr("Como usar os presets")),
         Item::Separator,
+        c(id::CHECK_UPDATES, tr("Verificar atualizações…")),
+        c(id::REPORT_BUG, tr("Relatar um problema…")),
+        c(id::FEEDBACK, tr("Enviar sugestão ou feedback…")),
+        Item::Separator,
         c(id::ABOUT, tr("Sobre o AnyCapture")),
     ]);
     vec![(tr("&Arquivo"), file), (tr("&Captura"), capture), (tr("E&xibir"), view), (tr("A&juda"), help)]

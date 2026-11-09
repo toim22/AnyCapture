@@ -6,6 +6,7 @@ import win32con
 from PIL import Image
 
 from anycapture_e2e import apps, regs, win
+from anycapture_e2e.library import LibraryWatcher
 from anycapture_e2e.target import TITLE
 
 PICKER = "AnyCaptureColorPicker"
@@ -93,8 +94,11 @@ def test_interval_from_the_command_line(capture, logs, tmp_path):
     regs.set_string("IntervalPrefix", "cli")
     try:
         capture.start("/hide")
+        lib = LibraryWatcher()
         capture.send("/interval")
         win.wait_until(lambda: list(folder.glob("cli*.png")), timeout=10, what="an interval capture")
+        # each capture also goes to the library (Recent captures), as every other capture does
+        lib.wait_new("*.snap", timeout=10)
         capture.send("/interval", "stop")
         logs.capture.wait(r"Interval capture: stopped")
     finally:

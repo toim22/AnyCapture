@@ -209,6 +209,11 @@ pub fn build_menu() -> Vec<(String, Menu)> {
     let help = Menu::popup(vec![
         cmd(M_MANUAL, "&Manual do AnyCapture\tF1"),
         cmd(M_SHORTCUTS, "&Atalhos de teclado"),
+        Item::Separator,
+        Item::Cmd(M_CHECK_UPDATES, tr("&Verificar atualizações…")),
+        Item::Cmd(M_REPORT_BUG, tr("&Relatar um problema…")),
+        Item::Cmd(M_FEEDBACK, tr("Enviar su&gestão ou feedback…")),
+        Item::Separator,
         cmd(M_ABOUT, "&Sobre o AnyCapture Editor"),
     ]);
     let cursors =

@@ -596,6 +596,10 @@ impl Editor {
                     // in a text field the field keeps its own keys (Ctrl+Z/Y/X/C/V/A); the other shortcuts still work
                     let field_key = !modifiers.ctrl
                         || matches!(key, egui::Key::Z | egui::Key::Y | egui::Key::X | egui::Key::C | egui::Key::V | egui::Key::A);
+                    // Del and F2 on a focused list of captures act on its items
+                    if !field && self.list_key(ctl, key, modifiers) {
+                        continue;
+                    }
                     if !(field && field_key)
                         && let Some(c) = menu::accelerator(key, modifiers)
                     {

@@ -17,6 +17,7 @@ mod quick;
 mod share;
 mod rawwin;
 mod tray;
+mod update;
 
 use std::ffi::OsStr;
 use std::sync::atomic::{AtomicU32, Ordering};
@@ -496,6 +497,9 @@ impl CaptureApp {
             id::AFTER_EDITOR => toggle_after_capture_editor(),
             id::CLEANUP_NOW => self.cleanup_now(),
             id::MANUAL => open_manual("capture-window"),
+            id::CHECK_UPDATES => update::check_now(self.hwnd),
+            id::REPORT_BUG => shell_open(&snapcore::project::report_bug_url(VERSION)),
+            id::FEEDBACK => shell_open(&snapcore::project::feedback_url(VERSION)),
             id::CAPTURE_FILE => {
                 let mut p = self.store.first_of_kind(CaptureKind::Image);
                 p.selection = Selection::File;
@@ -642,6 +646,10 @@ impl CaptureApp {
                         let _ = windows::Win32::UI::WindowsAndMessaging::PostMessageW(
                             Some(HWND(self.hwnd as _)), WM_COMMAND, WPARAM(id::EXIT as usize), LPARAM(0));
                     }
+                    handled = true;
+                }
+                Cmd::CheckUpdates => {
+                    update::check_now(self.hwnd);
                     handled = true;
                 }
                 Cmd::Help => {
@@ -1026,6 +1034,7 @@ impl App for CaptureApp {
                 i.send_int(Channel::Editor, ipc::code::LIBRARY_CHANGED, 0, false);
             }
         }
+        update::check_at_start(self.hwnd);
         self.command_line(ctl, &instance::command_line(), true);
     }
 

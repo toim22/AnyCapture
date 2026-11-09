@@ -322,7 +322,7 @@ pub fn settings_import(owner: isize, store: &PresetStore) {
 }
 
 /// The Editor asked to close; true if it was open (waits up to 15 s for it to end).
-fn close_editor_and_wait() -> bool {
+pub(crate) fn close_editor_and_wait() -> bool {
     use windows::Win32::System::Threading::{OpenProcess, PROCESS_SYNCHRONIZE, WaitForSingleObject};
     use windows::Win32::UI::WindowsAndMessaging::{FindWindowW, GetWindowThreadProcessId, WM_CLOSE};
     let Some(ed) = unsafe { FindWindowW(windows::core::w!("AnyCaptureEditor"), PCWSTR::null()) }.ok().filter(|h| !h.0.is_null()) else {
@@ -430,6 +430,8 @@ pub fn options(owner: isize) {
             combo(&tr("Aparência (vale ao reabrir)"), &[tr("Seguir o Windows"), tr("Claro"), tr("Escuro")],
                   dword("Appearance", 0).min(2) as i32), // 39
             Field::Label(tr("Biblioteca: ") + &String::from_utf16_lossy(&snapcore::library::library_dir())),
+            Field::Separator(tr("Atualizações")), // 41
+            check(&tr("Verificar atualizações ao iniciar"), crate::update::enabled()), // 42
         ];
         let validate = |f: &[Field]| -> String {
             let mut keys: Vec<(u32, u32)> = Vec::new();
@@ -465,7 +467,7 @@ pub fn options(owner: isize) {
                           (20, "CaptureSound"), (23, "QuickCrop"), (24, "HdrCorrection"), (25, "WindowRoundCorners"), (26, "WindowShadow"),
                           (27, "HideDesktopIcons"), (28, "DndWhileRecording"), (29, "KeepAwake"), (31, "StripMetadata"), (32, "CleanupEnabled"),
                           (33, "CleanupDays"), (34, "CleanupKeepNamed"), (35, "CleanupKeepTagged"), (36, "CleanupRecycle"), (37, "CursorAsObject"),
-                          (38, "SplitLongPages"), (39, "Appearance")] {
+                          (38, "SplitLongPages"), (39, "Appearance"), (42, "CheckForUpdates")] {
             set_dword(name, f[i].int() as u32);
         }
         let wav = f[21].text().trim().to_owned();

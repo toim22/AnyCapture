@@ -38,6 +38,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   redistributable.
 
 ### Added
+- **Updates from inside the program.** AnyCapture checks GitHub for a newer version ten seconds after it starts (it can
+  be turned off in *Options › Updates*) and when *Help › Check for updates…* is chosen, in AnyCapture or the Editor.
+  *Update now* downloads the installer, checks its size and SHA-256 against the release, closes both programs,
+  installs over this copy and starts them again; *Skip this version* silences the reminder at start. Only full
+  releases are offered, not pre-releases.
+- **Report a problem and send feedback:** *Help › Report a problem…* and *Help › Send a suggestion or feedback…* open
+  a GitHub issue form with the AnyCapture and Windows versions already filled in.
+- **Export as ZIP:** exporting library items or recent captures can put them all into one `.zip`, in the chosen image
+  format.
+- **Recent captures work like File Explorer:** Shift+click selects a range, a rectangle dragged from the empty part
+  selects the thumbnails it touches, and Ctrl+C copies the selected captures as files (a single image also as a
+  picture). After a click on the strip, Ctrl+A, Ctrl+C, Del and F2 act on it; after a click on the image they act on
+  the image again.
 - **Light and dark theme:** *Options › Appearance* follows Windows or picks light or dark; the title bar and the
   Editor's menu bar follow it too. It applies when AnyCapture reopens.
 - `AnyCaptureTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
@@ -56,6 +69,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - The Editor's drawing tools are centered on the toolbar, and *Recent captures* is no longer cut off at the bottom when
   the window is maximized.
 - *Help › About* no longer shows the path of the library folder.
+- Dragging captures out of Recent captures, the Library, the quick thumbnail or a pin into File Explorer, a chat or a
+  document works again: the drag ended as soon as it started, because OLE was not initialized for it.
+- The interval capture plays the capture sound for each capture and adds each one to the library, so they show in the
+  Editor's Recent captures like every other capture.
 
 ## [0.4.1] — 2026-11-03
 

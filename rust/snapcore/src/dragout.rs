@@ -55,6 +55,16 @@ pub fn drag_files_out(source: isize, files: &[String], thumb: Option<&Image>, al
     if files.is_empty() {
         return 0;
     }
+    // OLE drag and drop needs OleInitialize on this thread, not only CoInitializeEx; winit's own drop support (which
+    // would call it) is off in snapui::host, so without this the drag ended at once with CO_E_NOTINITIALIZED. Once per
+    // thread is enough
+    thread_local!(static OLE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) });
+    if !OLE.get() {
+        OLE.set(true);
+        if let Err(e) = unsafe { windows::Win32::System::Ole::OleInitialize(None) } {
+            log::write(&format!("DragOut: OleInitialize failed: {e}"));
+        }
+    }
     let Some(obj) = data_object(files) else {
         log::write(&format!("DragOut: no data object for {} file(s)", files.len()));
         return 0;
@@ -101,7 +111,10 @@ pub fn drag_files_out(source: isize, files: &[String], thumb: Option<&Image>, al
     }
     match unsafe { SHDoDragDrop(Some(screen::hwnd(source)), &obj, None::<&IDropSource>, allowed) } {
         Ok(DROPEFFECT(e)) => e,
-        Err(_) => 0,
+        Err(e) => {
+            log::write(&format!("DragOut: the drag failed: {e}"));
+            0
+        }
     }
 }
 

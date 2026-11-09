@@ -132,6 +132,7 @@ impl Editor {
             M_CUT => {
                 self.copy_to_clipboard(true);
             }
+            M_COPY if !self.list_selection().is_empty() => self.copy_items(self.list_selection()),
             M_COPY => {
                 if self.copy_to_clipboard(false) {
                     self.status = tr("Copiado.");
@@ -270,6 +271,9 @@ impl Editor {
             M_SELECTALL => {
                 if self.library_open {
                     self.library.select_all();
+                } else if self.show_tray && self.tray.focused {
+                    // the last click was on Recent captures: Ctrl+A selects all of them, not the picture
+                    self.tray.select_all();
                 } else if self.cv.doc().is_some_and(|d| !d.is_video && !d.st.objs.is_empty())
                     && self.cv.tool == Tool::Select
                     && !self.cv.smart_move
@@ -430,6 +434,12 @@ impl Editor {
             }
             M_SHORTCUTS => self.show_shortcuts(ctl),
             M_MANUAL => self.show_manual(),
+            // the check, its dialog and the installer belong to AnyCapture.exe (started when it is not running)
+            M_CHECK_UPDATES => {
+                snapcore::instance::launch_sibling("AnyCapture.exe", "/checkupdates", false);
+            }
+            M_REPORT_BUG => snapedit_app::shell_open(&snapcore::project::report_bug_url(super::VERSION)),
+            M_FEEDBACK => snapedit_app::shell_open(&snapcore::project::feedback_url(super::VERSION)),
             M_ABOUT => {
                 // no paths or other details of this computer: the box may end up in a screenshot
                 let text = format!(
@@ -942,6 +952,7 @@ impl Editor {
                 }
             }
             T::Delete(v) => self.delete_docs(v),
+            T::Copy(v) => self.copy_items(v),
             T::Export(v) => self.export_items(v),
             T::Rename(p) => {
                 // the name shown in the tray and the library, and the document's title
@@ -999,6 +1010,46 @@ impl Editor {
             T::Batch(v) => self.run_batch(v),
             T::ShowLibrary(on) => self.show_library(on),
             T::DragOut(paths, item) => self.drag_out(paths, &item),
+        }
+    }
+
+    /// The list the keyboard belongs to (the library when it is open, Recent captures after a click on it) and its
+    /// selected items; empty when the keyboard belongs to the picture.
+    pub fn list_selection(&self) -> Vec<String> {
+        if self.library_open {
+            self.library.selected_paths()
+        } else if self.show_tray && self.tray.focused {
+            self.tray.selected_paths()
+        } else {
+            Vec::new()
+        }
+    }
+
+    /// The keys of a focused list: Del sends its selected items to the Recycle Bin, F2 renames the one selected.
+    /// True when the key was the list's.
+    pub fn list_key(&mut self, ctl: &mut Ctl, key: egui::Key, m: egui::Modifiers) -> bool {
+        use snapedit_app::tray::TrayAction as T;
+        if m.ctrl || m.alt || m.shift {
+            return false;
+        }
+        let sel = self.list_selection();
+        match key {
+            egui::Key::Delete if !sel.is_empty() => self.tray_action(ctl, T::Delete(sel)),
+            egui::Key::F2 if sel.len() == 1 => self.tray_action(ctl, T::Rename(sel[0].clone())),
+            _ => return false,
+        }
+        true
+    }
+
+    /// Copies list items as Explorer does (the files, as PNG or MP4), with the picture itself when it is one image, so
+    /// both a folder and a chat or document accept the paste.
+    fn copy_items(&mut self, paths: Vec<String>) {
+        let files = self.files_for_drag(&paths);
+        let img = (paths.len() == 1 && snapedit_app::doc::ext_of(&paths[0]) != ".mp4")
+            .then(|| self.load_item_image(&paths[0]).map(|(i, _)| i))
+            .flatten();
+        if snapcore::clip::copy_files_and_image(self.hwnd, &files, img.as_ref(), super::VERSION) {
+            self.status = if files.len() == 1 { tr("Copiado.") } else { fmt(&tr("%zu itens copiados."), &[&files.len()]) };
         }
     }
 

@@ -265,6 +265,15 @@ and start AnyCapture with Windows. If AnyCapture is running, the installer close
 <code>AnyCapture.exe</code>. Keep the <code>lang</code> and <code>help</code> folders next to the programs.</td></tr>
 </table>
 
+<h3 id="updates">Updates</h3>
+<p>Ten seconds after it starts, AnyCapture checks whether a newer version has been published, and
+<span class="path">Help › Check for updates…</span> checks at any time (in AnyCapture or the Editor). When there is one, a window shows its
+number and what is new: <span class="ui">Update now</span> downloads the installer, checks that it arrived intact, closes AnyCapture and the
+Editor, installs the new version over this one (your captures and settings stay) and starts the programs again.
+<span class="ui">See the release page</span> opens it on GitHub, and <span class="ui">Skip this version</span> stops the reminder at start until
+the next version. Turn the check at start off with <span class="ui">Check for updates at start</span> in
+<span class="path">File › Options… › Updates</span>. The check needs the internet and sends nothing about you or this computer.</p>
+
 <h3>What you see after starting</h3>
 <ol class="steps">
   <li>The AnyCapture icon appears in the notification area (next to the clock). If you do not see it, click the small arrow
@@ -423,7 +432,9 @@ current preset at once. There is no "OK" button.</div>
 clipboard into a capture); <span class="ui">From a graphics file…</span> (imports an image file as a capture).</td></tr>
 <tr><td>View</td><td class="wrap"><span class="ui">Show One Click</span>; <span class="ui">Presets list</span>.</td></tr>
 <tr><td>Help</td><td class="wrap"><span class="ui">AnyCapture Manual</span> (<kbd>F1</kbd>); <span class="ui">How to use presets</span>;
-<span class="ui">About AnyCapture</span>.</td></tr>
+<span class="ui">Check for updates…</span> (see <a href="#updates">Updates</a>); <span class="ui">Report a problem…</span> and
+<span class="ui">Send a suggestion or feedback…</span> (open a form on AnyCapture's GitHub page with your AnyCapture and Windows versions
+filled in); <span class="ui">About AnyCapture</span>. The Editor's Help menu has the same commands.</td></tr>
 </table>
 </section>
 
@@ -1346,8 +1357,12 @@ front; opening a capture that is already in the strip keeps it in its place. Hid
 <ul>
   <li>Click a thumbnail to open it. Rest the mouse on it for a larger preview with its annotations, size and date (videos show the
   first frame and the duration).</li>
-  <li><b>Select several</b> with <kbd>Ctrl</kbd>+click, <kbd>Shift</kbd>+click, <kbd>Ctrl</kbd>+<kbd>A</kbd>, or by dragging a rectangle from empty
-  space (as in File Explorer).</li>
+  <li><b>Select several</b> as in File Explorer: <kbd>Ctrl</kbd>+click adds or removes one, <kbd>Shift</kbd>+click selects everything between the
+  last clicked thumbnail and this one, and dragging a rectangle from the empty part of the strip selects the thumbnails it touches.</li>
+  <li><b>The keyboard follows your last click.</b> After a click on the strip, <kbd>Ctrl</kbd>+<kbd>A</kbd> selects all recent captures and
+  <kbd>Ctrl</kbd>+<kbd>C</kbd> copies the selected ones (paste them in File Explorer, a chat or an e-mail; a single image also pastes as a
+  picture); <kbd>Del</kbd> deletes them and <kbd>F2</kbd> renames one. Click the image above to give the keys back to it:
+  <kbd>Ctrl</kbd>+<kbd>A</kbd> then selects everything in the image.</li>
   <li><b>Drag thumbnails into other programs</b> — chats, e-mails, documents, File Explorer. Images go as PNG with the annotations; videos as MP4.</li>
   <li><b>Drop files</b> from File Explorer onto the Editor to import them.</li>
   <li><b>Right-click</b>: <span class="ui">Open</span>, <span class="ui">Show in folder</span>, <span class="ui">Export…</span>,
@@ -1361,7 +1376,8 @@ image; <span class="ui">Back to editor</span> returns.</p>
 <ul>
   <li><span class="ui">Search by name</span> filters by capture name.</li>
   <li>Multiple selection as in the tray. With items selected: <span class="ui">Export (n)…</span> copies them to a folder in an image format of
-  your choice (videos are copied as MP4); <span class="ui">Delete (n)</span> sends them to the Recycle Bin; <span class="ui">Clear selection</span>.</li>
+  your choice (videos are copied as MP4); with <span class="ui">Export as ZIP (all together in one file)</span> checked, the same files go into
+  one <code>.zip</code> in that folder instead; <span class="ui">Delete (n)</span> sends them to the Recycle Bin; <span class="ui">Clear selection</span>.</li>
   <li>The X on a thumbnail deletes it; <kbd>Del</kbd> deletes the selected items.</li>
 </ul>
 
@@ -1600,7 +1616,7 @@ Uninstalling AnyCapture keeps all of this.</p>
 
 <section id="system-extras">
 <h2>Interval capture, screen focus and library cleanup</h2>
-<p><strong>Interval capture</strong> (<em>Capture › Interval capture…</em> on the capture window, or the tray menu) takes a capture of an area, the full screen or a window every few seconds, for a set time or until you stop it; a red dot on the tray icon shows it is running. <strong>Screen focus</strong> (<em>Capture › Screen focus (presentations)</em>, the tray menu, its shortcut in Options or <code>/focus</code>) darkens the screen except a circle or rectangle around the pointer, for presentations. <strong>Clean desktop</strong>: <em>Options › Capture › Hide desktop icons while capturing</em> hides them during every capture and brings them back afterwards. <strong>Library cleanup</strong> (off by default) deletes captures older than a chosen number of days, keeping named or tagged ones if you want and sending them to the Recycle Bin; the cleanup is set in <em>Options › Privacy and library</em>, and <em>File › Clean up the library now</em> runs it at once.</p>
+<p><strong>Interval capture</strong> (<em>Capture › Interval capture…</em> on the capture window, or the tray menu) takes a capture of an area, the full screen or a window every few seconds, for a set time or until you stop it; a red dot on the tray icon shows it is running. Each capture plays the capture sound chosen in Options and goes to the Library, so it also shows in the Editor's Recent captures. <strong>Screen focus</strong> (<em>Capture › Screen focus (presentations)</em>, the tray menu, its shortcut in Options or <code>/focus</code>) darkens the screen except a circle or rectangle around the pointer, for presentations. <strong>Clean desktop</strong>: <em>Options › Capture › Hide desktop icons while capturing</em> hides them during every capture and brings them back afterwards. <strong>Library cleanup</strong> (off by default) deletes captures older than a chosen number of days, keeping named or tagged ones if you want and sending them to the Recycle Bin; the cleanup is set in <em>Options › Privacy and library</em>, and <em>File › Clean up the library now</em> runs it at once.</p>
 </section>
 
 <p class="part-title">Reference</p>
@@ -1736,6 +1752,10 @@ Keyboard › Use the Print screen key to open screen capture</span>, then restar
 <h4>A shortcut does nothing.</h4>
 <p>Check that AnyCapture is running (its icon is in the notification area). Another program may own the combination; open
 <span class="path">File › Options…</span> or the preset's <span class="ui">Shortcut…</span> to choose a different one.</p>
+<h4>Something does not work, or you have an idea.</h4>
+<p>Use <span class="path">Help › Report a problem…</span> or <span class="path">Help › Send a suggestion or feedback…</span>: they open a short
+form on AnyCapture's GitHub page (a free GitHub account is needed to send it). Attach the last lines of the log
+(<span class="path">File › Open the logs folder</span>) when reporting a problem.</p>
 <h4>Where did my capture go?</h4>
 <p>Every capture is in the Library: open the Editor and click <span class="ui">Library</span>. If <span class="ui">Preview in Editor</span> was off,
 the capture was only stored there (and sent to the other destinations).</p>

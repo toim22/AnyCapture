@@ -341,6 +341,17 @@ def clipboard_formats():
         win32clipboard.CloseClipboard()
 
 
+def clipboard_files():
+    """The paths of a file copy on the clipboard (CF_HDROP, as Explorer's Copy puts them); [] when there is none."""
+    _open_clipboard()
+    try:
+        if not win32clipboard.IsClipboardFormatAvailable(win32con.CF_HDROP):
+            return []
+        return list(win32clipboard.GetClipboardData(win32con.CF_HDROP))
+    finally:
+        win32clipboard.CloseClipboard()
+
+
 def clipboard_text():
     _open_clipboard()
     try:

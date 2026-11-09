@@ -3172,6 +3172,8 @@ name = "snapcore"
 version = "0.1.0"
 dependencies = [
  "cfb",
+ "crc32fast",
+ "flate2",
  "libwebp-sys",
  "regex",
  "rxing",

@@ -31,6 +31,8 @@ pub enum Cmd {
     Clipboard,
     Exit,
     Help,
+    /// Help › Check for updates in the Editor
+    CheckUpdates,
 }
 
 /// swscanf(v, "%d,%d,%d,%d"): each number may have spaces and a sign before it; the commas must follow right away.
@@ -100,6 +102,7 @@ pub fn parse(args: &[String]) -> Vec<Cmd> {
             }
             "/clipboard" => out.push(Cmd::Clipboard),
             "/exit" => out.push(Cmd::Exit),
+            "/checkupdates" => out.push(Cmd::CheckUpdates),
             "/help" | "/?" => out.push(Cmd::Help),
             _ => {}
         }

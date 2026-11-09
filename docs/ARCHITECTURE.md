@@ -191,13 +191,34 @@ exported with the settings) and, where it has the feature, the ShareX reverse-en
 | WebP/AVIF/HEIC and metadata (C03, C29) | `snapcore/src/codec.rs` (WebP with libwebp 1.5.0 through `libwebp-sys`; AVIF/HEIC through WIC, HEIF encoder with AV1) |
 | QR (C04) | `snapcore/src/barcode.rs` (the `rxing` crate, a Rust port of ZXing); `snapui/src/qr.rs` (results dialog) |
 | Beautify (C05) | `snapcore/src/beautify.rs` (the render); `anycapture/src/dialogs.rs` (capture effect) and `snapedit/src/app/extras.rs` (Editor dialog and presets) |
-| Copy as (C30), drag out | `snapedit/src/app/extras.rs` (Copy as), `snapcore/src/dragout.rs` |
+| Copy as (C30), drag out, Recent captures selection and Ctrl+C, Export as ZIP | `snapedit/src/app/extras.rs` (Copy as), `snapcore/src/dragout.rs`, `snapedit/src/tray.rs` + `list_selection` / `copy_items` in `snapedit/src/app/commands.rs` (the keyboard goes to the list after a click on it), `snapcore/src/clip.rs` (files and picture together), `snapcore/src/zip.rs` (deflate through `flate2`) |
 | Office (C20), upload (C21) | `snapcore/src/office.rs` (IDispatch late binding), `snapcore/src/upload.rs` + `net.rs` (WinHTTP, SigV4, OAuth PKCE loopback, Credential Manager); `snapui/src/upload_ui.rs` (dialogs) |
 | Combine, redaction, cursors, date stamp, background removal, split, contrast (C09, C11, C25–C27, C34, C36) | `snapedit/src/edtools.rs`, `snapedit/src/app/extras.rs`, `snapcore/src/stamps.rs` (cursors) and `snapcore/src/pdf.rs` (PDF writer, smart page breaks) |
 | Compare (C17), AI assistant (C22), batch (C28) | `snapedit/src/app/windows_aux.rs` (Compare and the assistant window; the request in `snapcore/src/ai.rs`), `snapedit/src/app/extras.rs` (batch) |
 | Smart highlighter, text only (C12), draw & hold (C23), touch/pen (C43) | `snapedit/src/canvas.rs` (OCR word boxes from `snapcore/src/ocr.rs`), `recognize_stroke` in `snapedit/src/tools.rs` |
 | Hand-drawn style (C35), vertical text and text on a path (C37) | `snapcore/src/render.rs`, `snapcore/src/doc.rs` (new `Style` fields, written to the `.snap` only when set) |
 | Clicks/keys overlay (C07), zoom (C15), crash-safe recording (C14), audio only (C32), restart confirmation (C33) | `snapcore/src/recorder.rs` (low-level hooks feed the overlays; fragmented MP4 remuxed at the end; interrupted recordings recovered at startup), `anycapture/src/hud.rs` and `anycapture/src/engine/video.rs` |
+
+## Updates, problem reports and feedback
+
+The updater follows the reference's (comp_9): it lives in the capture program, checks some time after the start and
+on request, downloads the installer, verifies it and runs it. The server is GitHub Releases instead of TechSmith's.
+
+- `snapcore/src/update.rs` asks `api.github.com/repos/toim22/AnyCapture/releases/latest` (GitHub leaves drafts and
+  pre-releases out of that answer; 404 while no full release exists), compares the versions number by number and
+  picks the asset `AnyCapture-<version>-setup.exe`; `download` checks its size and the SHA-256 GitHub publishes in the
+  asset's `digest`, then saves it to `%TEMP%\AnyCapture\Update`.
+- `anycapture/src/update.rs`: the check ten seconds after the start (registry `CheckForUpdates`, on by default;
+  `SkippedVersion`; the environment variable `ANYCAPTURE_NO_UPDATE_CHECK` turns it off, the e2e suite sets it), *Help ›
+  Check for updates…* (the Editor runs `AnyCapture.exe /checkupdates`), the task dialog with *Update now / See the
+  release page / Skip this version*, the download behind a marquee dialog, then the Editor is closed and the installer
+  runs with `/SILENT /SUPPRESSMSGBOXES /NORESTART /UPDATE` (`/EDITOR` when the Editor was open) and AnyCapture exits.
+- `packaging/installer/AnyCapture.iss`: with `/UPDATE`, `InitializeSetup` waits up to a minute for both programs'
+  mutexes to go away (it runs before Setup's own `AppMutex` check), and two `[Run]` entries with `Check: IsUpdate`
+  start AnyCapture (and the Editor with `/EDITOR`) again as the original user.
+- `snapcore/src/project.rs`: the repository's name, and the issue forms of *Help › Report a problem…* and *Send a
+  suggestion or feedback…* (`.github/ISSUE_TEMPLATE/bug_report.yml`, `feedback.yml`), opened in the browser with the
+  `version` and `windows` fields filled in through the query string. GitHub reads the forms from the default branch.
 
 ## Deliberate differences from the reference
 

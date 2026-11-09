@@ -60,6 +60,7 @@ pub mod office;
 pub mod paths;
 pub mod pdf;
 pub mod presets;
+pub mod project;
 pub mod panorama;
 pub mod recorder;
 pub mod webcam;
@@ -71,8 +72,10 @@ pub mod settings;
 pub mod snap;
 pub mod sounds;
 pub mod stamps;
+pub mod update;
 pub mod upload;
 pub mod video;
 pub mod wide;
 pub mod xml;
+pub mod zip;
 
