@@ -226,7 +226,8 @@ on request, downloads the installer, verifies it and runs it. The server is GitH
   (Issues: read and write on this repository only; its private key is a Worker secret), labeled `bug` or
   `enhancement`, with the headings of the issue forms. Nobody needs a GitHub account and no key ships in the
   programs. The Worker refuses malformed reports, allows 2 a minute per address (429: the window asks to wait) and
-  defuses `@mentions` and closing keywords. When the relay cannot be reached (or `RELAY_URL` is still empty), the
+  defuses `@mentions` and closing keywords. It runs at `https://anycapture-issues.antoniocarlos85.workers.dev`
+  (deploy and keys: `services/issue-relay/README.md`). When the relay cannot be reached (or `RELAY_URL` is empty), the
   browser opens GitHub's issue form (`.github/ISSUE_TEMPLATE/bug_report.yml`, `feedback.yml`) with the title and the
   fields (`what`/`steps` or `idea`/`why`, `version`, `windows`) filled in through the query string; that path needs
   a GitHub account. GitHub reads the forms from the default branch.

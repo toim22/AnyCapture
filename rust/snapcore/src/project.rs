@@ -127,9 +127,9 @@ pub fn new_issue_url(kind: IssueKind, i: &Issue) -> String {
 }
 
 /// The relay that files the issues for people without a GitHub account: services/issue-relay, a Cloudflare Worker
-/// that creates them as the AnyCapture Reports GitHub App. Empty until it is deployed (then the browser form is
-/// used); the environment variable ANYCAPTURE_ISSUE_RELAY points elsewhere (a local `cf dev`, a test).
-pub const RELAY_URL: &str = "";
+/// that creates them as the AnyCapture Reports GitHub App. When it cannot be reached the browser form is used; the
+/// environment variable ANYCAPTURE_ISSUE_RELAY points elsewhere (a local `cf dev`, a test).
+pub const RELAY_URL: &str = "https://anycapture-issues.antoniocarlos85.workers.dev";
 
 fn relay_url() -> String {
     std::env::var("ANYCAPTURE_ISSUE_RELAY").ok().filter(|s| !s.trim().is_empty()).unwrap_or_else(|| RELAY_URL.to_owned())
