@@ -9,6 +9,7 @@ use std::sync::{Arc, OnceLock};
 use egui::{FontData, FontDefinitions, FontFamily};
 
 pub mod droplist;
+pub mod feedback;
 pub mod form;
 pub mod host;
 pub mod icons;

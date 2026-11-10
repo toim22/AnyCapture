@@ -19,7 +19,7 @@ fn harness_with(view: View) -> Harness<'static, State> {
     let state = State { store: PresetStore { presets: default_presets(), selected: 0 }, view, actions: Vec::new() };
     let h = anycapture_app::window::height(&state.store, &state.view);
     snapui::fixed_look_for_tests();
-    Harness::builder().with_size(egui::vec2(anycapture_app::window::WIDTH, h)).build_ui_state(
+    let mut harness = Harness::builder().with_size(egui::vec2(anycapture_app::window::WIDTH, h)).build_ui_state(
         |ui, s: &mut State| {
             snapui::install_fonts(ui.ctx());
             snapui::theme::apply(ui.ctx());
@@ -27,7 +27,13 @@ fn harness_with(view: View) -> Harness<'static, State> {
             s.actions.extend(a);
         },
         state,
-    )
+    );
+    // the window takes the width its content measured on the first frame, as the app does
+    let w = anycapture_app::window::width(&harness.state().view);
+    harness.set_size(egui::vec2(w, h));
+    harness.run();
+    harness.state_mut().actions.clear();
+    harness
 }
 
 fn harness() -> Harness<'static, State> {

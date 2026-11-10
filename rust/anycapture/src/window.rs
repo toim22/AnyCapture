@@ -136,6 +136,8 @@ pub struct View {
     pub webcam_menu: bool,
     /// the window (its title bar opens the menus); 0 in the tests
     pub hwnd: isize,
+    /// the width the content needs, measured as it is drawn (0 before the first frame): the window fits it
+    pub width: f32,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -177,13 +179,30 @@ fn tag_value(ui: &egui::Ui, r: &egui::Response, name: &str, value: &str) {
     });
 }
 
-/// The window's height: the content and the bottom bar, plus the preset list when it is open.
+/// The window's height: the title bar, the fields and switches, the bottom bar, plus the preset list when it is open.
 pub fn height(store: &PresetStore, view: &View) -> f32 {
-    let base = 262.0;
+    let base = 230.0;
     if view.presets_open { base + 8.0 + 30.0 * store.presets.len().clamp(2, 8) as f32 } else { base }
 }
 
-pub const WIDTH: f32 = 840.0;
+/// The window's width until the first frame measures the content (`View::width`).
+pub const WIDTH: f32 = 780.0;
+
+/// The window's width: just what the fields, the switches and the capture button need in the interface language.
+pub fn width(view: &View) -> f32 {
+    if view.width > 0.0 { view.width } else { WIDTH }
+}
+
+/// The labels of the switches of both tabs: their column is as wide as the longest, so it does not move between tabs.
+const SWITCHES: [&str; 5] = ["Visualizar no Editor", "Copiar para a área de transferência", "Capturar o cursor", "Gravar microfone",
+                             "Gravar áudio do sistema"];
+
+/// The labels of the fields of both tabs (same reason).
+const FIELD_LABELS: [&str; 5] = ["Seleção:", "Efeitos:", "Compartilhar:", "Qualidade:", "Webcam:"];
+
+fn widest(ui: &egui::Ui, texts: &[&str], font: egui::FontId) -> f32 {
+    texts.iter().map(|s| ui.painter().layout_no_wrap(tr(s), font.clone(), Color32::WHITE).size().x).fold(0.0, f32::max)
+}
 
 /// BuildMenu: File, Capture, View and Help, on the title bar (snapui's caption.rs). A chosen command arrives as
 /// WM_COMMAND, as the C++ menus sent it.
@@ -800,9 +819,12 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
         let i = store.selected as usize;
         let p = &mut store.presets[i];
         let video = p.kind == CaptureKind::Video;
-        ui.add_space(10.0);
-        ui.horizontal_top(|ui| {
-            egui::Grid::new("fields").num_columns(2).spacing([12.0, 10.0]).min_row_height(widgets::ROW_H).show(ui, |ui| {
+        let label_w = widest(ui, &FIELD_LABELS, egui::TextStyle::Body.resolve(ui.style())).ceil();
+        // a switch's label, a gap and the switch (40 px plus its focus ring)
+        let switch_w = (widest(ui, &SWITCHES, egui::FontId::proportional(snapui::theme::tokens().body)) + 12.0 + 42.0).ceil();
+        ui.add_space(8.0);
+        let row = ui.horizontal_top(|ui| {
+            egui::Grid::new("fields").num_columns(2).spacing([12.0, 10.0]).min_col_width(label_w).min_row_height(widgets::ROW_H).show(ui, |ui| {
                 selection_row(ui, p, &mut out);
                 if video {
                     quality_row(ui, p, &mut out);
@@ -812,9 +834,9 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
                     share_row(ui, p, &mut out);
                 }
             });
-            ui.add_space(16.0);
+            ui.add_space(24.0);
             ui.vertical(|ui| {
-                ui.set_width((ui.available_width() - 102.0).max(180.0));
+                ui.set_width(switch_w);
                 ui.spacing_mut().item_spacing.y = 6.0;
                 ui.add_space(2.0);
                 let mut changed = switch(ui, &mut p.preview_in_editor, "Visualizar no Editor", "IDC_PREVIEW");
@@ -831,11 +853,15 @@ pub fn draw(store: &mut PresetStore, view: &mut View, hk_text: &dyn Fn(u32, u32)
                     out.push(Action::Changed);
                 }
             });
-            ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
-                ui.add_space(2.0);
+            // the capture button right after the switches, centered on their column
+            ui.add_space(20.0);
+            ui.vertical(|ui| {
+                ui.add_space(18.0);
                 capture_button(ui, p, view, &mut out);
             });
         });
+        // the central panel's margin (8) and the same again after the button's shadow, as on the left of the fields
+        view.width = (row.response.rect.right() + 16.0).ceil();
     });
     out
 }

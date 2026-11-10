@@ -438,8 +438,8 @@ impl Editor {
             M_CHECK_UPDATES => {
                 snapcore::instance::launch_sibling("AnyCapture.exe", "/checkupdates", false);
             }
-            M_REPORT_BUG => snapedit_app::shell_open(&snapcore::project::report_bug_url(super::VERSION)),
-            M_FEEDBACK => snapedit_app::shell_open(&snapcore::project::feedback_url(super::VERSION)),
+            M_REPORT_BUG => snapui::feedback::open(self.hwnd, snapcore::project::IssueKind::Bug, "AnyCapture Editor", super::VERSION),
+            M_FEEDBACK => snapui::feedback::open(self.hwnd, snapcore::project::IssueKind::Idea, "AnyCapture Editor", super::VERSION),
             M_ABOUT => {
                 // no paths or other details of this computer: the box may end up in a screenshot
                 let text = format!(

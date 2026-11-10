@@ -498,8 +498,8 @@ impl CaptureApp {
             id::CLEANUP_NOW => self.cleanup_now(),
             id::MANUAL => open_manual("capture-window"),
             id::CHECK_UPDATES => update::check_now(self.hwnd),
-            id::REPORT_BUG => shell_open(&snapcore::project::report_bug_url(VERSION)),
-            id::FEEDBACK => shell_open(&snapcore::project::feedback_url(VERSION)),
+            id::REPORT_BUG => snapui::feedback::open(self.hwnd, snapcore::project::IssueKind::Bug, "AnyCapture", VERSION),
+            id::FEEDBACK => snapui::feedback::open(self.hwnd, snapcore::project::IssueKind::Idea, "AnyCapture", VERSION),
             id::CAPTURE_FILE => {
                 let mut p = self.store.first_of_kind(CaptureKind::Image);
                 p.selection = Selection::File;
@@ -846,12 +846,12 @@ impl CaptureApp {
     fn fit_window(&self, ctl: &Ctl) {
         let mut v = self.view.clone();
         v.presets_open = reg::get_dword(OsStr::new("CapturePresetsOpen"), 0, None) != 0;
-        let h = window::height(&self.store, &v);
+        let (wd, h) = (window::width(&v), window::height(&self.store, &v));
         if let Some(w) = self.main.and_then(|k| ctl.window(k)) {
             let scale = w.scale_factor();
             let cur = w.inner_size().to_logical::<f32>(scale);
-            if (cur.height - h).abs() > 1.0 || (cur.width - window::WIDTH).abs() > 1.0 {
-                let _ = w.request_inner_size(winit::dpi::LogicalSize::new(window::WIDTH, h));
+            if (cur.height - h).abs() > 1.0 || (cur.width - wd).abs() > 1.0 {
+                let _ = w.request_inner_size(winit::dpi::LogicalSize::new(wd, h));
             }
         }
     }

@@ -87,7 +87,7 @@ msgstr "Nombre del ajuste"
 msgid "Preset %zu"
 msgstr "Ajuste %zu"
 
-#: rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:769 rust/snapcore/src/presets.rs:185
+#: rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:788 rust/snapcore/src/presets.rs:185
 msgid "Novo preset"
 msgstr "Nuevo ajuste"
 
@@ -95,7 +95,7 @@ msgstr "Nuevo ajuste"
 msgid " (cópia)"
 msgstr " (copia)"
 
-#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:773
+#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:792
 msgid "Novo preset com as configurações atuais"
 msgstr "Nuevo ajuste con la configuración actual"
 
@@ -140,7 +140,7 @@ msgstr ""
 "•  El engranaje de la fila cambia el nombre, duplica o elimina el ajuste.\n"
 "•  \"Nuevo ajuste con la configuración actual\" guarda lo que hay en la ventana ahora."
 
-#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:543 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:763
+#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:543 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:782
 msgid "Presets"
 msgstr "Ajustes predefinidos"
 
@@ -212,11 +212,11 @@ msgstr "Automático (idioma de Windows)"
 msgid "Atalhos globais"
 msgstr "Atajos globales"
 
-#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:218
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:237
 msgid "Capturar imagem"
 msgstr "Capturar imagen"
 
-#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:219
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:238
 msgid "Gravar vídeo"
 msgstr "Grabar vídeo"
 
@@ -228,7 +228,7 @@ msgstr "Pausar/reanudar vídeo"
 msgid "Parar vídeo"
 msgstr "Detener vídeo"
 
-#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:225
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:244
 msgid "Conta-gotas de tela"
 msgstr "Cuentagotas de pantalla"
 
@@ -236,11 +236,11 @@ msgstr "Cuentagotas de pantalla"
 msgid "Capturar e fixar na tela"
 msgstr "Capturar y fijar en la pantalla"
 
-#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:213
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:232
 msgid "Fixar da área de transferência"
 msgstr "Fijar desde el portapapeles"
 
-#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:229
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:248
 msgid "Foco de tela (apresentações)"
 msgstr "Foco de pantalla (presentaciones)"
 
@@ -256,7 +256,7 @@ msgstr "Carpeta de salida"
 msgid "Monitorar área de transferência"
 msgstr "Vigilar el portapapeles"
 
-#: rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:595 rust/anycapture/src/window.rs:606 rust/snapcore/src/sounds.rs:31
+#: rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:614 rust/anycapture/src/window.rs:625 rust/snapcore/src/sounds.rs:31
 msgid "Desligado"
 msgstr "Desactivado"
 
@@ -452,7 +452,7 @@ msgstr "Elija el archivo WAV del sonido de captura (ruta completa)."
 msgid "O novo idioma vale depois que o AnyCapture e o Editor reiniciarem. Reiniciar agora?"
 msgstr "El nuevo idioma se aplicará cuando AnyCapture y el Editor se reinicien. ¿Reiniciar ahora?"
 
-#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:108 rust/anycapture/src/window.rs:557 rust/snapedit/src/app/extras.rs:793
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:108 rust/anycapture/src/window.rs:576 rust/snapedit/src/app/extras.rs:793
 msgid "Formato"
 msgstr "Formato"
 
@@ -516,7 +516,7 @@ msgstr "Arriba (Y)"
 msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
 msgstr "Sin posición fija, arrastras el rectángulo hasta su lugar al capturar."
 
-#: rust/anycapture/src/dialogs.rs:559 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:353
+#: rust/anycapture/src/dialogs.rs:559 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:372
 msgid "Região fixa"
 msgstr "Región fija"
 
@@ -876,7 +876,7 @@ msgstr "Degradado"
 msgid "Papel de parede"
 msgstr "Fondo de escritorio"
 
-#: rust/anycapture/src/dialogs.rs:685 rust/anycapture/src/share.rs:53 rust/anycapture/src/window.rs:285 rust/snapedit/src/panels.rs:399
+#: rust/anycapture/src/dialogs.rs:685 rust/anycapture/src/share.rs:53 rust/anycapture/src/window.rs:304 rust/snapedit/src/panels.rs:399
 msgid "Imagem"
 msgstr "Imagen"
 
@@ -997,11 +997,11 @@ msgstr "Cerrar"
 msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
 msgstr "Imágenes y documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento de AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos los archivos (*.*)|*.*|"
 
-#: rust/anycapture/src/hotkeys.rs:48 rust/snapedit/src/app/extras.rs:1086
+#: rust/anycapture/src/hotkeys.rs:51 rust/snapedit/src/app/extras.rs:1086
 msgid "(nenhum)"
 msgstr "(ninguno)"
 
-#: rust/anycapture/src/hotkeys.rs:57 rust/anycapture/src/hotkeys.rs:261 rust/anycapture/tests/window.rs:34
+#: rust/anycapture/src/hotkeys.rs:60 rust/anycapture/src/hotkeys.rs:298 rust/anycapture/tests/window.rs:40
 msgid "Print Screen"
 msgstr "Impr Pant"
 
@@ -1097,7 +1097,7 @@ msgstr "Intervalo (segundos)"
 msgid "Duração (minutos, 0 = até parar)"
 msgstr "Duración (minutos, 0 = hasta detener)"
 
-#: rust/anycapture/src/interval.rs:111 rust/anycapture/src/window.rs:822 rust/anycapture/src/window.rs:827
+#: rust/anycapture/src/interval.rs:111 rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:844 rust/anycapture/src/window.rs:849
 msgid "Capturar o cursor"
 msgstr "Capturar el cursor"
 
@@ -1169,7 +1169,7 @@ msgstr "El atajo del ajuste \"%s\" ya lo usa otra acción."
 msgid "Abrir a janela de captura"
 msgstr "Abrir la ventana de captura"
 
-#: rust/anycapture/src/main.rs:543 rust/anycapture/src/window.rs:194
+#: rust/anycapture/src/main.rs:543 rust/anycapture/src/window.rs:213
 msgid "Abrir o Editor"
 msgstr "Abrir el Editor"
 
@@ -1181,7 +1181,7 @@ msgstr "Salir"
 msgid "Ler código QR"
 msgstr "Leer código QR"
 
-#: rust/anycapture/src/main.rs:545 rust/anycapture/src/window.rs:234
+#: rust/anycapture/src/main.rs:545 rust/anycapture/src/window.rs:253
 msgid "Mostrar o One Click"
 msgstr "Mostrar One Click"
 
@@ -1194,7 +1194,7 @@ msgstr "Imágenes fijadas (%zu)"
 msgid "Imagens fixadas"
 msgstr "Imágenes fijadas"
 
-#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:230
+#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:249
 msgid "Gravar só o áudio"
 msgstr "Grabar solo el audio"
 
@@ -1203,7 +1203,7 @@ msgstr "Grabar solo el audio"
 msgid "Parar a captura por intervalo (%d)"
 msgstr "Detener la captura por intervalo (%d)"
 
-#: rust/anycapture/src/main.rs:552 rust/anycapture/src/window.rs:228
+#: rust/anycapture/src/main.rs:552 rust/anycapture/src/window.rs:247
 msgid "Captura por intervalo…"
 msgstr "Captura por intervalo…"
 
@@ -1211,7 +1211,7 @@ msgstr "Captura por intervalo…"
 msgid "Abrir o Editor depois da captura"
 msgstr "Abrir el Editor después de capturar"
 
-#: rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:207
+#: rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:226
 msgid "Opções…"
 msgstr "Opciones…"
 
@@ -1245,11 +1245,11 @@ msgstr "No se pudo fijar: "
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s no está instalado en este equipo (o es la versión de Microsoft Store, sin automatización)."
 
-#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:214
+#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:233
 msgid "Fixar um arquivo…"
 msgstr "Fijar un archivo…"
 
-#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:212
+#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:231
 msgid "Capturar e fixar"
 msgstr "Capturar y fijar"
 
@@ -1261,7 +1261,7 @@ msgstr "Mostrar todas"
 msgid "Ocultar todas"
 msgstr "Ocultar todas"
 
-#: rust/anycapture/src/main.rs:881 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:215
+#: rust/anycapture/src/main.rs:881 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:234
 msgid "Fechar todas"
 msgstr "Cerrar todas"
 
@@ -1289,7 +1289,7 @@ msgstr " — captura de pantalla y grabación de vídeo"
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "Software libre bajo la Licencia Pública General GNU versión 3."
 
-#: rust/anycapture/src/main.rs:972 rust/anycapture/src/window.rs:245
+#: rust/anycapture/src/main.rs:972 rust/anycapture/src/window.rs:264
 msgid "Sobre o AnyCapture"
 msgstr "Acerca de AnyCapture"
 
@@ -1439,7 +1439,7 @@ msgstr "Blanco"
 msgid "Copiado para a área de transferência."
 msgstr "Copiado al portapapeles."
 
-#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:286
+#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:305
 msgid "Vídeo"
 msgstr "Vídeo"
 
@@ -1475,7 +1475,7 @@ msgstr "Guardar como…"
 msgid "Anotar no Editor"
 msgstr "Anotar en el Editor"
 
-#: rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:227 rust/snapedit/src/tray.rs:324
+#: rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:246 rust/snapedit/src/tray.rs:324
 msgid "Fixar na tela"
 msgstr "Fijar en la pantalla"
 
@@ -1545,7 +1545,7 @@ msgstr "Grabación: "
 msgid "ok"
 msgstr "ok"
 
-#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:577 rust/snapui/src/form.rs:461
+#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:577 rust/snapui/src/form.rs:476
 msgid "OK"
 msgstr "Aceptar"
 
@@ -1662,7 +1662,7 @@ msgstr "No se pudo descargar la actualización."
 msgid "O instalador não foi iniciado. Você pode instalar a nova versão pela página da versão no GitHub."
 msgstr "El instalador no se inició. Puedes instalar la nueva versión desde la página de la versión en GitHub."
 
-#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:420 rust/anycapture/src/window.rs:430
+#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:439 rust/anycapture/src/window.rs:449
 msgid "Nenhum"
 msgstr "Ninguno"
 
@@ -1682,249 +1682,249 @@ msgstr "Texto (OCR)"
 msgid "Upload (copiar o link)"
 msgstr "Subir (copiar el enlace)"
 
-#: rust/anycapture/src/window.rs:195
+#: rust/anycapture/src/window.rs:214
 msgid "Abrir a pasta da biblioteca"
 msgstr "Abrir la carpeta de la biblioteca"
 
-#: rust/anycapture/src/window.rs:196
+#: rust/anycapture/src/window.rs:215
 msgid "Abrir a pasta de logs"
 msgstr "Abrir la carpeta de registros"
 
-#: rust/anycapture/src/window.rs:198
+#: rust/anycapture/src/window.rs:217
 msgid "Importar presets…"
 msgstr "Importar ajustes predefinidos…"
 
-#: rust/anycapture/src/window.rs:199
+#: rust/anycapture/src/window.rs:218
 msgid "Exportar presets…"
 msgstr "Exportar ajustes predefinidos…"
 
-#: rust/anycapture/src/window.rs:201
+#: rust/anycapture/src/window.rs:220
 msgid "Exportar todas as configurações…"
 msgstr "Exportar toda la configuración…"
 
-#: rust/anycapture/src/window.rs:202
+#: rust/anycapture/src/window.rs:221
 msgid "Importar todas as configurações…"
 msgstr "Importar toda la configuración…"
 
-#: rust/anycapture/src/window.rs:203
+#: rust/anycapture/src/window.rs:222
 msgid "Abrir a pasta de backups"
 msgstr "Abrir la carpeta de copias de seguridad"
 
-#: rust/anycapture/src/window.rs:205
+#: rust/anycapture/src/window.rs:224
 msgid "Configurar o upload…"
 msgstr "Configurar la subida…"
 
-#: rust/anycapture/src/window.rs:206
+#: rust/anycapture/src/window.rs:225
 msgid "Limpar a biblioteca agora"
 msgstr "Limpiar la biblioteca ahora"
 
-#: rust/anycapture/src/window.rs:209
+#: rust/anycapture/src/window.rs:228
 msgid "Sair do AnyCapture"
 msgstr "Salir de AnyCapture"
 
-#: rust/anycapture/src/window.rs:220
+#: rust/anycapture/src/window.rs:239
 msgid "Repetir a última captura"
 msgstr "Repetir la última captura"
 
-#: rust/anycapture/src/window.rs:222 rust/snapedit/src/app/docs.rs:348
+#: rust/anycapture/src/window.rs:241 rust/snapedit/src/app/docs.rs:348
 msgid "Da área de transferência"
 msgstr "Desde el portapapeles"
 
-#: rust/anycapture/src/window.rs:223
+#: rust/anycapture/src/window.rs:242
 msgid "De um arquivo gráfico…"
 msgstr "Desde un archivo de imagen…"
 
-#: rust/anycapture/src/window.rs:231
+#: rust/anycapture/src/window.rs:250
 msgid "Abrir a pasta dos áudios"
 msgstr "Abrir la carpeta de audios"
 
-#: rust/anycapture/src/window.rs:235
+#: rust/anycapture/src/window.rs:254
 msgid "Lista de presets"
 msgstr "Lista de ajustes predefinidos"
 
-#: rust/anycapture/src/window.rs:238
+#: rust/anycapture/src/window.rs:257
 msgid "Manual do AnyCapture"
 msgstr "Manual de AnyCapture"
 
-#: rust/anycapture/src/window.rs:239
+#: rust/anycapture/src/window.rs:258
 msgid "Como usar os presets"
 msgstr "Cómo usar los ajustes predefinidos"
 
-#: rust/anycapture/src/window.rs:241
+#: rust/anycapture/src/window.rs:260
 msgid "Verificar atualizações…"
 msgstr "Buscar actualizaciones…"
 
-#: rust/anycapture/src/window.rs:242
+#: rust/anycapture/src/window.rs:261
 msgid "Relatar um problema…"
 msgstr "Informar de un problema…"
 
-#: rust/anycapture/src/window.rs:243
+#: rust/anycapture/src/window.rs:262
 msgid "Enviar sugestão ou feedback…"
 msgstr "Enviar sugerencia o comentarios…"
 
-#: rust/anycapture/src/window.rs:247 rust/snapedit/src/menu.rs:239
+#: rust/anycapture/src/window.rs:266 rust/snapedit/src/menu.rs:239
 msgid "&Arquivo"
 msgstr "&Archivo"
 
-#: rust/anycapture/src/window.rs:247
+#: rust/anycapture/src/window.rs:266
 msgid "&Captura"
 msgstr "&Captura"
 
-#: rust/anycapture/src/window.rs:247 rust/snapedit/src/menu.rs:243
+#: rust/anycapture/src/window.rs:266 rust/snapedit/src/menu.rs:243
 msgid "E&xibir"
 msgstr "&Ver"
 
-#: rust/anycapture/src/window.rs:247 rust/snapedit/src/menu.rs:244
+#: rust/anycapture/src/window.rs:266 rust/snapedit/src/menu.rs:244
 msgid "A&juda"
 msgstr "Ay&uda"
 
-#: rust/anycapture/src/window.rs:351
+#: rust/anycapture/src/window.rs:370 rust/anycapture/src/window.rs:201
 msgid "Seleção:"
 msgstr "Selección:"
 
-#: rust/anycapture/src/window.rs:369 rust/anycapture/src/window.rs:684
+#: rust/anycapture/src/window.rs:388 rust/anycapture/src/window.rs:703
 msgid "Configurações"
 msgstr "Configuración"
 
-#: rust/anycapture/src/window.rs:374
+#: rust/anycapture/src/window.rs:393
 msgid "Selecionar a região na captura"
 msgstr "Seleccionar la región al capturar"
 
-#: rust/anycapture/src/window.rs:376
+#: rust/anycapture/src/window.rs:395
 msgid "Região fixa…"
 msgstr "Región fija…"
 
-#: rust/anycapture/src/window.rs:385
+#: rust/anycapture/src/window.rs:404
 msgid "Cada janela como um objeto separado"
 msgstr "Cada ventana como un objeto separado"
 
-#: rust/anycapture/src/window.rs:388
+#: rust/anycapture/src/window.rs:407
 msgid "Guardar os links da página (clicáveis, também no PDF)"
 msgstr "Conservar los enlaces de la página (clicables, también en PDF)"
 
-#: rust/anycapture/src/window.rs:414
+#: rust/anycapture/src/window.rs:433 rust/anycapture/src/window.rs:201
 msgid "Efeitos:"
 msgstr "Efectos:"
 
-#: rust/anycapture/src/window.rs:435
+#: rust/anycapture/src/window.rs:454
 msgid "Adicionar outro efeito"
 msgstr "Añadir otro efecto"
 
-#: rust/anycapture/src/window.rs:436
+#: rust/anycapture/src/window.rs:455
 msgid "Remover este efeito"
 msgstr "Quitar este efecto"
 
-#: rust/anycapture/src/window.rs:477
+#: rust/anycapture/src/window.rs:496 rust/anycapture/src/window.rs:201
 msgid "Compartilhar:"
 msgstr "Compartir:"
 
-#: rust/anycapture/src/window.rs:500
+#: rust/anycapture/src/window.rs:519 rust/anycapture/src/window.rs:201
 msgid "Qualidade:"
 msgstr "Calidad:"
 
-#: rust/anycapture/src/window.rs:501
+#: rust/anycapture/src/window.rs:520
 msgid "Muito baixa"
 msgstr "Muy baja"
 
-#: rust/anycapture/src/window.rs:501 rust/snapedit/src/effects.rs:126
+#: rust/anycapture/src/window.rs:520 rust/snapedit/src/effects.rs:126
 msgid "Baixa"
 msgstr "Baja"
 
-#: rust/anycapture/src/window.rs:501 rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126
+#: rust/anycapture/src/window.rs:520 rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126
 msgid "Média"
 msgstr "Media"
 
-#: rust/anycapture/src/window.rs:501 rust/snapedit/src/effects.rs:126
+#: rust/anycapture/src/window.rs:520 rust/snapedit/src/effects.rs:126
 msgid "Alta"
 msgstr "Alta"
 
-#: rust/anycapture/src/window.rs:532
+#: rust/anycapture/src/window.rs:551 rust/anycapture/src/window.rs:201
 msgid "Webcam:"
 msgstr "Cámara web:"
 
-#: rust/anycapture/src/window.rs:533
+#: rust/anycapture/src/window.rs:552
 msgid "Ligada"
 msgstr "Activada"
 
-#: rust/anycapture/src/window.rs:533 rust/anycapture/src/window.rs:544
+#: rust/anycapture/src/window.rs:552 rust/anycapture/src/window.rs:563
 msgid "Desligada"
 msgstr "Desactivada"
 
-#: rust/anycapture/src/window.rs:546
+#: rust/anycapture/src/window.rs:565
 msgid "Nenhuma webcam encontrada"
 msgstr "No se encontró ninguna cámara web"
 
-#: rust/anycapture/src/window.rs:560
+#: rust/anycapture/src/window.rs:579
 msgid "Remover o fundo (chroma key)…"
 msgstr "Quitar el fondo (chroma key)…"
 
-#: rust/anycapture/src/window.rs:595
+#: rust/anycapture/src/window.rs:614
 #, c-format
 msgid "%d s"
 msgstr "%d s"
 
-#: rust/anycapture/src/window.rs:599
+#: rust/anycapture/src/window.rs:618
 msgid "Atraso"
 msgstr "Retraso"
 
-#: rust/anycapture/src/window.rs:607
+#: rust/anycapture/src/window.rs:626
 msgid "1 segundo"
 msgstr "1 segundo"
 
-#: rust/anycapture/src/window.rs:608
+#: rust/anycapture/src/window.rs:627
 #, c-format
 msgid "%d segundos"
 msgstr "%d segundos"
 
-#: rust/anycapture/src/window.rs:623 rust/snapedit/src/panels.rs:244
+#: rust/anycapture/src/window.rs:642 rust/snapedit/src/panels.rs:244
 msgid "Gravar"
 msgstr "Grabar"
 
-#: rust/anycapture/src/window.rs:623 rust/snapedit/src/panels.rs:243
+#: rust/anycapture/src/window.rs:642 rust/snapedit/src/panels.rs:243
 msgid "Capturar"
 msgstr "Capturar"
 
-#: rust/anycapture/src/window.rs:647
+#: rust/anycapture/src/window.rs:666
 msgid "Gravar vídeo  ("
 msgstr "Grabar vídeo  ("
 
-#: rust/anycapture/src/window.rs:647
+#: rust/anycapture/src/window.rs:666
 msgid "Capturar imagem  ("
 msgstr "Capturar imagen  ("
 
-#: rust/anycapture/src/window.rs:657
+#: rust/anycapture/src/window.rs:676
 msgid "Adicionar atalho"
 msgstr "Añadir atajo"
 
-#: rust/anycapture/src/window.rs:729
+#: rust/anycapture/src/window.rs:748
 msgid "Capturar com este preset"
 msgstr "Capturar con este ajuste"
 
-#: rust/anycapture/src/window.rs:731
+#: rust/anycapture/src/window.rs:750
 msgid "Renomear…"
 msgstr "Cambiar nombre…"
 
-#: rust/anycapture/src/window.rs:732
+#: rust/anycapture/src/window.rs:751
 msgid "Atalho…"
 msgstr "Atajo…"
 
-#: rust/anycapture/src/window.rs:733 rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591
+#: rust/anycapture/src/window.rs:752 rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591
 msgid "Duplicar"
 msgstr "Duplicar"
 
-#: rust/anycapture/src/window.rs:735 rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618
+#: rust/anycapture/src/window.rs:754 rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618
 msgid "Excluir"
 msgstr "Eliminar"
 
-#: rust/anycapture/src/window.rs:774 rust/anycapture/tests/window.rs:166
+#: rust/anycapture/src/window.rs:793 rust/anycapture/tests/window.rs:172
 msgid "Novo preset…"
 msgstr "Nuevo ajuste…"
 
-#: rust/anycapture/src/window.rs:776 rust/snapedit/src/props.rs:860
+#: rust/anycapture/src/window.rs:795 rust/snapedit/src/props.rs:860
 msgid "Ajuda"
 msgstr "Ayuda"
 
-#: rust/anycapture/src/window.rs:786
+#: rust/anycapture/src/window.rs:805
 msgid "Abrir Editor"
 msgstr "Abrir Editor"
 
@@ -1976,21 +1976,21 @@ msgstr "Resolución de la imagen"
 msgid "Embelezar (fundo, margem e sombra)"
 msgstr "Embellecer (fondo, margen y sombra)"
 
-#: rust/anycapture/src/window.rs:820
+#: rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:842
 msgid "Visualizar no Editor"
 msgstr "Ver en el Editor"
 
-#: rust/anycapture/src/window.rs:823
+#: rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:848
+msgid "Copiar para a área de transferência"
+msgstr "Copiar al portapapeles"
+
+#: rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:845
 msgid "Gravar microfone"
 msgstr "Grabar micrófono"
 
-#: rust/anycapture/src/window.rs:824
+#: rust/anycapture/src/window.rs:198 rust/anycapture/src/window.rs:846
 msgid "Gravar áudio do sistema"
 msgstr "Grabar audio del sistema"
-
-#: rust/anycapture/src/window.rs:826
-msgid "Copiar para a área de transferência"
-msgstr "Copiar al portapapeles"
 
 #: rust/anycapture/src/engine/scroll.rs:159
 msgid "A janela será ampliada além da tela, capturada e restaurada."
@@ -2165,6 +2165,10 @@ msgstr "Audio"
 #: rust/snapcore/src/library.rs:559 rust/snapcore/src/library.rs:563 rust/snapcore/src/presets.rs:56 rust/snapedit/tests/golden.rs:1371
 msgid "Região"
 msgstr "Región"
+
+#: rust/snapcore/src/library.rs:559 rust/snapui/src/feedback.rs:37
+msgid "Título"
+msgstr "Título"
 
 #: rust/snapcore/src/net.rs:829 rust/snapcore/src/settings.rs:291 rust/snapedit/src/stamp_data.rs:12
 msgid "ab"
@@ -5991,23 +5995,23 @@ msgstr "Eliminar %zu elementos (Papelera)\tDel"
 msgid "Excluir (Lixeira)\tDel"
 msgstr "Eliminar (Papelera)\tDel"
 
-#: rust/snapedit/src/tray.rs:393 rust/snapedit/src/app/mod.rs:412
+#: rust/snapedit/src/tray.rs:400 rust/snapedit/src/app/mod.rs:412
 msgid "Capturas recentes"
 msgstr "Capturas recientes"
 
-#: rust/snapedit/src/tray.rs:394
+#: rust/snapedit/src/tray.rs:401
 msgid "Biblioteca…"
 msgstr "Biblioteca…"
 
-#: rust/snapedit/src/tray.rs:400
+#: rust/snapedit/src/tray.rs:407
 msgid "Biblioteca"
 msgstr "Biblioteca"
 
-#: rust/snapedit/src/tray.rs:403
+#: rust/snapedit/src/tray.rs:410
 msgid "Pesquisar"
 msgstr "Buscar"
 
-#: rust/snapedit/src/tray.rs:408
+#: rust/snapedit/src/tray.rs:415
 msgid "Voltar à imagem"
 msgstr "Volver a la imagen"
 
@@ -6043,7 +6047,7 @@ msgstr "Imagen entera copiada al portapapeles."
 msgid "Imagens e capturas"
 msgstr "Imágenes y capturas"
 
-#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1054 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
+#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1052 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
 msgid "Copiado."
 msgstr "Copiado."
 
@@ -6276,7 +6280,7 @@ msgstr "Cambiar &nombre…"
 msgid "Renomear captura"
 msgstr "Cambiar el nombre de la captura"
 
-#: rust/snapedit/src/app/commands.rs:1054
+#: rust/snapedit/src/app/commands.rs:1052
 #, c-format
 msgid "%zu itens copiados."
 msgstr "%zu elementos copiados."
@@ -7414,6 +7418,66 @@ msgstr "Error al escribir el archivo."
 #: rust/snapedit/tests/golden.rs:596
 msgid "Falha ao codificar a imagem."
 msgstr "Error al codificar la imagen."
+
+#: rust/snapui/src/feedback.rs:33
+msgid "Descreva o problema. Ele é enviado ao projeto AnyCapture no GitHub como um novo relato (bug)."
+msgstr "Describa el problema. Se envía al proyecto AnyCapture en GitHub como un nuevo informe (bug)."
+
+#: rust/snapui/src/feedback.rs:35
+msgid "Conte sua ideia ou o que acha do AnyCapture. Ela é enviada ao projeto AnyCapture no GitHub como uma sugestão."
+msgstr "Cuéntenos su idea o qué piensa de AnyCapture. Se envía al proyecto AnyCapture en GitHub como una sugerencia."
+
+#: rust/snapui/src/feedback.rs:38
+msgid "O que aconteceu?"
+msgstr "¿Qué pasó?"
+
+#: rust/snapui/src/feedback.rs:38
+msgid "Sua sugestão ou feedback"
+msgstr "Su sugerencia o comentario"
+
+#: rust/snapui/src/feedback.rs:40
+msgid "Passos para reproduzir (opcional)"
+msgstr "Pasos para reproducirlo (opcional)"
+
+#: rust/snapui/src/feedback.rs:40
+msgid "Por que ajudaria? (opcional)"
+msgstr "¿Por qué ayudaría? (opcional)"
+
+#: rust/snapui/src/feedback.rs:44
+msgid "Incluir a versão do Windows e o idioma"
+msgstr "Incluir la versión de Windows y el idioma"
+
+#: rust/snapui/src/feedback.rs:49
+msgid "Preencha o título e a descrição."
+msgstr "Complete el título y la descripción."
+
+#: rust/snapui/src/feedback.rs:54
+msgid "Relatar um problema"
+msgstr "Informar de un problema"
+
+#: rust/snapui/src/feedback.rs:54
+msgid "Enviar sugestão ou feedback"
+msgstr "Enviar sugerencia o comentarios"
+
+#: rust/snapui/src/feedback.rs:68
+msgid "Obrigado! Seu relato foi enviado ao projeto AnyCapture no GitHub:"
+msgstr "¡Gracias! Su informe se envió al proyecto AnyCapture en GitHub:"
+
+#: rust/snapui/src/feedback.rs:69
+msgid "Obrigado! Sua sugestão foi enviada ao projeto AnyCapture no GitHub:"
+msgstr "¡Gracias! Su sugerencia se envió al proyecto AnyCapture en GitHub:"
+
+#: rust/snapui/src/feedback.rs:71
+msgid "Abrir no navegador?"
+msgstr "¿Abrir en el navegador?"
+
+#: rust/snapui/src/feedback.rs:76
+msgid "O GitHub abriu no navegador com tudo já preenchido. Entre na sua conta do GitHub se for pedido, revise e clique em \"Create\" para enviar."
+msgstr "GitHub se abrió en el navegador con todo ya completado. Inicie sesión en GitHub si se le pide, revíselo y haga clic en \"Create\" para enviarlo."
+
+#: rust/snapui/src/feedback.rs:80
+msgid "Não foi possível enviar nem abrir o navegador. Envie pelo endereço:"
+msgstr "No se pudo enviar ni abrir el navegador. Envíelo en esta dirección:"
 
 #: rust/snapui/src/qr.rs:27
 msgid "Nenhum código QR ou de barras encontrado na imagem."

@@ -1,7 +1,9 @@
 //! The global hotkeys (Hotkeys.cpp, comp_7 §4.2) and their fallback keyboard hook (CSnagItKeybHook, §4.3). A key
 //! another program (or Windows) already owns is served by a WH_KEYBOARD_LL hook, which posts the same WM_HOTKEY to the
-//! capture window and swallows the key; so is plain Print Screen when Windows 11 opens the Snipping Tool with it
-//! (RegisterHotKey succeeds there, but the shell takes the key first).
+//! capture window and swallows the key. Print Screen always goes through the hook too: Windows 11 opens the Snipping
+//! Tool with it (RegisterHotKey succeeds there, but the shell takes the key first), and OneDrive, Dropbox or another
+//! capture tool may own it. The hook runs on a thread of its own: Windows silently removes a low-level hook that does
+//! not answer in time, which the window's thread could not promise while it draws or captures.
 
 use std::collections::BTreeMap;
 use std::sync::Mutex;
@@ -10,14 +12,15 @@ use snapcore::log;
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::System::Diagnostics::Debug::IsDebuggerPresent;
 use windows::Win32::System::Registry::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, RRF_RT_REG_DWORD, RRF_RT_REG_SZ, RegGetValueW};
+use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetAsyncKeyState, GetKeyNameTextW, MAPVK_VK_TO_VSC, MOD_ALT, MOD_CONTROL, MOD_NOREPEAT, MOD_SHIFT, MOD_WIN,
     MapVirtualKeyW, RegisterHotKey, UnregisterHotKey, VK_CONTROL, VK_DELETE, VK_DOWN, VK_END, VK_HOME, VK_INSERT, VK_LEFT,
     VK_LWIN, VK_MENU, VK_NEXT, VK_PRIOR, VK_RIGHT, VK_RWIN, VK_SHIFT, VK_SNAPSHOT, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    CallNextHookEx, HC_ACTION, HHOOK, KBDLLHOOKSTRUCT, PostMessageW, SetWindowsHookExW, UnhookWindowsHookEx, WH_KEYBOARD_LL,
-    WM_HOTKEY, WM_KEYDOWN, WM_SYSKEYDOWN,
+    CallNextHookEx, GetMessageW, HC_ACTION, KBDLLHOOKSTRUCT, MSG, PostMessageW, PostThreadMessageW, SetWindowsHookExW,
+    UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_HOTKEY, WM_KEYDOWN, WM_QUIT, WM_SYSKEYDOWN,
 };
 use windows::core::w;
 
@@ -100,7 +103,7 @@ pub enum Result {
     HookedFallback,
 }
 
-/// The ids the hook serves, read by the hook procedure (it runs on this thread, but outside the app).
+/// The ids the hook serves, read by the hook procedure (on the hook's own thread).
 struct Hooked {
     hwnd: isize,
     keys: Vec<(i32, u32, u32)>,
@@ -139,18 +142,50 @@ unsafe extern "system" fn low_level_proc(code: i32, w: WPARAM, l: LPARAM) -> LRE
     unsafe { CallNextHookEx(None, code, w, l) }
 }
 
+/// Starts the thread that installs the hook and pumps the messages it needs (a low-level hook is called on the thread
+/// that installed it, inside its message loop); its id, to end it, or None if the hook could not be installed.
+fn start_hook_thread() -> Option<u32> {
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::Builder::new()
+        .name("hotkey hook".into())
+        .spawn(move || unsafe {
+            let Ok(hook) = SetWindowsHookExW(WH_KEYBOARD_LL, Some(low_level_proc), None, 0) else {
+                let _ = tx.send(None);
+                return;
+            };
+            let _ = tx.send(Some(GetCurrentThreadId()));
+            let mut msg = MSG::default();
+            while GetMessageW(&mut msg, None, 0, 0).as_bool() {}
+            let _ = UnhookWindowsHookEx(hook);
+        })
+        .ok()?;
+    let tid = rx.recv().ok().flatten();
+    if tid.is_none() {
+        log::write("Hotkeys: the keyboard hook could not be installed");
+    }
+    tid
+}
+
+/// Ends the hook's thread: WM_QUIT ends its message loop, and it removes the hook.
+fn stop_hook_thread(tid: u32) {
+    unsafe {
+        let _ = PostThreadMessageW(tid, WM_QUIT, WPARAM(0), LPARAM(0));
+    }
+}
+
 pub struct Manager {
     hwnd: isize,
     /// id → accepted (mods, vk)
     map: BTreeMap<i32, (u32, u32)>,
     /// ids served by the hook
     hooked: BTreeMap<i32, (u32, u32)>,
-    hook: Option<HHOOK>,
+    /// the thread that owns the hook, while there is one
+    hook_thread: Option<u32>,
 }
 
 impl Manager {
     pub fn new(hwnd: isize) -> Manager {
-        Manager { hwnd, map: BTreeMap::new(), hooked: BTreeMap::new(), hook: None }
+        Manager { hwnd, map: BTreeMap::new(), hooked: BTreeMap::new(), hook_thread: None }
     }
 
     fn h(&self) -> Option<HWND> {
@@ -184,12 +219,15 @@ impl Manager {
             self.map.remove(&id);
             self.hooked.remove(&id);
         }
-        if vk == VK_SNAPSHOT.0 as u32 && mods == 0 && windows_owns_print_screen() {
-            log::write(&format!("Hotkey {}: Windows opens the Snipping Tool with this key — using the keyboard hook",
-                                to_text(mods, vk)));
+        let ok = unsafe { RegisterHotKey(self.h(), id, windows::Win32::UI::Input::KeyboardAndMouse::HOT_KEY_MODIFIERS(mods | MOD_NOREPEAT.0), vk) };
+        if vk == VK_SNAPSHOT.0 as u32 {
+            // the hook takes the key first (it consumes it, so the registered key never fires twice); the registered key
+            // still works where the hook cannot see the keyboard (an elevated program in front)
+            let why = if mods == 0 && windows_owns_print_screen() { "Windows opens the Snipping Tool with it" } else { "other programs want it too" };
+            log::write(&format!("Hotkey {}: {why} — using the keyboard hook (RegisterHotKey {})", to_text(mods, vk),
+                                if ok.is_ok() { "also succeeded" } else { "failed" }));
             return self.hook_it(id, mods, vk);
         }
-        let ok = unsafe { RegisterHotKey(self.h(), id, windows::Win32::UI::Input::KeyboardAndMouse::HOT_KEY_MODIFIERS(mods | MOD_NOREPEAT.0), vk) };
         match ok {
             Ok(()) => {
                 self.map.insert(id, (mods, vk));
@@ -229,17 +267,16 @@ impl Manager {
             h.hwnd = self.hwnd;
             h.keys = self.hooked.iter().map(|(&id, &(m, v))| (id, m, v)).collect();
         }
-        if !self.hooked.is_empty() && self.hook.is_none() {
+        if !self.hooked.is_empty() && self.hook_thread.is_none() {
             if unsafe { IsDebuggerPresent() }.as_bool() {
-                return; // like the original: not under a debugger
+                log::write("Hotkeys: no keyboard hook under a debugger (it would freeze the keyboard at a breakpoint)");
+                return;
             }
-            self.hook = unsafe { SetWindowsHookExW(WH_KEYBOARD_LL, Some(low_level_proc), None, 0) }.ok();
+            self.hook_thread = start_hook_thread();
         } else if self.hooked.is_empty()
-            && let Some(h) = self.hook.take()
+            && let Some(tid) = self.hook_thread.take()
         {
-            unsafe {
-                let _ = UnhookWindowsHookEx(h);
-            }
+            stop_hook_thread(tid);
         }
     }
 }

@@ -43,8 +43,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   *Update now* downloads the installer, checks its size and SHA-256 against the release, closes both programs,
   installs over this copy and starts them again; *Skip this version* silences the reminder at start. Only full
   releases are offered, not pre-releases.
-- **Report a problem and send feedback:** *Help › Report a problem…* and *Help › Send a suggestion or feedback…* open
-  a GitHub issue form with the AnyCapture and Windows versions already filled in.
+- **Report a problem and send feedback:** *Help › Report a problem…* and *Help › Send a suggestion or feedback…*, in
+  both programs, open a form (title, description, steps or reason, and optionally the Windows version and language).
+  *Send* files it as an issue on the AnyCapture project on GitHub, labeled `bug` or `enhancement`: at once when the
+  GitHub CLI (`gh`) is signed in on the computer, otherwise GitHub's issue form opens in the browser with everything
+  filled in, ready for *Create*.
 - **Export as ZIP:** exporting library items or recent captures can put them all into one `.zip`, in the chosen image
   format.
 - **Recent captures work like File Explorer:** Shift+click selects a range, a rectangle dragged from the empty part
@@ -64,6 +67,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - *Save as* in the Editor (Ctrl+Shift+S) opens in the folder used the last time, instead of the capture folder (#5).
 - Print Screen can be typed into a hotkey box (Options and preset hotkeys), alone or with Shift, Ctrl or Alt. Windows
   sends no key press for it, and the Snipping Tool or a AnyCapture capture could take it first (#6).
+- Print Screen captures reliably as the image hotkey: the keyboard hook that takes it before the Snipping Tool,
+  OneDrive or another capture tool runs on a thread of its own, so Windows no longer drops it when the capture window
+  is busy, and the key is also registered the usual way for when an elevated program is in front.
+- The capture window is more compact: no empty band under the fields, and the switches and the capture button sit
+  right after the fields, the window only as wide as they need in the interface language.
 - With *Only copy to the clipboard*, the notification after a capture shows a miniature of it, and a click on the
   notification opens the capture in the Editor (#7).
 - The Editor's drawing tools are centered on the toolbar, and *Recent captures* is no longer cut off at the bottom when
