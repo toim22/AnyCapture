@@ -1,5 +1,6 @@
 //! Where AnyCapture lives on GitHub: the issues sent from Help › Report a problem and Send a suggestion or feedback
-//! (created with the GitHub CLI when it is signed in, otherwise GitHub's issue form opens in the browser filled in),
+//! (posted to the issue relay, services/issue-relay, which needs no GitHub account; GitHub's form in the browser
+//! when the relay cannot be reached),
 //! and the releases the update check reads (`update.rs`).
 
 use crate::net::url_encode;
@@ -69,6 +70,14 @@ impl IssueKind {
             IssueKind::Idea => "feedback.yml",
         }
     }
+
+    /// the report's kind for the relay
+    fn relay_kind(self) -> &'static str {
+        match self {
+            IssueKind::Bug => "bug",
+            IssueKind::Idea => "idea",
+        }
+    }
 }
 
 /// What the form of Help › Report a problem / Send a suggestion collects.
@@ -91,7 +100,7 @@ pub fn system_info() -> String {
     format!("{}, {}", windows_version(), crate::i18n::current())
 }
 
-/// At most `max` bytes of `s`, cut on a character boundary.
+/// At most `max` bytes of `s`, cut on a character boundary (so also at most `max` UTF-16 units, as the relay counts).
 fn clip(s: &str, max: usize) -> &str {
     if s.len() <= max {
         return s;
@@ -103,27 +112,9 @@ fn clip(s: &str, max: usize) -> &str {
     &s[..n]
 }
 
-/// The issue's text in GitHub Markdown, with the headings of the issue form (the same issue whichever way it is sent).
-pub fn issue_body(kind: IssueKind, i: &Issue) -> String {
-    let bug = kind == IssueKind::Bug;
-    let mut b = String::new();
-    let mut section = |title: &str, text: &str| {
-        if !text.trim().is_empty() {
-            b += &format!("### {title}\n\n{}\n\n", text.trim());
-        }
-    };
-    section(if bug { "What happened?" } else { "Your suggestion or feedback" }, &i.text);
-    section(if bug { "Steps to reproduce" } else { "Why would it help?" }, &i.more);
-    section("AnyCapture version", &i.app_version);
-    if i.system {
-        section("Windows version", &system_info());
-    }
-    let menu = if bug { "Help › Report a problem" } else { "Help › Send a suggestion or feedback" };
-    b + &format!("_Sent from {} ({menu})._\n", i.program)
-}
-
 /// GitHub's "New issue" page with the issue form filled in (the field ids of .github/ISSUE_TEMPLATE); long texts are
-/// cut so the address stays under the length browsers and GitHub accept.
+/// cut so the address stays under the length browsers and GitHub accept. It needs a GitHub account: the way out when
+/// the relay cannot be reached.
 pub fn new_issue_url(kind: IssueKind, i: &Issue) -> String {
     let (text_id, more_id) = if kind == IssueKind::Bug { ("what", "steps") } else { ("idea", "why") };
     let mut u = format!("{}/issues/new?template={}&title={}&{text_id}={}&{more_id}={}&version={}", home(), kind.template(),
@@ -135,41 +126,66 @@ pub fn new_issue_url(kind: IssueKind, i: &Issue) -> String {
     u
 }
 
+/// The relay that files the issues for people without a GitHub account: services/issue-relay, a Cloudflare Worker
+/// that creates them as the AnyCapture Reports GitHub App. Empty until it is deployed (then the browser form is
+/// used); the environment variable ANYCAPTURE_ISSUE_RELAY points elsewhere (a local `cf dev`, a test).
+pub const RELAY_URL: &str = "";
+
+fn relay_url() -> String {
+    std::env::var("ANYCAPTURE_ISSUE_RELAY").ok().filter(|s| !s.trim().is_empty()).unwrap_or_else(|| RELAY_URL.to_owned())
+}
+
+/// The report as the relay reads it (services/issue-relay/src/report.ts), cut to its limits.
+pub fn relay_body(kind: IssueKind, i: &Issue) -> String {
+    use crate::net::Json;
+    Json::obj()
+        .set("kind", Json::str(kind.relay_kind()))
+        .set("title", Json::str(clip(i.title.trim(), 200)))
+        .set("text", Json::str(clip(i.text.trim(), 8000)))
+        .set("more", Json::str(clip(i.more.trim(), 4000)))
+        .set("version", Json::str(clip(&i.app_version, 32)))
+        .set("program", Json::str(clip(&i.program, 40)))
+        .set("system", Json::str(if i.system { clip(&system_info(), 160).to_owned() } else { String::new() }))
+        .dump()
+}
+
 /// What became of the issue.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Sent {
-    /// created by the GitHub CLI: the issue's address
+    /// created on GitHub: the issue's address
     Created(String),
-    /// the browser opened the filled-in form, which the user sends
+    /// the relay was not reachable, so the browser opened GitHub's filled-in form, which the user sends
     Browser,
-    /// not even the browser opened: the address of the issues, to tell the user
+    /// the relay asks to wait (several reports in a minute from this address)
+    Later,
+    /// neither the relay nor the browser: the address of the issues, to tell the user
     Failed(String),
 }
 
-/// Runs the GitHub CLI without a console window; None when it is not installed.
-fn gh(args: &[&str]) -> Option<std::process::Output> {
-    use std::os::windows::process::CommandExt;
-    use windows::Win32::System::Threading::CREATE_NO_WINDOW;
-    std::process::Command::new("gh").args(args).creation_flags(CREATE_NO_WINDOW.0).output().ok()
+/// Posts the report to the relay: the issue's address, or why not (for the log).
+fn send_to_relay(base: &str, kind: IssueKind, i: &Issue) -> Result<String, (i32, String)> {
+    let r = crate::net::request("POST", &format!("{}/issues", base.trim_end_matches('/')), &["Content-Type: application/json".to_owned()],
+                                relay_body(kind, i).as_bytes(), 20000);
+    if r.ok() {
+        let url = crate::net::json_field(&r.body, "url");
+        return Ok(if url.starts_with("https://github.com/") { url } else { format!("{}/issues", home()) });
+    }
+    Err((r.status, if r.status == 0 { r.error } else { r.text() }))
 }
 
-/// Creates the issue with the GitHub CLI: None when it is missing or not signed in.
-fn create_with_gh(label: &str, title: &str, body: &str) -> Option<Result<String, String>> {
-    if !gh(&["auth", "status", "--hostname", "github.com"])?.status.success() {
-        return None;
+/// Sends the issue (it takes a few seconds: call it from a thread of its own). Through the relay, the issue is created
+/// at once, with its label, and nobody needs a GitHub account; when the relay cannot be reached, the browser opens
+/// GitHub's issue form filled in, as the last way out.
+pub fn send_issue(kind: IssueKind, i: &Issue) -> Sent {
+    let relay = relay_url();
+    if !relay.is_empty() {
+        match send_to_relay(&relay, kind, i) {
+            Ok(url) => return Sent::Created(url),
+            Err((429, _)) => return Sent::Later,
+            Err((status, e)) => crate::log::write(&format!("Issue: the relay did not take it ({status} {e}); opening the browser")),
+        }
     }
-    let mut out = gh(&["issue", "create", "--repo", REPO, "--title", title, "--body", body, "--label", label])?;
-    if !out.status.success() {
-        // the label may be missing from the repository: once more without it
-        out = gh(&["issue", "create", "--repo", REPO, "--title", title, "--body", body])?;
-    }
-    if out.status.success() {
-        let text = String::from_utf8_lossy(&out.stdout);
-        let url = text.lines().rev().find(|l| l.trim().starts_with("https://")).unwrap_or_default().trim().to_owned();
-        Some(Ok(if url.is_empty() { format!("{}/issues", home()) } else { url }))
-    } else {
-        Some(Err(String::from_utf8_lossy(&out.stderr).trim().to_owned()))
-    }
+    if open_url(&new_issue_url(kind, i)) { Sent::Browser } else { Sent::Failed(format!("{}/issues", home())) }
 }
 
 /// Opens an address in the default browser.
@@ -182,39 +198,21 @@ pub fn open_url(url: &str) -> bool {
     h.0 as isize > 32
 }
 
-/// Sends the issue (it takes a few seconds: call it from a thread of its own). With the GitHub CLI signed in on this
-/// computer the issue is created at once, with its label; otherwise the browser opens GitHub's issue form with
-/// everything filled in, and the user only signs in and clicks "Create" (GitHub creates issues only for an account, and
-/// the program carries no key of its own).
-pub fn send_issue(kind: IssueKind, i: &Issue) -> Sent {
-    let title = clip(i.title.trim(), 250).to_owned();
-    match create_with_gh(kind.label(), &title, clip(&issue_body(kind, i), 30000)) {
-        Some(Ok(url)) => return Sent::Created(url),
-        Some(Err(e)) => crate::log::write(&format!("Issue: the GitHub CLI could not create it ({e}); opening the browser")),
-        None => {}
-    }
-    if open_url(&new_issue_url(kind, i)) { Sent::Browser } else { Sent::Failed(format!("{}/issues", home())) }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn the_issue_has_the_form_fields() {
-        let i = Issue { title: "Crash".into(), text: "It closed".into(), more: "1. Open".into(), app_version: "0.5.0".into(),
+    fn the_report_goes_out_as_the_relay_and_the_form_read_it() {
+        let i = Issue { title: "Crash".into(), text: "It \"closed\"\n".into(), more: "1. Open".into(), app_version: "0.5.0".into(),
                         program: "AnyCapture".into(), system: true };
-        let b = issue_body(IssueKind::Bug, &i);
-        assert!(b.starts_with("### What happened?\n\nIt closed\n\n### Steps to reproduce\n\n1. Open\n\n### AnyCapture version\n\n0.5.0"), "{b}");
-        assert!(b.contains("### Windows version\n\nWindows 1"), "{b}");
-        assert!(b.ends_with("_Sent from AnyCapture (Help › Report a problem)._\n"), "{b}");
-        let u = new_issue_url(IssueKind::Bug, &i);
-        assert!(u.starts_with("https://github.com/toim22/AnyCapture/issues/new?template=bug_report.yml&title=Crash&what=It%20closed&steps=1.%20Open&version=0.5.0&windows=Windows%20"), "{u}");
+        let b = relay_body(IssueKind::Bug, &i);
+        assert!(b.starts_with(r#"{"kind":"bug","title":"Crash","text":"It \"closed\"","more":"1. Open","version":"0.5.0","program":"AnyCapture","system":"Windows 1"#), "{b}");
         let idea = Issue { title: "Dark mode".into(), text: "Please".into(), app_version: "0.5.0".into(), program: "AnyCapture Editor".into(),
                            ..Default::default() };
-        let b = issue_body(IssueKind::Idea, &idea);
-        assert!(b.starts_with("### Your suggestion or feedback\n\nPlease\n\n### AnyCapture version"), "{b}");
-        assert!(!b.contains("Why would it help") && !b.contains("Windows version"), "{b}");
+        assert!(relay_body(IssueKind::Idea, &idea).ends_with(r#""program":"AnyCapture Editor","system":""}"#));
+        let u = new_issue_url(IssueKind::Bug, &i);
+        assert!(u.starts_with("https://github.com/toim22/AnyCapture/issues/new?template=bug_report.yml&title=Crash&what=It%20%22closed%22&steps=1.%20Open&version=0.5.0&windows=Windows%20"), "{u}");
         assert!(new_issue_url(IssueKind::Idea, &idea).ends_with("template=feedback.yml&title=Dark%20mode&idea=Please&why=&version=0.5.0"));
         assert_eq!((IssueKind::Bug.label(), IssueKind::Idea.label()), ("bug", "enhancement"));
         assert_eq!(clip("ação", 2), "a");

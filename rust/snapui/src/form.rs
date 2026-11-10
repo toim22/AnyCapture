@@ -29,7 +29,7 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     BS_DEFPUSHBUTTON, CallNextHookEx, CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, ES_AUTOHSCROLL, ES_NUMBER, GetDlgItem,
-    GetForegroundWindow, GetMessageW, GetWindowRect, GetWindowTextLengthW, GetWindowTextW, HC_ACTION, HMENU, IDC_ARROW, IsChild, IsDialogMessageW, LoadCursorW, MB_ICONWARNING, MSG,
+    GetForegroundWindow, GetMessageW, GetWindowRect, GetWindowTextW, HC_ACTION, HMENU, IDC_ARROW, IsChild, IsDialogMessageW, LoadCursorW, MB_ICONWARNING, MSG,
     KBDLLHOOKSTRUCT, MessageBoxW, RegisterClassW, SW_SHOW, SendMessageW, SetForegroundWindow, SetWindowTextW, SetWindowsHookExW,
     ShowWindow, TranslateMessage, UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
     WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_KEYDOWN, WM_SETFONT, WNDCLASSW, WS_BORDER, WS_CAPTION, WS_CHILD, WS_CLIPCHILDREN,
@@ -43,8 +43,6 @@ pub enum Field {
     /// a section title in bold
     Separator(String),
     Text { label: String, text: String },
-    /// a text of several lines, `rows` rows tall (Enter starts a new line)
-    Memo { label: String, text: String, rows: i32 },
     Int { label: String, value: i32, min: i32, max: i32 },
     /// a drop-down list; `value` is the chosen index
     Combo { label: String, items: Vec<String>, value: i32 },
@@ -70,7 +68,7 @@ impl Field {
 
     pub fn text(&self) -> &str {
         match self {
-            Field::Text { text, .. } | Field::Memo { text, .. } => text,
+            Field::Text { text, .. } => text,
             _ => "",
         }
     }
@@ -87,7 +85,6 @@ impl Field {
         match self {
             Field::Label(t) | Field::Separator(t) => t,
             Field::Text { label, .. }
-            | Field::Memo { label, .. }
             | Field::Int { label, .. }
             | Field::Combo { label, .. }
             | Field::Check { label, .. }
@@ -108,8 +105,6 @@ const BN_CLICKED: usize = 0;
 const HOTKEYF_SHIFT: u32 = 1;
 const HOTKEYF_CONTROL: u32 = 2;
 const HOTKEYF_ALT: u32 = 4;
-// multi-line edit styles (ES_MULTILINE, ES_AUTOVSCROLL, ES_WANTRETURN) and WS_VSCROLL
-const ES_MEMO: u32 = 0x0004 | 0x0040 | 0x1000 | 0x0020_0000;
 
 const ID_FIELD: i32 = 1000;
 // static control styles (SS_LEFT, SS_CENTERIMAGE)
@@ -245,7 +240,7 @@ fn collect(h: HWND, fields: &mut [Field]) {
     for (i, f) in fields.iter_mut().enumerate() {
         let id = ID_FIELD + i as i32;
         let e = unsafe { GetDlgItem(Some(h), id) }.unwrap_or_default();
-        let mut buf = vec![0u16; (unsafe { GetWindowTextLengthW(e) }.max(0) as usize + 1).max(4096)];
+        let mut buf = vec![0u16; 4096];
         let n = unsafe { GetWindowTextW(e, &mut buf) } as usize;
         let got = String::from_utf16_lossy(&buf[..n]);
         unsafe {
@@ -255,7 +250,6 @@ fn collect(h: HWND, fields: &mut [Field]) {
                     *value = s.parse::<i32>().unwrap_or(*value).clamp(*min, *max);
                 }
                 Field::Text { text, .. } => *text = got,
-                Field::Memo { text, .. } => *text = got.replace("\r\n", "\n"),
                 Field::Combo { value, .. } => *value = SendMessageW(e, CB_GETCURSEL, None, None).0.max(0) as i32,
                 Field::Check { value, .. } => *value = SendMessageW(e, BM_GETCHECK, None, None).0 == 1,
                 Field::Color { color, .. } => {
@@ -329,11 +323,7 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
     let avail = (ww_ - 2 * pad - scale(4, dpi)).max(1);
     let span: Vec<i32> = fields
         .iter()
-        .map(|f| match f {
-            Field::Label(t) => ((text_width(font, t) * 11 / 10) / avail + 1).clamp(1, 4),
-            Field::Memo { rows, .. } => (*rows).clamp(1, 12),
-            _ => 1,
-        })
+        .map(|f| if let Field::Label(t) = f { ((text_width(font, t) * 11 / 10) / avail + 1).clamp(1, 4) } else { 1 })
         .collect();
     let span_rows = |a: usize, b: usize| span[a..b].iter().sum::<i32>();
     // the monitor of the owner (or of the cursor)
@@ -420,11 +410,6 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
                 Field::Text { label: l, text } => {
                     label(l);
                     Some(child(WS_EX_CLIENTEDGE, w!("EDIT"), text, WS_TABSTOP.0 | ES_AUTOHSCROLL as u32, cx, yy, cw, ctl_h, id, font))
-                }
-                Field::Memo { label: l, text, .. } => {
-                    label(l);
-                    let t = text.replace("\r\n", "\n").replace('\n', "\r\n");
-                    Some(child(WS_EX_CLIENTEDGE, w!("EDIT"), &t, WS_TABSTOP.0 | ES_MEMO, cx, yy, cw, ctl_h + (sp - 1) * row_h, id, font))
                 }
                 Field::Int { label: l, value, min, max } => {
                     label(l);

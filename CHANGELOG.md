@@ -43,11 +43,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   *Update now* downloads the installer, checks its size and SHA-256 against the release, closes both programs,
   installs over this copy and starts them again; *Skip this version* silences the reminder at start. Only full
   releases are offered, not pre-releases.
-- **Report a problem and send feedback:** *Help › Report a problem…* and *Help › Send a suggestion or feedback…*, in
-  both programs, open a form (title, description, steps or reason, and optionally the Windows version and language).
-  *Send* files it as an issue on the AnyCapture project on GitHub, labeled `bug` or `enhancement`: at once when the
-  GitHub CLI (`gh`) is signed in on the computer, otherwise GitHub's issue form opens in the browser with everything
-  filled in, ready for *Create*.
+- **Report a problem and send feedback, no GitHub account needed:** *Help › Report a problem…* and *Help › Send a
+  suggestion or feedback…*, in both programs, open a window in the programs' light or dark theme (title, description,
+  steps or reason, and optionally the Windows version and language). *Send* files it as an issue on the AnyCapture
+  project on GitHub, labeled `bug` or `enhancement`, and shows its link. If the service cannot be reached, GitHub's
+  issue form opens in the browser with everything filled in instead.
 - **Export as ZIP:** exporting library items or recent captures can put them all into one `.zip`, in the chosen image
   format.
 - **Recent captures work like File Explorer:** Shift+click selects a range, a rectangle dragged from the empty part

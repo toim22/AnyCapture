@@ -88,6 +88,8 @@ struct CaptureApp {
     pending_interval: Option<interval::Settings>,
     /// what the capture window shows besides the presets
     view: window::View,
+    /// Help › Report a problem / Send a suggestion or feedback, while its window is open
+    feedback: Option<snapui::feedback::Feedback>,
 }
 
 /// The engine's view of the app (disjoint fields: the engine itself stays borrowable).
@@ -498,8 +500,8 @@ impl CaptureApp {
             id::CLEANUP_NOW => self.cleanup_now(),
             id::MANUAL => open_manual("capture-window"),
             id::CHECK_UPDATES => update::check_now(self.hwnd),
-            id::REPORT_BUG => snapui::feedback::open(self.hwnd, snapcore::project::IssueKind::Bug, "AnyCapture", VERSION),
-            id::FEEDBACK => snapui::feedback::open(self.hwnd, snapcore::project::IssueKind::Idea, "AnyCapture", VERSION),
+            id::REPORT_BUG => self.open_feedback(ctl, snapcore::project::IssueKind::Bug),
+            id::FEEDBACK => self.open_feedback(ctl, snapcore::project::IssueKind::Idea),
             id::CAPTURE_FILE => {
                 let mut p = self.store.first_of_kind(CaptureKind::Image);
                 p.selection = Selection::File;
@@ -524,6 +526,20 @@ impl CaptureApp {
             }
             _ => log::write(&format!("Command {cmd}: not in the Rust app yet")),
         }
+    }
+
+    /// Help › Report a problem / Send a suggestion or feedback: its window (the open one comes forward; the other kind
+    /// replaces it unless a report is on its way).
+    fn open_feedback(&mut self, ctl: &mut Ctl, kind: snapcore::project::IssueKind) {
+        if let Some(f) = &self.feedback {
+            if f.busy() {
+                f.focus(ctl);
+                return;
+            }
+            ctl.close(f.key);
+            self.feedback = None;
+        }
+        self.feedback = snapui::feedback::Feedback::open(ctl, kind, "AnyCapture", VERSION);
     }
 
     /// /clipboard: the current preset's outputs for the image on the clipboard.
@@ -1041,6 +1057,11 @@ impl App for CaptureApp {
     fn ui(&mut self, ctl: &mut Ctl, win: WinKey, ui: &mut egui::Ui) {
         if Some(win) == self.main {
             self.main_ui(ctl, ui);
+        } else if let Some(f) = self.feedback.as_mut().filter(|f| f.key == win) {
+            if f.ui(ui) {
+                ctl.close(win);
+                self.feedback = None;
+            }
         } else if self.engine.owns(win) {
             let env = env!(self);
             self.engine.ui(ctl, &env, win, ui);
@@ -1088,6 +1109,12 @@ impl App for CaptureApp {
             // the capture window hides; the app stays in the tray
             if let Some(w) = ctl.window(win) {
                 w.set_visible(false);
+            }
+        } else if self.feedback.as_ref().is_some_and(|f| f.key == win) {
+            // a report on its way finishes first (its thread would have nowhere to answer)
+            if !self.feedback.as_ref().is_some_and(|f| f.busy()) {
+                ctl.close(win);
+                self.feedback = None;
             }
         } else if self.engine.owns(win) {
             let env = env!(self);
@@ -1246,6 +1273,7 @@ fn main() {
         pending_interval: None,
         view: Default::default(),
         waker: None,
+        feedback: None,
     };
     if let Err(e) = snapui::host::run(app, |_| {}) {
         log::write(&format!("Event loop: {e}"));

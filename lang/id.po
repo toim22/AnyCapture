@@ -140,7 +140,7 @@ msgstr ""
 "•  Roda gigi di baris mengganti nama, menggandakan, atau menghapus preset.\n"
 "•  \"Preset baru dari pengaturan saat ini\" menyimpan isi jendela sekarang."
 
-#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:543 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:782
+#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:559 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:782
 msgid "Presets"
 msgstr "Preset"
 
@@ -212,11 +212,11 @@ msgstr "Otomatis (bahasa Windows)"
 msgid "Atalhos globais"
 msgstr "Pintasan global"
 
-#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:237
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:237
 msgid "Capturar imagem"
 msgstr "Ambil gambar"
 
-#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:238
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:238
 msgid "Gravar vídeo"
 msgstr "Rekam video"
 
@@ -228,7 +228,7 @@ msgstr "Jeda/lanjutkan video"
 msgid "Parar vídeo"
 msgstr "Hentikan video"
 
-#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:244
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:564 rust/anycapture/src/window.rs:244
 msgid "Conta-gotas de tela"
 msgstr "Pengambil warna layar"
 
@@ -236,11 +236,11 @@ msgstr "Pengambil warna layar"
 msgid "Capturar e fixar na tela"
 msgstr "Tangkap dan sematkan di layar"
 
-#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:232
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:232
 msgid "Fixar da área de transferência"
 msgstr "Sematkan dari papan klip"
 
-#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:248
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:570 rust/anycapture/src/window.rs:248
 msgid "Foco de tela (apresentações)"
 msgstr "Fokus layar (presentasi)"
 
@@ -764,7 +764,7 @@ msgstr "Resolusi (DPI)"
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "Ditulis ke file yang disimpan (PNG, JPEG, TIFF, BMP)."
 
-#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:798
 msgid "Fundo"
 msgstr "Latar"
 
@@ -989,7 +989,7 @@ msgstr "Tangkapan ditambahkan ke pustaka"
 msgid "Clique para abrir no Editor."
 msgstr "Klik untuk membukanya di Editor."
 
-#: rust/anycapture/src/engine.rs:953 rust/anycapture/src/quick.rs:58 rust/snapedit/src/app/windows_aux.rs:487 rust/snapedit/src/app/windows_aux.rs:691
+#: rust/anycapture/src/engine.rs:953 rust/anycapture/src/quick.rs:58 rust/snapedit/src/app/windows_aux.rs:514 rust/snapedit/src/app/windows_aux.rs:718
 msgid "Fechar"
 msgstr "Tutup"
 
@@ -1122,37 +1122,37 @@ msgstr "Tidak dapat membuat folder: "
 msgid "Captura por intervalo parada: %d imagem(ns) em %s"
 msgstr "Tangkapan berinterval dihentikan: %d gambar di %s"
 
-#: rust/anycapture/src/main.rs:176
+#: rust/anycapture/src/main.rs:178
 msgid "Esse atalho já está em uso por outra ação do AnyCapture."
 msgstr "Pintasan ini sudah dipakai tindakan AnyCapture lain."
 
-#: rust/anycapture/src/main.rs:176 rust/anycapture/src/main.rs:261
+#: rust/anycapture/src/main.rs:178 rust/anycapture/src/main.rs:263
 msgid "Conflito de atalho"
 msgstr "Bentrok pintasan"
 
-#: rust/anycapture/src/main.rs:184
+#: rust/anycapture/src/main.rs:186
 msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
 msgstr "Program lain sudah memakai pintasan ini. AnyCapture akan mencegatnya dengan hook keyboard."
 
-#: rust/anycapture/src/main.rs:185
+#: rust/anycapture/src/main.rs:187
 msgid "Atalho"
 msgstr "Pintasan"
 
-#: rust/anycapture/src/main.rs:210
+#: rust/anycapture/src/main.rs:212
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "Hapus sekarang tangkapan yang lebih dari %u hari (dengan aturan di Opsi)?"
 
-#: rust/anycapture/src/main.rs:224
+#: rust/anycapture/src/main.rs:226
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "%d tangkapan dihapus dari pustaka."
 
-#: rust/anycapture/src/main.rs:231
+#: rust/anycapture/src/main.rs:233
 msgid "Fixar imagem na tela"
 msgstr "Sematkan gambar di layar"
 
-#: rust/anycapture/src/main.rs:233
+#: rust/anycapture/src/main.rs:235
 msgid ""
 "Não foi possível abrir a imagem.\n"
 "\n"
@@ -1160,153 +1160,153 @@ msgstr ""
 "Tidak dapat membuka gambar.\n"
 "\n"
 
-#: rust/anycapture/src/main.rs:262
+#: rust/anycapture/src/main.rs:264
 #, c-format
 msgid "O atalho do preset \"%s\" já está em uso por outra ação."
 msgstr "Pintasan preset \"%s\" sudah dipakai tindakan lain."
 
-#: rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572
+#: rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588
 msgid "Abrir a janela de captura"
 msgstr "Buka jendela tangkapan"
 
-#: rust/anycapture/src/main.rs:543 rust/anycapture/src/window.rs:213
+#: rust/anycapture/src/main.rs:559 rust/anycapture/src/window.rs:213
 msgid "Abrir o Editor"
 msgstr "Buka Editor"
 
-#: rust/anycapture/src/main.rs:543
+#: rust/anycapture/src/main.rs:559
 msgid "Sair"
 msgstr "Keluar"
 
-#: rust/anycapture/src/main.rs:544 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
+#: rust/anycapture/src/main.rs:560 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
 msgid "Ler código QR"
 msgstr "Baca kode QR"
 
-#: rust/anycapture/src/main.rs:545 rust/anycapture/src/window.rs:253
+#: rust/anycapture/src/main.rs:561 rust/anycapture/src/window.rs:253
 msgid "Mostrar o One Click"
 msgstr "Tampilkan One Click"
 
-#: rust/anycapture/src/main.rs:547
+#: rust/anycapture/src/main.rs:563
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "Gambar disematkan (%zu)"
 
-#: rust/anycapture/src/main.rs:547
+#: rust/anycapture/src/main.rs:563
 msgid "Imagens fixadas"
 msgstr "Gambar disematkan"
 
-#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:249
+#: rust/anycapture/src/main.rs:564 rust/anycapture/src/window.rs:249
 msgid "Gravar só o áudio"
 msgstr "Rekam audio saja"
 
-#: rust/anycapture/src/main.rs:550
+#: rust/anycapture/src/main.rs:566
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "Hentikan tangkapan berinterval (%d)"
 
-#: rust/anycapture/src/main.rs:552 rust/anycapture/src/window.rs:247
+#: rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:247
 msgid "Captura por intervalo…"
 msgstr "Tangkapan berinterval…"
 
-#: rust/anycapture/src/main.rs:554
+#: rust/anycapture/src/main.rs:570
 msgid "Abrir o Editor depois da captura"
 msgstr "Buka Editor setelah menangkap"
 
-#: rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:226
+#: rust/anycapture/src/main.rs:570 rust/anycapture/src/window.rs:226
 msgid "Opções…"
 msgstr "Opsi…"
 
-#: rust/anycapture/src/main.rs:572
+#: rust/anycapture/src/main.rs:588
 msgid "Ocultar o One Click"
 msgstr "Sembunyikan One Click"
 
-#: rust/anycapture/src/main.rs:658
+#: rust/anycapture/src/main.rs:674
 msgid "AnyCapture — linha de comando"
 msgstr "AnyCapture — baris perintah"
 
-#: rust/anycapture/src/main.rs:688
+#: rust/anycapture/src/main.rs:704
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region memerlukan x,y,lebar,tinggi (mis.: /region 100,100,800,600)."
 
-#: rust/anycapture/src/main.rs:700
+#: rust/anycapture/src/main.rs:716
 msgid "Nenhuma janela com esse título: "
 msgstr "Tidak ada jendela dengan judul ini: "
 
-#: rust/anycapture/src/main.rs:712
+#: rust/anycapture/src/main.rs:728
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "Monitor %d tidak ada (ada %zu)."
 
-#: rust/anycapture/src/main.rs:732
+#: rust/anycapture/src/main.rs:748
 msgid "Não foi possível fixar: "
 msgstr "Tidak dapat menyematkan: "
 
-#: rust/anycapture/src/main.rs:868 rust/snapcore/src/office.rs:181
+#: rust/anycapture/src/main.rs:884 rust/snapcore/src/office.rs:181
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "%s tidak terpasang di komputer ini (atau versi Microsoft Store, tanpa otomatisasi)."
 
-#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:233
+#: rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:233
 msgid "Fixar um arquivo…"
 msgstr "Sematkan file…"
 
-#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:231
+#: rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:231
 msgid "Capturar e fixar"
 msgstr "Tangkap dan sematkan"
 
-#: rust/anycapture/src/main.rs:880
+#: rust/anycapture/src/main.rs:896
 msgid "Mostrar todas"
 msgstr "Tampilkan semua"
 
-#: rust/anycapture/src/main.rs:881
+#: rust/anycapture/src/main.rs:897
 msgid "Ocultar todas"
 msgstr "Sembunyikan semua"
 
-#: rust/anycapture/src/main.rs:881 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:234
+#: rust/anycapture/src/main.rs:897 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:234
 msgid "Fechar todas"
 msgstr "Tutup semua"
 
-#: rust/anycapture/src/main.rs:881
+#: rust/anycapture/src/main.rs:897
 msgid "Desligar \"atravessar cliques\""
 msgstr "Matikan \"klik tembus\""
 
-#: rust/anycapture/src/main.rs:881
+#: rust/anycapture/src/main.rs:897
 msgid "Reabrir a última fechada"
 msgstr "Buka lagi yang terakhir ditutup"
 
-#: rust/anycapture/src/main.rs:882
+#: rust/anycapture/src/main.rs:898
 msgid "Histórico"
 msgstr "Riwayat"
 
-#: rust/anycapture/src/main.rs:927 rust/snapedit/src/app/extras.rs:328
+#: rust/anycapture/src/main.rs:943 rust/snapedit/src/app/extras.rs:328
 msgid "O manual não foi encontrado:\n"
 msgstr "Panduan tidak ditemukan:\n"
 
-#: rust/anycapture/src/main.rs:968
+#: rust/anycapture/src/main.rs:984
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — tangkapan layar dan rekaman video"
 
-#: rust/anycapture/src/main.rs:969 rust/snapedit/src/app/commands.rs:449
+#: rust/anycapture/src/main.rs:985 rust/snapedit/src/app/commands.rs:449
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "Perangkat lunak bebas di bawah GNU General Public License versi 3."
 
-#: rust/anycapture/src/main.rs:972 rust/anycapture/src/window.rs:264
+#: rust/anycapture/src/main.rs:988 rust/anycapture/src/window.rs:264
 msgid "Sobre o AnyCapture"
 msgstr "Tentang AnyCapture"
 
-#: rust/anycapture/src/main.rs:1011 rust/anycapture/src/main.rs:1080 rust/anycapture/src/main.rs:1160
+#: rust/anycapture/src/main.rs:1027 rust/anycapture/src/main.rs:1101 rust/anycapture/src/main.rs:1187
 msgid "AnyCapture — clique para capturar"
 msgstr "AnyCapture — klik untuk mengambil"
 
-#: rust/anycapture/src/main.rs:1031
+#: rust/anycapture/src/main.rs:1047
 msgid "AnyCapture — gravação recuperada"
 msgstr "AnyCapture — rekaman dipulihkan"
 
-#: rust/anycapture/src/main.rs:1032
+#: rust/anycapture/src/main.rs:1048
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "%zu rekaman yang terputus dipulihkan di pustaka."
 
-#: rust/anycapture/src/main.rs:1158
+#: rust/anycapture/src/main.rs:1185
 #, c-format
 msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
 msgstr "AnyCapture — tangkapan berinterval: %d gambar"
@@ -1463,7 +1463,7 @@ msgstr "Salin sebagai…"
 msgid "Enviar (upload) e copiar o link"
 msgstr "Unggah dan salin tautan"
 
-#: rust/anycapture/src/quick.rs:53 rust/snapedit/src/app/windows_aux.rs:869
+#: rust/anycapture/src/quick.rs:53 rust/snapedit/src/app/windows_aux.rs:896
 msgid "Copiar"
 msgstr "Salin"
 
@@ -1500,7 +1500,7 @@ msgstr "Wilayah sebelumnya %d dari %d"
 msgid "Tamanho da seleção"
 msgstr "Ukuran pilihan"
 
-#: rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387 rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574
+#: rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387 rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:601
 msgid "Cancelar"
 msgstr "Batal"
 
@@ -1545,7 +1545,7 @@ msgstr "Rekaman: "
 msgid "ok"
 msgstr "ok"
 
-#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:577 rust/snapui/src/form.rs:476
+#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:604 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "OK"
 
@@ -2166,7 +2166,7 @@ msgstr "Audio"
 msgid "Região"
 msgstr "Area"
 
-#: rust/snapcore/src/library.rs:559 rust/snapui/src/feedback.rs:37
+#: rust/snapcore/src/library.rs:559 rust/snapui/src/feedback.rs:160
 msgid "Título"
 msgstr "Judul"
 
@@ -2433,7 +2433,7 @@ msgstr "Tidak ada tujuan unggahan yang diatur."
 msgid "Não foi possível ler o arquivo."
 msgstr "Tidak dapat membaca file."
 
-#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:290
+#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:292
 msgid "Não foi possível preparar a imagem."
 msgstr "Tidak dapat menyiapkan gambar."
 
@@ -3682,7 +3682,7 @@ msgstr "Gambar baru dari papan klip"
 msgid "Abrir arquivo (Ctrl+O)"
 msgstr "Buka file (Ctrl+O)"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:744
+#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:771
 msgid "Salvar"
 msgstr "Simpan"
 
@@ -3838,7 +3838,7 @@ msgstr "Bagikan"
 msgid "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"
 msgstr "Bagikan: file, papan klip, email, printer, program"
 
-#: rust/snapedit/src/panels.rs:260 rust/snapedit/src/app/windows_aux.rs:488 rust/snapui/src/qr.rs:48
+#: rust/snapedit/src/panels.rs:260 rust/snapedit/src/app/windows_aux.rs:515 rust/snapui/src/qr.rs:48
 msgid "Copiar tudo"
 msgstr "Salin semua"
 
@@ -5815,11 +5815,11 @@ msgstr "koper"
 msgid "local pino"
 msgstr "penanda lokasi"
 
-#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:352
+#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:354
 msgid "Antes"
 msgstr "Sebelum"
 
-#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:353
+#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:355
 msgid "Depois"
 msgstr "Sesudah"
 
@@ -6047,7 +6047,7 @@ msgstr "Seluruh gambar disalin ke papan klip."
 msgid "Imagens e capturas"
 msgstr "Gambar dan tangkapan"
 
-#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1052 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
+#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1052 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:528
 msgid "Copiado."
 msgstr "Disalin."
 
@@ -6469,7 +6469,7 @@ msgstr "Tautan unggahan"
 msgid "Imagem em Markdown (link do upload)"
 msgstr "Gambar Markdown (tautan unggahan)"
 
-#: rust/snapedit/src/app/extras.rs:445 rust/snapedit/src/app/extras.rs:952
+#: rust/snapedit/src/app/extras.rs:445 rust/snapedit/src/app/extras.rs:952 rust/snapui/src/feedback.rs:125
 msgid "Enviando…"
 msgstr "Mengunggah…"
 
@@ -6663,7 +6663,7 @@ msgstr ""
 "\n"
 "Atur sekarang?"
 
-#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:228 rust/snapedit/src/app/windows_aux.rs:254 rust/snapedit/src/app/windows_aux.rs:432
+#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:230 rust/snapedit/src/app/windows_aux.rs:256 rust/snapedit/src/app/windows_aux.rs:434
 msgid "Assistente de IA"
 msgstr "Asisten AI"
 
@@ -6822,7 +6822,7 @@ msgstr "Grafit"
 msgid "Branco simples"
 msgstr "Putih polos"
 
-#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:706
 msgid "Lado a lado"
 msgstr "Berdampingan"
 
@@ -6950,7 +6950,7 @@ msgstr ""
 msgid "Propriedades"
 msgstr "Properti"
 
-#: rust/snapedit/src/app/mod.rs:457 rust/snapedit/src/app/windows_aux.rs:559
+#: rust/snapedit/src/app/mod.rs:457 rust/snapedit/src/app/windows_aux.rs:586
 msgid "Efeitos"
 msgstr "Efek"
 
@@ -7043,7 +7043,7 @@ msgstr "Buat GIF animasi"
 msgid "Salvar GIF"
 msgstr "Simpan GIF"
 
-#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:740
+#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:767
 msgid "GIF animado (*.gif)|*.gif|"
 msgstr "GIF animasi (*.gif)|*.gif|"
 
@@ -7103,263 +7103,263 @@ msgstr "Simpan MP4…"
 msgid "Abrir no player"
 msgstr "Buka di pemutar"
 
-#: rust/snapedit/src/app/windows_aux.rs:135
+#: rust/snapedit/src/app/windows_aux.rs:137
 msgid "Compatível com OpenAI"
 msgstr "Kompatibel OpenAI"
 
-#: rust/snapedit/src/app/windows_aux.rs:136
+#: rust/snapedit/src/app/windows_aux.rs:138
 msgid "Modelo local (Ollama)"
 msgstr "Model lokal (Ollama)"
 
-#: rust/snapedit/src/app/windows_aux.rs:208
+#: rust/snapedit/src/app/windows_aux.rs:210
 #, c-format
 msgid "A imagem e a pergunta serão enviadas para %s (%s). Nada é enviado até você perguntar."
 msgstr "Gambar dan pertanyaan akan dikirim ke %s (%s). Tidak ada yang dikirim sampai Anda bertanya."
 
-#: rust/snapedit/src/app/windows_aux.rs:216
+#: rust/snapedit/src/app/windows_aux.rs:218
 msgid "(guardada — deixe assim para manter)"
 msgstr "(tersimpan — biarkan apa adanya untuk mempertahankan)"
 
-#: rust/snapedit/src/app/windows_aux.rs:219
+#: rust/snapedit/src/app/windows_aux.rs:221
 msgid "Ativar o assistente de IA"
 msgstr "Aktifkan asisten AI"
 
-#: rust/snapedit/src/app/windows_aux.rs:220
+#: rust/snapedit/src/app/windows_aux.rs:222
 msgid "Ao perguntar, a imagem é enviada ao provedor escolhido. Use a sua própria chave (cobrança na sua conta)."
 msgstr "Saat bertanya, gambar dikirim ke penyedia yang dipilih. Gunakan kunci Anda sendiri (ditagihkan ke akun Anda)."
 
-#: rust/snapedit/src/app/windows_aux.rs:221
+#: rust/snapedit/src/app/windows_aux.rs:223
 msgid "Provedor"
 msgstr "Penyedia"
 
-#: rust/snapedit/src/app/windows_aux.rs:222
+#: rust/snapedit/src/app/windows_aux.rs:224
 msgid "Modelo"
 msgstr "Model"
 
-#: rust/snapedit/src/app/windows_aux.rs:223
+#: rust/snapedit/src/app/windows_aux.rs:225
 msgid "Endereço da API"
 msgstr "Alamat API"
 
-#: rust/snapedit/src/app/windows_aux.rs:224
+#: rust/snapedit/src/app/windows_aux.rs:226
 msgid "Chave da API"
 msgstr "Kunci API"
 
-#: rust/snapedit/src/app/windows_aux.rs:225
+#: rust/snapedit/src/app/windows_aux.rs:227
 msgid "A chave fica no Gerenciador de Credenciais do Windows, nunca em arquivos. Modelo local: Ollama em http://localhost:11434/v1 (sem chave)."
 msgstr "Kunci disimpan di Pengelola Kredensial Windows, tidak pernah di file. Model lokal: Ollama di http://localhost:11434/v1 (tanpa kunci)."
 
-#: rust/snapedit/src/app/windows_aux.rs:244
+#: rust/snapedit/src/app/windows_aux.rs:246
 msgid "Informe o endereço da API."
 msgstr "Masukkan alamat API."
 
-#: rust/snapedit/src/app/windows_aux.rs:246
+#: rust/snapedit/src/app/windows_aux.rs:248
 msgid "Informe o modelo."
 msgstr "Masukkan model."
 
-#: rust/snapedit/src/app/windows_aux.rs:378
+#: rust/snapedit/src/app/windows_aux.rs:380
 msgid "Atalhos do AnyCapture Editor"
 msgstr "Pintasan AnyCapture Editor"
 
-#: rust/snapedit/src/app/windows_aux.rs:389 rust/snapedit/src/app/windows_aux.rs:513
+#: rust/snapedit/src/app/windows_aux.rs:391 rust/snapedit/src/app/windows_aux.rs:540
 msgid "Ampliar parte da imagem"
 msgstr "Perbesar bagian gambar"
 
-#: rust/snapedit/src/app/windows_aux.rs:404
+#: rust/snapedit/src/app/windows_aux.rs:406
 msgid "Personalizar a barra de ferramentas"
 msgstr "Kustomisasi bilah alat"
 
-#: rust/snapedit/src/app/windows_aux.rs:413
+#: rust/snapedit/src/app/windows_aux.rs:415
 msgid "Verificador de contraste (WCAG)"
 msgstr "Pemeriksa kontras (WCAG)"
 
-#: rust/snapedit/src/app/windows_aux.rs:422
+#: rust/snapedit/src/app/windows_aux.rs:424
 msgid "Comparar imagens"
 msgstr "Bandingkan gambar"
 
-#: rust/snapedit/src/app/windows_aux.rs:515
+#: rust/snapedit/src/app/windows_aux.rs:542
 msgid "Amplie partes da imagem para destacar os detalhes importantes. Arraste para criar a lupa; com a lente separada, a alça amarela escolhe a área ampliada."
 msgstr "Perbesar bagian gambar untuk menonjolkan detail penting. Seret untuk membuat kaca pembesar; dengan lensa terpisah, pegangan kuning memilih area yang diperbesar."
 
-#: rust/snapedit/src/app/windows_aux.rs:518
+#: rust/snapedit/src/app/windows_aux.rs:545
 msgid "Entendi!"
 msgstr "Mengerti!"
 
-#: rust/snapedit/src/app/windows_aux.rs:532
+#: rust/snapedit/src/app/windows_aux.rs:559
 msgid "Personalização cancelada."
 msgstr "Kustomisasi dibatalkan."
 
-#: rust/snapedit/src/app/windows_aux.rs:544
+#: rust/snapedit/src/app/windows_aux.rs:571
 msgid "Barra de ferramentas personalizada."
 msgstr "Bilah alat kustom."
 
-#: rust/snapedit/src/app/windows_aux.rs:544
+#: rust/snapedit/src/app/windows_aux.rs:571
 msgid "Barra de ferramentas automática."
 msgstr "Bilah alat otomatis."
 
-#: rust/snapedit/src/app/windows_aux.rs:551
+#: rust/snapedit/src/app/windows_aux.rs:578
 msgid "— espaço —"
 msgstr "— spasi —"
 
-#: rust/snapedit/src/app/windows_aux.rs:556
+#: rust/snapedit/src/app/windows_aux.rs:583
 msgid "Ferramentas de desenho"
 msgstr "Alat menggambar"
 
-#: rust/snapedit/src/app/windows_aux.rs:557
+#: rust/snapedit/src/app/windows_aux.rs:584
 msgid "Itens de menu"
 msgstr "Item menu"
 
-#: rust/snapedit/src/app/windows_aux.rs:558
+#: rust/snapedit/src/app/windows_aux.rs:585
 msgid "Destinos de compartilhamento"
 msgstr "Tujuan berbagi"
 
-#: rust/snapedit/src/app/windows_aux.rs:560
+#: rust/snapedit/src/app/windows_aux.rs:587
 msgid "Diversos"
 msgstr "Lain-lain"
 
-#: rust/snapedit/src/app/windows_aux.rs:568
+#: rust/snapedit/src/app/windows_aux.rs:595
 msgid "Ferramentas na barra automática:"
 msgstr "Alat di bilah otomatis:"
 
-#: rust/snapedit/src/app/windows_aux.rs:572
+#: rust/snapedit/src/app/windows_aux.rs:599
 msgid "Restaurar o padrão"
 msgstr "Pulihkan default"
 
-#: rust/snapedit/src/app/windows_aux.rs:587
+#: rust/snapedit/src/app/windows_aux.rs:614
 msgid "Na barra"
 msgstr "Di bilah"
 
-#: rust/snapedit/src/app/windows_aux.rs:600
+#: rust/snapedit/src/app/windows_aux.rs:627
 msgid "Remover da barra"
 msgstr "Hapus dari bilah"
 
-#: rust/snapedit/src/app/windows_aux.rs:603
+#: rust/snapedit/src/app/windows_aux.rs:630
 msgid "Mover para baixo"
 msgstr "Pindah ke bawah"
 
-#: rust/snapedit/src/app/windows_aux.rs:606
+#: rust/snapedit/src/app/windows_aux.rs:633
 msgid "Mover para cima"
 msgstr "Pindah ke atas"
 
-#: rust/snapedit/src/app/windows_aux.rs:624
+#: rust/snapedit/src/app/windows_aux.rs:651
 msgid "Clique num item para acrescentá-lo ao fim da barra."
 msgstr "Klik item untuk menambahkannya ke akhir bilah."
 
-#: rust/snapedit/src/app/windows_aux.rs:635
+#: rust/snapedit/src/app/windows_aux.rs:662
 msgid "Já está na barra"
 msgstr "Sudah ada di bilah"
 
-#: rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/windows_aux.rs:706
 msgid "Sobreposição"
 msgstr "Tumpang tindih"
 
-#: rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/windows_aux.rs:706
 msgid "Deslizar (antes | depois)"
 msgstr "Geser (sebelum | sesudah)"
 
-#: rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/windows_aux.rs:706
 msgid "Diferença"
 msgstr "Perbedaan"
 
-#: rust/snapedit/src/app/windows_aux.rs:686
+#: rust/snapedit/src/app/windows_aux.rs:713
 msgid "Transparência de B"
 msgstr "Transparansi B"
 
-#: rust/snapedit/src/app/windows_aux.rs:686
+#: rust/snapedit/src/app/windows_aux.rs:713
 msgid "Divisória"
 msgstr "Pembatas"
 
-#: rust/snapedit/src/app/windows_aux.rs:692
+#: rust/snapedit/src/app/windows_aux.rs:719
 msgid "Exportar imagem…"
 msgstr "Ekspor gambar…"
 
-#: rust/snapedit/src/app/windows_aux.rs:693
+#: rust/snapedit/src/app/windows_aux.rs:720
 msgid "Exportar GIF…"
 msgstr "Ekspor GIF…"
 
-#: rust/snapedit/src/app/windows_aux.rs:694
+#: rust/snapedit/src/app/windows_aux.rs:721
 msgid "A ⇄ B"
 msgstr "A ⇄ B"
 
-#: rust/snapedit/src/app/windows_aux.rs:704
+#: rust/snapedit/src/app/windows_aux.rs:731
 #, c-format
 msgid "A: %s (%d × %d)   B: %s (%d × %d)"
 msgstr "A: %s (%d × %d)   B: %s (%d × %d)"
 
-#: rust/snapedit/src/app/windows_aux.rs:709
+#: rust/snapedit/src/app/windows_aux.rs:736
 #, c-format
 msgid "   •   %d pixels diferentes (%.2f%%)"
 msgstr "   •   %d piksel berbeda (%.2f%%)"
 
-#: rust/snapedit/src/app/windows_aux.rs:740 rust/snapedit/src/app/windows_aux.rs:742
+#: rust/snapedit/src/app/windows_aux.rs:767 rust/snapedit/src/app/windows_aux.rs:769
 msgid "Antes-depois"
 msgstr "Sebelum-sesudah"
 
-#: rust/snapedit/src/app/windows_aux.rs:748
+#: rust/snapedit/src/app/windows_aux.rs:775
 msgid "Exportado."
 msgstr "Diekspor."
 
-#: rust/snapedit/src/app/windows_aux.rs:749
+#: rust/snapedit/src/app/windows_aux.rs:776
 msgid "Não foi possível salvar o arquivo."
 msgstr "Tidak dapat menyimpan file."
 
-#: rust/snapedit/src/app/windows_aux.rs:771
+#: rust/snapedit/src/app/windows_aux.rs:798
 msgid "Texto (primeiro plano)"
 msgstr "Teks (latar depan)"
 
-#: rust/snapedit/src/app/windows_aux.rs:783
+#: rust/snapedit/src/app/windows_aux.rs:810
 msgid "Escolher cor…"
 msgstr "Pilih warna…"
 
-#: rust/snapedit/src/app/windows_aux.rs:786
+#: rust/snapedit/src/app/windows_aux.rs:813
 msgid "Copiar HEX"
 msgstr "Salin HEX"
 
-#: rust/snapedit/src/app/windows_aux.rs:797
+#: rust/snapedit/src/app/windows_aux.rs:824
 msgid "Texto grande Aa"
 msgstr "Teks besar Aa"
 
-#: rust/snapedit/src/app/windows_aux.rs:798
+#: rust/snapedit/src/app/windows_aux.rs:825
 msgid "Texto normal — o rato roeu a roupa do rei"
 msgstr "Teks normal — rubah cokelat cepat melompati anjing malas"
 
-#: rust/snapedit/src/app/windows_aux.rs:804
+#: rust/snapedit/src/app/windows_aux.rs:831
 msgid "Inverter as cores"
 msgstr "Tukar warna"
 
-#: rust/snapedit/src/app/windows_aux.rs:841
+#: rust/snapedit/src/app/windows_aux.rs:868
 msgid "Configure a chave do provedor primeiro."
 msgstr "Atur kunci penyedia terlebih dahulu."
 
-#: rust/snapedit/src/app/windows_aux.rs:846
+#: rust/snapedit/src/app/windows_aux.rs:873
 msgid "Perguntando…"
 msgstr "Bertanya…"
 
-#: rust/snapedit/src/app/windows_aux.rs:854
+#: rust/snapedit/src/app/windows_aux.rs:881
 #, c-format
 msgid "Resposta de %s (%s)."
 msgstr "Jawaban dari %s (%s)."
 
-#: rust/snapedit/src/app/windows_aux.rs:871
+#: rust/snapedit/src/app/windows_aux.rs:898
 msgid "Resposta copiada."
 msgstr "Jawaban disalin."
 
-#: rust/snapedit/src/app/windows_aux.rs:873
+#: rust/snapedit/src/app/windows_aux.rs:900
 msgid "Adicionar como texto"
 msgstr "Tambahkan sebagai teks"
 
-#: rust/snapedit/src/app/windows_aux.rs:874
+#: rust/snapedit/src/app/windows_aux.rs:901
 msgid "Configurações…"
 msgstr "Pengaturan…"
 
-#: rust/snapedit/src/app/windows_aux.rs:893
+#: rust/snapedit/src/app/windows_aux.rs:920
 msgid "Faça uma pergunta sobre a imagem…"
 msgstr "Ajukan pertanyaan tentang gambar…"
 
-#: rust/snapedit/src/app/windows_aux.rs:895
+#: rust/snapedit/src/app/windows_aux.rs:922
 msgid "Perguntar"
 msgstr "Tanya"
 
-#: rust/snapedit/src/app/windows_aux.rs:117
+#: rust/snapedit/src/app/windows_aux.rs:119
 msgid ""
 "Ferramentas (com a área de pintura em foco):\n"
 "  V Mover   A Seta   L Linha   R Forma   P Caneta   H Marcador\n"
@@ -7391,19 +7391,19 @@ msgstr ""
 "Gambar:  Ctrl+Shift+F/B satu tingkat maju/mundur • Ctrl+T gabungkan objek • Ctrl+Shift+T gabungkan semua • Ctrl+; jepret\n"
 "Video:   Spasi putar/jeda • ←/→ bingkai • I/O menandai awal/akhir\n"
 
-#: rust/snapedit/src/app/windows_aux.rs:275
+#: rust/snapedit/src/app/windows_aux.rs:277
 msgid "Explicar"
 msgstr "Jelaskan"
 
-#: rust/snapedit/src/app/windows_aux.rs:276
+#: rust/snapedit/src/app/windows_aux.rs:278
 msgid "Descrever"
 msgstr "Deskripsikan"
 
-#: rust/snapedit/src/app/windows_aux.rs:277
+#: rust/snapedit/src/app/windows_aux.rs:279
 msgid "Extrair os passos"
 msgstr "Ekstrak langkah"
 
-#: rust/snapedit/src/app/windows_aux.rs:278
+#: rust/snapedit/src/app/windows_aux.rs:280
 msgid "Extrair o texto"
 msgstr "Ekstrak teks"
 
@@ -7419,63 +7419,103 @@ msgstr "Gagal menulis file."
 msgid "Falha ao codificar a imagem."
 msgstr "Gagal mengodekan gambar."
 
-#: rust/snapui/src/feedback.rs:33
-msgid "Descreva o problema. Ele é enviado ao projeto AnyCapture no GitHub como um novo relato (bug)."
-msgstr "Jelaskan masalahnya. Masalah ini dikirim ke proyek AnyCapture di GitHub sebagai laporan baru (bug)."
-
-#: rust/snapui/src/feedback.rs:35
-msgid "Conte sua ideia ou o que acha do AnyCapture. Ela é enviada ao projeto AnyCapture no GitHub como uma sugestão."
-msgstr "Ceritakan ide Anda atau pendapat Anda tentang AnyCapture. Ini dikirim ke proyek AnyCapture di GitHub sebagai saran."
-
-#: rust/snapui/src/feedback.rs:38
-msgid "O que aconteceu?"
-msgstr "Apa yang terjadi?"
-
-#: rust/snapui/src/feedback.rs:38
-msgid "Sua sugestão ou feedback"
-msgstr "Saran atau masukan Anda"
-
 #: rust/snapui/src/feedback.rs:40
-msgid "Passos para reproduzir (opcional)"
-msgstr "Langkah untuk mereproduksi (opsional)"
-
-#: rust/snapui/src/feedback.rs:40
-msgid "Por que ajudaria? (opcional)"
-msgstr "Mengapa ini membantu? (opsional)"
-
-#: rust/snapui/src/feedback.rs:44
-msgid "Incluir a versão do Windows e o idioma"
-msgstr "Sertakan versi Windows dan bahasa"
-
-#: rust/snapui/src/feedback.rs:49
-msgid "Preencha o título e a descrição."
-msgstr "Isi judul dan deskripsinya."
-
-#: rust/snapui/src/feedback.rs:54
 msgid "Relatar um problema"
 msgstr "Laporkan masalah"
 
-#: rust/snapui/src/feedback.rs:54
+#: rust/snapui/src/feedback.rs:40
 msgid "Enviar sugestão ou feedback"
 msgstr "Kirim saran atau masukan"
 
-#: rust/snapui/src/feedback.rs:68
-msgid "Obrigado! Seu relato foi enviado ao projeto AnyCapture no GitHub:"
-msgstr "Terima kasih! Laporan Anda telah dikirim ke proyek AnyCapture di GitHub:"
+#: rust/snapui/src/feedback.rs:107
+msgid "Ver os relatos enviados"
+msgstr "Lihat laporan yang dikirim"
 
-#: rust/snapui/src/feedback.rs:69
-msgid "Obrigado! Sua sugestão foi enviada ao projeto AnyCapture no GitHub:"
-msgstr "Terima kasih! Saran Anda telah dikirim ke proyek AnyCapture di GitHub:"
+#: rust/snapui/src/feedback.rs:109
+msgid "Ver as sugestões enviadas"
+msgstr "Lihat saran yang dikirim"
 
-#: rust/snapui/src/feedback.rs:71
-msgid "Abrir no navegador?"
-msgstr "Buka di browser?"
+#: rust/snapui/src/feedback.rs:119
+msgid "Voltar"
+msgstr "Kembali"
 
-#: rust/snapui/src/feedback.rs:76
-msgid "O GitHub abriu no navegador com tudo já preenchido. Entre na sua conta do GitHub se for pedido, revise e clique em \"Create\" para enviar."
-msgstr "GitHub terbuka di browser dengan semuanya sudah terisi. Masuk ke GitHub jika diminta, periksa, lalu klik \"Create\" untuk mengirim."
+#: rust/snapui/src/feedback.rs:125
+msgid "Enviar"
+msgstr "Kirim"
 
-#: rust/snapui/src/feedback.rs:80
+#: rust/snapui/src/feedback.rs:154
+msgid "Descreva o problema. Ele é enviado ao projeto AnyCapture no GitHub como um novo relato (bug); não é preciso ter conta no GitHub."
+msgstr "Jelaskan masalahnya. Masalah ini dikirim ke proyek AnyCapture di GitHub sebagai laporan baru (bug); tidak perlu akun GitHub."
+
+#: rust/snapui/src/feedback.rs:156
+msgid "Conte sua ideia ou o que acha do AnyCapture. Ela é enviada ao projeto AnyCapture no GitHub como uma sugestão; não é preciso ter conta no GitHub."
+msgstr "Ceritakan ide Anda atau pendapat Anda tentang AnyCapture. Ini dikirim ke proyek AnyCapture di GitHub sebagai saran; tidak perlu akun GitHub."
+
+#: rust/snapui/src/feedback.rs:161
+msgid "Ex.: o Editor fecha ao colar uma imagem"
+msgstr "Mis.: Editor tertutup saat menempelkan gambar"
+
+#: rust/snapui/src/feedback.rs:161
+msgid "Ex.: atalho para repetir a última região"
+msgstr "Mis.: pintasan untuk mengulang wilayah terakhir"
+
+#: rust/snapui/src/feedback.rs:168
+msgid "O que aconteceu?"
+msgstr "Apa yang terjadi?"
+
+#: rust/snapui/src/feedback.rs:168
+msgid "Sua sugestão ou feedback"
+msgstr "Saran atau masukan Anda"
+
+#: rust/snapui/src/feedback.rs:171
+msgid "Passos para reproduzir (opcional)"
+msgstr "Langkah untuk mereproduksi (opsional)"
+
+#: rust/snapui/src/feedback.rs:171
+msgid "Por que ajudaria? (opcional)"
+msgstr "Mengapa ini membantu? (opsional)"
+
+#: rust/snapui/src/feedback.rs:175
+msgid "Incluir a versão do Windows e o idioma"
+msgstr "Sertakan versi Windows dan bahasa"
+
+#: rust/snapui/src/feedback.rs:182
+msgid "Preencha o título e a descrição."
+msgstr "Isi judul dan deskripsinya."
+
+#: rust/snapui/src/feedback.rs:191
+msgid "Obrigado! Seu relato foi enviado."
+msgstr "Terima kasih! Laporan Anda telah dikirim."
+
+#: rust/snapui/src/feedback.rs:191
+msgid "Obrigado! Sua sugestão foi enviada."
+msgstr "Terima kasih! Saran Anda telah dikirim."
+
+#: rust/snapui/src/feedback.rs:192
+msgid "Ele está no projeto AnyCapture no GitHub:"
+msgstr "Ada di proyek AnyCapture di GitHub:"
+
+#: rust/snapui/src/feedback.rs:193
+msgid "Quase lá: termine no navegador"
+msgstr "Hampir selesai: lanjutkan di browser"
+
+#: rust/snapui/src/feedback.rs:194
+msgid "Não foi possível enviar direto agora, então o GitHub abriu no navegador com tudo já preenchido. Entre na sua conta do GitHub se for pedido, revise e clique em \"Create\" para enviar."
+msgstr "Saat ini tidak dapat dikirim langsung, jadi GitHub dibuka di browser dengan semuanya sudah terisi. Masuk ke GitHub jika diminta, periksa, lalu klik \"Create\" untuk mengirim."
+
+#: rust/snapui/src/feedback.rs:195
+msgid "Aguarde um pouco"
+msgstr "Tunggu sebentar"
+
+#: rust/snapui/src/feedback.rs:195
+msgid "Vários envios seguidos deste computador. Tente de novo em um minuto."
+msgstr "Beberapa kiriman berturut-turut dari komputer ini. Coba lagi dalam satu menit."
+
+#: rust/snapui/src/feedback.rs:196
+msgid "Não foi possível enviar"
+msgstr "Tidak dapat mengirim"
+
+#: rust/snapui/src/feedback.rs:196
 msgid "Não foi possível enviar nem abrir o navegador. Envie pelo endereço:"
 msgstr "Tidak dapat mengirim atau membuka browser. Kirim melalui alamat ini:"
 

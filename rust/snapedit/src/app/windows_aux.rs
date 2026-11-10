@@ -72,6 +72,8 @@ pub struct Aux {
     compare: Option<Compare>,
     contrast: Option<Contrast>,
     assistant: Option<Assistant>,
+    /// Help › Report a problem / Send a suggestion or feedback
+    feedback: Option<snapui::feedback::Feedback>,
 }
 
 /// The icon of a toolbar entry (a spacer has the plain rectangle, as in the C++ catalog).
@@ -443,7 +445,27 @@ impl Editor {
         }
     }
 
+    /// Help › Report a problem / Send a suggestion or feedback: its window (the open one comes forward; the other kind
+    /// replaces it unless a report is on its way).
+    pub fn show_feedback(&mut self, ctl: &mut Ctl, kind: snapcore::project::IssueKind) {
+        if let Some(f) = &self.aux.feedback {
+            if f.busy() {
+                f.focus(ctl);
+                return;
+            }
+            ctl.close(f.key);
+            self.aux.feedback = None;
+        }
+        self.aux.feedback = snapui::feedback::Feedback::open(ctl, kind, "AnyCapture Editor", VERSION);
+    }
+
     pub fn aux_close(&mut self, ctl: &mut Ctl, k: WinKey) {
+        if self.aux.feedback.as_ref().is_some_and(|f| f.key == k) {
+            if self.aux.feedback.as_ref().is_some_and(|f| f.busy()) {
+                return; // a report on its way finishes first
+            }
+            self.aux.feedback = None;
+        }
         if self.aux.customize.as_ref().is_some_and(|c| c.key == k) {
             self.customize_done(false);
         }
@@ -476,6 +498,11 @@ impl Editor {
             self.contrast_ui(ctl, ui);
         } else if self.aux.assistant.as_ref().is_some_and(|c| c.key == k) {
             self.assistant_ui(ctl, ui);
+        } else if let Some(f) = self.aux.feedback.as_mut().filter(|f| f.key == k) {
+            if f.ui(ui) {
+                self.aux.feedback = None;
+                ctl.close(k);
+            }
         }
     }
 

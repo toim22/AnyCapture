@@ -140,7 +140,7 @@ msgstr ""
 "•  行上的齿轮可重命名、复制或删除预设。\n"
 "•  “用当前设置新建预设”会保存窗口中的当前内容。"
 
-#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:543 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:782
+#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:559 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:782
 msgid "Presets"
 msgstr "预设"
 
@@ -212,11 +212,11 @@ msgstr "自动 (Windows 语言)"
 msgid "Atalhos globais"
 msgstr "全局快捷键"
 
-#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:237
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:237
 msgid "Capturar imagem"
 msgstr "截取图像"
 
-#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572 rust/anycapture/src/window.rs:238
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:238
 msgid "Gravar vídeo"
 msgstr "录制视频"
 
@@ -228,7 +228,7 @@ msgstr "暂停/继续视频"
 msgid "Parar vídeo"
 msgstr "停止视频"
 
-#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:244
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:564 rust/anycapture/src/window.rs:244
 msgid "Conta-gotas de tela"
 msgstr "屏幕取色器"
 
@@ -236,11 +236,11 @@ msgstr "屏幕取色器"
 msgid "Capturar e fixar na tela"
 msgstr "截图并固定到屏幕"
 
-#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:232
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:232
 msgid "Fixar da área de transferência"
 msgstr "从剪贴板固定"
 
-#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:248
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:570 rust/anycapture/src/window.rs:248
 msgid "Foco de tela (apresentações)"
 msgstr "屏幕聚焦 (演示)"
 
@@ -764,7 +764,7 @@ msgstr "分辨率 (DPI)"
 msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
 msgstr "写入保存的文件 (PNG、JPEG、TIFF、BMP)。"
 
-#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:771
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:798
 msgid "Fundo"
 msgstr "背景"
 
@@ -989,7 +989,7 @@ msgstr "截图已添加到库"
 msgid "Clique para abrir no Editor."
 msgstr "单击可在编辑器中打开。"
 
-#: rust/anycapture/src/engine.rs:953 rust/anycapture/src/quick.rs:58 rust/snapedit/src/app/windows_aux.rs:487 rust/snapedit/src/app/windows_aux.rs:691
+#: rust/anycapture/src/engine.rs:953 rust/anycapture/src/quick.rs:58 rust/snapedit/src/app/windows_aux.rs:514 rust/snapedit/src/app/windows_aux.rs:718
 msgid "Fechar"
 msgstr "关闭"
 
@@ -1122,37 +1122,37 @@ msgstr "无法创建文件夹： "
 msgid "Captura por intervalo parada: %d imagem(ns) em %s"
 msgstr "定时截图已停止：%d 张图像，位于 %s"
 
-#: rust/anycapture/src/main.rs:176
+#: rust/anycapture/src/main.rs:178
 msgid "Esse atalho já está em uso por outra ação do AnyCapture."
 msgstr "此快捷键已被 AnyCapture 的其他操作占用。"
 
-#: rust/anycapture/src/main.rs:176 rust/anycapture/src/main.rs:261
+#: rust/anycapture/src/main.rs:178 rust/anycapture/src/main.rs:263
 msgid "Conflito de atalho"
 msgstr "快捷键冲突"
 
-#: rust/anycapture/src/main.rs:184
+#: rust/anycapture/src/main.rs:186
 msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
 msgstr "其他程序已在使用此快捷键。AnyCapture 将通过键盘钩子拦截它。"
 
-#: rust/anycapture/src/main.rs:185
+#: rust/anycapture/src/main.rs:187
 msgid "Atalho"
 msgstr "快捷键"
 
-#: rust/anycapture/src/main.rs:210
+#: rust/anycapture/src/main.rs:212
 #, c-format
 msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
 msgstr "现在删除早于 %u 天的截图 (按选项中的规则)？"
 
-#: rust/anycapture/src/main.rs:224
+#: rust/anycapture/src/main.rs:226
 #, c-format
 msgid "%d captura(s) removida(s) da biblioteca."
 msgstr "已从库中删除 %d 个截图。"
 
-#: rust/anycapture/src/main.rs:231
+#: rust/anycapture/src/main.rs:233
 msgid "Fixar imagem na tela"
 msgstr "将图像固定到屏幕"
 
-#: rust/anycapture/src/main.rs:233
+#: rust/anycapture/src/main.rs:235
 msgid ""
 "Não foi possível abrir a imagem.\n"
 "\n"
@@ -1160,153 +1160,153 @@ msgstr ""
 "无法打开图像。\n"
 "\n"
 
-#: rust/anycapture/src/main.rs:262
+#: rust/anycapture/src/main.rs:264
 #, c-format
 msgid "O atalho do preset \"%s\" já está em uso por outra ação."
 msgstr "预设“%s”的快捷键已被其他操作占用。"
 
-#: rust/anycapture/src/main.rs:542 rust/anycapture/src/main.rs:572
+#: rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588
 msgid "Abrir a janela de captura"
 msgstr "打开截图窗口"
 
-#: rust/anycapture/src/main.rs:543 rust/anycapture/src/window.rs:213
+#: rust/anycapture/src/main.rs:559 rust/anycapture/src/window.rs:213
 msgid "Abrir o Editor"
 msgstr "打开编辑器"
 
-#: rust/anycapture/src/main.rs:543
+#: rust/anycapture/src/main.rs:559
 msgid "Sair"
 msgstr "退出"
 
-#: rust/anycapture/src/main.rs:544 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
+#: rust/anycapture/src/main.rs:560 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44
 msgid "Ler código QR"
 msgstr "读取二维码"
 
-#: rust/anycapture/src/main.rs:545 rust/anycapture/src/window.rs:253
+#: rust/anycapture/src/main.rs:561 rust/anycapture/src/window.rs:253
 msgid "Mostrar o One Click"
 msgstr "显示 One Click"
 
-#: rust/anycapture/src/main.rs:547
+#: rust/anycapture/src/main.rs:563
 #, c-format
 msgid "Imagens fixadas (%zu)"
 msgstr "固定的图像 (%zu)"
 
-#: rust/anycapture/src/main.rs:547
+#: rust/anycapture/src/main.rs:563
 msgid "Imagens fixadas"
 msgstr "固定的图像"
 
-#: rust/anycapture/src/main.rs:548 rust/anycapture/src/window.rs:249
+#: rust/anycapture/src/main.rs:564 rust/anycapture/src/window.rs:249
 msgid "Gravar só o áudio"
 msgstr "仅录制音频"
 
-#: rust/anycapture/src/main.rs:550
+#: rust/anycapture/src/main.rs:566
 #, c-format
 msgid "Parar a captura por intervalo (%d)"
 msgstr "停止定时截图 (%d)"
 
-#: rust/anycapture/src/main.rs:552 rust/anycapture/src/window.rs:247
+#: rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:247
 msgid "Captura por intervalo…"
 msgstr "定时截图…"
 
-#: rust/anycapture/src/main.rs:554
+#: rust/anycapture/src/main.rs:570
 msgid "Abrir o Editor depois da captura"
 msgstr "截图后打开编辑器"
 
-#: rust/anycapture/src/main.rs:554 rust/anycapture/src/window.rs:226
+#: rust/anycapture/src/main.rs:570 rust/anycapture/src/window.rs:226
 msgid "Opções…"
 msgstr "选项…"
 
-#: rust/anycapture/src/main.rs:572
+#: rust/anycapture/src/main.rs:588
 msgid "Ocultar o One Click"
 msgstr "隐藏 One Click"
 
-#: rust/anycapture/src/main.rs:658
+#: rust/anycapture/src/main.rs:674
 msgid "AnyCapture — linha de comando"
 msgstr "AnyCapture — 命令行"
 
-#: rust/anycapture/src/main.rs:688
+#: rust/anycapture/src/main.rs:704
 msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
 msgstr "/region 需要 x,y,宽度,高度 (例如：/region 100,100,800,600)。"
 
-#: rust/anycapture/src/main.rs:700
+#: rust/anycapture/src/main.rs:716
 msgid "Nenhuma janela com esse título: "
 msgstr "没有此标题的窗口： "
 
-#: rust/anycapture/src/main.rs:712
+#: rust/anycapture/src/main.rs:728
 #, c-format
 msgid "Monitor %d não existe (há %zu)."
 msgstr "显示器 %d 不存在 (共有 %zu 个)。"
 
-#: rust/anycapture/src/main.rs:732
+#: rust/anycapture/src/main.rs:748
 msgid "Não foi possível fixar: "
 msgstr "无法固定： "
 
-#: rust/anycapture/src/main.rs:868 rust/snapcore/src/office.rs:181
+#: rust/anycapture/src/main.rs:884 rust/snapcore/src/office.rs:181
 #, c-format
 msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
 msgstr "此计算机未安装 %s (或者是 Microsoft Store 版本，不支持自动化)。"
 
-#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:233
+#: rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:233
 msgid "Fixar um arquivo…"
 msgstr "固定文件…"
 
-#: rust/anycapture/src/main.rs:880 rust/anycapture/src/window.rs:231
+#: rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:231
 msgid "Capturar e fixar"
 msgstr "截图并固定"
 
-#: rust/anycapture/src/main.rs:880
+#: rust/anycapture/src/main.rs:896
 msgid "Mostrar todas"
 msgstr "全部显示"
 
-#: rust/anycapture/src/main.rs:881
+#: rust/anycapture/src/main.rs:897
 msgid "Ocultar todas"
 msgstr "全部隐藏"
 
-#: rust/anycapture/src/main.rs:881 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:234
+#: rust/anycapture/src/main.rs:897 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:234
 msgid "Fechar todas"
 msgstr "全部关闭"
 
-#: rust/anycapture/src/main.rs:881
+#: rust/anycapture/src/main.rs:897
 msgid "Desligar \"atravessar cliques\""
 msgstr "关闭“点击穿透”"
 
-#: rust/anycapture/src/main.rs:881
+#: rust/anycapture/src/main.rs:897
 msgid "Reabrir a última fechada"
 msgstr "重新打开最后关闭的"
 
-#: rust/anycapture/src/main.rs:882
+#: rust/anycapture/src/main.rs:898
 msgid "Histórico"
 msgstr "历史记录"
 
-#: rust/anycapture/src/main.rs:927 rust/snapedit/src/app/extras.rs:328
+#: rust/anycapture/src/main.rs:943 rust/snapedit/src/app/extras.rs:328
 msgid "O manual não foi encontrado:\n"
 msgstr "找不到手册：\n"
 
-#: rust/anycapture/src/main.rs:968
+#: rust/anycapture/src/main.rs:984
 msgid " — captura de tela e gravação de vídeo"
 msgstr " — 屏幕截图和视频录制"
 
-#: rust/anycapture/src/main.rs:969 rust/snapedit/src/app/commands.rs:449
+#: rust/anycapture/src/main.rs:985 rust/snapedit/src/app/commands.rs:449
 msgid "Software livre sob a GNU General Public License versão 3."
 msgstr "基于 GNU 通用公共许可证第 3 版的自由软件。"
 
-#: rust/anycapture/src/main.rs:972 rust/anycapture/src/window.rs:264
+#: rust/anycapture/src/main.rs:988 rust/anycapture/src/window.rs:264
 msgid "Sobre o AnyCapture"
 msgstr "关于 AnyCapture"
 
-#: rust/anycapture/src/main.rs:1011 rust/anycapture/src/main.rs:1080 rust/anycapture/src/main.rs:1160
+#: rust/anycapture/src/main.rs:1027 rust/anycapture/src/main.rs:1101 rust/anycapture/src/main.rs:1187
 msgid "AnyCapture — clique para capturar"
 msgstr "AnyCapture — 单击截图"
 
-#: rust/anycapture/src/main.rs:1031
+#: rust/anycapture/src/main.rs:1047
 msgid "AnyCapture — gravação recuperada"
 msgstr "AnyCapture — 录制已恢复"
 
-#: rust/anycapture/src/main.rs:1032
+#: rust/anycapture/src/main.rs:1048
 #, c-format
 msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
 msgstr "已在库中恢复 %zu 个中断的录制。"
 
-#: rust/anycapture/src/main.rs:1158
+#: rust/anycapture/src/main.rs:1185
 #, c-format
 msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
 msgstr "AnyCapture — 定时截图：%d 张图像"
@@ -1463,7 +1463,7 @@ msgstr "复制为…"
 msgid "Enviar (upload) e copiar o link"
 msgstr "上传并复制链接"
 
-#: rust/anycapture/src/quick.rs:53 rust/snapedit/src/app/windows_aux.rs:869
+#: rust/anycapture/src/quick.rs:53 rust/snapedit/src/app/windows_aux.rs:896
 msgid "Copiar"
 msgstr "复制"
 
@@ -1500,7 +1500,7 @@ msgstr "以前的区域 %d / %d"
 msgid "Tamanho da seleção"
 msgstr "选区大小"
 
-#: rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387 rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:574
+#: rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387 rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:601
 msgid "Cancelar"
 msgstr "取消"
 
@@ -1545,7 +1545,7 @@ msgstr "录制： "
 msgid "ok"
 msgstr "ok"
 
-#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:577 rust/snapui/src/form.rs:476
+#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:604 rust/snapui/src/form.rs:461
 msgid "OK"
 msgstr "确定"
 
@@ -2166,7 +2166,7 @@ msgstr "Audio"
 msgid "Região"
 msgstr "区域"
 
-#: rust/snapcore/src/library.rs:559 rust/snapui/src/feedback.rs:37
+#: rust/snapcore/src/library.rs:559 rust/snapui/src/feedback.rs:160
 msgid "Título"
 msgstr "标题"
 
@@ -2433,7 +2433,7 @@ msgstr "未设置上传目标。"
 msgid "Não foi possível ler o arquivo."
 msgstr "无法读取文件。"
 
-#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:290
+#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:292
 msgid "Não foi possível preparar a imagem."
 msgstr "无法准备图像。"
 
@@ -3682,7 +3682,7 @@ msgstr "从剪贴板新建图像"
 msgid "Abrir arquivo (Ctrl+O)"
 msgstr "打开文件 (Ctrl+O)"
 
-#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:744
+#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:771
 msgid "Salvar"
 msgstr "保存"
 
@@ -3838,7 +3838,7 @@ msgstr "分享"
 msgid "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"
 msgstr "分享：文件、剪贴板、电子邮件、打印机、程序"
 
-#: rust/snapedit/src/panels.rs:260 rust/snapedit/src/app/windows_aux.rs:488 rust/snapui/src/qr.rs:48
+#: rust/snapedit/src/panels.rs:260 rust/snapedit/src/app/windows_aux.rs:515 rust/snapui/src/qr.rs:48
 msgid "Copiar tudo"
 msgstr "全部复制"
 
@@ -5815,11 +5815,11 @@ msgstr "行李箱"
 msgid "local pino"
 msgstr "位置 图钉"
 
-#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:352
+#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:354
 msgid "Antes"
 msgstr "之前"
 
-#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:353
+#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:355
 msgid "Depois"
 msgstr "之后"
 
@@ -6047,7 +6047,7 @@ msgstr "整张图像已复制到剪贴板。"
 msgid "Imagens e capturas"
 msgstr "图片和截图"
 
-#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1052 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:501
+#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1052 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:528
 msgid "Copiado."
 msgstr "已复制。"
 
@@ -6469,7 +6469,7 @@ msgstr "上传链接"
 msgid "Imagem em Markdown (link do upload)"
 msgstr "Markdown 图像 (上传链接)"
 
-#: rust/snapedit/src/app/extras.rs:445 rust/snapedit/src/app/extras.rs:952
+#: rust/snapedit/src/app/extras.rs:445 rust/snapedit/src/app/extras.rs:952 rust/snapui/src/feedback.rs:125
 msgid "Enviando…"
 msgstr "正在上传…"
 
@@ -6663,7 +6663,7 @@ msgstr ""
 "\n"
 "现在设置吗？"
 
-#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:228 rust/snapedit/src/app/windows_aux.rs:254 rust/snapedit/src/app/windows_aux.rs:432
+#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:230 rust/snapedit/src/app/windows_aux.rs:256 rust/snapedit/src/app/windows_aux.rs:434
 msgid "Assistente de IA"
 msgstr "AI 助手"
 
@@ -6822,7 +6822,7 @@ msgstr "石墨"
 msgid "Branco simples"
 msgstr "纯白"
 
-#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:706
 msgid "Lado a lado"
 msgstr "并排"
 
@@ -6950,7 +6950,7 @@ msgstr ""
 msgid "Propriedades"
 msgstr "属性"
 
-#: rust/snapedit/src/app/mod.rs:457 rust/snapedit/src/app/windows_aux.rs:559
+#: rust/snapedit/src/app/mod.rs:457 rust/snapedit/src/app/windows_aux.rs:586
 msgid "Efeitos"
 msgstr "效果"
 
@@ -7043,7 +7043,7 @@ msgstr "创建 GIF 动画"
 msgid "Salvar GIF"
 msgstr "保存 GIF"
 
-#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:740
+#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:767
 msgid "GIF animado (*.gif)|*.gif|"
 msgstr "GIF 动画 (*.gif)|*.gif|"
 
@@ -7103,263 +7103,263 @@ msgstr "保存 MP4…"
 msgid "Abrir no player"
 msgstr "在播放器中打开"
 
-#: rust/snapedit/src/app/windows_aux.rs:135
+#: rust/snapedit/src/app/windows_aux.rs:137
 msgid "Compatível com OpenAI"
 msgstr "兼容 OpenAI"
 
-#: rust/snapedit/src/app/windows_aux.rs:136
+#: rust/snapedit/src/app/windows_aux.rs:138
 msgid "Modelo local (Ollama)"
 msgstr "本地模型 (Ollama)"
 
-#: rust/snapedit/src/app/windows_aux.rs:208
+#: rust/snapedit/src/app/windows_aux.rs:210
 #, c-format
 msgid "A imagem e a pergunta serão enviadas para %s (%s). Nada é enviado até você perguntar."
 msgstr "图像和问题将发送到 %s (%s)。在您提问之前不会发送任何内容。"
 
-#: rust/snapedit/src/app/windows_aux.rs:216
+#: rust/snapedit/src/app/windows_aux.rs:218
 msgid "(guardada — deixe assim para manter)"
 msgstr "(已保存 — 保持不变即可保留)"
 
-#: rust/snapedit/src/app/windows_aux.rs:219
+#: rust/snapedit/src/app/windows_aux.rs:221
 msgid "Ativar o assistente de IA"
 msgstr "启用 AI 助手"
 
-#: rust/snapedit/src/app/windows_aux.rs:220
+#: rust/snapedit/src/app/windows_aux.rs:222
 msgid "Ao perguntar, a imagem é enviada ao provedor escolhido. Use a sua própria chave (cobrança na sua conta)."
 msgstr "提问时，图像会发送到所选的提供商。请使用您自己的密钥 (费用计入您的账户)。"
 
-#: rust/snapedit/src/app/windows_aux.rs:221
+#: rust/snapedit/src/app/windows_aux.rs:223
 msgid "Provedor"
 msgstr "提供商"
 
-#: rust/snapedit/src/app/windows_aux.rs:222
+#: rust/snapedit/src/app/windows_aux.rs:224
 msgid "Modelo"
 msgstr "模型"
 
-#: rust/snapedit/src/app/windows_aux.rs:223
+#: rust/snapedit/src/app/windows_aux.rs:225
 msgid "Endereço da API"
 msgstr "API 地址"
 
-#: rust/snapedit/src/app/windows_aux.rs:224
+#: rust/snapedit/src/app/windows_aux.rs:226
 msgid "Chave da API"
 msgstr "API 密钥"
 
-#: rust/snapedit/src/app/windows_aux.rs:225
+#: rust/snapedit/src/app/windows_aux.rs:227
 msgid "A chave fica no Gerenciador de Credenciais do Windows, nunca em arquivos. Modelo local: Ollama em http://localhost:11434/v1 (sem chave)."
 msgstr "密钥保存在 Windows 凭据管理器中，绝不存入文件。本地模型：Ollama，地址 http://localhost:11434/v1 (无需密钥)。"
 
-#: rust/snapedit/src/app/windows_aux.rs:244
+#: rust/snapedit/src/app/windows_aux.rs:246
 msgid "Informe o endereço da API."
 msgstr "请输入 API 地址。"
 
-#: rust/snapedit/src/app/windows_aux.rs:246
+#: rust/snapedit/src/app/windows_aux.rs:248
 msgid "Informe o modelo."
 msgstr "请输入模型。"
 
-#: rust/snapedit/src/app/windows_aux.rs:378
+#: rust/snapedit/src/app/windows_aux.rs:380
 msgid "Atalhos do AnyCapture Editor"
 msgstr "AnyCapture Editor 快捷键"
 
-#: rust/snapedit/src/app/windows_aux.rs:389 rust/snapedit/src/app/windows_aux.rs:513
+#: rust/snapedit/src/app/windows_aux.rs:391 rust/snapedit/src/app/windows_aux.rs:540
 msgid "Ampliar parte da imagem"
 msgstr "放大图像的局部"
 
-#: rust/snapedit/src/app/windows_aux.rs:404
+#: rust/snapedit/src/app/windows_aux.rs:406
 msgid "Personalizar a barra de ferramentas"
 msgstr "自定义工具栏"
 
-#: rust/snapedit/src/app/windows_aux.rs:413
+#: rust/snapedit/src/app/windows_aux.rs:415
 msgid "Verificador de contraste (WCAG)"
 msgstr "对比度检查器 (WCAG)"
 
-#: rust/snapedit/src/app/windows_aux.rs:422
+#: rust/snapedit/src/app/windows_aux.rs:424
 msgid "Comparar imagens"
 msgstr "比较图像"
 
-#: rust/snapedit/src/app/windows_aux.rs:515
+#: rust/snapedit/src/app/windows_aux.rs:542
 msgid "Amplie partes da imagem para destacar os detalhes importantes. Arraste para criar a lupa; com a lente separada, a alça amarela escolhe a área ampliada."
 msgstr "放大图像的局部以突出重要细节。拖动以创建放大镜；镜头分离时，黄色控制点用于选择放大区域。"
 
-#: rust/snapedit/src/app/windows_aux.rs:518
+#: rust/snapedit/src/app/windows_aux.rs:545
 msgid "Entendi!"
 msgstr "知道了！"
 
-#: rust/snapedit/src/app/windows_aux.rs:532
+#: rust/snapedit/src/app/windows_aux.rs:559
 msgid "Personalização cancelada."
 msgstr "已取消自定义。"
 
-#: rust/snapedit/src/app/windows_aux.rs:544
+#: rust/snapedit/src/app/windows_aux.rs:571
 msgid "Barra de ferramentas personalizada."
 msgstr "自定义工具栏。"
 
-#: rust/snapedit/src/app/windows_aux.rs:544
+#: rust/snapedit/src/app/windows_aux.rs:571
 msgid "Barra de ferramentas automática."
 msgstr "自动工具栏。"
 
-#: rust/snapedit/src/app/windows_aux.rs:551
+#: rust/snapedit/src/app/windows_aux.rs:578
 msgid "— espaço —"
 msgstr "— 间隔 —"
 
-#: rust/snapedit/src/app/windows_aux.rs:556
+#: rust/snapedit/src/app/windows_aux.rs:583
 msgid "Ferramentas de desenho"
 msgstr "绘图工具"
 
-#: rust/snapedit/src/app/windows_aux.rs:557
+#: rust/snapedit/src/app/windows_aux.rs:584
 msgid "Itens de menu"
 msgstr "菜单项"
 
-#: rust/snapedit/src/app/windows_aux.rs:558
+#: rust/snapedit/src/app/windows_aux.rs:585
 msgid "Destinos de compartilhamento"
 msgstr "分享目标"
 
-#: rust/snapedit/src/app/windows_aux.rs:560
+#: rust/snapedit/src/app/windows_aux.rs:587
 msgid "Diversos"
 msgstr "其他"
 
-#: rust/snapedit/src/app/windows_aux.rs:568
+#: rust/snapedit/src/app/windows_aux.rs:595
 msgid "Ferramentas na barra automática:"
 msgstr "自动工具栏中的工具："
 
-#: rust/snapedit/src/app/windows_aux.rs:572
+#: rust/snapedit/src/app/windows_aux.rs:599
 msgid "Restaurar o padrão"
 msgstr "恢复默认值"
 
-#: rust/snapedit/src/app/windows_aux.rs:587
+#: rust/snapedit/src/app/windows_aux.rs:614
 msgid "Na barra"
 msgstr "在工具栏中"
 
-#: rust/snapedit/src/app/windows_aux.rs:600
+#: rust/snapedit/src/app/windows_aux.rs:627
 msgid "Remover da barra"
 msgstr "从工具栏移除"
 
-#: rust/snapedit/src/app/windows_aux.rs:603
+#: rust/snapedit/src/app/windows_aux.rs:630
 msgid "Mover para baixo"
 msgstr "下移"
 
-#: rust/snapedit/src/app/windows_aux.rs:606
+#: rust/snapedit/src/app/windows_aux.rs:633
 msgid "Mover para cima"
 msgstr "上移"
 
-#: rust/snapedit/src/app/windows_aux.rs:624
+#: rust/snapedit/src/app/windows_aux.rs:651
 msgid "Clique num item para acrescentá-lo ao fim da barra."
 msgstr "单击一项将其添加到工具栏末尾。"
 
-#: rust/snapedit/src/app/windows_aux.rs:635
+#: rust/snapedit/src/app/windows_aux.rs:662
 msgid "Já está na barra"
 msgstr "已在工具栏上"
 
-#: rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/windows_aux.rs:706
 msgid "Sobreposição"
 msgstr "叠加"
 
-#: rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/windows_aux.rs:706
 msgid "Deslizar (antes | depois)"
 msgstr "滑动 (之前 | 之后)"
 
-#: rust/snapedit/src/app/windows_aux.rs:679
+#: rust/snapedit/src/app/windows_aux.rs:706
 msgid "Diferença"
 msgstr "差异"
 
-#: rust/snapedit/src/app/windows_aux.rs:686
+#: rust/snapedit/src/app/windows_aux.rs:713
 msgid "Transparência de B"
 msgstr "B 的透明度"
 
-#: rust/snapedit/src/app/windows_aux.rs:686
+#: rust/snapedit/src/app/windows_aux.rs:713
 msgid "Divisória"
 msgstr "分隔线"
 
-#: rust/snapedit/src/app/windows_aux.rs:692
+#: rust/snapedit/src/app/windows_aux.rs:719
 msgid "Exportar imagem…"
 msgstr "导出图像…"
 
-#: rust/snapedit/src/app/windows_aux.rs:693
+#: rust/snapedit/src/app/windows_aux.rs:720
 msgid "Exportar GIF…"
 msgstr "导出 GIF…"
 
-#: rust/snapedit/src/app/windows_aux.rs:694
+#: rust/snapedit/src/app/windows_aux.rs:721
 msgid "A ⇄ B"
 msgstr "A ⇄ B"
 
-#: rust/snapedit/src/app/windows_aux.rs:704
+#: rust/snapedit/src/app/windows_aux.rs:731
 #, c-format
 msgid "A: %s (%d × %d)   B: %s (%d × %d)"
 msgstr "A：%s (%d × %d)   B：%s (%d × %d)"
 
-#: rust/snapedit/src/app/windows_aux.rs:709
+#: rust/snapedit/src/app/windows_aux.rs:736
 #, c-format
 msgid "   •   %d pixels diferentes (%.2f%%)"
 msgstr "   •   %d 个不同的像素 (%.2f%%)"
 
-#: rust/snapedit/src/app/windows_aux.rs:740 rust/snapedit/src/app/windows_aux.rs:742
+#: rust/snapedit/src/app/windows_aux.rs:767 rust/snapedit/src/app/windows_aux.rs:769
 msgid "Antes-depois"
 msgstr "前后对比"
 
-#: rust/snapedit/src/app/windows_aux.rs:748
+#: rust/snapedit/src/app/windows_aux.rs:775
 msgid "Exportado."
 msgstr "已导出。"
 
-#: rust/snapedit/src/app/windows_aux.rs:749
+#: rust/snapedit/src/app/windows_aux.rs:776
 msgid "Não foi possível salvar o arquivo."
 msgstr "无法保存文件。"
 
-#: rust/snapedit/src/app/windows_aux.rs:771
+#: rust/snapedit/src/app/windows_aux.rs:798
 msgid "Texto (primeiro plano)"
 msgstr "文本 (前景)"
 
-#: rust/snapedit/src/app/windows_aux.rs:783
+#: rust/snapedit/src/app/windows_aux.rs:810
 msgid "Escolher cor…"
 msgstr "选择颜色…"
 
-#: rust/snapedit/src/app/windows_aux.rs:786
+#: rust/snapedit/src/app/windows_aux.rs:813
 msgid "Copiar HEX"
 msgstr "复制 HEX"
 
-#: rust/snapedit/src/app/windows_aux.rs:797
+#: rust/snapedit/src/app/windows_aux.rs:824
 msgid "Texto grande Aa"
 msgstr "大号文本 Aa"
 
-#: rust/snapedit/src/app/windows_aux.rs:798
+#: rust/snapedit/src/app/windows_aux.rs:825
 msgid "Texto normal — o rato roeu a roupa do rei"
 msgstr "普通文本 — 敏捷的棕色狐狸跳过了懒狗"
 
-#: rust/snapedit/src/app/windows_aux.rs:804
+#: rust/snapedit/src/app/windows_aux.rs:831
 msgid "Inverter as cores"
 msgstr "交换颜色"
 
-#: rust/snapedit/src/app/windows_aux.rs:841
+#: rust/snapedit/src/app/windows_aux.rs:868
 msgid "Configure a chave do provedor primeiro."
 msgstr "请先设置提供商的密钥。"
 
-#: rust/snapedit/src/app/windows_aux.rs:846
+#: rust/snapedit/src/app/windows_aux.rs:873
 msgid "Perguntando…"
 msgstr "正在提问…"
 
-#: rust/snapedit/src/app/windows_aux.rs:854
+#: rust/snapedit/src/app/windows_aux.rs:881
 #, c-format
 msgid "Resposta de %s (%s)."
 msgstr "来自 %s (%s) 的回答。"
 
-#: rust/snapedit/src/app/windows_aux.rs:871
+#: rust/snapedit/src/app/windows_aux.rs:898
 msgid "Resposta copiada."
 msgstr "回答已复制。"
 
-#: rust/snapedit/src/app/windows_aux.rs:873
+#: rust/snapedit/src/app/windows_aux.rs:900
 msgid "Adicionar como texto"
 msgstr "添加为文本"
 
-#: rust/snapedit/src/app/windows_aux.rs:874
+#: rust/snapedit/src/app/windows_aux.rs:901
 msgid "Configurações…"
 msgstr "设置…"
 
-#: rust/snapedit/src/app/windows_aux.rs:893
+#: rust/snapedit/src/app/windows_aux.rs:920
 msgid "Faça uma pergunta sobre a imagem…"
 msgstr "提出关于图像的问题…"
 
-#: rust/snapedit/src/app/windows_aux.rs:895
+#: rust/snapedit/src/app/windows_aux.rs:922
 msgid "Perguntar"
 msgstr "提问"
 
-#: rust/snapedit/src/app/windows_aux.rs:117
+#: rust/snapedit/src/app/windows_aux.rs:119
 msgid ""
 "Ferramentas (com a área de pintura em foco):\n"
 "  V Mover   A Seta   L Linha   R Forma   P Caneta   H Marcador\n"
@@ -7391,19 +7391,19 @@ msgstr ""
 "图像：Ctrl+Shift+F/B 上移/下移一层 • Ctrl+T 合并对象 • Ctrl+Shift+T 全部合并 • Ctrl+; 吸附\n"
 "视频：空格 播放/暂停 • ←/→ 帧 • I/O 标记起点/终点\n"
 
-#: rust/snapedit/src/app/windows_aux.rs:275
+#: rust/snapedit/src/app/windows_aux.rs:277
 msgid "Explicar"
 msgstr "解释"
 
-#: rust/snapedit/src/app/windows_aux.rs:276
+#: rust/snapedit/src/app/windows_aux.rs:278
 msgid "Descrever"
 msgstr "描述"
 
-#: rust/snapedit/src/app/windows_aux.rs:277
+#: rust/snapedit/src/app/windows_aux.rs:279
 msgid "Extrair os passos"
 msgstr "提取步骤"
 
-#: rust/snapedit/src/app/windows_aux.rs:278
+#: rust/snapedit/src/app/windows_aux.rs:280
 msgid "Extrair o texto"
 msgstr "提取文本"
 
@@ -7419,63 +7419,103 @@ msgstr "写入文件失败。"
 msgid "Falha ao codificar a imagem."
 msgstr "图像编码失败。"
 
-#: rust/snapui/src/feedback.rs:33
-msgid "Descreva o problema. Ele é enviado ao projeto AnyCapture no GitHub como um novo relato (bug)."
-msgstr "请描述问题。它会作为新的问题报告（bug）发送到 GitHub 上的 AnyCapture 项目。"
-
-#: rust/snapui/src/feedback.rs:35
-msgid "Conte sua ideia ou o que acha do AnyCapture. Ela é enviada ao projeto AnyCapture no GitHub como uma sugestão."
-msgstr "告诉我们您的想法或对 AnyCapture 的看法。它会作为建议发送到 GitHub 上的 AnyCapture 项目。"
-
-#: rust/snapui/src/feedback.rs:38
-msgid "O que aconteceu?"
-msgstr "发生了什么？"
-
-#: rust/snapui/src/feedback.rs:38
-msgid "Sua sugestão ou feedback"
-msgstr "您的建议或反馈"
-
 #: rust/snapui/src/feedback.rs:40
-msgid "Passos para reproduzir (opcional)"
-msgstr "重现步骤（可选）"
-
-#: rust/snapui/src/feedback.rs:40
-msgid "Por que ajudaria? (opcional)"
-msgstr "为什么会有帮助？（可选）"
-
-#: rust/snapui/src/feedback.rs:44
-msgid "Incluir a versão do Windows e o idioma"
-msgstr "包含 Windows 版本和语言"
-
-#: rust/snapui/src/feedback.rs:49
-msgid "Preencha o título e a descrição."
-msgstr "请填写标题和描述。"
-
-#: rust/snapui/src/feedback.rs:54
 msgid "Relatar um problema"
 msgstr "报告问题"
 
-#: rust/snapui/src/feedback.rs:54
+#: rust/snapui/src/feedback.rs:40
 msgid "Enviar sugestão ou feedback"
 msgstr "发送建议或反馈"
 
-#: rust/snapui/src/feedback.rs:68
-msgid "Obrigado! Seu relato foi enviado ao projeto AnyCapture no GitHub:"
-msgstr "谢谢！您的报告已发送到 GitHub 上的 AnyCapture 项目："
+#: rust/snapui/src/feedback.rs:107
+msgid "Ver os relatos enviados"
+msgstr "查看已发送的报告"
 
-#: rust/snapui/src/feedback.rs:69
-msgid "Obrigado! Sua sugestão foi enviada ao projeto AnyCapture no GitHub:"
-msgstr "谢谢！您的建议已发送到 GitHub 上的 AnyCapture 项目："
+#: rust/snapui/src/feedback.rs:109
+msgid "Ver as sugestões enviadas"
+msgstr "查看已发送的建议"
 
-#: rust/snapui/src/feedback.rs:71
-msgid "Abrir no navegador?"
-msgstr "在浏览器中打开？"
+#: rust/snapui/src/feedback.rs:119
+msgid "Voltar"
+msgstr "返回"
 
-#: rust/snapui/src/feedback.rs:76
-msgid "O GitHub abriu no navegador com tudo já preenchido. Entre na sua conta do GitHub se for pedido, revise e clique em \"Create\" para enviar."
-msgstr "GitHub 已在浏览器中打开，所有内容均已填写。如有要求请登录 GitHub，检查后点击 \"Create\" 发送。"
+#: rust/snapui/src/feedback.rs:125
+msgid "Enviar"
+msgstr "发送"
 
-#: rust/snapui/src/feedback.rs:80
+#: rust/snapui/src/feedback.rs:154
+msgid "Descreva o problema. Ele é enviado ao projeto AnyCapture no GitHub como um novo relato (bug); não é preciso ter conta no GitHub."
+msgstr "请描述问题。它会作为新的问题报告（bug）发送到 GitHub 上的 AnyCapture 项目；无需 GitHub 帐户。"
+
+#: rust/snapui/src/feedback.rs:156
+msgid "Conte sua ideia ou o que acha do AnyCapture. Ela é enviada ao projeto AnyCapture no GitHub como uma sugestão; não é preciso ter conta no GitHub."
+msgstr "告诉我们您的想法或对 AnyCapture 的看法。它会作为建议发送到 GitHub 上的 AnyCapture 项目；无需 GitHub 帐户。"
+
+#: rust/snapui/src/feedback.rs:161
+msgid "Ex.: o Editor fecha ao colar uma imagem"
+msgstr "例如：粘贴图像时编辑器会关闭"
+
+#: rust/snapui/src/feedback.rs:161
+msgid "Ex.: atalho para repetir a última região"
+msgstr "例如：重复上一个区域的快捷键"
+
+#: rust/snapui/src/feedback.rs:168
+msgid "O que aconteceu?"
+msgstr "发生了什么？"
+
+#: rust/snapui/src/feedback.rs:168
+msgid "Sua sugestão ou feedback"
+msgstr "您的建议或反馈"
+
+#: rust/snapui/src/feedback.rs:171
+msgid "Passos para reproduzir (opcional)"
+msgstr "重现步骤（可选）"
+
+#: rust/snapui/src/feedback.rs:171
+msgid "Por que ajudaria? (opcional)"
+msgstr "为什么会有帮助？（可选）"
+
+#: rust/snapui/src/feedback.rs:175
+msgid "Incluir a versão do Windows e o idioma"
+msgstr "包含 Windows 版本和语言"
+
+#: rust/snapui/src/feedback.rs:182
+msgid "Preencha o título e a descrição."
+msgstr "请填写标题和描述。"
+
+#: rust/snapui/src/feedback.rs:191
+msgid "Obrigado! Seu relato foi enviado."
+msgstr "谢谢！您的报告已发送。"
+
+#: rust/snapui/src/feedback.rs:191
+msgid "Obrigado! Sua sugestão foi enviada."
+msgstr "谢谢！您的建议已发送。"
+
+#: rust/snapui/src/feedback.rs:192
+msgid "Ele está no projeto AnyCapture no GitHub:"
+msgstr "它位于 GitHub 上的 AnyCapture 项目："
+
+#: rust/snapui/src/feedback.rs:193
+msgid "Quase lá: termine no navegador"
+msgstr "即将完成：请在浏览器中完成"
+
+#: rust/snapui/src/feedback.rs:194
+msgid "Não foi possível enviar direto agora, então o GitHub abriu no navegador com tudo já preenchido. Entre na sua conta do GitHub se for pedido, revise e clique em \"Create\" para enviar."
+msgstr "目前无法直接发送，因此已在浏览器中打开 GitHub，所有内容均已填写。如有要求请登录 GitHub，检查后点击 \"Create\" 发送。"
+
+#: rust/snapui/src/feedback.rs:195
+msgid "Aguarde um pouco"
+msgstr "请稍候"
+
+#: rust/snapui/src/feedback.rs:195
+msgid "Vários envios seguidos deste computador. Tente de novo em um minuto."
+msgstr "此计算机连续发送了多次。请一分钟后重试。"
+
+#: rust/snapui/src/feedback.rs:196
+msgid "Não foi possível enviar"
+msgstr "无法发送"
+
+#: rust/snapui/src/feedback.rs:196
 msgid "Não foi possível enviar nem abrir o navegador. Envie pelo endereço:"
 msgstr "无法发送，也无法打开浏览器。请通过以下地址发送："
 
