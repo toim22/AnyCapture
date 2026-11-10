@@ -6,6 +6,7 @@
 
 use std::cell::{Cell, RefCell};
 use std::sync::Once;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use snapcore::screen;
 use snapcore::wide::to_wide;
@@ -19,20 +20,25 @@ use windows::Win32::Graphics::Gdi::{
 };
 use windows::Win32::UI::Controls::Dialogs::{CC_FULLOPEN, CC_RGBINIT, CHOOSECOLORW, ChooseColorW};
 use windows::Win32::UI::Controls::{
-    HKM_GETHOTKEY, HKM_SETHOTKEY, HOTKEY_CLASSW, UDM_SETBUDDY, UDM_SETPOS32, UDM_SETRANGE32, UDS_ALIGNRIGHT, UDS_ARROWKEYS,
+    EM_SETSEL, HKM_GETHOTKEY, HKM_SETHOTKEY, UDM_SETBUDDY, UDM_SETPOS32, UDM_SETRANGE32, UDS_ALIGNRIGHT, UDS_ARROWKEYS,
     UDS_NOTHOUSANDS, UDS_SETBUDDYINT, UPDOWN_CLASSW,
 };
 use windows::Win32::UI::HiDpi::{AdjustWindowRectExForDpi, GetDpiForSystem, GetDpiForWindow};
 use windows::Win32::UI::Input::KeyboardAndMouse::{
-    EnableWindow, GetAsyncKeyState, GetFocus, MOD_ALT, MOD_CONTROL, MOD_SHIFT, SetFocus, VK_CONTROL, VK_ESCAPE, VK_MENU, VK_SHIFT,
-    VK_SNAPSHOT,
+    EnableWindow, GetAsyncKeyState, GetFocus, GetKeyNameTextW, MAPVK_VK_TO_VSC, MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_WIN,
+    MapVirtualKeyW, SetFocus, VK_BACK, VK_CONTROL, VK_DELETE, VK_DIVIDE, VK_DOWN, VK_END, VK_ESCAPE, VK_HOME, VK_INSERT,
+    VK_LCONTROL, VK_LEFT, VK_LSHIFT, VK_LWIN, VK_MENU, VK_NEXT, VK_NUMLOCK, VK_PAUSE, VK_PRIOR, VK_RCONTROL, VK_RETURN,
+    VK_RIGHT, VK_RSHIFT, VK_RWIN, VK_SHIFT, VK_SNAPSHOT, VK_TAB, VK_UP,
 };
+use windows::Win32::UI::Shell::{DefSubclassProc, RemoveWindowSubclass, SetWindowSubclass};
 use windows::Win32::UI::WindowsAndMessaging::{
     BS_DEFPUSHBUTTON, CallNextHookEx, CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, ES_AUTOHSCROLL, ES_NUMBER, GetDlgItem,
     GetForegroundWindow, GetMessageW, GetWindowRect, GetWindowTextW, HC_ACTION, HMENU, IDC_ARROW, IsChild, IsDialogMessageW, LoadCursorW, MB_ICONWARNING, MSG,
     KBDLLHOOKSTRUCT, MessageBoxW, RegisterClassW, SW_SHOW, SendMessageW, SetForegroundWindow, SetWindowTextW, SetWindowsHookExW,
     ShowWindow, TranslateMessage, UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
-    WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_KEYDOWN, WM_SETFONT, WNDCLASSW, WS_BORDER, WS_CAPTION, WS_CHILD, WS_CLIPCHILDREN,
+    WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_KEYDOWN, WM_SETFONT, WNDCLASSW, WS_CAPTION, WS_CHILD, WS_CLIPCHILDREN,
+    DLGC_WANTALLKEYS, GWLP_USERDATA, GetWindowLongPtrW, SetWindowLongPtrW, WM_CHAR, WM_CLEAR, WM_CONTEXTMENU, WM_CUT,
+    WM_DEADCHAR, WM_GETDLGCODE, WM_NCDESTROY, WM_PASTE, WM_SETTEXT, WM_SYSCHAR, WM_SYSDEADCHAR, WM_UNDO,
     WS_EX_CLIENTEDGE, WS_EX_DLGMODALFRAME, WS_EX_TOPMOST, WS_POPUP, WS_SYSMENU, WS_TABSTOP, WS_VISIBLE,
 };
 use windows::core::{PCWSTR, w};
@@ -123,9 +129,29 @@ thread_local! {
     static HOTKEY_FIELDS: RefCell<(isize, Vec<isize>)> = const { RefCell::new((0, Vec::new())) };
 }
 
-/// Print Screen in a hotkey field (#6): Windows sends no key-down for it, so the hotkey control never sees it, and the
-/// key may belong to the Snipping Tool or to a AnyCapture capture. While a hotkey field of this thread's form has the
-/// focus, this low-level hook (installed after those, so it comes first) puts the key in the field and keeps it.
+/// Forms with hotkey fields open in this process: while one is, the programs' own shortcuts stand aside
+/// ([`editing_hotkeys`]), so pressing the key being chosen does not start a capture.
+static HOTKEY_FORMS: AtomicUsize = AtomicUsize::new(0);
+
+/// True while a form with hotkey fields is open (the Options): the program ignores its global shortcuts meanwhile.
+pub fn editing_hotkeys() -> bool {
+    HOTKEY_FORMS.load(Ordering::SeqCst) > 0
+}
+
+fn held(vk: u16) -> bool {
+    unsafe { GetAsyncKeyState(vk as i32) as u16 & 0x8000 != 0 }
+}
+
+/// The modifiers held now, as HOTKEYF_ flags.
+fn held_hkf() -> u32 {
+    (if held(VK_SHIFT.0) { HOTKEYF_SHIFT } else { 0 }) | (if held(VK_CONTROL.0) { HOTKEYF_CONTROL } else { 0 })
+        | (if held(VK_MENU.0) { HOTKEYF_ALT } else { 0 })
+}
+
+/// Print Screen in a hotkey field (#6): Windows sends no key-down for it, and the key may belong to the Snipping Tool
+/// or to a AnyCapture capture. While a hotkey field of this thread's form has the focus, this low-level hook (installed
+/// after those, so it comes first) puts the key in the field and keeps it. Where the hook is not called, the field
+/// still takes the key-up ([`hotkey_field_proc`]).
 unsafe extern "system" fn print_screen_proc(code: i32, w: WPARAM, l: LPARAM) -> LRESULT {
     let msg = w.0 as u32;
     if code == HC_ACTION as i32 && matches!(msg, WM_KEYDOWN | WM_SYSKEYDOWN | WM_KEYUP | WM_SYSKEYUP) {
@@ -137,16 +163,113 @@ unsafe extern "system" fn print_screen_proc(code: i32, w: WPARAM, l: LPARAM) -> 
         });
         if ours && k.vkCode == VK_SNAPSHOT.0 as u32 {
             if matches!(msg, WM_KEYDOWN | WM_SYSKEYDOWN) {
-                let down = |vk: u16| unsafe { GetAsyncKeyState(vk as i32) } as u16 & 0x8000 != 0;
-                let mods = (if down(VK_SHIFT.0) { MOD_SHIFT.0 } else { 0 }) | (if down(VK_CONTROL.0) { MOD_CONTROL.0 } else { 0 })
-                    | (if down(VK_MENU.0) { MOD_ALT.0 } else { 0 });
-                let v = VK_SNAPSHOT.0 as u32 | mod_to_hkf(mods) << 8;
+                let v = VK_SNAPSHOT.0 as u32 | held_hkf() << 8;
                 unsafe { SendMessageW(HWND(focus as _), HKM_SETHOTKEY, Some(WPARAM(v as usize)), None) };
             }
             return LRESULT(1);
         }
     }
     unsafe { CallNextHookEx(None, code, w, l) }
+}
+
+/// "Ctrl+Shift+F11", "Print Screen", "Shift+Home"; "(nenhum)" for none. `mods` are MOD_ flags. Windows' own hotkey
+/// control has no name for Print Screen (an empty field, as if the key had been refused) and calls Home "Num 7", so the
+/// fields and the logs name the keys here.
+pub fn hotkey_text(mods: u32, vk: u32) -> String {
+    if vk == 0 {
+        return tr("(nenhum)");
+    }
+    let mut s = String::new();
+    for (m, t) in [(MOD_CONTROL.0, "Ctrl+"), (MOD_SHIFT.0, "Shift+"), (MOD_ALT.0, "Alt+"), (MOD_WIN.0, "Win+")] {
+        if mods & m != 0 {
+            s += t;
+        }
+    }
+    if vk == VK_SNAPSHOT.0 as u32 {
+        return s + &tr("Print Screen");
+    }
+    if vk == VK_PAUSE.0 as u32 {
+        return s + "Pause";
+    }
+    let sc = unsafe { MapVirtualKeyW(vk, MAPVK_VK_TO_VSC) };
+    let mut lp = (sc << 16) as i32;
+    let extended = [VK_INSERT, VK_DELETE, VK_HOME, VK_END, VK_PRIOR, VK_NEXT, VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN, VK_DIVIDE, VK_NUMLOCK];
+    if extended.iter().any(|k| k.0 as u32 == vk) {
+        lp |= 1 << 24;
+    }
+    let mut name = [0u16; 64];
+    let n = unsafe { GetKeyNameTextW(lp, &mut name) };
+    if n > 0 {
+        return s + &String::from_utf16_lossy(&name[..n as usize]);
+    }
+    s + &format!("VK{vk}")
+}
+
+/// Shows the hotkey `v` (HKM_SETHOTKEY layout: the key in the low byte, HOTKEYF_ flags above) in the field.
+fn set_hotkey_field(h: HWND, v: u32) {
+    let v = v & 0xFFFF;
+    let t = to_wide(&hotkey_text(hkf_to_mod((v >> 8) & 0xFF), v & 0xFF));
+    unsafe {
+        SetWindowLongPtrW(h, GWLP_USERDATA, v as isize);
+        DefSubclassProc(h, WM_SETTEXT, WPARAM(0), LPARAM(t.as_ptr() as isize));
+        DefSubclassProc(h, EM_SETSEL, WPARAM(t.len().saturating_sub(1)), LPARAM(-1));
+    }
+}
+
+const HOTKEY_SUBCLASS: usize = 0x484B;
+
+/// A hotkey field: an edit box that takes the key pressed (with Ctrl, Shift and Alt) and shows its name; Backspace or
+/// Delete empties it. It answers HKM_SETHOTKEY and HKM_GETHOTKEY like Windows' hotkey control (the e2e suite fills it
+/// that way). Print Screen has no key-down, so its key-up sets it.
+unsafe extern "system" fn hotkey_field_proc(h: HWND, msg: u32, wp: WPARAM, lp: LPARAM, _id: usize, _data: usize) -> LRESULT {
+    const MODIFIERS: [u16; 9] = [VK_SHIFT.0, VK_CONTROL.0, VK_MENU.0, VK_LSHIFT.0, VK_RSHIFT.0, VK_LCONTROL.0, VK_RCONTROL.0,
+                                 VK_LWIN.0, VK_RWIN.0];
+    unsafe {
+        match msg {
+            HKM_SETHOTKEY => {
+                set_hotkey_field(h, wp.0 as u32);
+                return LRESULT(0);
+            }
+            HKM_GETHOTKEY => return LRESULT(GetWindowLongPtrW(h, GWLP_USERDATA) & 0xFFFF),
+            WM_GETDLGCODE => {
+                // Tab, Enter and Esc keep moving, confirming and closing the form; every other key is for the field
+                if lp.0 != 0 {
+                    let m = &*(lp.0 as *const MSG);
+                    let k = m.wParam.0 as u16;
+                    if m.message == WM_KEYDOWN
+                        && held_hkf() & (HOTKEYF_CONTROL | HOTKEYF_ALT) == 0
+                        && (k == VK_TAB.0 || k == VK_RETURN.0 || k == VK_ESCAPE.0)
+                    {
+                        return LRESULT(0);
+                    }
+                }
+                return LRESULT(DLGC_WANTALLKEYS as isize);
+            }
+            WM_KEYDOWN | WM_SYSKEYDOWN => {
+                let vk = wp.0 as u16;
+                if !MODIFIERS.contains(&vk) {
+                    let mods = held_hkf();
+                    let clear = mods == 0 && (vk == VK_BACK.0 || vk == VK_DELETE.0);
+                    set_hotkey_field(h, if clear { 0 } else { vk as u32 | mods << 8 });
+                }
+                return LRESULT(0);
+            }
+            WM_KEYUP | WM_SYSKEYUP => {
+                if wp.0 as u16 == VK_SNAPSHOT.0 {
+                    set_hotkey_field(h, VK_SNAPSHOT.0 as u32 | held_hkf() << 8);
+                }
+                return LRESULT(0);
+            }
+            WM_CHAR | WM_SYSCHAR | WM_DEADCHAR | WM_SYSDEADCHAR | WM_PASTE | WM_CUT | WM_CLEAR | WM_UNDO | WM_CONTEXTMENU => {
+                return LRESULT(0);
+            }
+            WM_NCDESTROY => {
+                let _ = RemoveWindowSubclass(h, Some(hotkey_field_proc), HOTKEY_SUBCLASS);
+            }
+            _ => {}
+        }
+        DefSubclassProc(h, msg, wp, lp)
+    }
 }
 
 fn color_text(c: u32) -> String {
@@ -445,7 +568,8 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
                 }
                 Field::Hotkey { label: l, mods, vk } => {
                     label(l);
-                    let c = child(Default::default(), HOTKEY_CLASSW, "", WS_TABSTOP.0 | WS_BORDER.0, cx, yy, cw, ctl_h, id, font);
+                    let c = child(WS_EX_CLIENTEDGE, w!("EDIT"), "", WS_TABSTOP.0 | ES_AUTOHSCROLL as u32, cx, yy, cw, ctl_h, id, font);
+                    let _ = SetWindowSubclass(c, Some(hotkey_field_proc), HOTKEY_SUBCLASS, 0);
                     SendMessageW(c, HKM_SETHOTKEY, Some(WPARAM(((*vk & 0xFF) | (mod_to_hkf(*mods) << 8)) as usize)), None);
                     HOTKEY_FIELDS.with(|f| f.borrow_mut().1.push(c.0 as isize));
                     Some(c)
@@ -469,8 +593,10 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
         let hook = if HOTKEY_FIELDS.with(|f| f.borrow().1.is_empty()) {
             None
         } else {
+            HOTKEY_FORMS.fetch_add(1, Ordering::SeqCst);
             SetWindowsHookExW(WH_KEYBOARD_LL, Some(print_screen_proc), None, 0).ok()
         };
+        let editing = !HOTKEY_FIELDS.with(|f| f.borrow().1.is_empty());
         let _ = ShowWindow(h, SW_SHOW);
         let _ = SetForegroundWindow(h);
         let _ = SetFocus(Some(first.unwrap_or(ok)));
@@ -505,6 +631,9 @@ pub fn run_ex(owner: isize, title: &str, fields: &mut [Field], width: i32, valid
         }
         if let Some(k) = hook {
             let _ = UnhookWindowsHookEx(k);
+        }
+        if editing {
+            HOTKEY_FORMS.fetch_sub(1, Ordering::SeqCst);
         }
         HOTKEY_FIELDS.with(|f| *f.borrow_mut() = (0, Vec::new()));
         let _ = DestroyWindow(h);

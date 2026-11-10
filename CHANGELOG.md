@@ -65,8 +65,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - The Pen and the Eraser show their tip as the mouse pointer, a circle as wide as the chosen width at the current zoom,
   instead of a cross (#4).
 - *Save as* in the Editor (Ctrl+Shift+S) opens in the folder used the last time, instead of the capture folder (#5).
-- Print Screen can be typed into a hotkey box (Options and preset hotkeys), alone or with Shift, Ctrl or Alt. Windows
-  sends no key press for it, and the Snipping Tool or a AnyCapture capture could take it first (#6).
+- Print Screen can be typed into a hotkey box (Options and preset hotkeys), alone or with Shift, Ctrl or Alt, and the
+  box says "Print Screen". Windows' own hotkey box had no name for the key, so it stayed empty as if the key had been
+  refused (and Shift+Print Screen read "Shift +", Home "Num 7"); the boxes now name every key the way the log does.
+  While the Options are open, pressing a shortcut no longer starts a capture (#6).
 - Print Screen captures reliably as the image hotkey: the keyboard hook that takes it before the Snipping Tool,
   OneDrive or another capture tool runs on a thread of its own, so Windows no longer drops it when the capture window
   is busy, and the key is also registered the usual way for when an elevated program is in front.

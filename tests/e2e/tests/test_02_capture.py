@@ -5,6 +5,7 @@ import time
 import psutil
 import pytest
 import win32api
+import win32con
 from PIL import Image
 
 from anycapture_e2e import apps, library, presets, regs, win
@@ -298,6 +299,61 @@ def test_print_screen_runs_first_image_preset(capture, logs, lib):
                if snip else ""))
 
 
+HKM_GETHOTKEY = 0x0402
+VK_HOME, VK_SNAPSHOT, MOD_SHIFT = 0x24, 0x2C, 0x4
+
+
+def field_text(h):
+    """The text of an edit box in another process (GetWindowText only reads captions there)."""
+    import ctypes
+    u = ctypes.windll.user32
+    n = u.SendMessageW(h, win32con.WM_GETTEXTLENGTH, 0, 0)
+    buf = ctypes.create_unicode_buffer(n + 1)
+    u.SendMessageW(h, win32con.WM_GETTEXT, n + 1, buf)
+    return buf.value
+
+
+def test_print_screen_typed_in_options_then_captures(capture, logs, lib):
+    """#6 the user's way: another key (Shift+Home) and video on Shift+Print Screen; in Options, click the "Capture image"
+    field, press Print Screen, OK; then Print Screen captures. Windows' own hotkey control showed Print Screen as an
+    empty field (and Shift+Print Screen as "Shift +"), which looked like the key had been refused."""
+    regs.set_dword("ImageHotkey", MOD_SHIFT << 16 | VK_HOME)
+    regs.set_dword("VideoHotkey", MOD_SHIFT << 16 | VK_SNAPSHOT)
+    start_with(capture, presets.preset("e2e full", "FullScreen", editor=False))
+    logs.capture.wait(r"(?i)Hotkey registered: id 1 = Shift\+HOME")
+    capture.show()
+    win.foreground(capture.hwnd)
+    capture.command(apps.CaptureCmd.IDM_OPTIONS)
+    form = win.wait_form(capture.pid)
+    win.foreground(form)
+    field, video = win.child_by_id(form, 1001), win.child_by_id(form, 1002)   # after the "Global shortcuts" heading
+    assert field_text(field).lower() == "shift+home", f"the image field reads {field_text(field)!r}"
+    assert field_text(video).lower().startswith("shift+") and len(field_text(video)) > len("shift+"), \
+        f"the video field names Print Screen; it reads {field_text(video)!r}"
+    l, t, r, b = win.rect(field)
+    win.click((l + r) // 2, (t + b) // 2)
+    apps.wait_quiet(0.3)
+    win.keys("{PRTSC}")
+    win.wait_until(lambda: win.send(field, HKM_GETHOTKEY) & 0xFFFF == VK_SNAPSHOT, 5, what="Print Screen in the field")
+    shown = field_text(field)
+    assert shown and "+" not in shown and shown == field_text(video)[len("shift+"):], \
+        f"the field shows the key's name, like the video one; it reads {shown!r}"
+    assert lib.new("*.snap") == [], "Print Screen pressed in the field must not start a capture"
+    logs.mark()
+    win.form_ok(form)
+    win.wait_until(lambda: regs.get("ImageHotkey") == VK_SNAPSHOT, what="Print Screen saved as the image hotkey")
+    logs.capture.wait(r"Hotkey registered: id 1 = Print Screen|Hotkey Print Screen:")
+    for box in capture.popups("#32770"):                     # a notice that the hook takes the key, if any
+        win.post_command(box, win32con.IDCANCEL)
+    apps.wait_quiet(1.0)
+    win.keys("{PRTSC}")
+    try:
+        lib.wait_new()
+    except AssertionError:
+        win.keys("{ESC}")
+        raise AssertionError("Print Screen did not start a capture after being set in Options")
+
+
 # ---------- outputs ----------
 
 def test_output_opens_editor(capture, logs, lib):
@@ -416,3 +472,4 @@ def test_grab_text_ocr(capture, target):
     text = win.wait_until(win.clipboard_text, 10, what="recognized text on the clipboard")
     win.close_window(tw)
     assert "Target" in text or "E2E" in text, f"OCR text: {text!r}"
+

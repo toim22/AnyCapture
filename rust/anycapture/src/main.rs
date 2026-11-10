@@ -301,6 +301,11 @@ impl CaptureApp {
 
     fn on_hotkey(&mut self, ctl: &mut Ctl, id: i32) {
         use hotkeys::*;
+        // the Options are open: the key pressed is being chosen in a hotkey field, not a capture (#6)
+        if snapui::form::editing_hotkeys() {
+            log::write(&format!("Hotkey id {id} ignored: a form with hotkey fields is open"));
+            return;
+        }
         match id {
             HK_IMAGE => self.start_capture(ctl, &self.store.first_of_kind(CaptureKind::Image)),
             HK_VIDEO => {

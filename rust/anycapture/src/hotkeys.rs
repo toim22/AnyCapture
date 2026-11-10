@@ -14,9 +14,8 @@ use windows::Win32::System::Diagnostics::Debug::IsDebuggerPresent;
 use windows::Win32::System::Registry::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, RRF_RT_REG_DWORD, RRF_RT_REG_SZ, RegGetValueW};
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
-    GetAsyncKeyState, GetKeyNameTextW, MAPVK_VK_TO_VSC, MOD_ALT, MOD_CONTROL, MOD_NOREPEAT, MOD_SHIFT, MOD_WIN,
-    MapVirtualKeyW, RegisterHotKey, UnregisterHotKey, VK_CONTROL, VK_DELETE, VK_DOWN, VK_END, VK_HOME, VK_INSERT, VK_LEFT,
-    VK_LWIN, VK_MENU, VK_NEXT, VK_PRIOR, VK_RIGHT, VK_RWIN, VK_SHIFT, VK_SNAPSHOT, VK_UP,
+    GetAsyncKeyState, MOD_ALT, MOD_CONTROL, MOD_NOREPEAT, MOD_SHIFT, MOD_WIN, RegisterHotKey, UnregisterHotKey, VK_CONTROL,
+    VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT, VK_SNAPSHOT,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, GetMessageW, HC_ACTION, KBDLLHOOKSTRUCT, MSG, PostMessageW, PostThreadMessageW, SetWindowsHookExW,
@@ -45,32 +44,9 @@ pub fn unpack(v: u32) -> (u32, u32) {
     (v >> 16, v & 0xFFFF)
 }
 
-/// HotkeyToText: "Ctrl+Shift+F11", "Print Screen".
+/// HotkeyToText: "Ctrl+Shift+F11", "Print Screen" (the same names as the hotkey fields of the forms).
 pub fn to_text(mods: u32, vk: u32) -> String {
-    if vk == 0 {
-        return anycapture_app::tr("(nenhum)");
-    }
-    let mut s = String::new();
-    for (m, t) in [(MOD_CONTROL.0, "Ctrl+"), (MOD_SHIFT.0, "Shift+"), (MOD_ALT.0, "Alt+"), (MOD_WIN.0, "Win+")] {
-        if mods & m != 0 {
-            s += t;
-        }
-    }
-    if vk == VK_SNAPSHOT.0 as u32 {
-        return s + &anycapture_app::tr("Print Screen");
-    }
-    let sc = unsafe { MapVirtualKeyW(vk, MAPVK_VK_TO_VSC) };
-    let mut lp = (sc << 16) as i32;
-    let extended = [VK_INSERT, VK_DELETE, VK_HOME, VK_END, VK_PRIOR, VK_NEXT, VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN];
-    if extended.iter().any(|k| k.0 as u32 == vk) {
-        lp |= 1 << 24;
-    }
-    let mut name = [0u16; 64];
-    let n = unsafe { GetKeyNameTextW(lp, &mut name) };
-    if n > 0 {
-        return s + &String::from_utf16_lossy(&name[..n as usize]);
-    }
-    s + &format!("VK{vk}")
+    snapui::form::hotkey_text(mods, vk)
 }
 
 /// Windows 11 "Use the Print screen key to open screen capture": the value is missing until the user changes the
@@ -112,7 +88,7 @@ struct Hooked {
 static HOOKED: Mutex<Hooked> = Mutex::new(Hooked { hwnd: 0, keys: Vec::new() });
 
 unsafe extern "system" fn low_level_proc(code: i32, w: WPARAM, l: LPARAM) -> LRESULT {
-    if code == HC_ACTION as i32 && (w.0 == WM_KEYDOWN as usize || w.0 == WM_SYSKEYDOWN as usize) {
+    if code == HC_ACTION as i32 && (w.0 == WM_KEYDOWN as usize || w.0 == WM_SYSKEYDOWN as usize) && !snapui::form::editing_hotkeys() {
         let k = unsafe { &*(l.0 as *const KBDLLHOOKSTRUCT) };
         // injected keys count too (on-screen keyboard, accessibility and macro tools)
         let down = |vk: u16| unsafe { GetAsyncKeyState(vk as i32) } as u16 & 0x8000 != 0;
