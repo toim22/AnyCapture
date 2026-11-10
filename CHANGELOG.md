@@ -3,6 +3,87 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] — 2026-11-10
+
+### Changed
+- **A new name: AnyCapture.** The programs are `AnyCapture.exe` and `AnyCaptureEditor.exe`, and the installer, the
+  Start menu, the manual and every window carry the new name. The first time either program starts, what the earlier
+  versions kept moves over by itself: the settings, presets, styles, library, the captures and recordings folders,
+  the saved upload logins and the *Start with Windows* entry. Their `.snap` documents and exported settings open as
+  before. Installing over an earlier version replaces it, in a folder with the new name.
+- **A new logo.** AnyCapture's icon is a capture frame over a glass card, and the Editor's adds a pen nib; they show
+  on the taskbar, Start, the desktop, the tray and in the installer, with their own drawing at the small sizes so the
+  tray stays sharp. The title bars inside the programs show the logo's outline in one color.
+- **AnyCapture is now written in Rust.** Both programs, `AnyCapture.exe` (capture) and `AnyCaptureEditor.exe` (Editor), and
+  `SnapEx64.dll` were rewritten in Rust; the interface is drawn with egui on the GPU (wgpu) and stays accessible to
+  screen readers and UI Automation (AccessKit), with the controls under the names of the former Win32 controls. The C++
+  code is gone. Same features, same files: captures, presets, settings, the library and the `.snap` documents written
+  by earlier versions open as before, and the same command line, hotkeys and window classes work as before. The move
+  went one part at a time behind the unchanged end-to-end suite, and the parts that compute something (effects,
+  Beautify, the Editor's drawings, the `.snap` and clipboard XML, WebP, PDF, OCR, the network layer, presets) are
+  checked against what the C++ code gave for the same input.
+- **A Windows 11 look.** The capture window and the Editor use Windows 11's controls and gray surfaces with the
+  Windows accent color: switches instead of check boxes, tabs with an accent bar, a round capture button, preset rows
+  with their hotkey and a settings gear. Drop-down lists can still open past the window's edges, and the icons of the
+  tabs, toolbar, menus and layers are the same as before. The menus sit in the title bar again, as in the earlier
+  versions, and are drawn in the same theme with rounded corners and an icon next to the items that have one; the
+  Editor's *More*, zoom and Recent captures menus look the same. The interface font is now Inter, built into the
+  programs. *Customize toolbar* shows the items as icons, by group.
+- A damaged or hostile `.snap`, image or upload response is now parsed by memory-safe code.
+- QR codes and barcodes are read by rxing, a Rust port of ZXing, instead of ZXing-C++; several codes in one picture
+  are listed top to bottom.
+- The `{regex:…}` of a custom uploader (.sxcu) uses Rust's regular expressions: no look-around or backreferences.
+- Building needs Rust (the MSVC toolchain) and the Visual Studio build tools instead of CMake: `build.bat` runs
+  `cargo build` and packages `dist\` as before. The C runtime is linked statically, so the programs need no Visual C++
+  redistributable.
+
+### Added
+- **Updates from inside the program.** AnyCapture checks GitHub for a newer version ten seconds after it starts (it can
+  be turned off in *Options › Updates*) and when *Help › Check for updates…* is chosen, in AnyCapture or the Editor.
+  *Update now* downloads the installer, checks its size and SHA-256 against the release, closes both programs,
+  installs over this copy and starts them again; *Skip this version* silences the reminder at start. Only full
+  releases are offered, not pre-releases.
+- **Report a problem and send feedback, no GitHub account needed:** *Help › Report a problem…* and *Help › Send a
+  suggestion or feedback…*, in both programs, open a window in the programs' light or dark theme (title, description,
+  steps or reason, and optionally the Windows version and language). *Send* files it as an issue on the AnyCapture
+  project on GitHub, labeled `bug` or `enhancement`, and shows its link. If the service cannot be reached, GitHub's
+  issue form opens in the browser with everything filled in instead.
+- **Export as ZIP:** exporting library items or recent captures can put them all into one `.zip`, in the chosen image
+  format.
+- **Recent captures work like File Explorer:** Shift+click selects a range, a rectangle dragged from the empty part
+  selects the thumbnails it touches, and Ctrl+C copies the selected captures as files (a single image also as a
+  picture). After a click on the strip, Ctrl+A, Ctrl+C, Del and F2 act on it; after a click on the image they act on
+  the image again.
+- **Light and dark theme:** *Options › Appearance* follows Windows or picks light or dark; the title bar and the
+  Editor's menu bar follow it too. It applies when AnyCapture reopens.
+- `AnyCaptureTool.exe` (not shipped): prints a `.snap` document's XML or reads a recording's audio track, for the tests
+  and for debugging.
+
+### Fixed
+- *Compare images* shows the share of different pixels, and the video view its frame rate, instead of a `%.2f` /
+  `%.0f` placeholder.
+- The Pen and the Eraser show their tip as the mouse pointer, a circle as wide as the chosen width at the current zoom,
+  instead of a cross (#4).
+- *Save as* in the Editor (Ctrl+Shift+S) opens in the folder used the last time, instead of the capture folder (#5).
+- Print Screen can be typed into a hotkey box (Options and preset hotkeys), alone or with Shift, Ctrl or Alt, and the
+  box says "Print Screen". Windows' own hotkey box had no name for the key, so it stayed empty as if the key had been
+  refused (and Shift+Print Screen read "Shift +", Home "Num 7"); the boxes now name every key the way the log does.
+  While the Options are open, pressing a shortcut no longer starts a capture (#6).
+- Print Screen captures reliably as the image hotkey: the keyboard hook that takes it before the Snipping Tool,
+  OneDrive or another capture tool runs on a thread of its own, so Windows no longer drops it when the capture window
+  is busy, and the key is also registered the usual way for when an elevated program is in front.
+- The capture window is more compact: no empty band under the fields, and the switches and the capture button sit
+  right after the fields, the window only as wide as they need in the interface language.
+- With *Only copy to the clipboard*, the notification after a capture shows a miniature of it, and a click on the
+  notification opens the capture in the Editor (#7).
+- The Editor's drawing tools are centered on the toolbar, and *Recent captures* is no longer cut off at the bottom when
+  the window is maximized.
+- *Help › About* no longer shows the path of the library folder.
+- Dragging captures out of Recent captures, the Library, the quick thumbnail or a pin into File Explorer, a chat or a
+  document works again: the drag ended as soon as it started, because OLE was not initialized for it.
+- The interval capture plays the capture sound for each capture and adds each one to the library, so they show in the
+  Editor's Recent captures like every other capture.
+
 ## [0.4.1] — 2026-11-03
 
 ### Added
@@ -80,11 +161,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Fixed
 - The names of the capture effects (Border, Filters…) were always in Portuguese, whatever the language.
-- Running Snapnab or a command line switch while it was already open could crash the second process on PCs with
+- Running AnyCapture or a command line switch while it was already open could crash the second process on PCs with
   audio overlays that inject themselves into every program (Nahimic on Alienware/Dell).
 - *Print* did nothing without a printer or with the print service stopped; it now says why.
 - Editor shortcuts such as Ctrl+S and Ctrl+Shift+S were ignored while a field of the side panel had the focus.
-- A capture that did not end cleanly could leave Snapnab busy until it restarted (the record button stopped
+- A capture that did not end cleanly could leave AnyCapture busy until it restarted (the record button stopped
   working); a new capture now resets it.
 - Editor: starting a pen stroke on or next to the previous one dragged that stroke instead of drawing; the pen now
   always draws (the Move tool moves strokes).
@@ -94,11 +175,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ## [0.3.0] — 2026-10-26
 
 ### Added
-- **User manual** in English (`help/Snapnab-Manual.html`, installed next to the programs): quick-start lessons and a
+- **User manual** in English (`help/AnyCapture-Manual.html`, installed next to the programs): quick-start lessons and a
   complete reference of every capture, recording, preset, Editor, library and settings feature, with keyboard shortcut
   tables, troubleshooting and a glossary; contents sidebar, search, light/dark theme and print layout. It opens from
-  *Help › Snapnab Manual* and with **F1** in the capture window and the Editor; in the Editor, F1 opens the chapter of
-  the current tool (or of the library or the video editor). The installer adds a *Snapnab Manual* Start menu shortcut.
+  *Help › AnyCapture Manual* and with **F1** in the capture window and the Editor; in the Editor, F1 opens the chapter of
+  the current tool (or of the library or the video editor). The installer adds a *AnyCapture Manual* Start menu shortcut.
 - Editor: **Shift draws perfect geometry in every shape-based tool** — rectangle → square, ellipse → circle, rounded
   rectangle → rounded square, triangle → equilateral, hexagon → regular, lines and polygon sides in 45° steps, stamps in
   the proportion of their image — in Shape, Highlighter, Spotlight, Hide, Magnifier, Callout and Stamp, and a square
@@ -169,7 +250,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **Backup of the settings**: *File › Export all settings…* / *Import all settings…* (one `.snapsettings` file with the
   registry settings, presets, themes and quick styles, favorites, tool styles, quick effects, stamp order and toolbar
   layout); importing asks whether to replace or merge, keeps a copy of the current settings and restarts both
-  programs. A backup is also written automatically once a week to `%LOCALAPPDATA%\Snapnab\Backups` (the last 5 are kept).
+  programs. A backup is also written automatically once a week to `%LOCALAPPDATA%\AnyCapture\Backups` (the last 5 are kept).
 
 ### Fixed
 - Editor: the properties panel could keep the old pixels of a number field over a button after another object was
@@ -192,17 +273,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Added
 - Interface in 12 languages, the most widely spoken: Portuguese, English, Chinese (Simplified), Hindi, Spanish, Arabic,
   French, Bengali, Russian, Indonesian, Urdu and German. The default is the Windows language and, if it has no
-  translation, English; *File › Options… › Language* picks another one and restarts Snapnab and the Editor to apply it.
+  translation, English; *File › Options… › Language* picks another one and restarts AnyCapture and the Editor to apply it.
   Chinese, Hindi and Bengali use a font with the language's characters; in Arabic and Urdu the strings read right to
   left (the window layout stays the same).
-- Translations in gettext catalogs (`lang/<language>.po`, template `lang/snapnab.pot`), editable in Poedit;
+- Translations in gettext catalogs (`lang/<language>.po`, template `lang/anycapture.pot`), editable in Poedit;
   `scripts/i18n.py` extracts the strings from the code and checks the catalogs (missing strings and `%d`/`%s` markers).
-- `Snapnab-<version>-setup.exe` installer, built by `build.bat` along with the portable zip (when Inno Setup 6 is
+- `AnyCapture-<version>-setup.exe` installer, built by `build.bat` along with the portable zip (when Inno Setup 6 is
   installed). It installs for the current user only, without asking for administrator rights, or for all users;
-  creates the Start menu shortcuts, an optional desktop shortcut and "start with Windows"; closes a running Snapnab
+  creates the Start menu shortcuts, an optional desktop shortcut and "start with Windows"; closes a running AnyCapture
   before updating; uninstalls from *Settings › Apps* keeping captures and settings. The wizard comes in the same 12
   languages as the program (chosen from the Windows language), follows the Windows light/dark theme and uses the
-  Snapnab icon.
+  AnyCapture icon.
 - Webcam in video recordings: pick the camera under *Webcam*; it appears inside the recorded area, with a button on the
   recording panel to show or hide it. Shapes: circle, rounded square, square, 16:9 and 4:3 rectangles, plus background
   removal by color (chroma key, with adjustable color and tolerance), which leaves the webcam without a frame.
@@ -317,7 +398,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 First pre-release: the main features already work, but the program is still under development.
 
-### Capture (Snapnab.exe)
+### Capture (AnyCapture.exe)
 - Region, window, full screen, monitor, fixed region, freehand, multiple areas, object, scrolling,
   extended window, menu, clipboard and file capture.
 - MP4 video recording (H.264 + AAC) with microphone and system audio, pause, and a control panel outside the video.
@@ -326,7 +407,7 @@ First pre-release: the main features already work, but the program is still unde
   edge effects, trim edges, color adjustment, rotate, watermark and resolution.
 - Compact capture window, with modern controls and colors that follow the Windows accent color.
 
-### Editor (SnapnabEditor.exe)
+### Editor (AnyCaptureEditor.exe)
 - Annotation tools (arrow, shapes, text, callouts, steps, stamps, blur, highlight, magnifier…),
   selection with Smart Move, magic wand and smart fill.
 - Image effects, OCR (Grab Text), PNG/JPG/BMP/GIF/TIFF/PDF/SNAP export, printing and email.

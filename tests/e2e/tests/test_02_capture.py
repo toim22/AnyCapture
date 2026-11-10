@@ -1,18 +1,19 @@
 """Image capture: every selection mode, the outputs (Editor, clipboard, file, program, text) and the capture engine
-state machine, driven through presets written to Presets1.xml and run with `Snapnab.exe /preset "name"`."""
+state machine, driven through presets written to Presets1.xml and run with `AnyCapture.exe /preset "name"`."""
 import time
 
 import psutil
 import pytest
 import win32api
+import win32con
 from PIL import Image
 
-from snapnab_e2e import apps, library, presets, regs, win
-from snapnab_e2e.apps import CaptureCmd
-from snapnab_e2e.config import EDITOR_EXE, LIBRARY_DIR
-from snapnab_e2e.logs import state
+from anycapture_e2e import apps, library, presets, regs, win
+from anycapture_e2e.apps import CaptureCmd
+from anycapture_e2e.config import EDITOR_EXE, LIBRARY_DIR
+from anycapture_e2e.logs import state
 
-OVERLAY = "SnapnabSelectWindowClass"
+OVERLAY = "AnyCaptureSelectWindowClass"
 
 
 def virtual_screen():
@@ -191,6 +192,31 @@ def test_scrolling_window(capture, lib, target):
     assert w >= (r - l) * 0.8 and h >= (b - t) * 0.6, (w, h)
 
 
+
+def pano_region(capture, target):
+    start_with(capture, presets.preset("e2e pano", "Panoramic", editor=False))
+    run_preset(capture, "e2e pano")
+    overlay()
+    l, t, _, _ = target.rect
+    win.drag([(l + 50, t + 60), (l + 350, t + 260)])
+    win.wait_window("AnyCapturePanoBar", 10)            # the bar below the region, with the orange frame around it
+    win.wait_window("AnyCapturePanoBorder", 5)
+
+
+def test_panoramic_without_scrolling_is_the_region(capture, lib, target):
+    pano_region(capture, target)
+    win.keys("{ENTER}")                               # Enter finishes
+    w, h = library.size(library.dump(lib.wait_new()[-1]))
+    assert near(w, 300, 2) and near(h, 200, 2), (w, h)
+    assert not win.find_window("AnyCapturePanoBar", visible_only=True)
+
+
+def test_panoramic_esc_cancels(capture, logs, lib, target):
+    pano_region(capture, target)
+    win.keys("{ESC}")
+    wait_idle(logs)
+    assert not lib.new("*.snap")
+
 def test_menu_without_open_menu_falls_back_to_region(capture, logs):
     start_with(capture, presets.preset("e2e menu", "Menu", editor=False))
     run_preset(capture, "e2e menu")
@@ -204,7 +230,7 @@ def test_capture_from_file(capture, lib, tmp_path):
     Image.new("RGB", (271, 133), (1, 2, 3)).save(src)
     start_with(capture, presets.preset("e2e file", "File", editor=False))
     capture.command(CaptureCmd.IDM_PRESET_BASE)         # also covers running a preset from the menu
-    from snapnab_e2e import filedialog
+    from anycapture_e2e import filedialog
     filedialog.fill(capture.pid, src)
     assert library.size(library.dump(lib.wait_new()[-1])) == (271, 133)
 
@@ -213,7 +239,7 @@ def test_delay_shows_countdown(capture, logs, lib):
     start_with(capture, presets.preset("e2e delay", "FullScreen", editor=False, delay=2))
     t0 = time.time()
     run_preset(capture, "e2e delay")
-    win.wait_window("SnapnabDelay", 5)
+    win.wait_window("AnyCaptureDelay", 5)
     lib.wait_new(timeout=15)
     assert time.time() - t0 >= 1.8, "the capture must wait for the delay"
 
@@ -267,10 +293,65 @@ def test_print_screen_runs_first_image_preset(capture, logs, lib):
         snip = windows_print_screen_opens_snipping()
         win.keys("{ESC}")                    # closes the Snipping Tool overlay if it took the key
         raise AssertionError(
-            "Print Screen did not start a Snapnab capture"
+            "Print Screen did not start a AnyCapture capture"
             + (" — Windows opened the Snipping Tool instead: RegisterHotKey succeeds while the Windows 11 setting "
                "'Use the Print screen key to open screen capture' is on, so the low-level hook fallback never engages"
                if snip else ""))
+
+
+HKM_GETHOTKEY = 0x0402
+VK_HOME, VK_SNAPSHOT, MOD_SHIFT = 0x24, 0x2C, 0x4
+
+
+def field_text(h):
+    """The text of an edit box in another process (GetWindowText only reads captions there)."""
+    import ctypes
+    u = ctypes.windll.user32
+    n = u.SendMessageW(h, win32con.WM_GETTEXTLENGTH, 0, 0)
+    buf = ctypes.create_unicode_buffer(n + 1)
+    u.SendMessageW(h, win32con.WM_GETTEXT, n + 1, buf)
+    return buf.value
+
+
+def test_print_screen_typed_in_options_then_captures(capture, logs, lib):
+    """#6 the user's way: another key (Shift+Home) and video on Shift+Print Screen; in Options, click the "Capture image"
+    field, press Print Screen, OK; then Print Screen captures. Windows' own hotkey control showed Print Screen as an
+    empty field (and Shift+Print Screen as "Shift +"), which looked like the key had been refused."""
+    regs.set_dword("ImageHotkey", MOD_SHIFT << 16 | VK_HOME)
+    regs.set_dword("VideoHotkey", MOD_SHIFT << 16 | VK_SNAPSHOT)
+    start_with(capture, presets.preset("e2e full", "FullScreen", editor=False))
+    logs.capture.wait(r"(?i)Hotkey registered: id 1 = Shift\+HOME")
+    capture.show()
+    win.foreground(capture.hwnd)
+    capture.command(apps.CaptureCmd.IDM_OPTIONS)
+    form = win.wait_form(capture.pid)
+    win.foreground(form)
+    field, video = win.child_by_id(form, 1001), win.child_by_id(form, 1002)   # after the "Global shortcuts" heading
+    assert field_text(field).lower() == "shift+home", f"the image field reads {field_text(field)!r}"
+    assert field_text(video).lower().startswith("shift+") and len(field_text(video)) > len("shift+"), \
+        f"the video field names Print Screen; it reads {field_text(video)!r}"
+    l, t, r, b = win.rect(field)
+    win.click((l + r) // 2, (t + b) // 2)
+    apps.wait_quiet(0.3)
+    win.keys("{PRTSC}")
+    win.wait_until(lambda: win.send(field, HKM_GETHOTKEY) & 0xFFFF == VK_SNAPSHOT, 5, what="Print Screen in the field")
+    shown = field_text(field)
+    assert shown and "+" not in shown and shown == field_text(video)[len("shift+"):], \
+        f"the field shows the key's name, like the video one; it reads {shown!r}"
+    assert lib.new("*.snap") == [], "Print Screen pressed in the field must not start a capture"
+    logs.mark()
+    win.form_ok(form)
+    win.wait_until(lambda: regs.get("ImageHotkey") == VK_SNAPSHOT, what="Print Screen saved as the image hotkey")
+    logs.capture.wait(r"Hotkey registered: id 1 = Print Screen|Hotkey Print Screen:")
+    for box in capture.popups("#32770"):                     # a notice that the hook takes the key, if any
+        win.post_command(box, win32con.IDCANCEL)
+    apps.wait_quiet(1.0)
+    win.keys("{PRTSC}")
+    try:
+        lib.wait_new()
+    except AssertionError:
+        win.keys("{ESC}")
+        raise AssertionError("Print Screen did not start a capture after being set in Options")
 
 
 # ---------- outputs ----------
@@ -310,7 +391,7 @@ def test_after_capture_only_copy(capture, logs, lib):
         wait_idle(logs)
         time.sleep(1.5)
         assert not apps.Editor().running, "the Editor opened"
-        assert not win.find_window("SnapnabQuickOverlay", visible_only=True), "the quick thumbnail appeared"
+        assert not win.find_window("AnyCaptureQuickOverlay", visible_only=True), "the quick thumbnail appeared"
     finally:
         regs.delete("AfterCaptureMode")
         regs.delete("CopyEveryCapture")
@@ -371,7 +452,7 @@ def test_output_external_program(capture, lib):
     try:
         p = win.wait_until(lambda: [p for p in apps.processes("mspaint.exe") if p.pid not in before], 20,
                            what="Paint opened with the capture")[0]
-        assert any("Snapnab_" in a for a in p.cmdline()), p.cmdline()
+        assert any("AnyCapture_" in a for a in p.cmdline()), p.cmdline()
     finally:
         for p in apps.processes("mspaint.exe"):
             if p.pid not in before:
@@ -387,7 +468,8 @@ def test_grab_text_ocr(capture, target):
                                        region_fixed=True, region_pos=(l + 20, (t + b) // 2 - 60)))
     win.set_clipboard_text("")
     run_preset(capture, "e2e text")
-    tw = win.wait_window("SnapnabTextWnd", 20)
+    tw = win.wait_window("AnyCaptureTextWnd", 20)
     text = win.wait_until(win.clipboard_text, 10, what="recognized text on the clipboard")
     win.close_window(tw)
     assert "Target" in text or "E2E" in text, f"OCR text: {text!r}"
+

@@ -1,0 +1,7606 @@
+# AnyCapture — interface translations.
+# Copyright © 2026 Antonio Rezende. GPL-3.0.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: AnyCapture\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: rust/anycapture/src/camwin.rs:81 rust/anycapture/src/engine/video.rs:178
+msgid "AnyCapture — webcam"
+msgstr ""
+
+#: rust/anycapture/src/cmdline.rs:114
+msgid ""
+"AnyCapture.exe [opções]\n"
+"\n"
+"/hide                 inicia só na bandeja\n"
+"/capture              captura imagem com o preset de imagem atual\n"
+"/video                grava vídeo com o preset de vídeo atual\n"
+"/preset \"nome\"        executa um preset pelo nome\n"
+"/clipboard            captura a imagem da área de transferência\n"
+"/region x,y,l,a       captura essa área da tela\n"
+"/window \"título\"      captura a janela cujo título contém o texto\n"
+"/monitor n            captura o monitor n (1, 2…, da esquerda para a direita)\n"
+"/fullscreen           captura a tela inteira\n"
+"/delay s              espera s segundos antes de capturar\n"
+"/ocr  /qr  /upload    reconhece o texto, lê o código QR ou envia a captura\n"
+"/pin [arquivo]        fixa o arquivo na tela (sem arquivo: captura e fixa)\n"
+"/pinclipboard         fixa o conteúdo da área de transferência\n"
+"/colorpicker          abre o conta-gotas de tela\n"
+"/focus                liga ou desliga o foco de tela\n"
+"/interval [stop]      inicia (ou para) a captura por intervalo\n"
+"/output clipboard|editor|none|\"arquivo\"   para onde vai a captura\n"
+"/exit                 encerra o AnyCapture em execução"
+msgstr ""
+
+#: rust/anycapture/src/cmdline.rs:155 rust/anycapture/src/cmdline.rs:156 rust/snapcore/src/presets.rs:601
+msgid "Imagem — Região"
+msgstr ""
+
+#: rust/anycapture/src/desk.rs:450
+msgid "Conta-gotas: clique para copiar a cor • setas movem 1 px (Shift = 10) • Enter = copiar • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/desk.rs:602
+msgid "AnyCapture — conta-gotas"
+msgstr ""
+
+#: rust/anycapture/src/desk.rs:644
+msgid "Cores recentes"
+msgstr ""
+
+#: rust/anycapture/src/desk.rs:644
+msgid "Formato padrão"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:85
+msgid "Nome do preset"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:110
+#, c-format
+msgid "Preset %zu"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:115 rust/anycapture/src/window.rs:788 rust/snapcore/src/presets.rs:185
+msgid "Novo preset"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:120 rust/anycapture/src/dialogs.rs:139 rust/snapedit/src/props.rs:587 rust/snapedit/src/props.rs:593 …
+msgid " (cópia)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:121 rust/anycapture/src/window.rs:792
+msgid "Novo preset com as configurações atuais"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:127
+msgid "Renomear preset"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:151
+msgid "É preciso manter pelo menos um preset."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:154
+#, c-format
+msgid "Excluir o preset \"%s\"?"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:170
+msgid "Atalho do preset"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:170
+msgid "Deixe vazio (Backspace) para remover."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:171
+msgid "Atalho — "
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:181
+msgid ""
+"Um preset guarda tudo o que a janela de captura mostra: tipo (imagem ou vídeo), seleção, efeitos, destino e opções de gravação.\n"
+"\n"
+"•  Clique em um preset para carregá-lo na janela; clique duas vezes para capturar com ele.\n"
+"•  \"Adicionar atalho\" dá a ele uma tecla de atalho global.\n"
+"•  A engrenagem da linha renomeia, duplica ou exclui o preset.\n"
+"•  \"Novo preset com as configurações atuais\" salva o que está na janela agora."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:182 rust/anycapture/src/main.rs:559 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:782 …
+msgid "Presets"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:210
+msgid "Presets do AnyCapture (*.snappresets)|*.snappresets|"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:216
+msgid "Não foi possível exportar."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:223
+msgid "Presets do AnyCapture (*.snappresets;*.xml)|*.snappresets;*.xml|"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:226
+msgid "Presets importados."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:228
+msgid "Arquivo de presets inválido."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:237
+msgid "Configurações do AnyCapture (*.snapsettings)|*.snapsettings|"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:246
+msgid "Exportar configurações"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:252
+msgid "Configurações exportadas: presets, temas, estilos rápidos, favoritos, efeitos rápidos, ordem dos carimbos e barra de ferramentas."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:266
+msgid ""
+"Substituir\n"
+"As configurações atuais dão lugar às do arquivo."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:267
+msgid ""
+"Mesclar\n"
+"Mantém as configurações atuais e acrescenta o que faltar (presets, temas, favoritos, efeitos rápidos…)."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:268 rust/anycapture/src/dialogs.rs:298
+msgid "Importar configurações"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:269
+msgid "O AnyCapture e o Editor reiniciam com as configurações importadas. Uma cópia das configurações atuais fica na pasta de backups."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:300 rust/snapcore/src/settings.rs:225
+msgid "Arquivo de configurações inválido."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:374
+msgid "Automático (idioma do Windows)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:385
+msgid "Atalhos globais"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:386 rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:237
+msgid "Capturar imagem"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:387 rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588 rust/anycapture/src/window.rs:238
+msgid "Gravar vídeo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:388
+msgid "Pausar/retomar vídeo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:389
+msgid "Parar vídeo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:390 rust/anycapture/src/main.rs:564 rust/anycapture/src/window.rs:244
+msgid "Conta-gotas de tela"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:391
+msgid "Capturar e fixar na tela"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:392 rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:232
+msgid "Fixar da área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:393 rust/anycapture/src/main.rs:570 rust/anycapture/src/window.rs:248
+msgid "Foco de tela (apresentações)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:394
+msgid "Geral"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:395
+msgid "Pasta de saída"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:396
+msgid "Monitorar área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:397 rust/anycapture/src/window.rs:614 rust/anycapture/src/window.rs:625 rust/snapcore/src/sounds.rs:31
+msgid "Desligado"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:397
+msgid "Só a Ferramenta de Captura do Windows"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:397
+msgid "Qualquer aplicativo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:398
+msgid "Iniciar com o Windows"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:399
+msgid "Mostrar a janela de captura ao iniciar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:400
+msgid "Idioma"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:401
+msgid "Depois da captura"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:402
+msgid "Copiar toda captura para a área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:403
+msgid "Ao terminar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:404
+msgid "Abrir no Editor (como o preset diz)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:404
+msgid "Mostrar a miniatura rápida em vez do Editor"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:405
+msgid "Mostrar a miniatura e abrir o Editor"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:405
+msgid "Só copiar para a área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:407
+msgid "A miniatura fecha após (s, 0 = não fecha)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:408
+msgid "Canto da miniatura"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:693 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:129
+msgid "Inferior direito"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128
+msgid "Inferior esquerdo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128
+msgid "Superior direito"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:409 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:112 rust/snapedit/src/app/extras.rs:128
+msgid "Superior esquerdo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:411
+msgid "Som da captura"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:412
+msgid "Arquivo WAV do som"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:413 rust/anycapture/src/engine.rs:878 rust/anycapture/src/quick.rs:245 rust/snapcore/src/presets.rs:202 …
+msgid "Captura"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:414
+msgid "Capturar a região assim que soltar o mouse"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:415
+msgid "Corrigir as cores em monitores HDR"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:416
+msgid "Cantos arredondados transparentes nas janelas"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:417
+msgid "Sombra nas capturas de janela"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:418
+msgid "Ocultar os ícones da área de trabalho ao capturar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:419
+msgid "Não perturbe (sem notificações) ao gravar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:420
+msgid "Manter a tela acesa durante a captura"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:421
+msgid "Privacidade e biblioteca"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:422
+msgid "Remover metadados (câmera, GPS, datas) ao salvar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:423
+msgid "Limpar a biblioteca automaticamente"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:424
+msgid "Apagar capturas com mais de (dias)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:425
+msgid "Manter as capturas que têm nome"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:426
+msgid "Manter as capturas com etiquetas"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:427
+msgid "Enviar para a Lixeira em vez de apagar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:428
+msgid "Cursor capturado como objeto no Editor"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:429
+msgid "Dividir imagens longas em páginas (impressão e PDF)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Aparência (vale ao reabrir)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Seguir o Windows"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Claro"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:430
+msgid "Escuro"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:432
+msgid "Biblioteca: "
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:433
+msgid "Atualizações"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:434
+msgid "Verificar atualizações ao iniciar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:444
+msgid "Dois atalhos iguais: "
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:450
+msgid "Opções do AnyCapture"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:477
+msgid "Escolha o arquivo WAV do som da captura (caminho completo)."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:487
+msgid "O novo idioma vale depois que o AnyCapture e o Editor reiniciarem. Reiniciar agora?"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:108 rust/anycapture/src/window.rs:576 rust/snapedit/src/app/extras.rs:793 …
+msgid "Formato"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:109
+msgid "Prefixo do nome"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:503 rust/anycapture/src/interval.rs:110 rust/snapui/src/upload_ui.rs:80 rust/snapui/src/upload_ui.rs:83 …
+msgid "Pasta"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:504
+msgid "Nome automático: <Prefixo><Número>, ex.: Captura001.png"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:507 rust/anycapture/src/interval.rs:132
+msgid "O prefixo contém caracteres inválidos."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:509
+msgid "Salvar em arquivo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:528 rust/snapedit/src/panels.rs:64 rust/snapedit/src/app/docs.rs:572
+msgid "Programa"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:528
+msgid "A captura é aberta nesse programa (ex.: mspaint.exe)."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:529 rust/snapedit/src/panels.rs:64
+msgid "Abrir em um programa externo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:543
+msgid "Cada captura num slide novo (desligado: no slide atual)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:555 rust/anycapture/src/dialogs.rs:662 rust/anycapture/src/select.rs:666 rust/snapedit/src/app/commands.rs:661 …
+msgid "Largura (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:555 rust/anycapture/src/select.rs:669 rust/snapedit/src/app/commands.rs:662 rust/snapedit/src/app/commands.rs:709 …
+msgid "Altura (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:556
+msgid "Capturar sempre na mesma posição"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:557
+msgid "Esquerda (X)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:557
+msgid "Topo (Y)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:558
+msgid "Sem posição fixa, você arrasta o retângulo até o lugar na hora da captura."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:559 rust/anycapture/src/engine.rs:445 rust/anycapture/src/window.rs:372
+msgid "Região fixa"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:582 rust/snapedit/src/app/video.rs:455
+msgid "Quadros por segundo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:583
+msgid "Reduzir para 1080p"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:584
+msgid "Codificação por hardware"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:585
+msgid "Áudio"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:586
+msgid "Volume do microfone (%)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:587
+msgid "Volume do áudio do sistema (%)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:588 rust/anycapture/src/hud.rs:361
+msgid "Ganho automático do microfone"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:589
+msgid "Também ajustáveis no painel da gravação."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:590
+msgid "Gravar somente o áudio (sem vídeo)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:591
+msgid "Formato do áudio"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:592
+msgid "Na gravação (todos os presets)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:593 rust/anycapture/src/engine/video.rs:360
+msgid "Destacar o cursor"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:594
+msgid "Cor do destaque"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:595
+msgid "Tamanho do destaque (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:596 rust/anycapture/src/engine/video.rs:360
+msgid "Mostrar os cliques"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:597
+msgid "Cor do clique esquerdo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:598
+msgid "Cor do clique direito"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Teclas na tela"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Não mostrar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Só atalhos (Ctrl, Alt, Win, F1…)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:599
+msgid "Todas (inclusive o que for digitado)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:601
+msgid "Ampliar ao clicar (zoom automático)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:602
+msgid "Ampliação do zoom (%)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:603
+msgid "Atalho do zoom durante a gravação"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:604
+msgid "Proteger contra travamentos (recupera a gravação)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:605
+msgid "Confirmar antes de recomeçar a gravação"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:607
+msgid "Opções de vídeo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:635
+msgid "Remover o fundo da webcam"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:635
+msgid "Cor do fundo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:636
+msgid "Tolerância (0–100)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:637
+msgid "Use um fundo liso e bem iluminado (tela verde é o ideal)."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:638
+msgid "Com o fundo removido, a webcam aparece sem moldura."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:639
+msgid "Remover o fundo (chroma key)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Filtro"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:664
+msgid "Deslocamento (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:664
+msgid "Desfoque (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:665 rust/anycapture/src/dialogs.rs:682
+msgid "Opacidade (%)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:666 rust/anycapture/src/dialogs.rs:682 rust/anycapture/src/pins.rs:692 rust/anycapture/src/pins.rs:1149 …
+msgid "Texto"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:666
+msgid "Campos: {date} {time} {computer} {user}"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:667 rust/snapedit/src/effects.rs:157
+msgid "Posição"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:668 rust/anycapture/src/dialogs.rs:677 rust/snapedit/src/effects.rs:141 rust/snapedit/src/props.rs:1004 …
+msgid "Tolerância"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:669
+msgid "Escala (%)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115 rust/snapedit/src/props.rs:1247
+msgid "Estilo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:673 rust/snapedit/src/app/extras.rs:757
+msgid "Tamanho (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:673 rust/anycapture/src/dialogs.rs:667 rust/snapedit/src/effects.rs:117 rust/snapedit/src/effects.rs:157
+msgid "Em cima"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:674 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:118 rust/snapedit/src/app/commands.rs:705 …
+msgid "Direita"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:674 rust/anycapture/src/dialogs.rs:667 rust/snapedit/src/effects.rs:119 rust/snapedit/src/effects.rs:157
+msgid "Embaixo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:675 rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/effects.rs:120 rust/snapedit/src/app/commands.rs:705 …
+msgid "Esquerda"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:677
+msgid "Remove as faixas de cor uniforme em volta da captura."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:678 rust/snapedit/src/effects.rs:129
+msgid "Brilho"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:678 rust/snapedit/src/effects.rs:130
+msgid "Contraste"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:679
+msgid "Matiz (graus)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:679 rust/snapedit/src/effects.rs:135
+msgid "Saturação"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:680 rust/snapedit/src/panels.rs:82 rust/snapedit/src/app/commands.rs:639
+msgid "Girar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "90° à direita"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "90° à esquerda"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "Espelhar na horizontal"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:680
+msgid "Espelhar na vertical"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:683
+msgid "Repetir por toda a imagem"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:684
+msgid "Resolução (DPI)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:684
+msgid "Gravada nos arquivos salvos (PNG, JPEG, TIFF, BMP)."
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112 rust/snapedit/src/app/windows_aux.rs:798
+msgid "Fundo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:686 rust/snapedit/src/app/extras.rs:115
+msgid "Ângulo do degradê"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:687 rust/snapedit/src/app/extras.rs:116
+msgid "Imagem de fundo"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:687 rust/snapedit/src/app/extras.rs:117 rust/snapedit/src/app/extras.rs:531
+msgid "Margem (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:688 rust/snapedit/src/app/extras.rs:118
+msgid "Cantos arredondados (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:688 rust/snapedit/src/app/extras.rs:119
+msgid "Sombra (%)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:689 rust/snapedit/src/app/extras.rs:120
+msgid "Tamanho da sombra (px)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:690 rust/snapedit/src/app/extras.rs:122
+msgid "Proporção"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:690
+msgid "Original"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:691 rust/snapedit/src/props.rs:1258 rust/snapedit/src/app/extras.rs:127 rust/snapedit/src/app/extras.rs:533
+msgid "Alinhamento"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:694 rust/snapedit/src/app/extras.rs:132
+msgid "Equilibrar as margens (corta bordas lisas da captura)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:696 rust/snapedit/src/app/extras.rs:135 rust/snapedit/src/app/extras.rs:587
+msgid "Embelezar"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:662 rust/snapedit/src/effects.rs:98 rust/snapedit/src/props.rs:894 rust/snapedit/src/props.rs:917 …
+msgid "Cor"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Tons de cinza"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Sépia"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Inverter cores"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:663 rust/snapedit/src/effects.rs:124
+msgid "Preto e branco"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:668
+msgid "Cor a substituir"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:668 rust/snapedit/src/effects.rs:139
+msgid "Nova cor"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Rasgada"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:341
+msgid "Onda"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Dente de serra"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Dente de tubarão"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115 rust/snapedit/src/effects.rs:343
+msgid "Esmaecer"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:672 rust/snapedit/src/effects.rs:115
+msgid "Chanfrada"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112
+msgid "Cor sólida"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:112
+msgid "Degradê"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/extras.rs:81 rust/snapedit/src/app/extras.rs:112
+msgid "Papel de parede"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:685 rust/anycapture/src/share.rs:53 rust/anycapture/src/window.rs:304 rust/snapedit/src/panels.rs:399 …
+msgid "Imagem"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:685 rust/snapedit/src/app/commands.rs:712 rust/snapedit/src/app/docs.rs:359 rust/snapedit/src/app/extras.rs:112
+msgid "Transparente"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:686 rust/snapedit/src/app/extras.rs:113
+msgid "Cor 1"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:686 rust/snapedit/src/app/extras.rs:114
+msgid "Cor 2 (degradê)"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/app/commands.rs:705 rust/snapedit/src/app/extras.rs:128
+msgid "Superior"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:692 rust/snapedit/src/app/commands.rs:705 rust/snapedit/src/app/extras.rs:128 rust/snapedit/src/app/extras.rs:534
+msgid "Centro"
+msgstr ""
+
+#: rust/anycapture/src/dialogs.rs:693 rust/snapedit/src/app/commands.rs:706 rust/snapedit/src/app/extras.rs:129
+msgid "Inferior"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:373
+#, c-format
+msgid "Captura em %d s…"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:441
+msgid "A região fixa está fora da tela. Ajuste a posição na engrenagem da Seleção."
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:466
+msgid "Janelas como objetos"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:479 rust/snapedit/src/app/docs.rs:345
+msgid "A área de transferência não contém imagem."
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:483 rust/anycapture/src/pins.rs:1139 rust/snapcore/src/presets.rs:68 rust/snapedit/src/panels.rs:65 …
+msgid "Área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:488
+msgid "Capturar de arquivo gráfico"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:493
+msgid "Não foi possível abrir a imagem."
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:507
+msgid "Nenhum menu aberto encontrado; selecione a região."
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:557
+msgid "AnyCapture — seleção"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:616
+msgid "vídeo"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:621
+msgid "A biblioteca está vazia"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:774
+msgid "Cursor do mouse"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:806
+msgid ""
+"Não foi possível reconhecer o texto.\n"
+"\n"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:807 rust/anycapture/src/engine.rs:811
+msgid "AnyCapture — Capturar texto"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:811
+msgid "Nenhum texto encontrado na captura."
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:815
+msgid "Capturar texto — copiado para a área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:846
+msgid "copiada para a área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:854 rust/anycapture/src/engine.rs:881
+msgid "salva em "
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:914
+msgid "Captura adicionada à biblioteca"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:922
+msgid "Clique para abrir no Editor."
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:953 rust/anycapture/src/quick.rs:58 rust/snapedit/src/app/windows_aux.rs:514 rust/snapedit/src/app/windows_aux.rs:718 …
+msgid "Fechar"
+msgstr ""
+
+#: rust/anycapture/src/engine.rs:1109
+msgid "Imagens e documentos|*.snap;*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif;*.tiff;*.ico;*.webp;*.avif;*.heic;*.heif;*.mp4|Documento AnyCapture (*.snap)|*.snap|Vídeo MP4 (*.mp4)|*.mp4|Todos os arquivos (*.*)|*.*|"
+msgstr ""
+
+#: rust/anycapture/src/hotkeys.rs:51 rust/snapedit/src/app/extras.rs:1086
+msgid "(nenhum)"
+msgstr ""
+
+#: rust/anycapture/src/hotkeys.rs:60 rust/anycapture/src/hotkeys.rs:298 rust/anycapture/tests/window.rs:40
+msgid "Print Screen"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:152
+msgid "Gravar / pausar"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:153
+msgid "Parar e salvar"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:154
+msgid "Recomeçar a gravação"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:155
+msgid "Cancelar (descarta a gravação)"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:156
+msgid "Microfone: liga / desliga"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:157
+msgid "Áudio do sistema: liga / desliga"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:158
+msgid "Volume do microfone e do sistema"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:159
+msgid "Webcam: mostra / oculta"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:160
+msgid "Capturar uma imagem sem parar a gravação"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:161
+msgid "Zoom em volta do ponteiro"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:162
+msgid "No vídeo: destaque do cursor, cliques e teclas"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:263
+msgid "Pronto"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:314 rust/anycapture/src/engine/video.rs:539
+msgid "Volume"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:340
+msgid "Microfone"
+msgstr ""
+
+#: rust/anycapture/src/hud.rs:340
+msgid "Áudio do sistema"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:71 rust/anycapture/src/interval.rs:72
+msgid "Intervalo"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:102
+msgid "Área"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Tela inteira"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Monitor do cursor"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Região (escolher agora)"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:103
+msgid "Janela (escolher agora)"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:106
+msgid "Intervalo (segundos)"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:107
+msgid "Duração (minutos, 0 = até parar)"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:111 rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:844 rust/anycapture/src/window.rs:849
+msgid "Capturar o cursor"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:112
+msgid "Um ponto vermelho no ícone da bandeja indica que está capturando; pare pelo menu da bandeja."
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:115 rust/anycapture/src/interval.rs:143 rust/anycapture/src/interval.rs:283
+msgid "Captura por intervalo"
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:134
+msgid "Escolha uma pasta."
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:162
+msgid "Não foi possível criar a pasta: "
+msgstr ""
+
+#: rust/anycapture/src/interval.rs:226
+#, c-format
+msgid "Captura por intervalo parada: %d imagem(ns) em %s"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:178
+msgid "Esse atalho já está em uso por outra ação do AnyCapture."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:178 rust/anycapture/src/main.rs:263
+msgid "Conflito de atalho"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:186
+msgid "Outro programa já usa esse atalho. O AnyCapture vai interceptá-lo por um gancho de teclado."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:187
+msgid "Atalho"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:212
+#, c-format
+msgid "Remover agora as capturas com mais de %u dias (com as regras das Opções)?"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:226
+#, c-format
+msgid "%d captura(s) removida(s) da biblioteca."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:233
+msgid "Fixar imagem na tela"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:235
+msgid ""
+"Não foi possível abrir a imagem.\n"
+"\n"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:264
+#, c-format
+msgid "O atalho do preset \"%s\" já está em uso por outra ação."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:558 rust/anycapture/src/main.rs:588
+msgid "Abrir a janela de captura"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:559 rust/anycapture/src/window.rs:213
+msgid "Abrir o Editor"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:559
+msgid "Sair"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:560 rust/anycapture/src/pins.rs:613 rust/anycapture/src/quick.rs:298 rust/anycapture/src/window.rs:44 …
+msgid "Ler código QR"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:561 rust/anycapture/src/window.rs:253
+msgid "Mostrar o One Click"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:563
+#, c-format
+msgid "Imagens fixadas (%zu)"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:563
+msgid "Imagens fixadas"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:564 rust/anycapture/src/window.rs:249
+msgid "Gravar só o áudio"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:566
+#, c-format
+msgid "Parar a captura por intervalo (%d)"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:568 rust/anycapture/src/window.rs:247
+msgid "Captura por intervalo…"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:570
+msgid "Abrir o Editor depois da captura"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:570 rust/anycapture/src/window.rs:226
+msgid "Opções…"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:588
+msgid "Ocultar o One Click"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:674
+msgid "AnyCapture — linha de comando"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:704
+msgid "/region espera x,y,largura,altura (ex.: /region 100,100,800,600)."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:716
+msgid "Nenhuma janela com esse título: "
+msgstr ""
+
+#: rust/anycapture/src/main.rs:728
+#, c-format
+msgid "Monitor %d não existe (há %zu)."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:748
+msgid "Não foi possível fixar: "
+msgstr ""
+
+#: rust/anycapture/src/main.rs:884 rust/snapcore/src/office.rs:181
+#, c-format
+msgid "O %s não está instalado neste computador (ou é a versão da Microsoft Store, sem automação)."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:233
+msgid "Fixar um arquivo…"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:896 rust/anycapture/src/window.rs:231
+msgid "Capturar e fixar"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:896
+msgid "Mostrar todas"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:897
+msgid "Ocultar todas"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:897 rust/anycapture/src/quick.rs:300 rust/anycapture/src/window.rs:234
+msgid "Fechar todas"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:897
+msgid "Desligar \"atravessar cliques\""
+msgstr ""
+
+#: rust/anycapture/src/main.rs:897
+msgid "Reabrir a última fechada"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:898
+msgid "Histórico"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:943 rust/snapedit/src/app/extras.rs:328
+msgid "O manual não foi encontrado:\n"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:984
+msgid " — captura de tela e gravação de vídeo"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:985 rust/snapedit/src/app/commands.rs:449
+msgid "Software livre sob a GNU General Public License versão 3."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:988 rust/anycapture/src/window.rs:264
+msgid "Sobre o AnyCapture"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:1027 rust/anycapture/src/main.rs:1101 rust/anycapture/src/main.rs:1187
+msgid "AnyCapture — clique para capturar"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:1047
+msgid "AnyCapture — gravação recuperada"
+msgstr ""
+
+#: rust/anycapture/src/main.rs:1048
+#, c-format
+msgid "%zu gravação(ões) interrompida(s) foi(ram) recuperada(s) na biblioteca."
+msgstr ""
+
+#: rust/anycapture/src/main.rs:1185
+#, c-format
+msgid "AnyCapture — captura por intervalo: %d imagem(ns)"
+msgstr ""
+
+#: rust/anycapture/src/oneclick.rs:500
+msgid "Iniciar uma captura"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:412 rust/anycapture/src/select.rs:578
+msgid "Cor copiada: "
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:420
+msgid "Fixada"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:421
+msgid "Salvar a imagem fixada"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:429 rust/anycapture/src/quick.rs:255 rust/snapedit/src/app/docs.rs:322
+msgid "Não foi possível salvar:\n"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:438 rust/anycapture/src/pins.rs:978 rust/anycapture/src/pins.rs:1206
+msgid "Imagem fixada"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:610 rust/snapedit/src/tray.rs:318
+msgid "Copiar\tCtrl+C"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:610
+msgid "Salvar como…\tCtrl+S"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:610
+msgid "Abrir no Editor"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:611
+msgid "Anotar (caneta, marcador, seta, retângulo, texto)"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:611
+msgid "Desfazer a anotação\tCtrl+Z"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:612
+msgid "Zoom"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:612 rust/snapedit/src/effects.rs:103 rust/snapedit/src/effects.rs:151 rust/snapedit/src/props.rs:899 …
+msgid "Opacidade"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:612
+msgid "Travar a posição"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:613
+msgid "Atravessar cliques (desligue pelo menu da bandeja)"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:613
+msgid "Sempre visível"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:613 rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:100 rust/snapedit/src/effects.rs:121 …
+msgid "Sombra"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:614
+msgid "Copiar a cor neste ponto\tAlt+clique"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:614
+msgid "Arrastar para outro programa: Ctrl+arrastar"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:614
+msgid "Fechar\tEsc"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:615
+msgid "Fechar todas as imagens fixadas"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:693
+msgid "Texto na imagem fixada"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:1144
+msgid "A área de transferência não tem imagem nem texto para fixar."
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:1212
+msgid "PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif|WebP (*.webp)|*.webp|"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Vermelho"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Amarelo"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Verde"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Azul"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Roxo"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Preto"
+msgstr ""
+
+#: rust/anycapture/src/pins.rs:572
+msgid "Branco"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:236
+msgid "Copiado para a área de transferência."
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:240 rust/anycapture/src/window.rs:305
+msgid "Vídeo"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:241
+msgid "Salvar o vídeo"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:241 rust/snapedit/src/app/video.rs:413
+msgid "Vídeo MP4 (*.mp4)|*.mp4|"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:247 rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259 rust/snapedit/src/app/docs.rs:262
+msgid "Salvar como"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:297 rust/snapedit/src/tray.rs:322 rust/snapedit/src/app/commands.rs:788
+msgid "Copiar como…"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:299
+msgid "Enviar (upload) e copiar o link"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:53 rust/snapedit/src/app/windows_aux.rs:896
+msgid "Copiar"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:54
+msgid "Salvar como…"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:55
+msgid "Anotar no Editor"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:56 rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:246 rust/snapedit/src/tray.rs:324 …
+msgid "Fixar na tela"
+msgstr ""
+
+#: rust/anycapture/src/quick.rs:57
+msgid "Excluir da biblioteca"
+msgstr ""
+
+#: rust/anycapture/src/rawwin.rs:194
+msgid "Pular"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:556
+msgid "Nenhuma região anterior ainda"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:566
+#, c-format
+msgid "Região anterior %d de %d"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:660
+msgid "Tamanho da seleção"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:677 rust/anycapture/src/engine/scroll.rs:387 rust/snapedit/src/effects.rs:643 rust/snapedit/src/app/windows_aux.rs:601 …
+msgid "Cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:808
+msgid "Setas movem (Shift = 10 px) • Ctrl+setas aumentam, Ctrl+Shift+setas diminuem • clique no tamanho para digitar • Enter ou duplo clique captura • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:809
+msgid "Arraste para selecionar • clique captura a janela/área destacada • Enter = monitor • Tab = regiões anteriores • H = capturas recentes • C = copiar a cor • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:810
+msgid "Clique na janela a capturar • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:811
+msgid "Clique no controle/objeto a capturar • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:812
+#, c-format
+msgid "Região fixa %d × %d — clique para capturar • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:813
+msgid "Desenhe o contorno com o botão pressionado • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:814
+msgid "Arraste várias áreas • Backspace desfaz • Enter ou botão direito conclui • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:815
+msgid "Clique na janela/área rolável • Esc = cancelar"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:817
+msgid "Gravação: "
+msgstr ""
+
+#: rust/anycapture/src/select.rs:294 rust/snapcore/src/recorder.rs:1081 rust/snapcore/src/recorder.rs:1614 rust/snapedit/src/edtools.rs:740 …
+msgid "ok"
+msgstr ""
+
+#: rust/anycapture/src/select.rs:674 rust/snapedit/src/app/windows_aux.rs:604 rust/snapui/src/form.rs:461
+msgid "OK"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:40
+#, c-format
+msgid "Captura enviada para o %s."
+msgstr ""
+
+#: rust/anycapture/src/share.rs:53 rust/snapedit/src/app/extras.rs:395
+msgid "Arquivo (para colar no Explorer, e-mail, chat)"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:53 rust/snapedit/src/app/extras.rs:396
+msgid "Caminho do arquivo"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:53 rust/snapedit/src/app/extras.rs:399
+msgid "Base64 (PNG)"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:54 rust/snapedit/src/app/extras.rs:400
+msgid "Data URL (PNG)"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:54 rust/snapedit/src/app/extras.rs:401
+msgid "Data URL (WebP)"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:98
+msgid "O upload ainda não está configurado. Configurar agora?"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:105
+msgid "Enviando a captura…"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:109
+msgid ""
+"O upload falhou.\n"
+"\n"
+msgstr ""
+
+#: rust/anycapture/src/share.rs:118
+msgid "Upload concluído — link copiado"
+msgstr ""
+
+#: rust/anycapture/src/update.rs:75
+#, c-format
+msgid "Você já está usando a versão mais recente do AnyCapture (%s)."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:80
+msgid "Não foi possível verificar se há atualizações. Verifique a conexão com a internet."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:97
+#, c-format
+msgid "O AnyCapture %s está disponível"
+msgstr ""
+
+#: rust/anycapture/src/update.rs:98
+#, c-format
+msgid "Você está usando a versão %s."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:105
+msgid "Mostrar as novidades"
+msgstr ""
+
+#: rust/anycapture/src/update.rs:105
+msgid "Ocultar as novidades"
+msgstr ""
+
+#: rust/anycapture/src/update.rs:108
+msgid ""
+"Atualizar agora\n"
+"Baixa o instalador, fecha o AnyCapture e o Editor e instala a nova versão."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:109
+msgid ""
+"Ver a página da versão\n"
+"Abre a versão no GitHub, com as novidades e os arquivos."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:110
+msgid ""
+"Pular esta versão\n"
+"Não avisa mais desta versão ao iniciar."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:171
+#, c-format
+msgid "Baixando o AnyCapture %s…"
+msgstr ""
+
+#: rust/anycapture/src/update.rs:172
+msgid "A instalação começa assim que o download terminar."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:201
+msgid "Não foi possível baixar a atualização."
+msgstr ""
+
+#: rust/anycapture/src/update.rs:219
+msgid "O instalador não foi iniciado. Você pode instalar a nova versão pela página da versão no GitHub."
+msgstr ""
+
+#: rust/anycapture/src/window.rs:44 rust/anycapture/src/window.rs:439 rust/anycapture/src/window.rs:449
+msgid "Nenhum"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:44 rust/snapedit/src/panels.rs:62
+msgid "Arquivo"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:44
+msgid "Programa externo"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:44
+msgid "Texto (OCR)"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:45
+msgid "Upload (copiar o link)"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:214
+msgid "Abrir a pasta da biblioteca"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:215
+msgid "Abrir a pasta de logs"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:217
+msgid "Importar presets…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:218
+msgid "Exportar presets…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:220
+msgid "Exportar todas as configurações…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:221
+msgid "Importar todas as configurações…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:222
+msgid "Abrir a pasta de backups"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:224
+msgid "Configurar o upload…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:225
+msgid "Limpar a biblioteca agora"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:228
+msgid "Sair do AnyCapture"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:239
+msgid "Repetir a última captura"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:241 rust/snapedit/src/app/docs.rs:348
+msgid "Da área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:242
+msgid "De um arquivo gráfico…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:250
+msgid "Abrir a pasta dos áudios"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:254
+msgid "Lista de presets"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:257
+msgid "Manual do AnyCapture"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:258
+msgid "Como usar os presets"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:260
+msgid "Verificar atualizações…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:261
+msgid "Relatar um problema…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:262
+msgid "Enviar sugestão ou feedback…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:266 rust/snapedit/src/menu.rs:239
+msgid "&Arquivo"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:266
+msgid "&Captura"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:266 rust/snapedit/src/menu.rs:243
+msgid "E&xibir"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:266 rust/snapedit/src/menu.rs:244
+msgid "A&juda"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:370 rust/anycapture/src/window.rs:201
+msgid "Seleção:"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:388 rust/anycapture/src/window.rs:703
+msgid "Configurações"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:393
+msgid "Selecionar a região na captura"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:395
+msgid "Região fixa…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:404
+msgid "Cada janela como um objeto separado"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:407
+msgid "Guardar os links da página (clicáveis, também no PDF)"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:433 rust/anycapture/src/window.rs:201
+msgid "Efeitos:"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:454
+msgid "Adicionar outro efeito"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:455
+msgid "Remover este efeito"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:496 rust/anycapture/src/window.rs:201
+msgid "Compartilhar:"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:519 rust/anycapture/src/window.rs:201
+msgid "Qualidade:"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:520
+msgid "Muito baixa"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:520 rust/snapedit/src/effects.rs:126
+msgid "Baixa"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:520 rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:126
+msgid "Média"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:520 rust/snapedit/src/effects.rs:126
+msgid "Alta"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:551 rust/anycapture/src/window.rs:201
+msgid "Webcam:"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:552
+msgid "Ligada"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:552 rust/anycapture/src/window.rs:563
+msgid "Desligada"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:565
+msgid "Nenhuma webcam encontrada"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:579
+msgid "Remover o fundo (chroma key)…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:614
+#, c-format
+msgid "%d s"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:618
+msgid "Atraso"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:626
+msgid "1 segundo"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:627
+#, c-format
+msgid "%d segundos"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:642 rust/snapedit/src/panels.rs:244
+msgid "Gravar"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:642 rust/snapedit/src/panels.rs:243
+msgid "Capturar"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:666
+msgid "Gravar vídeo  ("
+msgstr ""
+
+#: rust/anycapture/src/window.rs:666
+msgid "Capturar imagem  ("
+msgstr ""
+
+#: rust/anycapture/src/window.rs:676
+msgid "Adicionar atalho"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:748
+msgid "Capturar com este preset"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:750
+msgid "Renomear…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:751
+msgid "Atalho…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:752 rust/snapedit/src/panels.rs:77 rust/snapedit/src/props.rs:591
+msgid "Duplicar"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:754 rust/snapedit/src/effects.rs:544 rust/snapedit/src/props.rs:618
+msgid "Excluir"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:793 rust/anycapture/tests/window.rs:172
+msgid "Novo preset…"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:795 rust/snapedit/src/props.rs:860
+msgid "Ajuda"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:805
+msgid "Abrir Editor"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:96 rust/snapedit/src/app/commands.rs:589
+msgid "Borda"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:123
+msgid "Filtros"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:155
+msgid "Informações da captura"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/effects.rs:137
+msgid "Substituição de cor"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:87 rust/snapedit/src/app/commands.rs:666
+msgid "Redimensionar imagem"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:88 rust/snapedit/src/app/commands.rs:590
+msgid "Bordas especiais"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:88
+msgid "Cortar bordas"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:88
+msgid "Ajuste de cor"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:88
+msgid "Girar imagem"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:88 rust/snapedit/src/effects.rs:149
+msgid "Marca d'água"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:88
+msgid "Resolução da imagem"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:89
+msgid "Embelezar (fundo, margem e sombra)"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:842
+msgid "Visualizar no Editor"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:848
+msgid "Copiar para a área de transferência"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:197 rust/anycapture/src/window.rs:845
+msgid "Gravar microfone"
+msgstr ""
+
+#: rust/anycapture/src/window.rs:198 rust/anycapture/src/window.rs:846
+msgid "Gravar áudio do sistema"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:159
+msgid "A janela será ampliada além da tela, capturada e restaurada."
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:160
+msgid "Nova largura (px)"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:161
+msgid "Nova altura (px)"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:163 rust/snapcore/src/presets.rs:66
+msgid "Janela estendida"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:283
+msgid "AnyCapture — rolagem panorâmica"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:379
+msgid "Role o conteúdo dentro da moldura…"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:381
+#, c-format
+msgid "Capturando: %d × %d px"
+msgstr ""
+
+#: rust/anycapture/src/engine/scroll.rs:387
+msgid "Concluir"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:123
+msgid "Recomeçar a gravação?"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:124
+msgid "O que foi gravado até agora será descartado."
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:125
+msgid "Não perguntar de novo"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:191
+msgid "AnyCapture — gravação"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:318
+msgid ""
+"Não foi possível iniciar a gravação.\n"
+"\n"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:360
+msgid "Teclas: não mostrar"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:361
+msgid "Teclas: só atalhos (Ctrl, Alt, Win, F1…)"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:361
+msgid "Teclas: todas (inclusive o que for digitado)"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:405
+msgid "Há uma gravação em andamento. Parar e sair?"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:415
+msgid "Imagem durante gravação"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:421
+msgid "Imagem capturada sem parar a gravação."
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:481
+msgid "AnyCapture — áudio salvo"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:506
+msgid "Vídeo salvo na biblioteca: "
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:509
+msgid ""
+"A gravação falhou.\n"
+"\n"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:520
+msgid "AnyCapture — pouco espaço em disco"
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:520
+msgid "Restam menos de 1 GB livres na unidade da biblioteca."
+msgstr ""
+
+#: rust/anycapture/src/engine/video.rs:522
+msgid "Gravação interrompida: espaço em disco insuficiente."
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:61
+msgid "Sem resposta do provedor: "
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:72
+#, c-format
+msgid "O provedor respondeu %d: "
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:74
+msgid "Resposta inválida do provedor."
+msgstr ""
+
+#: rust/snapcore/src/ai.rs:82
+msgid "O provedor não devolveu texto."
+msgstr ""
+
+#: rust/snapcore/src/codec.rs:633 rust/snapcore/src/codec.rs:634
+msgid "Para abrir fotos HEIC, instale da Microsoft Store as extensões \"Extensões de Imagem HEIF\" e \"Extensões de Vídeo HEVC\"."
+msgstr ""
+
+#: rust/snapcore/src/codec.rs:636 rust/snapcore/src/codec.rs:637
+msgid "Para usar AVIF, instale da Microsoft Store a \"Extensão de Vídeo AV1\" e as \"Extensões de Imagem HEIF\". Salvar em AVIF também precisa de um codificador AV1 (placas de vídeo recentes)."
+msgstr ""
+
+#: rust/snapcore/src/codec.rs:646
+msgid ""
+"Este computador não consegue salvar em AVIF.\n"
+"\n"
+msgstr ""
+
+#: rust/snapcore/src/codec.rs:653
+msgid "Arquivo WebP inválido."
+msgstr ""
+
+#: rust/snapcore/src/codec.rs:657
+msgid "Formato de imagem não suportado."
+msgstr ""
+
+#: rust/snapcore/src/codec.rs:667
+msgid "Falha ao codificar WebP."
+msgstr ""
+
+#: rust/snapcore/src/doc.rs:587 rust/snapedit/src/props.rs:1750
+msgid "L"
+msgstr ""
+
+#: rust/snapcore/src/i18n.rs:374 rust/snapedit/src/panels.rs:74 rust/snapedit/src/tray.rs:314 rust/snapedit/src/app/commands.rs:91
+msgid "Abrir"
+msgstr ""
+
+#: rust/snapcore/src/legacy.rs:315 rust/snapcore/src/net.rs:828 rust/snapcore/src/settings.rs:291 rust/snapcore/src/snap.rs:323 …
+msgid "abc"
+msgstr ""
+
+#: rust/snapcore/src/library.rs:219
+msgid "Audio"
+msgstr ""
+
+#: rust/snapcore/src/library.rs:559 rust/snapcore/src/library.rs:563 rust/snapcore/src/presets.rs:56 rust/snapedit/tests/golden.rs:1371 …
+msgid "Região"
+msgstr ""
+
+#: rust/snapcore/src/library.rs:559 rust/snapui/src/feedback.rs:160
+msgid "Título"
+msgstr ""
+
+#: rust/snapcore/src/net.rs:829 rust/snapcore/src/settings.rs:291 rust/snapedit/src/stamp_data.rs:12
+msgid "ab"
+msgstr ""
+
+#: rust/snapcore/src/ocr.rs:32 rust/snapedit/tests/golden.rs:593
+msgid "Imagem vazia."
+msgstr ""
+
+#: rust/snapcore/src/ocr.rs:34
+msgid "Nenhum idioma de OCR instalado no Windows (Configurações › Hora e idioma › Idioma)."
+msgstr ""
+
+#: rust/snapcore/src/ocr.rs:36
+msgid "Falha desconhecida no OCR."
+msgstr ""
+
+#: rust/snapcore/src/ocr.rs:37
+msgid "A detecção de rostos não está disponível neste Windows."
+msgstr ""
+
+#: rust/snapcore/src/ocr.rs:38
+msgid "Falha na detecção de rostos."
+msgstr ""
+
+#: rust/snapcore/src/office.rs:190
+#, c-format
+msgid "Não foi possível abrir o %s."
+msgstr ""
+
+#: rust/snapcore/src/office.rs:221
+#, c-format
+msgid "O %s recusou a imagem (0x%08X)."
+msgstr ""
+
+#: rust/snapcore/src/office.rs:296
+msgid "Abra uma página no OneNote antes de enviar a captura."
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:57
+msgid "Janela"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:58
+msgid "Tela inteira (todos os monitores)"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:59
+msgid "Monitor atual"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:60
+msgid "Região com tamanho fixo"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:61
+msgid "Mão livre"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:62
+msgid "Várias áreas"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:63
+msgid "Objeto (controle sob o cursor)"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:64
+msgid "Rolagem automática (janela)"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:65
+msgid "Rolagem panorâmica"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:67
+msgid "Menu"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:69
+msgid "Arquivo gráfico"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:585
+msgid "Imagem — Janela"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:588
+msgid "Tela inteira → Área de transferência"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:592
+msgid "Rolagem (página inteira)"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:594
+msgid "Vídeo — Região"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:597
+msgid "Vídeo — Tela inteira"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:605
+msgid "Captura com rolagem panorâmica"
+msgstr ""
+
+#: rust/snapcore/src/presets.rs:607
+msgid "Capturar texto"
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:883
+msgid "Área de gravação muito pequena."
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:897
+msgid "Media Foundation indisponível."
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:903
+msgid "Nenhuma fonte de áudio disponível (ligue o microfone ou o áudio do sistema)."
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:948
+#, c-format
+msgid "Não foi possível iniciar o codificador MP4 (0x%08X)."
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:1053
+#, c-format
+msgid "Falha ao finalizar o MP4 (0x%08X)."
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:1114
+msgid "Espaço"
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:1175 rust/snapcore/src/recorder.rs:1382
+msgid "Falha ao gravar quadro de vídeo."
+msgstr ""
+
+#: rust/snapcore/src/recorder.rs:1645 rust/snapedit/src/props.rs:1750 rust/snapedit/src/styles.rs:788 rust/snapedit/src/styles.rs:795 …
+msgid "A"
+msgstr ""
+
+#: rust/snapcore/src/settings.rs:206
+msgid "Não foi possível gravar o arquivo."
+msgstr ""
+
+#: rust/snapcore/src/settings.rs:270
+msgid "Não foi possível gravar "
+msgstr ""
+
+#: rust/snapcore/src/sounds.rs:32
+msgid "Obturador de câmera"
+msgstr ""
+
+#: rust/snapcore/src/sounds.rs:33
+msgid "Clique"
+msgstr ""
+
+#: rust/snapcore/src/sounds.rs:34
+msgid "Toque suave"
+msgstr ""
+
+#: rust/snapcore/src/sounds.rs:35
+msgid "Arquivo WAV…"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:64
+msgid "Armazenamento S3 (AWS e compatíveis)"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:70
+msgid "Enviador HTTP personalizado (.sxcu)"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:71
+msgid "Nenhum (desligado)"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:383
+msgid "AnyCapture: login concluído. Você já pode fechar esta janela."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:398
+msgid "Falha ao renovar o acesso (faça login de novo nas opções de upload)"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:448
+msgid "Configure o bucket e as chaves do S3."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:473
+msgid "Falha no upload para o S3"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:485
+msgid "O Dropbox aceita até 150 MB por envio pela API."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:502
+msgid "Falha no upload para o Dropbox"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:518 rust/snapcore/src/upload.rs:592
+msgid "O arquivo foi enviado, mas o link não pôde ser criado"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:555
+msgid "Falha no upload para o Google Drive"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:581
+msgid "Falha no upload para o OneDrive"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:623
+#, c-format
+msgid "Não foi possível conectar ao FTP (%u)."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:642
+#, c-format
+msgid "O servidor FTP recusou o arquivo (%u)."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:655
+msgid "O cliente OpenSSH do Windows não está instalado (Configurações › Sistema › Recursos opcionais)."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:677
+msgid "Não foi possível iniciar o sftp."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:690
+#, c-format
+msgid "O SFTP falhou (código %u). Use autenticação por chave (sem senha) e confira host, usuário e pasta."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:698
+msgid "O enviador personalizado não é um JSON válido."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:710
+msgid "O enviador personalizado não tem RequestURL."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:765
+msgid "Falha no envio"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:773
+msgid "O servidor respondeu, mas o link não foi encontrado na resposta."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:911
+msgid "Nenhum destino de upload configurado."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:924
+msgid "Não foi possível ler o arquivo."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:951 rust/snapedit/src/app/windows_aux.rs:292
+msgid "Não foi possível preparar a imagem."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1027
+msgid "Não foi possível abrir a porta local para o retorno do navegador."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1059
+msgid "O Dropbox recusou o código"
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1069
+msgid "Resposta de login inválida."
+msgstr ""
+
+#: rust/snapcore/src/upload.rs:1085
+msgid "O login foi recusado"
+msgstr ""
+
+#: rust/snapcore/src/video.rs:382
+#, c-format
+msgid "Falha ao ler o vídeo (0x%08X)."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:447 rust/snapcore/src/video.rs:504
+msgid "Cancelado."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:468 rust/snapcore/src/video.rs:284 rust/snapcore/src/video.rs:289
+msgid "Não foi possível abrir o vídeo."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:474 rust/snapcore/src/video.rs:509
+msgid "Não foi possível criar o GIF."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:507
+msgid "Nenhum quadro no intervalo."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:292 rust/snapcore/src/video.rs:295 rust/snapcore/src/video.rs:296
+msgid "Formato de vídeo não suportado."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:326 rust/snapcore/src/video.rs:329
+msgid "Não foi possível criar o arquivo de saída."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:332 rust/snapcore/src/video.rs:340
+msgid "Codificador H.264 indisponível."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:341 rust/snapcore/src/video.rs:348
+msgid "Entrada de vídeo recusada."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:370
+msgid "Codificador AAC indisponível."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:372
+msgid "Falha ao iniciar a gravação."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:430 rust/snapcore/src/video.rs:437 rust/snapcore/src/video.rs:441
+msgid "Falha ao codificar quadro."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:453
+msgid "Falha ao codificar áudio."
+msgstr ""
+
+#: rust/snapcore/src/video.rs:456
+msgid "Falha ao finalizar o MP4."
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:77
+msgid "Círculo"
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:77
+msgid "Quadrado arredondado"
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:77
+msgid "Quadrado"
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:77
+msgid "Retângulo 16:9"
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:77
+msgid "Retângulo 4:3"
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:103
+msgid "O Windows bloqueou o acesso à câmera. Libere em Configurações › Privacidade e segurança › Câmera."
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:105
+#, c-format
+msgid "Não foi possível abrir a webcam (0x%08X)."
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:117
+#, c-format
+msgid "A webcam não oferece um formato compatível (0x%08X)."
+msgstr ""
+
+#: rust/snapcore/src/webcam.rs:215 rust/snapcore/src/webcam.rs:248
+msgid "Nenhuma webcam encontrada."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:1677
+msgid "Selecione 3 ou mais objetos para distribuir."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:1887 rust/snapedit/src/app/docs.rs:616 rust/snapedit/src/app/extras.rs:614
+msgid "OCR indisponível: "
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:1903
+msgid "Nenhum texto reconhecido nesta área (\"Somente o texto\" ligado)."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:1931
+msgid "Nenhuma linha de texto reconhecida aqui: o marca-texto ficou como foi desenhado."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2004
+msgid "Forma reconhecida: "
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2004
+msgid " (Ctrl+Z desfaz; Editar › Desenhar e segurar desliga)."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2819
+msgid "Objeto bloqueado: desbloqueie para mover."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:3124
+msgid "Digite para escrever um texto na ponta inicial da seta."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:68 rust/snapedit/src/menu.rs:26
+msgid "Mover"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:69 rust/snapedit/src/panels.rs:381
+msgid "Seta"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:70 rust/snapedit/src/panels.rs:382
+msgid "Linha"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:71 rust/snapedit/src/props.rs:1608
+msgid "Forma"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:72 rust/snapedit/src/panels.rs:383
+msgid "Caneta"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:73 rust/snapedit/src/panels.rs:384
+msgid "Marcador"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:75 rust/snapedit/src/panels.rs:386
+msgid "Balão"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:76
+msgid "Passos"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:77 rust/snapedit/src/panels.rs:392 rust/snapedit/src/stamps.rs:234
+msgid "Carimbo"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:78
+msgid "Ocultar"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:79 rust/snapedit/src/effects.rs:143 rust/snapedit/src/panels.rs:397
+msgid "Destaque"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:80 rust/snapedit/src/panels.rs:398
+msgid "Lupa"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:81
+msgid "Preencher"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:82
+msgid "Borracha"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:83 rust/snapedit/src/app/extras.rs:752
+msgid "Cortar"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:84
+msgid "Seleção"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:85
+msgid "Recortar faixa"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:86 rust/snapedit/src/props.rs:995
+msgid "Conta-gotas"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:87 rust/snapedit/src/props.rs:479
+msgid "Favoritos"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:88 rust/snapedit/src/props.rs:1103
+msgid "Varinha mágica"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:1500
+msgid "Objetos bloqueados não são excluídos (desbloqueie pelo menu de contexto ou pelo painel Camadas)."
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2003
+msgid "linha"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2003
+msgid "seta"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2003
+msgid "retângulo"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2003
+msgid "elipse"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2003
+msgid "triângulo"
+msgstr ""
+
+#: rust/snapedit/src/canvas.rs:2655
+msgid "Clique nos cantos do polígono; clique no primeiro ponto, dê um duplo clique ou tecle Enter para fechar (Esc cancela)."
+msgstr ""
+
+#: rust/snapedit/src/canvas_ui.rs:317
+msgid "Nenhuma captura aberta — use “Capturar” ou abra um arquivo (Ctrl+O)."
+msgstr ""
+
+#: rust/snapedit/src/canvas_ui.rs:408
+msgid "Prévia — Aplicar ou Cancelar no painel"
+msgstr ""
+
+#: rust/snapedit/src/canvas_ui.rs:435
+msgid "(duplo clique abre)"
+msgstr ""
+
+#: rust/snapedit/src/canvas_ui.rs:530
+#, c-format
+msgid "%d × %d  — Enter aplica, Esc cancela"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:683
+msgid "passa"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:683
+msgid "falha"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:685
+#, c-format
+msgid ""
+"Contraste %.2f:1\n"
+"\n"
+"Texto normal — AA (4,5:1): %s · AAA (7:1): %s\n"
+"Texto grande — AA (3:1): %s · AAA (4,5:1): %s\n"
+"Componentes e gráficos — AA (3:1): %s"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:211 rust/snapedit/src/edtools.rs:732
+msgid "Link com token"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:216
+msgid "Chave de API"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:220 rust/snapedit/src/edtools.rs:726 rust/snapedit/src/panels.rs:63
+msgid "E-mail"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:224 rust/snapedit/src/edtools.rs:727
+msgid "Cartão"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:225
+msgid "Documento (SSN)"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:226 rust/snapedit/src/edtools.rs:731
+msgid "Endereço IP"
+msgstr ""
+
+#: rust/snapedit/src/edtools.rs:228 rust/snapedit/src/edtools.rs:733
+msgid "Telefone"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:150
+msgid "Confidencial"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:373 rust/snapedit/src/app/extras.rs:1096
+msgid "Efeito"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:534
+msgid "Efeitos rápidos"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:551
+msgid "+ Adicionar aos efeitos rápidos"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:638
+msgid "Aplicar"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:96
+msgid "Contorno sólido em volta da imagem, na largura e cor que você escolher."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:96 rust/snapedit/src/effects.rs:100 rust/snapedit/src/effects.rs:105 rust/snapedit/src/effects.rs:110 …
+msgid "Bordas e sombras"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:97 rust/snapedit/src/props.rs:898 rust/snapedit/src/props.rs:921 rust/snapedit/src/props.rs:1043
+msgid "Largura"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:100
+msgid "Sombra suave atrás da imagem, que destaca a captura do fundo."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:101
+msgid "Deslocamento"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:102 rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:145 rust/snapedit/src/panels.rs:395 …
+msgid "Desfoque"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:105
+msgid "Perspectiva"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:105
+msgid "Inclina a imagem como se estivesse de lado, em pé ou deitada."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:106
+msgid "Horizontal"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:107
+msgid "Vertical"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:108
+msgid "Inclinação"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:110 rust/snapedit/src/effects.rs:339 rust/snapedit/src/app/commands.rs:592
+msgid "Dobra de página"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:110
+msgid "Dobra um canto da imagem, como a ponta de uma folha de papel."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:111 rust/snapedit/src/effects.rs:116 rust/snapedit/src/effects.rs:158
+msgid "Tamanho"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:111
+msgid "Pequena"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:111
+msgid "Grande"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:112
+msgid "Canto"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:114
+msgid "Bordas"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:114
+msgid "Rasgada, onda, serrilhada, tubarão, esmaecida ou chanfrada."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:123
+msgid "Cinza, sépia, inverter, P&B, relevo, mosaico, nitidez, desfoque."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:123 rust/snapedit/src/effects.rs:128 rust/snapedit/src/effects.rs:137 rust/snapedit/src/app/video.rs:457
+msgid "Cores"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:124 rust/snapedit/src/effects.rs:153
+msgid "Relevo"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:124
+msgid "Mosaico"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:124
+msgid "Nitidez"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:126 rust/snapedit/src/props.rs:1073 rust/snapedit/src/props.rs:1078
+msgid "Intensidade"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:128
+msgid "Ajuste de cores"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:128
+msgid "Brilho, contraste, gama, matiz e saturação."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:131
+msgid "Gama"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:133
+msgid "Matiz"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:137
+msgid "Troca uma cor por outra (ou por transparente)."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:138
+msgid "Cor atual"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:140
+msgid "Tornar transparente"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:143
+msgid "Spotlight e lupa"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:143
+msgid "Destaca a seleção (ou o meio da imagem) e escurece o resto."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:144
+msgid "Escurecer"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:146
+msgid "Ampliar"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:147
+msgid "Sombra na área em foco"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:149
+msgid "Texto translúcido sobre a imagem, uma vez ou em mosaico."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:152
+msgid "Repetir em mosaico"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:155
+msgid "Faixa de texto em cima ou embaixo; aceita {date} e {time}."
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:159 rust/snapedit/src/props.rs:1010
+msgid "Cor do texto"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:160
+msgid "Cor da faixa"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:336
+msgid "Borda e sombra"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:337
+msgid "Papel rasgado"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:342
+msgid "Serrilhado"
+msgstr ""
+
+#: rust/snapedit/src/effects.rs:345
+msgid "Chanfrado"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:20
+msgid "Seta do mouse"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:21
+msgid "Seta do mouse (escura)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:22
+msgid "Mão (link)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:23
+msgid "Cursor de texto"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:24
+msgid "Ocupado"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:25
+msgid "Mira"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:27 rust/snapedit/src/app/extras.rs:1092
+msgid "Redimensionar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:28
+msgid "Indicador de clique"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:29
+msgid "Clique direito"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:91
+msgid "Enviar &para"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:157
+msgid "&Alinhar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:169
+msgid "Ferramen&tas"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:170
+msgid "&Efeitos"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:172
+msgid "&Organizar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:186
+msgid "&Girar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:213
+msgid "&Verificar atualizações…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:214
+msgid "&Relatar um problema…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:215
+msgid "Enviar su&gestão ou feedback…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:229
+msgid "Inserir c&ursor"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:240
+msgid "&Editar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:241
+msgid "&Imagem"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:242
+msgid "&Ferramentas"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:45
+msgid "Favoritos: seus estilos favoritos de todas as ferramentas"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:46
+msgid "Seta (A)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:47
+msgid "Texto (T)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:48
+msgid "Balão (C)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:49
+msgid "Forma: retângulo, elipse… (R)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:50
+msgid "Carimbo (K)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:51
+msgid "Preencher (F)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:52
+msgid "Seleção e Smart Move (S)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:53
+msgid "Varinha mágica: seleciona pela cor"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:54
+msgid "Cortar (X)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:55
+msgid "Recortar faixa (U)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:56
+msgid "Caneta (P)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:57
+msgid "Linha (L)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:58
+msgid "Marcador: retângulo, elipse, polígono ou mão livre (H)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:59
+msgid "Passos numerados (N)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:60
+msgid "Borracha (E)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:61
+msgid "Ocultar: desfoque/pixelado (B)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:62
+msgid "Mover e Smart Move (V)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:63
+msgid "Lupa (Z)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:64
+msgid "Destaque/spotlight (G)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:65
+msgid "Conta-gotas (I)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:75
+msgid "Nova &captura\tCtrl+Shift+N"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:76
+msgid "Nova &gravação de vídeo"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:77
+msgid "Novo da área de &transferência"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:78
+msgid "Nova &imagem…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:80
+msgid "&Abrir…\tCtrl+O"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:81
+msgid "&Salvar\tCtrl+S"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:82
+msgid "Salvar &como…\tCtrl+Shift+S"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:83
+msgid "&Duplicar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:84
+msgid "&Excluir (Lixeira)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:86
+msgid "&Imprimir…\tCtrl+P"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:87
+msgid "Enviar por &e-mail…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:88
+msgid "Abrir em &programa externo…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:89
+msgid "Fi&xar na tela\tCtrl+Shift+P"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:90
+msgid "Enviar (&upload)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:93
+msgid "Com&binar imagens…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:94
+msgid "Comparar ima&gens…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:95
+msgid "Processamento em &lote…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:97
+msgid "Abrir a pasta da &biblioteca"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:98
+msgid "&Fechar documento\tCtrl+W"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:99
+msgid "Sai&r"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:102
+msgid "&Desfazer\tCtrl+Z"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:103
+msgid "&Refazer\tCtrl+Y"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:104
+msgid "Desfazer &tudo"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:106 rust/snapedit/src/app/commands.rs:874
+msgid "Recor&tar\tCtrl+X"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:107 rust/snapedit/src/app/commands.rs:875 rust/snapedit/src/app/commands.rs:909
+msgid "&Copiar\tCtrl+C"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:108
+msgid "Copiar t&udo\tCtrl+Shift+C"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:109
+msgid "Copiar co&mo…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:110 rust/snapedit/src/app/commands.rs:876 rust/snapedit/src/app/commands.rs:905
+msgid "C&olar\tCtrl+V"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:111 rust/snapedit/src/app/commands.rs:877 rust/snapedit/src/app/commands.rs:906
+msgid "Colar no &mesmo lugar\tCtrl+Shift+V"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:112 rust/snapedit/src/app/commands.rs:878
+msgid "E&xcluir\tDel"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:113 rust/snapedit/src/app/commands.rs:917
+msgid "Selecionar tu&do\tCtrl+A"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:114 rust/snapedit/src/app/commands.rs:910
+msgid "Cortar para a &seleção"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:115 rust/snapedit/src/app/commands.rs:911
+msgid "&Levantar a seleção (peça solta)\tCtrl+Shift+L"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:116
+msgid "Soltar a &peça na imagem\tEnter"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:118
+msgid "Colar texto sem &formatação"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:119
+msgid "Seleção encaixa nas &bordas da imagem"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:120
+msgid "Desen&har e segurar vira forma (Caneta)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:122
+msgid "&Grab Text (OCR)\tCtrl+Shift+O"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:125
+msgid "&Borda"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:126
+msgid "Bor&das"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:127
+msgid "&Informações da captura"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:128
+msgid "&Perspectiva"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:129
+msgid "D&obra de página"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:130
+msgid "&Sombra"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:131
+msgid "&Filtros"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:132
+msgid "&Ajuste de cores"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:133
+msgid "Substituição de co&r"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:134
+msgid "Spotlight e &lupa"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:135
+msgid "&Marca d'água"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:137
+msgid "&Embelezar…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:140
+msgid "À &esquerda"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:141
+msgid "Ao &centro"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:142
+msgid "À &direita"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:144
+msgid "Em &cima"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:145
+msgid "No &meio"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:146
+msgid "Em&baixo"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:148
+msgid "Distribuir na &horizontal"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:149
+msgid "Distribuir na &vertical"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:152 rust/snapedit/src/app/commands.rs:886
+msgid "Trazer para a &frente\tCtrl+Shift+F"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:153 rust/snapedit/src/app/commands.rs:885
+msgid "Trazer para o &primeiro plano"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:154 rust/snapedit/src/app/commands.rs:887
+msgid "Enviar para &trás\tCtrl+Shift+B"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:155 rust/snapedit/src/app/commands.rs:888
+msgid "Enviar para o plano de &fundo"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:159
+msgid "Espelhar na &vertical"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:160
+msgid "Espelhar na &horizontal"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:163
+msgid "Sentido &horário\tCtrl+R"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:164
+msgid "Sentido &anti-horário"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:165
+msgid "&180 graus"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:166
+msgid "Ângulo &personalizado…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:173 rust/snapedit/src/app/commands.rs:899
+msgid "A&grupar\tCtrl+Shift+G"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:174 rust/snapedit/src/app/commands.rs:902
+msgid "Desagr&upar\tCtrl+Shift+U"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:175
+msgid "&Bloquear objeto\tCtrl+L"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:176
+msgid "Desblo&quear objeto\tCtrl+Shift+K"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:178
+msgid "&Mesclar\tCtrl+T"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:179
+msgid "Mesclar t&udo\tCtrl+Shift+T"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:181
+msgid "A&parar"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:182
+msgid "&Redimensionar imagem…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:183
+msgid "Redimensionar &canvas…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:184
+msgid "Aplicar mode&lo…\tCtrl+Alt+C"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:187
+msgid "Encai&xe no canvas\tCtrl+;"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:188
+msgid "Cor do canva&s…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:190
+msgid "Etiquetar &imagem…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:193
+msgid "&Ampliar\tCtrl++"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:194
+msgid "&Reduzir\tCtrl+-"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:195
+msgid "&Tamanho real\tCtrl+1"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:196
+msgid "A&justar à janela\tCtrl+0"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:198
+msgid "&Cor de fundo da área…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:199
+msgid "Ré&guas e guias\tCtrl+Shift+R"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:200
+msgid "Remover as gu&ias"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:202
+msgid "Painel de &efeitos"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:203
+msgid "Painel de ca&madas"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:204
+msgid "&Biblioteca"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:205
+msgid "Capturas &recentes (bandeja)"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:207
+msgid "&Personalizar a barra de ferramentas…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:210
+msgid "&Manual do AnyCapture\tF1"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:211
+msgid "&Atalhos de teclado"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:217
+msgid "&Sobre o AnyCapture Editor"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:222
+msgid "Ler código &QR\tCtrl+Shift+Q"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:223
+msgid "&Ocultar dados sensíveis…\tCtrl+Shift+E"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:224
+msgid "Remover o &fundo…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:225
+msgid "&Dividir imagem…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:226
+msgid "Adicionar ca&ptura"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:228
+msgid "Inserir data e &hora\tCtrl+Shift+D"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:230
+msgid "Formato da data e hora…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:232
+msgid "Verificador de &contraste…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:233
+msgid "&Assistente de IA…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:235
+msgid "Configurar o assistente de IA…"
+msgstr ""
+
+#: rust/snapedit/src/menu.rs:236
+msgid "Configurar o &upload…"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:210
+msgid "Efeito: "
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:210
+msgid " — abre os ajustes no painel de efeitos"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:324
+msgid "Mais"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:387
+#, c-format
+msgid "Passo %s"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:396 rust/snapedit/src/props.rs:1063
+msgid "Pixelado"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:399
+msgid "Peça solta"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:400
+#, c-format
+msgid "Grupo (%zu)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:401
+msgid "Link: "
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:423 rust/snapedit/src/app/mod.rs:457
+msgid "Camadas"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:425
+msgid "Nenhuma imagem aberta."
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:430
+msgid "Os objetos desenhados (setas, textos, formas…) aparecem aqui, do mais à frente ao mais atrás."
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:438
+msgid "Mostrar ou ocultar"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:443
+msgid "Bloquear ou desbloquear"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:464 rust/snapedit/src/props.rs:1814
+msgid "Enviar para trás"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:467 rust/snapedit/src/props.rs:1813
+msgid "Trazer para a frente"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:473
+msgid "Fundo (imagem)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:62
+msgid "Salvar como arquivo (PNG, JPG, PDF…)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:63
+msgid "Enviar por e-mail"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:65
+msgid "Copiar a imagem inteira"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:66
+msgid "Impressora"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:66
+msgid "Imprimir a imagem"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:70
+msgid "Desfazer"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:70
+msgid "Desfazer (Ctrl+Z)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:71
+msgid "Refazer"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:71
+msgid "Refazer (Ctrl+Y)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:72 rust/snapedit/src/app/docs.rs:361 rust/snapedit/src/app/docs.rs:366
+msgid "Nova imagem"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:72
+msgid "Nova imagem em branco"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:73
+msgid "Da área de transf."
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:73
+msgid "Nova imagem da área de transferência"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:74
+msgid "Abrir arquivo (Ctrl+O)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:75 rust/snapedit/src/app/windows_aux.rs:771
+msgid "Salvar"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:75
+msgid "Salvar na biblioteca (Ctrl+S)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:76 rust/snapedit/src/panels.rs:259
+msgid "Salvar como arquivo (Ctrl+Shift+S)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:77
+msgid "Duplicar a imagem"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:78 rust/snapedit/src/props.rs:1823
+msgid "Excluir objeto"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:78
+msgid "Excluir o objeto selecionado (Del)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:79
+msgid "Grab Text"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:79
+msgid "Reconhecer o texto da imagem (Ctrl+Shift+T)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:80
+msgid "Excluir imagem"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:80
+msgid "Enviar a imagem para a Lixeira"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:81
+msgid "Mesclar tudo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:81
+msgid "Mesclar todos os objetos na imagem"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:82
+msgid "Girar 90° no sentido horário (Ctrl+R)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:83 rust/snapedit/src/props.rs:1099
+msgid "Corte automático"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:83
+msgid "Cortar as bordas de cor uniforme"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:84 rust/snapedit/src/app/commands.rs:891
+msgid "Alinhar à esquerda"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:84
+msgid "Alinhar os objetos à esquerda"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:85 rust/snapedit/src/app/commands.rs:891
+msgid "Alinhar ao centro"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:85
+msgid "Alinhar os objetos ao centro"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:86 rust/snapedit/src/app/commands.rs:891
+msgid "Alinhar à direita"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:86
+msgid "Alinhar os objetos à direita"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:87 rust/snapedit/src/app/commands.rs:892
+msgid "Alinhar em cima"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:87
+msgid "Alinhar os objetos em cima"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:88 rust/snapedit/src/app/commands.rs:892
+msgid "Alinhar no meio"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:88
+msgid "Alinhar os objetos no meio"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:89 rust/snapedit/src/app/commands.rs:892
+msgid "Alinhar embaixo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:89
+msgid "Alinhar os objetos embaixo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:90 rust/snapedit/src/app/commands.rs:896
+msgid "Distribuir na horizontal"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:90
+msgid "Espaçar 3 ou mais objetos igualmente na horizontal"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:91 rust/snapedit/src/app/commands.rs:897
+msgid "Distribuir na vertical"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:91
+msgid "Espaçar 3 ou mais objetos igualmente na vertical"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:92 rust/snapedit/src/props.rs:1816
+msgid "Bloquear"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:92
+msgid "Bloquear o objeto selecionado (Ctrl+L)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:95
+msgid "Réguas"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:95
+msgid "Mostrar réguas, guias e coordenadas (Ctrl+Shift+R)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:243
+msgid "Nova captura de imagem (pede ao AnyCapture)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:244
+msgid "Nova gravação de vídeo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:258
+msgid "Compartilhar"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:258
+msgid "Compartilhar: arquivo, área de transferência, e-mail, impressora, programa"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:260 rust/snapedit/src/app/windows_aux.rs:515 rust/snapui/src/qr.rs:48
+msgid "Copiar tudo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:260
+msgid "Copiar a imagem inteira (Ctrl+Shift+C)"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379 rust/snapedit/src/props.rs:1103
+msgid "Retângulo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379
+msgid "Retângulo arredondado"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379 rust/snapedit/src/props.rs:1103
+msgid "Elipse"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379
+msgid "Triângulo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379
+msgid "Losango"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379
+msgid "Paralelogramo"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379
+msgid "Hexágono"
+msgstr ""
+
+#: rust/snapedit/src/panels.rs:379
+msgid "Estrela"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:452
+msgid "Abra uma imagem para editar."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:479
+msgid "Carimbos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:479
+msgid "Estilos rápidos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:482
+msgid "Adicionar o estilo atual aos estilos rápidos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:495
+msgid "Pesquisar carimbos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:517
+msgid "Organizar carimbos…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:522 rust/snapedit/src/props.rs:550
+msgid "Importar…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:532
+#, c-format
+msgid "%d carimbo(s) importado(s) para Meus carimbos."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:546
+msgid "Tema:"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:549
+msgid "Novo tema…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:562
+msgid "Meu tema"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/props.rs:601
+msgid "Tema do AnyCapture (*.snaptheme)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:567 rust/snapedit/src/app/commands.rs:91
+msgid "Todos os arquivos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:568
+msgid "Importar tema"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:585
+msgid "Editar uma cópia do tema…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:585
+msgid "Editar o tema…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:597 rust/snapedit/src/tray.rs:319
+msgid "Exportar…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:602
+msgid "Exportar tema"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:608
+msgid "Não foi possível exportar o tema."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:622
+#, c-format
+msgid "Excluir o tema \"%s\"?"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:651
+msgid "Clique na estrela de um estilo rápido para adicioná-lo aos favoritos."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:677
+msgid "Aplicar este estilo"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:687
+msgid "Remover dos favoritos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:687
+msgid "Adicionar aos favoritos"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:692
+msgid "Excluir este estilo rápido"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:764
+msgid "Nenhum carimbo nesta categoria. Use “Importar…” para acrescentar imagens."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:766
+msgid "Nenhum carimbo encontrado."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:800
+msgid "Desafixar"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:800
+msgid "Fixar no topo"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:807
+msgid "Carimbo desafixado."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:809
+msgid "Carimbo fixado: aparece primeiro na categoria e em “Fixados”."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:813
+msgid "Usar este carimbo"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:858
+msgid "Propriedades da ferramenta"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:882
+#, c-format
+msgid "%d objetos selecionados. As mudanças de estilo valem para os do mesmo tipo do último clicado."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:885
+#, c-format
+msgid "Grupo com %zu objetos: arraste para mover, use as alças para redimensionar."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:900
+msgid "Tamanho inicial"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:901
+msgid "Tamanho final"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:902
+msgid "Curva de Bézier"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:903 rust/snapedit/src/props.rs:987
+msgid "Desenhado à mão"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:904
+msgid "Texto ao longo da linha"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:906
+msgid "Fonte do texto"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:907
+msgid "Tamanho do texto"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:909
+msgid "Depois de desenhar, digite o texto: ele acompanha a linha ou a curva; duplo clique edita."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:911
+msgid "Depois de desenhar a seta, digite para escrever um texto na ponta inicial; duplo clique edita."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:930
+msgid "Encaixar nas linhas de texto"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:931 rust/snapedit/src/props.rs:1074 rust/snapedit/src/props.rs:1079
+msgid "Somente o texto (palavras na área)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:935 rust/snapedit/src/props.rs:949 rust/snapedit/src/props.rs:980 rust/snapedit/src/props.rs:1001 …
+msgid "Preenchimento"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:936 rust/snapedit/src/props.rs:950 rust/snapedit/src/props.rs:981 rust/snapedit/src/props.rs:1037 …
+msgid "Contorno"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:939 rust/snapedit/src/props.rs:955
+msgid "Fonte"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:940 rust/snapedit/src/props.rs:958
+msgid "Tamanho da fonte"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:941 rust/snapedit/src/props.rs:959 rust/snapedit/src/props.rs:985 rust/snapedit/src/props.rs:1054
+msgid "Espessura"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:942 rust/snapedit/src/props.rs:975
+msgid "Texto vertical"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:943
+msgid "Letra à mão"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:962
+msgid "Estilo da seta"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:967
+msgid "Cor da seta"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:971
+msgid "Tamanho da seta"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:972
+msgid "Desfocar o fundo (vidro fosco)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:974
+msgid "Opacidade do preenchimento"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:999
+msgid "Conta-gotas: clique na imagem para pegar a cor de preenchimento."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1005
+msgid "Mesma cor em toda a imagem"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1016 rust/snapedit/src/props.rs:1062 rust/snapedit/src/props.rs:1889
+msgid "Tipo"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1017
+msgid "I, II, III…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1017
+msgid "i, ii, iii…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1026
+msgid "Reiniciar a sequência"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1032
+msgid "A sequência de passos recomeça em 1."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1040
+msgid "Espessura do contorno"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1045
+msgid "Suavizar as bordas"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1053
+msgid "Ampliação (%)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1055
+msgid "Lente separada da área ampliada"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1056
+msgid "Lupa realista (aro e reflexo)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1057
+msgid "Com cabo"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1084
+msgid "Smart Move"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1090
+msgid "Arraste uma área da imagem e depois arraste-a para outro lugar; o fundo é preenchido."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1092
+msgid "Clique num objeto para selecionar. Ctrl+clique ou arraste um retângulo para selecionar vários."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1097 rust/snapedit/src/props.rs:131
+msgid "Arraste a área a manter; Enter ou duplo clique aplica."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1098
+msgid "Aplicar recorte"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1102
+msgid "Modo"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1103
+msgid "Laço (mão livre)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1105
+msgid "Seleção global (mesma cor)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1106
+msgid "Ao mover, preencher"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1107
+msgid "Transparência"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1107
+msgid "Cor do canvas (branco)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1107
+msgid "Preenchimento inteligente"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1108
+msgid "Cortar para a seleção"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1109
+msgid "Copiar seleção"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1110
+msgid "Excluir seleção"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1111
+msgid "Levantar a seleção (peça solta)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1115 rust/snapedit/src/app/commands.rs:171
+msgid "Selecione uma área com a ferramenta Seleção para levantá-la."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1117 rust/snapedit/src/app/commands.rs:173
+msgid "Peça solta: ajuste o resto da imagem (cortar, recortar faixa…), posicione a peça e tecle Enter para soltá-la."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1125
+msgid "Direção"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1125
+msgid "Horizontal (remove linhas)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1125
+msgid "Vertical (remove colunas)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1126
+msgid "Arraste sobre a faixa a remover; as partes da imagem são unidas."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1130
+msgid "Clique na imagem para pegar a cor; ela vai para as ferramentas de desenho."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1145
+msgid "Soltar a peça na imagem"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1148 rust/snapedit/src/app/commands.rs:178
+msgid "Peça solta na imagem."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1210
+msgid "Variar o traço"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1237
+msgid "Avançado"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1278
+msgid "Margem interna"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1279
+msgid "Espaçamento entre linhas (%)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1281
+msgid "Sombreado (degradê)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1383
+msgid "Cores do tema"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1384
+msgid "Cores padrão"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1387
+msgid "Recentes"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1391
+msgid "Gradientes"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1413
+msgid "Sem cor"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1416
+msgid "Mais cores…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1436
+msgid "Editar gradiente…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1489
+msgid "Sombra ▾"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1491
+msgid "Mostrar sombra"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1495
+msgid "Cor da sombra…"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1526
+msgid "Distância"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1632
+msgid "Polígono: clique nos cantos; clique no primeiro ponto ou dê um duplo clique para fechar."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1634
+msgid "Mão livre: arraste contornando a área."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1647 rust/snapedit/src/props.rs:1707
+msgid "Tracejado"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1674
+msgid "Ponta inicial"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1674
+msgid "Ponta final"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1745
+msgid "Área de corte (px)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1745
+msgid "Seleção (px)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1745
+msgid "Posição e tamanho (px)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1770 rust/snapedit/src/app/commands.rs:664
+msgid "Manter proporção"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1808
+msgid "Agrupar"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1811
+msgid "Desagrupar"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1816
+msgid "Desbloquear"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1889
+msgid "Linear"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1889
+msgid "Radial (do centro)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1890
+msgid "Ângulo (graus)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1891
+msgid "Cor inicial"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1892
+msgid "Cor final"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1893
+msgid "Cor intermediária"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1895 rust/snapedit/src/props.rs:1898
+msgid "Posição (%)"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1896
+msgid "Segunda cor intermediária"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1899
+msgid "O ângulo vale para o gradiente linear: 0° da esquerda para a direita, 90° de cima para baixo."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1901
+msgid "Gradiente"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1922 rust/snapedit/src/app/commands.rs:244 rust/snapedit/src/app/commands.rs:587 rust/snapedit/src/app/commands.rs:962
+msgid "Nome"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1924
+#, c-format
+msgid "Cor %d"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1926
+msgid "Os estilos rápidos de todas as ferramentas são gerados com estas cores."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1927
+msgid "Novo tema"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:1927
+msgid "Editar tema"
+msgstr ""
+
+#: rust/snapedit/src/props.rs:116
+msgid "Arraste para desenhar uma seta. Shift trava em 45°. Com “Curva de Bézier”, arraste a alça do meio para curvar."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:117
+msgid "Arraste para desenhar uma linha. Shift trava em 45°."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:118
+msgid "Arraste para desenhar a forma. Shift deixa a forma perfeita (quadrado, círculo, triângulo equilátero, hexágono regular)."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:119
+msgid "Arraste para desenhar à mão livre; segure Shift para um trecho reto. Para virar linha, seta, retângulo, elipse ou triângulo, pare o mouse por um instante antes de soltar."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:120
+msgid "Arraste sobre o que quer destacar. Em Forma, escolha retângulo, elipse, polígono (clique nos cantos) ou mão livre; Shift deixa a forma perfeita."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:121
+msgid "Clique ou arraste para criar uma caixa de texto. Duplo clique edita o texto."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:122
+msgid "Arraste para criar o balão e digite. A alça amarela move a ponta (ou a direção das setas)."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:123
+msgid "Clique para numerar passos em sequência. O Tipo escolhe números, letras ou algarismos romanos."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:124
+msgid "Escolha um carimbo na galeria e clique ou arraste na imagem. “Importar…” acrescenta imagens suas."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:125
+msgid "Clique para preencher a área de cor semelhante. O conta-gotas pega a cor de preenchimento da imagem."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:126
+msgid "Arraste para apagar pixels da imagem (ficam transparentes)."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:127
+msgid "Arraste para criar a lupa. Com a lente separada, a alça amarela escolhe a área ampliada."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:128
+msgid "Arraste sobre a área a ocultar (desfoque ou pixelado). Em Forma, escolha elipse, polígono ou mão livre; Shift deixa a forma perfeita."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:129
+msgid "Arraste a área em destaque; o resto escurece. Em Forma, escolha elipse, polígono ou mão livre; Shift deixa a forma perfeita."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:130
+msgid "Clique num objeto para selecionar e arrastar. Com Smart Move, arraste uma área da imagem para movê-la; o fundo é preenchido."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:132
+msgid "Selecione e arraste para mover (Smart Move); Del apaga; Ctrl+C copia."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:133
+msgid "Arraste sobre a faixa a remover; as partes são unidas."
+msgstr ""
+
+#: rust/snapedit/src/props.rs:134
+msgid "Clique na imagem para pegar a cor."
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "Negócios"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5 rust/snapedit/src/stamps.rs:245
+msgid "clipe anexo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "lupa pesquisar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "engrenagem configurações"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "relógio hora"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "usuário pessoa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "equipe pessoas"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "cadeado fechado segurança"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "cadeado aberto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "marcador"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "sinal wi-fi"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "notebook código"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "baixar download"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "enviar upload"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "mesclar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "repetir"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "gráfico barras"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "crescimento"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "queda"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "lista concluído"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "link compartilhar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "reproduzir play"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "parar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "pausar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "avançar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "voltar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "dinheiro moedas"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "cartão pagamento"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "globo internet"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "prêmio medalha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "caneta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "lápis"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "documento"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "nota"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "telefone"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "e-mail carta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "conversa comentário"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "monitor computador"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "celular"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "mouse"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "nuvem"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "pasta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "calendário"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "maleta trabalho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "alfinete"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "lixeira"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "sino notificação"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "ideia lâmpada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "alvo meta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "foguete lançamento"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:5
+msgid "troféu"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "Interface"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "concluído certo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "errado fechar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "atenção aviso"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "informação"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "pergunta dúvida"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "exclamação importante"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "estrela favorito"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "coração"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "positivo curtir"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "negativo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "seta direita"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "seta esquerda"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "seta cima"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "seta baixo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "seta diagonal"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "atualizar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "adicionar mais"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "remover menos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "marca certo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "multiplicar fechar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "vermelho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "laranja"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "amarelo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "verde"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "azul"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "roxo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "preto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "branco"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "quadrado vermelho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "quadrado verde"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "quadrado azul"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "botão rádio"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "caixa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6 rust/snapedit/src/stamp_data.rs:12
+msgid "caixa marcada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "som alto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "sem som mudo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "início casa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "chave senha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "carrinho compras"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "caixa de entrada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "caixa de saída"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:6
+msgid "zoom pesquisa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "Atividades"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "futebol"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "basquete"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "futebol americano"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "beisebol"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "tênis"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "vôlei"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "pingue-pongue"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "badminton"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "boxe"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "boliche"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "golfe"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "pesca"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "esqui"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "snowboard"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "surfe"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "ciclismo bicicleta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "natação"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "musculação"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "videogame jogo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "dado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "quebra-cabeça"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "pintura arte"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "teatro"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "microfone"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "fone"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "guitarra"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "piano"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "bateria"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "cinema filme"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "primeiro lugar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "ingresso"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:7
+msgid "foto câmera"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "Comida e bebida"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "maçã"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "banana"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "uva"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "morango"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "melancia"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "cereja"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "pêssego"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "abacaxi"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "abacate"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "cenoura"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "milho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "pão"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "queijo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "hambúrguer"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "batata frita"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "pizza"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "cachorro-quente"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "taco"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "sushi"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "lámen sopa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "rosquinha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "biscoito"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "bolo aniversário"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "torta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "chocolate"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "pipoca"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "café"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "chá"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "refrigerante"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "cerveja"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "vinho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:8
+msgid "brinde"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "Feriados"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "natal árvore"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "papai noel"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "presente"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "abóbora halloween"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "fantasma"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "peru"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "coelho páscoa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "ovo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "coração presente"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "flores"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "fogos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "estrelinha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "festa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "confete"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "balão"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "vela"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "estrela brilhante"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "neve floco"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "boneco de neve"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "laço"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "envelope"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "trevo sorte"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "piñata"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:9
+msgid "menorá"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "Smileys e pessoas"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "sorriso feliz"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "alegre"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "rindo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "sorrisão"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "gargalhada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "aliviado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "chorando de rir"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "sorriso leve"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "piscada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "contente"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "apaixonado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "beijo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "legal óculos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "pensando"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "neutro"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "dormindo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "surpreso"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "espantado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "triste"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "chorando"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "bravo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "cabeça explodindo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "comemorando"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "encantado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "anjo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "de cabeça para baixo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "abraço"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "revirando olhos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "careta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "olá tchau"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "palmas"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "viva"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "paz"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "dedos cruzados"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "apontando direita"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "apontando esquerda"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "apontando cima"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "apontando baixo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "força"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "por favor obrigado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:10
+msgid "acordo aperto de mão"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "Adesivos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "cem pontos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "fogo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "brilho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "explosão"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "tontura"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "raiva"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "sono"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "gotas"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "novo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "legal"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "grátis"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "up"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "topo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "em breve"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "arco-íris"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "coroa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "diamante"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "bandeira"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "chegada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "megafone"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "anúncio"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "etiqueta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "medalha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "ímã"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "bola de cristal"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "varinha mágica"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "bomba"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:11
+msgid "trevo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "Símbolos"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "seta dupla horizontal"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "seta dupla vertical"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "girar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "dividir"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "infinito"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "dupla exclamação"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "exclamação pergunta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "proibido"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "entrada proibida"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "círculo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "losango laranja"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "losango azul"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "reciclar"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "raio energia"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "radioativo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "risco biológico"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "copyright"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "marca registrada"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "marca"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "hashtag"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "um"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "dois"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "três"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "quatro"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "cinco"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "seis"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "sete"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "oito"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "nove"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "dez"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "letra a"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "letra b"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "cifrão"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:12
+msgid "câmbio"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "Viagem e lugares"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "carro"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "táxi"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "ônibus"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "ambulância"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "bombeiros"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "polícia"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "bicicleta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "moto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "trem"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "avião"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "navio"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "veleiro"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "helicóptero"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "mapa"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "bússola"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "montanha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "praia"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "ilha"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "acampamento"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "cidade"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "prédio escritório"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "hospital"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "banco"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "hotel"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "escola"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "igreja"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "estátua"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "torre"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "terra mundo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "posto combustível"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "semáforo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "estacionamento"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "mala"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:13
+msgid "local pino"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:17 rust/snapedit/src/app/windows_aux.rs:354
+msgid "Antes"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:18 rust/snapedit/src/app/windows_aux.rs:355
+msgid "Depois"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:19
+msgid "Errado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:20
+msgid "Certo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:21
+msgid "Novo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:22
+msgid "Atualizado"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:23
+msgid "Incorreto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:24
+msgid "Correto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:25
+msgid "Sim"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:26 rust/snapedit/src/app/extras.rs:1092
+msgid "Não"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:27
+msgid "Faça"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:28
+msgid "Não faça"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:29
+msgid "Importante"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:30
+msgid "Dica"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:31
+msgid "Nota"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:32
+msgid "Exemplo"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:33
+msgid "Rascunho"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:34
+msgid "Beta"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:35
+msgid "Obsoleto"
+msgstr ""
+
+#: rust/snapedit/src/stamp_data.rs:36
+msgid "Em breve"
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:171
+msgid "Meus carimbos"
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:178
+msgid "Meus carimbos › "
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:183
+msgid "Rótulos"
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:186
+msgid "Cursores"
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:196
+msgid "Fixados"
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:216 rust/snapedit/src/app/extras.rs:56 rust/snapedit/src/app/extras.rs:875
+msgid "Imagens"
+msgstr ""
+
+#: rust/snapedit/src/stamps.rs:217
+msgid "Importar carimbos"
+msgstr ""
+
+#: rust/snapedit/src/styles.rs:495 rust/snapedit/src/styles.rs:619
+msgid "Tema"
+msgstr ""
+
+#: rust/snapedit/src/styles.rs:639
+msgid "O arquivo não é um tema do AnyCapture (.snaptheme)."
+msgstr ""
+
+#: rust/snapedit/src/styles.rs:470 rust/snapedit/src/styles.rs:522
+msgid "Básico"
+msgstr ""
+
+#: rust/snapedit/src/styles.rs:471
+msgid "Industrial"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:315
+msgid "Mostrar na pasta"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:319
+#, c-format
+msgid "Exportar %zu itens…"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:326 rust/snapedit/src/app/commands.rs:794
+msgid "Enviar (upload)"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:329
+#, c-format
+msgid "Combinar %zu imagens…"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:332
+msgid "Comparar as duas…"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:334
+#, c-format
+msgid "Processar %zu em lote…"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:334
+msgid "Processamento em lote…"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:337
+msgid "Selecionar tudo\tCtrl+A"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:339
+msgid "Renomear…\tF2"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:342
+msgid "Remover da bandeja"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:342
+msgid "Remover da bandeja (continua na biblioteca)"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:346
+#, c-format
+msgid "Excluir %zu itens (Lixeira)\tDel"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:346
+msgid "Excluir (Lixeira)\tDel"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:400 rust/snapedit/src/app/mod.rs:412
+msgid "Capturas recentes"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:401
+msgid "Biblioteca…"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:407
+msgid "Biblioteca"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:410
+msgid "Pesquisar"
+msgstr ""
+
+#: rust/snapedit/src/tray.rs:415
+msgid "Voltar à imagem"
+msgstr ""
+
+#: rust/snapedit/src/app/clipboard.rs:108
+msgid "Objetos bloqueados não são recortados."
+msgstr ""
+
+#: rust/snapedit/src/app/clipboard.rs:148 rust/snapedit/src/app/clipboard.rs:180
+msgid "Nada para colar."
+msgstr ""
+
+#: rust/snapedit/src/app/clipboard.rs:155
+msgid "O texto copiado não tem formatação; colado com o estilo do objeto."
+msgstr ""
+
+#: rust/snapedit/src/app/clipboard.rs:168
+msgid "Colado no mesmo lugar."
+msgstr ""
+
+#: rust/snapedit/src/app/clipboard.rs:168
+msgid "Colado."
+msgstr ""
+
+#: rust/snapedit/src/app/clipboard.rs:185
+msgid "Colado"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:83
+msgid "Imagem inteira copiada para a área de transferência."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:91
+msgid "Imagens e capturas"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:138 rust/snapedit/src/app/commands.rs:1052 rust/snapedit/src/app/extras.rs:1011 rust/snapedit/src/app/windows_aux.rs:528
+msgid "Copiado."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:154
+msgid "Selecione um objeto para bloquear ou desbloquear."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:161
+msgid "Objeto bloqueado: não pode ser movido, redimensionado nem excluído."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:163
+msgid "Objeto desbloqueado."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:193
+msgid "Réguas ligadas: arraste de uma régua para criar uma guia; arraste a guia de volta para removê-la."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:195
+msgid "Réguas desligadas."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:213
+msgid "A seleção e o corte encaixam nas bordas da imagem (Alt desliga na hora)."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:215
+msgid "Encaixe nas bordas desligado."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:222
+msgid "Caneta: desenhe uma linha, seta, retângulo, elipse ou triângulo e segure parado para virar a forma."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:224
+msgid "Desenhar e segurar desligado."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:231
+msgid "Texto colado sem formatação (Ctrl+Shift+V mantém a formatação)."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:233
+msgid "Texto colado com a formatação de origem (Ctrl+Shift+V cola sem formatação)."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:245
+msgid "Renomear objeto"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:317
+msgid "Selecione dois ou mais objetos (Ctrl+clique ou arraste um retângulo com o Mover) para agrupar."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:321
+msgid "Objetos agrupados. Imagem › Desagrupar (Ctrl+Shift+U) separa."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:326
+msgid "Grupo desfeito."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:340
+msgid "Faça a captura: ela será adicionada abaixo desta imagem."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:384
+msgid "Encaixe no canvas ligado (Alt ao arrastar desliga na hora)."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:386
+msgid "Encaixe no canvas desligado."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:397
+msgid "Etiquetas"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:398
+msgid "Separe as etiquetas por vírgula. Elas ficam gravadas na captura."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:400
+msgid "Etiquetar imagem"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:412
+msgid "Etiquetas removidas."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:412
+msgid "Etiquetas: "
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:448
+msgid ""
+"Edição de capturas com objetos vetoriais, efeitos, Smart Move,\n"
+"OCR, exportação PDF e edição de vídeo (cortes e GIF)."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:451
+msgid "Sobre"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:540
+msgid "Spotlight: sem seleção, o foco é o meio da imagem. Use a ferramenta Seleção para escolher a área."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:564
+msgid "Efeito aplicado: "
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:564
+msgid " (Ctrl+Z desfaz)"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:587
+#, c-format
+msgid "Meu efeito %zu"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:588
+msgid "Os ajustes vêm dos efeitos do painel (abra cada um para mudar):"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:594
+msgid "Adicionar aos efeitos rápidos"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:603
+msgid "Efeito rápido adicionado: "
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:626
+msgid "Faça uma seleção (ferramenta Seleção) ou um recorte primeiro."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:634
+msgid "Ângulo (graus, horário)"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:635 rust/snapedit/src/app/docs.rs:358 rust/snapedit/src/app/extras.rs:539
+msgid "Cor de fundo"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:636 rust/snapedit/src/app/extras.rs:538
+msgid "Fundo transparente"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:637
+msgid "Os objetos serão mesclados à imagem."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:663
+msgid "ou escala (%)"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:710
+msgid "Âncora"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:711
+msgid "Cor do canvas"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:714
+msgid "Tamanho do canvas"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:751
+msgid "Nada a cortar: as bordas não são uniformes."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:786
+msgid "Arquivo…"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:789
+msgid "E-mail…"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:790
+msgid "Impressora…"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:791
+msgid "Programa externo…"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:795
+msgid "Enviar para"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:811
+msgid "Ajustar à janela\tCtrl+0"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:838
+msgid "Personalizar a barra…"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:839
+msgid "Voltar ao padrão (automática)"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:867
+msgid "Abrir o link"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:871 rust/snapedit/src/app/commands.rs:914
+msgid "Soltar a peça na imagem\tEnter"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:880
+msgid "Desblo&quear\tCtrl+Shift+K"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:880
+msgid "&Bloquear\tCtrl+L"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:882
+msgid "Re&nomear…"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:963
+msgid "Renomear captura"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:1052
+#, c-format
+msgid "%zu itens copiados."
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:1111
+#, c-format
+msgid "%zu itens"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:705
+msgid "Superior esquerda"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:705
+msgid "Superior direita"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:705
+msgid "Inferior esquerda"
+msgstr ""
+
+#: rust/snapedit/src/app/commands.rs:706
+msgid "Inferior direita"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:181
+msgid "Arquivo não encontrado:\n"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:188
+msgid "Não foi possível abrir:\n"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:194
+msgid "Arquivo importado"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:239
+msgid "Salvo na biblioteca: "
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:272
+msgid "Qualidade JPEG (1–100)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:279
+msgid "Sem perdas (ideal para capturas de tela)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:280
+msgid "Qualidade com perdas (1–100)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:292
+msgid "Qualidade AVIF (1–100)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:325
+msgid "Salvo em "
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:349
+msgid "Imagem nova criada a partir da área de transferência."
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:366
+msgid "Imagem nova"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:410
+msgid "Enviar para a Lixeira?\n"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:412
+#, c-format
+msgid "Enviar %zu itens da biblioteca para a Lixeira?"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:434
+msgid "Item enviado para a Lixeira."
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:436
+#, c-format
+msgid "%zu itens enviados para a Lixeira."
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:476
+msgid "Formato das imagens"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:477
+msgid "Exportar como ZIP (todos juntos em um arquivo)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:478
+msgid "Vídeos são copiados em MP4."
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:480
+#, c-format
+msgid "Exportar %zu item(ns)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:483
+msgid "Exportar para a pasta"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:526
+msgid "Capturas"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:553
+#, c-format
+msgid "%d item(ns) exportado(s) para %s"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:554
+#, c-format
+msgid " — %d falha(s)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:573
+msgid "Abrir em programa externo"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:594
+msgid "Captura: "
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:608
+msgid "Reconhecendo o texto…"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:613
+msgid "(nenhum texto reconhecido)"
+msgstr ""
+
+#: rust/snapedit/src/app/docs.rs:614
+msgid "Grab Text — texto reconhecido"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:56
+msgid "Escolha as imagens"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:107
+msgid "(ajustes abaixo)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:111
+msgid "Predefinição"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:123
+msgid "Livre"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:133
+msgid "Salvar como predefinição (nome)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:203
+msgid "Nenhum cliente de e-mail MAPI está configurado. A imagem foi salva em:\n"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:230
+#, c-format
+msgid "Falha ao enviar e-mail (MAPI %u)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:275
+#, c-format
+msgid "Não foi possível abrir a impressão: não há impressora instalada ou o serviço de impressão do Windows (Spooler) está parado. (código 0x%04X)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:307
+msgid "A impressora não aceitou o documento (verifique se ela está ligada e se o serviço de impressão do Windows está rodando)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:405
+msgid "Link do upload"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:407
+msgid "Imagem em Markdown (link do upload)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:445 rust/snapedit/src/app/extras.rs:952 rust/snapui/src/feedback.rs:125
+msgid "Enviando…"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:447
+msgid "Enviado para "
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:494
+msgid "Captura adicionada abaixo da imagem (é um objeto: pode ser movida)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:522
+msgid "Escolha duas ou mais imagens para combinar."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:527
+#, c-format
+msgid "%zu imagens"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:528
+msgid "Disposição"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:529
+msgid "Colunas (grade)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:530
+msgid "Espaço entre as imagens (px)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:537
+msgid "Mesmo tamanho (ajusta altura ou largura)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:541 rust/snapedit/src/app/extras.rs:563
+msgid "Combinar imagens"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:561
+msgid "A imagem combinada ficaria grande demais."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:563
+msgid "Imagens combinadas"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:564
+#, c-format
+msgid "%zu imagens combinadas numa imagem nova."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:597
+msgid "Procurando dados sensíveis…"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:608
+msgid "Rosto"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:612
+msgid "Nenhum dado sensível encontrado (e-mail, telefone, cartão, documentos, links com token, chaves, rostos)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:616 rust/snapedit/src/app/extras.rs:637
+msgid "Ocultar dados sensíveis"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:620
+msgid "Ocultar com"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:620
+msgid "Pixelização"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:620
+msgid "Tarja preta"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:621
+#, c-format
+msgid "%zu itens encontrados — desmarque o que deve ficar visível:"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:635
+#, c-format
+msgid "Outros: %s"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:687
+#, c-format
+msgid "%zu áreas ocultadas — cada uma é um objeto (pode ser movida, redimensionada ou excluída)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:709
+msgid "Tolerância (1–100)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:710
+msgid "Borda suave (px)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:712
+msgid "A imagem será cortada para a seleção."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:714
+msgid "O fundo é o que toca as bordas da imagem e tem as cores delas."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:717
+msgid "Remover o fundo"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:733
+msgid "Fundo removido (Ctrl+Z desfaz). Salve como PNG ou WebP para manter a transparência."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:750
+#, c-format
+msgid "Imagem de %d × %d px"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:753
+msgid "Na horizontal (partes empilhadas)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:753
+msgid "Na vertical (partes lado a lado)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:756
+msgid "Dividir por"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:756
+msgid "Tamanho de cada parte (px)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:756 rust/snapedit/src/app/extras.rs:758
+msgid "Número de partes"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:759
+msgid "Não cortar linhas de texto (quebras inteligentes)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:761
+msgid "Dividir imagem"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:772
+#, c-format
+msgid "%s — parte %zu"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:772
+msgid "Imagem dividida"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:774
+#, c-format
+msgid "Imagem dividida em %zu partes (imagens novas na bandeja)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:794
+msgid "Vazio = data e hora curtas. Códigos: yyyy ano · MM mês · MMM/MMMM nome do mês · dd dia · ddd/dddd dia da semana · HH hora (24 h) · hh hora (12 h) · mm minutos · ss segundos · tt AM/PM · '…' texto"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:795
+msgid "Exemplo: "
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:797
+msgid "Formato da data e hora"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:805
+msgid "Data e hora: "
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:834
+msgid ""
+"O assistente de IA está desligado. Ele envia a imagem para um provedor de IA escolhido por você, com a sua chave.\n"
+"\n"
+"Configurar agora?"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:835 rust/snapedit/src/app/windows_aux.rs:230 rust/snapedit/src/app/windows_aux.rs:256 rust/snapedit/src/app/windows_aux.rs:434
+msgid "Assistente de IA"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:860 rust/snapedit/src/app/extras.rs:889
+msgid "Não foi possível abrir as imagens para comparar."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:875
+msgid "Comparar com…"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:882
+msgid "Escolha duas imagens para comparar."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:919
+msgid "Embelezar: "
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:935
+msgid "Imagem fixada na tela."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:978
+msgid "Falha no envio."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:979
+msgid "Falha no envio: "
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:983
+msgid "Enviado: "
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:983
+msgid " (link copiado)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1025
+msgid "Imprimir"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1062
+msgid "Lote"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1088
+msgid "O mesmo do original"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1091
+#, c-format
+msgid "%zu imagens — os originais não são alterados."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1093 rust/snapedit/src/app/extras.rs:1092
+msgid "Porcentagem"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1094
+msgid "Largura máxima (0 = livre)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1095
+msgid "Altura máxima (0 = livre)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1097
+msgid "Marca d'água (texto)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1098
+msgid "Opacidade da marca d'água (%)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1100
+msgid "Qualidade (JPEG, WebP, AVIF)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1101
+msgid "Remover metadados (EXIF, GPS…)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1102
+msgid "Nome dos arquivos"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1103
+msgid "{name} nome original · {n} número · {date} data de hoje"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1104
+msgid "Pasta de destino"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1107 rust/snapedit/src/app/extras.rs:1120 rust/snapedit/src/app/extras.rs:1166 rust/snapedit/src/app/extras.rs:1218
+msgid "Processamento em lote"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1112
+msgid "Escolha a pasta de destino."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1114
+msgid "Não foi possível criar a pasta de destino."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1212
+#, c-format
+msgid ""
+"%d imagens processadas em:\n"
+"%s"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1214
+#, c-format
+msgid ""
+"\n"
+"\n"
+"%d falharam (primeira: %s)."
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1216
+msgid ""
+"\n"
+"\n"
+"Abrir a pasta?"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:77
+msgid "Oceano"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:78
+msgid "Pôr do sol"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:79
+msgid "Menta"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:80
+msgid "Grafite"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:82
+msgid "Branco simples"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:528 rust/snapedit/src/app/windows_aux.rs:706
+msgid "Lado a lado"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:528
+msgid "Empilhadas"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:528
+msgid "Grade"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:534
+msgid "Início (topo/esquerda)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:534
+msgid "Fim (base/direita)"
+msgstr ""
+
+#: rust/snapedit/src/app/extras.rs:1092
+msgid "Largura/altura máxima"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:217
+msgid " — AnyCapture Editor"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:231
+msgid "Vídeo: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:233
+#, c-format
+msgid "%d × %d px"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:235
+msgid ""
+"\n"
+"Captura: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:238
+msgid ""
+"\n"
+"Aplicativo: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:241
+msgid ""
+"\n"
+"Janela: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:243
+#, c-format
+msgid ""
+"\n"
+"Objetos: %zu"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:245
+msgid ""
+"\n"
+"Etiquetas: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:260
+#, c-format
+msgid "%d × %d px  •  %zu objeto(s)  •  %zu passo(s) para desfazer"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:388
+msgid "Ferramenta: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:421
+#, c-format
+msgid "Zoom %d%%"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:647
+#, c-format
+msgid "%d objetos selecionados  •  Ctrl+Shift+G agrupa  •  Organizar › Alinhar alinha entre si"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:660
+msgid "Cor capturada: "
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:660
+msgid " (aplicada às ferramentas de desenho)"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:717
+#, c-format
+msgid "Excluir o efeito rápido \"%s\"?"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:903
+msgid ""
+"AnyCaptureEditor.exe [opções] [arquivo…]\n"
+"\n"
+"/Open \"arquivo\"     abre um arquivo (.snap, imagem, .mp4)\n"
+"/NewFromClipboard   cria imagem a partir da área de transferência\n"
+"/restartwait        espera a instância anterior fechar"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:457
+msgid "Propriedades"
+msgstr ""
+
+#: rust/snapedit/src/app/mod.rs:457 rust/snapedit/src/app/windows_aux.rs:586
+msgid "Efeitos"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:189
+#, c-format
+msgid "   •   %d×%d @ %.0f qps"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:192
+msgid "   •   duração após cortes: "
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:196
+msgid "   •   seleção: "
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:233
+msgid "Não foi possível abrir o vídeo (somente MP4)."
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:258
+msgid "trecho cortado"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:318
+msgid "❚❚ Pausar"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:374
+msgid "Marque o início e o fim do trecho a remover."
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:393
+msgid "Quadro do vídeo"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:393
+msgid "Quadro de vídeo"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:413
+msgid "Salvar vídeo"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:415
+msgid "Escolha um arquivo diferente do original."
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:418
+msgid "Salvando vídeo…"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:427
+msgid "Não foi possível salvar o vídeo.\n"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:434
+msgid "Vídeo salvo: "
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:451
+msgid "Intervalo: a seleção marcada."
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:453
+msgid "Intervalo: o vídeo inteiro (marque início/fim para limitar)."
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:457
+msgid "256 cores"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:457
+msgid "16 cores (arquivo menor)"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:458
+msgid "Pontilhado (dithering)"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:459
+msgid "Quadros delta (só o que mudou)"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:461
+msgid "Criar GIF animado"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:464
+msgid "Salvar GIF"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:464 rust/snapedit/src/app/windows_aux.rs:767
+msgid "GIF animado (*.gif)|*.gif|"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:466
+msgid "Criando GIF…"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:480
+msgid "Não foi possível criar o GIF.\n"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:487
+msgid "GIF salvo: "
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:203
+msgid "▶ Reproduzir"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:204
+msgid "◀ Quadro"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:205
+msgid "Quadro ▶"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:206
+msgid "[ Início"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:207
+msgid "Fim ]"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:208
+msgid "✂ Cortar seleção"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:209
+msgid "Desfazer corte"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:210
+msgid "Salvar quadro"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:211
+msgid "Criar GIF…"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:212
+msgid "Salvar MP4…"
+msgstr ""
+
+#: rust/snapedit/src/app/video.rs:213
+msgid "Abrir no player"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:137
+msgid "Compatível com OpenAI"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:138
+msgid "Modelo local (Ollama)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:210
+#, c-format
+msgid "A imagem e a pergunta serão enviadas para %s (%s). Nada é enviado até você perguntar."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:218
+msgid "(guardada — deixe assim para manter)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:221
+msgid "Ativar o assistente de IA"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:222
+msgid "Ao perguntar, a imagem é enviada ao provedor escolhido. Use a sua própria chave (cobrança na sua conta)."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:223
+msgid "Provedor"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:224
+msgid "Modelo"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:225
+msgid "Endereço da API"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:226
+msgid "Chave da API"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:227
+msgid "A chave fica no Gerenciador de Credenciais do Windows, nunca em arquivos. Modelo local: Ollama em http://localhost:11434/v1 (sem chave)."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:246
+msgid "Informe o endereço da API."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:248
+msgid "Informe o modelo."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:380
+msgid "Atalhos do AnyCapture Editor"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:391 rust/snapedit/src/app/windows_aux.rs:540
+msgid "Ampliar parte da imagem"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:406
+msgid "Personalizar a barra de ferramentas"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:415
+msgid "Verificador de contraste (WCAG)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:424
+msgid "Comparar imagens"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:542
+msgid "Amplie partes da imagem para destacar os detalhes importantes. Arraste para criar a lupa; com a lente separada, a alça amarela escolhe a área ampliada."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:545
+msgid "Entendi!"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:559
+msgid "Personalização cancelada."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:571
+msgid "Barra de ferramentas personalizada."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:571
+msgid "Barra de ferramentas automática."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:578
+msgid "— espaço —"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:583
+msgid "Ferramentas de desenho"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:584
+msgid "Itens de menu"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:585
+msgid "Destinos de compartilhamento"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:587
+msgid "Diversos"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:595
+msgid "Ferramentas na barra automática:"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:599
+msgid "Restaurar o padrão"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:614
+msgid "Na barra"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:627
+msgid "Remover da barra"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:630
+msgid "Mover para baixo"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:633
+msgid "Mover para cima"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:651
+msgid "Clique num item para acrescentá-lo ao fim da barra."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:662
+msgid "Já está na barra"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:706
+msgid "Sobreposição"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:706
+msgid "Deslizar (antes | depois)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:706
+msgid "Diferença"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:713
+msgid "Transparência de B"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:713
+msgid "Divisória"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:719
+msgid "Exportar imagem…"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:720
+msgid "Exportar GIF…"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:721
+msgid "A ⇄ B"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:731
+#, c-format
+msgid "A: %s (%d × %d)   B: %s (%d × %d)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:736
+#, c-format
+msgid "   •   %d pixels diferentes (%.2f%%)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:767 rust/snapedit/src/app/windows_aux.rs:769
+msgid "Antes-depois"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:775
+msgid "Exportado."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:776
+msgid "Não foi possível salvar o arquivo."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:798
+msgid "Texto (primeiro plano)"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:810
+msgid "Escolher cor…"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:813
+msgid "Copiar HEX"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:824
+msgid "Texto grande Aa"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:825
+msgid "Texto normal — o rato roeu a roupa do rei"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:831
+msgid "Inverter as cores"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:868
+msgid "Configure a chave do provedor primeiro."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:873
+msgid "Perguntando…"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:881
+#, c-format
+msgid "Resposta de %s (%s)."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:898
+msgid "Resposta copiada."
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:900
+msgid "Adicionar como texto"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:901
+msgid "Configurações…"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:920
+msgid "Faça uma pergunta sobre a imagem…"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:922
+msgid "Perguntar"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:119
+msgid ""
+"Ferramentas (com a área de pintura em foco):\n"
+"  V Mover   A Seta   L Linha   R Forma   P Caneta   H Marcador\n"
+"  T Texto   C Balão   N Passo   K Carimbo   B Ocultar   G Destaque   Z Lupa\n"
+"  F Preencher   E Borracha   X Cortar   S Seleção   U Recortar faixa   I Conta-gotas\n"
+"\n"
+"Edição:  Ctrl+Z/Ctrl+Y desfazer/refazer • Ctrl+C/X/V • Ctrl+Shift+C copiar tudo • Del excluir\n"
+"         Setas movem o objeto (Shift = 10 px) • Shift restringe proporção/ângulo\n"
+"         Duplo clique edita texto • Esc cancela • Enter aplica o recorte\n"
+"Exibir:  Ctrl+roda = zoom • Ctrl+0 ajustar • Ctrl+1 tamanho real • botão do meio arrasta\n"
+"Arquivo: Ctrl+S salvar na biblioteca • Ctrl+Shift+S salvar como (PNG/JPG/BMP/GIF/TIFF/PDF/SNAP)\n"
+"Texto:   Ctrl+Shift+O Grab Text (OCR) • Ctrl+Shift+D data e hora\n"
+"Ferramentas: Ctrl+Shift+Q ler código QR • Ctrl+Shift+E ocultar dados sensíveis • Ctrl+Shift+P fixar na tela\n"
+"Imagem:  Ctrl+Shift+F/B um passo à frente/atrás • Ctrl+T mesclar o objeto • Ctrl+Shift+T mesclar tudo • Ctrl+; encaixe\n"
+"Vídeo:   Espaço reproduz/pausa • ←/→ quadro • I/O marcam início/fim\n"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:277
+msgid "Explicar"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:278
+msgid "Descrever"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:279
+msgid "Extrair os passos"
+msgstr ""
+
+#: rust/snapedit/src/app/windows_aux.rs:280
+msgid "Extrair o texto"
+msgstr ""
+
+#: rust/snapedit/tests/golden.rs:594
+msgid "Não foi possível criar o arquivo."
+msgstr ""
+
+#: rust/snapedit/tests/golden.rs:595
+msgid "Falha ao gravar o arquivo."
+msgstr ""
+
+#: rust/snapedit/tests/golden.rs:596
+msgid "Falha ao codificar a imagem."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:40
+msgid "Relatar um problema"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:40
+msgid "Enviar sugestão ou feedback"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:107
+msgid "Ver os relatos enviados"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:109
+msgid "Ver as sugestões enviadas"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:119
+msgid "Voltar"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:125
+msgid "Enviar"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:154
+msgid "Descreva o problema. Ele é enviado ao projeto AnyCapture no GitHub como um novo relato (bug); não é preciso ter conta no GitHub."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:156
+msgid "Conte sua ideia ou o que acha do AnyCapture. Ela é enviada ao projeto AnyCapture no GitHub como uma sugestão; não é preciso ter conta no GitHub."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:161
+msgid "Ex.: o Editor fecha ao colar uma imagem"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:161
+msgid "Ex.: atalho para repetir a última região"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:168
+msgid "O que aconteceu?"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:168
+msgid "Sua sugestão ou feedback"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:171
+msgid "Passos para reproduzir (opcional)"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:171
+msgid "Por que ajudaria? (opcional)"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:175
+msgid "Incluir a versão do Windows e o idioma"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:182
+msgid "Preencha o título e a descrição."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:191
+msgid "Obrigado! Seu relato foi enviado."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:191
+msgid "Obrigado! Sua sugestão foi enviada."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:192
+msgid "Ele está no projeto AnyCapture no GitHub:"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:193
+msgid "Quase lá: termine no navegador"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:194
+msgid "Não foi possível enviar direto agora, então o GitHub abriu no navegador com tudo já preenchido. Entre na sua conta do GitHub se for pedido, revise e clique em \"Create\" para enviar."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:195
+msgid "Aguarde um pouco"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:195
+msgid "Vários envios seguidos deste computador. Tente de novo em um minuto."
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:196
+msgid "Não foi possível enviar"
+msgstr ""
+
+#: rust/snapui/src/feedback.rs:196
+msgid "Não foi possível enviar nem abrir o navegador. Envie pelo endereço:"
+msgstr ""
+
+#: rust/snapui/src/qr.rs:27
+msgid "Nenhum código QR ou de barras encontrado na imagem."
+msgstr ""
+
+#: rust/snapui/src/qr.rs:40
+#, c-format
+msgid ""
+"Copiar %zu\n"
+"%s"
+msgstr ""
+
+#: rust/snapui/src/qr.rs:43
+#, c-format
+msgid ""
+"Abrir o link %zu\n"
+"%s"
+msgstr ""
+
+#: rust/snapui/src/qr.rs:54
+msgid "1 código encontrado"
+msgstr ""
+
+#: rust/snapui/src/qr.rs:56
+#, c-format
+msgid "%zu códigos encontrados"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:63
+msgid "Desligado por padrão: nada é enviado até você escolher um destino."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:64
+msgid "Destino"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:65
+msgid "Copiar o link para a área de transferência depois do envio"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:66
+msgid "Remover metadados das imagens enviadas"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:67
+msgid "Upload — destino"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:74
+msgid "Endpoint (host)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:75
+msgid "Prefixo (pasta)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:76
+msgid "Endereço público (opcional)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:77
+msgid "Endereço no estilo de caminho (MinIO e alguns serviços)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:78
+msgid "Leitura pública (x-amz-acl: public-read)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:79
+msgid "A chave secreta fica no Gerenciador de Credenciais do Windows."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:80
+msgid "App key do seu app Dropbox"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:81
+msgid "Crie um app em dropbox.com/developers (acesso \"App folder\" ou \"Full\", permissões files.content.write e sharing.write)."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:82
+msgid "Client ID (app para computador)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:84
+msgid "Qualquer pessoa com o link pode ver"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:85
+msgid "Crie credenciais OAuth do tipo \"App para computador\" no Google Cloud Console (API do Drive ativada)."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:86
+msgid "Client ID (registro de app do Azure)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:87
+msgid "Link anônimo (qualquer pessoa com o link)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:88
+msgid "Registre um app (\"Aplicativos móveis e de desktop\", redirecionamento http://localhost) com a permissão Files.ReadWrite."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:91
+msgid "Servidor"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:91
+msgid "Porta (0 = padrão)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:92
+msgid "Usuário"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:93
+msgid "Senha"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:93
+msgid "Arquivo da chave privada"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:94
+msgid "Pasta remota"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:94
+msgid "Endereço web da pasta (para o link)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:95
+msgid "FTP sem criptografia: prefira SFTP para dados sensíveis."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:96
+msgid "Usa o cliente OpenSSH do Windows com autenticação por chave."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:99
+msgid "Enviador personalizado (*.sxcu;*.json)|*.sxcu;*.json|"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:100
+msgid "Importar enviador (.sxcu)"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:106
+msgid "Arquivo .sxcu inválido."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:117
+msgid "Upload — "
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:156
+msgid "Fazer login de novo agora?"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:159
+msgid "Login concluído. As capturas podem ser enviadas."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:177
+msgid "Autorize no navegador e cole aqui o código que o Dropbox mostrar."
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:177
+msgid "Código"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:178
+msgid "Login no Dropbox"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:209
+msgid "Conclua o login no navegador"
+msgstr ""
+
+#: rust/snapui/src/upload_ui.rs:210
+msgid "Autorize o AnyCapture na página que abriu. Esta janela fecha sozinha quando o navegador voltar."
+msgstr ""

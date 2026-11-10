@@ -1,11 +1,11 @@
-"""Process model and IPC between Snapnab.exe and SnapnabEditor.exe (ARCHITECTURE.md: single instance via mutex +
+"""Process model and IPC between AnyCapture.exe and AnyCaptureEditor.exe (ARCHITECTURE.md: single instance via mutex +
 window, WM_COPYDATA forwarding of the command line, shared-memory notification channel)."""
 import pytest
 from PIL import Image
 
-from snapnab_e2e import apps, library, presets, regs, win
-from snapnab_e2e.apps import CaptureCmd, EditorCmd
-from snapnab_e2e.logs import (EDITOR_CLOSED, EDITOR_START_CAPTURE, LIBRARY_CHANGED, LIBRARY_DOC_OPENED,
+from anycapture_e2e import apps, library, presets, regs, win
+from anycapture_e2e.apps import CaptureCmd, EditorCmd
+from anycapture_e2e.logs import (EDITOR_CLOSED, EDITOR_START_CAPTURE, LIBRARY_CHANGED, LIBRARY_DOC_OPENED,
                               NEW_IMAGE_FROM_CLIPBOARD, SHOW_EDITOR, ipc_received, ipc_sent, state)
 
 
@@ -21,7 +21,7 @@ def png(tmp_path):
 @pytest.mark.smoke
 def test_capture_starts_hidden_in_tray(capture):
     capture.start("/hide")
-    assert capture.hwnd, "SnapnabUI window must exist (it owns the tray icon and the hotkeys)"
+    assert capture.hwnd, "AnyCaptureUI window must exist (it owns the tray icon and the hotkeys)"
     assert not win.is_visible(capture.hwnd), "/hide must keep the capture window hidden"
 
 
@@ -36,7 +36,7 @@ def test_second_instance_forwards_and_exits(capture):
     pid = capture.pid
     rc = capture.send()                          # no arguments: shows the existing window
     assert rc == 0
-    assert [p.pid for p in apps.processes("Snapnab.exe")] == [pid], "a second process must not stay running"
+    assert [p.pid for p in apps.processes("AnyCapture.exe")] == [pid], "a second process must not stay running"
     win.wait_until(lambda: win.is_visible(capture.hwnd), what="first instance to show its window")
 
 
@@ -53,7 +53,7 @@ def test_exit_command_closes_capturer(capture, logs):
     capture.start("/hide")
     capture.exit()
     assert not capture.running
-    logs.capture.wait(r"Snapnab exited|exited")
+    logs.capture.wait(r"AnyCapture exited|exited")
 
 
 # ---------- Editor ↔ capturer ----------
@@ -62,7 +62,7 @@ def test_exit_command_closes_capturer(capture, logs):
 def test_editor_starts_capturer_in_tray(editor):
     editor.start()
     cap = apps.Capture()
-    win.wait_until(lambda: cap.running and cap.hwnd, 15, what="Editor to start Snapnab.exe")
+    win.wait_until(lambda: cap.running and cap.hwnd, 15, what="Editor to start AnyCapture.exe")
     assert not win.is_visible(cap.hwnd), "the capturer started by the Editor stays in the tray (/hide)"
 
 
@@ -86,7 +86,7 @@ def test_second_editor_instance_forwards_open(editor, png, tmp_path):
     Image.new("RGB", (300, 200), (200, 60, 60)).save(other)
     editor.open(other)
     win.wait_until(lambda: "second" in editor.title(), what="document opened in the running Editor")
-    assert [p.pid for p in apps.processes("SnapnabEditor.exe")] == [pid]
+    assert [p.pid for p in apps.processes("AnyCaptureEditor.exe")] == [pid]
 
 
 def test_editor_close_notifies_capturer_and_autosaves(editor, logs):
@@ -119,11 +119,11 @@ def test_editor_new_capture_goes_through_capturer(editor, logs):
     logs.editor.wait(ipc_sent(EDITOR_START_CAPTURE, 0))
     logs.capture.wait(ipc_received(EDITOR_START_CAPTURE))
     logs.capture.wait(state("Idle", "Activated"))
-    overlay = win.wait_window("SnapnabSelectWindowClass")
+    overlay = win.wait_window("AnyCaptureSelectWindowClass")
     win.foreground(overlay)
     win.keys("{ESC}")
     logs.capture.wait(r"CaptureEngine: \w+ → Idle")
-    win.wait_no_window("SnapnabSelectWindowClass")
+    win.wait_no_window("AnyCaptureSelectWindowClass")
 
 
 def test_capture_from_clipboard_opens_in_editor(capture, logs, lib):

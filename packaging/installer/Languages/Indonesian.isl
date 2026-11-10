@@ -1,5 +1,5 @@
-﻿; *** Inno Setup — messages in Bahasa Indonesia (Snapnab) ***
-; Translation made for the Snapnab installer from Inno Setup 6's Default.isl.
+﻿; *** Inno Setup — messages in Bahasa Indonesia (AnyCapture) ***
+; Translation made for the AnyCapture installer from Inno Setup 6's Default.isl.
 
 [LangOptions]
 LanguageName=Bahasa Indonesia

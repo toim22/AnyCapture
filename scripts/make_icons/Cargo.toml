@@ -1,0 +1,13 @@
+# Builds rust/resources/AnyCapture.ico and AnyCaptureEditor.ico from the SVGs in rust/resources/icons:
+#   cargo run --release --manifest-path scripts/make_icons/Cargo.toml
+# Not part of the rust/ workspace: only needed when the artwork changes.
+[package]
+name = "make_icons"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+resvg = "0.49"
+
+[workspace]

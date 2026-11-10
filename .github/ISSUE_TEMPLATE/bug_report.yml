@@ -1,0 +1,43 @@
+name: Report a problem
+description: Something in AnyCapture or the Editor does not work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! You can write in English or Portuguese. Help › Report a problem in AnyCapture fills in
+        the versions below for you. Please leave out passwords and anything private from logs and screenshots.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What went wrong, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the Editor
+        2. Click …
+        3. …
+  - type: input
+    id: version
+    attributes:
+      label: AnyCapture version
+      placeholder: "0.5.0"
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: "Windows 11 25H2 (build 26200.1234)"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log or screenshots
+      description: |
+        File › Open logs folder in AnyCapture. Paste the last lines of the log, or drag screenshots here.
+      render: text

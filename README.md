@@ -1,11 +1,11 @@
-# Snapnab
+# AnyCapture
 
 **Screen capture, video recording and image editor for Windows.**
 
-![Snapnab capture window](docs/images/capture-window.png)
+![AnyCapture capture window](docs/images/capture-window.png)
 
-Snapnab lives in the notification area: press **Print Screen**, choose what to capture and the image opens in
-**Snapnab Editor**, ready to annotate, highlight and share. It also records the screen as MP4, with microphone and system audio.
+AnyCapture lives in the notification area: press **Print Screen**, choose what to capture and the image opens in
+**AnyCapture Editor**, ready to annotate, highlight and share. It also records the screen as MP4, with microphone and system audio.
 
 ## Features
 
@@ -59,16 +59,16 @@ Snapnab lives in the notification area: press **Print Screen**, choose what to c
 
 The capture window follows the accent color chosen in *Settings > Personalization > Colors*.
 
-The complete user manual is [help/Snapnab-Manual.html](help/Snapnab-Manual.html); it opens from *Help › Snapnab Manual*
+The complete user manual is [help/AnyCapture-Manual.html](help/AnyCapture-Manual.html); it opens from *Help › AnyCapture Manual*
 (**F1**) in both programs.
 
 ## Installation
 
 Requires **Windows 10 version 2004 or later, or Windows 11 (64-bit)**. No extra runtime is needed.
 
-- **Portable:** download `Snapnab-<version>-win-x64.zip` from the *Releases* page, extract it to any folder and open `Snapnab.exe`.
-- **Installer:** open `Snapnab-<version>-setup.exe` and follow the wizard. It installs just for you (no administrator
-  prompt) or for all users, creates the Start menu shortcuts, can start Snapnab with Windows and
+- **Portable:** download `AnyCapture-<version>-win-x64.zip` from the *Releases* page, extract it to any folder and open `AnyCapture.exe`.
+- **Installer:** open `AnyCapture-<version>-setup.exe` and follow the wizard. It installs just for you (no administrator
+  prompt) or for all users, creates the Start menu shortcuts, can start AnyCapture with Windows and
   uninstalls from *Settings › Apps*. Your captures and settings are kept when uninstalling.
 
 ## Usage
@@ -84,46 +84,49 @@ Requires **Windows 10 version 2004 or later, or Windows 11 (64-bit)**. No extra 
 The shortcuts can be changed in *Options*. Command line:
 
 ```text
-Snapnab.exe        /capture | /video | /preset "name" | /clipboard | /hide | /exit | /help
-SnapnabEditor.exe  /Open "file" | /NewFromClipboard | /help
+AnyCapture.exe        /capture | /video | /preset "name" | /clipboard | /hide | /exit | /help
+AnyCaptureEditor.exe  /Open "file" | /NewFromClipboard | /help
 ```
 
 ### Your data
 
 | What | Where |
 |---|---|
-| Captures and videos | `%LOCALAPPDATA%\Snapnab\Library` |
-| Presets | `%LOCALAPPDATA%\Snapnab\Presets1.xml` |
-| Editor themes, quick styles, favorites, quick effects, stamp order | `%LOCALAPPDATA%\Snapnab\*.xml` |
-| Settings backups | `%LOCALAPPDATA%\Snapnab\Backups` |
-| Logs | `%LOCALAPPDATA%\Snapnab\Logs` |
-| Settings | `HKEY_CURRENT_USER\Software\Snapnab` |
+| Captures and videos | `%LOCALAPPDATA%\AnyCapture\Library` |
+| Presets | `%LOCALAPPDATA%\AnyCapture\Presets1.xml` |
+| Editor themes, quick styles, favorites, quick effects, stamp order | `%LOCALAPPDATA%\AnyCapture\*.xml` |
+| Settings backups | `%LOCALAPPDATA%\AnyCapture\Backups` |
+| Logs | `%LOCALAPPDATA%\AnyCapture\Logs` |
+| Settings | `HKEY_CURRENT_USER\Software\AnyCapture` |
 
 Nothing is sent to the internet.
 
 ## Building from source
 
-With Visual Studio 2022+ (*Desktop development with C++* workload):
+With [Rust](https://rustup.rs) and the Visual Studio 2022+ C++ build tools (the MSVC linker, `rc.exe` and the Windows
+SDK):
 
 ```bat
 build.bat
 ```
 
-The program ends up in `dist\Snapnab\` and the package in `dist\Snapnab-<version>-win-x64.zip`. Details, tests and the
+The program ends up in `dist\AnyCapture\` and the package in `dist\AnyCapture-<version>-win-x64.zip`. Details, tests and the
 installer are in [docs/BUILDING.md](docs/BUILDING.md).
 
 ## Repository layout
 
 ```text
-src/                    source code (C++20, Win32)
-  common/               library shared by both programs
-  capture/              Snapnab.exe — capture and recording
-  editor/               SnapnabEditor.exe — editor
+rust/                   source code (Rust workspace)
+  snapcore/             library shared by both programs (documents, library, images, effects, capture, video…)
+  snapui/               egui window host and shared windows and forms
+  anycapture/              AnyCapture.exe — capture and recording
+  snapedit/             AnyCaptureEditor.exe — editor
   snapex/               SnapEx64.dll — extended window capture
-  resources/            icons and manifest
-tests/                  integration tests
-help/                   user manual (Snapnab-Manual.html, opened by Help › Snapnab Manual and F1)
-lang/                   interface translations (gettext: <language>.po and the snapnab.pot template)
+  snaptool/             AnyCaptureTool.exe — test and debugging helper (not shipped)
+  resources/            icons, manifest and version resources
+tests/                  end-to-end tests (tests/e2e) and the reference data of the Rust tests (tests/data)
+help/                   user manual (AnyCapture-Manual.html, opened by Help › AnyCapture Manual and F1)
+lang/                   interface translations (gettext: <language>.po and the anycapture.pot template)
 packaging/              package files and installer script
 scripts/                development utilities (i18n.py extracts and checks the translations)
 docs/                   architecture, build and images
@@ -146,13 +149,13 @@ nothing built on a personal computer is signed. Each signing request is approved
 | Committers and reviewers | [toim22](https://github.com/toim22) |
 | Approvers | [toim22](https://github.com/toim22) |
 
-The signed files are `Snapnab.exe`, `SnapnabEditor.exe`, `SnapEx64.dll` and the installer `Snapnab-<version>-setup.exe`.
+The signed files are `AnyCapture.exe`, `AnyCaptureEditor.exe`, `SnapEx64.dll` and the installer `AnyCapture-<version>-setup.exe`.
 The SHA-256 hashes of the release packages are published with each release.
 
 ### Privacy policy
 
 This program will not transfer any information to other networked systems unless specifically requested by the user or
-the person installing or operating it. Snapnab has no telemetry, update check or online account; the only network
+the person installing or operating it. AnyCapture has no telemetry, update check or online account; the only network
 activity happens when you open a link yourself (it opens in your default browser), choose to send a capture by email
 (it is handed to your email program), or turn on one of the two optional online features: **upload** (to the storage
 you configure) and the **AI assistant** (the image and your question go to the provider you choose, with your own
@@ -163,6 +166,6 @@ key). Both are off until you set them up; their secrets stay in the Windows Cred
 
 Copyright © 2026 Antonio Rezende.
 
-Snapnab is free software: you can use, study, modify and redistribute it under the terms of the
+AnyCapture is free software: you can use, study, modify and redistribute it under the terms of the
 [GNU General Public License version 3](LICENSE). Modified versions that are distributed must also have their
 source code open under the same license. The program is provided without warranty of any kind.
