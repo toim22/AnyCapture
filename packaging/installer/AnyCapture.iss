@@ -127,12 +127,9 @@ Name: "{autoprograms}\AnyCapture Editor"; Filename: "{app}\AnyCaptureEditor.exe"
 Name: "{autoprograms}\AnyCapture Manual"; Filename: "{app}\help\AnyCapture-Manual.html"
 Name: "{autodesktop}\AnyCapture"; Filename: "{app}\AnyCapture.exe"; Tasks: desktopicon
 
-[Registry]
-; same value that Options > "Start with Windows" writes; removed on uninstall
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "AnyCapture"; \
-    ValueData: """{app}\AnyCapture.exe"" /hide"; Tasks: startup; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: none; ValueName: "AnyCapture"; \
-    Flags: dontcreatekey uninsdeletevalue
+; The "Start with Windows" entry (HKCU\...\Run\AnyCapture, the value Options > "Start with Windows" writes) is managed in
+; [Code] (StartupBefore, WantStartup, CurUninstallStepChanged), not in [Registry]: every copy of AnyCapture shares that
+; one value, so an uninstall may only remove it when it names its own copy, and an update keeps what the user has.
 
 [Run]
 Filename: "{app}\AnyCapture.exe"; Description: "{cm:LaunchProgram,AnyCapture}"; Flags: nowait postinstall skipifsilent
@@ -181,11 +178,111 @@ begin
   Result := IsUpdate and HasParam('/EDITOR');
 end;
 
+// ---- Start with Windows
+const
+  RunKey = 'Software\Microsoft\Windows\CurrentVersion\Run';
+var
+  // AnyCapture (or the former name) started with Windows before this Setup changed anything: the uninstallers of
+  // earlier versions that RemoveOtherInstall/RemoveRenamedInstall run delete the value, and earlier versions' Setup
+  // remembered the startup task even when the user later turned "Start with Windows" on or off in Options
+  StartupBefore: Boolean;
+  HasEarlierInstall: Boolean;
+  StartupTaskSet: Boolean;
+
+function HasParamPrefix(Prefix: String): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 1 to ParamCount do
+    if CompareText(Copy(ParamStr(I), 1, Length(Prefix)), Prefix) = 0 then
+      Result := True;
+end;
+
+// an earlier version of AnyCapture (or under the former name) was installed when Setup started: its uninstall entry,
+// for this user or for all users
+function FindEarlierInstall: Boolean;
+begin
+  Result := RegValueExists(HKLM, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{C59F0FFC-FF4A-4107-8483-9934772DA4EB}_is1', 'UninstallString') or
+            RegValueExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{C59F0FFC-FF4A-4107-8483-9934772DA4EB}_is1', 'UninstallString');
+end;
+
+// The startup task as it should be: what the user ticked on the Tasks page, or what /TASKS or /MERGETASKS ask; with
+// neither (an update, silent or not shown that page), what the computer does today, so an update never turns
+// "Start with Windows" on or off.
+function WantStartup: Boolean;
+begin
+  if (not WizardSilent) or HasParamPrefix('/TASKS=') or HasParamPrefix('/MERGETASKS=') or not HasEarlierInstall then
+    Result := WizardIsTaskSelected('startup')
+  else
+    Result := StartupBefore;
+end;
+
+// The Tasks page shows the entry as the computer has it now, not as it was ticked the last time Setup ran (once, so
+// going Back keeps the user's own choice). A silent Setup passes through this page too: there /TASKS and /MERGETASKS
+// stay as given.
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if (CurPageID = wpSelectTasks) and not StartupTaskSet and
+     not HasParamPrefix('/TASKS=') and not HasParamPrefix('/MERGETASKS=') then
+  begin
+    StartupTaskSet := True;
+    if StartupBefore then
+      WizardSelectTasks('startup')
+    else if HasEarlierInstall then
+      WizardSelectTasks('!startup');
+    Log(Format('Start with Windows: the task shows %d (the entry existed: %d)', [Ord(WizardIsTaskSelected('startup')), Ord(StartupBefore)]));
+  end;
+end;
+
+procedure ApplyStartup;
+var
+  Value: String;
+begin
+  Value := '"' + ExpandConstant('{app}') + '\{#AppName}.exe" /hide';
+  if WantStartup then
+  begin
+    RegWriteStringValue(HKCU, RunKey, '{#AppName}', Value);
+    RegDeleteValue(HKCU, RunKey, '{#OldName}');
+    Log('Start with Windows: on, ' + Value);
+  end
+  else
+  begin
+    // off: only this copy's entry goes (another copy's stays, as Options there wrote it)
+    if RegQueryStringValue(HKCU, RunKey, '{#AppName}', Value) and
+       (Pos(Lowercase(ExpandConstant('{app}') + '\'), Lowercase(Value)) > 0) then
+      RegDeleteValue(HKCU, RunKey, '{#AppName}');
+    Log('Start with Windows: off');
+  end;
+end;
+
+// ---- Uninstall: the entry goes only when it starts this copy (an earlier version's uninstall log may still delete
+// it whatever it names, so another copy's entry is put back afterwards)
+var
+  UninstallRunValue: String;
+  UninstallRunOther: Boolean;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usUninstall then
+  begin
+    UninstallRunOther := RegQueryStringValue(HKCU, RunKey, '{#AppName}', UninstallRunValue) and
+                         (Pos(Lowercase(ExpandConstant('{app}') + '\'), Lowercase(UninstallRunValue)) = 0);
+    if not UninstallRunOther then
+      RegDeleteValue(HKCU, RunKey, '{#AppName}');
+  end
+  else if (CurUninstallStep = usPostUninstall) and UninstallRunOther and
+          not RegValueExists(HKCU, RunKey, '{#AppName}') then
+    RegWriteStringValue(HKCU, RunKey, '{#AppName}', UninstallRunValue);
+end;
+
 function InitializeSetup: Boolean;
 var
   I: Integer;
 begin
   Result := True;
+  StartupBefore := RegValueExists(HKCU, RunKey, '{#AppName}') or RegValueExists(HKCU, RunKey, '{#OldName}');
+  HasEarlierInstall := FindEarlierInstall;
   if not IsUpdate then
     Exit;
   for I := 1 to 120 do
@@ -285,9 +382,7 @@ end;
 
 // An install made under the program's former name sits in a folder of that name. The update goes to a folder with the
 // new name (in the same parent folder), and the old install is removed with its own uninstaller before the files are
-// copied; its "Start with Windows" entry comes back under the new name.
-var
-  HadOldStartup: Boolean;
+// copied; its "Start with Windows" entry comes back under the new name (StartupBefore, ApplyStartup).
 
 procedure InitializeWizard;
 var
@@ -314,7 +409,6 @@ begin
     Exit;
   if not RegQueryStringValue(Root, UninstallKey, 'UninstallString', Cmd) then
     Exit;
-  HadOldStartup := RegValueExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', '{#OldName}');
   Cmd := RemoveQuotes(Cmd);
   Log('Removing the install made under the former name: ' + Cmd);
   if not Exec(Cmd, '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART', '', SW_HIDE, ewWaitUntilTerminated, Code) then
@@ -329,9 +423,8 @@ begin
     if IsAdminInstallMode then
       RemoveOtherInstall(HKCU);
   end;
-  if (CurStep = ssPostInstall) and HadOldStartup and not WizardIsTaskSelected('startup') then
-    RegWriteStringValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', '{#AppName}',
-                        '"' + ExpandConstant('{app}') + '\{#AppName}.exe" /hide');
+  if CurStep = ssPostInstall then
+    ApplyStartup;
 end;
 
 // closes this instance without asking "Exit Setup?" once the elevated one has opened

@@ -73,7 +73,10 @@ What the installer does:
   (`WizardLarge-*.png`, `WizardLarge-dark-*.png` and `WizardSmall-*.png`, one per display scale, drawn from the app
   icon by `python packaging/installer/wizard_images.py`);
 - Start menu shortcuts (AnyCapture and AnyCapture Editor), an optional desktop shortcut and "start with Windows"
-  (the same value that *Options › Start with Windows* writes);
+  (the same value that *Options › Start with Windows* writes, managed in `[Code]`). The box shows whether AnyCapture
+  starts with Windows today; an update that doesn't show it (silent, or started by AnyCapture) keeps the entry as it
+  is, and `/TASKS=` or `/MERGETASKS=` still decide it. Uninstalling removes the entry only when it starts that copy;
+  another copy's entry, such as a portable one, stays;
 - closes AnyCapture if it is running, and on an update installs over the previous version keeping the settings: in
   the same folder and mode (all users or just this one) as before, with no question; installing for all users also
   removes a copy that was installed only for this user;

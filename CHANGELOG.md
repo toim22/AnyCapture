@@ -3,6 +3,14 @@
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- **Start with Windows stays as you set it.** The installer's *Start AnyCapture automatically* box now shows whether
+  AnyCapture starts with Windows today, instead of the choice made the last time an installer ran, and an update keeps
+  the setting from *Options* (0.5.0 could leave it off or turn it back on). Uninstalling, including the per-user copy
+  an install for all users replaces, no longer removes an entry that starts another copy of AnyCapture.
+
 ## [0.5.0] — 2026-11-10
 
 ### Changed
