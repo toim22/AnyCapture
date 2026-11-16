@@ -286,6 +286,35 @@ pub fn window_frame_rect(h: isize) -> Rect {
     to_rect(r)
 }
 
+/// `frame` moved inside `work` and, where it is larger, shrunk to it.
+pub fn fit_inside(frame: Rect, work: Rect) -> Rect {
+    let (w, h) = (frame.width().min(work.width()), frame.height().min(work.height()));
+    let left = frame.left.clamp(work.left, work.right - w);
+    let top = frame.top.clamp(work.top, work.bottom - h);
+    Rect::new(left, top, left + w, top + h)
+}
+
+/// Moves the top-level window `h` (and shrinks it, if it is larger) so its visible frame lies inside the work area of
+/// its monitor, the screen without the taskbar: on a small screen a window opened at its usual size would otherwise
+/// reach under the taskbar. The invisible resize borders stay outside the frame, as Windows keeps them.
+pub fn fit_window_to_work_area(h: isize) {
+    use windows::Win32::UI::WindowsAndMessaging::{SWP_NOACTIVATE, SWP_NOZORDER, SetWindowPos};
+    let (outer, frame) = (window_rect(h), window_frame_rect(h));
+    if frame.is_empty() {
+        return;
+    }
+    let work = monitor_rect((frame.left + frame.right) / 2, (frame.top + frame.bottom) / 2, true);
+    let fit = fit_inside(frame, work);
+    if fit == frame {
+        return;
+    }
+    let r = Rect::new(fit.left - (frame.left - outer.left), fit.top - (frame.top - outer.top),
+                      fit.right + (outer.right - frame.right), fit.bottom + (outer.bottom - frame.bottom));
+    unsafe {
+        let _ = SetWindowPos(hwnd(h), None, r.left, r.top, r.width(), r.height(), SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+}
+
 pub fn window_rect(h: isize) -> Rect {
     let mut r = RECT::default();
     unsafe {
@@ -616,4 +645,22 @@ pub fn open_menus() -> (Vec<Rect>, Option<Rect>) {
 /// GetSysColor(COLOR_DESKTOP) as a COLORREF.
 pub fn desktop_color() -> u32 {
     unsafe { windows::Win32::Graphics::Gdi::GetSysColor(windows::Win32::Graphics::Gdi::COLOR_BACKGROUND) }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_window_too_tall_for_the_work_area_moves_up_and_shrinks_to_it() {
+        // the Editor's 1280×820 on a 1520×823 screen with a 48-pixel taskbar: it ends at the taskbar's edge
+        let work = Rect::new(0, 0, 1520, 775);
+        assert_eq!(fit_inside(Rect::new(120, 104, 1400, 924), work), Rect::new(120, 0, 1400, 775));
+        // one that fits only moves back inside, keeping its size
+        assert_eq!(fit_inside(Rect::new(-50, 600, 950, 1200), work), Rect::new(0, 175, 1000, 775));
+        // inside already: untouched
+        assert_eq!(fit_inside(Rect::new(10, 10, 500, 400), work), Rect::new(10, 10, 500, 400));
+        // a monitor to the left of the primary one
+        assert_eq!(fit_inside(Rect::new(-1900, 50, -100, 1300), Rect::new(-1920, 0, 0, 1040)), Rect::new(-1900, 0, -100, 1040));
+    }
 }

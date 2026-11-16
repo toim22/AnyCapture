@@ -1018,6 +1018,9 @@ impl App for Editor {
         self.cv.hwnd = self.hwnd;
         if let Some(w) = ctl.window(k) {
             w.set_min_inner_size(Some(winit::dpi::LogicalSize::new(900.0, 560.0)));
+            // 1280×820, or the saved size, may be taller than a small screen: the bottom (Recent captures) would be
+            // under the taskbar
+            snapcore::screen::fit_window_to_work_area(self.hwnd);
             if maximize {
                 w.set_maximized(true);
             }
