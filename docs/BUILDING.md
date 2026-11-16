@@ -58,7 +58,7 @@ finds `ISCC.exe` (in `%LOCALAPPDATA%\Programs`, `Program Files` or on the `PATH`
 `rust\Cargo.toml`. To compile it by hand after `build.bat`:
 
 ```bat
-ISCC.exe /DAppVersion=0.5.0 packaging\installer\AnyCapture.iss
+ISCC.exe /DAppVersion=0.5.1 packaging\installer\AnyCapture.iss
 ```
 
 What the installer does:

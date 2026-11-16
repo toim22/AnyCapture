@@ -1,6 +1,6 @@
 ; AnyCapture installer (Inno Setup 6.7 or later) — packages dist\AnyCapture\ produced by build.bat.
 ; build.bat compiles it automatically when it finds Inno Setup, passing the version from rust\Cargo.toml:
-;   ISCC.exe /DAppVersion=0.5.0 packaging\installer\AnyCapture.iss   →   dist\AnyCapture-0.5.0-setup.exe
+;   ISCC.exe /DAppVersion=0.5.1 packaging\installer\AnyCapture.iss   →   dist\AnyCapture-0.5.1-setup.exe
 ;
 ; Installs for the current user only (no administrator prompt, in %LOCALAPPDATA%\Programs\AnyCapture) or, if the user
 ; chooses, for all users (in Program Files). Captures, presets and settings live in the user profile
@@ -8,7 +8,7 @@
 
 #define AppName      "AnyCapture"
 #ifndef AppVersion
-  #define AppVersion "0.5.0"
+  #define AppVersion "0.5.1"
 #endif
 #define AppPublisher "Antonio Rezende"
 #define AppURL       "https://github.com/toim22/AnyCapture"

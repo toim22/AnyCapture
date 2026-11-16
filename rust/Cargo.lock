@@ -180,7 +180,7 @@ dependencies = [
 
 [[package]]
 name = "anycapture"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "egui",
  "egui_kittest",
@@ -3182,7 +3182,7 @@ dependencies = [
 
 [[package]]
 name = "snapedit"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "egui",
  "egui_kittest",
@@ -3203,7 +3203,7 @@ dependencies = [
 
 [[package]]
 name = "snaptool"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "snapcore",
 ]

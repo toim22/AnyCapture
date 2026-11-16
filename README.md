@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/toim22/AnyCapture/releases/latest"><img alt="Version 0.5.0" src="https://img.shields.io/badge/version-0.5.0-0a9cff"></a>
+  <a href="https://github.com/toim22/AnyCapture/releases/latest"><img alt="Version 0.5.1" src="https://img.shields.io/badge/version-0.5.1-0a9cff"></a>
   <img alt="Windows 10 and 11, 64-bit" src="https://img.shields.io/badge/Windows-10%20%7C%2011%20(x64)-2b3242">
   <img alt="12 languages" src="https://img.shields.io/badge/languages-12-43c35a">
   <img alt="Built with Rust" src="https://img.shields.io/badge/built%20with-Rust-f57c00">
@@ -17,9 +17,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/toim22/AnyCapture/releases/latest"><strong>Download AnyCapture 0.5.0</strong></a>
+  <a href="https://github.com/toim22/AnyCapture/releases/latest"><strong>Download AnyCapture 0.5.1</strong></a>
   ·
-  <a href="https://github.com/toim22/AnyCapture/releases/tag/v0.5.0">What's new</a>
+  <a href="https://github.com/toim22/AnyCapture/releases/tag/v0.5.1">What's new</a>
   ·
   <a href="https://github.com/toim22/AnyCapture/issues">Report a bug or share an idea</a>
 </p>
@@ -93,7 +93,7 @@ The complete user manual is [help/AnyCapture-Manual.html](help/AnyCapture-Manual
 
 ## Install
 
-1. Download `AnyCapture-0.5.0-setup.exe` from the [latest release](https://github.com/toim22/AnyCapture/releases/latest).
+1. Download `AnyCapture-0.5.1-setup.exe` from the [latest release](https://github.com/toim22/AnyCapture/releases/latest).
 2. Run it. It installs just for you, with no administrator prompt, or for all users if you choose.
 3. AnyCapture starts in the notification area. Press **Print Screen** to capture.
 
@@ -101,7 +101,7 @@ The installer adds AnyCapture to the Start menu, can start it with Windows, and 
 Your captures and settings are kept when you uninstall. Installing over Snapnab 0.4 replaces it and brings your
 captures and settings along.
 
-Prefer no installation? Download `AnyCapture-0.5.0-win-x64.zip`, extract it to any folder and run `AnyCapture.exe`.
+Prefer no installation? Download `AnyCapture-0.5.1-win-x64.zip`, extract it to any folder and run `AnyCapture.exe`.
 
 **Requirements:** Windows 10 version 2004 or later, or Windows 11, 64-bit.
 
@@ -178,8 +178,9 @@ The architecture is described in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), a
 
 ## Project status
 
-AnyCapture **0.5.0** is the first full release. It is the former Snapnab, renamed and rewritten from C++ to Rust with
-the same features and files. See the [changelog](CHANGELOG.md) for everything that changed. Known limits:
+AnyCapture **0.5.1** is the current release; **0.5.0** was the first full one. AnyCapture is the former Snapnab,
+renamed and rewritten from C++ to Rust with the same features and files. See the [changelog](CHANGELOG.md) for
+everything that changed. Known limits:
 
 - The programs aren't code-signed yet, so Windows shows a warning the first time you run them.
 - A few things work differently from the C++ version, for example the named Beautify presets of a capture preset are
