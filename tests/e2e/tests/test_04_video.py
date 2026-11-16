@@ -107,7 +107,8 @@ def test_close_hud_before_start_cancels(capture, logs, lib):
 
 def test_video_hotkey_opens_the_hud(capture, logs):
     start_with(capture, v.video_preset())
-    logs.capture.wait(r"Hotkey registered: id 2")
+    # registered, or served by the keyboard hook when another program wants the key too
+    logs.capture.wait(r"Hotkey registered: id 2|Hotkey Shift\+Print Screen: .*keyboard hook")
     win.keys("+{PRTSC}")
     hud = win.wait_window(v.HUD, 10)
     v.click(hud, "cancel")

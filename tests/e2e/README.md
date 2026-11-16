@@ -22,6 +22,27 @@ real data; `conftest.py` stops the run if it detects that.
 
 Don't touch the mouse or keyboard while it runs: the tests draw, click and type, and use the clipboard.
 
+### In Windows Sandbox (experimental)
+
+`sandbox\run-sandbox.ps1` runs the suite inside Windows Sandbox, a throwaway Windows desktop with its own mouse,
+keyboard, clipboard and screen, so the computer stays free while it runs (leave the Sandbox window open, not
+minimized: it is the tests' screen). It needs the *Windows Sandbox* feature (Windows Pro or Enterprise):
+
+```powershell
+.\sandbox\run-sandbox.ps1                  # everything (~27 min)
+.\sandbox\run-sandbox.ps1 -m smoke         # the same pytest arguments as run.ps1
+```
+
+It tests `ANYCAPTURE_DIR` (default `dist\AnyCapture`) with this computer's Python and packages, mapped read-only, plus
+its Visual C++ runtime, which the sandbox lacks and pywin32 needs. Inside, `sandbox\inside.ps1` turns off what a fresh
+Windows does that a user's desktop usually doesn't (Print Screen opening the Snipping Tool, notification pop-ups),
+runs pytest and copies the report, the failure screenshots and the programs' logs to `artifacts\sandbox-<date-time>\`.
+Your own data is never touched: the sandbox has its own profile and is thrown away at the end.
+
+Not yet a full replacement for a run on the desktop: of 242 tests, about 20 still fail there. The Save dialog ignores
+the path the tests type (Save as, export), Paint, a printer and the OCR language are missing, and a few tests assume a
+bigger screen than the sandbox's (about 1520×823). The webcam and microphone are off.
+
 | Variable | Default | |
 |---|---|---|
 | `ANYCAPTURE_DIR` | `C:\Program Files\AnyCapture` | the program under test (e.g. `dist\AnyCapture` for a fresh build) |
